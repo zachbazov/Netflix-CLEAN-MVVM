@@ -6,3 +6,13 @@
 //
 
 import Foundation
+
+final class SearchViewCoordinator: Coordinate {
+    enum Screen {
+        case search
+    }
+    
+    var viewController: SearchViewController?
+    
+    func showScreen(_ screen: Screen) {}
+}

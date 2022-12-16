@@ -6,3 +6,9 @@
 //
 
 import Foundation
+
+final class SearchViewModel: ViewModel {
+    var coordinator: SearchViewCoordinator?
+    
+    func transform(input: Void) {}
+}

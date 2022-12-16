@@ -8,7 +8,8 @@
 
 "LandpageViewController.BarButton.Title" = "Sign In";
 
-"TabBarCoordinator.TabBarItem.Title" = "Home";
+"TabBarCoordinator.TabBarItem.Home.Title" = "Home";
+"TabBarCoordinator.TabBarItem.Search.Title" = "Search";
 
 "HomeViewController.PanelViewItem.Leading.Title" = "My List";
 "HomeViewController.PanelViewItem.Trailing.Title" = "Info";

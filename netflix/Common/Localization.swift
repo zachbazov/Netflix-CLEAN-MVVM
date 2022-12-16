@@ -17,8 +17,10 @@ struct Localization {
     
     struct TabBar {
         struct Coordinator {
-            let tabBarButtonTitle = NSLocalizedString("TabBarCoordinator.TabBarItem.Title",
+            let homeButton = NSLocalizedString("TabBarCoordinator.TabBarItem.Home.Title",
                                                       comment: "Home Button")
+            let searchButton = NSLocalizedString("TabBarCoordinator.TabBarItem.Search.Title",
+                                                      comment: "Search Button")
         }
         
         struct Home {
