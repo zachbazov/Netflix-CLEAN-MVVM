@@ -35,7 +35,7 @@ final class NavigationOverlayFooterView: UIView {
     
     private func viewDidConfigure() {
         backgroundColor = .clear
-        isHidden(true)
+        alpha = .zero
     }
     
     @objc

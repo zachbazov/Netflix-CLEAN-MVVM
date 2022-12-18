@@ -57,6 +57,7 @@ final class HomeViewController: UIViewController {
     
     private func setupBrowseOverlayView() {
         browseOverlayView = BrowseOverlayView(on: browseOverlayViewContainer, with: viewModel)
+        browseOverlayViewContainer.isHidden(true)
     }
     
     func removeObservers() {

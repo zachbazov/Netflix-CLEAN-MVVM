@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="21507" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21505"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="SearchViewController" customModule="netflix" customModuleProvider="target">
+            <connections>
+                <outlet property="contentContainer" destination="WsN-hZ-h6l" id="jtz-34-beg"/>
+                <outlet property="contentView" destination="Eug-U7-55W" id="d2g-l1-Ubv"/>
+                <outlet property="searchBarContainer" destination="Pe2-eV-mfP" id="9xy-nM-w0q"/>
+                <outlet property="view" destination="oLm-og-pdd" id="7Ul-cW-2Cs"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="oLm-og-pdd">
+            <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <subviews>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Eug-U7-55W" userLabel="Content View">
+                    <rect key="frame" x="0.0" y="59" width="393" height="759"/>
+                    <subviews>
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Pe2-eV-mfP" userLabel="Search Bar Container">
+                            <rect key="frame" x="0.0" y="0.0" width="393" height="56"/>
+                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="56" id="0v9-lz-u2G"/>
+                            </constraints>
+                        </view>
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="WsN-hZ-h6l" userLabel="Content Container">
+                            <rect key="frame" x="0.0" y="56" width="393" height="703"/>
+                        </view>
+                    </subviews>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <constraints>
+                        <constraint firstAttribute="bottom" secondItem="WsN-hZ-h6l" secondAttribute="bottom" id="K0e-Vu-Gio"/>
+                        <constraint firstAttribute="trailing" secondItem="WsN-hZ-h6l" secondAttribute="trailing" id="P3i-iP-Rv2"/>
+                        <constraint firstAttribute="trailing" secondItem="Pe2-eV-mfP" secondAttribute="trailing" id="USN-eF-7Y2"/>
+                        <constraint firstItem="Pe2-eV-mfP" firstAttribute="leading" secondItem="Eug-U7-55W" secondAttribute="leading" id="Xig-hW-aQV"/>
+                        <constraint firstItem="Pe2-eV-mfP" firstAttribute="top" secondItem="Eug-U7-55W" secondAttribute="top" id="dh1-op-xbb"/>
+                        <constraint firstItem="WsN-hZ-h6l" firstAttribute="top" secondItem="Pe2-eV-mfP" secondAttribute="bottom" id="feb-ff-gec"/>
+                        <constraint firstItem="WsN-hZ-h6l" firstAttribute="leading" secondItem="Eug-U7-55W" secondAttribute="leading" id="oOI-n0-MjA"/>
+                    </constraints>
+                </view>
+            </subviews>
+            <viewLayoutGuide key="safeArea" id="qUX-wD-p8S"/>
+            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+            <constraints>
+                <constraint firstItem="Eug-U7-55W" firstAttribute="leading" secondItem="qUX-wD-p8S" secondAttribute="leading" id="3nj-Rr-LQa"/>
+                <constraint firstItem="Eug-U7-55W" firstAttribute="top" secondItem="qUX-wD-p8S" secondAttribute="top" id="46M-lr-7zO"/>
+                <constraint firstItem="qUX-wD-p8S" firstAttribute="trailing" secondItem="Eug-U7-55W" secondAttribute="trailing" id="cP9-On-33M"/>
+                <constraint firstItem="qUX-wD-p8S" firstAttribute="bottom" secondItem="Eug-U7-55W" secondAttribute="bottom" id="twP-nD-jFE"/>
+            </constraints>
+            <point key="canvasLocation" x="225" y="46"/>
+        </view>
+    </objects>
+</document>

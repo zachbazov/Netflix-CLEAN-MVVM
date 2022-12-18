@@ -22,6 +22,8 @@ final class BrowseOverlayViewModel {
         guard let homeViewController = coordinator.viewController else { return }
         
         if isPresented {
+            homeViewController.browseOverlayViewContainer.isHidden(false)
+            
             homeViewController.view.animateUsingSpring(
                 withDuration: 0.5,
                 withDamping: 1.0,
@@ -30,6 +32,7 @@ final class BrowseOverlayViewModel {
                     homeViewController.navigationViewContainer.backgroundColor = .black
                     homeViewController.browseOverlayViewContainer.alpha = 1.0
                 })
+            
             return
         }
         
@@ -40,6 +43,10 @@ final class BrowseOverlayViewModel {
             animations: {
                 homeViewController.navigationViewContainer.backgroundColor = .clear
                 homeViewController.browseOverlayViewContainer.alpha = .zero
-            })
+            }) { done in
+                if done {
+                    homeViewController.browseOverlayViewContainer.isHidden(true)
+                }
+            }
     }
 }
