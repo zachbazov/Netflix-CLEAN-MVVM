@@ -42,3 +42,5 @@
 "DetailViewController.NavigationViewItem.Leading.Title" = "Episodes";
 "DetailViewController.NavigationViewItem.Center.Title" = "Trailers";
 "DetailViewController.NavigationViewItem.Trailing.Title" = "Similar Content";
+
+"SearchViewModel.Search" = "Search";

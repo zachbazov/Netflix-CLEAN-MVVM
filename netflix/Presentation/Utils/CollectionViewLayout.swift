@@ -21,13 +21,14 @@ private typealias Layout = LayoutInput & LayoutOutput
 
 final class CollectionViewLayout: UICollectionViewFlowLayout, Layout {
     enum Layout {
-        case ratable,
-             resumable,
-             standard,
-             homeOverlay,
-             detail,
-             descriptive,
-             trailer
+        case ratable
+        case resumable
+        case standard
+        case homeOverlay
+        case detail
+        case descriptive
+        case trailer
+        case search
     }
     
     fileprivate var layout: Layout!
@@ -59,6 +60,7 @@ final class CollectionViewLayout: UICollectionViewFlowLayout, Layout {
                     .detail: return 146.0
             case .descriptive: return 156.0
             case .trailer: return 224.0
+            case .search: return 146.0
             default: return .zero
             }
         }
@@ -95,6 +97,8 @@ final class CollectionViewLayout: UICollectionViewFlowLayout, Layout {
         case .descriptive:
             break
         case .trailer:
+            break
+        case .search:
             break
         default: break
         }

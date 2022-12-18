@@ -6,6 +6,11 @@
 	<string>${API_HOST}</string>
 	<key>API Scheme</key>
 	<string>${API_SCHEME}</string>
+	<key>NSAppTransportSecurity</key>
+	<dict>
+		<key>NSAllowsArbitraryLoads</key>
+		<true/>
+	</dict>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>

@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct CollectionViewCellViewModel {
+struct CollectionViewCellViewModel: Equatable {
     enum PresentedLogoAlignment: String {
         case top
         case midTop = "mid-top"
@@ -35,7 +35,7 @@ struct CollectionViewCellViewModel {
         case seventh = "6"
     }
     
-    let indexPath: IndexPath
+    var indexPath: IndexPath?
     let title: String
     let slug: String
     let posters: [String]
@@ -48,8 +48,31 @@ struct CollectionViewCellViewModel {
     var logoImageURL: URL!
     let presentedLogoAlignment: PresentedLogoAlignment
     
+    /// This initializer is basicly used in `Home` tab.
+    /// It serves `CollectionViewCell` cell types used on the collection views.
+    /// - Parameters:
+    ///   - media: Represented media object.
+    ///   - indexPath: Represented index path for the object on the collection.
     init(media: Media, indexPath: IndexPath) {
         self.indexPath = indexPath
+        self.title = media.title
+        self.slug = media.slug
+        self.posters = media.resources.posters
+        self.logos = media.resources.logos
+        self.posterImagePath = .init()
+        self.logoImagePath = .init()
+        self.presentedLogoAlignment = .init(rawValue: media.resources.presentedLogoAlignment)!
+        self.posterImageIdentifier = .init(string: "poster_\(media.slug)")
+        self.logoImageIdentifier = .init(string: "logo_\(media.slug)")
+        self.posterImagePath = path(for: PresentedPoster.self, with: media)!
+        self.logoImagePath = path(for: PresentedLogo.self, with: media)!
+        self.posterImageURL = URL(string: self.posterImagePath)
+        self.logoImageURL = URL(string: self.logoImagePath)
+    }
+    
+    /// This initializer basicly used in `Search` tab.
+    /// - Parameter media: Represented media object.
+    init(media: Media) {
         self.title = media.title
         self.slug = media.slug
         self.posters = media.resources.posters
