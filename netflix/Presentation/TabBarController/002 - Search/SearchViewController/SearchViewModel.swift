@@ -47,6 +47,7 @@ extension SearchViewModel {
         pages = pages.filter { $0.page != mediaPage.page } + [mediaPage]
         
         items.value = pages.media.map(CollectionViewCellViewModel.init)
+        print(1, items.value.count)
     }
     
     private func resetPages() {

@@ -32,15 +32,18 @@ final class SearchUseCase {
         page: Int,
         cached: @escaping (MediaPage) -> Void,
         completion: @escaping (Result<MediaPage, Error>) -> Void) -> Cancellable? {
-            let requestDTO = SearchRequestDTO(slug: query.query, page: nil) //, page: page
+            let requestDTO = SearchRequestDTO(title: query.query, page: nil) //, page: page
             let task = RepositoryTask()
             
             guard !task.isCancelled else { return nil }
             
-            let endpoint = getMedia(with: requestDTO)
+            let endpoint = APIEndpoint.MediaRepository.searchMedia(with: requestDTO)
             task.networkTask = Application.current.dataTransferService.request(with: endpoint, completion: { result in
                 if case let .success(responseDTO) = result {
-                    completion(.success(MediaPage(page: 0, totalPages: 1, media: responseDTO.data.map { $0.toDomain() } )))
+                    let mediaPage = MediaPage(page: 0,
+                                              totalPages: 1,
+                                              media: responseDTO.data.map { $0.toDomain() })
+                    completion(.success(mediaPage))
                 } else if case let .failure(error) = result {
                     completion(.failure(error))
                 }

@@ -19,6 +19,7 @@ private protocol SectionsRepositoryEndpoints {
 private protocol MediaRepositoryEndpoints {
     static func getAllMedia() -> Endpoint<MediaResponseDTO.GET.Many>
     static func getMedia(with request: MediaRequestDTO.GET.One) -> Endpoint<MediaResponseDTO.GET.One>
+    static func searchMedia(with request: SearchRequestDTO) -> Endpoint<SearchResponseDTO>
 }
 
 private protocol SeasonsRepositoryEndpoints {
@@ -72,6 +73,10 @@ struct APIEndpoint {
             let assertion = request.id == nil ? request.slug! : request.id!
             return Endpoint(path: "api/v1/media/\(assertion)",
                             method: .get)
+        }
+        
+        static func searchMedia(with request: SearchRequestDTO) -> Endpoint<SearchResponseDTO> {
+            return Endpoint(path: "api/v1/media/search/\(request.title)", method: .get)
         }
     }
     

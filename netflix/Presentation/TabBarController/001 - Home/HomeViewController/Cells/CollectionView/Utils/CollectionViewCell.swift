@@ -34,6 +34,19 @@ class CollectionViewCell: UICollectionViewCell {
         return view
     }
     
+    static func create(on collectionView: UICollectionView,
+                       reuseIdentifier: String,
+                       media: [Media],
+                       for indexPath: IndexPath) -> CollectionViewCell {
+        guard let view = collectionView.dequeueReusableCell(
+            withReuseIdentifier: reuseIdentifier, for: indexPath) as? CollectionViewCell
+        else { fatalError() }
+        let media = media[indexPath.row]
+        view.viewModel = CollectionViewCellViewModel(media: media)
+        view.viewDidLoad(media: media, with: view.viewModel)
+        return view
+    }
+    
     override func prepareForReuse() {
         super.prepareForReuse()
         viewModel = nil

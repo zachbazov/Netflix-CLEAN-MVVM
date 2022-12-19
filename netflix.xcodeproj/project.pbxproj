@@ -495,12 +495,20 @@
 		A130BC9C294E5F620070EA5E /* SearchViewController */ = {
 			isa = PBXGroup;
 			children = (
+				A130BCAD2950930A0070EA5E /* Cells */,
 				A130BC93294CE0AB0070EA5E /* SearchViewCoordinator.swift */,
 				A130BC95294CE0AF0070EA5E /* SearchViewModel.swift */,
 				A130BC97294CE0B30070EA5E /* SearchViewController.swift */,
 				A130BC99294CE0B80070EA5E /* SearchViewController.xib */,
 			);
 			path = SearchViewController;
+			sourceTree = "<group>";
+		};
+		A130BCAD2950930A0070EA5E /* Cells */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Cells;
 			sourceTree = "<group>";
 		};
 		A1741CFE28E6793700F3C46B /* Cells */ = {

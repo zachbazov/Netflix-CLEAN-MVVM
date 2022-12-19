@@ -35,6 +35,7 @@ struct CollectionViewCellViewModel: Equatable {
         case seventh = "6"
     }
     
+    var media: Media?
     var indexPath: IndexPath?
     let title: String
     let slug: String
@@ -73,6 +74,7 @@ struct CollectionViewCellViewModel: Equatable {
     /// This initializer basicly used in `Search` tab.
     /// - Parameter media: Represented media object.
     init(media: Media) {
+        self.media = media
         self.title = media.title
         self.slug = media.slug
         self.posters = media.resources.posters
@@ -112,5 +114,11 @@ struct CollectionViewCellViewModel: Equatable {
             default: return nil
             }
         }
+    }
+}
+
+extension CollectionViewCellViewModel {
+    func toMedia() -> Media {
+        return media!
     }
 }

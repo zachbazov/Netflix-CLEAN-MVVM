@@ -9,5 +9,6 @@ import Foundation
 
 struct SearchResponseDTO: Decodable {
     let status: String
+    let results: Int
     let data: [MediaDTO]
 }

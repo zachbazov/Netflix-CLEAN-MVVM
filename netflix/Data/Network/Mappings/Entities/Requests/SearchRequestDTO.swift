@@ -8,6 +8,6 @@
 import Foundation
 
 struct SearchRequestDTO: Encodable {
-    let slug: String
+    let title: String
     let page: Int?
 }
