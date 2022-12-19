@@ -27,10 +27,11 @@ final class TabBarCoordinator: Coordinate {
     
     private func createViewControllers(with state: NavigationView.State? = nil) {
         let home = homeNavigation(state)
+        let news = newsNavigation()
         let search = searchNavigation()
         let downloads = downloadsController()
         
-        viewController?.viewControllers = [home, search, downloads]
+        viewController?.viewControllers = [home, news, search, downloads]
     }
     
     func terminateHomeViewController() {
@@ -93,7 +94,7 @@ extension TabBarCoordinator {
         controller.tabBarItem = UITabBarItem(title: title, image: image, tag: 0)
         controller.tabBarItem.setTitleTextAttributes([
             NSAttributedString.Key.foregroundColor: UIColor.white,
-            NSAttributedString.Key.font: UIFont.systemFont(ofSize: 12.0, weight: .bold)], for: .normal)
+            NSAttributedString.Key.font: UIFont.systemFont(ofSize: 11.0, weight: .bold)], for: .normal)
         
         controller.setNavigationBarHidden(true, animated: false)
     }
@@ -104,6 +105,34 @@ extension TabBarCoordinator {
         viewModel.cachedAuthorizationSession { [weak self] in
             self?.createViewControllers(with: state)
         }
+    }
+}
+
+extension TabBarCoordinator {
+    private func newsNavigation() -> UINavigationController {
+        let coordinator = NewsViewCoordinator()
+        let viewModel = NewsViewModel()
+        let controller = NewsViewController()
+        
+        controller.viewModel = viewModel
+        controller.viewModel.coordinator = coordinator
+        coordinator.viewController = controller
+        
+        let navigation = UINavigationController(rootViewController: controller)
+        setupNewsTabItem(for: navigation)
+        return navigation
+    }
+    
+    private func setupNewsTabItem(for controller: UINavigationController) {
+        let title = "News & Hot"
+        let image = UIImage(systemName: "play.rectangle.on.rectangle.fill")?.whiteRendering()
+        
+        controller.tabBarItem = UITabBarItem(title: title, image: image, tag: 1)
+        controller.tabBarItem.setTitleTextAttributes([
+            NSAttributedString.Key.foregroundColor: UIColor.white,
+            NSAttributedString.Key.font: UIFont.systemFont(ofSize: 11.0, weight: .bold)], for: .normal)
+        
+        controller.setNavigationBarHidden(true, animated: false)
     }
 }
 
@@ -129,7 +158,7 @@ extension TabBarCoordinator {
         controller.tabBarItem = UITabBarItem(title: title, image: image, tag: 2)
         controller.tabBarItem.setTitleTextAttributes([
             NSAttributedString.Key.foregroundColor: UIColor.white,
-            NSAttributedString.Key.font: UIFont.systemFont(ofSize: 12.0, weight: .bold)], for: .normal)
+            NSAttributedString.Key.font: UIFont.systemFont(ofSize: 11.0, weight: .bold)], for: .normal)
         
         controller.setNavigationBarHidden(true, animated: false)
     }
@@ -156,6 +185,6 @@ extension TabBarCoordinator {
         controller.tabBarItem = UITabBarItem(title: title, image: image, tag: 3)
         controller.tabBarItem.setTitleTextAttributes([
             NSAttributedString.Key.foregroundColor: UIColor.white,
-            NSAttributedString.Key.font: UIFont.systemFont(ofSize: 12.0, weight: .bold)], for: .normal)
+            NSAttributedString.Key.font: UIFont.systemFont(ofSize: 11.0, weight: .bold)], for: .normal)
     }
 }
