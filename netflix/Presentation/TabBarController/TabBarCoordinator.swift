@@ -11,6 +11,7 @@ final class TabBarCoordinator: Coordinate {
     enum Screen {
         case home
         case search
+        case downloads
     }
     
     weak var viewController: TabBarController?
@@ -27,7 +28,8 @@ final class TabBarCoordinator: Coordinate {
     private func createViewControllers(with state: NavigationView.State? = nil) {
         let home = homeNavigation(state)
         let search = searchNavigation()
-        viewController?.viewControllers = [home, search]
+        let downloads = downloadsController()
+        viewController?.viewControllers = [home, search, downloads]
     }
     
     func terminateHomeViewController() {
@@ -80,7 +82,9 @@ extension TabBarCoordinator {
         coordinator.viewController?.viewModel = viewModel
         
         let navigation = UINavigationController(rootViewController: controller)
+        
         setupHomeTabItem(navigation)
+        
         return navigation
     }
     
@@ -115,18 +119,49 @@ extension TabBarCoordinator {
         coordinator.viewController = controller
         
         let navigation = UINavigationController(rootViewController: controller)
+        
         setupSearchTabItem(for: navigation)
+        
         return navigation
     }
     
     private func setupSearchTabItem(for controller: UINavigationController) {
         let title = Localization.TabBar.Coordinator().searchButton
         let image = UIImage(systemName: "magnifyingglass")?.whiteRendering()
-        controller.tabBarItem = UITabBarItem(title: title, image: image, tag: 0)
+        
+        controller.tabBarItem = UITabBarItem(title: title, image: image, tag: 2)
         controller.tabBarItem.setTitleTextAttributes([
             NSAttributedString.Key.foregroundColor: UIColor.white,
             NSAttributedString.Key.font: UIFont.systemFont(ofSize: 12.0, weight: .bold)], for: .normal)
         
         controller.setNavigationBarHidden(true, animated: false)
+    }
+}
+
+extension TabBarCoordinator {
+    private func downloadsController() -> DownloadsViewController {
+        let coordinator = DownloadsViewCoordinator()
+        let viewModel = DownloadsViewModel()
+        let controller = DownloadsViewController()
+        
+        controller.viewModel = viewModel
+        controller.viewModel.coordinator = coordinator
+        coordinator.viewController = controller
+        
+        setupDownloadsTabItem(for: controller)
+        
+        return controller
+    }
+    
+    private func setupDownloadsTabItem(for controller: DownloadsViewController) {
+        let title = "Downloads"
+        let image = UIImage(systemName: "arrow.down.circle.fill")?.whiteRendering()
+        
+        controller.tabBarItem = UITabBarItem(title: title, image: image, tag: 3)
+        controller.tabBarItem.setTitleTextAttributes([
+            NSAttributedString.Key.foregroundColor: UIColor.white,
+            NSAttributedString.Key.font: UIFont.systemFont(ofSize: 12.0, weight: .bold)], for: .normal)
+        
+        //controller.setNavigationBarHidden(true, animated: false)
     }
 }
