@@ -5,12 +5,13 @@
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21505"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
-        <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="DownloadsViewController" customModule="netflix" customModuleProvider="target">
             <connections>
+                <outlet property="downloadsViewContainer" destination="3Cy-L5-WmG" id="VLQ-Vm-HSb"/>
+                <outlet property="navigationViewContainer" destination="21d-Zv-BfY" id="Dwh-b1-FHa"/>
                 <outlet property="view" destination="eum-3E-bUK" id="7WQ-he-c48"/>
             </connections>
         </placeholder>
@@ -18,14 +19,29 @@
         <view contentMode="scaleToFill" id="eum-3E-bUK">
             <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <subviews>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="21d-Zv-BfY" userLabel="Downloads Navigation View Container">
+                    <rect key="frame" x="0.0" y="59" width="393" height="100"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="100" id="naA-Jd-9No"/>
+                    </constraints>
+                </view>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3Cy-L5-WmG" userLabel="Downloads View Container">
+                    <rect key="frame" x="0.0" y="159" width="393" height="596.33333333333337"/>
+                </view>
+            </subviews>
             <viewLayoutGuide key="safeArea" id="4fx-Ne-2XG"/>
-            <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+            <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+            <constraints>
+                <constraint firstItem="3Cy-L5-WmG" firstAttribute="top" secondItem="21d-Zv-BfY" secondAttribute="bottom" id="0jK-kv-bOq"/>
+                <constraint firstItem="21d-Zv-BfY" firstAttribute="top" secondItem="4fx-Ne-2XG" secondAttribute="top" id="9tk-nd-Rq3"/>
+                <constraint firstItem="4fx-Ne-2XG" firstAttribute="trailing" secondItem="21d-Zv-BfY" secondAttribute="trailing" id="EgN-rM-Qo9"/>
+                <constraint firstItem="3Cy-L5-WmG" firstAttribute="leading" secondItem="4fx-Ne-2XG" secondAttribute="leading" id="Uow-6e-xnt"/>
+                <constraint firstItem="3Cy-L5-WmG" firstAttribute="height" secondItem="eum-3E-bUK" secondAttribute="height" multiplier="0.7" id="n1E-XR-quP"/>
+                <constraint firstItem="4fx-Ne-2XG" firstAttribute="trailing" secondItem="3Cy-L5-WmG" secondAttribute="trailing" id="pW6-jZ-iLZ"/>
+                <constraint firstItem="21d-Zv-BfY" firstAttribute="leading" secondItem="4fx-Ne-2XG" secondAttribute="leading" id="tnm-0n-DHt"/>
+            </constraints>
             <point key="canvasLocation" x="465" y="-265"/>
         </view>
     </objects>
-    <resources>
-        <systemColor name="systemBackgroundColor">
-            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-        </systemColor>
-    </resources>
 </document>

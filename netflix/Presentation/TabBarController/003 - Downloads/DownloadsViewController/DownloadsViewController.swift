@@ -8,10 +8,31 @@
 import UIKit
 
 final class DownloadsViewController: UIViewController {
+    @IBOutlet private var navigationViewContainer: UIView!
+    @IBOutlet private var downloadsViewContainer: UIView!
+    
     var viewModel: DownloadsViewModel!
+    
+    private var navigationView: DownloadsNavigationView!
+    private var downloadsView: DownloadsView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .blue
+        setupSubviews()
+    }
+    
+    private func setupSubviews() {
+        setupDownloadsNavigationView()
+        setupDownloadsView()
+    }
+    
+    private func setupDownloadsNavigationView() {
+        navigationView = DownloadsNavigationView(frame: navigationViewContainer.bounds)
+        navigationViewContainer.addSubview(navigationView)
+    }
+    
+    private func setupDownloadsView() {
+        downloadsView = DownloadsView(frame: downloadsViewContainer.bounds)
+        downloadsViewContainer.addSubview(downloadsView)
     }
 }

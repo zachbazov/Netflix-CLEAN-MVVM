@@ -8,7 +8,6 @@
 import Foundation
 
 final class DownloadsViewModel: ViewModel {
-    
     var coordinator: DownloadsViewCoordinator?
     
     func transform(input: Void) {}

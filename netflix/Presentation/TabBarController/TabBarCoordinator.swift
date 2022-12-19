@@ -29,6 +29,7 @@ final class TabBarCoordinator: Coordinate {
         let home = homeNavigation(state)
         let search = searchNavigation()
         let downloads = downloadsController()
+        
         viewController?.viewControllers = [home, search, downloads]
     }
     
@@ -82,9 +83,7 @@ extension TabBarCoordinator {
         coordinator.viewController?.viewModel = viewModel
         
         let navigation = UINavigationController(rootViewController: controller)
-        
         setupHomeTabItem(navigation)
-        
         return navigation
     }
     
@@ -119,9 +118,7 @@ extension TabBarCoordinator {
         coordinator.viewController = controller
         
         let navigation = UINavigationController(rootViewController: controller)
-        
         setupSearchTabItem(for: navigation)
-        
         return navigation
     }
     
@@ -149,7 +146,6 @@ extension TabBarCoordinator {
         coordinator.viewController = controller
         
         setupDownloadsTabItem(for: controller)
-        
         return controller
     }
     
@@ -161,7 +157,5 @@ extension TabBarCoordinator {
         controller.tabBarItem.setTitleTextAttributes([
             NSAttributedString.Key.foregroundColor: UIColor.white,
             NSAttributedString.Key.font: UIFont.systemFont(ofSize: 12.0, weight: .bold)], for: .normal)
-        
-        //controller.setNavigationBarHidden(true, animated: false)
     }
 }

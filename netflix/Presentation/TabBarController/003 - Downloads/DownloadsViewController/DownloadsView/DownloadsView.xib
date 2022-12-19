@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="21507" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21505"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="DownloadsView" customModule="netflix" customModuleProvider="target">
+            <connections>
+                <outlet property="canDownloadButton" destination="lD5-SW-2Gs" id="Y22-lQ-cCE"/>
+                <outlet property="imageView" destination="Ng6-Da-drk" id="xgh-fi-eor"/>
+                <outlet property="infoTextView" destination="5tV-WE-Roo" id="7yU-5M-i8K"/>
+                <outlet property="setupButton" destination="Sbd-JS-z4m" id="iRQ-bk-SbK"/>
+                <outlet property="titleLabel" destination="98S-DU-TUg" id="QQA-vP-TNM"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="nwm-oU-ZFu" userLabel="Content View">
+            <rect key="frame" x="0.0" y="0.0" width="414" height="600"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <subviews>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Fi8-yd-9lL">
+                    <rect key="frame" x="0.0" y="0.0" width="414" height="600"/>
+                    <subviews>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Introducing Downloads for You" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="98S-DU-TUg">
+                            <rect key="frame" x="32" y="0.0" width="350" height="26.333333333333332"/>
+                            <fontDescription key="fontDescription" type="boldSystem" pointSize="22"/>
+                            <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                        <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" text="We'll download a personalized selection of movies and shows for you, so there's always something to watch on your device." textAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="5tV-WE-Roo">
+                            <rect key="frame" x="48" y="34.333333333333343" width="318" height="96"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="96" id="LuU-fd-e7a"/>
+                            </constraints>
+                            <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="14"/>
+                            <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                        </textView>
+                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="downloads-1" translatesAutoresizingMaskIntoConstraints="NO" id="Ng6-Da-drk">
+                            <rect key="frame" x="32" y="146.33333333333337" width="350" height="256"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="256" id="1un-pe-Y9C"/>
+                            </constraints>
+                        </imageView>
+                        <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" spacing="16" translatesAutoresizingMaskIntoConstraints="NO" id="LbK-7V-x6W">
+                            <rect key="frame" x="32" y="442.33333333333331" width="350" height="79.999999999999943"/>
+                            <subviews>
+                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Sbd-JS-z4m">
+                                    <rect key="frame" x="0.0" y="0.0" width="350" height="32"/>
+                                    <state key="normal" title="Button"/>
+                                    <buttonConfiguration key="configuration" style="plain" title="Set Up"/>
+                                </button>
+                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lD5-SW-2Gs">
+                                    <rect key="frame" x="0.0" y="48" width="350" height="32"/>
+                                    <state key="normal" title="Button"/>
+                                    <buttonConfiguration key="configuration" style="plain" title="See What You Can Download"/>
+                                </button>
+                            </subviews>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="80" id="7y2-Qv-gMG"/>
+                            </constraints>
+                        </stackView>
+                    </subviews>
+                    <constraints>
+                        <constraint firstItem="LbK-7V-x6W" firstAttribute="top" secondItem="Ng6-Da-drk" secondAttribute="bottom" constant="40" id="4Fh-hA-SbE"/>
+                        <constraint firstItem="Ng6-Da-drk" firstAttribute="leading" secondItem="Fi8-yd-9lL" secondAttribute="leading" constant="32" id="CCt-qj-ImQ"/>
+                        <constraint firstItem="Ng6-Da-drk" firstAttribute="top" secondItem="5tV-WE-Roo" secondAttribute="bottom" constant="16" id="CfB-eJ-3jZ"/>
+                        <constraint firstAttribute="trailing" secondItem="98S-DU-TUg" secondAttribute="trailing" constant="32" id="Coq-Zf-cmS"/>
+                        <constraint firstAttribute="trailing" secondItem="5tV-WE-Roo" secondAttribute="trailing" constant="48" id="EWV-a0-ohZ"/>
+                        <constraint firstItem="LbK-7V-x6W" firstAttribute="leading" secondItem="Fi8-yd-9lL" secondAttribute="leading" constant="32" id="KrQ-QP-5Ww"/>
+                        <constraint firstItem="98S-DU-TUg" firstAttribute="top" secondItem="Fi8-yd-9lL" secondAttribute="top" id="W3T-Fv-rMr"/>
+                        <constraint firstItem="5tV-WE-Roo" firstAttribute="centerX" secondItem="Fi8-yd-9lL" secondAttribute="centerX" id="ZJx-8e-ZFf"/>
+                        <constraint firstAttribute="trailing" secondItem="Ng6-Da-drk" secondAttribute="trailing" constant="32" id="c24-en-oTN"/>
+                        <constraint firstItem="5tV-WE-Roo" firstAttribute="leading" secondItem="Fi8-yd-9lL" secondAttribute="leading" constant="48" id="cWM-7N-Uk4"/>
+                        <constraint firstItem="5tV-WE-Roo" firstAttribute="top" secondItem="98S-DU-TUg" secondAttribute="bottom" constant="8" id="lDd-yi-g2e"/>
+                        <constraint firstItem="98S-DU-TUg" firstAttribute="leading" secondItem="Fi8-yd-9lL" secondAttribute="leading" constant="32" id="sfM-tS-aEY"/>
+                        <constraint firstAttribute="trailing" secondItem="LbK-7V-x6W" secondAttribute="trailing" constant="32" id="zaV-43-OtX"/>
+                    </constraints>
+                </view>
+            </subviews>
+            <constraints>
+                <constraint firstItem="Fi8-yd-9lL" firstAttribute="top" secondItem="nwm-oU-ZFu" secondAttribute="top" id="9gP-wP-QY4"/>
+                <constraint firstAttribute="bottom" secondItem="Fi8-yd-9lL" secondAttribute="bottom" id="SZd-wc-nUf"/>
+                <constraint firstItem="Fi8-yd-9lL" firstAttribute="leading" secondItem="nwm-oU-ZFu" secondAttribute="leading" id="aLW-Bq-ChA"/>
+                <constraint firstAttribute="trailing" secondItem="Fi8-yd-9lL" secondAttribute="trailing" id="ysT-7i-GH7"/>
+            </constraints>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <point key="canvasLocation" x="24.427480916030532" y="-92.605633802816911"/>
+        </view>
+    </objects>
+    <resources>
+        <image name="downloads-1" width="575" height="456"/>
+    </resources>
+</document>
