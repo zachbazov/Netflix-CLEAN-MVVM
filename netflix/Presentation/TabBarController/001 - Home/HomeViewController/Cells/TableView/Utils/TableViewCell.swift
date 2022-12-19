@@ -64,7 +64,7 @@ final class TableViewCell<T>: UITableViewCell where T: UICollectionViewCell {
         if case .display = indices {
             ///
         } else if case .ratable = indices {
-            layout = CollectionViewLayout(layout: .ratable, scrollDirection: .horizontal)
+            layout = CollectionViewLayout(layout: .rated, scrollDirection: .horizontal)
             collectionView.setCollectionViewLayout(layout, animated: false)
         } else {
             layout = CollectionViewLayout(layout: .standard, scrollDirection: .horizontal)

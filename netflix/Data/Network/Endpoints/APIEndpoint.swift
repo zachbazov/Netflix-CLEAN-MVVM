@@ -76,7 +76,8 @@ struct APIEndpoint {
         }
         
         static func searchMedia(with request: SearchRequestDTO) -> Endpoint<SearchResponseDTO> {
-            return Endpoint(path: "api/v1/media/search/\(request.title)", method: .get)
+            return Endpoint(path: "api/v1/media/search/\(request.title)",
+                            method: .get)
         }
     }
     

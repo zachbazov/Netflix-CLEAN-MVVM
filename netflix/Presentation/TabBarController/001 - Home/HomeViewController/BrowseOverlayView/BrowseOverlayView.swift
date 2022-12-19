@@ -31,7 +31,7 @@ final class BrowseOverlayView: UIView {
     required init?(coder: NSCoder) { fatalError() }
     
     private func createCollectionView() -> UICollectionView {
-        let layout = CollectionViewLayout(layout: .homeOverlay, scrollDirection: .vertical)
+        let layout = CollectionViewLayout(layout: .navigationOverlay, scrollDirection: .vertical)
         let collectionView = UICollectionView(frame: bounds, collectionViewLayout: layout)
         collectionView.register(StandardCollectionViewCell.nib,
                                 forCellWithReuseIdentifier: StandardCollectionViewCell.reuseIdentifier)

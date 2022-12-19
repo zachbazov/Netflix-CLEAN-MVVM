@@ -26,6 +26,7 @@ final class TrailerCollectionViewCell: UICollectionViewCell {
     private func dataDidDownload(with viewModel: TrailerCollectionViewCellViewModel,
                          completion: (() -> Void)?) {
         AsyncImageFetcher.shared.load(
+            in: .home,
             url: viewModel.posterImageURL,
             identifier: viewModel.posterImageIdentifier) { _ in completion?() }
     }
@@ -39,7 +40,7 @@ final class TrailerCollectionViewCell: UICollectionViewCell {
     }
     
     private func viewDidConfigure(with viewModel: TrailerCollectionViewCellViewModel) {
-        let image = AsyncImageFetcher.shared.object(for: viewModel.posterImageIdentifier)
+        let image = AsyncImageFetcher.shared.object(in: .home, for: viewModel.posterImageIdentifier)
         posterImageView.image = image
         titleLabel.text = viewModel.title
     }

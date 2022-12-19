@@ -36,8 +36,6 @@ final class SearchViewController: UIViewController {
     }
     
     private func setupSubviews() {
-        title = viewModel?.title
-        
         setupSearchController()
         setupDataSource()
     }
@@ -71,8 +69,8 @@ final class SearchViewController: UIViewController {
     private func createCollectionView() -> UICollectionView {
         let layout = CollectionViewLayout(layout: .search, scrollDirection: .vertical)
         let collectionView = UICollectionView(frame: contentContainer.bounds, collectionViewLayout: layout)
-        collectionView.register(StandardCollectionViewCell.nib,
-                                forCellWithReuseIdentifier: StandardCollectionViewCell.reuseIdentifier)
+        collectionView.register(SearchCollectionViewCell.nib,
+                                forCellWithReuseIdentifier: SearchCollectionViewCell.reuseIdentifier)
         contentContainer.addSubview(collectionView)
         collectionView.constraintToSuperview(contentContainer)
         return collectionView
@@ -105,6 +103,17 @@ extension SearchViewController {
         searchController.isActive = false
         searchController.searchBar.text = query
     }
+    
+    private func removeDataSource() {
+        collectionView.delegate = nil
+        collectionView.dataSource = nil
+        collectionView.reloadData()
+        collectionView.contentSize = .zero
+        
+        viewModel.items.value = []
+        
+        AsyncImageFetcher.shared.searchCache.removeAllObjects()
+    }
 }
 
 extension SearchViewController: UISearchBarDelegate {
@@ -121,14 +130,16 @@ extension SearchViewController: UISearchBarDelegate {
 
 extension SearchViewController: UISearchControllerDelegate {
     func willPresentSearchController(_ searchController: UISearchController) {
-        ///
+        collectionView.delegate = dataSource
+        collectionView.dataSource = dataSource
+        collectionView.reloadData()
     }
     
     func willDismissSearchController(_ searchController: UISearchController) {
-        ///
+        removeDataSource()
     }
     
     func didDismissSearchController(_ searchController: UISearchController) {
-        ///
+        removeDataSource()
     }
 }

@@ -30,6 +30,7 @@ final class EpisodeCollectionViewCell: UICollectionViewCell {
     private func dataDidDownload(with viewModel: EpisodeCollectionViewCellViewModel,
                                      completion: (() -> Void)?) {
         AsyncImageFetcher.shared.load(
+            in: .home,
             url: viewModel.posterImageURL,
             identifier: viewModel.posterImageIdentifier) { _ in
                 asynchrony { completion?() }
@@ -49,7 +50,7 @@ final class EpisodeCollectionViewCell: UICollectionViewCell {
                                       with viewModel: EpisodeCollectionViewCellViewModel) {
         guard let season = viewModel.season else { return }
         let episode = season.episodes[indexPath.row]
-        let image = AsyncImageFetcher.shared.object(for: viewModel.posterImageIdentifier)
+        let image = AsyncImageFetcher.shared.object(in: .home, for: viewModel.posterImageIdentifier)
         imageView.image = image
         titleLabel.text = episode.title
         timestampLabel.text = viewModel.media.length

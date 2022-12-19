@@ -16,7 +16,7 @@ final class HomeViewCoordinator: Coordinate {
     
     func showScreen(_ screen: Screen) {}
     
-    func presentMediaDetails(in section: Section, for media: Media, shouldScreenRoatate rotated: Bool) {
+    func presentMediaDetails(in section: Section, for media: Media, shouldScreenRotate rotated: Bool) {
         let controller = DetailViewController()
         let homeViewModel = viewController!.viewModel!
         let viewModel = DetailViewModel(section: section, media: media, with: homeViewModel)
@@ -34,7 +34,7 @@ final class HomeViewCoordinator: Coordinate {
     func actions() -> HomeViewModelActions {
         return HomeViewModelActions(
             presentMediaDetails: { [weak self] section, media, rotated in
-                self?.presentMediaDetails(in: section, for: media, shouldScreenRoatate: rotated)
+                self?.presentMediaDetails(in: section, for: media, shouldScreenRotate: rotated)
             })
     }
 }

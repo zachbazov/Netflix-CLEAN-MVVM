@@ -33,6 +33,7 @@ final class OpaqueView: UIView {
         insertSubview(blurView, at: 1)
         
         AsyncImageFetcher.shared.load(
+            in: .home,
             url: viewModel.imageURL,
             identifier: viewModel.identifier) { [weak self] image in
                 asynchrony {

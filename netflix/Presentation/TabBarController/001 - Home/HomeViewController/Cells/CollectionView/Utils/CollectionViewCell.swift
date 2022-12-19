@@ -34,19 +34,6 @@ class CollectionViewCell: UICollectionViewCell {
         return view
     }
     
-    static func create(on collectionView: UICollectionView,
-                       reuseIdentifier: String,
-                       media: [Media],
-                       for indexPath: IndexPath) -> CollectionViewCell {
-        guard let view = collectionView.dequeueReusableCell(
-            withReuseIdentifier: reuseIdentifier, for: indexPath) as? CollectionViewCell
-        else { fatalError() }
-        let media = media[indexPath.row]
-        view.viewModel = CollectionViewCellViewModel(media: media)
-        view.viewDidLoad(media: media, with: view.viewModel)
-        return view
-    }
-    
     override func prepareForReuse() {
         super.prepareForReuse()
         viewModel = nil
@@ -59,11 +46,13 @@ class CollectionViewCell: UICollectionViewCell {
     fileprivate func dataDidDownload(with viewModel: CollectionViewCellViewModel,
                                      completion: (() -> Void)?) {
         AsyncImageFetcher.shared.load(
+            in: .home,
             url: viewModel.posterImageURL,
             identifier: viewModel.posterImageIdentifier) { _ in
                 DispatchQueue.main.async { completion?() }
             }
         AsyncImageFetcher.shared.load(
+            in: .home,
             url: viewModel.logoImageURL,
             identifier: viewModel.logoImageIdentifier) { _ in
                 DispatchQueue.main.async { completion?() }
@@ -99,8 +88,8 @@ class CollectionViewCell: UICollectionViewCell {
     public func viewDidConfigure(with viewModel: CollectionViewCellViewModel) {
         guard representedIdentifier == viewModel.slug as NSString? else { return }
         
-        let posterImage = AsyncImageFetcher.shared.object(for: viewModel.posterImageIdentifier)
-        let logoImage = AsyncImageFetcher.shared.object(for: viewModel.logoImageIdentifier)
+        let posterImage = AsyncImageFetcher.shared.object(in: .home, for: viewModel.posterImageIdentifier)
+        let logoImage = AsyncImageFetcher.shared.object(in: .home, for: viewModel.logoImageIdentifier)
         coverImageView.image = posterImage
         logoImageView.image = logoImage
 

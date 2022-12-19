@@ -1,14 +1,14 @@
 //
-//  CollectionViewCellViewModel.swift
+//  SearchCollectionViewCellViewModel.swift
 //  netflix
 //
-//  Created by Zach Bazov on 08/09/2022.
+//  Created by Zach Bazov on 19/12/2022.
 //
 
 import Foundation
 
-struct CollectionViewCellViewModel: Equatable {
-    let indexPath: IndexPath
+struct SearchCollectionViewCellViewModel {
+    var media: Media?
     let title: String
     let slug: String
     let posters: [String]
@@ -20,13 +20,9 @@ struct CollectionViewCellViewModel: Equatable {
     var logoImageIdentifier: NSString
     var logoImageURL: URL!
     let presentedLogoAlignment: PresentedLogoAlignment
-    /// This initializer is basicly used in `Home` tab.
-    /// It serves `CollectionViewCell` cell types used on the collection views.
-    /// - Parameters:
-    ///   - media: Represented media object.
-    ///   - indexPath: Represented index path for the object on the collection.
-    init(media: Media, indexPath: IndexPath) {
-        self.indexPath = indexPath
+    
+    init(media: Media) {
+        self.media = media
         self.title = media.title
         self.slug = media.slug
         self.posters = media.resources.posters
@@ -34,11 +30,17 @@ struct CollectionViewCellViewModel: Equatable {
         self.posterImagePath = .init()
         self.logoImagePath = .init()
         self.presentedLogoAlignment = .init(rawValue: media.resources.presentedLogoAlignment)!
-        self.posterImageIdentifier = .init(string: "poster_\(media.slug)")
-        self.logoImageIdentifier = .init(string: "logo_\(media.slug)")
-        self.posterImagePath = media.path(forResourceOfType: PresentedPoster.self)!
-        self.logoImagePath = media.path(forResourceOfType: PresentedLogo.self)!
+        self.posterImageIdentifier = .init(string: "preview-poster_\(media.slug)")
+        self.logoImageIdentifier = .init(string: "display-logo_\(media.slug)")
+        self.posterImagePath = media.resources.previewPoster
+        self.logoImagePath = media.path(forResourceOfType: PresentedDisplayLogo.self)!
         self.posterImageURL = URL(string: self.posterImagePath)
         self.logoImageURL = URL(string: self.logoImagePath)
+    }
+}
+
+extension SearchCollectionViewCellViewModel {
+    func toMedia() -> Media {
+        return media!
     }
 }

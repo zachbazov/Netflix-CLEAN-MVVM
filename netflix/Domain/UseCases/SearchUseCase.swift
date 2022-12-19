@@ -52,11 +52,11 @@ final class SearchUseCase {
             return task
         }
     
-    func getMedia(with mediaRequestDTO: SearchRequestDTO) -> Endpoint<SearchResponseDTO> {
-        return Endpoint(path: "api/v1/media",
-                        method: .get,
-                        queryParametersEncodable: mediaRequestDTO)
-    }
+//    func getMedia(with mediaRequestDTO: SearchRequestDTO) -> Endpoint<SearchResponseDTO> {
+//        return Endpoint(path: "api/v1/media",
+//                        method: .get,
+//                        queryParametersEncodable: mediaRequestDTO)
+//    }
 }
 
 struct SearchUseCaseRequestValue {

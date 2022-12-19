@@ -9,25 +9,21 @@ import Foundation
 
 final class SearchViewModel: ViewModel {
     var coordinator: SearchViewCoordinator?
+    private let useCase: SearchUseCase
     
-    let title = NSLocalizedString("SearchViewModel.Search", comment: "Search")
-    var useCase: SearchUseCase
+    private var currentPage: Int = 0
+    private var totalPageCount: Int = 1
+    private var hasMorePages: Bool { currentPage < totalPageCount }
+    private var nextPage: Int { hasMorePages ? currentPage + 1 : currentPage }
+    private var pages: [MediaPage] = []
     
-    var currentPage: Int = 0
-    var totalPageCount: Int = 1
-    var hasMorePages: Bool { currentPage < totalPageCount }
-    var nextPage: Int { hasMorePages ? currentPage + 1 : currentPage }
+    private var mediaLoadTask: Cancellable? { willSet { mediaLoadTask?.cancel() } }
     
-    var pages: [MediaPage] = []
-    var mediaLoadTask: Cancellable? {
-        willSet { mediaLoadTask?.cancel() }
-    }
-    
-    let items: Observable<[CollectionViewCellViewModel]> = Observable([])
+    let items: Observable<[SearchCollectionViewCellViewModel]> = Observable([])
     let loading: Observable<SearchLoading?> = Observable(.none)
     let query: Observable<String> = Observable("")
-    let error: Observable<String> = Observable("")
-    var isEmpty: Bool { return items.value.isEmpty }
+    private let error: Observable<String> = Observable("")
+    private var isEmpty: Bool { return items.value.isEmpty }
     
     init() {
         let dataTransferService = Application.current.dataTransferService
@@ -46,8 +42,7 @@ extension SearchViewModel {
         
         pages = pages.filter { $0.page != mediaPage.page } + [mediaPage]
         
-        items.value = pages.media.map(CollectionViewCellViewModel.init)
-        print(1, items.value.count)
+        items.value = pages.media.map(SearchCollectionViewCellViewModel.init)
     }
     
     private func resetPages() {

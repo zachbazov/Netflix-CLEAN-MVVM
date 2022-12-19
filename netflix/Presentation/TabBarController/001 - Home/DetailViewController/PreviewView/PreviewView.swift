@@ -57,6 +57,7 @@ final class PreviewView: UIView {
     
     private func viewDidConfigure() {
         AsyncImageFetcher.shared.load(
+            in: .home,
             url: viewModel.url,
             identifier: viewModel.identifier) { [weak self] image in
                 asynchrony { self?.imageView.image = image }

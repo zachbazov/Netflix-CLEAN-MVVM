@@ -31,12 +31,14 @@ struct DisplayViewConfiguration: Configuration {
         view?.genresLabel.attributedText = nil
         
         AsyncImageFetcher.shared.load(
+            in: .home,
             url: viewModel.posterImageURL,
             identifier: viewModel.posterImageIdentifier) { image in
                 DispatchQueue.main.async { view?.posterImageView.image = image }
             }
         
         AsyncImageFetcher.shared.load(
+            in: .home,
             url: viewModel.logoImageURL,
             identifier: viewModel.logoImageIdentifier) { image in
                 DispatchQueue.main.async { view?.logoImageView.image = image }

@@ -12,10 +12,10 @@ private protocol FetcherInput {
     
     static func urlSession() -> URLSession
     
-    func set(_ image: UIImage, forKey identifier: NSString)
-    func remove(for identifier: NSString)
-    func object(for identifier: NSString) -> UIImage?
-    func load(url: URL, identifier: NSString, completion: @escaping (UIImage?) -> Void)
+    func set(in cache: AsyncImageFetcher.Cache, _ image: UIImage, forKey identifier: NSString)
+    func remove(in cache: AsyncImageFetcher.Cache, for identifier: NSString)
+    func object(in cache: AsyncImageFetcher.Cache, for identifier: NSString) -> UIImage?
+    func load(in cache: AsyncImageFetcher.Cache, url: URL, identifier: NSString, completion: @escaping (UIImage?) -> Void)
 }
 
 private protocol FetcherOutput {
@@ -27,33 +27,53 @@ private protocol FetcherOutput {
 private typealias Fetcher = FetcherInput & FetcherOutput
 
 final class AsyncImageFetcher: Fetcher {
+    enum Cache {
+        case home
+        case search
+    }
+    
     static var shared = AsyncImageFetcher()
     
     fileprivate(set) var cache = NSCache<NSString, UIImage>()
+    fileprivate(set) var searchCache = NSCache<NSString, UIImage>()
     fileprivate let queue = OS_dispatch_queue_serial(label: "com.netflix.utils.async-image-fetcher")
     
     internal required init() {}
     
     fileprivate static func urlSession() -> URLSession {
         let config = URLSessionConfiguration.ephemeral
-        config.timeoutIntervalForRequest = 30
+        config.timeoutIntervalForRequest = 60
         return URLSession(configuration: config)
     }
     
-    fileprivate func set(_ image: UIImage, forKey identifier: NSString) {
-        cache.setObject(image, forKey: identifier)
+    fileprivate func set(in cache: Cache, _ image: UIImage, forKey identifier: NSString) {
+        if case .home = cache {
+            self.cache.setObject(image, forKey: identifier)
+            return
+        }
+        
+        self.searchCache.setObject(image, forKey: identifier)
     }
     
-    func remove(for identifier: NSString) {
-        cache.removeObject(forKey: identifier)
+    func remove(in cache: Cache, for identifier: NSString) {
+        if case .home = cache {
+            self.cache.removeObject(forKey: identifier)
+            return
+        }
+        
+        searchCache.removeObject(forKey: identifier)
     }
     
-    func object(for identifier: NSString) -> UIImage? {
-        return cache.object(forKey: identifier)
+    func object(in cache: Cache, for identifier: NSString) -> UIImage? {
+        if case .home = cache {
+            return self.cache.object(forKey: identifier)
+        }
+        
+        return searchCache.object(forKey: identifier)
     }
     
-    func load(url: URL, identifier: NSString, completion: @escaping (UIImage?) -> Void) {
-        if let cachedImage = object(for: identifier) {
+    func load(in cache: Cache, url: URL, identifier: NSString, completion: @escaping (UIImage?) -> Void) {
+        if let cachedImage = object(in: cache, for: identifier) {
             return queue.async { completion(cachedImage) }
         }
         
@@ -68,7 +88,7 @@ final class AsyncImageFetcher: Fetcher {
                 httpURLResponse.statusCode == 200,
                 mimeType.hasPrefix("image")
             else { return }
-            self.set(image, forKey: identifier)
+            self.set(in: cache, image, forKey: identifier)
             self.queue.async { completion(image) }
         }.resume()
     }
