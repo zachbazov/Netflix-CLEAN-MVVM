@@ -26,7 +26,6 @@
                     <subviews>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Pe2-eV-mfP" userLabel="Search Bar Container">
                             <rect key="frame" x="0.0" y="0.0" width="393" height="56"/>
-                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="56" id="0v9-lz-u2G"/>
                             </constraints>
@@ -35,7 +34,6 @@
                             <rect key="frame" x="0.0" y="56" width="393" height="703"/>
                         </view>
                     </subviews>
-                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <constraints>
                         <constraint firstAttribute="bottom" secondItem="WsN-hZ-h6l" secondAttribute="bottom" id="K0e-Vu-Gio"/>
                         <constraint firstAttribute="trailing" secondItem="WsN-hZ-h6l" secondAttribute="trailing" id="P3i-iP-Rv2"/>
@@ -48,7 +46,6 @@
                 </view>
             </subviews>
             <viewLayoutGuide key="safeArea" id="qUX-wD-p8S"/>
-            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
             <constraints>
                 <constraint firstItem="Eug-U7-55W" firstAttribute="leading" secondItem="qUX-wD-p8S" secondAttribute="leading" id="3nj-Rr-LQa"/>
                 <constraint firstItem="Eug-U7-55W" firstAttribute="top" secondItem="qUX-wD-p8S" secondAttribute="top" id="46M-lr-7zO"/>

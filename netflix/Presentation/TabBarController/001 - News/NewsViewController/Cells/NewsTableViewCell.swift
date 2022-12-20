@@ -44,6 +44,7 @@ final class NewsTableViewCell: UITableViewCell {
     
     private func setupSubviews() {
         selectionStyle = .none
+        backgroundColor = .black
         previewPosterImageView.layer.cornerRadius = 10.0
     }
     

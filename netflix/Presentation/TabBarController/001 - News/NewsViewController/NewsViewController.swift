@@ -46,6 +46,7 @@ final class NewsViewController: UIViewController {
         tableView.showsVerticalScrollIndicator = false
         tableView.showsHorizontalScrollIndicator = false
         tableView.register(nib: NewsTableViewCell.self)
+        tableView.backgroundColor = .black
         
         tableViewContainer.addSubview(tableView)
     }

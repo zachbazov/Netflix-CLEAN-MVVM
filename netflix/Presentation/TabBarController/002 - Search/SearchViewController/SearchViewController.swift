@@ -55,10 +55,13 @@ final class SearchViewController: UIViewController {
         searchController.searchBar.delegate = self
         searchController.searchBar.placeholder = "Search..."
         searchController.obscuresBackgroundDuringPresentation = false
-        searchController.searchBar.barStyle = .default
+        searchController.searchBar.barStyle = .black
         searchController.hidesNavigationBarDuringPresentation = false
         searchController.searchBar.frame = searchBarContainer.bounds
-        searchController.searchBar.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        searchController.searchBar.autoresizingMask = [.flexibleWidth,  .flexibleHeight]
+        searchController.searchBar.searchTextField.backgroundColor = .hexColor("#2B2B2B")
+        searchController.searchBar.searchTextField.superview?.backgroundColor = .black
+        searchController.searchBar.searchTextField.keyboardAppearance = .dark
         searchBarContainer.addSubview(searchController.searchBar)
         definesPresentationContext = true
         if #available(iOS 13.0, *) {
@@ -71,6 +74,7 @@ final class SearchViewController: UIViewController {
         let collectionView = UICollectionView(frame: contentContainer.bounds, collectionViewLayout: layout)
         collectionView.register(SearchCollectionViewCell.nib,
                                 forCellWithReuseIdentifier: SearchCollectionViewCell.reuseIdentifier)
+        collectionView.backgroundColor = .black
         contentContainer.addSubview(collectionView)
         collectionView.constraintToSuperview(contentContainer)
         return collectionView
