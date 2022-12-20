@@ -21,13 +21,13 @@
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <subviews>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="21d-Zv-BfY" userLabel="Downloads Navigation View Container">
-                    <rect key="frame" x="0.0" y="59" width="393" height="100"/>
+                    <rect key="frame" x="0.0" y="59" width="393" height="80"/>
                     <constraints>
-                        <constraint firstAttribute="height" constant="100" id="naA-Jd-9No"/>
+                        <constraint firstAttribute="height" constant="80" id="naA-Jd-9No"/>
                     </constraints>
                 </view>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3Cy-L5-WmG" userLabel="Downloads View Container">
-                    <rect key="frame" x="0.0" y="159" width="393" height="596.33333333333337"/>
+                    <rect key="frame" x="0.0" y="139" width="393" height="596.33333333333337"/>
                 </view>
             </subviews>
             <viewLayoutGuide key="safeArea" id="4fx-Ne-2XG"/>

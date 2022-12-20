@@ -19,8 +19,30 @@
                 <subviews>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Mdr-N1-92d" userLabel="Date Container">
                         <rect key="frame" x="0.0" y="0.0" width="40" height="426"/>
+                        <subviews>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="2" translatesAutoresizingMaskIntoConstraints="NO" id="UXP-in-wET">
+                                <rect key="frame" x="0.0" y="0.0" width="40" height="44"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="AUG" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="v8y-8i-HED" userLabel="Month Label">
+                                        <rect key="frame" x="0.0" y="0.0" width="40" height="15.666666666666666"/>
+                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="13"/>
+                                        <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="26" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TWU-2N-Eip" userLabel="Day Label">
+                                        <rect key="frame" x="0.0" y="17.666666666666671" width="40" height="26.333333333333329"/>
+                                        <fontDescription key="fontDescription" type="system" weight="heavy" pointSize="22"/>
+                                        <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                            </stackView>
+                        </subviews>
                         <constraints>
                             <constraint firstAttribute="width" constant="40" id="MiG-Hm-ajJ"/>
+                            <constraint firstItem="UXP-in-wET" firstAttribute="leading" secondItem="Mdr-N1-92d" secondAttribute="leading" id="NMt-1M-ijM"/>
+                            <constraint firstItem="UXP-in-wET" firstAttribute="top" secondItem="Mdr-N1-92d" secondAttribute="top" id="Nxj-Y5-DGA"/>
+                            <constraint firstAttribute="trailing" secondItem="UXP-in-wET" secondAttribute="trailing" id="eUL-6w-Dgc"/>
                         </constraints>
                     </view>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="UVV-XH-f74" userLabel="Media Player View Container">
@@ -175,12 +197,14 @@
             <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
             <connections>
                 <outlet property="brandImageView" destination="JDM-jc-QPX" id="VJs-Y7-HFa"/>
+                <outlet property="dayLabel" destination="TWU-2N-Eip" id="23W-06-6n0"/>
                 <outlet property="descriptionTextView" destination="jEM-IT-3CJ" id="3aR-Yr-z5Y"/>
                 <outlet property="etaTillOnAir" destination="P5J-KT-Civ" id="eeu-hI-D0E"/>
                 <outlet property="genresLabel" destination="I5K-Dv-tN3" id="xNk-wU-jmd"/>
                 <outlet property="infoButton" destination="7eT-gV-3I8" id="dMu-an-car"/>
                 <outlet property="logoImageView" destination="0Hc-ob-Pxu" id="vYb-af-eKq"/>
                 <outlet property="mediaTypeLabel" destination="4QE-DK-Kec" id="zac-iY-vgc"/>
+                <outlet property="monthLabel" destination="v8y-8i-HED" id="TGV-WI-MdO"/>
                 <outlet property="previewPosterImageView" destination="xHr-r5-wFd" id="g7S-BU-PZ3"/>
                 <outlet property="remindMeButton" destination="BKi-uy-L2F" id="W5X-fl-M3R"/>
                 <outlet property="titleLabel" destination="Pu6-TL-CBC" id="AMM-5h-UQa"/>
