@@ -83,7 +83,7 @@ final class RootCoordinator: Coordinate {
         let navigationView = homeViewController?.navigationView!
         
         homeViewController?.dataSource?.terminate()
-        tabBar?.viewModel.coordinator?.terminateHomeViewController()
+        homeViewController?.terminate()
         
         tabCoordinator.viewController = nil
         tabBar?.viewModel.coordinator = nil

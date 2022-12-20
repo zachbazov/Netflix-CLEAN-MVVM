@@ -10,8 +10,10 @@ import Foundation
 final class NavigationOverlayViewModel {
     let coordinator: HomeViewCoordinator
     
-    private(set) var isPresented: Observable<Bool> = Observable(false)
-    private(set) var items: Observable<[Valuable]> = Observable([])
+    let numberOfSections: Int = 1
+    let isPresented: Observable<Bool> = Observable(false)
+    let items: Observable<[Valuable]> = Observable([])
+    
     private var state: NavigationOverlayTableViewDataSource.State = .mainMenu
     
     init(with viewModel: HomeViewModel) {

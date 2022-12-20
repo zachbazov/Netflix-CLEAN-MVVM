@@ -30,18 +30,23 @@ final class TabBarCoordinator: Coordinate {
         }
     }
     
-    private func createViewControllers(with state: NavigationView.State? = nil) {
+    /// Create view controllers for the tab controller.
+    /// - Parameter state: Initial navigation view state.
+    private func createViewControllers(with state: NavigationView.State) {
+        /// Home's navigation view controls the state of the table view data source.
+        /// Hence, `home` property will be initialized every time the state changes.
         home = homeNavigation(state)
+        /// One-time initialization is needed for the other scenes.
         if news == nil { news = newsNavigation() }
         if search == nil { search = searchNavigation() }
         if downloads == nil { downloads = downloadsController() }
-        
+        /// Arranged view controllers for the tab controller.
         viewController?.viewControllers = [home, news, search, downloads]
     }
 }
 
 extension TabBarCoordinator {
-    private func homeNavigation(_ state: NavigationView.State?) -> UINavigationController {
+    private func homeNavigation(_ state: NavigationView.State) -> UINavigationController {
         let coordinator = HomeViewCoordinator()
         let viewModel = HomeViewModel()
         let controller = HomeViewController()
@@ -78,38 +83,12 @@ extension TabBarCoordinator {
         controller.setNavigationBarHidden(true, animated: false)
     }
     
-    func requestUserCredentials(_ state: NavigationView.State?) {
+    func requestUserCredentials(_ state: NavigationView.State) {
         let viewModel = AuthViewModel()
         
         viewModel.cachedAuthorizationSession { [weak self] in
             self?.createViewControllers(with: state)
         }
-    }
-    
-    func terminateHomeViewController() {
-        let tabBar = Application.current.rootCoordinator.window?.rootViewController as! TabBarController
-        let homeNavigation = tabBar.viewControllers?.first! as! UINavigationController
-        let homeViewController = homeNavigation.viewControllers.first! as? HomeViewController
-        
-        homeViewController?.navigationView?.navigationOverlayView?.tableView.removeFromSuperview()
-        homeViewController?.navigationView?.navigationOverlayView?.removeFromSuperview()
-        homeViewController?.navigationView?.navigationOverlayView = nil
-        homeViewController?.navigationView?.removeFromSuperview()
-        homeViewController?.navigationView = nil
-
-        homeViewController?.browseOverlayView?.removeFromSuperview()
-        homeViewController?.browseOverlayView = nil
-        
-        homeViewController?.viewModel?.myList?.removeObservers()
-        homeViewController?.viewModel?.coordinator = nil
-        homeViewController?.viewModel?.mediaTask = nil
-        homeViewController?.viewModel?.sectionsTask = nil
-        homeViewController?.viewModel?.tableViewState = nil
-        homeViewController?.viewModel?.myList = nil
-        homeViewController?.viewModel = nil
-
-        homeViewController?.removeObservers()
-        homeViewController?.removeFromParent()
     }
 }
 

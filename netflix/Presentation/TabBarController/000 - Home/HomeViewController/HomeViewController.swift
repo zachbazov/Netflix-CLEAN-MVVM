@@ -70,6 +70,9 @@ final class HomeViewController: UIViewController {
     }
     
     func terminate() {
+        navigationView.navigationOverlayView.removeFromSuperview()
+        navigationView.navigationOverlayView = nil
+        
         navigationView.removeFromSuperview()
         navigationView = nil
 

@@ -50,7 +50,7 @@ final class NavigationOverlayView: UIView {
         parent.addSubview(self.footerView)
         self.addSubview(self.tableView)
         
-        self.dataSource = NavigationOverlayTableViewDataSource(on: self.tableView, with: self.viewModel)
+        self.dataSource = NavigationOverlayTableViewDataSource(with: self.viewModel)
         
         /// Updates root coordinator's `categoriesOverlayView` property.
         viewModel.coordinator?.viewController?.navigationView?.navigationOverlayView = self

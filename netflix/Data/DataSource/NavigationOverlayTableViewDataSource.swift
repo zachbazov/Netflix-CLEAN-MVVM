@@ -16,17 +16,14 @@ final class NavigationOverlayTableViewDataSource: NSObject,
         case categories
     }
     
-    private weak var tableView: UITableView!
     private weak var viewModel: NavigationOverlayViewModel!
-    private let numberOfSections: Int = 1
     
-    init(on tableView: UITableView, with viewModel: NavigationOverlayViewModel) {
-        self.tableView = tableView
+    init(with viewModel: NavigationOverlayViewModel) {
         self.viewModel = viewModel
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        return numberOfSections
+        return viewModel.numberOfSections
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -34,11 +31,16 @@ final class NavigationOverlayTableViewDataSource: NSObject,
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        return NavigationOverlayTableViewCell(on: tableView, for: indexPath, with: viewModel.items.value)
+        return NavigationOverlayTableViewCell(on: tableView,
+                                              for: indexPath,
+                                              with: viewModel.items.value)
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         viewModel.isPresented.value = false
         viewModel.didSelectRow(at: indexPath)
+        if case .none? = State(rawValue: indexPath.section) {
+            
+        }
     }
 }
