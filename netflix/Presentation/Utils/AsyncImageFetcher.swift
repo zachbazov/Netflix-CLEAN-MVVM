@@ -30,12 +30,14 @@ final class AsyncImageFetcher: Fetcher {
     enum Cache {
         case home
         case search
+        case news
     }
     
     static var shared = AsyncImageFetcher()
     
     fileprivate(set) var cache = NSCache<NSString, UIImage>()
     fileprivate(set) var searchCache = NSCache<NSString, UIImage>()
+    fileprivate(set) var newsCache = NSCache<NSString, UIImage>()
     fileprivate let queue = OS_dispatch_queue_serial(label: "com.netflix.utils.async-image-fetcher")
     
     internal required init() {}
@@ -49,27 +51,31 @@ final class AsyncImageFetcher: Fetcher {
     fileprivate func set(in cache: Cache, _ image: UIImage, forKey identifier: NSString) {
         if case .home = cache {
             self.cache.setObject(image, forKey: identifier)
-            return
+        } else if case .search = cache {
+            searchCache.setObject(image, forKey: identifier)
+        } else {
+            newsCache.setObject(image, forKey: identifier)
         }
-        
-        self.searchCache.setObject(image, forKey: identifier)
     }
     
     func remove(in cache: Cache, for identifier: NSString) {
         if case .home = cache {
             self.cache.removeObject(forKey: identifier)
-            return
+        } else if case .search = cache {
+            searchCache.removeObject(forKey: identifier)
+        } else {
+            newsCache.removeObject(forKey: identifier)
         }
-        
-        searchCache.removeObject(forKey: identifier)
     }
     
     func object(in cache: Cache, for identifier: NSString) -> UIImage? {
         if case .home = cache {
             return self.cache.object(forKey: identifier)
+        } else if case .search = cache {
+            return searchCache.object(forKey: identifier)
+        } else {
+            return newsCache.object(forKey: identifier)
         }
-        
-        return searchCache.object(forKey: identifier)
     }
     
     func load(in cache: Cache, url: URL, identifier: NSString, completion: @escaping (UIImage?) -> Void) {

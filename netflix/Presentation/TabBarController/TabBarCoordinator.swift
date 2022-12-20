@@ -16,6 +16,11 @@ final class TabBarCoordinator: Coordinate {
     
     weak var viewController: TabBarController?
     
+    private var home: UINavigationController!
+    private var news: UINavigationController!
+    private var search: UINavigationController!
+    private var downloads: UIViewController!
+    
     func showScreen(_ screen: Screen) {
         switch screen {
         case .home:
@@ -26,10 +31,10 @@ final class TabBarCoordinator: Coordinate {
     }
     
     private func createViewControllers(with state: NavigationView.State? = nil) {
-        let home = homeNavigation(state)
-        let news = newsNavigation()
-        let search = searchNavigation()
-        let downloads = downloadsController()
+        home = homeNavigation(state)
+        if news == nil { news = newsNavigation() }
+        if search == nil { search = searchNavigation() }
+        if downloads == nil { downloads = downloadsController() }
         
         viewController?.viewControllers = [home, news, search, downloads]
     }

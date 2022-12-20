@@ -79,6 +79,12 @@ struct APIEndpoint {
             return Endpoint(path: "api/v1/media/search/\(request.title)",
                             method: .get)
         }
+        
+        static func getUpcomingMedia(with request: NewsRequestDTO) -> Endpoint<NewsResponseDTO> {
+            return Endpoint(path: "api/v1/media",
+                            method: .get,
+                            queryParameters: request.queryParams)
+        }
     }
     
     struct SeasonsRepository: SeasonsRepositoryEndpoints {

@@ -18,21 +18,23 @@ final class SearchUseCase {
         requestValue: SearchUseCaseRequestValue,
         cached: @escaping (MediaPage) -> Void,
         completion: @escaping (Result<MediaPage, Error>) -> Void) -> Cancellable? {
-            return fetchMediaList(query: requestValue.query, page: requestValue.page) { mediaPage in
-                print("cached", mediaPage)
-            } completion: { result in
-                if case let .success(mediaPage) = result {
-                    completion(.success(mediaPage))
-                }
+            return fetchMediaList(
+                query: requestValue.query,
+                page: requestValue.page,
+                cached: { _ in },
+                completion: { result in
+                    if case let .success(mediaPage) = result {
+                        completion(.success(mediaPage))
+                    }
+                })
             }
-        }
     
     func fetchMediaList(
         query: MediaQuery,
         page: Int,
         cached: @escaping (MediaPage) -> Void,
         completion: @escaping (Result<MediaPage, Error>) -> Void) -> Cancellable? {
-            let requestDTO = SearchRequestDTO(title: query.query, page: nil) //, page: page
+            let requestDTO = SearchRequestDTO(title: query.query, page: nil)
             let task = RepositoryTask()
             
             guard !task.isCancelled else { return nil }
@@ -51,12 +53,6 @@ final class SearchUseCase {
             
             return task
         }
-    
-//    func getMedia(with mediaRequestDTO: SearchRequestDTO) -> Endpoint<SearchResponseDTO> {
-//        return Endpoint(path: "api/v1/media",
-//                        method: .get,
-//                        queryParametersEncodable: mediaRequestDTO)
-//    }
 }
 
 struct SearchUseCaseRequestValue {

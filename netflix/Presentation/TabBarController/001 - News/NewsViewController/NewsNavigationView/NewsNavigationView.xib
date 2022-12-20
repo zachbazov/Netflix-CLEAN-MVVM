@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="21507" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21505"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="NewsNavigationView" customModule="netflix" customModuleProvider="target">
+            <connections>
+                <outlet property="accountButton" destination="8sj-cb-Cxe" id="5fD-pV-6oQ"/>
+                <outlet property="airPlayButton" destination="t4l-6D-jiV" id="EVL-cy-CTm"/>
+                <outlet property="titleLabel" destination="mQd-uz-dZA" id="DUz-zz-FOj"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="LdG-cv-pVM">
+            <rect key="frame" x="0.0" y="0.0" width="393" height="80"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <subviews>
+                <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="bqa-oB-GEE">
+                    <rect key="frame" x="0.0" y="0.0" width="393" height="80"/>
+                    <subviews>
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3EA-iD-8N4" userLabel="Top Navigation Container">
+                            <rect key="frame" x="0.0" y="0.0" width="393" height="40"/>
+                            <subviews>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="News &amp; Hot" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mQd-uz-dZA">
+                                    <rect key="frame" x="16" y="0.0" width="265" height="40"/>
+                                    <fontDescription key="fontDescription" type="system" weight="heavy" pointSize="22"/>
+                                    <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    <nil key="highlightedColor"/>
+                                </label>
+                                <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="16" translatesAutoresizingMaskIntoConstraints="NO" id="zVf-KS-UZw">
+                                    <rect key="frame" x="297" y="8" width="80" height="24"/>
+                                    <subviews>
+                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="t4l-6D-jiV" userLabel="AirPlay Button">
+                                            <rect key="frame" x="0.0" y="0.0" width="32" height="24"/>
+                                            <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                        </button>
+                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8sj-cb-Cxe" userLabel="Account Button">
+                                            <rect key="frame" x="48" y="0.0" width="32" height="24"/>
+                                            <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                        </button>
+                                    </subviews>
+                                    <constraints>
+                                        <constraint firstAttribute="width" constant="80" id="HP4-M1-UdV"/>
+                                    </constraints>
+                                </stackView>
+                            </subviews>
+                            <constraints>
+                                <constraint firstItem="mQd-uz-dZA" firstAttribute="top" secondItem="3EA-iD-8N4" secondAttribute="top" id="3CY-ad-jk3"/>
+                                <constraint firstAttribute="bottom" secondItem="zVf-KS-UZw" secondAttribute="bottom" constant="8" id="Agn-tV-2fn"/>
+                                <constraint firstAttribute="bottom" secondItem="mQd-uz-dZA" secondAttribute="bottom" id="GeT-Rj-2y7"/>
+                                <constraint firstItem="zVf-KS-UZw" firstAttribute="top" secondItem="3EA-iD-8N4" secondAttribute="top" constant="8" id="MQ0-9n-rAx"/>
+                                <constraint firstAttribute="trailing" secondItem="zVf-KS-UZw" secondAttribute="trailing" constant="16" id="X7f-o7-u7q"/>
+                                <constraint firstItem="mQd-uz-dZA" firstAttribute="leading" secondItem="3EA-iD-8N4" secondAttribute="leading" constant="16" id="ko6-iF-Ynp"/>
+                                <constraint firstItem="zVf-KS-UZw" firstAttribute="leading" secondItem="mQd-uz-dZA" secondAttribute="trailing" constant="16" id="tRX-fc-Wc1"/>
+                            </constraints>
+                        </view>
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="X0h-YJ-KEf" userLabel="Bottom Navigation Container">
+                            <rect key="frame" x="0.0" y="40" width="393" height="40"/>
+                        </view>
+                    </subviews>
+                </stackView>
+            </subviews>
+            <viewLayoutGuide key="safeArea" id="cSI-SI-KHh"/>
+            <constraints>
+                <constraint firstItem="cSI-SI-KHh" firstAttribute="trailing" secondItem="bqa-oB-GEE" secondAttribute="trailing" id="E7o-8H-i0x"/>
+                <constraint firstItem="bqa-oB-GEE" firstAttribute="top" secondItem="LdG-cv-pVM" secondAttribute="top" id="leS-L9-1cJ"/>
+                <constraint firstAttribute="bottom" secondItem="bqa-oB-GEE" secondAttribute="bottom" id="sv1-ar-MNV"/>
+                <constraint firstItem="bqa-oB-GEE" firstAttribute="leading" secondItem="cSI-SI-KHh" secondAttribute="leading" id="tge-2p-YeI"/>
+            </constraints>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <point key="canvasLocation" x="276" y="-206"/>
+        </view>
+    </objects>
+</document>

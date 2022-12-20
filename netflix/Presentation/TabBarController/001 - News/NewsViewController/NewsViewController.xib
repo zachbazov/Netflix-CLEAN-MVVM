@@ -5,12 +5,13 @@
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21505"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
-        <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="NewsViewController" customModule="netflix" customModuleProvider="target">
             <connections>
+                <outlet property="navigationViewContainer" destination="Kee-Q2-Jru" id="vTn-le-wUv"/>
+                <outlet property="tableViewContainer" destination="nKW-Fb-3q3" id="Tch-FJ-rKO"/>
                 <outlet property="view" destination="DoN-JX-aNB" id="JoZ-rn-n6k"/>
             </connections>
         </placeholder>
@@ -18,14 +19,29 @@
         <view contentMode="scaleToFill" id="DoN-JX-aNB">
             <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <subviews>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Kee-Q2-Jru" userLabel="News Navigation View Container">
+                    <rect key="frame" x="0.0" y="59" width="393" height="80"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="80" id="6d9-7n-ev6"/>
+                    </constraints>
+                </view>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="nKW-Fb-3q3" userLabel="News Table View Container">
+                    <rect key="frame" x="0.0" y="139" width="393" height="679"/>
+                </view>
+            </subviews>
             <viewLayoutGuide key="safeArea" id="4x1-hv-Ouq"/>
-            <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+            <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+            <constraints>
+                <constraint firstItem="4x1-hv-Ouq" firstAttribute="bottom" secondItem="nKW-Fb-3q3" secondAttribute="bottom" id="68x-KQ-5SV"/>
+                <constraint firstItem="nKW-Fb-3q3" firstAttribute="top" secondItem="Kee-Q2-Jru" secondAttribute="bottom" id="9er-6p-SYB"/>
+                <constraint firstItem="nKW-Fb-3q3" firstAttribute="leading" secondItem="4x1-hv-Ouq" secondAttribute="leading" id="S5E-T2-7Mh"/>
+                <constraint firstItem="4x1-hv-Ouq" firstAttribute="trailing" secondItem="nKW-Fb-3q3" secondAttribute="trailing" id="XUM-MX-O9g"/>
+                <constraint firstItem="4x1-hv-Ouq" firstAttribute="trailing" secondItem="Kee-Q2-Jru" secondAttribute="trailing" id="tvC-iI-fZt"/>
+                <constraint firstItem="Kee-Q2-Jru" firstAttribute="top" secondItem="4x1-hv-Ouq" secondAttribute="top" id="vUH-cC-Rf7"/>
+                <constraint firstItem="Kee-Q2-Jru" firstAttribute="leading" secondItem="4x1-hv-Ouq" secondAttribute="leading" id="xvU-f4-B8U"/>
+            </constraints>
             <point key="canvasLocation" x="204" y="53"/>
         </view>
     </objects>
-    <resources>
-        <systemColor name="systemBackgroundColor">
-            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-        </systemColor>
-    </resources>
 </document>
