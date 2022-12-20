@@ -14,9 +14,11 @@ final class DownloadsView: UIView, ViewInstantiable {
     @IBOutlet private var setupButton: UIButton!
     @IBOutlet private var canDownloadButton: UIButton!
     
-    override init(frame: CGRect) {
-        super.init(frame: frame)
+    init(on parent: UIView) {
+        super.init(frame: parent.bounds)
         self.nibDidLoad()
+        parent.addSubview(self)
+        self.constraintToSuperview(parent)
     }
     
     required init?(coder: NSCoder) { fatalError() }

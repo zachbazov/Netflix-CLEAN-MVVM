@@ -12,9 +12,11 @@ final class DownloadsNavigationView: UIView, ViewInstantiable {
     @IBOutlet private var airPlayButton: UIButton!
     @IBOutlet private var accountButton: UIButton!
     
-    override init(frame: CGRect) {
-        super.init(frame: frame)
+    init(on parent: UIView) {
+        super.init(frame: parent.bounds)
         self.nibDidLoad()
+        parent.addSubview(self)
+        self.constraintToSuperview(parent)
     }
     
     required init?(coder: NSCoder) { fatalError() }

@@ -38,32 +38,6 @@ final class TabBarCoordinator: Coordinate {
         
         viewController?.viewControllers = [home, news, search, downloads]
     }
-    
-    func terminateHomeViewController() {
-        let tabBar = Application.current.rootCoordinator.window?.rootViewController as! TabBarController
-        let homeNavigation = tabBar.viewControllers?.first! as! UINavigationController
-        let homeViewController = homeNavigation.viewControllers.first! as? HomeViewController
-        
-        homeViewController?.navigationView?.navigationOverlayView?.tableView.removeFromSuperview()
-        homeViewController?.navigationView?.navigationOverlayView?.removeFromSuperview()
-        homeViewController?.navigationView?.navigationOverlayView = nil
-        homeViewController?.navigationView?.removeFromSuperview()
-        homeViewController?.navigationView = nil
-
-        homeViewController?.browseOverlayView?.removeFromSuperview()
-        homeViewController?.browseOverlayView = nil
-        
-        homeViewController?.viewModel?.myList?.removeObservers()
-        homeViewController?.viewModel?.coordinator = nil
-        homeViewController?.viewModel?.mediaTask = nil
-        homeViewController?.viewModel?.sectionsTask = nil
-        homeViewController?.viewModel?.tableViewState = nil
-        homeViewController?.viewModel?.myList = nil
-        homeViewController?.viewModel = nil
-
-        homeViewController?.removeObservers()
-        homeViewController?.removeFromParent()
-    }
 }
 
 extension TabBarCoordinator {
@@ -73,16 +47,16 @@ extension TabBarCoordinator {
         let controller = HomeViewController()
         
         if state == .tvShows {
-            viewController?.viewModel.tableViewState.value = .series
+            viewController?.viewModel.homeDataSourceState.value = .series
         } else if state == .movies {
-            viewController?.viewModel.tableViewState.value = .films
+            viewController?.viewModel.homeDataSourceState.value = .films
         } else if state == .home {
-            viewController?.viewModel.tableViewState.value = .all
+            viewController?.viewModel.homeDataSourceState.value = .all
         } else {}
         
-        viewModel.tableViewState = viewController?.viewModel.tableViewState.value
+        viewModel.tableViewState = viewController?.viewModel.homeDataSourceState.value
         controller.viewModel = viewModel
-        controller.viewModel.tableViewState = viewController?.viewModel.tableViewState.value
+        controller.viewModel.tableViewState = viewController?.viewModel.homeDataSourceState.value
         controller.viewModel.coordinator = coordinator
         controller.viewModel.coordinator?.viewController = controller
         coordinator.viewController = controller
@@ -110,6 +84,32 @@ extension TabBarCoordinator {
         viewModel.cachedAuthorizationSession { [weak self] in
             self?.createViewControllers(with: state)
         }
+    }
+    
+    func terminateHomeViewController() {
+        let tabBar = Application.current.rootCoordinator.window?.rootViewController as! TabBarController
+        let homeNavigation = tabBar.viewControllers?.first! as! UINavigationController
+        let homeViewController = homeNavigation.viewControllers.first! as? HomeViewController
+        
+        homeViewController?.navigationView?.navigationOverlayView?.tableView.removeFromSuperview()
+        homeViewController?.navigationView?.navigationOverlayView?.removeFromSuperview()
+        homeViewController?.navigationView?.navigationOverlayView = nil
+        homeViewController?.navigationView?.removeFromSuperview()
+        homeViewController?.navigationView = nil
+
+        homeViewController?.browseOverlayView?.removeFromSuperview()
+        homeViewController?.browseOverlayView = nil
+        
+        homeViewController?.viewModel?.myList?.removeObservers()
+        homeViewController?.viewModel?.coordinator = nil
+        homeViewController?.viewModel?.mediaTask = nil
+        homeViewController?.viewModel?.sectionsTask = nil
+        homeViewController?.viewModel?.tableViewState = nil
+        homeViewController?.viewModel?.myList = nil
+        homeViewController?.viewModel = nil
+
+        homeViewController?.removeObservers()
+        homeViewController?.removeFromParent()
     }
 }
 

@@ -99,15 +99,15 @@ final class NavigationView: UIView, ViewInstantiable {
     private func viewDidReconfigure() {
         /// Reconfigure the view once reinitialized.
         let tabBarViewModel = Application.current.rootCoordinator.tabCoordinator.viewController?.viewModel
-        if tabBarViewModel?.tableViewState.value == .all {
+        if tabBarViewModel?.homeDataSourceState.value == .all {
             self.homeItemView.viewModel.isSelected = true
             self.viewModel.state.value = .home
-        } else if tabBarViewModel?.tableViewState.value == .series {
-            tabBarViewModel?.lastSelection = .tvShows
+        } else if tabBarViewModel?.homeDataSourceState.value == .series {
+            tabBarViewModel?.homeNavigationState = .tvShows
             self.tvShowsItemView.viewModel.isSelected = true
             self.viewModel.state.value = .tvShows
-        } else if tabBarViewModel?.tableViewState.value == .films {
-            tabBarViewModel?.lastSelection = .movies
+        } else if tabBarViewModel?.homeDataSourceState.value == .films {
+            tabBarViewModel?.homeNavigationState = .movies
             self.moviesItemView.viewModel.isSelected = true
             self.viewModel.state.value = .movies
         }

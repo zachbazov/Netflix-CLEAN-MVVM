@@ -69,7 +69,7 @@ extension HomeViewModel {
         navigationViewModel?.actions.navigationViewDidAppear()
         /// Invokes tableview presentation.
         let tabBarViewModel = Application.current.rootCoordinator.tabCoordinator.viewController?.viewModel
-        tabBarViewModel?.tableViewState.value = tableViewState
+        tabBarViewModel?.homeDataSourceState.value = tableViewState
         /// Creates an instance of `MyList`.
         myList = MyList(with: self)
     }

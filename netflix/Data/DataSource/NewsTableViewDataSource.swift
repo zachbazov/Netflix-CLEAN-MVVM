@@ -28,11 +28,12 @@ final class NewsTableViewDataSource: NSObject, UITableViewDelegate, UITableViewD
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        let x = viewModel.coordinator!.viewController!.tableViewContainer.bounds.size.height
+        let bounds = viewModel.coordinator!.viewController!.tableViewContainer.bounds.size.height
+        let cellHeight = CGFloat(426.0)
         if indexPath.row % 1 == 0 {
-            return x - (x - 426.0 - 34.0)
+            return bounds - (bounds - cellHeight - 34.0)
         } else {
-            return x - 426.0 - 34.0
+            return bounds - cellHeight - 34.0
         }
     }
 }

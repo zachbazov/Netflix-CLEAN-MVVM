@@ -9,7 +9,7 @@ import Foundation
 
 final class NewsViewModel: ViewModel {
     var coordinator: NewsViewCoordinator?
-    let useCase: NewsUseCase
+    private let useCase: NewsUseCase
     
     private var mediaLoadTask: Cancellable? { willSet { mediaLoadTask?.cancel() } }
     
@@ -21,6 +21,7 @@ final class NewsViewModel: ViewModel {
     }
     
     var items: Observable<[NewsTableViewCellViewModel]> = Observable([])
+    var isEmpty: Bool { return items.value.isEmpty }
     
     func transform(input: Void) {}
 }

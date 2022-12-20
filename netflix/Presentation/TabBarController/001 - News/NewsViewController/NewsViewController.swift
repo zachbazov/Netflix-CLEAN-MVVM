@@ -31,14 +31,13 @@ final class NewsViewController: UIViewController {
     
     private func setupObservers() {
         viewModel.items.observe(on: self) { [weak self] _ in
-            guard !self!.viewModel.items.value.isEmpty else { return }
+            guard !self!.viewModel.isEmpty else { return }
             self?.dataSourceDidChange()
         }
     }
     
     private func setupNavigationView() {
-        navigationView = NewsNavigationView(frame: navigationViewContainer.bounds)
-        navigationViewContainer.addSubview(navigationView)
+        navigationView = NewsNavigationView(on: navigationViewContainer)
     }
     
     private func setupTableView() {

@@ -27,12 +27,10 @@ final class DownloadsViewController: UIViewController {
     }
     
     private func setupDownloadsNavigationView() {
-        navigationView = DownloadsNavigationView(frame: navigationViewContainer.bounds)
-        navigationViewContainer.addSubview(navigationView)
+        navigationView = DownloadsNavigationView(on: navigationViewContainer)
     }
     
     private func setupDownloadsView() {
-        downloadsView = DownloadsView(frame: downloadsViewContainer.bounds)
-        downloadsViewContainer.addSubview(downloadsView)
+        downloadsView = DownloadsView(on: downloadsViewContainer)
     }
 }

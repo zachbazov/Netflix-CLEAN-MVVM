@@ -12,9 +12,11 @@ final class NewsNavigationView: UIView, ViewInstantiable {
     @IBOutlet private weak var airPlayButton: UIButton!
     @IBOutlet private weak var accountButton: UIButton!
     
-    override init(frame: CGRect) {
-        super.init(frame: frame)
+    init(on parent: UIView) {
+        super.init(frame: parent.bounds)
+        parent.addSubview(self)
         self.nibDidLoad()
+        self.constraintToSuperview(parent)
     }
     
     required init?(coder: NSCoder) { fatalError() }

@@ -53,7 +53,7 @@ final class RootCoordinator: Coordinate {
         }
         
         tabBar.viewModel = viewModel
-        tabCoordinator.viewController?.viewModel.tableViewState.value = tableViewState
+        tabCoordinator.viewController?.viewModel.homeDataSourceState.value = tableViewState
         tabCoordinator.viewController = tabBar
         viewModel.coordinator = tabCoordinator
         tabBar.viewModel = viewModel

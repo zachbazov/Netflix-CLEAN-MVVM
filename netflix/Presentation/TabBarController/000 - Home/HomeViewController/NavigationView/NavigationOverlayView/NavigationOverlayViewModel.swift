@@ -99,7 +99,7 @@ final class NavigationOverlayViewModel {
               let homeViewController = coordinator.viewController,
               let navigationView = homeViewController.navigationView,
               let browseOverlay = homeViewController.browseOverlayView,
-              var lastSelection = tabCoordinator.viewController?.viewModel.lastSelection ?? .home as NavigationView.State? else {
+              var lastSelection = tabCoordinator.viewController?.viewModel.homeNavigationState ?? .home as NavigationView.State? else {
             return
         }
         
@@ -121,7 +121,7 @@ final class NavigationOverlayViewModel {
                     /// Apply `NavigationView` state changes.
                     navigationView.viewModel.stateDidChange(lastSelection)
                     /// Based the navigation last selection, change selection settings.
-                    if tabCoordinator.viewController?.viewModel.lastSelection == .tvShows {
+                    if tabCoordinator.viewController?.viewModel.homeNavigationState == .tvShows {
                         navigationView.homeItemView.viewModel.isSelected = false
                         navigationView.tvShowsItemView.viewModel.isSelected = true
                         navigationView.moviesItemView.viewModel.isSelected = false
