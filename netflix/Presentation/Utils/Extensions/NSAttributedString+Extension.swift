@@ -16,4 +16,9 @@ extension NSAttributedString {
                                                       .foregroundColor: UIColor.white]
     static let displayGenresSeparatorAttributes: Attributes = [.font: UIFont.systemFont(ofSize: 26.0, weight: .heavy),
                                                                .foregroundColor: UIColor.white]
+    
+    static let newsGenresAttributes: Attributes = [.font: UIFont.systemFont(ofSize: 13.0, weight: .bold),
+                                                      .foregroundColor: UIColor.white]
+    static let newsGenresSeparatorAttributes: Attributes = [.font: UIFont.systemFont(ofSize: 20.0, weight: .heavy),
+                                                               .foregroundColor: UIColor.white]
 }

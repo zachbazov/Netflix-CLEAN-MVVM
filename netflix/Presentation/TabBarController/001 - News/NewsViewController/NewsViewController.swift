@@ -9,7 +9,7 @@ import UIKit
 
 final class NewsViewController: UIViewController {
     @IBOutlet private var navigationViewContainer: UIView!
-    @IBOutlet private var tableViewContainer: UIView!
+    @IBOutlet private(set) var tableViewContainer: UIView!
     
     var viewModel: NewsViewModel!
     private var navigationView: NewsNavigationView!

@@ -1,5 +1,5 @@
 //
-//  Media+PRP.swift
+//  Media+Extension.swift
 //  netflix
 //
 //  Created by Zach Bazov on 19/12/2022.
@@ -9,7 +9,6 @@ import Foundation
 
 // MARK: - Media's Presentation Resource Path extension.
 // Provides indication into the resources array in a media object.
-
 enum PresentedLogoAlignment: String {
     case top
     case midTop = "mid-top"
@@ -84,5 +83,39 @@ extension Media {
             }
         default: return nil
         }
+    }
+}
+
+// MARK: - Media + Attributed Genres String
+extension Media {
+    enum Presentor {
+        case display
+        case news
+    }
+    
+    func attributedString(for presentor: Presentor) -> NSMutableAttributedString {
+        guard let symbol = " · " as String?,
+              let genres = genres as [String]? else {
+            return .init()
+        }
+        
+        let mutableString = NSMutableAttributedString()
+        let genresAttributes = presentor == .display
+            ? NSAttributedString.displayGenresAttributes
+            : NSAttributedString.newsGenresAttributes
+        let separatorAttributes = presentor == .display
+            ? NSAttributedString.displayGenresSeparatorAttributes
+            : NSAttributedString.newsGenresSeparatorAttributes
+        let mappedGenres = genres.enumerated().map {
+            NSAttributedString(string: $0.element, attributes: genresAttributes) }
+        
+        for genre in mappedGenres {
+            mutableString.append(genre)
+            let attributedSeparator = NSAttributedString(string: symbol, attributes: separatorAttributes)
+            if genre == mappedGenres.last { continue }
+            mutableString.append(attributedSeparator)
+        }
+        
+        return mutableString
     }
 }

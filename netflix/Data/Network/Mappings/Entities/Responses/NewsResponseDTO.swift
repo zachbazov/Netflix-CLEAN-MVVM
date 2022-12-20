@@ -15,6 +15,6 @@ struct NewsResponseDTO: Decodable {
 
 extension NewsResponseDTO {
     func toCellViewModels() -> [NewsTableViewCellViewModel] {
-        return data.map { NewsTableViewCellViewModel(media: $0) }
+        return data.map { NewsTableViewCellViewModel(with: $0.toDomain()) }
     }
 }
