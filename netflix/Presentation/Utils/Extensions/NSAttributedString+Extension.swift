@@ -10,6 +10,9 @@ import UIKit
 extension NSAttributedString {
     typealias Attributes = [NSAttributedString.Key: Any]
     
+    static let tabBarItemAttributes: Attributes = [.foregroundColor: UIColor.white,
+                                                   .font: UIFont.systemFont(ofSize: 11.0, weight: .bold)]
+    
     static let placeholderAttributes: Attributes = [.font: UIFont.systemFont(ofSize: 15.0, weight: .semibold),
                                                     .foregroundColor: UIColor.white]
     static let displayGenresAttributes: Attributes = [.font: UIFont.systemFont(ofSize: 18.0, weight: .bold),

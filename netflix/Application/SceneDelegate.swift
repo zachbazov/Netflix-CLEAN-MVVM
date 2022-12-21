@@ -11,41 +11,24 @@ class SceneDelegate: UIResponder {
     var window: UIWindow?
 }
 
-// MARK: - UIWindowSceneDelegate implementation
 extension SceneDelegate: UIWindowSceneDelegate {
     func scene(_ scene: UIScene,
                willConnectTo session: UISceneSession,
                options connectionOptions: UIScene.ConnectionOptions) {
         guard let windowScene = (scene as? UIWindowScene) else { return }
-        
+        /// Apply application appearance configurations.
         AppAppearance.setupAppearance()
-        
+        /// Allocate root's references.
         window = UIWindow(windowScene: windowScene)
         Application.current.root(in: window)
+        /// Stack and present the window.
         window?.makeKeyAndVisible()
     }
     
+    /// Top level ejection point.
+    /// - Parameter scene: Current window's sceneto be ejected.
     func sceneDidDisconnect(_ scene: UIScene) {
-        if let sceneDelegate = scene.delegate as? SceneDelegate,
-           let tabBar = sceneDelegate.window?.rootViewController as? TabBarController,
-           let navigationController = tabBar.viewModel.coordinator?.viewController?.viewControllers?.first! as? UINavigationController,
-           let homeViewController = navigationController.viewControllers.first! as? HomeViewController {
-            
-            homeViewController.removeObservers()
-            homeViewController.viewModel.myList?.removeObservers()
-            
-            if let panelView = homeViewController.dataSource?.displayCell?.displayView.panelView {
-                panelView.removeObservers()
-            }
-            if let navigationView = homeViewController.navigationView {
-                navigationView.removeObservers()
-            }
-            if let navigationOverlayView = homeViewController.navigationView.navigationOverlayView {
-                navigationOverlayView.removeObservers()
-            }
-            
-            printIfDebug("Removed `HomeViewController` observers successfully.")
-        }
+        removeTabBarObservers()
     }
     
     func sceneDidBecomeActive(_ scene: UIScene) {}
@@ -55,4 +38,29 @@ extension SceneDelegate: UIWindowSceneDelegate {
     func sceneWillEnterForeground(_ scene: UIScene) {}
     
     func sceneDidEnterBackground(_ scene: UIScene) {}
+}
+
+extension SceneDelegate {
+    private func removeTabBarObservers() {
+        if let tabCoordinator = Application.current.rootCoordinator.tabCoordinator,
+           let homeViewController = tabCoordinator.home.viewControllers.first! as? HomeViewController {
+            
+            if let displayCell = homeViewController.dataSource.displayCell,
+               let panelView = displayCell.displayView.panelView {
+                panelView.removeObservers()
+            }
+            if let navigationView = homeViewController.navigationView,
+               let navigationOverlayView = navigationView.navigationOverlayView {
+                navigationView.removeObservers()
+                navigationOverlayView.removeObservers()
+            }
+            if let myList = homeViewController.viewModel.myList {
+                myList.removeObservers()
+            }
+            
+            homeViewController.removeObservers()
+            
+            printIfDebug("Removed `HomeViewController` observers successfully.")
+        }
+    }
 }

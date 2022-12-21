@@ -8,6 +8,7 @@
 import Foundation
 
 final class AppConfiguration {
+    /// Loads the value from the application .plist file.
     lazy var apiScheme: String = {
         guard let scheme = Bundle.main.object(forInfoDictionaryKey: "API Scheme") as? String else {
             fatalError("API Scheme must be set on the property list file.")

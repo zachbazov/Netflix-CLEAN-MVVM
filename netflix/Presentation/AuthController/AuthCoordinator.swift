@@ -9,7 +9,7 @@ import UIKit
 
 final class AuthCoordinator: Coordinate {
     enum Screen {
-        case intro
+        case landpage
         case signIn
         case signUp
     }
@@ -17,7 +17,7 @@ final class AuthCoordinator: Coordinate {
     var viewController: AuthController?
     
     func showScreen(_ screen: Screen) {
-        if case .intro = screen {
+        if case .landpage = screen {
             presentLandpage()
         } else if case .signIn = screen {
             presentSignIn()

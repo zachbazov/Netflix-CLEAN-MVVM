@@ -142,8 +142,10 @@ final class NavigationOverlayViewModel {
                         /// Apply navigation view state changes.
                         navigationView.viewModel.stateDidChange(lastSelection)
                     } else {
+                        
+                        tabCoordinator.viewController?.viewModel.homeNavigationState = .home
                         /// Reload a new view-controller instance.
-                        rootCoordinator.replaceRootCoordinator()
+                        rootCoordinator.reallocateTabController()
                     }
                 }
             } else {
@@ -157,8 +159,10 @@ final class NavigationOverlayViewModel {
                     /// In-case the last selection is either set to both media types states (series and films).
                     /// Initiate re-coordination procedure, and reset `lastSelection` value to home state.
                     if lastSelection == .tvShows || lastSelection == .movies {
+                        
+                        tabCoordinator.viewController?.viewModel.homeNavigationState = .home
                         /// Re-coordinate with a new view-controller instance.
-                        rootCoordinator.replaceRootCoordinator()
+                        rootCoordinator.reallocateTabController()
                         /// Reset to home state.
                         lastSelection = .home
                     } else {
@@ -176,7 +180,9 @@ final class NavigationOverlayViewModel {
                 navigationView.tvShowsItemView.viewModel.isSelected = true
                 navigationView.moviesItemView.viewModel.isSelected = false
                 
-                rootCoordinator.replaceRootCoordinator()
+                tabCoordinator.viewController?.viewModel.homeNavigationState = .tvShows
+                
+                rootCoordinator.reallocateTabController()
             } else {
                 self.state = .mainMenu
                 isPresented.value = true
@@ -189,7 +195,9 @@ final class NavigationOverlayViewModel {
                 navigationView.tvShowsItemView.viewModel.isSelected = false
                 navigationView.moviesItemView.viewModel.isSelected = true
                 
-                rootCoordinator.replaceRootCoordinator()
+                tabCoordinator.viewController?.viewModel.homeNavigationState = .movies
+                
+                rootCoordinator.reallocateTabController()
             } else {
                 self.state = .mainMenu
                 isPresented.value = true
