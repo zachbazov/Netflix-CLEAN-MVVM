@@ -39,17 +39,14 @@ final class SignUpViewController: UIViewController {
         passwordTextField.addTarget(self, action: #selector(textFieldValueDidChange), for: .editingChanged)
         passwordConfirmTextField.addTarget(self, action: #selector(textFieldValueDidChange), for: .editingChanged)
     }
-    
+}
+
+extension SignUpViewController {
     @objc
     func textFieldValueDidChange(_ textField: UITextField) {
-        if nameTextField == textField {
-            viewModel?.name = textField.text
-        } else if emailTextField == textField {
-            viewModel?.email = textField.text
-        } else if passwordTextField == textField {
-            viewModel?.password = textField.text
-        } else {
-            viewModel?.passwordConfirm = textField.text
-        }
+        if nameTextField == textField { viewModel?.name = textField.text }
+        else if emailTextField == textField { viewModel?.email = textField.text }
+        else if passwordTextField == textField { viewModel?.password = textField.text }
+        else { viewModel?.passwordConfirm = textField.text }
     }
 }

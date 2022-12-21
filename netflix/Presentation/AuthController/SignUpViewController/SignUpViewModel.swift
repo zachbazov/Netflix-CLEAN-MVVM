@@ -17,24 +17,27 @@ final class SignUpViewModel {
     init(with viewModel: AuthViewModel) {
         self.viewModel = viewModel
     }
-    
+}
+
+extension SignUpViewModel {
     @objc
     func signUpButtonDidTap() {
         let authService = Application.current.authService
         let coordinator = Application.current.rootCoordinator
-        
+        /// User's data transfer object.
         let userDTO = UserDTO(name: name,
                               email: email,
                               password: password,
                               passwordConfirm: passwordConfirm)
         let requestDTO = AuthRequestDTO(user: userDTO)
-        
+        /// Invoke a sign-up request.
         viewModel.signUp(request: requestDTO.toDomain()) { result in
             if case let .success(responseDTO) = result {
                 let userDTO = responseDTO.data
                 userDTO?.token = responseDTO.token
-                authService.assignUser(user: userDTO)
-                
+                /// Authenticate the user.
+                authService.authenticate(user: userDTO)
+                /// Present tab bar screen.
                 coordinator.showScreen(.tabBar)
             }
             if case let .failure(error) = result { print(error) }

@@ -32,13 +32,12 @@ final class SignInViewController: UIViewController {
         emailTextField.addTarget(self, action: #selector(textFieldValueDidChange), for: .editingChanged)
         passwordTextField.addTarget(self, action: #selector(textFieldValueDidChange), for: .editingChanged)
     }
-    
+}
+
+extension SignInViewController {
     @objc
     func textFieldValueDidChange(_ textField: UITextField) {
-        if emailTextField == textField {
-            viewModel?.email = textField.text
-            return
-        }
-        viewModel?.password = textField.text
+        if emailTextField == textField { viewModel?.email = textField.text }
+        else { viewModel?.password = textField.text }
     }
 }

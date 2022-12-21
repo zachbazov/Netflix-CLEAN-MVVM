@@ -7,15 +7,13 @@
 
 import Foundation
 
-final class AuthViewModel: ViewModel {
-    private var task: Cancellable? {
-        willSet { task?.cancel() }
-    }
-    
+final class AuthViewModel {
     var coordinator: AuthCoordinator?
-    let useCase: AuthUseCase
-    let authService = Application.current.authService
-    
+    private let useCase: AuthUseCase
+    private let authService = Application.current.authService
+    private var authorizationTask: Cancellable? { willSet { authorizationTask?.cancel() } }
+    /// Default initializer.
+    /// Allocate `useCase` property and it's dependencies.
     init() {
         let dataTransferService = Application.current.dataTransferService
         let authResponseCache = AuthResponseStorage(authService: authService)
@@ -25,28 +23,39 @@ final class AuthViewModel: ViewModel {
     
     deinit {
         coordinator = nil
-        task = nil
+        authorizationTask = nil
     }
-    
+}
+
+extension AuthViewModel: ViewModel {
     func transform(input: Void) {}
 }
 
 extension AuthViewModel {
+    /// Use-case's sign-up operation.
+    /// - Parameters:
+    ///   - request: Representation of the candidate user for the operation.
+    ///   - completion: Completion handler with a response.
     func signUp(request: AuthRequest,
                 completion: @escaping (Result<AuthResponseDTO, Error>) -> Void) {
-        task = useCase.execute(
-            requestValue: .init(method: .signup, request: request),
+        let requestValue = AuthUseCaseRequestValue(method: .signup, request: request)
+        authorizationTask = useCase.execute(
+            requestValue: requestValue,
             cached: { _ in },
             completion: { result in
                 if case let .success(responseDTO) = result { completion(.success(responseDTO)) }
                 if case let .failure(error) = result { completion(.failure(error)) }
             })
     }
-    
+    /// Use-case's sign-in operation.
+    /// - Parameters:
+    ///   - request: Representation of the candidate user for the operation.
+    ///   - completion: Completion handler with a response.
     func signIn(request: AuthRequest,
                 completion: @escaping (Result<AuthResponseDTO, Error>) -> Void) {
-        task = useCase.execute(
-            requestValue: .init(method: .signin, request: request),
+        let requestValue = AuthUseCaseRequestValue(method: .signin, request: request)
+        authorizationTask = useCase.execute(
+            requestValue: requestValue,
             cached: { response in
                 if let response = response { completion(.success(response)) }
             },
@@ -55,7 +64,10 @@ extension AuthViewModel {
                 if case let .failure(error) = result { completion(.failure(error)) }
             })
     }
-    
+    /// Cached authorization session.
+    /// In-case there is a registered last sign by a user in the cache,
+    /// perform a re-sign operation.
+    /// - Parameter completion: Completion handler.
     func cachedAuthorizationSession(_ completion: @escaping () -> Void) {
         authService.performCachedAuthorizationSession { [weak self] request in
             guard let self = self else { return }
@@ -63,11 +75,12 @@ extension AuthViewModel {
                 if case let .success(responseDTO) = result {
                     let userDTO = responseDTO.data
                     userDTO?.token = responseDTO.token
-                    self.authService.assignUser(user: userDTO)
-                    
+                    /// Reauthenticate the user.
+                    self.authService.authenticate(user: userDTO)
+                    /// Grant access to the `TabBar` scene.
                     asynchrony { completion() }
                 }
-                if case let .failure(error) = result { printIfDebug("Unresolved error \(error)") }
+                if case let .failure(error) = result { print("Unresolved error \(error)") }
             }
         }
     }

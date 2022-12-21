@@ -91,7 +91,7 @@ extension RootCoordinator: Coordinate {
         case tabBar
     }
     /// Screen presentation control.
-    /// - Parameter screen: the screen to be allocated and presented.
+    /// - Parameter screen: The screen to be allocated and presented.
     func showScreen(_ screen: Screen) {
         if case .auth = screen { allocateAuthScreen() }
         else { allocateTabBarScreen() }

@@ -37,39 +37,36 @@ final class LandpageViewController: UIViewController {
         let button = UIBarButtonItem(title: string,
                                      style: .plain,
                                      target: viewModel.coordinator,
-                                     action: #selector(viewModel.coordinator!.presentSignIn))
+                                     action: #selector(viewModel.coordinator!.present(_:)))
         navigationItem.rightBarButtonItem = button
     }
     
     private func setupGradientViews() {
         statusBarGradientView.addGradientLayer(
             frame: statusBarGradientView.bounds,
-            colors:
-                [.black.withAlphaComponent(0.75),
-                 .black.withAlphaComponent(0.5),
-                 .clear],
+            colors: [.black.withAlphaComponent(0.75),
+                     .black.withAlphaComponent(0.5),
+                     .clear],
             locations: [0.0, 0.5, 1.0])
         
         topGradientView.addGradientLayer(
             frame: topGradientView.bounds,
-            colors:
-                [.clear,
-                 .black.withAlphaComponent(0.75),
-                 .black.withAlphaComponent(0.9)],
+            colors: [.clear,
+                     .black.withAlphaComponent(0.75),
+                     .black.withAlphaComponent(0.9)],
             locations: [0.0, 0.5, 1.0])
         
         bottomGradientView.addGradientLayer(
             frame: bottomGradientView.bounds,
-            colors:
-                [.black.withAlphaComponent(0.9),
-                 .black.withAlphaComponent(0.75),
-                 .clear],
+            colors: [.black.withAlphaComponent(0.9),
+                     .black.withAlphaComponent(0.75),
+                     .clear],
             locations: [0.0, 0.5, 1.0])
     }
     
     private func setupTargets() {
         signUpButton.addTarget(viewModel.coordinator,
-                               action: #selector(viewModel.coordinator!.presentSignUp),
+                               action: #selector(viewModel.coordinator!.present(_:)),
                                for: .touchUpInside)
     }
 }
