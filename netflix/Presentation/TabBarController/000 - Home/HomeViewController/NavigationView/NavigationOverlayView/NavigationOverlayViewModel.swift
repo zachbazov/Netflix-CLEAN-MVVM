@@ -101,7 +101,7 @@ final class NavigationOverlayViewModel {
               let homeViewController = coordinator.viewController,
               let navigationView = homeViewController.navigationView,
               let browseOverlay = homeViewController.browseOverlayView,
-              var lastSelection = tabCoordinator.viewController?.viewModel.homeNavigationState ?? .home as NavigationView.State? else {
+              var lastSelection = tabCoordinator.viewController?.viewModel.latestHomeNavigationState ?? .home as NavigationView.State? else {
             return
         }
         
@@ -117,13 +117,13 @@ final class NavigationOverlayViewModel {
                 /// - PHASE #2-A:
                 /// Firstly, check for a case where the browser overlay is presented and home's table view
                 /// data source state has been set to 'all' state.
-                if browseOverlay.viewModel.isPresented && homeViewController.viewModel.tableViewState == .all {
+                if browseOverlay.viewModel.isPresented && homeViewController.viewModel.homeDataSourceState.value == .all {
                     /// In-case `browseOverlayView` has been presented, hide it.
                     browseOverlay.viewModel.isPresented = false
                     /// Apply `NavigationView` state changes.
                     navigationView.viewModel.stateDidChange(lastSelection)
                     /// Based the navigation last selection, change selection settings.
-                    if tabCoordinator.viewController?.viewModel.homeNavigationState == .tvShows {
+                    if tabCoordinator.viewController?.viewModel.latestHomeNavigationState == .tvShows {
                         navigationView.homeItemView.viewModel.isSelected = false
                         navigationView.tvShowsItemView.viewModel.isSelected = true
                         navigationView.moviesItemView.viewModel.isSelected = false
@@ -143,7 +143,7 @@ final class NavigationOverlayViewModel {
                         navigationView.viewModel.stateDidChange(lastSelection)
                     } else {
                         
-                        tabCoordinator.viewController?.viewModel.homeNavigationState = .home
+                        tabCoordinator.viewController?.viewModel.latestHomeNavigationState = .home
                         /// Reload a new view-controller instance.
                         rootCoordinator.reallocateTabController()
                     }
@@ -160,7 +160,7 @@ final class NavigationOverlayViewModel {
                     /// Initiate re-coordination procedure, and reset `lastSelection` value to home state.
                     if lastSelection == .tvShows || lastSelection == .movies {
                         
-                        tabCoordinator.viewController?.viewModel.homeNavigationState = .home
+                        tabCoordinator.viewController?.viewModel.latestHomeNavigationState = .home
                         /// Re-coordinate with a new view-controller instance.
                         rootCoordinator.reallocateTabController()
                         /// Reset to home state.
@@ -180,7 +180,7 @@ final class NavigationOverlayViewModel {
                 navigationView.tvShowsItemView.viewModel.isSelected = true
                 navigationView.moviesItemView.viewModel.isSelected = false
                 
-                tabCoordinator.viewController?.viewModel.homeNavigationState = .tvShows
+                tabCoordinator.viewController?.viewModel.latestHomeNavigationState = .tvShows
                 
                 rootCoordinator.reallocateTabController()
             } else {
@@ -195,7 +195,7 @@ final class NavigationOverlayViewModel {
                 navigationView.tvShowsItemView.viewModel.isSelected = false
                 navigationView.moviesItemView.viewModel.isSelected = true
                 
-                tabCoordinator.viewController?.viewModel.homeNavigationState = .movies
+                tabCoordinator.viewController?.viewModel.latestHomeNavigationState = .movies
                 
                 rootCoordinator.reallocateTabController()
             } else {

@@ -107,15 +107,15 @@ final class TabBarCoordinator {
     private func updateHomeTableViewDataSourceState(with viewModel: HomeViewModel) {
         let tabViewModel = viewController?.viewModel
         /// Based on the navigation view state, set home's table view data source state accordingly.
-        if tabViewModel?.homeNavigationState == .home {
-            tabViewModel?.homeDataSourceState.value = .all
-        } else if tabViewModel?.homeNavigationState == .tvShows {
-            tabViewModel?.homeDataSourceState.value = .series
-        } else if tabViewModel?.homeNavigationState == .movies {
-            tabViewModel?.homeDataSourceState.value = .films
+        if tabViewModel?.latestHomeNavigationState == .home {
+            tabViewModel?.latestHomeDataSourceState = .all
+        } else if tabViewModel?.latestHomeNavigationState == .tvShows {
+            tabViewModel?.latestHomeDataSourceState = .series
+        } else if tabViewModel?.latestHomeNavigationState == .movies {
+            tabViewModel?.latestHomeDataSourceState = .films
         } else {}
         /// Pass the table view data source state to home's view model.
-        viewModel.tableViewState = tabViewModel?.homeDataSourceState.value
+        viewModel.homeDataSourceState.value = tabViewModel!.latestHomeDataSourceState
     }
 }
 

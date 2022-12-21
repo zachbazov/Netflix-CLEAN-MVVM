@@ -7,11 +7,17 @@
 
 import UIKit
 
-final class TabBarViewModel: ViewModel {
+final class TabBarViewModel {
     var coordinator: TabBarCoordinator?
-    
-    private(set) var homeDataSourceState: Observable<HomeTableViewDataSource.State> = Observable(.all)
-    var homeNavigationState: NavigationView.State = .home
-    
+    /// Home's table view data source latest state.
+    var latestHomeDataSourceState: HomeTableViewDataSource.State = .all
+    /// Home's navigation view latest state.
+    var latestHomeNavigationState: NavigationView.State = .home
+    /// NOTE:
+    /// The use case for the `latest` properties is basicly to store the latest interacted states of the views,
+    /// As reallocation done operating, restate the views by them.
+}
+
+extension TabBarViewModel: ViewModel {
     func transform(input: Void) {}
 }

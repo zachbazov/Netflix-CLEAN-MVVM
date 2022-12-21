@@ -61,10 +61,9 @@ final class HomeViewController: UIViewController {
     }
     
     func removeObservers() {
-        if let viewModel = viewModel,
-           let tabBarViewModel = Application.current.rootCoordinator.tabCoordinator.viewController?.viewModel {
+        if let viewModel = viewModel {
             printIfDebug("Removed `HomeViewModel` observers.")
-            tabBarViewModel.homeDataSourceState.remove(observer: self)
+            viewModel.homeDataSourceState.remove(observer: self)
             viewModel.presentedDisplayMedia.remove(observer: self)
         }
     }
@@ -91,11 +90,7 @@ final class HomeViewController: UIViewController {
 
 extension HomeViewController {
     private func tableViewState(in viewModel: HomeViewModel) {
-        guard let tabBar = Application.current.rootCoordinator.viewController as? TabBarController,
-              let tabBarViewModel = tabBar.viewModel else {
-            return
-        }
-        tabBarViewModel.homeDataSourceState.observe(on: self) { [weak self] state in
+        viewModel.homeDataSourceState.observe(on: self) { [weak self] state in
             self?.setupDataSource()
         }
     }
