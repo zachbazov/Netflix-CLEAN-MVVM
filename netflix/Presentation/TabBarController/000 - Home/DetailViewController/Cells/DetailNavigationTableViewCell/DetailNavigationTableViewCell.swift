@@ -9,7 +9,8 @@ import UIKit
 
 final class DetailNavigationTableViewCell: UITableViewCell {
     var navigationView: DetailNavigationView!
-    
+    /// Create a navigation table view cell object.
+    /// - Parameter viewModel: Coordinating view model.
     init(with viewModel: DetailViewModel) {
         super.init(style: .default, reuseIdentifier: DetailNavigationTableViewCell.reuseIdentifier)
         self.navigationView = DetailNavigationView(on: self.contentView, with: viewModel)
@@ -21,7 +22,9 @@ final class DetailNavigationTableViewCell: UITableViewCell {
     deinit {
         navigationView = nil
     }
-    
+}
+
+extension DetailNavigationTableViewCell {
     private func viewDidConfigure() {
         backgroundColor = .black
         selectionStyle = .none

@@ -29,23 +29,26 @@ final class DetailPanelViewItemViewModel {
         case .share: return Localization.TabBar.Detail.Panel().trailingItem
         }
     }
-    
-    init(item: DetailPanelViewItem,
-         with viewModel: DetailViewModel) {
+    /// Create a panel view item view model object.
+    /// - Parameters:
+    ///   - item: Corresponding view.
+    ///   - viewModel: Coordinating view model.
+    init(item: DetailPanelViewItem, with viewModel: DetailViewModel) {
         self.tag = item.tag
         self.isSelected = Observable(item.isSelected)
         self.media = viewModel.media
-        self.observe(on: item)
+        self.setupObservers(on: item)
     }
     
     deinit {
+        removeObservers()
         media = nil
     }
-    
-    private func observe(on item: DetailPanelViewItem) {
-        isSelected.observe(on: self) { _ in
-            item.configuration?.viewDidConfigure()
-        }
+}
+
+extension DetailPanelViewItemViewModel {
+    private func setupObservers(on item: DetailPanelViewItem) {
+        isSelected.observe(on: self) { _ in item.configuration?.viewDidConfigure() }
     }
     
     func removeObservers() {

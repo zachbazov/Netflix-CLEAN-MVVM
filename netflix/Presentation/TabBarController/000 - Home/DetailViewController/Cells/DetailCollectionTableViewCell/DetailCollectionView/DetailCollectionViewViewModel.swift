@@ -13,7 +13,8 @@ struct DetailCollectionViewViewModel {
     var section: Section!
     var season: Observable<Season?>!
     var fetchSeason: ((SeasonRequestDTO.GET, @escaping () -> Void) -> Void)?
-    
+    /// Create a detail collection view view model object.
+    /// - Parameter viewModel: Coordinating view model.
     init(with viewModel: DetailViewModel) {
         self.navigationViewState = viewModel.navigationViewState
         self.media = viewModel.media

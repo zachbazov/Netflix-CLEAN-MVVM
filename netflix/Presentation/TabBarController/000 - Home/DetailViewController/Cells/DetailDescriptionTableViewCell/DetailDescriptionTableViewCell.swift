@@ -8,6 +8,8 @@
 import UIKit
 
 final class DetailDescriptionTableViewCell: UITableViewCell {
+    /// Create a description table view cell object.
+    /// - Parameter viewModel: Coordinating view model.
     init(with viewModel: DetailViewModel) {
         super.init(style: .default, reuseIdentifier: DetailDescriptionTableViewCell.reuseIdentifier)
         let viewModel = DetailDescriptionViewViewModel(with: viewModel.media)
@@ -18,7 +20,9 @@ final class DetailDescriptionTableViewCell: UITableViewCell {
     }
     
     required init?(coder: NSCoder) { fatalError() }
-    
+}
+
+extension DetailDescriptionTableViewCell {
     private func viewDidConfigure() {
         backgroundColor = .black
         selectionStyle = .none

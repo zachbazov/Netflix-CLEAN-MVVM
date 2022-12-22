@@ -8,6 +8,8 @@
 import UIKit
 
 final class DetailInfoTableViewCell: UITableViewCell {
+    /// Create a info table view cell object.
+    /// - Parameter viewModel: Coordinating view model.
     init(with viewModel: DetailViewModel) {
         super.init(style: .default, reuseIdentifier: DetailInfoTableViewCell.reuseIdentifier)
         let viewModel = DetailInfoViewViewModel(with: viewModel)
@@ -18,7 +20,9 @@ final class DetailInfoTableViewCell: UITableViewCell {
     }
     
     required init?(coder: NSCoder) { fatalError() }
-    
+}
+
+extension DetailInfoTableViewCell {
     private func viewDidConfigure() {
         backgroundColor = .black
         selectionStyle = .none

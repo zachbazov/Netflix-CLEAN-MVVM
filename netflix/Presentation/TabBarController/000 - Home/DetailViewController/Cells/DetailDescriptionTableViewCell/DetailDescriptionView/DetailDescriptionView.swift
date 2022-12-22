@@ -13,7 +13,10 @@ final class DetailDescriptionView: UIView, ViewInstantiable {
     @IBOutlet private weak var writersLabel: UILabel!
     
     private let viewModel: DetailDescriptionViewViewModel
-    
+    /// Create a description view object.
+    /// - Parameters:
+    ///   - parent: Instantiating view.
+    ///   - viewModel: Coordinating view model.
     init(on parent: UIView, with viewModel: DetailDescriptionViewViewModel) {
         self.viewModel = viewModel
         super.init(frame: parent.bounds)
@@ -22,7 +25,9 @@ final class DetailDescriptionView: UIView, ViewInstantiable {
     }
     
     required init?(coder: NSCoder) { fatalError() }
-    
+}
+
+extension DetailDescriptionView {
     private func viewDidConfigure() {
         backgroundColor = .black
         

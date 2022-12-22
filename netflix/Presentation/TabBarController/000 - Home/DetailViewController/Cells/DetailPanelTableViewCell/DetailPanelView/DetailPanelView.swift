@@ -15,7 +15,10 @@ final class DetailPanelView: UIView, ViewInstantiable {
     private(set) var leadingItem: DetailPanelViewItem!
     private(set) var centerItem: DetailPanelViewItem!
     private(set) var trailingItem: DetailPanelViewItem!
-    
+    /// Create a panel view object.
+    /// - Parameters:
+    ///   - parent: Instantiating view.
+    ///   - viewModel: Coordinating view model.
     init(on parent: UIView, with viewModel: DetailViewModel) {
         super.init(frame: parent.bounds)
         self.nibDidLoad()
@@ -29,6 +32,9 @@ final class DetailPanelView: UIView, ViewInstantiable {
     
     deinit {
         removeObservers()
+        leadingItem.viewModel.removeObservers()
+        centerItem.viewModel.removeObservers()
+        trailingItem.viewModel.removeObservers()
         leadingItem.viewModel = nil
         centerItem.viewModel = nil
         trailingItem.viewModel = nil
@@ -36,11 +42,15 @@ final class DetailPanelView: UIView, ViewInstantiable {
         centerItem = nil
         trailingItem = nil
     }
-    
+}
+
+extension DetailPanelView {
     private func viewDidConfigure() {
         backgroundColor = .black
     }
-    
+}
+
+extension DetailPanelView {
     private func removeObservers() {
         printIfDebug("Removed `DetailPanelView` observers.")
         leadingItem?.viewModel?.removeObservers()

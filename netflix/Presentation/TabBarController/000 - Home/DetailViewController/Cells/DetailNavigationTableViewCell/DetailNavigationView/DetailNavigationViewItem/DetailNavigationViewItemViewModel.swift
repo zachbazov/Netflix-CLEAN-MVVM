@@ -19,7 +19,8 @@ final class DetailNavigationViewItemViewModel {
         case .similarContent: return Localization.TabBar.Detail.Navigation().trailingItem
         }
     }
-    
+    /// Create a navigation view item view model object.
+    /// - Parameter item: Corresponding item object.
     init(with item: DetailNavigationViewItem) {
         self.tag = item.tag
         self.isSelected = item.isSelected

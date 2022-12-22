@@ -12,7 +12,10 @@ final class DetailCollectionView: UIView {
     private lazy var collectionView = createCollectionView()
     private var dataSource: DetailCollectionViewDataSource<Mediable>!
     private var layout: CollectionViewLayout!
-    
+    /// Create a detail collection view object.
+    /// - Parameters:
+    ///   - parent: Instantiating view.
+    ///   - viewModel: Coordinating view model.
     init(on parent: UIView, with viewModel: DetailViewModel) {
         self.viewModel = viewModel
         super.init(frame: .zero)
@@ -42,7 +45,9 @@ final class DetailCollectionView: UIView {
         addSubview(collectionView)
         return collectionView
     }
-    
+}
+
+extension DetailCollectionView {
     private func dataDidLoad() {
         if viewModel.navigationViewState.value == .episodes {
             let cellViewModel = EpisodeCollectionViewCellViewModel(with: viewModel)

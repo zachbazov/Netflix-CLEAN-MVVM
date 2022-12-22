@@ -14,7 +14,12 @@ final class EpisodeCollectionViewCell: UICollectionViewCell {
     @IBOutlet private weak var descriptionTextView: UITextView!
     @IBOutlet private weak var playButton: UIButton!
     @IBOutlet private weak var downloadButton: UIButton!
-    
+    /// Create an episode collection view cell object.
+    /// - Parameters:
+    ///   - collectionView: Corresponding collection view.
+    ///   - indexPath: The index path of the cell on the data source.
+    ///   - viewModel: Coordinating view model.
+    /// - Returns: An episode collection view cell object.
     static func create(on collectionView: UICollectionView,
                        for indexPath: IndexPath,
                        with viewModel: DetailViewModel) -> EpisodeCollectionViewCell {
@@ -25,6 +30,16 @@ final class EpisodeCollectionViewCell: UICollectionViewCell {
         view.setupSubviews()
         view.viewDidLoad(at: indexPath, with: cellViewModel)
         return view
+    }
+}
+
+extension EpisodeCollectionViewCell {
+    private func setupSubviews() {
+        playButton.layer.borderColor = UIColor.white.cgColor
+        playButton.layer.borderWidth = 2.0
+        playButton.layer.cornerRadius = playButton.bounds.size.height / 2
+        
+        imageView.layer.cornerRadius = 4.0
     }
     
     private func dataDidDownload(with viewModel: EpisodeCollectionViewCellViewModel,
@@ -55,13 +70,5 @@ final class EpisodeCollectionViewCell: UICollectionViewCell {
         titleLabel.text = episode.title
         timestampLabel.text = viewModel.media.length
         descriptionTextView.text = viewModel.media.description
-    }
-    
-    private func setupSubviews() {
-        playButton.layer.borderColor = UIColor.white.cgColor
-        playButton.layer.borderWidth = 2.0
-        playButton.layer.cornerRadius = playButton.bounds.size.height / 2
-        
-        imageView.layer.cornerRadius = 4.0
     }
 }

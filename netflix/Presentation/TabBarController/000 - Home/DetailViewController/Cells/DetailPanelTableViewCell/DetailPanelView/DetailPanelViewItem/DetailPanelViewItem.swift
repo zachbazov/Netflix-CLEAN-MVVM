@@ -8,16 +8,13 @@
 import UIKit
 
 final class DetailPanelViewItemConfiguration {
-    enum Item: Int {
-        case myList
-        case rate
-        case share
-    }
-    
     private weak var view: DetailPanelViewItem!
     private let myList: MyList
     private let section: Section
-    
+    /// Create a panel view item configuration object.
+    /// - Parameters:
+    ///   - view: Corresponding view.
+    ///   - viewModel: Coordinating view model.
     init(view: DetailPanelViewItem, with viewModel: DetailViewModel) {
         self.view = view
         self.myList = viewModel.myList
@@ -29,12 +26,15 @@ final class DetailPanelViewItemConfiguration {
     deinit {
         view = nil
     }
-    
+}
+
+extension DetailPanelViewItemConfiguration {
     private func viewDidRegisterRecognizers() {
         let tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(viewDidTap))
         view.addGestureRecognizer(tapRecognizer)
     }
-    
+    /// Change the view to `selected` state.
+    /// Occurs while the `DisplayView` presenting media is contained in the user's list.
     private func selectIfNeeded() {
         guard let tag = Item(rawValue: view.tag) else { return }
         guard let viewModel = view.viewModel else { return }
@@ -59,6 +59,7 @@ final class DetailPanelViewItemConfiguration {
         guard let viewModel = view.viewModel else { return }
         switch tag {
         case .myList:
+            /// In-case the user doesn't have a list yet.
             if myList.viewModel.list.value.isEmpty {
                 myList.viewModel.createList()
             }
@@ -68,10 +69,19 @@ final class DetailPanelViewItemConfiguration {
         case .rate: print("rate")
         case .share: print("share")
         }
-        
+        /// Animate alpha effect.
         view.setAlphaAnimation(using: view.gestureRecognizers!.first) {
             viewModel.isSelected.value.toggle()
         }
+    }
+}
+
+extension DetailPanelViewItemConfiguration {
+    /// Item representation type.
+    enum Item: Int {
+        case myList
+        case rate
+        case share
     }
 }
 
@@ -83,7 +93,10 @@ final class DetailPanelViewItem: UIView {
     fileprivate lazy var label = createLabel()
     
     var isSelected = false
-    
+    /// Create a panel view item object.
+    /// - Parameters:
+    ///   - parent: Instantiating view.
+    ///   - viewModel: Coordinating view model.
     init(on parent: UIView, with viewModel: DetailViewModel) {
         super.init(frame: parent.bounds)
         self.tag = parent.tag

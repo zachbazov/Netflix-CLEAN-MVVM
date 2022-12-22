@@ -12,7 +12,8 @@ struct TrailerCollectionViewCellViewModel {
     var posterImagePath: String
     var posterImageIdentifier: NSString
     var posterImageURL: URL!
-    
+    /// Create a trailer collection view cell view model object.
+    /// - Parameter media: Corresponding media object.
     init(with media: Media) {
         self.title = media.title
         self.posterImagePath = media.resources.previewPoster

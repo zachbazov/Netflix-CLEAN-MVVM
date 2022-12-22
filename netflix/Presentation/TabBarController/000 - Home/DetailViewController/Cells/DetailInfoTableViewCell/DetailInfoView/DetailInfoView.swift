@@ -19,9 +19,12 @@ final class DetailInfoView: UIView, ViewInstantiable {
     @IBOutlet private weak var downloadButton: UIButton!
     
     private let viewModel: DetailInfoViewViewModel
-    var ageRestrictionView: AgeRestrictionView!
-    var hdView: HDView!
-    
+    private var ageRestrictionView: AgeRestrictionView!
+    private var hdView: HDView!
+    /// Create a detail info object.
+    /// - Parameters:
+    ///   - parent: Instantiating view.
+    ///   - viewModel: Coordinating view model.
     init(on parent: UIView, with viewModel: DetailInfoViewViewModel) {
         self.viewModel = viewModel
         super.init(frame: parent.bounds)
@@ -32,7 +35,9 @@ final class DetailInfoView: UIView, ViewInstantiable {
     }
     
     required init?(coder: NSCoder) { fatalError() }
-    
+}
+
+extension DetailInfoView {
     private func viewDidLoad() {
         setupSubviews()
         viewDidConfigure()

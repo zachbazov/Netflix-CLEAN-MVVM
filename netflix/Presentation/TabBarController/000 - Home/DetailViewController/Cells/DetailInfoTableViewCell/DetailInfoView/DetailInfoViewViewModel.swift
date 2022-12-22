@@ -15,7 +15,8 @@ struct DetailInfoViewViewModel {
     let duration: String
     let length: String
     let isHD: Bool
-    
+    /// Create a info view view model object.
+    /// - Parameter viewModel: Coordinating view model.
     init(with viewModel: DetailViewModel) {
         self.state = viewModel.homeDataSourceState
         

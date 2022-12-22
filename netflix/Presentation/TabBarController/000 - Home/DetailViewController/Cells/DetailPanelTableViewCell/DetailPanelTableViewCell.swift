@@ -9,7 +9,8 @@ import UIKit
 
 final class DetailPanelTableViewCell: UITableViewCell {
     var panelView: DetailPanelView!
-    
+    /// Create a panel table view cell object.
+    /// - Parameter viewModel: Coordinating view model.
     init(with viewModel: DetailViewModel) {
         super.init(style: .default, reuseIdentifier: DetailPanelTableViewCell.reuseIdentifier)
         self.panelView = DetailPanelView(on: self.contentView, with: viewModel)
@@ -22,7 +23,9 @@ final class DetailPanelTableViewCell: UITableViewCell {
     }
     
     required init?(coder: NSCoder) { fatalError() }
-    
+}
+
+extension DetailPanelTableViewCell {
     private func viewDidConfigure() {
         backgroundColor = .black
         selectionStyle = .none

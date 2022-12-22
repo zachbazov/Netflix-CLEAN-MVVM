@@ -9,7 +9,8 @@ import UIKit
 
 final class DetailCollectionTableViewCell: UITableViewCell {
     var detailCollectionView: DetailCollectionView!
-    
+    /// Create a collection table view cell object.
+    /// - Parameter viewModel: Coordinating view model.
     init(with viewModel: DetailViewModel) {
         super.init(style: .default, reuseIdentifier: DetailCollectionTableViewCell.reuseIdentifier)
         self.detailCollectionView = DetailCollectionView(on: self.contentView, with: viewModel)
@@ -22,7 +23,9 @@ final class DetailCollectionTableViewCell: UITableViewCell {
     deinit {
         detailCollectionView = nil
     }
-    
+}
+
+extension DetailCollectionTableViewCell {
     private func viewDidConfigure() {
         backgroundColor = .black
         selectionStyle = .none

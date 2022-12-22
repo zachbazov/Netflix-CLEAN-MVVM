@@ -11,7 +11,12 @@ final class TrailerCollectionViewCell: UICollectionViewCell {
     @IBOutlet private weak var posterImageView: UIImageView!
     @IBOutlet private weak var titleLabel: UILabel!
     @IBOutlet private weak var playButton: UIButton!
-    
+    /// Create a trailer collection view cell object.
+    /// - Parameters:
+    ///   - collectionView: Corresponding collection view.
+    ///   - indexPath: The index path of the cell on the data source.
+    ///   - viewModel: Coordinating view model.
+    /// - Returns: A trailer collection view cell.
     static func create(on collectionView: UICollectionView,
                        for indexPath: IndexPath,
                        with viewModel: DetailViewModel) -> TrailerCollectionViewCell {
@@ -21,6 +26,16 @@ final class TrailerCollectionViewCell: UICollectionViewCell {
         let cellViewModel = TrailerCollectionViewCellViewModel(with: viewModel.media)
         view.viewDidLoad(with: cellViewModel)
         return view
+    }
+}
+
+extension TrailerCollectionViewCell {
+    private func setupSubviews() {
+        playButton.layer.borderColor = UIColor.white.cgColor
+        playButton.layer.borderWidth = 2.0
+        playButton.layer.cornerRadius = playButton.bounds.size.height / 2
+        
+        posterImageView.layer.cornerRadius = 4.0
     }
     
     private func dataDidDownload(with viewModel: TrailerCollectionViewCellViewModel,
@@ -43,13 +58,5 @@ final class TrailerCollectionViewCell: UICollectionViewCell {
         let image = AsyncImageFetcher.shared.object(in: .home, for: viewModel.posterImageIdentifier)
         posterImageView.image = image
         titleLabel.text = viewModel.title
-    }
-    
-    private func setupSubviews() {
-        playButton.layer.borderColor = UIColor.white.cgColor
-        playButton.layer.borderWidth = 2.0
-        playButton.layer.cornerRadius = playButton.bounds.size.height / 2
-        
-        posterImageView.layer.cornerRadius = 4.0
     }
 }
