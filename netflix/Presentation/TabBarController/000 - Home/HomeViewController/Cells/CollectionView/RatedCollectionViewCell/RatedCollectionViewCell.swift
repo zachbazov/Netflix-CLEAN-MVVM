@@ -8,7 +8,8 @@
 import UIKit
 
 final class RatedCollectionViewCell: CollectionViewCell {
-    fileprivate final class TextLayer: CATextLayer {
+    /// A text layer representation for the cell.
+    private final class TextLayer: CATextLayer {
         override func draw(in ctx: CGContext) {
             ctx.saveGState()
             ctx.translateBy(x: .zero, y: .zero)
@@ -17,8 +18,8 @@ final class RatedCollectionViewCell: CollectionViewCell {
         }
     }
     
-    fileprivate let layerView = UIView()
-    fileprivate var textLayer = TextLayer()
+    private let layerView = UIView()
+    private let textLayer = TextLayer()
     
     deinit {
         textLayer.removeFromSuperlayer()
@@ -36,21 +37,19 @@ final class RatedCollectionViewCell: CollectionViewCell {
     }
     
     override func viewDidConfigure(with viewModel: CollectionViewCellViewModel) {
+        /// Apply base configuartion.
         super.viewDidConfigure(with: viewModel)
         
         guard let indexPath = viewModel.indexPath as IndexPath? else { return }
-        
-        textLayer.frame = CGRect(x: -8.0,
-                                 y: -8.0,
-                                 width: bounds.width,
-                                 height: 144.0)
-        if indexPath.row == 0 {
-            textLayer.frame = CGRect(x: 0.0,
-                                     y: -8.0,
-                                     width: bounds.width,
-                                     height: 144.0)
+        /// In-case of first cell index, do nothing.
+        if indexPath.row == .zero {
+            textLayer.frame = CGRect(x: 0.0, y: -8.0, width: bounds.width, height: 144.0)
+        } else {
+            /// Else, change the frame horizontal parameter
+            /// to make the effect that the text layers collide with other cells.
+            textLayer.frame = CGRect(x: -8.0, y: -8.0, width: bounds.width, height: 144.0)
         }
-        
+        /// Increase the index path by one, start indexing from 1.
         let index = String(describing: indexPath.row + 1)
         let attributedString = NSAttributedString(
             string: index,
@@ -58,21 +57,16 @@ final class RatedCollectionViewCell: CollectionViewCell {
                          .strokeColor: UIColor.white,
                          .strokeWidth: -2.5,
                          .foregroundColor: UIColor.black.cgColor])
-        
+        /// Add the layer to the view hierarchy.
         layerView.layer.insertSublayer(textLayer, at: 1)
+        /// Set the text value.
         textLayer.string = attributedString
     }
-    
-    fileprivate func viewDidLoad() {
+}
+
+extension RatedCollectionViewCell {
+    private func viewDidLoad() {
         contentView.addSubview(layerView)
-        
-        layerView.translatesAutoresizingMaskIntoConstraints = false
-        
-        NSLayoutConstraint.activate([
-            layerView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
-            layerView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            layerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            layerView.heightAnchor.constraint(equalToConstant: bounds.height / 2)
-        ])
+        layerView.constraintBottom(toParent: self.contentView, withHeightAnchor: bounds.height / 2)
     }
 }

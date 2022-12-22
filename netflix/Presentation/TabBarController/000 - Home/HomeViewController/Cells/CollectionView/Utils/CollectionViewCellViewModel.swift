@@ -20,8 +20,7 @@ struct CollectionViewCellViewModel: Equatable {
     var logoImageIdentifier: NSString
     var logoImageURL: URL!
     let presentedLogoAlignment: PresentedLogoAlignment
-    /// This initializer is basicly used in `Home` tab.
-    /// It serves `CollectionViewCell` cell types used on the collection views.
+    /// Create a collection view cell view model object.
     /// - Parameters:
     ///   - media: Represented media object.
     ///   - indexPath: Represented index path for the object on the collection.

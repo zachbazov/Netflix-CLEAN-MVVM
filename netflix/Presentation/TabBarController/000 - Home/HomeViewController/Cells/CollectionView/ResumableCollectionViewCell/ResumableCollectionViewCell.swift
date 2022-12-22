@@ -20,8 +20,10 @@ final class ResumableCollectionViewCell: CollectionViewCell {
         super.awakeFromNib()
         self.viewDidLoad()
     }
-    
-    fileprivate func viewDidLoad() {
+}
+
+extension ResumableCollectionViewCell {
+    private func viewDidLoad() {
         setupSubviews()
     }
     
