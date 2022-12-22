@@ -12,8 +12,9 @@ final class HomeViewModel {
     let useCase: HomeUseCase
     let orientation = DeviceOrientation.shared
     
-    var dataSourceState: Observable<HomeTableViewDataSource.State> = Observable(.all)
-    var presentedDisplayMedia: Observable<Media?> = Observable(.none)
+    let dataSourceState: Observable<HomeTableViewDataSource.State> = Observable(.all)
+    /// The media object for the `DisplayView` to present.
+    let displayMedia: Observable<Media?> = Observable(.none)
     
     private(set) var sections: [Section] = []
     private(set) var media: [Media] = []
@@ -33,6 +34,7 @@ final class HomeViewModel {
         let listRepository = ListRepository(dataTransferService: dataTransferService)
         let useCase = HomeUseCase(sectionsRepository: sectionRepository, mediaRepository: mediaRepository, listRepository: listRepository)
         self.useCase = useCase
+        self.viewDidLoad()
     }
     
     deinit {
@@ -45,6 +47,20 @@ final class HomeViewModel {
 }
 
 extension HomeViewModel {
+    func dataDidBeganLoading() {
+        fetchSections()
+    }
+    
+    private func dataDidEndLoading() {
+        let navigationViewModel = coordinator?.viewController?.navigationView.viewModel
+        navigationViewModel?.navigationViewDidAppear()
+        
+        let tabBarViewModel = Application.current.rootCoordinator.tabCoordinator.viewController?.viewModel
+        dataSourceState.value = tabBarViewModel!.latestHomeDataSourceState
+        
+        myList = MyList(with: self)
+    }
+    
     private func viewDidLoad() {
         setupOrientation()
     }
@@ -52,21 +68,6 @@ extension HomeViewModel {
     private func setupOrientation() {
         let orientation = DeviceOrientation.shared
         orientation.setLock(orientation: .portrait)
-    }
-    
-    func dataDidBeganLoading() {
-        fetchSections()
-    }
-    
-    private func dataDidEndLoading() {
-        /// Invoke navigation bar presentation.
-        let navigationViewModel = coordinator?.viewController?.navigationView.viewModel
-        navigationViewModel?.actions.navigationViewDidAppear()
-        /// Invoke table view presentation.
-        let tabBarViewModel = Application.current.rootCoordinator.tabCoordinator.viewController?.viewModel
-        dataSourceState.value = tabBarViewModel!.latestHomeDataSourceState
-        /// Allocate my list.
-        myList = MyList(with: self)
     }
 }
 
@@ -84,7 +85,9 @@ extension HomeViewModel {
             completion: { [weak self] result in
                 guard let self = self else { return }
                 if case let .success(response) = result {
+                    /// Allocate sections with the response data.
                     self.sections = response.data
+                    /// Execute media fetching operation.
                     self.fetchMedia()
                 }
             })
@@ -98,7 +101,9 @@ extension HomeViewModel {
             completion: { [weak self] result in
                 guard let self = self else { return }
                 if case let .success(response) = result {
+                    /// Allocate media with the response data.
                     self.media = response.data
+                    /// Execute after data loading operations.
                     self.dataDidEndLoading()
                 }
             })
@@ -106,21 +111,28 @@ extension HomeViewModel {
 }
 
 extension HomeViewModel {
+    /// Given a specific index, returns a section object.
+    /// - Parameter index: A representation of the section's index.
+    /// - Returns: A section.
     func section(at index: HomeTableViewDataSource.Index) -> Section {
-        sections[index.rawValue]
+        return sections[index.rawValue]
     }
-    
+    /// Filter all the sections based on the state of the table view data source.
+    /// - Parameter sections: The sections to be filtered.
     func filter(sections: [Section]) {
         guard !isEmpty else { return }
         
-        HomeTableViewDataSource.Index.allCases.forEach { index in
-            sections[index.rawValue].media = filter(at: index)
+        HomeTableViewDataSource.Index.allCases.forEach {
+            sections[$0.rawValue].media = filter(at: $0)
         }
     }
-    
+    /// Filter a section based on an index of the table view data source.
+    /// - Parameter index: Representation of the section's index.
+    /// - Returns: Filtered media array.
     private func filter(at index: HomeTableViewDataSource.Index) -> [Media] {
-        let media = self.media
+        /// Filter according to the index of the section.
         if case .rated = index {
+            /// Filter according to the state of the data source.
             if case .all = dataSourceState.value {
                 return media
                     .sorted { $0.rating > $1.rating }
@@ -148,6 +160,7 @@ extension HomeViewModel {
                 return media.shuffled().filter { $0.type == .film }
             }
         } else if case .myList = index {
+            
             let media = myList.viewModel.list.value
             if case .all = dataSourceState.value {
                 return media.shuffled()

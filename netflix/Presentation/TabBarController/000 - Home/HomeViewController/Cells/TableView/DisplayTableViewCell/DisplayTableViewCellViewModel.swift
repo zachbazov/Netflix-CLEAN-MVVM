@@ -15,7 +15,7 @@ struct DisplayTableViewCellViewModel {
     
     init(with viewModel: HomeViewModel) {
         self.coordinator = viewModel.coordinator!
-        self.presentedMedia = self.coordinator!.viewController!.viewModel.presentedDisplayMedia
+        self.presentedMedia = self.coordinator!.viewController!.viewModel.displayMedia
         self.myList = viewModel.myList
         self.sectionAt = viewModel.section(at:)
     }

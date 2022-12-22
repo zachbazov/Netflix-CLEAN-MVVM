@@ -51,7 +51,7 @@ final class NavigationView: UIView, ViewInstantiable {
         let items: [NavigationViewItem] = [self.homeItemView, self.airPlayItemView,
                                            self.accountItemView, self.tvShowsItemView,
                                            self.moviesItemView, self.categoriesItemView]
-        self.viewModel = NavigationViewViewModel(items: items, actions: self.actions(), with: viewModel)
+        self.viewModel = NavigationViewViewModel(items: items, with: viewModel)
         
         /// Updates root coordinator's `navigationView` property.
         viewModel.coordinator?.viewController?.navigationView = self
@@ -73,7 +73,8 @@ final class NavigationView: UIView, ViewInstantiable {
     
     private func setupObservers() {
         viewModel.state.observe(on: self) { [weak self] state in
-            self?.viewModel?.actions.stateDidChange(state)
+            self?.viewModel.stateDidChange(state)
+            self?.navigationOverlayView.viewModel.navigationViewStateDidChange(state)
         }
     }
     
@@ -113,16 +114,15 @@ final class NavigationView: UIView, ViewInstantiable {
         }
     }
     
-    private func actions() -> NavigationViewViewModelActions {
-        return NavigationViewViewModelActions(
-            navigationViewDidAppear: { [weak self] in
-                self?.viewModel?.navigationViewDidAppear()
-            },
-            stateDidChange: { [weak self] state in
-                self?.viewModel.stateDidChange(state)
-                self?.navigationOverlayView.viewModel.navigationViewStateDidChange(state)
-            })
-    }
+//    private func actions() -> NavigationViewViewModelActions {
+//        return NavigationViewViewModelActions(
+//            navigationViewDidAppear: { [weak self] in
+//                
+//            },
+//            stateDidChange: { [weak self] state in
+//
+//            })
+//    }
     
     func removeObservers() {
         printIfDebug("Removed `NavigationView` observers.")

@@ -73,6 +73,9 @@ final class HomeTableViewDataSource: NSObject, DataSource {
     }
     
     func dataSourceDidChange() {
+        /// Filters the sections based on the data source state.
+        viewModel.filter(sections: viewModel.sections)
+        
         tableView.delegate = self
         tableView.dataSource = self
         tableView.reloadData()

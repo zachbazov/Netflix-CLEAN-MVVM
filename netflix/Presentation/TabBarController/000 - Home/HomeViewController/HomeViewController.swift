@@ -10,7 +10,7 @@ import UIKit
 final class HomeViewController: UIViewController {
     override var preferredStatusBarStyle: UIStatusBarStyle { .lightContent }
     
-    @IBOutlet var tableView: UITableView!
+    @IBOutlet private(set) var tableView: UITableView!
     @IBOutlet private(set) var navigationViewContainer: UIView!
     @IBOutlet private(set) var navigationViewTopConstraint: NSLayoutConstraint!
     @IBOutlet private(set) var browseOverlayViewContainer: UIView!
@@ -18,7 +18,7 @@ final class HomeViewController: UIViewController {
     var viewModel: HomeViewModel!
     var navigationView: NavigationView!
     var browseOverlayView: BrowseOverlayView!
-    var dataSource: HomeTableViewDataSource!
+    private(set) var dataSource: HomeTableViewDataSource!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -39,15 +39,7 @@ final class HomeViewController: UIViewController {
         setupBrowseOverlayView()
     }
     
-    private func setupObservers() {
-        dataSourceState(in: viewModel)
-        presentedDisplayMedia(in: viewModel)
-    }
-    
     private func setupDataSource() {
-        /// Filters the sections based on the data source state.
-        viewModel.filter(sections: viewModel.sections)
-        
         dataSource = HomeTableViewDataSource(tableView: tableView, viewModel: viewModel)
     }
     
@@ -59,46 +51,50 @@ final class HomeViewController: UIViewController {
         browseOverlayView = BrowseOverlayView(on: browseOverlayViewContainer, with: viewModel)
         browseOverlayViewContainer.isHidden(true)
     }
+}
+
+extension HomeViewController {
+    private func setupObservers() {
+        viewModel.dataSourceState.observe(on: self) { [weak self] state in
+            /// Release data source changes.
+            self?.dataSource.dataSourceDidChange()
+        }
+        
+        viewModel.displayMedia.observe(on: self) { [weak self] media in
+            guard let media = media else { return }
+            /// Release `opaqueView` view model changes based on the display media object.
+            self?.navigationView.navigationOverlayView.opaqueView.viewModelDidUpdate(with: media)
+        }
+    }
     
     func removeObservers() {
         if let viewModel = viewModel {
             printIfDebug("Removed `HomeViewModel` observers.")
             viewModel.dataSourceState.remove(observer: self)
-            viewModel.presentedDisplayMedia.remove(observer: self)
+            viewModel.displayMedia.remove(observer: self)
         }
-    }
-    
-    func terminate() {
-        navigationView.navigationOverlayView.removeFromSuperview()
-        navigationView.navigationOverlayView = nil
-        
-        navigationView.removeFromSuperview()
-        navigationView = nil
-
-        browseOverlayView.removeFromSuperview()
-        browseOverlayView = nil
-        
-        viewModel.myList.removeObservers()
-        viewModel.myList = nil
-        viewModel.coordinator = nil
-        viewModel = nil
-        
-        removeObservers()
-        removeFromParent()
     }
 }
 
 extension HomeViewController {
-    private func dataSourceState(in viewModel: HomeViewModel) {
-        viewModel.dataSourceState.observe(on: self) { [weak self] state in
-            self?.setupDataSource()
-        }
-    }
-    
-    private func presentedDisplayMedia(in viewModel: HomeViewModel) {
-        viewModel.presentedDisplayMedia.observe(on: self) { [weak self] media in
-            guard let media = media else { return }
-            self?.navigationView.navigationOverlayView.opaqueView.viewModelDidUpdate(with: media)
-        }
+    /// Deallocating this view controller entirely.
+    func terminate() {
+        /// Remove and deallocate navigation view and it's dependencies.
+        navigationView.navigationOverlayView.removeFromSuperview()
+        navigationView.navigationOverlayView = nil
+        navigationView.removeFromSuperview()
+        navigationView = nil
+        /// Remove and deallocate browse overlay view.
+        browseOverlayView.removeFromSuperview()
+        browseOverlayView = nil
+        /// Remove and deallocate home view model and it's dependencies.
+        viewModel.myList.removeObservers()
+        viewModel.myList = nil
+        viewModel.coordinator = nil
+        viewModel = nil
+        /// Remove controller observers.
+        removeObservers()
+        /// Remove from tab bar controller.
+        removeFromParent()
     }
 }

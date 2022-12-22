@@ -7,22 +7,13 @@
 
 import Foundation
 
-struct NavigationViewViewModelActions {
-    let navigationViewDidAppear: () -> Void
-    let stateDidChange: (NavigationView.State) -> Void
-}
-
 final class NavigationViewViewModel {
     let coordinator: HomeViewCoordinator
-    let state: Observable<NavigationView.State> = Observable(.home)
     let items: [NavigationViewItem]
-    let actions: NavigationViewViewModelActions
+    let state: Observable<NavigationView.State> = Observable(.home)
     
-    init(items: [NavigationViewItem],
-         actions: NavigationViewViewModelActions,
-         with viewModel: HomeViewModel) {
+    init(items: [NavigationViewItem], with viewModel: HomeViewModel) {
         self.coordinator = viewModel.coordinator!
-        self.actions = actions
         self.items = items
     }
     
