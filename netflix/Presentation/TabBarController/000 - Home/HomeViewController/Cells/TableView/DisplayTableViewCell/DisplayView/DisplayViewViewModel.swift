@@ -17,7 +17,8 @@ struct DisplayViewViewModel {
     var logoImageIdentifier: NSString
     var logoImageURL: URL!
     var attributedGenres: NSMutableAttributedString!
-    
+    /// Create a view model based on a media object.
+    /// - Parameter media: The media object represented on the display view.
     init(with media: Media) {
         self.slug = media.slug
         self.posterImagePath = media.resources.displayPoster

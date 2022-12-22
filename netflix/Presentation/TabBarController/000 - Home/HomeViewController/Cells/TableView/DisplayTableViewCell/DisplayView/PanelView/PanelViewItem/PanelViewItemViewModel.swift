@@ -25,19 +25,24 @@ final class PanelViewItemViewModel {
         let trailing = trailingTitle
         return tag == 0 ? leading : trailing
     }
-    
+    /// Create a panel view item view model object.
+    /// - Parameters:
+    ///   - item: Corresponding view.
+    ///   - media: The media object to be interacted.
     init(item: PanelViewItem, with media: Media) {
         self.tag = item.tag
         self.isSelected = .init(item.isSelected)
         self.media = media
-        self.bind(on: item)
+        self.setupObservers(on: item)
     }
     
     deinit {
         media = nil
     }
-    
-    fileprivate func bind(on item: PanelViewItem) {
+}
+
+extension PanelViewItemViewModel {
+    private func setupObservers(on item: PanelViewItem) {
         isSelected.observe(on: self) { _ in item.configuration?.viewDidConfigure() }
     }
     

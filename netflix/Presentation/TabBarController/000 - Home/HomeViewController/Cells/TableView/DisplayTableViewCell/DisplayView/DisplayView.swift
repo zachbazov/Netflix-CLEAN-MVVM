@@ -8,14 +8,18 @@
 import UIKit
 
 struct DisplayViewConfiguration {
-    weak var view: DisplayView?
-    
+    private weak var view: DisplayView?
+    /// Create a configuration object for the display view.
+    /// - Parameters:
+    ///   - view: The view itself.
+    ///   - viewModel: Coordinating view model.
     init(view: DisplayView, viewModel: DisplayViewViewModel) {
         self.view = view
         self.viewDidConfigure(with: viewModel)
     }
-    
-    func viewDidConfigure(with viewModel: DisplayViewViewModel) {
+    /// Configure the view.
+    /// - Parameter viewModel: Coordinating view model.
+    private func viewDidConfigure(with viewModel: DisplayViewViewModel) {
         view?.posterImageView.image = nil
         view?.logoImageView.image = nil
         view?.genresLabel.attributedText = nil
@@ -48,23 +52,18 @@ final class DisplayView: UIView, ViewInstantiable {
     
     private var viewModel: DisplayViewViewModel!
     private var configuration: DisplayViewConfiguration!
-    var panelView: PanelView!
-    
+    private(set) var panelView: PanelView!
+    /// Create a display view object.
+    /// - Parameter viewModel: Coordinating view model.
     init(with viewModel: DisplayTableViewCellViewModel) {
         super.init(frame: .zero)
         self.nibDidLoad()
-        viewModel.presentedDisplayMediaDidChange()
-        self.viewModel = DisplayViewViewModel(with: viewModel.presentedMedia.value!)
+        let homeViewModel = viewModel.coordinator!.viewController!.viewModel!
+        let mediaFromCache = mediaFromCache(with: homeViewModel)
+        self.viewModel = DisplayViewViewModel(with: mediaFromCache)
         self.panelView = PanelView(on: panelViewContainer, with: viewModel)
         self.configuration = DisplayViewConfiguration(view: self, viewModel: self.viewModel)
         self.viewDidLoad()
-    }
-    
-    deinit {
-        configuration = nil
-        viewModel = nil
-        panelView.removeFromSuperview()
-        panelView = nil
     }
     
     required init?(coder: NSCoder) { fatalError() }
@@ -84,5 +83,16 @@ final class DisplayView: UIView, ViewInstantiable {
             locations: [0.0, 0.66])
         
         posterImageView.contentMode = .scaleAspectFill
+    }
+}
+
+extension DisplayView {
+    /// Retrieve a media object from the display cache.
+    /// - Parameter viewModel: Coordinating view model.
+    /// - Returns: A media object.
+    private func mediaFromCache(with viewModel: HomeViewModel) -> Media {
+        if case .all = viewModel.dataSourceState.value { return viewModel.displayMediaCache[.all]! }
+        else if case .series = viewModel.dataSourceState.value { return viewModel.displayMediaCache[.series]! }
+        else { return viewModel.displayMediaCache[.films]! }
     }
 }

@@ -8,10 +8,12 @@
 import UIKit
 
 final class TableViewHeaderFooterView: UITableViewHeaderFooterView {
-    var viewModel: TableViewHeaderFooterViewViewModel!
-    
+    private var viewModel: TableViewHeaderFooterViewViewModel!
     private lazy var titleLabel = createLabel()
-    
+    /// Create a table view header view.
+    /// - Parameters:
+    ///   - section: The represented section for the header.
+    ///   - viewModel: Coordinating view model.
     init(for section: Int, with viewModel: HomeViewModel) {
         super.init(reuseIdentifier: String(describing: TableViewHeaderFooterView.reuseIdentifier))
         self.viewModel = .init()
@@ -19,7 +21,9 @@ final class TableViewHeaderFooterView: UITableViewHeaderFooterView {
     }
     
     required init?(coder: NSCoder) { fatalError() }
-    
+}
+
+extension TableViewHeaderFooterView {
     private func createLabel() -> UILabel {
         let label = UILabel()
         let font = UIFont.systemFont(ofSize: 17.0, weight: .heavy)

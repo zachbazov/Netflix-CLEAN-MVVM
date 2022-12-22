@@ -15,7 +15,10 @@ final class PanelView: UIView, ViewInstantiable {
     var viewModel: DisplayTableViewCellViewModel!
     var leadingItemView: PanelViewItem!
     var trailingItemView: PanelViewItem!
-    
+    /// Create a panel view object.
+    /// - Parameters:
+    ///   - parent: Instantiating view.
+    ///   - viewModel: Coordinating view model.
     init(on parent: UIView, with viewModel: DisplayTableViewCellViewModel) {
         self.viewModel = viewModel
         super.init(frame: parent.bounds)
@@ -37,7 +40,9 @@ final class PanelView: UIView, ViewInstantiable {
         trailingItemView = nil
         viewModel = nil
     }
-    
+}
+
+extension PanelView {
     private func viewDidConfigure() {
         playButton.layer.cornerRadius = 6.0
         playButton.addTarget(self, action: #selector(playDidTap), for: .touchUpInside)
@@ -45,6 +50,7 @@ final class PanelView: UIView, ViewInstantiable {
     
     @objc
     private func playDidTap() {
+        /// Allocate a new detail controller.
         let coordinator = viewModel.coordinator!
         let section = viewModel.sectionAt(.display)
         let media = viewModel.presentedMedia.value!

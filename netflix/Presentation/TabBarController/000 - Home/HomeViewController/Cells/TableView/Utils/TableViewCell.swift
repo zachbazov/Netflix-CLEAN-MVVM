@@ -15,7 +15,10 @@ final class TableViewCell<T>: UITableViewCell where T: UICollectionViewCell {
     private lazy var collectionView = createCollectionView()
     private var dataSource: HomeCollectionViewDataSource<T>!
     private var layout: CollectionViewLayout!
-    
+    /// Create a table view cell which holds a collection view.
+    /// - Parameters:
+    ///   - indexPath: The index path from the table view data source.
+    ///   - viewModel: Coordinating view model.
     init(for indexPath: IndexPath, with viewModel: HomeViewModel) {
         super.init(style: .default, reuseIdentifier: TableViewCell<T>.reuseIdentifier)
         let index = HomeTableViewDataSource.Index(rawValue: indexPath.section)!
@@ -26,11 +29,6 @@ final class TableViewCell<T>: UITableViewCell where T: UICollectionViewCell {
             viewModel: viewModel)
         self.viewDidLoad()
         self.collectionViewDidLayout(for: section, with: viewModel)
-    }
-    
-    deinit {
-        layout = nil
-        dataSource = nil
     }
     
     required init?(coder: NSCoder) { fatalError() }

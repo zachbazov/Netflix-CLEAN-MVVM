@@ -7,42 +7,17 @@
 
 import UIKit
 
-@objc
-private protocol ConfigurationInput {
-    func viewDidRegisterRecognizers()
-    func viewDidConfigure()
-    func viewDidTap()
-    func viewDidLongPress()
-    func selectIfNeeded()
-}
-
-private protocol ConfigurationOutput {
-    var view: PanelViewItem? { get }
-    var viewModel: DisplayTableViewCellViewModel { get }
-    var gestureRecognizers: [PanelViewItemConfiguration.GestureGecognizer] { get }
-    var tapRecognizer: UITapGestureRecognizer! { get }
-    var longPressRecognizer: UILongPressGestureRecognizer! { get }
-}
-
-private typealias Configuration = ConfigurationInput & ConfigurationOutput
-
-final class PanelViewItemConfiguration: Configuration {
-    enum GestureGecognizer {
-        case tap
-        case longPress
-    }
-    
-    enum Item: Int {
-        case myList
-        case info
-    }
-    
-    weak var view: PanelViewItem?
-    fileprivate var viewModel: DisplayTableViewCellViewModel
-    fileprivate var gestureRecognizers: [GestureGecognizer]
-    var tapRecognizer: UITapGestureRecognizer!
-    var longPressRecognizer: UILongPressGestureRecognizer!
-    
+final class PanelViewItemConfiguration {
+    fileprivate weak var view: PanelViewItem?
+    private var viewModel: DisplayTableViewCellViewModel
+    private var gestureRecognizers: [GestureGecognizer]
+    private var tapRecognizer: UITapGestureRecognizer!
+    private var longPressRecognizer: UILongPressGestureRecognizer!
+    /// Create a new panel view object.
+    /// - Parameters:
+    ///   - view: Instantiating view.
+    ///   - gestureRecognizers: Gestures to activate.
+    ///   - viewModel: Coordinating view model.
     init(view: PanelViewItem,
          gestureRecognizers: [GestureGecognizer],
          with viewModel: DisplayTableViewCellViewModel) {
@@ -59,8 +34,20 @@ final class PanelViewItemConfiguration: Configuration {
         tapRecognizer = nil
         longPressRecognizer = nil
     }
+}
+
+extension PanelViewItemConfiguration {
+    enum GestureGecognizer {
+        case tap
+        case longPress
+    }
+    /// View representation type.
+    enum Item: Int {
+        case myList
+        case info
+    }
     
-    fileprivate func viewDidRegisterRecognizers() {
+    private func viewDidRegisterRecognizers() {
         if gestureRecognizers.contains(.tap) {
             tapRecognizer = .init(target: self, action: #selector(viewDidTap))
             view?.addGestureRecognizer(tapRecognizer)
@@ -71,21 +58,19 @@ final class PanelViewItemConfiguration: Configuration {
         }
     }
     
-    fileprivate func selectIfNeeded() {
-        guard
-            let view = view,
-            let item = Item(rawValue: view.tag)
-        else { return }
+    private func selectIfNeeded() {
+        guard let view = view,
+              let item = Item(rawValue: view.tag) else {
+            return
+        }
         if case .myList = item {
             view.viewModel.isSelected.value = viewModel.myList.viewModel.contains(
-                view.viewModel.media,
-                in: viewModel.sectionAt(.myList).media)
+                view.viewModel.media, in: viewModel.sectionAt(.myList).media)
         }
     }
     
     func viewDidConfigure() {
-        guard let view = view else { return }
-        guard let viewModel = view.viewModel else { return }
+        guard let view = view, let viewModel = view.viewModel else { return }
         view.imageView.image = .init(systemName: viewModel.systemImage)
         view.titleLabel.text = viewModel.title
         
@@ -94,19 +79,23 @@ final class PanelViewItemConfiguration: Configuration {
     
     @objc
     func viewDidTap() {
-        guard
-            let view = view,
-            let tag = Item(rawValue: view.tag)
-        else { return }
+        guard let view = view,
+              let tag = Item(rawValue: view.tag) else {
+            return
+        }
         switch tag {
         case .myList:
+            /// In-case the user doesn't have a list yet.
             if viewModel.myList.viewModel.list.value.isEmpty {
                 viewModel.myList.viewModel.createList()
             }
-            
+            /// Since, the tap event occurs from the `PanelViewItem`,
+            /// the presenting view on the `DisplayView` is to be interacted.
             let media = viewModel.presentedMedia.value!
+            /// Add or remove the object from the list.
             viewModel.myList.viewModel.shouldAddOrRemove(media, uponSelection: view.viewModel.isSelected.value)
         case .info:
+            /// Allocate a new detail controller.
             let coordinator = viewModel.coordinator!
             let section = viewModel.sectionAt(.resumable)
             let media = viewModel.presentedMedia.value!
@@ -115,7 +104,7 @@ final class PanelViewItemConfiguration: Configuration {
             coordinator.shouldScreenRotate = false
             coordinator.showScreen(.detail)
         }
-        
+        /// Set alpha animations for button as the event occurs.
         view.setAlphaAnimation(using: view.gestureRecognizers!.first) {
             view.viewModel.isSelected.value.toggle()
         }
@@ -129,10 +118,13 @@ final class PanelViewItem: UIView, ViewInstantiable {
     @IBOutlet private(set) weak var titleLabel: UILabel!
     @IBOutlet private(set) weak var imageView: UIImageView!
     
-    var configuration: PanelViewItemConfiguration!
-    var viewModel: PanelViewItemViewModel!
-    fileprivate(set) var isSelected = false
-    
+    private(set) var configuration: PanelViewItemConfiguration!
+    private(set) var viewModel: PanelViewItemViewModel!
+    private(set) var isSelected = false
+    /// Create a panel view item object.
+    /// - Parameters:
+    ///   - parent: Instantiating view.
+    ///   - viewModel: Coordinating view model.
     init(on parent: UIView, with viewModel: DisplayTableViewCellViewModel) {
         super.init(frame: parent.bounds)
         self.nibDidLoad()
