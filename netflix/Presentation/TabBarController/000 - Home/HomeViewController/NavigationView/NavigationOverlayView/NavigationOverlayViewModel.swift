@@ -13,31 +13,35 @@ final class NavigationOverlayViewModel {
     let items: Observable<[Valuable]> = Observable([])
     private var state: NavigationOverlayTableViewDataSource.State = .mainMenu
     let numberOfSections: Int = 1
-    
+    /// Create a navigation overlay view view model object.
+    /// - Parameter viewModel: Coordinating view model.
     init(with viewModel: HomeViewModel) {
         self.coordinator = viewModel.coordinator!
     }
 }
 
 extension NavigationOverlayViewModel {
+    /// Presentation of the view.
     func isPresentedDidChange() {
         if case true = isPresented.value { itemsDidChange() }
         
         animatePresentation()
     }
-    
+    /// Release data source changes and center the content.
     func dataSourceDidChange() {
         guard let navigationOverlayView = coordinator.viewController?.navigationView?.navigationOverlayView else {
             return
         }
         
         let tableView = navigationOverlayView.tableView
+        /// In-case there is no allocated delegate.
         if tableView.delegate == nil {
             tableView.delegate = navigationOverlayView.dataSource
             tableView.dataSource = navigationOverlayView.dataSource
         }
-        
+        /// Release changes.
         tableView.reloadData()
+        /// Center the content.
         tableView.centerVertically(on: navigationOverlayView)
     }
     /// Change `items` value based on the data source `state` value.
@@ -46,7 +50,7 @@ extension NavigationOverlayViewModel {
         else if case .categories = state { items.value = NavigationOverlayView.Category.allCases }
         else { items.value = [] }
     }
-    
+    /// Animate the presentation of the view.
     private func animatePresentation() {
         guard let navigationOverlayView = coordinator.viewController?.navigationView?.navigationOverlayView else {
             return

@@ -8,9 +8,12 @@
 import UIKit
 
 final class NavigationOverlayFooterView: UIView {
-    private var viewModel: NavigationOverlayViewModel!
+    private let viewModel: NavigationOverlayViewModel
     private lazy var button = createButton()
-    
+    /// Create a navigation overlay footer view object.
+    /// - Parameters:
+    ///   - parent: Instantiating view.
+    ///   - viewModel: Coordinating view model.
     init(parent: UIView, viewModel: NavigationOverlayViewModel) {
         self.viewModel = viewModel
         super.init(frame: .zero)
@@ -22,7 +25,9 @@ final class NavigationOverlayFooterView: UIView {
     }
     
     required init?(coder: NSCoder) { fatalError() }
-    
+}
+
+extension NavigationOverlayFooterView {
     private func createButton() -> UIButton {
         let button = UIButton(type: .system)
         let systemName = "xmark.circle.fill"

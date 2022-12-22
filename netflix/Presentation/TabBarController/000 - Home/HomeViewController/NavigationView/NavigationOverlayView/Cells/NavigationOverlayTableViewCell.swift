@@ -9,14 +9,12 @@ import UIKit
 
 final class NavigationOverlayTableViewCell: UITableViewCell {
     private lazy var titleLabel = createLabel()
-    
-    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-        super.init(style: .default, reuseIdentifier: reuseIdentifier)
-        self.viewDidConfigure()
-    }
-    
-    required init?(coder: NSCoder) { fatalError() }
-    
+    /// Create and dequeue a navigation overlay table view cell.
+    /// - Parameters:
+    ///   - tableView: Corresponding table view.
+    ///   - indexPath: The index path of the cell on the data source.
+    ///   - viewModel: Coordinating view model.
+    /// - Returns: A navigation overlay table view cell.
     static func create(on tableView: UITableView,
                        for indexPath: IndexPath,
                        with viewModel: NavigationOverlayViewModel) -> NavigationOverlayTableViewCell {
@@ -27,11 +25,20 @@ final class NavigationOverlayTableViewCell: UITableViewCell {
         }
         let model = viewModel.items.value[indexPath.row]
         let viewModel = NavigationOverlayCollectionViewCellViewModel(title: model.stringValue)
-        cell.applyConfig(with: viewModel)
+        cell.setupSubviews()
+        cell.viewDidConfigure(with: viewModel)
         return cell
     }
     
-    private func viewDidConfigure() {
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+    }
+    
+    required init?(coder: NSCoder) { fatalError() }
+}
+
+extension NavigationOverlayTableViewCell {
+    private func setupSubviews() {
         self.backgroundColor = .clear
         self.selectionStyle = .none
     }
@@ -45,10 +52,8 @@ final class NavigationOverlayTableViewCell: UITableViewCell {
         addSubview(label)
         return label
     }
-}
-
-extension NavigationOverlayTableViewCell {
-    private func applyConfig(with viewModel: NavigationOverlayCollectionViewCellViewModel) {
+    
+    private func viewDidConfigure(with viewModel: NavigationOverlayCollectionViewCellViewModel) {
         titleLabel.text = viewModel.title
     }
 }

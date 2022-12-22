@@ -14,7 +14,8 @@ final class NavigationOverlayView: UIView {
     let footerView: NavigationOverlayFooterView
     let tabBar: UITabBar
     private(set) lazy var tableView: UITableView = createTableView()
-    
+    /// Create a navigation overlay view object.
+    /// - Parameter viewModel: Coordinating view model.
     init(with viewModel: HomeViewModel) {
         self.tabBar = viewModel.coordinator!.viewController!.tabBarController!.tabBar
         self.viewModel = NavigationOverlayViewModel(with: viewModel)

@@ -8,15 +8,6 @@
 import UIKit
 
 final class NavigationView: UIView, ViewInstantiable {
-    enum State: Int, CaseIterable {
-        case home
-        case airPlay
-        case account
-        case tvShows
-        case movies
-        case categories
-    }
-    
     @IBOutlet private weak var gradientView: UIView!
     @IBOutlet private weak var homeItemViewContainer: UIView!
     @IBOutlet private weak var airPlayItemViewContainer: UIView!
@@ -35,7 +26,10 @@ final class NavigationView: UIView, ViewInstantiable {
     private(set) var tvShowsItemView: NavigationViewItem!
     private(set) var moviesItemView: NavigationViewItem!
     private(set) var categoriesItemView: NavigationViewItem!
-    
+    /// Create a navigation view object.
+    /// - Parameters:
+    ///   - parent: Instantiating view.
+    ///   - viewModel: Coordinating view model.
     init(on parent: UIView, with viewModel: HomeViewModel) {
         super.init(frame: parent.bounds)
         self.nibDidLoad()
@@ -52,13 +46,13 @@ final class NavigationView: UIView, ViewInstantiable {
                                            self.accountItemView, self.tvShowsItemView,
                                            self.moviesItemView, self.categoriesItemView]
         self.viewModel = NavigationViewViewModel(items: items, with: viewModel)
-        
         /// Updates root coordinator's `navigationView` property.
         viewModel.coordinator?.viewController?.navigationView = self
         
         self.navigationOverlayView = NavigationOverlayView(with: viewModel)
-        
+        /// In-case of reallocation, reconfigure the view.
         self.viewDidReconfigure()
+        
         self.viewDidLoad()
     }
     
@@ -70,14 +64,9 @@ final class NavigationView: UIView, ViewInstantiable {
         navigationOverlayView = nil
         viewModel = nil
     }
-    
-    private func setupObservers() {
-        viewModel.state.observe(on: self) { [weak self] state in
-            self?.viewModel.stateDidChange(state)
-            self?.navigationOverlayView.viewModel.navigationViewStateDidChange(state)
-        }
-    }
-    
+}
+
+extension NavigationView {
     private func setupGradientView() {
         let rect = CGRect(x: 0.0, y: 0.0, width: UIScreen.main.bounds.width, height: bounds.height)
         gradientView.addGradientLayer(
@@ -96,9 +85,8 @@ final class NavigationView: UIView, ViewInstantiable {
     private func viewDidConfigure() {
         setupGradientView()
     }
-    
+    /// Reconfigure the view once reallocation occurs by changing home's data source state.
     private func viewDidReconfigure() {
-        /// Reconfigure the view once reinitialized.
         let tabBarViewModel = Application.current.rootCoordinator.tabCoordinator.viewController?.viewModel
         if tabBarViewModel?.latestHomeDataSourceState == .all {
             self.homeItemView.viewModel.isSelected = true
@@ -113,20 +101,31 @@ final class NavigationView: UIView, ViewInstantiable {
             self.viewModel.state.value = .movies
         }
     }
-    
-//    private func actions() -> NavigationViewViewModelActions {
-//        return NavigationViewViewModelActions(
-//            navigationViewDidAppear: { [weak self] in
-//                
-//            },
-//            stateDidChange: { [weak self] state in
-//
-//            })
-//    }
+}
+
+extension NavigationView {
+    private func setupObservers() {
+        viewModel.state.observe(on: self) { [weak self] state in
+            self?.viewModel.stateDidChange(state)
+            self?.navigationOverlayView.viewModel.navigationViewStateDidChange(state)
+        }
+    }
     
     func removeObservers() {
         printIfDebug("Removed `NavigationView` observers.")
         viewModel.state.remove(observer: self)
+    }
+}
+
+extension NavigationView {
+    /// Item representation type.
+    enum State: Int, CaseIterable {
+        case home
+        case airPlay
+        case account
+        case tvShows
+        case movies
+        case categories
     }
 }
 

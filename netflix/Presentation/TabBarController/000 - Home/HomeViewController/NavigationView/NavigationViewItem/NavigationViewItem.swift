@@ -7,23 +7,11 @@
 
 import UIKit
 
-@objc
-private protocol ConfigurationInput {
-    func viewDidLoad()
-    func viewDidConfigure(item: NavigationViewItem)
-    func viewDidTap()
-}
-
-private protocol ConfigurationOutput {
-    var item: NavigationViewItem! { get }
-}
-
-private typealias Configuration = ConfigurationInput & ConfigurationOutput
-
-final class NavigationViewItemConfiguration: Configuration {
-    fileprivate weak var item: NavigationViewItem!
-    
-    init(configurationWithItem item: NavigationViewItem) {
+final class NavigationViewItemConfiguration {
+    private weak var item: NavigationViewItem!
+    /// Create a configuration object for the item.
+    /// - Parameter item: Corresponding view.
+    init(with item: NavigationViewItem) {
         self.item = item
         self.viewDidLoad()
     }
@@ -32,12 +20,14 @@ final class NavigationViewItemConfiguration: Configuration {
         item?.removeFromSuperview()
         item = nil
     }
-    
-    fileprivate func viewDidLoad() {
+}
+
+extension NavigationViewItemConfiguration {
+    private func viewDidLoad() {
         viewDidConfigure(item: item)
     }
     
-    fileprivate func viewDidConfigure(item: NavigationViewItem) {
+    private func viewDidConfigure(item: NavigationViewItem) {
         self.item = item
         
         guard let state = NavigationView.State(rawValue: item.tag) else { return }
@@ -71,7 +61,8 @@ final class NavigationViewItemConfiguration: Configuration {
         }
     }
     
-    fileprivate func viewDidTap() {
+    @objc
+    private func viewDidTap() {
         guard let navigation = item.viewModel.coordinator.viewController?.navigationView,
               let state = NavigationView.State(rawValue: item.tag) else {
             return
@@ -81,18 +72,20 @@ final class NavigationViewItemConfiguration: Configuration {
 }
 
 final class NavigationViewItem: UIView {
-    private(set) lazy var button = UIButton(type: .system)
-    
-    private(set) var configuration: NavigationViewItemConfiguration!
+    fileprivate lazy var button = UIButton(type: .system)
+    fileprivate var configuration: NavigationViewItemConfiguration!
     var viewModel: NavigationViewItemViewModel!
-    
+    /// Create a navigation view item object.
+    /// - Parameters:
+    ///   - parent: Instantiating view.
+    ///   - viewModel: Coordinating view model.
     init(on parent: UIView, with viewModel: HomeViewModel) {
         super.init(frame: parent.bounds)
         self.tag = parent.tag
         parent.addSubview(self)
         self.constraintToSuperview(parent)
-        self.viewModel = .init(tag: self.tag, with: viewModel)
-        self.configuration = .init(configurationWithItem: self)
+        self.viewModel = NavigationViewItemViewModel(tag: self.tag, with: viewModel)
+        self.configuration = NavigationViewItemConfiguration(with: self)
     }
     
     required init?(coder: NSCoder) { fatalError() }
@@ -101,9 +94,14 @@ final class NavigationViewItem: UIView {
         configuration = nil
         viewModel = nil
     }
-    
+}
+
+extension NavigationViewItem {
+    /// Configure an item and change it according to the navigation state.
+    /// - Parameter state: Corresponding navigation state.
     func viewDidConfigure(for state: NavigationView.State) {
         guard let tag = NavigationView.State(rawValue: tag) else { return }
+        /// Release changes for `categories` item depending the navigation state.
         if case .home = state, case .categories = tag {
             button.setTitle(viewModel.title, for: .normal)
             button.titleLabel?.font = UIFont.systemFont(ofSize: 16.0, weight: .bold)

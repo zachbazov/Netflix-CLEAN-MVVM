@@ -8,22 +8,31 @@
 import Foundation
 
 final class NavigationViewViewModel {
-    let coordinator: HomeViewCoordinator
-    let items: [NavigationViewItem]
+    private let coordinator: HomeViewCoordinator
+    private let items: [NavigationViewItem]
     let state: Observable<NavigationView.State> = Observable(.home)
-    
+    /// Create a navigation view view model object.
+    /// - Parameters:
+    ///   - items: Represented items on the navigation.
+    ///   - viewModel: Coordinating view model.
     init(items: [NavigationViewItem], with viewModel: HomeViewModel) {
         self.coordinator = viewModel.coordinator!
         self.items = items
     }
-    
+}
+
+extension NavigationViewViewModel {
+    /// Animate the first appearance of the navigation view.
     func navigationViewDidAppear() {
         let homeViewController = coordinator.viewController!
         homeViewController.navigationViewTopConstraint.constant = 0.0
         homeViewController.navigationView.alpha = 1.0
-        homeViewController.view.animateUsingSpring(withDuration: 0.66, withDamping: 1.0, initialSpringVelocity: 1.0)
+        homeViewController.view.animateUsingSpring(withDuration: 0.66,
+                                                   withDamping: 1.0,
+                                                   initialSpringVelocity: 1.0)
     }
-    
+    /// Controls the navigation presentation of items.
+    /// - Parameter state: Corresponding state.
     func stateDidChange(_ state: NavigationView.State) {
         let navigationView = coordinator.viewController!.navigationView!
         

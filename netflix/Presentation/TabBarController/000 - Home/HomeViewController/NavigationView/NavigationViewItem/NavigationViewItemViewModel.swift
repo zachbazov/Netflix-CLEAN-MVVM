@@ -13,7 +13,10 @@ struct NavigationViewItemViewModel {
     var title: String!
     var image: String!
     var isSelected: Bool
-    
+    /// Create a navigation view item view model object.
+    /// - Parameters:
+    ///   - tag: View indicator.
+    ///   - viewModel: Coordinating view model.
     init(tag: Int, with viewModel: HomeViewModel) {
         self.coordinator = viewModel.coordinator!
         self.isSelected = false
@@ -21,7 +24,9 @@ struct NavigationViewItemViewModel {
         self.title = title(for: tag)
         self.image = image(for: tag)
     }
-    
+}
+
+extension NavigationViewItemViewModel {
     private func title(for tag: Int) -> String? {
         guard let state = NavigationView.State(rawValue: tag) else { return nil }
         if case .tvShows = state { return "TV Shows" }

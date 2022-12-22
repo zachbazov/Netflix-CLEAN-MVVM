@@ -11,13 +11,9 @@ final class OpaqueView: UIView {
     private var imageView: UIImageView!
     private var blurView: UIVisualEffectView!
     private(set) var viewModel: OpaqueViewViewModel!
-    
-    deinit {
-        imageView = nil
-        blurView = nil
-        viewModel = nil
-    }
-    
+}
+
+extension OpaqueView {
     private func viewDidConfigure() {
         imageView?.removeFromSuperview()
         blurView?.removeFromSuperview()
@@ -31,20 +27,21 @@ final class OpaqueView: UIView {
         
         insertSubview(imageView, at: 0)
         insertSubview(blurView, at: 1)
-        
+        /// Download media resource.
         AsyncImageFetcher.shared.load(
             in: .home,
             url: viewModel.imageURL,
             identifier: viewModel.identifier) { [weak self] image in
-                asynchrony {
-                    self?.imageView.image = image
-                }
+                asynchrony { self?.imageView.image = image }
             }
     }
-    
+    /// Release changes for the view by the view model.
+    /// - Parameter media: Corresponding media object.
     func viewModelDidUpdate(with media: Media) {
-        guard let presentedDisplayMedia = media as Media? else { return }
-        viewModel = .init(with: presentedDisplayMedia)
+        /// Extract the presented media object on `DisplayView`.
+        guard let presentedMedia = media as Media? else { return }
+        viewModel = OpaqueViewViewModel(with: presentedMedia)
+        /// Release changes.
         viewDidConfigure()
     }
 }
