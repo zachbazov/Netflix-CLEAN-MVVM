@@ -7,36 +7,23 @@
 
 import Foundation
 
-struct MyListActions {
-    let listDidReload: () -> Void
-}
-
 final class MyListViewModel {
-    private var task: Cancellable? { willSet { task?.cancel() } }
-    private(set) var list: Observable<Set<Media>> = Observable([])
+    weak var coordinator: HomeViewCoordinator?
     private let user: UserDTO
     private let homeUseCase: HomeUseCase
-    private(set) var section: Section
-    private(set) var actions: MyListActions
+    let list: Observable<Set<Media>> = Observable([])
+    let section: Section
+    private var task: Cancellable? { willSet { task?.cancel() } }
     
     init(with viewModel: HomeViewModel) {
+        self.coordinator = viewModel.coordinator
         self.user = Application.current.authService.user ?? .init()
         self.homeUseCase = viewModel.useCase
         self.section = viewModel.section(at: .myList)
-        self.actions = MyListActions(
-            listDidReload: {
-                guard
-                    viewModel.coordinator!.viewController!.tableView.numberOfSections > 0,
-                    let myListIndex = HomeTableViewDataSource.Index(rawValue: 6),
-                    let section = viewModel.coordinator!.viewController?.viewModel?.section(at: .myList)
-                else { return }
-                viewModel.coordinator!.viewController?.viewModel?.filter(section: section)
-                let index = IndexSet(integer: myListIndex.rawValue)
-                viewModel.coordinator!.viewController?.tableView.reloadSections(index, with: .automatic)
-            })
     }
     
     deinit {
+        coordinator = nil
         task = nil
     }
 }
@@ -104,10 +91,36 @@ extension MyListViewModel {
         }
         
         updateList()
-        actions.listDidReload()
+        listDidReload()
+    }
+    
+    func listDidReload() {
+        guard
+            coordinator!.viewController!.tableView.numberOfSections > 0,
+            let myListIndex = HomeTableViewDataSource.Index(rawValue: 6),
+            let section = coordinator!.viewController?.viewModel?.section(at: .myList)
+        else { return }
+        filter(section: section)
+        let index = IndexSet(integer: myListIndex.rawValue)
+        coordinator!.viewController?.tableView.reloadSections(index, with: .automatic)
     }
     
     func contains(_ media: Media, in list: [Media]) -> Bool {
         return list.contains(media)
+    }
+    
+    func filter(section: Section) {
+        let homeViewModel = coordinator!.viewController!.viewModel!
+        guard !homeViewModel.isEmpty else { return }
+        
+        if section.id == homeViewModel.section(at: .myList).id {
+            var media = list.value
+            switch homeViewModel.dataSourceState.value {
+            case .all: break
+            case .series: media = media.filter { $0.type == .series }
+            case .films: media = media.filter { $0.type == .film }
+            }
+            homeViewModel.sections[section.id].media = media.toArray()
+        }
     }
 }

@@ -25,7 +25,7 @@ final class HomeViewController: UIViewController {
         setupBehaviors()
         setupSubviews()
         setupObservers()
-        viewModel.viewWillLoad()
+        viewModel.dataDidBeganLoading()
     }
     
     private func setupBehaviors() {
@@ -40,14 +40,14 @@ final class HomeViewController: UIViewController {
     }
     
     private func setupObservers() {
-        tableViewState(in: viewModel)
+        dataSourceState(in: viewModel)
         presentedDisplayMedia(in: viewModel)
     }
     
     private func setupDataSource() {
         /// Filters the sections based on the data source state.
         viewModel.filter(sections: viewModel.sections)
-        /// Initializes the data source.
+        
         dataSource = HomeTableViewDataSource(tableView: tableView, viewModel: viewModel)
     }
     
@@ -63,7 +63,7 @@ final class HomeViewController: UIViewController {
     func removeObservers() {
         if let viewModel = viewModel {
             printIfDebug("Removed `HomeViewModel` observers.")
-            viewModel.homeDataSourceState.remove(observer: self)
+            viewModel.dataSourceState.remove(observer: self)
             viewModel.presentedDisplayMedia.remove(observer: self)
         }
     }
@@ -79,8 +79,8 @@ final class HomeViewController: UIViewController {
         browseOverlayView = nil
         
         viewModel.myList.removeObservers()
-        viewModel.coordinator = nil
         viewModel.myList = nil
+        viewModel.coordinator = nil
         viewModel = nil
         
         removeObservers()
@@ -89,8 +89,8 @@ final class HomeViewController: UIViewController {
 }
 
 extension HomeViewController {
-    private func tableViewState(in viewModel: HomeViewModel) {
-        viewModel.homeDataSourceState.observe(on: self) { [weak self] state in
+    private func dataSourceState(in viewModel: HomeViewModel) {
+        viewModel.dataSourceState.observe(on: self) { [weak self] state in
             self?.setupDataSource()
         }
     }
@@ -98,38 +98,7 @@ extension HomeViewController {
     private func presentedDisplayMedia(in viewModel: HomeViewModel) {
         viewModel.presentedDisplayMedia.observe(on: self) { [weak self] media in
             guard let media = media else { return }
-            self!.navigationView.navigationOverlayView.opaqueView.viewModelDidUpdate(with: media)
+            self?.navigationView.navigationOverlayView.opaqueView.viewModelDidUpdate(with: media)
         }
-    }
-}
-
-extension HomeViewController {
-    func heightForRow(at indexPath: IndexPath) -> CGFloat {
-        if case .display = HomeTableViewDataSource.Index(rawValue: indexPath.section) {
-            return self.view.bounds.height * 0.76
-        }
-        return self.view.bounds.height * 0.19
-    }
-    
-    func viewDidScroll(in scrollView: UIScrollView) {
-        guard let translation = scrollView.panGestureRecognizer.translation(in: self.view) as CGPoint? else { return }
-        self.view.animateUsingSpring(withDuration: 0.66,
-                                     withDamping: 1.0,
-                                     initialSpringVelocity: 1.0) {
-            guard translation.y < 0 else {
-                self.navigationViewTopConstraint.constant = 0.0
-                self.navigationView.alpha = 1.0
-                return self.view.layoutIfNeeded()
-            }
-            self.navigationViewTopConstraint.constant = -self.navigationView.bounds.size.height
-            self.navigationView.alpha = 0.0
-            self.view.layoutIfNeeded()
-        }
-    }
-    
-    func didSelectItem(at section: Int, of row: Int) {
-        let section = viewModel.sections[section]
-        let media = section.media[row]
-        viewModel.actions?.presentMediaDetails(section, media, false)
     }
 }

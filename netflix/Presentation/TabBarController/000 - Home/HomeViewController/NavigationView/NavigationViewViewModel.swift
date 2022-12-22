@@ -14,7 +14,7 @@ struct NavigationViewViewModelActions {
 
 final class NavigationViewViewModel {
     let coordinator: HomeViewCoordinator
-    let state: Observable<NavigationView.State>
+    let state: Observable<NavigationView.State> = Observable(.home)
     let items: [NavigationViewItem]
     let actions: NavigationViewViewModelActions
     
@@ -22,7 +22,6 @@ final class NavigationViewViewModel {
          actions: NavigationViewViewModelActions,
          with viewModel: HomeViewModel) {
         self.coordinator = viewModel.coordinator!
-        self.state = Observable(.home)
         self.actions = actions
         self.items = items
     }
@@ -37,12 +36,8 @@ final class NavigationViewViewModel {
     func stateDidChange(_ state: NavigationView.State) {
         let navigationView = coordinator.viewController!.navigationView!
         
-        navigationView.categoriesItemView.viewDidConfigure(with: state)
+        navigationView.categoriesItemView.viewDidConfigure(for: state)
         
-        navigationView.animateUsingSpring(withDuration: 0.33,
-                                          withDamping: 0.7,
-                                          initialSpringVelocity: 0.7)
-
         switch state {
         case .home:
             navigationView.tvShowsItemViewContainer.isHidden(false)
@@ -66,5 +61,9 @@ final class NavigationViewViewModel {
         case .categories:
             break
         }
+        
+        navigationView.animateUsingSpring(withDuration: 0.33,
+                                          withDamping: 0.7,
+                                          initialSpringVelocity: 0.7)
     }
 }

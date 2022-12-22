@@ -34,6 +34,9 @@ final class BrowseOverlayCollectionViewDataSource: NSObject,
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let media = items[indexPath.row]
-        coordinator.presentMediaDetails(in: section, for: media, shouldScreenRotate: false)
+        coordinator.section = section
+        coordinator.media = media
+        coordinator.shouldScreenRotate = false
+        coordinator.showScreen(.detail)
     }
 }

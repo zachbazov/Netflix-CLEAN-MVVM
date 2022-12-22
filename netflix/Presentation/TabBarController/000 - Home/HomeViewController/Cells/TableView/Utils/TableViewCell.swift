@@ -20,19 +20,16 @@ final class TableViewCell<T>: UITableViewCell where T: UICollectionViewCell {
     var dataSource: HomeCollectionViewDataSource<T>!
     var layout: CollectionViewLayout!
     
-    init(with viewModel: HomeViewModel,
-         for indexPath: IndexPath,
-         actions: HomeCollectionViewDataSourceActions? = nil) {
+    init(with viewModel: HomeViewModel, for indexPath: IndexPath) {
         super.init(style: .default, reuseIdentifier: TableViewCell<T>.reuseIdentifier)
         let index = HomeTableViewDataSource.Index(rawValue: indexPath.section)!
         let section = viewModel.section(at: index)
         self.dataSource = HomeCollectionViewDataSource(
             on: collectionView,
             section: section,
-            viewModel: viewModel,
-            with: actions)
+            viewModel: viewModel)
         self.viewDidLoad()
-        self.viewDidConfigure(section: section, viewModel: viewModel, with: actions)
+        self.viewDidConfigure(section: section, viewModel: viewModel)
     }
     
     deinit {
@@ -57,13 +54,11 @@ final class TableViewCell<T>: UITableViewCell where T: UICollectionViewCell {
         backgroundColor = .black
     }
     
-    func viewDidConfigure(section: Section,
-                          viewModel: HomeViewModel,
-                          with actions: HomeCollectionViewDataSourceActions? = nil) {
+    func viewDidConfigure(section: Section, viewModel: HomeViewModel) {
         guard let indices = HomeTableViewDataSource.Index(rawValue: section.id) else { return }
         if case .display = indices {
             ///
-        } else if case .ratable = indices {
+        } else if case .rated = indices {
             layout = CollectionViewLayout(layout: .rated, scrollDirection: .horizontal)
             collectionView.setCollectionViewLayout(layout, animated: false)
         } else {

@@ -7,29 +7,24 @@
 
 import Foundation
 
-struct HomeViewModelActions {
-    let presentMediaDetails: (Section, Media, Bool) -> Void
-}
-
-final class HomeViewModel: ViewModel {
+final class HomeViewModel {
     var coordinator: HomeViewCoordinator?
     let useCase: HomeUseCase
-    private(set) lazy var actions: HomeViewModelActions! = coordinator?.actions()
     let orientation = DeviceOrientation.shared
     
-    var sectionsTask: Cancellable? { willSet { sectionsTask?.cancel() } }
-    var mediaTask: Cancellable? { willSet { mediaTask?.cancel() } }
+    var dataSourceState: Observable<HomeTableViewDataSource.State> = Observable(.all)
+    var presentedDisplayMedia: Observable<Media?> = Observable(.none)
     
     private(set) var sections: [Section] = []
     private(set) var media: [Media] = []
-    
-    private(set) var homeDataSourceState: Observable<HomeTableViewDataSource.State> = Observable(.all)
-    
-    private(set) var presentedDisplayMedia: Observable<Media?> = Observable(nil)
-    private var isEmpty: Bool { sections.isEmpty }
+    var isEmpty: Bool { sections.isEmpty }
     var myList: MyList!
-    private var displayMediaCache: [HomeTableViewDataSource.State: Media] = [:]
+    var displayMediaCache: [HomeTableViewDataSource.State: Media] = [:]
     
+    private var sectionsTask: Cancellable? { willSet { sectionsTask?.cancel() } }
+    private var mediaTask: Cancellable? { willSet { mediaTask?.cancel() } }
+    /// Default initializer.
+    /// Allocate `useCase` property and it's dependencies.
     init() {
         let dataTransferService = Application.current.dataTransferService
         let mediaResponseCache = Application.current.mediaResponseCache
@@ -47,33 +42,41 @@ final class HomeViewModel: ViewModel {
         sectionsTask = nil
         coordinator = nil
     }
-    
-    func transform(input: Void) {}
+}
+
+extension HomeViewModel {
+    private func viewDidLoad() {
+        setupOrientation()
+    }
     
     private func setupOrientation() {
         let orientation = DeviceOrientation.shared
         orientation.setLock(orientation: .portrait)
     }
-}
-
-extension HomeViewModel {
-    func viewWillLoad() {
-        setupOrientation()
+    
+    func dataDidBeganLoading() {
         fetchSections()
     }
     
-    fileprivate func viewDidLoad() {
-        /// Invokes navigation bar presentation.
+    private func dataDidEndLoading() {
+        /// Invoke navigation bar presentation.
         let navigationViewModel = coordinator?.viewController?.navigationView.viewModel
         navigationViewModel?.actions.navigationViewDidAppear()
-        /// Invokes tableview presentation.
+        /// Invoke table view presentation.
         let tabBarViewModel = Application.current.rootCoordinator.tabCoordinator.viewController?.viewModel
-        homeDataSourceState.value = tabBarViewModel!.latestHomeDataSourceState
-        /// Creates an instance of `MyList`.
+        dataSourceState.value = tabBarViewModel!.latestHomeDataSourceState
+        /// Allocate my list.
         myList = MyList(with: self)
     }
-    
-    fileprivate func fetchSections() {
+}
+
+extension HomeViewModel: ViewModel {
+    func transform(input: Void) {}
+}
+
+// MARK: - HomeUseCase implementation
+extension HomeViewModel {
+    private func fetchSections() {
         sectionsTask = useCase.execute(
             for: SectionResponse.GET.self,
             request: Any.self,
@@ -87,7 +90,7 @@ extension HomeViewModel {
             })
     }
     
-    fileprivate func fetchMedia() {
+    private func fetchMedia() {
         mediaTask = useCase.execute(
             for: MediaResponse.GET.Many.self,
             request: MediaRequestDTO.self,
@@ -96,146 +99,88 @@ extension HomeViewModel {
                 guard let self = self else { return }
                 if case let .success(response) = result {
                     self.media = response.data
-                    self.viewDidLoad()
+                    self.dataDidEndLoading()
                 }
             })
     }
-    
-    func filter(section: Section) {
-        guard !isEmpty else { return }
-        
-        if section.id == 6 {
-            var media = myList.viewModel.list.value
-            switch homeDataSourceState.value {
-            case .all:
-                break
-            case .series:
-                media = media.filter { $0.type == .series }
-            case .films:
-                media = media.filter { $0.type == .film }
-            }
-            sections[section.id].media = media.toArray()
-        }
+}
+
+extension HomeViewModel {
+    func section(at index: HomeTableViewDataSource.Index) -> Section {
+        sections[index.rawValue]
     }
     
     func filter(sections: [Section]) {
         guard !isEmpty else { return }
         
         HomeTableViewDataSource.Index.allCases.forEach { index in
-            switch index {
-            case .ratable:
-                var media = media
-                switch homeDataSourceState.value {
-                case .all:
-                    media = media
-                        .sorted { $0.rating > $1.rating }
-                        .filter { $0.rating > 7.5 }
-                        .slice(10)
-                case .series:
-                    media = media
-                        .filter { $0.type == .series }
-                        .sorted { $0.rating > $1.rating }
-                        .filter { $0.rating > 7.5 }
-                        .slice(10)
-                case .films:
-                    media = media
-                        .filter { $0.type == .film }
-                        .sorted { $0.rating > $1.rating }
-                        .filter { $0.rating > 7.5 }
-                        .slice(10)
-                }
-                sections[index.rawValue].media = media
-            case .resumable:
-                var media = media
-                switch homeDataSourceState.value {
-                case .all:
-                    media = media.shuffled()
-                case .series:
-                    media = media
-                        .shuffled()
-                        .filter { $0.type == .series }
-                case .films:
-                    media = media
-                        .shuffled()
-                        .filter { $0.type == .film }
-                }
-                sections[index.rawValue].media = media
-            case .myList:
-                guard let myList = myList else { return }
-                var media = myList.viewModel.list.value
-                switch homeDataSourceState.value {
-                case .all:
-                    break
-                case .series:
-                    media = media.filter { $0.type == .series }
-                case .films:
-                    media = media.filter { $0.type == .film }
-                }
-                sections[index.rawValue].media = media.toArray()
-            case .action, .sciFi,
-                    .crime, .thriller,
-                    .adventure, .comedy,
-                    .drama, .horror,
-                    .anime, .familyNchildren,
-                    .documentary:
-                switch homeDataSourceState.value {
-                case .all:
-                    sections[index.rawValue].media = media
-                        .shuffled()
-                        .filter { $0.genres.contains(sections[index.rawValue].title) }
-                case .series:
-                    sections[index.rawValue].media = media
-                        .shuffled()
-                        .filter { $0.type == .series }
-                        .filter { $0.genres.contains(sections[index.rawValue].title) }
-                case .films:
-                    sections[index.rawValue].media = media
-                        .shuffled()
-                        .filter { $0.type == .film }
-                        .filter { $0.genres.contains(sections[index.rawValue].title) }
-                }
-            case .blockbuster:
-                let value = Float(7.5)
-                switch homeDataSourceState.value {
-                case .all:
-                    sections[index.rawValue].media = media
-                        .filter { $0.rating > value }
-                case .series:
-                    sections[index.rawValue].media = media
-                        .filter { $0.type == .series }
-                        .filter { $0.rating > value }
-                case .films:
-                    sections[index.rawValue].media = media
-                        .filter { $0.type == .film }
-                        .filter { $0.rating > value }
-                }
-            default: break
+            sections[index.rawValue].media = filter(at: index)
+        }
+    }
+    
+    private func filter(at index: HomeTableViewDataSource.Index) -> [Media] {
+        let media = self.media
+        if case .rated = index {
+            if case .all = dataSourceState.value {
+                return media
+                    .sorted { $0.rating > $1.rating }
+                    .filter { $0.rating > 7.5 }
+                    .slice(10)
+            } else if case .series = dataSourceState.value {
+                return media
+                    .filter { $0.type == .series }
+                    .sorted { $0.rating > $1.rating }
+                    .filter { $0.rating > 7.5 }
+                    .slice(10)
+            } else {
+                return media
+                    .filter { $0.type == .film }
+                    .sorted { $0.rating > $1.rating }
+                    .filter { $0.rating > 7.5 }
+                    .slice(10)
+            }
+        } else if case .resumable = index {
+            if case .all = dataSourceState.value {
+                return media.shuffled()
+            } else if case .series = dataSourceState.value {
+                return media.shuffled().filter { $0.type == .series }
+            } else {
+                return media.shuffled().filter { $0.type == .film }
+            }
+        } else if case .myList = index {
+            let media = myList.viewModel.list.value
+            if case .all = dataSourceState.value {
+                return media.shuffled()
+            } else if case .series = dataSourceState.value {
+                return media.shuffled().filter { $0.type == .series }
+            } else {
+                return media.shuffled().filter { $0.type == .film }
+            }
+        } else if case .blockbuster = index {
+            let value = Float(7.5)
+            if case .all = dataSourceState.value {
+                return media.filter { $0.rating > value }
+            } else if case .series = dataSourceState.value {
+                return media.filter { $0.type == .series }.filter { $0.rating > value }
+            } else {
+                return media.filter { $0.type == .film }.filter { $0.rating > value }
+            }
+        } else {
+            if case .all = dataSourceState.value {
+                return media
+                    .shuffled()
+                    .filter { $0.genres.contains(sections[index.rawValue].title) }
+            } else if case .series = dataSourceState.value {
+                return media
+                    .shuffled()
+                    .filter { $0.type == .series }
+                    .filter { $0.genres.contains(sections[index.rawValue].title) }
+            } else {
+                return media
+                    .shuffled()
+                    .filter { $0.type == .film }
+                    .filter { $0.genres.contains(sections[index.rawValue].title) }
             }
         }
-    }
-    
-    func section(at index: HomeTableViewDataSource.Index) -> Section {
-        sections[index.rawValue]
-    }
-    
-    fileprivate func generateMedia(for state: HomeTableViewDataSource.State) -> Media {
-        guard displayMediaCache[state] == nil else { return displayMediaCache[state]! }
-        switch state {
-        case .all:
-            displayMediaCache[state] = media.randomElement()
-        case .series:
-            displayMediaCache[state] = media
-                .filter { $0.type == .series }
-                .randomElement()!
-        case .films:
-            displayMediaCache[state] = media
-                .filter { $0.type == .film }
-                .randomElement()!
-        }
-        return displayMediaCache[state]!
-    }
-    
-    func presentedDisplayMediaDidChange() {
-        presentedDisplayMedia.value = generateMedia(for: homeDataSourceState.value)
     }
 }

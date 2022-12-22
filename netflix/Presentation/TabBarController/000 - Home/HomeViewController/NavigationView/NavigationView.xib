@@ -36,21 +36,21 @@
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="p6X-Bg-Psj" userLabel="Top Container">
                             <rect key="frame" x="0.0" y="54" width="414" height="54"/>
                             <subviews>
-                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="xi4-Cf-x0R">
+                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="xi4-Cf-x0R" userLabel="Home Button Container">
                                     <rect key="frame" x="8" y="7" width="40" height="40"/>
                                     <constraints>
                                         <constraint firstAttribute="height" constant="40" id="DM7-xw-fpX"/>
                                         <constraint firstAttribute="width" constant="40" id="Jfb-aQ-bvC"/>
                                     </constraints>
                                 </view>
-                                <view tag="1" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="jyM-Yo-6ZJ">
+                                <view tag="1" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="jyM-Yo-6ZJ" userLabel="AirPlay Button Container">
                                     <rect key="frame" x="318" y="11" width="32" height="32"/>
                                     <constraints>
                                         <constraint firstAttribute="width" constant="32" id="b9r-xf-N2n"/>
                                         <constraint firstAttribute="height" constant="32" id="qTv-RB-h82"/>
                                     </constraints>
                                 </view>
-                                <view tag="2" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="bzF-Ir-7K2">
+                                <view tag="2" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="bzF-Ir-7K2" userLabel="Account Button Container">
                                     <rect key="frame" x="366" y="11" width="32" height="32"/>
                                     <constraints>
                                         <constraint firstAttribute="height" constant="32" id="SQi-b1-LWK"/>
@@ -73,13 +73,13 @@
                                 <stackView opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="dtf-W1-okM">
                                     <rect key="frame" x="31" y="0.0" width="352" height="54"/>
                                     <subviews>
-                                        <view tag="3" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="hup-KA-ylD">
+                                        <view tag="3" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="hup-KA-ylD" userLabel="Leading Item Container">
                                             <rect key="frame" x="0.0" y="0.0" width="117.5" height="54"/>
                                         </view>
-                                        <view tag="4" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="oaQ-J8-Kai">
+                                        <view tag="4" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="oaQ-J8-Kai" userLabel="Center Item Container">
                                             <rect key="frame" x="117.5" y="0.0" width="117.5" height="54"/>
                                         </view>
-                                        <view tag="5" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cNO-pR-kSt">
+                                        <view tag="5" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cNO-pR-kSt" userLabel="Trailing Item Container">
                                             <rect key="frame" x="235" y="0.0" width="117" height="54"/>
                                         </view>
                                     </subviews>

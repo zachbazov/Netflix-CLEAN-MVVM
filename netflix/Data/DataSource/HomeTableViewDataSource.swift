@@ -7,12 +7,6 @@
 
 import UIKit
 
-struct HomeTableViewDataSourceActions {
-    let heightForRowAt: (IndexPath) -> CGFloat
-    let viewDidScroll: (UIScrollView) -> Void
-    let didSelectItem: (Int, Int) -> Void
-}
-
 private protocol DataSourceInput {
     func viewDidLoad()
     func viewsDidRegister()
@@ -29,7 +23,7 @@ private typealias DataSource = DataSourceInput & DataSourceOutput
 final class HomeTableViewDataSource: NSObject, DataSource {
     enum Index: Int, CaseIterable {
         case display
-        case ratable
+        case rated
         case resumable
         case action
         case sciFi
@@ -53,8 +47,7 @@ final class HomeTableViewDataSource: NSObject, DataSource {
     }
     
     weak var tableView: UITableView!
-    private let viewModel: HomeViewModel
-    var actions: HomeTableViewDataSourceActions!
+    private weak var viewModel: HomeViewModel!
     
     fileprivate let numberOfRows = 1
     var displayCell: DisplayTableViewCell!
@@ -62,37 +55,6 @@ final class HomeTableViewDataSource: NSObject, DataSource {
     init(tableView: UITableView, viewModel: HomeViewModel) {
         self.tableView = tableView
         self.viewModel = viewModel
-        self.actions = HomeTableViewDataSourceActions(
-            heightForRowAt: { indexPath in
-                guard let homeViewController = viewModel.coordinator?.viewController else { return .zero }
-                if case .display = HomeTableViewDataSource.Index(rawValue: indexPath.section) {
-                    return homeViewController.view.bounds.height * 0.76
-                }
-                return homeViewController.view.bounds.height * 0.19
-                
-            }, viewDidScroll: { scrollView in
-                guard
-                    let homeViewController = viewModel.coordinator?.viewController,
-                    let translation = scrollView.panGestureRecognizer.translation(in: homeViewController.view) as CGPoint?
-                else { return }
-                homeViewController.view.animateUsingSpring(withDuration: 0.66,
-                                             withDamping: 1.0,
-                                             initialSpringVelocity: 1.0) {
-                    guard translation.y < 0 else {
-                        homeViewController.navigationViewTopConstraint.constant = 0.0
-                        homeViewController.navigationView.alpha = 1.0
-                        return homeViewController.view.layoutIfNeeded()
-                    }
-                    homeViewController.navigationViewTopConstraint.constant = -homeViewController.navigationView.bounds.size.height
-                    homeViewController.navigationView.alpha = 0.0
-                    homeViewController.view.layoutIfNeeded()
-                }
-                
-            }, didSelectItem: { section, row in
-                let section = viewModel.sections[section]
-                let media = section.media[row]
-                viewModel.actions?.presentMediaDetails(section, media, false)
-            })
         super.init()
         self.viewDidLoad()
     }
@@ -136,26 +98,25 @@ extension HomeTableViewDataSource: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let index = Index(rawValue: indexPath.section) else { fatalError() }
         
-        let actions = HomeCollectionViewDataSourceActions(
-            didSelectItem: { row in
-                self.actions.didSelectItem(index.rawValue, row)
-            })
-        
         if case .display = index {
             guard displayCell == nil else { return displayCell }
             displayCell = DisplayTableViewCell(for: indexPath, with: viewModel)
             return displayCell
-        } else if case .ratable = index {
-            return RatedTableViewCell(with: viewModel, for: indexPath, actions: actions)
+        } else if case .rated = index {
+            return RatedTableViewCell(with: viewModel, for: indexPath)
         } else if case .resumable = index {
-            return ResumableTableViewCell(with: viewModel, for: indexPath, actions: actions)
+            return ResumableTableViewCell(with: viewModel, for: indexPath)
         } else {
-            return StandardTableViewCell(with: viewModel, for: indexPath, actions: actions)
+            return StandardTableViewCell(with: viewModel, for: indexPath)
         }
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return viewModel.coordinator!.viewController!.heightForRow(at: indexPath)
+        let view = viewModel.coordinator!.viewController!.view!
+        if case .display = HomeTableViewDataSource.Index(rawValue: indexPath.section) {
+            return view.bounds.height * 0.76
+        }
+        return view.bounds.height * 0.19
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
@@ -166,7 +127,7 @@ extension HomeTableViewDataSource: UITableViewDelegate, UITableViewDataSource {
         guard let index = Index(rawValue: section) else { return .zero }
         if case .display = index {
             return 0.0
-        } else if case .ratable = index {
+        } else if case .rated = index {
             return 28.0
         } else {
             return 24.0
@@ -176,14 +137,29 @@ extension HomeTableViewDataSource: UITableViewDelegate, UITableViewDataSource {
 
 extension HomeTableViewDataSource {
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        actions?.viewDidScroll(scrollView)
+        guard let homeViewController = viewModel.coordinator?.viewController,
+              let translation = scrollView.panGestureRecognizer.translation(in: homeViewController.view) as CGPoint? else {
+            return
+        }
+        homeViewController.view.animateUsingSpring(withDuration: 0.66,
+                                     withDamping: 1.0,
+                                     initialSpringVelocity: 1.0) {
+            guard translation.y < 0 else {
+                homeViewController.navigationViewTopConstraint.constant = 0.0
+                homeViewController.navigationView.alpha = 1.0
+                return homeViewController.view.layoutIfNeeded()
+            }
+            homeViewController.navigationViewTopConstraint.constant = -homeViewController.navigationView.bounds.size.height
+            homeViewController.navigationView.alpha = 0.0
+            homeViewController.view.layoutIfNeeded()
+        }
     }
 }
 
 extension HomeTableViewDataSource.Index: Valuable {
     var stringValue: String {
         switch self {
-        case .display, .ratable, .resumable: return ""
+        case .display, .rated, .resumable: return ""
         case .action: return "Action"
         case .sciFi: return "Sci-Fi"
         case .blockbuster: return "Blockbusters"

@@ -10,13 +10,7 @@ import UIKit
 final class NavigationOverlayTableViewDataSource: NSObject,
                                                   UITableViewDelegate,
                                                   UITableViewDataSource {
-    enum State: Int {
-        case none
-        case mainMenu
-        case categories
-    }
-    
-    private weak var viewModel: NavigationOverlayViewModel!
+    private let viewModel: NavigationOverlayViewModel
     
     init(with viewModel: NavigationOverlayViewModel) {
         self.viewModel = viewModel
@@ -31,16 +25,22 @@ final class NavigationOverlayTableViewDataSource: NSObject,
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        return NavigationOverlayTableViewCell(on: tableView,
-                                              for: indexPath,
-                                              with: viewModel.items.value)
+        return NavigationOverlayTableViewCell.create(on: tableView, for: indexPath, with: viewModel)
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         viewModel.isPresented.value = false
         viewModel.didSelectRow(at: indexPath)
-        if case .none? = State(rawValue: indexPath.section) {
-            
-        }
+        
+        if case .none? = State(rawValue: indexPath.section) {}
+    }
+}
+
+extension NavigationOverlayTableViewDataSource {
+    /// Data source state representation.
+    enum State: Int {
+        case none
+        case mainMenu
+        case categories
     }
 }

@@ -186,6 +186,7 @@
 		A1AD25CB28D56BBA00F793B3 /* NavigationViewItemViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1AD25CA28D56BBA00F793B3 /* NavigationViewItemViewModel.swift */; };
 		A1AD25D028D6D31000F793B3 /* NavigationViewViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1AD25CF28D6D31000F793B3 /* NavigationViewViewModel.swift */; };
 		A1AE02D1293BA29A00AF0BD6 /* DeviceOrientation.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1AE02D0293BA29A00AF0BD6 /* DeviceOrientation.swift */; };
+		A1B0DE562954590E00307866 /* UITableView+ContentInset.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B0DE552954590E00307866 /* UITableView+ContentInset.swift */; };
 		A1B3F98A28C54F510042DE9F /* AuthRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B3F98928C54F510042DE9F /* AuthRepository.swift */; };
 		A1B3F98C28C55B500042DE9F /* HomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B3F98B28C55B500042DE9F /* HomeViewModel.swift */; };
 		A1B3F99428C575A30042DE9F /* AuthViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B3F99328C575A30042DE9F /* AuthViewModel.swift */; };
@@ -441,6 +442,7 @@
 		A1AD25CA28D56BBA00F793B3 /* NavigationViewItemViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationViewItemViewModel.swift; sourceTree = "<group>"; };
 		A1AD25CF28D6D31000F793B3 /* NavigationViewViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationViewViewModel.swift; sourceTree = "<group>"; };
 		A1AE02D0293BA29A00AF0BD6 /* DeviceOrientation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceOrientation.swift; sourceTree = "<group>"; };
+		A1B0DE552954590E00307866 /* UITableView+ContentInset.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITableView+ContentInset.swift"; sourceTree = "<group>"; };
 		A1B3F98928C54F510042DE9F /* AuthRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthRepository.swift; sourceTree = "<group>"; };
 		A1B3F98B28C55B500042DE9F /* HomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModel.swift; sourceTree = "<group>"; };
 		A1B3F99328C575A30042DE9F /* AuthViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthViewModel.swift; sourceTree = "<group>"; };
@@ -1011,11 +1013,9 @@
 				A1AA28F028F738D80011EE9D /* UICollectionView+Register.swift */,
 				A1AD25BB28D3FBDC00F793B3 /* UICollectionViewCell+ViewInstantiable.swift */,
 				A1BA1DA228D8149B00730EA8 /* UIImage+Rendering.swift */,
-				A1BA1DA628D8BA9F00730EA8 /* UIView+Animations.swift */,
-				A1BA1DBA28DBE02C00730EA8 /* UIView+Constraints.swift */,
-				A1F56A5D28C679980089BD4F /* UIView+Extension.swift */,
+				A1B0DE5829545A0600307866 /* UIView */,
 				A1E81D4628D1617E00D044EA /* UIViewController */,
-				A1AD25BF28D3FC9600F793B3 /* UITableView+Register.swift */,
+				A1B0DE57295459EB00307866 /* UITableView */,
 				A1E81D3A28D15D2E00D044EA /* UITableViewCell+ViewInstantiable.swift */,
 				A1AD25BD28D3FC1200F793B3 /* UITableViewHeaderFooterView+Reusable.swift */,
 				A1F56A6E28C695FC0089BD4F /* UITextField+Extension.swift */,
@@ -1379,6 +1379,25 @@
 			path = NavigationViewItem;
 			sourceTree = "<group>";
 		};
+		A1B0DE57295459EB00307866 /* UITableView */ = {
+			isa = PBXGroup;
+			children = (
+				A1AD25BF28D3FC9600F793B3 /* UITableView+Register.swift */,
+				A1B0DE552954590E00307866 /* UITableView+ContentInset.swift */,
+			);
+			path = UITableView;
+			sourceTree = "<group>";
+		};
+		A1B0DE5829545A0600307866 /* UIView */ = {
+			isa = PBXGroup;
+			children = (
+				A1BA1DA628D8BA9F00730EA8 /* UIView+Animations.swift */,
+				A1BA1DBA28DBE02C00730EA8 /* UIView+Constraints.swift */,
+				A1F56A5D28C679980089BD4F /* UIView+Extension.swift */,
+			);
+			path = UIView;
+			sourceTree = "<group>";
+		};
 		A1B3F98828C54F160042DE9F /* Repositories */ = {
 			isa = PBXGroup;
 			children = (
@@ -1714,6 +1733,7 @@
 				A18B994228BFD9C70077A5A6 /* Section.swift in Sources */,
 				A1C7E7A9292A784A004690B9 /* AuthService.swift in Sources */,
 				A1AA290028FB8ECE0011EE9D /* MediaRequest.swift in Sources */,
+				A1B0DE562954590E00307866 /* UITableView+ContentInset.swift in Sources */,
 				A1B70AA729400B0E00C718C6 /* SignUpViewModel.swift in Sources */,
 				A1BA1DAC28D9D42A00730EA8 /* NavigationOverlayView.swift in Sources */,
 				A1B3F99D28C631F90042DE9F /* SignInViewController.swift in Sources */,

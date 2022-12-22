@@ -45,9 +45,7 @@ final class NavigationViewItemConfiguration: Configuration {
         item.addSubview(item.button)
         item.button.frame = item.bounds
         item.button.layer.shadow(.black, radius: 3.0, opacity: 0.4)
-        item.button.addTarget(self,
-                              action: #selector(viewDidTap),
-                              for: .touchUpInside)
+        item.button.addTarget(self, action: #selector(viewDidTap), for: .touchUpInside)
         
         let image: UIImage!
         let symbolConfiguration: UIImage.SymbolConfiguration!
@@ -78,18 +76,17 @@ final class NavigationViewItemConfiguration: Configuration {
               let state = NavigationView.State(rawValue: item.tag) else {
             return
         }
-        
         navigation.viewModel.state.value = state
     }
 }
 
 final class NavigationViewItem: UIView {
-    fileprivate(set) lazy var button = UIButton(type: .system)
+    private(set) lazy var button = UIButton(type: .system)
     
     private(set) var configuration: NavigationViewItemConfiguration!
     var viewModel: NavigationViewItemViewModel!
     
-    init(onParent parent: UIView, with viewModel: HomeViewModel) {
+    init(on parent: UIView, with viewModel: HomeViewModel) {
         super.init(frame: parent.bounds)
         self.tag = parent.tag
         parent.addSubview(self)
@@ -105,20 +102,15 @@ final class NavigationViewItem: UIView {
         viewModel = nil
     }
     
-    func viewDidConfigure(with state: NavigationView.State) {
+    func viewDidConfigure(for state: NavigationView.State) {
         guard let tag = NavigationView.State(rawValue: tag) else { return }
-        if case .home = state,
-           case .categories = tag {
+        if case .home = state, case .categories = tag {
             button.setTitle(viewModel.title, for: .normal)
             button.titleLabel?.font = UIFont.systemFont(ofSize: 16.0, weight: .bold)
-        }
-        if case .tvShows = state,
-           case .categories = tag {
+        } else if case .tvShows = state, case .categories = tag {
             button.setTitle("All \(viewModel.title!)", for: .normal)
             button.titleLabel?.font = UIFont.systemFont(ofSize: 14.0, weight: .semibold)
-        }
-        if case .movies = state,
-           case .categories = tag {
+        } else if case .movies = state, case .categories = tag {
             button.setTitle("All \(viewModel.title!)", for: .normal)
             button.titleLabel?.font = UIFont.systemFont(ofSize: 14.0, weight: .semibold)
         }

@@ -77,8 +77,7 @@ final class PanelViewItemConfiguration: Configuration {
             let item = Item(rawValue: view.tag)
         else { return }
         if case .myList = item {
-            guard let myList = viewModel.myList else { return }
-            view.viewModel.isSelected.value = myList.viewModel.contains(
+            view.viewModel.isSelected.value = viewModel.myList.viewModel.contains(
                 view.viewModel.media,
                 in: viewModel.sectionAt(.myList).media)
         }
@@ -101,16 +100,20 @@ final class PanelViewItemConfiguration: Configuration {
         else { return }
         switch tag {
         case .myList:
-            if viewModel.myList!.viewModel.list.value.isEmpty {
-                viewModel.myList?.viewModel.createList()
+            if viewModel.myList.viewModel.list.value.isEmpty {
+                viewModel.myList.viewModel.createList()
             }
             
-            let media = viewModel.presentedDisplayMedia.value!
-            viewModel.myList?.viewModel.shouldAddOrRemove(media, uponSelection: view.viewModel.isSelected.value)
+            let media = viewModel.presentedMedia.value!
+            viewModel.myList.viewModel.shouldAddOrRemove(media, uponSelection: view.viewModel.isSelected.value)
         case .info:
+            let coordinator = viewModel.coordinator!
             let section = viewModel.sectionAt(.resumable)
-            let media = viewModel.presentedDisplayMedia.value!
-            viewModel.actions?.presentMediaDetails(section, media, false)
+            let media = viewModel.presentedMedia.value!
+            coordinator.section = section
+            coordinator.media = media
+            coordinator.shouldScreenRotate = false
+            coordinator.showScreen(.detail)
         }
         
         view.setAlphaAnimation(using: view.gestureRecognizers!.first) {
@@ -136,7 +139,7 @@ final class PanelViewItem: UIView, ViewInstantiable {
         self.tag = parent.tag
         parent.addSubview(self)
         self.constraintToSuperview(parent)
-        self.viewModel = PanelViewItemViewModel(item: self, with: viewModel.presentedDisplayMedia.value!)
+        self.viewModel = PanelViewItemViewModel(item: self, with: viewModel.presentedMedia.value!)
         self.configuration = PanelViewItemConfiguration(view: self, gestureRecognizers: [.tap], with: viewModel)
     }
     

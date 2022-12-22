@@ -7,10 +7,6 @@
 
 import UIKit
 
-struct HomeCollectionViewDataSourceActions {
-    var didSelectItem: (Int) -> Void
-}
-
 private protocol DataSourceInput {
     func viewDidLoad()
     func dataSourceDidChange()
@@ -18,7 +14,6 @@ private protocol DataSourceInput {
 
 private protocol DataSourceOutput {
     var collectionView: UICollectionView! { get }
-    var actions: HomeCollectionViewDataSourceActions? { get }
     var section: Section { get }
 }
 
@@ -29,26 +24,23 @@ final class HomeCollectionViewDataSource<Cell>: NSObject,
                                                 UICollectionViewDelegate,
                                                 UICollectionViewDataSource,
                                                 UICollectionViewDataSourcePrefetching where Cell: UICollectionViewCell {
+    weak var coordinator: HomeViewCoordinator!
     weak var collectionView: UICollectionView!
-    var actions: HomeCollectionViewDataSourceActions?
     fileprivate var section: Section
-    fileprivate let homeViewModel: HomeViewModel
     
     init(on collectionView: UICollectionView,
          section: Section,
-         viewModel: HomeViewModel,
-         with actions: HomeCollectionViewDataSourceActions? = nil) {
-        self.actions = actions
+         viewModel: HomeViewModel) {
+        self.coordinator = viewModel.coordinator
         self.section = section
         self.collectionView = collectionView
-        self.homeViewModel = viewModel
         super.init()
         self.viewDidLoad()
     }
     
     deinit {
         collectionView = nil
-        actions = nil
+        coordinator = nil
     }
     
     fileprivate func viewDidLoad() {
@@ -74,7 +66,11 @@ final class HomeCollectionViewDataSource<Cell>: NSObject,
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        actions?.didSelectItem(indexPath.row)
+        let media = section.media[indexPath.row]
+        coordinator.section = section
+        coordinator.media = media
+        coordinator.shouldScreenRotate = false
+        coordinator.showScreen(.detail)
     }
     
     func collectionView(_ collectionView: UICollectionView, prefetchItemsAt indexPaths: [IndexPath]) {}

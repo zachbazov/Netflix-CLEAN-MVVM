@@ -24,21 +24,17 @@ struct NavigationViewItemViewModel {
     
     private func title(for tag: Int) -> String? {
         guard let state = NavigationView.State(rawValue: tag) else { return nil }
-        switch state {
-        case .tvShows: return "TV Shows"
-        case .movies: return "Movies"
-        case .categories: return "Categories"
-        default: return nil
-        }
+        if case .tvShows = state { return "TV Shows" }
+        else if case .movies = state { return "Movies" }
+        else if case .categories = state { return "Categories" }
+        else { return nil }
     }
     
     private func image(for tag: Int) -> String? {
         guard let state = NavigationView.State(rawValue: tag) else { return nil }
-        switch state {
-        case .home: return "netflix-logo-sm"
-        case .airPlay: return "airplayvideo"
-        case .account: return "person.circle"
-        default: return nil
-        }
+        if case .home = state { return "netflix-logo-sm" }
+        else if case .airPlay = state { return "airplayvideo" }
+        else if case .account = state { return "person.circle" }
+        else { return nil }
     }
 }

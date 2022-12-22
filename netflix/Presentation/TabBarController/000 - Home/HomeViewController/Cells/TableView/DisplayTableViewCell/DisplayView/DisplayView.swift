@@ -64,7 +64,7 @@ final class DisplayView: UIView, ViewInstantiable {
         super.init(frame: .zero)
         self.nibDidLoad()
         viewModel.presentedDisplayMediaDidChange()
-        self.viewModel = DisplayViewViewModel(with: viewModel.presentedDisplayMedia.value!)
+        self.viewModel = DisplayViewViewModel(with: viewModel.presentedMedia.value!)
         self.configuration = DisplayViewConfiguration(view: self, viewModel: self.viewModel)
         self.panelView = PanelView(on: panelViewContainer, with: viewModel)
         self.viewDidLoad()

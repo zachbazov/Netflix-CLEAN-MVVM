@@ -8,11 +8,12 @@
 import UIKit
 
 final class DisplayTableViewCell: UITableViewCell {
-    var displayView: DisplayView!
+    let displayView: DisplayView
+    let viewModel: DisplayTableViewCellViewModel
     
     init(for indexPath: IndexPath, with viewModel: HomeViewModel) {
-        let viewModel = DisplayTableViewCellViewModel(with: viewModel)
-        let displayView = DisplayView(with: viewModel)
+        self.viewModel = DisplayTableViewCellViewModel(with: viewModel)
+        let displayView = DisplayView(with: self.viewModel)
         self.displayView = displayView
         super.init(style: .default, reuseIdentifier: DisplayTableViewCell.reuseIdentifier)
         self.contentView.addSubview(self.displayView)
@@ -22,8 +23,18 @@ final class DisplayTableViewCell: UITableViewCell {
     required init?(coder: NSCoder) { fatalError() }
     
     deinit {
-        displayView?.removeFromSuperview()
-        displayView = nil
-        removeFromSuperview()
+        displayView.removeFromSuperview()
+    }
+    
+    func terminate() {
+        storeDisplayCacheBeforeReallocation()
+    }
+}
+
+extension DisplayTableViewCell {
+    private func storeDisplayCacheBeforeReallocation() {
+        let tabViewModel = Application.current.rootCoordinator.tabViewModel
+        let homeViewModel = viewModel.coordinator!.viewController!.viewModel!
+        tabViewModel?.latestDisplayCache = homeViewModel.displayMediaCache
     }
 }

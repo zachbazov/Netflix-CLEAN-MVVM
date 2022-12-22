@@ -50,7 +50,8 @@ private struct TabBarConfiguration {
     private func homeTabItem(for controller: UINavigationController) {
         let title = Localization.TabBar.Coordinator().homeButton
         let systemImage = "house.fill"
-        let image = UIImage(systemName: systemImage)?.whiteRendering()
+        let symbolConfiguration = UIImage.SymbolConfiguration(pointSize: 15.0)
+        let image = UIImage(systemName: systemImage)?.whiteRendering(with: symbolConfiguration)
         let tag = TabBarCoordinator.Screen.home.rawValue
         let item = TabBarItem(title: title, image: image!, tag: tag, navigationBarHidden: true)
         item.applyConfig(for: controller)
@@ -59,7 +60,8 @@ private struct TabBarConfiguration {
     private func newsTabItem(for controller: UINavigationController) {
         let title = "News & Hot"
         let systemImage = "play.rectangle.on.rectangle.fill"
-        let image = UIImage(systemName: systemImage)?.whiteRendering()
+        let symbolConfiguration = UIImage.SymbolConfiguration(pointSize: 15.0)
+        let image = UIImage(systemName: systemImage)?.whiteRendering(with: symbolConfiguration)
         let tag = TabBarCoordinator.Screen.news.rawValue
         let item = TabBarItem(title: title, image: image!, tag: tag, navigationBarHidden: true)
         item.applyConfig(for: controller)
@@ -68,7 +70,8 @@ private struct TabBarConfiguration {
     private func searchTabItem(for controller: UINavigationController) {
         let title = Localization.TabBar.Coordinator().searchButton
         let systemImage = "magnifyingglass"
-        let image = UIImage(systemName: systemImage)?.whiteRendering()
+        let symbolConfiguration = UIImage.SymbolConfiguration(pointSize: 15.0)
+        let image = UIImage(systemName: systemImage)?.whiteRendering(with: symbolConfiguration)
         let tag = TabBarCoordinator.Screen.search.rawValue
         let item = TabBarItem(title: title, image: image!, tag: tag, navigationBarHidden: true)
         item.applyConfig(for: controller)
@@ -77,7 +80,8 @@ private struct TabBarConfiguration {
     private func downloadsTabItem(for controller: DownloadsViewController) {
         let title = "Downloads"
         let systemImage = "arrow.down.circle.fill"
-        let image = UIImage(systemName: systemImage)?.whiteRendering()
+        let symbolConfiguration = UIImage.SymbolConfiguration(pointSize: 15.0)
+        let image = UIImage(systemName: systemImage)?.whiteRendering(with: symbolConfiguration)
         let tag = TabBarCoordinator.Screen.downloads.rawValue
         let item = TabBarItem(title: title, image: image!, tag: tag)
         item.applyConfig(for: controller)
@@ -101,6 +105,7 @@ final class TabBarCoordinator {
     /// in-order for the application flow flawlessly.
     func afterReallocationSettings(with viewModel: HomeViewModel) {
         updateHomeTableViewDataSourceState(with: viewModel)
+        updateHomeDisplayCache(with: viewModel)
     }
     /// Restating home's table view data source.
     /// - Parameter viewModel: Coordinating view model.
@@ -115,7 +120,14 @@ final class TabBarCoordinator {
             tabViewModel?.latestHomeDataSourceState = .films
         } else {}
         /// Pass the table view data source state to home's view model.
-        viewModel.homeDataSourceState.value = tabViewModel!.latestHomeDataSourceState
+        viewModel.dataSourceState.value = tabViewModel!.latestHomeDataSourceState
+    }
+    /// Restoring home's display cell media cache.
+    /// - Parameter viewModel: Coordinating view model.
+    private func updateHomeDisplayCache(with viewModel: HomeViewModel) {
+        let tabViewModel = viewController?.viewModel
+        /// Pass the cache to home's view model.
+        viewModel.displayMediaCache = tabViewModel!.latestDisplayCache
     }
 }
 

@@ -45,10 +45,14 @@ final class PanelView: UIView, ViewInstantiable {
     
     @objc
     private func playDidTap() {
+        let coordinator = viewModel.coordinator!
         let section = viewModel.sectionAt(.display)
-        let media = viewModel.presentedDisplayMedia.value!
+        let media = viewModel.presentedMedia.value!
         let rotated = true
-        viewModel.actions?.presentMediaDetails(section, media, rotated)
+        coordinator.section = section
+        coordinator.media = media
+        coordinator.shouldScreenRotate = rotated
+        coordinator.showScreen(.detail)
     }
     
     func removeObservers() {

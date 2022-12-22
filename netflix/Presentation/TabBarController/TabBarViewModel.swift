@@ -13,6 +13,8 @@ final class TabBarViewModel {
     var latestHomeDataSourceState: HomeTableViewDataSource.State = .all
     /// Home's navigation view latest state.
     var latestHomeNavigationState: NavigationView.State = .home
+    /// Home display cell's display media cache.
+    var latestDisplayCache: [HomeTableViewDataSource.State: Media] = [:]
     /// NOTE:
     /// The use case for the `latest` properties is basicly to store the latest interacted states of the views,
     /// As reallocation done operating, restate the views by them.

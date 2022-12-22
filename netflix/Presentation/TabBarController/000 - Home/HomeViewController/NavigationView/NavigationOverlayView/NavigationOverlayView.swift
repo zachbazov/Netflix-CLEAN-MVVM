@@ -8,6 +8,63 @@
 import UIKit
 
 final class NavigationOverlayView: UIView {
+    let viewModel: NavigationOverlayViewModel
+    let dataSource: NavigationOverlayTableViewDataSource
+    let opaqueView = OpaqueView(frame: UIScreen.main.bounds)
+    let footerView: NavigationOverlayFooterView
+    let tabBar: UITabBar
+    private(set) lazy var tableView: UITableView = createTableView()
+    
+    init(with viewModel: HomeViewModel) {
+        self.tabBar = viewModel.coordinator!.viewController!.tabBarController!.tabBar
+        self.viewModel = NavigationOverlayViewModel(with: viewModel)
+        self.dataSource = NavigationOverlayTableViewDataSource(with: self.viewModel)
+        let parent = viewModel.coordinator!.viewController!.view!
+        self.footerView = NavigationOverlayFooterView(parent: parent, viewModel: self.viewModel)
+        
+        super.init(frame: UIScreen.main.bounds)
+        parent.addSubview(self)
+        parent.addSubview(self.footerView)
+        self.addSubview(self.tableView)
+        /// Updates root coordinator's `categoriesOverlayView` property.
+        viewModel.coordinator?.viewController?.navigationView?.navigationOverlayView = self
+        
+        self.setupObservers()
+    }
+    
+    required init?(coder: NSCoder) { fatalError() }
+    
+    deinit {
+        removeObservers()
+        tableView.removeFromSuperview()
+        footerView.removeFromSuperview()
+    }
+    
+    private func createTableView() -> UITableView {
+        let tableView = UITableView(frame: UIScreen.main.bounds, style: .plain)
+        tableView.showsVerticalScrollIndicator = false
+        tableView.showsHorizontalScrollIndicator = false
+        tableView.separatorStyle = .none
+        tableView.register(class: NavigationOverlayTableViewCell.self)
+        tableView.backgroundView = opaqueView
+        return tableView
+    }
+}
+
+extension NavigationOverlayView {
+    private func setupObservers() {
+        viewModel.isPresented.observe(on: self) { [weak self] _ in self?.viewModel.isPresentedDidChange() }
+        viewModel.items.observe(on: self) { [weak self] _ in self?.viewModel.dataSourceDidChange() }
+    }
+    
+    func removeObservers() {
+        printIfDebug("Removed `NavigationOverlayView` observers.")
+        viewModel.isPresented.remove(observer: self)
+        viewModel.items.remove(observer: self)
+    }
+}
+
+extension NavigationOverlayView {
     enum Category: Int, CaseIterable {
         case home
         case myList
@@ -22,81 +79,6 @@ final class NavigationOverlayView: UIView {
         case anime
         case familyNchildren
         case documentary
-    }
-    
-    private(set) lazy var tableView: UITableView = {
-        let tableView = UITableView(frame: UIScreen.main.bounds, style: .plain)
-        tableView.showsVerticalScrollIndicator = false
-        tableView.showsHorizontalScrollIndicator = false
-        tableView.separatorStyle = .none
-        tableView.register(class: NavigationOverlayTableViewCell.self)
-        return tableView
-    }()
-    let tabBar: UITabBar
-    let viewModel: NavigationOverlayViewModel
-    private(set) var dataSource: NavigationOverlayTableViewDataSource!
-    let opaqueView = OpaqueView(frame: UIScreen.main.bounds)
-    let footerView: NavigationOverlayFooterView
-    
-    init(with viewModel: HomeViewModel) {
-        self.tabBar = viewModel.coordinator!.viewController!.tabBarController!.tabBar
-        self.viewModel = NavigationOverlayViewModel(with: viewModel)
-        
-        let parent = viewModel.coordinator!.viewController!.view!
-        self.footerView = NavigationOverlayFooterView(parent: parent, viewModel: self.viewModel)
-        
-        super.init(frame: UIScreen.main.bounds)
-        parent.addSubview(self)
-        parent.addSubview(self.footerView)
-        self.addSubview(self.tableView)
-        
-        self.dataSource = NavigationOverlayTableViewDataSource(with: self.viewModel)
-        
-        /// Updates root coordinator's `categoriesOverlayView` property.
-        viewModel.coordinator?.viewController?.navigationView?.navigationOverlayView = self
-        
-        self.viewDidLoad()
-    }
-    
-    required init?(coder: NSCoder) { fatalError() }
-    
-    deinit {
-        removeObservers()
-        tableView.removeFromSuperview()
-        footerView.removeFromSuperview()
-        dataSource = nil
-    }
-    
-    private func viewDidLoad() {
-        setupObservers()
-        setupSubviews()
-    }
-    
-    private func setupObservers() {
-        isPresented(in: viewModel)
-        items(in: viewModel)
-    }
-    
-    private func setupSubviews() {
-        tableView.backgroundView = opaqueView
-    }
-    
-    func removeObservers() {
-        printIfDebug("Removed `NavigationOverlayView` observers.")
-        viewModel.isPresented.remove(observer: self)
-        viewModel.items.remove(observer: self)
-    }
-}
-
-extension NavigationOverlayView {
-    private func isPresented(in viewModel: NavigationOverlayViewModel) {
-        viewModel.isPresented.observe(on: self) { [weak self] _ in self?.viewModel.isPresentedDidChange() }
-    }
-    
-    private func items(in viewModel: NavigationOverlayViewModel) {
-        viewModel.items.observe(on: self) { [weak self] _ in
-            self?.viewModel.dataSourceDidChange()
-        }
     }
 }
 

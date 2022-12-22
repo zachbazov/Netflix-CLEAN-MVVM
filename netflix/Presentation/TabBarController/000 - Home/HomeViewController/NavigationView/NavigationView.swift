@@ -42,12 +42,12 @@ final class NavigationView: UIView, ViewInstantiable {
         parent.addSubview(self)
         self.constraintToSuperview(parent)
         
-        self.homeItemView = NavigationViewItem(onParent: self.homeItemViewContainer, with: viewModel)
-        self.airPlayItemView = NavigationViewItem(onParent: self.airPlayItemViewContainer, with: viewModel)
-        self.accountItemView = NavigationViewItem(onParent: self.accountItemViewContainer, with: viewModel)
-        self.tvShowsItemView = NavigationViewItem(onParent: self.tvShowsItemViewContainer, with: viewModel)
-        self.moviesItemView = NavigationViewItem(onParent: self.moviesItemViewContainer, with: viewModel)
-        self.categoriesItemView = NavigationViewItem(onParent: self.categoriesItemViewContainer, with: viewModel)
+        self.homeItemView = NavigationViewItem(on: self.homeItemViewContainer, with: viewModel)
+        self.airPlayItemView = NavigationViewItem(on: self.airPlayItemViewContainer, with: viewModel)
+        self.accountItemView = NavigationViewItem(on: self.accountItemViewContainer, with: viewModel)
+        self.tvShowsItemView = NavigationViewItem(on: self.tvShowsItemViewContainer, with: viewModel)
+        self.moviesItemView = NavigationViewItem(on: self.moviesItemViewContainer, with: viewModel)
+        self.categoriesItemView = NavigationViewItem(on: self.categoriesItemViewContainer, with: viewModel)
         let items: [NavigationViewItem] = [self.homeItemView, self.airPlayItemView,
                                            self.accountItemView, self.tvShowsItemView,
                                            self.moviesItemView, self.categoriesItemView]

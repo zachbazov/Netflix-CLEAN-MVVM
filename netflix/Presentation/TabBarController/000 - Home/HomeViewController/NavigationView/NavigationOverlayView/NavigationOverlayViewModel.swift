@@ -8,33 +8,28 @@
 import Foundation
 
 final class NavigationOverlayViewModel {
-    let coordinator: HomeViewCoordinator
-    
-    let numberOfSections: Int = 1
+    private let coordinator: HomeViewCoordinator
     let isPresented: Observable<Bool> = Observable(false)
     let items: Observable<[Valuable]> = Observable([])
-    
     private var state: NavigationOverlayTableViewDataSource.State = .mainMenu
+    let numberOfSections: Int = 1
     
     init(with viewModel: HomeViewModel) {
         self.coordinator = viewModel.coordinator!
     }
-    
-    private func itemsDidChange() {
-        switch state {
-        case .none:
-            items.value = []
-        case .mainMenu:
-            let states = NavigationView.State.allCases[3...5].toArray()
-            items.value = states
-        case .categories:
-            let categories = NavigationOverlayView.Category.allCases
-            items.value = categories
-        }
+}
+
+extension NavigationOverlayViewModel {
+    func isPresentedDidChange() {
+        if case true = isPresented.value { itemsDidChange() }
+        
+        animatePresentation()
     }
     
     func dataSourceDidChange() {
-        guard let navigationOverlayView = coordinator.viewController?.navigationView?.navigationOverlayView else { return }
+        guard let navigationOverlayView = coordinator.viewController?.navigationView?.navigationOverlayView else {
+            return
+        }
         
         let tableView = navigationOverlayView.tableView
         if tableView.delegate == nil {
@@ -43,28 +38,17 @@ final class NavigationOverlayViewModel {
         }
         
         tableView.reloadData()
-        tableView.contentInset = .init(
-            top: (navigationOverlayView.bounds.height - tableView.contentSize.height) / 2 - 80.0,
-            left: .zero,
-            bottom: (navigationOverlayView.bounds.height - tableView.contentSize.height) / 2,
-            right: .zero)
+        tableView.centerVertically(on: navigationOverlayView)
+    }
+    /// Change `items` value based on the data source `state` value.
+    private func itemsDidChange() {
+        if case .mainMenu = state { items.value = NavigationView.State.allCases[3...5].toArray() }
+        else if case .categories = state { items.value = NavigationOverlayView.Category.allCases }
+        else { items.value = [] }
     }
     
-    func isPresentedDidChange() {
-        guard let navigationOverlayView = coordinator.viewController?.navigationView?.navigationOverlayView else { return }
-        
-        if case true = isPresented.value {
-            navigationOverlayView.animateUsingSpring(
-                withDuration: 0.5,
-                withDamping: 1.0,
-                initialSpringVelocity: 0.5) {
-                    navigationOverlayView.alpha = 1.0
-                    navigationOverlayView.tableView.alpha = 1.0
-                    navigationOverlayView.footerView.alpha = 1.0
-                    navigationOverlayView.tabBar.alpha = 0.0
-                }
-            
-            itemsDidChange()
+    private func animatePresentation() {
+        guard let navigationOverlayView = coordinator.viewController?.navigationView?.navigationOverlayView else {
             return
         }
         
@@ -72,21 +56,22 @@ final class NavigationOverlayViewModel {
             withDuration: 0.5,
             withDamping: 1.0,
             initialSpringVelocity: 0.5,
-            animations: {
-                navigationOverlayView.alpha = 0.0
-                navigationOverlayView.tableView.alpha = 0.0
-                navigationOverlayView.footerView.alpha = 0.0
-                navigationOverlayView.tabBar.alpha = 1.0
+            animations: { [weak self] in
+                guard let self = self else { return }
+                navigationOverlayView.alpha = self.isPresented.value ? 1.0 : 0.0
+                navigationOverlayView.tableView.alpha = self.isPresented.value ? 1.0 : 0.0
+                navigationOverlayView.footerView.alpha = self.isPresented.value ? 1.0 : 0.0
+                navigationOverlayView.tabBar.alpha = self.isPresented.value ? 0.0 : 1.0
             },
-            completion: { done in
-                if done {
+            completion: { [weak self] done in
+                guard let self = self else { return }
+                /// In-case the overlay has been closed and animation is done.
+                if !self.isPresented.value && done {
                     navigationOverlayView.tableView.delegate = nil
                     navigationOverlayView.tableView.dataSource = nil
                 }
             })
-        
     }
-    
     /// The `NavigationView` designed to contain two phases for navigation methods.
     /// Phase #1: First cycle of the navigation, switching between the navigation states,
     ///           simply by clicking (selecting) one of them.
@@ -117,7 +102,7 @@ final class NavigationOverlayViewModel {
                 /// - PHASE #2-A:
                 /// Firstly, check for a case where the browser overlay is presented and home's table view
                 /// data source state has been set to 'all' state.
-                if browseOverlay.viewModel.isPresented && homeViewController.viewModel.homeDataSourceState.value == .all {
+                if browseOverlay.viewModel.isPresented && homeViewController.viewModel.dataSourceState.value == .all {
                     /// In-case `browseOverlayView` has been presented, hide it.
                     browseOverlay.viewModel.isPresented = false
                     /// Apply `NavigationView` state changes.
@@ -142,9 +127,9 @@ final class NavigationOverlayViewModel {
                         /// Apply navigation view state changes.
                         navigationView.viewModel.stateDidChange(lastSelection)
                     } else {
-                        
+                        /// Store the latest navigation view state.
                         tabCoordinator.viewController?.viewModel.latestHomeNavigationState = .home
-                        /// Reload a new view-controller instance.
+                        /// Re-coordinate with a new view-controller instance.
                         rootCoordinator.reallocateTabController()
                     }
                 }
@@ -159,9 +144,8 @@ final class NavigationOverlayViewModel {
                     /// In-case the last selection is either set to both media types states (series and films).
                     /// Initiate re-coordination procedure, and reset `lastSelection` value to home state.
                     if lastSelection == .tvShows || lastSelection == .movies {
-                        
                         tabCoordinator.viewController?.viewModel.latestHomeNavigationState = .home
-                        /// Re-coordinate with a new view-controller instance.
+                        
                         rootCoordinator.reallocateTabController()
                         /// Reset to home state.
                         lastSelection = .home
@@ -216,32 +200,37 @@ final class NavigationOverlayViewModel {
         let navigationView = homeViewController!.navigationView!
         let category = NavigationOverlayView.Category(rawValue: indexPath.row)!
         let browseOverlayView = coordinator.viewController!.browseOverlayView!
-        
-        if state == .categories {
+        /// Execute operations based on the row that has been selected on the overlay.
+        /// In-case the overlay state has been set to `.categories` value.
+        if case .categories = state {
+            /// Allocate `browseOverlayView` data source.
             let section = category.toSection(with: homeViewModel)
             browseOverlayView.dataSource = BrowseOverlayCollectionViewDataSource(
                 section: section,
                 with: homeViewModel)
+            /// Present the overlay.
             browseOverlayView.viewModel.isPresented = true
-            
         } else if state == .mainMenu {
+            /// In-case the overlay state has been set to `.mainMenu` value.
+            /// Extract a slice of the navigation view states.
             guard let options = NavigationView.State.allCases[3...5].toArray()[indexPath.row] as NavigationView.State? else { return }
-            
             if case .tvShows = options {
+                /// In-case the user reselect `.tvShows` state value, return.
                 if navigationView.viewModel.state.value == .tvShows { return }
+                /// Else, set the `navigationView` state to `.tvShows` value.
                 navigationView.viewModel.state.value = .tvShows
-                navigationView.tvShowsItemView.viewModel.isSelected = false
-                
+                /// Close the browse overlay.
                 browseOverlayView.viewModel.isPresented = false
             } else if case .movies = options {
                 if navigationView.viewModel.state.value == .movies { return }
                 navigationView.viewModel.state.value = .movies
-                navigationView.moviesItemView.viewModel.isSelected = false
                 
                 browseOverlayView.viewModel.isPresented = false
             } else {
+                /// In-case the overlay state has been set to `.categories` value.
                 state = .categories
                 isPresentedDidChange()
+                /// Present the navigation overlay.
                 isPresented.value = true
             }
         }

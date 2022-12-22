@@ -22,7 +22,7 @@ final class MyList {
     
     private func setupObservers() {
         viewModel.list.observe(on: self) { [weak self] _ in
-            self?.viewModel.actions.listDidReload()
+            self?.viewModel.listDidReload()
         }
     }
     
