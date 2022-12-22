@@ -11,7 +11,10 @@ final class PreviewView: UIView {
     private var viewModel: PreviewViewViewModel!
     private(set) var mediaPlayerView: MediaPlayerView!
     private(set) lazy var imageView = createImageView()
-    
+    /// Create a preview view object.
+    /// - Parameters:
+    ///   - parent: Instantiating view.
+    ///   - viewModel: Coordinating view model.
     init(on parent: UIView, with viewModel: DetailViewModel) {
         self.viewModel = .init(with: viewModel.media)
         super.init(frame: .zero)
@@ -29,6 +32,15 @@ final class PreviewView: UIView {
         mediaPlayerView = nil
     }
     
+    private func createImageView() -> UIImageView {
+        let imageView = UIImageView(frame: bounds)
+        imageView.contentMode = .scaleAspectFit
+        addSubview(imageView)
+        return imageView
+    }
+}
+
+extension PreviewView {
     private func createMediaPlayer(on parent: UIView,
                                    view: PreviewView,
                                    with viewModel: DetailViewModel) -> MediaPlayerView {
@@ -46,13 +58,6 @@ final class PreviewView: UIView {
         mediaPlayerView.constraintToSuperview(parent)
         
         return mediaPlayerView
-    }
-    
-    private func createImageView() -> UIImageView {
-        let imageView = UIImageView(frame: bounds)
-        imageView.contentMode = .scaleAspectFit
-        addSubview(imageView)
-        return imageView
     }
     
     private func viewDidConfigure() {

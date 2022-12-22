@@ -64,7 +64,8 @@ final class DetailCollectionViewDataSource<T>: NSObject,
             ///
         } else {
             let media = items[indexPath.row] as! Media
-            coordinator.presentDetails(for: media)
+            coordinator.media = media
+            coordinator.showScreen(.detail)
         }
     }
 }

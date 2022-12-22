@@ -7,27 +7,7 @@
 
 import UIKit.UITableView
 
-struct DetailTableViewDataSourceActions {
-    let heightForRowAt: (IndexPath) -> CGFloat
-}
-
-private protocol DataSourceInput {
-    func viewsDidRegister()
-    func dataSourceDidChange()
-}
-
-private protocol DataSourceOutput {
-    var tableView: UITableView { get }
-    var viewModel: DetailViewModel { get }
-    var actions: DetailTableViewDataSourceActions { get }
-    var numberOfRows: Int { get }
-    var numberOfSections: Int { get }
-}
-
-private typealias DataSource = DataSourceInput & DataSourceOutput
-
 final class DetailTableViewDataSource: NSObject,
-                                       DataSource,
                                        UITableViewDelegate,
                                        UITableViewDataSource {
     enum Index: Int, CaseIterable {
@@ -39,7 +19,6 @@ final class DetailTableViewDataSource: NSObject,
     }
     
     fileprivate let viewModel: DetailViewModel
-    fileprivate let actions: DetailTableViewDataSourceActions
     let tableView: UITableView
     fileprivate let numberOfRows: Int = 1
     fileprivate let numberOfSections = Index.allCases.count
@@ -50,9 +29,8 @@ final class DetailTableViewDataSource: NSObject,
     var navigationCell: DetailNavigationTableViewCell!
     var collectionCell: DetailCollectionTableViewCell!
     
-    init(on tableView: UITableView, actions: DetailTableViewDataSourceActions, with viewModel: DetailViewModel) {
+    init(on tableView: UITableView, with viewModel: DetailViewModel) {
         self.tableView = tableView
-        self.actions = actions
         self.viewModel = viewModel
         super.init()
         self.viewsDidRegister()
@@ -115,7 +93,24 @@ final class DetailTableViewDataSource: NSObject,
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return actions.heightForRowAt(indexPath)
+        guard let view = viewModel.coordinator!.viewController!.view! as UIView?,
+              let dataSource = viewModel.coordinator!.viewController!.dataSource,
+              let index = DetailTableViewDataSource.Index(rawValue: indexPath.section) else {
+            return .zero
+        }
+        switch index {
+        case .info: return view.bounds.height * 0.21
+        case .description: return view.bounds.height * 0.135
+        case .panel: return view.bounds.height * 0.0764
+        case .navigation: return view.bounds.height * 0.0764
+        case .collection:
+            switch viewModel.navigationViewState.value {
+            case .episodes, .trailers:
+                return CGFloat(dataSource.contentSize(with: viewModel.navigationViewState.value))
+            default:
+                return CGFloat(dataSource.contentSize(with: viewModel.navigationViewState.value))
+            }
+        }
     }
 }
 

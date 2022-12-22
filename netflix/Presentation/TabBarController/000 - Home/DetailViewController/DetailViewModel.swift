@@ -7,25 +7,24 @@
 
 import Foundation
 
-final class DetailViewModel: ViewModel {
+final class DetailViewModel {
     var coordinator: DetailViewCoordinator?
-    let useCase: DetailUseCase
+    private let useCase: DetailUseCase
     let section: Section
     var media: Media
-    let orientation = DeviceOrientation.shared
-    
-    var isRotated: Bool? {
-        didSet { shouldScreenRotate() }
-    }
+    private let orientation = DeviceOrientation.shared
+    var isRotated: Bool? { didSet { shouldScreenRotate() } }
     private(set) var homeDataSourceState: HomeTableViewDataSource.State!
     private(set) var navigationViewState: Observable<DetailNavigationView.State>! = Observable(.episodes)
     private(set) var season: Observable<Season?>! = Observable(nil)
     private(set) var myList: MyList!
     private(set) var myListSection: Section!
-    private var task: Cancellable? {
-        willSet { task?.cancel() }
-    }
-    
+    private var task: Cancellable? { willSet { task?.cancel() } }
+    /// Create a detail view model object.
+    /// - Parameters:
+    ///   - section: The section that corresponds to the media object.
+    ///   - media: Corresponding media object.
+    ///   - viewModel: Coordinating view model.
     init(section: Section, media: Media, with viewModel: HomeViewModel) {
         let dataTransferService = Application.current.dataTransferService
         let repository = SeasonRepository(dataTransferService: dataTransferService)
@@ -47,9 +46,13 @@ final class DetailViewModel: ViewModel {
         homeDataSourceState = nil
         task = nil
     }
-    
+}
+
+extension DetailViewModel: ViewModel {
     func transform(input: Void) {}
-    
+}
+
+extension DetailViewModel {
     private func shouldScreenRotate() {
         orientation.setLock(orientation: .all)
         
@@ -63,7 +66,9 @@ final class DetailViewModel: ViewModel {
     func resetOrientation() {
         orientation.setLock(orientation: .portrait)
     }
-    
+}
+
+extension DetailViewModel {
     func getSeason(with request: SeasonRequestDTO.GET, completion: @escaping () -> Void) {
         task = useCase.execute(for: SeasonResponse.self,
                                with: request) { [weak self] result in
