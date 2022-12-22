@@ -23,11 +23,9 @@ struct DisplayTableViewCellViewModel {
 
 extension DisplayTableViewCellViewModel {
     func presentedDisplayMediaDidChange() {
-        guard let homeViewModel = coordinator!.viewController!.viewModel,
-              let homeDataSourceState = homeViewModel.dataSourceState.value as HomeTableViewDataSource.State? else {
-            return
+        HomeTableViewDataSource.State.allCases.forEach {
+            presentedMedia.value = generateMedia(for: $0)
         }
-        presentedMedia.value = generateMedia(for: homeDataSourceState)
     }
     
     private func generateMedia(for state: HomeTableViewDataSource.State) -> Media {

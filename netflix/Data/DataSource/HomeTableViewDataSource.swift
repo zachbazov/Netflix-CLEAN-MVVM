@@ -40,7 +40,7 @@ final class HomeTableViewDataSource: NSObject, DataSource {
         case documentary
     }
     
-    enum State: Int {
+    enum State: Int, CaseIterable {
         case all
         case series
         case films
@@ -106,11 +106,11 @@ extension HomeTableViewDataSource: UITableViewDelegate, UITableViewDataSource {
             displayCell = DisplayTableViewCell(for: indexPath, with: viewModel)
             return displayCell
         } else if case .rated = index {
-            return RatedTableViewCell(with: viewModel, for: indexPath)
+            return RatedTableViewCell(for: indexPath, with: viewModel)
         } else if case .resumable = index {
-            return ResumableTableViewCell(with: viewModel, for: indexPath)
+            return ResumableTableViewCell(for: indexPath, with: viewModel)
         } else {
-            return StandardTableViewCell(with: viewModel, for: indexPath)
+            return StandardTableViewCell(for: indexPath, with: viewModel)
         }
     }
     

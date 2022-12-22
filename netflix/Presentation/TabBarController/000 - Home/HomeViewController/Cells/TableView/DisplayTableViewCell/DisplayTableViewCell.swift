@@ -9,7 +9,7 @@ import UIKit
 
 final class DisplayTableViewCell: UITableViewCell {
     let displayView: DisplayView
-    let viewModel: DisplayTableViewCellViewModel
+    private let viewModel: DisplayTableViewCellViewModel
     
     init(for indexPath: IndexPath, with viewModel: HomeViewModel) {
         self.viewModel = DisplayTableViewCellViewModel(with: viewModel)
@@ -22,9 +22,9 @@ final class DisplayTableViewCell: UITableViewCell {
     
     required init?(coder: NSCoder) { fatalError() }
     
-    deinit {
-        displayView.removeFromSuperview()
-    }
+//    deinit {
+//        displayView.removeFromSuperview()
+//    }
     
     func terminate() {
         storeDisplayCacheBeforeReallocation()

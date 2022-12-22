@@ -12,15 +12,11 @@ typealias ResumableTableViewCell = TableViewCell<ResumableCollectionViewCell>
 typealias StandardTableViewCell = TableViewCell<StandardCollectionViewCell>
 
 final class TableViewCell<T>: UITableViewCell where T: UICollectionViewCell {
-    enum SortOptions {
-        case rating
-    }
+    private lazy var collectionView = createCollectionView()
+    private var dataSource: HomeCollectionViewDataSource<T>!
+    private var layout: CollectionViewLayout!
     
-    lazy var collectionView = createCollectionView()
-    var dataSource: HomeCollectionViewDataSource<T>!
-    var layout: CollectionViewLayout!
-    
-    init(with viewModel: HomeViewModel, for indexPath: IndexPath) {
+    init(for indexPath: IndexPath, with viewModel: HomeViewModel) {
         super.init(style: .default, reuseIdentifier: TableViewCell<T>.reuseIdentifier)
         let index = HomeTableViewDataSource.Index(rawValue: indexPath.section)!
         let section = viewModel.section(at: index)
@@ -29,7 +25,7 @@ final class TableViewCell<T>: UITableViewCell where T: UICollectionViewCell {
             section: section,
             viewModel: viewModel)
         self.viewDidLoad()
-        self.viewDidConfigure(section: section, viewModel: viewModel)
+        self.collectionViewDidLayout(for: section, with: viewModel)
     }
     
     deinit {
@@ -53,8 +49,14 @@ final class TableViewCell<T>: UITableViewCell where T: UICollectionViewCell {
     private func viewDidLoad() {
         backgroundColor = .black
     }
-    
-    func viewDidConfigure(section: Section, viewModel: HomeViewModel) {
+}
+
+extension TableViewCell {
+    /// Setting a layout for the collection view.
+    /// - Parameters:
+    ///   - section: A section object that represent the cell.
+    ///   - viewModel: Coordinating view model.
+    func collectionViewDidLayout(for section: Section, with viewModel: HomeViewModel) {
         guard let indices = HomeTableViewDataSource.Index(rawValue: section.id) else { return }
         if case .display = indices {
             ///
@@ -65,5 +67,11 @@ final class TableViewCell<T>: UITableViewCell where T: UICollectionViewCell {
             layout = CollectionViewLayout(layout: .standard, scrollDirection: .horizontal)
             collectionView.setCollectionViewLayout(layout, animated: false)
         }
+    }
+}
+
+extension TableViewCell {
+    enum SortOptions {
+        case rating
     }
 }

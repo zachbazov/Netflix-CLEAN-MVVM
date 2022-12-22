@@ -7,18 +7,8 @@
 
 import UIKit
 
-private protocol ConfigurationInput {
-    func viewDidConfigure(with viewModel: DisplayViewViewModel)
-}
-
-private protocol ConfigurationOutput {
-    var view: DisplayView! { get }
-}
-
-private typealias Configuration = ConfigurationInput & ConfigurationOutput
-
-struct DisplayViewConfiguration: Configuration {
-    weak var view: DisplayView!
+struct DisplayViewConfiguration {
+    weak var view: DisplayView?
     
     init(view: DisplayView, viewModel: DisplayViewViewModel) {
         self.view = view
@@ -34,14 +24,14 @@ struct DisplayViewConfiguration: Configuration {
             in: .home,
             url: viewModel.posterImageURL,
             identifier: viewModel.posterImageIdentifier) { image in
-                DispatchQueue.main.async { view?.posterImageView.image = image }
+                asynchrony { view?.posterImageView.image = image }
             }
         
         AsyncImageFetcher.shared.load(
             in: .home,
             url: viewModel.logoImageURL,
             identifier: viewModel.logoImageIdentifier) { image in
-                DispatchQueue.main.async { view?.logoImageView.image = image }
+                asynchrony { view?.logoImageView.image = image }
             }
         
         view?.genresLabel.attributedText = viewModel.attributedGenres
@@ -56,8 +46,8 @@ final class DisplayView: UIView, ViewInstantiable {
     @IBOutlet private weak var typeImageView: UIImageView!
     @IBOutlet private(set) weak var panelViewContainer: UIView!
     
-    var viewModel: DisplayViewViewModel!
-    var configuration: DisplayViewConfiguration!
+    private var viewModel: DisplayViewViewModel!
+    private var configuration: DisplayViewConfiguration!
     var panelView: PanelView!
     
     init(with viewModel: DisplayTableViewCellViewModel) {
@@ -65,16 +55,16 @@ final class DisplayView: UIView, ViewInstantiable {
         self.nibDidLoad()
         viewModel.presentedDisplayMediaDidChange()
         self.viewModel = DisplayViewViewModel(with: viewModel.presentedMedia.value!)
-        self.configuration = DisplayViewConfiguration(view: self, viewModel: self.viewModel)
         self.panelView = PanelView(on: panelViewContainer, with: viewModel)
+        self.configuration = DisplayViewConfiguration(view: self, viewModel: self.viewModel)
         self.viewDidLoad()
     }
     
     deinit {
-        panelView?.removeFromSuperview()
-        panelView = nil
         configuration = nil
         viewModel = nil
+        panelView.removeFromSuperview()
+        panelView = nil
     }
     
     required init?(coder: NSCoder) { fatalError() }

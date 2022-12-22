@@ -46,7 +46,7 @@ extension SceneDelegate {
            let homeViewController = tabCoordinator.home.viewControllers.first! as? HomeViewController {
             
             if let displayCell = homeViewController.dataSource.displayCell,
-               let panelView = displayCell.displayView.panelView {
+               let panelView = displayCell.displayView.panelView as PanelView? {
                 panelView.removeObservers()
             }
             if let navigationView = homeViewController.navigationView,
