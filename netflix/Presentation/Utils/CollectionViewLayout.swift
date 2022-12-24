@@ -20,17 +20,6 @@ private protocol LayoutOutput {
 private typealias Layout = LayoutInput & LayoutOutput
 
 final class CollectionViewLayout: UICollectionViewFlowLayout, Layout {
-    enum Layout {
-        case rated
-        case resumable
-        case standard
-        case navigationOverlay
-        case detail
-        case descriptive
-        case trailer
-        case search
-    }
-    
     fileprivate var layout: Layout!
     fileprivate var itemsPerLine: CGFloat = 3.0
     fileprivate var lineSpacing: CGFloat = 8.0
@@ -66,8 +55,7 @@ final class CollectionViewLayout: UICollectionViewFlowLayout, Layout {
         set {}
     }
     
-    convenience init(layout: Layout,
-                     scrollDirection: UICollectionView.ScrollDirection? = .horizontal) {
+    convenience init(layout: Layout, scrollDirection: UICollectionView.ScrollDirection? = .horizontal) {
         self.init()
         self.layout = layout
         self.scrollDirection = scrollDirection == .horizontal ? .horizontal : .vertical
@@ -109,5 +97,19 @@ final class CollectionViewLayout: UICollectionViewFlowLayout, Layout {
             return true
         }
         return super.shouldInvalidateLayout(forBoundsChange: newBounds)
+    }
+}
+
+extension CollectionViewLayout {
+    /// Layout representation type.
+    enum Layout {
+        case rated
+        case resumable
+        case standard
+        case navigationOverlay
+        case detail
+        case descriptive
+        case trailer
+        case search
     }
 }

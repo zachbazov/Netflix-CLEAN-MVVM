@@ -7,45 +7,7 @@
 
 import UIKit
 
-private protocol DataSourceInput {
-    func viewDidLoad()
-    func viewsDidRegister()
-    func dataSourceDidChange()
-}
-
-private protocol DataSourceOutput {
-    var numberOfRows: Int { get }
-    var displayCell: DisplayTableViewCell! { get }
-}
-
-private typealias DataSource = DataSourceInput & DataSourceOutput
-
-final class HomeTableViewDataSource: NSObject, DataSource {
-    enum Index: Int, CaseIterable {
-        case display
-        case rated
-        case resumable
-        case action
-        case sciFi
-        case blockbuster
-        case myList
-        case crime
-        case thriller
-        case adventure
-        case comedy
-        case drama
-        case horror
-        case anime
-        case familyNchildren
-        case documentary
-    }
-    
-    enum State: Int, CaseIterable {
-        case all
-        case series
-        case films
-    }
-    
+final class HomeTableViewDataSource: NSObject {
     weak var tableView: UITableView!
     private weak var viewModel: HomeViewModel!
     
@@ -128,13 +90,9 @@ extension HomeTableViewDataSource: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         guard let index = Index(rawValue: section) else { return .zero }
-        if case .display = index {
-            return 0.0
-        } else if case .rated = index {
-            return 28.0
-        } else {
-            return 24.0
-        }
+        if case .display = index { return 0.0 }
+        else if case .rated = index { return 28.0 }
+        else { return 24.0 }
     }
 }
 
@@ -145,8 +103,8 @@ extension HomeTableViewDataSource {
             return
         }
         homeViewController.view.animateUsingSpring(withDuration: 0.66,
-                                     withDamping: 1.0,
-                                     initialSpringVelocity: 1.0) {
+                                                   withDamping: 1.0,
+                                                   initialSpringVelocity: 1.0) {
             guard translation.y < 0 else {
                 homeViewController.navigationViewTopConstraint.constant = 0.0
                 homeViewController.navigationView.alpha = 1.0
@@ -156,6 +114,34 @@ extension HomeTableViewDataSource {
             homeViewController.navigationView.alpha = 0.0
             homeViewController.view.layoutIfNeeded()
         }
+    }
+}
+
+extension HomeTableViewDataSource {
+    /// Section's index representation type.
+    enum Index: Int, CaseIterable {
+        case display
+        case rated
+        case resumable
+        case action
+        case sciFi
+        case blockbuster
+        case myList
+        case crime
+        case thriller
+        case adventure
+        case comedy
+        case drama
+        case horror
+        case anime
+        case familyNchildren
+        case documentary
+    }
+    /// Data source's state representation type.
+    enum State: Int, CaseIterable {
+        case all
+        case series
+        case films
     }
 }
 

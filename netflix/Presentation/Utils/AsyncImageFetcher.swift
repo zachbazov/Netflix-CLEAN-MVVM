@@ -8,10 +8,7 @@
 import UIKit
 
 private protocol FetcherInput {
-    init()
-    
     static func urlSession() -> URLSession
-    
     func set(in cache: AsyncImageFetcher.Cache, _ image: UIImage, forKey identifier: NSString)
     func remove(in cache: AsyncImageFetcher.Cache, for identifier: NSString)
     func object(in cache: AsyncImageFetcher.Cache, for identifier: NSString) -> UIImage?
@@ -27,12 +24,6 @@ private protocol FetcherOutput {
 private typealias Fetcher = FetcherInput & FetcherOutput
 
 final class AsyncImageFetcher: Fetcher {
-    enum Cache {
-        case home
-        case search
-        case news
-    }
-    
     static var shared = AsyncImageFetcher()
     
     fileprivate(set) var cache = NSCache<NSString, UIImage>()
@@ -40,7 +31,7 @@ final class AsyncImageFetcher: Fetcher {
     fileprivate(set) var newsCache = NSCache<NSString, UIImage>()
     fileprivate let queue = OS_dispatch_queue_serial(label: "com.netflix.utils.async-image-fetcher")
     
-    internal required init() {}
+    private init() {}
     
     fileprivate static func urlSession() -> URLSession {
         let config = URLSessionConfiguration.ephemeral
@@ -49,33 +40,21 @@ final class AsyncImageFetcher: Fetcher {
     }
     
     fileprivate func set(in cache: Cache, _ image: UIImage, forKey identifier: NSString) {
-        if case .home = cache {
-            self.cache.setObject(image, forKey: identifier)
-        } else if case .search = cache {
-            searchCache.setObject(image, forKey: identifier)
-        } else {
-            newsCache.setObject(image, forKey: identifier)
-        }
+        if case .home = cache {  self.cache.setObject(image, forKey: identifier) }
+        else if case .search = cache { searchCache.setObject(image, forKey: identifier) }
+        else { newsCache.setObject(image, forKey: identifier) }
     }
     
     func remove(in cache: Cache, for identifier: NSString) {
-        if case .home = cache {
-            self.cache.removeObject(forKey: identifier)
-        } else if case .search = cache {
-            searchCache.removeObject(forKey: identifier)
-        } else {
-            newsCache.removeObject(forKey: identifier)
-        }
+        if case .home = cache { self.cache.removeObject(forKey: identifier) }
+        else if case .search = cache { searchCache.removeObject(forKey: identifier) }
+        else { newsCache.removeObject(forKey: identifier) }
     }
     
     func object(in cache: Cache, for identifier: NSString) -> UIImage? {
-        if case .home = cache {
-            return self.cache.object(forKey: identifier)
-        } else if case .search = cache {
-            return searchCache.object(forKey: identifier)
-        } else {
-            return newsCache.object(forKey: identifier)
-        }
+        if case .home = cache { return self.cache.object(forKey: identifier) }
+        else if case .search = cache { return searchCache.object(forKey: identifier) }
+        else { return newsCache.object(forKey: identifier) }
     }
     
     func load(in cache: Cache, url: URL, identifier: NSString, completion: @escaping (UIImage?) -> Void) {
@@ -84,38 +63,28 @@ final class AsyncImageFetcher: Fetcher {
         }
         
         AsyncImageFetcher.urlSession().dataTask(with: url) { [weak self] data, response, error in
-            guard
-                error == nil,
-                let self = self,
-                let httpURLResponse = response as? HTTPURLResponse,
-                let mimeType = response?.mimeType,
-                let data = data,
-                let image = UIImage(data: data),
-                httpURLResponse.statusCode == 200,
-                mimeType.hasPrefix("image")
-            else { return }
+            guard error == nil,
+                  let self = self,
+                  let httpURLResponse = response as? HTTPURLResponse,
+                  let mimeType = response?.mimeType,
+                  let data = data,
+                  let image = UIImage(data: data),
+                  httpURLResponse.statusCode == 200,
+                  mimeType.hasPrefix("image") else {
+                return
+            }
             self.set(in: cache, image, forKey: identifier)
             self.queue.async { completion(image) }
         }.resume()
     }
 }
 
-class Item: Hashable {
-    var image: UIImage!
-    let url: URL!
-    let identifier = UUID()
-    
-    init(image: UIImage, url: URL) {
-        self.image = image
-        self.url = url
-    }
-    
-    func hash(into hasher: inout Hasher) {
-        hasher.combine(identifier)
-    }
-    
-    static func ==(lhs: Item, rhs: Item) -> Bool {
-        return lhs.identifier == rhs.identifier
+extension AsyncImageFetcher {
+    /// Cache representation type.
+    enum Cache {
+        case home
+        case search
+        case news
     }
 }
 
@@ -177,106 +146,3 @@ class ImageURLProtocol: URLProtocol {
         return  URLSession(configuration: config)
     }
 }
-
-
-public class ImageCacheService {
-    public static let shared = ImageCacheService()
-
-    var placeholderImage = UIImage(systemName: "rectangle")!
-    let cachedImages = NSCache<NSURL, UIImage>()
-    var loadingResponses = [NSURL: [(Item, UIImage?) -> Void]]()
-
-    public final func image(url: NSURL) -> UIImage? {
-        return cachedImages.object(forKey: url)
-    }
-    /// - Tag: cache
-    // Returns the cached image if available, otherwise asynchronously loads and caches it.
-    final func load(url: NSURL, item: Item, completion: @escaping (Item, UIImage?) -> Void) {
-        // Check for a cached image.
-        if let cachedImage = image(url: url) {
-            asynchrony {
-                completion(item, cachedImage)
-            }
-            return
-        }
-        // In case there are more than one requestor for the image, we append their completion block.
-        if loadingResponses[url] != nil {
-            loadingResponses[url]?.append(completion)
-            return
-        } else {
-            loadingResponses[url] = [completion]
-        }
-        // Go fetch the image.
-        ImageURLProtocol.urlSession().dataTask(with: url as URL) { (data, response, error) in
-            // Check for the error, then data and try to create the image.
-            guard let responseData = data,
-                  let image = UIImage(data: responseData),
-                  let blocks = self.loadingResponses[url],
-                  error == nil else {
-                asynchrony {
-                    completion(item, nil)
-                }
-                return
-            }
-            // Cache the image.
-            self.cachedImages.setObject(image, forKey: url, cost: responseData.count)
-            // Iterate over each requestor for the image and pass it back.
-            for block in blocks {
-                asynchrony {
-                    block(item, image)
-                }
-                return
-            }
-        }.resume()
-    }
-}
-
-//protocol URLImageCachable {
-//    typealias CompletionHandler = (Item, UIImage?) -> Void
-//    func image(for url: NSURL) -> UIImage?
-//    mutating func request(_ url: NSURL, item: Item, completion: @escaping CompletionHandler)
-//}
-//
-//final class CacheService: URLImageCachable {
-//    let session = ImageURLProtocol.urlSession()
-//    let cachedImages = NSCache<NSURL, UIImage>()
-//    var loadingResponses = [NSURL: [(Item, UIImage?) -> Void]]()
-//
-//    func image(for url: NSURL) -> UIImage? {
-//        return cachedImages.object(forKey: url)
-//    }
-//
-//    func request(_ url: NSURL, item: Item, completion: @escaping CompletionHandler) {
-//        if let cachedImage = image(for: url) {
-//            completion(item, cachedImage)
-//        }
-//
-//        if loadingResponses[url] != nil {
-//            loadingResponses[url]?.append(completion)
-//            return
-//        } else {
-//            loadingResponses[url] = [completion]
-//        }
-//
-//        session.dataTask(with: url as URL) { (data, response, error) in
-//            guard let responseData = data,
-//                  let image = UIImage(data: responseData),
-//                  let blocks = self.loadingResponses[url],
-//                  error == nil else {
-//                DispatchQueue.main.async {
-//                    completion(item, nil)
-//                }
-//                return
-//            }
-//
-//            self.cachedImages.setObject(image, forKey: url, cost: responseData.count)
-//
-//            for block in blocks {
-//                DispatchQueue.main.async {
-//                    block(item, image)
-//                }
-//                return
-//            }
-//        }.resume()
-//    }
-//}

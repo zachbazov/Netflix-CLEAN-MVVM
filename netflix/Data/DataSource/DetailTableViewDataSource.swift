@@ -10,14 +10,6 @@ import UIKit.UITableView
 final class DetailTableViewDataSource: NSObject,
                                        UITableViewDelegate,
                                        UITableViewDataSource {
-    enum Index: Int, CaseIterable {
-        case info
-        case description
-        case panel
-        case navigation
-        case collection
-    }
-    
     fileprivate let viewModel: DetailViewModel
     let tableView: UITableView
     fileprivate let numberOfRows: Int = 1
@@ -146,5 +138,16 @@ extension DetailTableViewDataSource {
                 + topContentInset
             return Float(value)
         }
+    }
+}
+
+extension DetailTableViewDataSource {
+    /// Section's index representation type.
+    enum Index: Int, CaseIterable {
+        case info
+        case description
+        case panel
+        case navigation
+        case collection
     }
 }

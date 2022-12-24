@@ -35,18 +35,9 @@ final class DeviceOrientation {
     }
     
     func rotate() {
-        /// Refers to `didSelectItemAt` on `DetailCollectionViewDataSource`.
-        /// Once selecting a new item,
-        /// the killing proccess of the controller reverts the lock to portrait.
-        /// Thus, setting it back to free is required.
-        if orientationLock == .portrait {
-            orientationLock = .all
-        }
-        /// Switching between portrait and landscape mode.
-        if orientation == .landscapeLeft {
-            orientation = .portrait
-        } else {
-            orientation = .landscapeLeft
-        }
+        if orientationLock == .portrait { orientationLock = .all }
+        
+        if orientation == .landscapeLeft { orientation = .portrait }
+        else { orientation = .landscapeLeft }
     }
 }
