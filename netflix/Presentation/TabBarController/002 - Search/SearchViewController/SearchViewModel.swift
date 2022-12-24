@@ -7,7 +7,7 @@
 
 import Foundation
 
-final class SearchViewModel: ViewModel {
+final class SearchViewModel {
     var coordinator: SearchViewCoordinator?
     private let useCase: SearchUseCase
     
@@ -17,21 +17,24 @@ final class SearchViewModel: ViewModel {
     private var nextPage: Int { hasMorePages ? currentPage + 1 : currentPage }
     private var pages: [MediaPage] = []
     
-    private var mediaLoadTask: Cancellable? { willSet { mediaLoadTask?.cancel() } }
-    
     let items: Observable<[SearchCollectionViewCellViewModel]> = Observable([])
     let loading: Observable<SearchLoading?> = Observable(.none)
     let query: Observable<String> = Observable("")
     private let error: Observable<String> = Observable("")
     private var isEmpty: Bool { return items.value.isEmpty }
     
+    private var mediaLoadTask: Cancellable? { willSet { mediaLoadTask?.cancel() } }
+    /// Default initializer.
+    /// Allocate `useCase` property and it's dependencies.
     init() {
         let dataTransferService = Application.current.dataTransferService
         let mediaResponseCache = Application.current.mediaResponseCache
         let mediaRepository = MediaRepository(dataTransferService: dataTransferService, cache: mediaResponseCache)
         self.useCase = SearchUseCase(mediaRepository: mediaRepository)
     }
-    
+}
+
+extension SearchViewModel: ViewModel {
     func transform(input: Void) {}
 }
 

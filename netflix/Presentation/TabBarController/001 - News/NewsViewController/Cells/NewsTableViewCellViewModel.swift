@@ -17,7 +17,8 @@ struct NewsTableViewCellViewModel {
     var displayLogoImageURL: URL!
     let eta: String
     let mediaType: String
-    
+    /// Create a news table view cell view model object.
+    /// - Parameter media: Corresponding media object.
     init(with media: Media) {
         self.media = media
         self.previewPosterImagePath = media.resources.previewPoster

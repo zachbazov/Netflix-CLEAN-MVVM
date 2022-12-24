@@ -7,12 +7,16 @@
 
 import Foundation
 
-final class DownloadsViewCoordinator: Coordinate {
+final class DownloadsViewCoordinator {
+    var viewController: DownloadsViewController?
+}
+
+extension DownloadsViewCoordinator: Coordinate {
+    /// View representation type.
     enum Screen {
         case downloads
     }
-    
-    var viewController: DownloadsViewController?
-    
+    /// Screen presentation control.
+    /// - Parameter screen: The screen to be allocated and presented.
     func showScreen(_ screen: Screen) {}
 }

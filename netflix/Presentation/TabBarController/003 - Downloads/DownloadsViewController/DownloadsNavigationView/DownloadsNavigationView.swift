@@ -11,7 +11,8 @@ final class DownloadsNavigationView: UIView, ViewInstantiable {
     @IBOutlet private var titleLabel: UILabel!
     @IBOutlet private var airPlayButton: UIButton!
     @IBOutlet private var accountButton: UIButton!
-    
+    /// Create a navigation view object.
+    /// - Parameter parent: Instantiating view.
     init(on parent: UIView) {
         super.init(frame: parent.bounds)
         self.nibDidLoad()

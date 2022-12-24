@@ -20,7 +20,8 @@ struct SearchCollectionViewCellViewModel {
     var logoImageIdentifier: NSString
     var logoImageURL: URL!
     let presentedLogoAlignment: PresentedLogoAlignment
-    
+    /// Create a search collection view cell view model object.
+    /// - Parameter media: Corresponding media object.
     init(media: Media) {
         self.media = media
         self.title = media.title

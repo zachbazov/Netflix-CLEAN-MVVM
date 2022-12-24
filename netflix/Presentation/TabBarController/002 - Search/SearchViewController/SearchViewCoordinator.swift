@@ -7,12 +7,16 @@
 
 import Foundation
 
-final class SearchViewCoordinator: Coordinate {
+final class SearchViewCoordinator {
+    var viewController: SearchViewController?
+}
+
+extension SearchViewCoordinator: Coordinate {
+    /// View representation type.
     enum Screen {
         case search
     }
-    
-    var viewController: SearchViewController?
-    
+    /// Screen presentation control.
+    /// - Parameter screen: The screen to be allocated and presented.
     func showScreen(_ screen: Screen) {}
 }

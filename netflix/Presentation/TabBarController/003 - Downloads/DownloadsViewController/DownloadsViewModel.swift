@@ -7,8 +7,10 @@
 
 import Foundation
 
-final class DownloadsViewModel: ViewModel {
+final class DownloadsViewModel {
     var coordinator: DownloadsViewCoordinator?
-    
+}
+
+extension DownloadsViewModel: ViewModel {
     func transform(input: Void) {}
 }

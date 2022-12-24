@@ -40,12 +40,6 @@ final class SearchViewController: UIViewController {
         setupDataSource()
     }
     
-    private func setupObservers() {
-        viewModel.items.observe(on: self) { [weak self] _ in self?.updateItems() }
-        viewModel.loading.observe(on: self) { [weak self] in self?.updateLoading($0) }
-        viewModel.query.observe(on: self) { [weak self] in self?.updateSearchQuery($0) }
-    }
-    
     private func setupDataSource() {
         dataSource = SearchCollectionViewDataSource(with: viewModel)
     }
@@ -78,6 +72,21 @@ final class SearchViewController: UIViewController {
         contentContainer.addSubview(collectionView)
         collectionView.constraintToSuperview(contentContainer)
         return collectionView
+    }
+}
+
+extension SearchViewController {
+    private func setupObservers() {
+        viewModel.items.observe(on: self) { [weak self] _ in self?.updateItems() }
+        viewModel.loading.observe(on: self) { [weak self] in self?.updateLoading($0) }
+        viewModel.query.observe(on: self) { [weak self] in self?.updateSearchQuery($0) }
+    }
+    
+    func removeObservers() {
+        printIfDebug("Removed `SearchViewModel` observers.")
+        viewModel.items.remove(observer: self)
+        viewModel.loading.remove(observer: self)
+        viewModel.query.remove(observer: self)
     }
 }
 

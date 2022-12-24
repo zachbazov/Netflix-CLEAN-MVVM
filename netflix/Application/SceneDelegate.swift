@@ -65,5 +65,10 @@ extension SceneDelegate {
            let newsController = tabCoordinator.news.viewControllers.first! as? NewsViewController {
             newsController.removeObservers()
         }
+        
+        if let tabCoordinator = Application.current.rootCoordinator.tabCoordinator,
+           let searchController = tabCoordinator.search.viewControllers.first! as? SearchViewController {
+            searchController.removeObservers()
+        }
     }
 }

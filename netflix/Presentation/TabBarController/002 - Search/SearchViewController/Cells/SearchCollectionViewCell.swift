@@ -14,7 +14,12 @@ class SearchCollectionViewCell: UICollectionViewCell {
     
     private var representedIdentifier: NSString?
     private var appliedGradient = false
-    
+    /// Create a search collection view cell object.
+    /// - Parameters:
+    ///   - collectionView: Corresponding collection view.
+    ///   - indexPath: The index path of the cell on the data source.
+    ///   - viewModel: Coordinating view model.
+    /// - Returns: A search collection view cell.
     static func create(on collectionView: UICollectionView,
                        for indexPath: IndexPath,
                        with viewModel: SearchViewModel) -> SearchCollectionViewCell {
