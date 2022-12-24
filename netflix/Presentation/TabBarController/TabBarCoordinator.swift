@@ -12,7 +12,7 @@ private protocol TabBarCoordinable {
     func homeDependencies() -> UINavigationController
     func newsDependencies() -> UINavigationController
     func searchDependencies() -> UINavigationController
-    func downloadsDependencies() -> DownloadsViewController
+    func downloadsDependencies() -> UINavigationController
 }
 
 private struct TabBarConfiguration {
@@ -22,7 +22,6 @@ private struct TabBarConfiguration {
         let image: UIImage
         let tag: Int
         var navigationBarHidden: Bool?
-        
         /// Apply configuration a tab bar item.
         /// - Parameter controller: Receiver view controller.
         func applyConfig<T: UIViewController>(for controller: T) {
@@ -43,7 +42,7 @@ private struct TabBarConfiguration {
         if case .home = screen { homeTabItem(for: controller as! UINavigationController) }
         else if case .news = screen { newsTabItem(for: controller as! UINavigationController) }
         else if case .search = screen { searchTabItem(for: controller as! UINavigationController) }
-        else { downloadsTabItem(for: controller as! DownloadsViewController) }
+        else { downloadsTabItem(for: controller as! UINavigationController) }
     }
     /// Create an Home tab bar item.
     /// - Parameter controller: Tab's root controller.
@@ -77,7 +76,7 @@ private struct TabBarConfiguration {
         item.applyConfig(for: controller)
     }
     
-    private func downloadsTabItem(for controller: DownloadsViewController) {
+    private func downloadsTabItem(for controller: UINavigationController) {
         let title = "Downloads"
         let systemImage = "arrow.down.circle.fill"
         let symbolConfiguration = UIImage.SymbolConfiguration(pointSize: 15.0)
@@ -92,42 +91,14 @@ final class TabBarCoordinator {
     weak var viewController: TabBarController?
     private let configuration = TabBarConfiguration()
     private(set) var home: UINavigationController!
-    private var news: UINavigationController!
-    private var search: UINavigationController!
+    private(set) var news: UINavigationController!
+    private(set) var search: UINavigationController!
     private var downloads: UIViewController!
     /// In-order to gain access to the home page,
     /// request the user credentials.
     func requestUserCredentials() {
         let viewModel = AuthViewModel()
         viewModel.cachedAuthorizationSession { [weak self] in self?.allocateViewControllers() }
-    }
-    /// Due to reallocation, certain data needs to be stored,
-    /// in-order for the application flow flawlessly.
-    func afterReallocationSettings(with viewModel: HomeViewModel) {
-        updateHomeTableViewDataSourceState(with: viewModel)
-        updateHomeDisplayCache(with: viewModel)
-    }
-    /// Restating home's table view data source.
-    /// - Parameter viewModel: Coordinating view model.
-    private func updateHomeTableViewDataSourceState(with viewModel: HomeViewModel) {
-        let tabViewModel = viewController?.viewModel
-        /// Based on the navigation view state, set home's table view data source state accordingly.
-        if tabViewModel?.latestHomeNavigationState == .home {
-            tabViewModel?.latestHomeDataSourceState = .all
-        } else if tabViewModel?.latestHomeNavigationState == .tvShows {
-            tabViewModel?.latestHomeDataSourceState = .series
-        } else if tabViewModel?.latestHomeNavigationState == .movies {
-            tabViewModel?.latestHomeDataSourceState = .films
-        } else {}
-        /// Pass the table view data source state to home's view model.
-        viewModel.dataSourceState.value = tabViewModel!.latestHomeDataSourceState
-    }
-    /// Restoring home's display cell media cache.
-    /// - Parameter viewModel: Coordinating view model.
-    private func updateHomeDisplayCache(with viewModel: HomeViewModel) {
-        let tabViewModel = viewController?.viewModel
-        /// Pass the cache to home's view model.
-        viewModel.displayMediaCache = tabViewModel!.latestDisplayCache
     }
 }
 
@@ -161,6 +132,8 @@ extension TabBarCoordinator: TabBarCoordinable {
         coordinator.viewController?.viewModel = viewModel
         /// Embed the view controller in a navigation controller.
         let navigation = UINavigationController(rootViewController: controller)
+        /// Update the tag representor property.
+        navigation.navigationBar.tag = Screen.home.rawValue
         /// Configure the tab bar item.
         configuration.tabBarItem(for: .home, with: navigation)
         return navigation
@@ -176,6 +149,7 @@ extension TabBarCoordinator: TabBarCoordinable {
         coordinator.viewController = controller
         
         let navigation = UINavigationController(rootViewController: controller)
+        navigation.navigationBar.tag = Screen.news.rawValue
         configuration.tabBarItem(for: .news, with: navigation)
         return navigation
     }
@@ -190,11 +164,12 @@ extension TabBarCoordinator: TabBarCoordinable {
         coordinator.viewController = controller
         
         let navigation = UINavigationController(rootViewController: controller)
+        navigation.navigationBar.tag = Screen.search.rawValue
         configuration.tabBarItem(for: .search, with: navigation)
         return navigation
     }
     
-    fileprivate func downloadsDependencies() -> DownloadsViewController {
+    fileprivate func downloadsDependencies() -> UINavigationController {
         let coordinator = DownloadsViewCoordinator()
         let viewModel = DownloadsViewModel()
         let controller = DownloadsViewController()
@@ -203,18 +178,51 @@ extension TabBarCoordinator: TabBarCoordinable {
         controller.viewModel.coordinator = coordinator
         coordinator.viewController = controller
         
-        configuration.tabBarItem(for: .downloads, with: controller)
-        return controller
+        let navigation = UINavigationController(rootViewController: controller)
+        navigation.navigationBar.tag = Screen.downloads.rawValue
+        configuration.tabBarItem(for: .downloads, with: navigation)
+        return navigation
+    }
+}
+
+extension TabBarCoordinator {
+    /// Due to reallocation, certain data needs to be stored,
+    /// in-order for the application flow flawlessly.
+    func afterReallocationSettings(with viewModel: HomeViewModel) {
+        updateHomeTableViewDataSourceState(with: viewModel)
+        updateHomeDisplayCache(with: viewModel)
+    }
+    /// Restating home's table view data source.
+    /// - Parameter viewModel: Coordinating view model.
+    private func updateHomeTableViewDataSourceState(with viewModel: HomeViewModel) {
+        let tabViewModel = viewController?.viewModel
+        /// Based on the navigation view state, set home's table view data source state accordingly.
+        if tabViewModel?.latestHomeNavigationState == .home {
+            tabViewModel?.latestHomeDataSourceState = .all
+        } else if tabViewModel?.latestHomeNavigationState == .tvShows {
+            tabViewModel?.latestHomeDataSourceState = .series
+        } else if tabViewModel?.latestHomeNavigationState == .movies {
+            tabViewModel?.latestHomeDataSourceState = .films
+        } else {}
+        /// Pass the table view data source state to home's view model.
+        viewModel.dataSourceState.value = tabViewModel!.latestHomeDataSourceState
+    }
+    /// Restoring home's display cell media cache.
+    /// - Parameter viewModel: Coordinating view model.
+    private func updateHomeDisplayCache(with viewModel: HomeViewModel) {
+        let tabViewModel = viewController?.viewModel
+        /// Pass the cache to home's view model.
+        viewModel.displayMediaCache = tabViewModel!.latestDisplayCache
     }
 }
 
 extension TabBarCoordinator: Coordinate {
     /// View representation type.
     enum Screen: Int {
-        case home       = 000
-        case news       = 001
-        case search     = 002
-        case downloads  = 003
+        case home       = 0
+        case news       = 1
+        case search     = 2
+        case downloads  = 3
     }
     /// Screen presentation control.
     /// - Parameter screen: The screen to be allocated and presented.

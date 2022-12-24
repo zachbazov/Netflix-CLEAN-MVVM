@@ -13,7 +13,7 @@ final class NewsViewController: UIViewController {
     
     var viewModel: NewsViewModel!
     private var navigationView: NewsNavigationView!
-    private var tableView: UITableView!
+    private(set) var tableView: UITableView!
     private var dataSource: NewsTableViewDataSource!
     
     override func viewDidLoad() {
@@ -27,13 +27,6 @@ final class NewsViewController: UIViewController {
         setupNavigationView()
         setupTableView()
         setupDataSource()
-    }
-    
-    private func setupObservers() {
-        viewModel.items.observe(on: self) { [weak self] _ in
-            guard !self!.viewModel.isEmpty else { return }
-            self?.dataSourceDidChange()
-        }
     }
     
     private func setupNavigationView() {
@@ -53,10 +46,20 @@ final class NewsViewController: UIViewController {
     private func setupDataSource() {
         dataSource = NewsTableViewDataSource(with: viewModel)
     }
+}
+
+extension NewsViewController {
+    private func setupObservers() {
+        viewModel.items.observe(on: self) { [weak self] _ in
+            guard let self = self, !self.viewModel.isEmpty else { return }
+            self.dataSource.dataSourceDidChange()
+        }
+    }
     
-    private func dataSourceDidChange() {
-        tableView.delegate = dataSource
-        tableView.dataSource = dataSource
-        tableView.reloadData()
+    func removeObservers() {
+        if let viewModel = viewModel {
+            printIfDebug("Removed `NewsViewModel` observers.")
+            viewModel.items.remove(observer: self)
+        }
     }
 }

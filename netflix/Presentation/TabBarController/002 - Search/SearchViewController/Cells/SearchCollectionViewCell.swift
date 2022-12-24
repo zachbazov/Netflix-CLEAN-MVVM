@@ -23,7 +23,7 @@ class SearchCollectionViewCell: UICollectionViewCell {
             for: indexPath) as? SearchCollectionViewCell else {
             fatalError()
         }
-        let media = viewModel.items.value[indexPath.row].toMedia()
+        let media = viewModel.items.value[indexPath.row].media!
         let cellViewModel = SearchCollectionViewCellViewModel(media: media)
         view.representedIdentifier = cellViewModel.slug as NSString
         view.setupSubviews()

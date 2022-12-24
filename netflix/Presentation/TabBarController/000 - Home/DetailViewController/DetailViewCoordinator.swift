@@ -22,6 +22,7 @@ final class DetailViewCoordinator {
         viewController = nil
         /// Allocate the new controller.
         controller.viewModel = viewModel
+        /// Depend on the new media object.
         controller.viewModel.media = media!
         viewController = controller
         /// Reallocate the navigation stack.

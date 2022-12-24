@@ -43,24 +43,27 @@ extension SceneDelegate: UIWindowSceneDelegate {
 extension SceneDelegate {
     private func removeTabBarObservers() {
         if let tabCoordinator = Application.current.rootCoordinator.tabCoordinator,
-           let homeViewController = tabCoordinator.home.viewControllers.first! as? HomeViewController {
+           let homeController = tabCoordinator.home.viewControllers.first! as? HomeViewController {
             
-            if let displayCell = homeViewController.dataSource.displayCell,
+            if let displayCell = homeController.dataSource.displayCell,
                let panelView = displayCell.displayView.panelView as PanelView? {
                 panelView.removeObservers()
             }
-            if let navigationView = homeViewController.navigationView,
+            if let navigationView = homeController.navigationView,
                let navigationOverlayView = navigationView.navigationOverlayView {
                 navigationView.removeObservers()
                 navigationOverlayView.removeObservers()
             }
-            if let myList = homeViewController.viewModel.myList {
+            if let myList = homeController.viewModel.myList {
                 myList.removeObservers()
             }
             
-            homeViewController.removeObservers()
-            
-            printIfDebug("Removed `HomeViewController` observers successfully.")
+            homeController.removeObservers()
+        }
+        
+        if let tabCoordinator = Application.current.rootCoordinator.tabCoordinator,
+           let newsController = tabCoordinator.news.viewControllers.first! as? NewsViewController {
+            newsController.removeObservers()
         }
     }
 }

@@ -26,9 +26,9 @@ final class SearchCollectionViewDataSource: NSObject, UICollectionViewDelegate, 
         let controller = navigation.viewControllers.first! as! HomeViewController
         let coordinator = controller.viewModel.coordinator!
         let section = controller.viewModel.section(at: .resumable)
-        let media = viewModel.items.value[indexPath.row].toMedia()
+        let cellViewModel = viewModel.items.value[indexPath.row]
         coordinator.section = section
-        coordinator.media = media
+        coordinator.media = cellViewModel.media
         coordinator.shouldScreenRotate = false
         coordinator.showScreen(.detail)
     }

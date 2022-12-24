@@ -25,7 +25,12 @@ final class NewsTableViewCell: UITableViewCell {
     
     private var viewModel: NewsTableViewCellViewModel!
     private var representedIdentifier: String?
-    
+    /// Create a news table view cell object.
+    /// - Parameters:
+    ///   - tableView: Corresponding table view.
+    ///   - indexPath: The index path of the cell on the data source.
+    ///   - viewModel: Coordinating view model.
+    /// - Returns: A news table view cell.
     static func create(in tableView: UITableView,
                        for indexPath: IndexPath,
                        with viewModel: NewsViewModel) -> NewsTableViewCell {
@@ -47,7 +52,9 @@ final class NewsTableViewCell: UITableViewCell {
         backgroundColor = .black
         previewPosterImageView.layer.cornerRadius = 10.0
     }
-    
+}
+
+extension NewsTableViewCell {
     private func viewDidConfigure(with viewModel: NewsTableViewCellViewModel) {
         guard representedIdentifier == viewModel.media.slug else { return }
         

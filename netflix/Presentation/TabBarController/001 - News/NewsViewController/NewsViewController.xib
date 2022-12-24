@@ -27,13 +27,13 @@
                     </constraints>
                 </view>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="nKW-Fb-3q3" userLabel="News Table View Container">
-                    <rect key="frame" x="0.0" y="139" width="393" height="639"/>
+                    <rect key="frame" x="0.0" y="139" width="393" height="679"/>
                 </view>
             </subviews>
             <viewLayoutGuide key="safeArea" id="0WA-in-P1A"/>
             <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
             <constraints>
-                <constraint firstItem="0WA-in-P1A" firstAttribute="bottom" secondItem="nKW-Fb-3q3" secondAttribute="bottom" constant="40" id="68x-KQ-5SV"/>
+                <constraint firstItem="0WA-in-P1A" firstAttribute="bottom" secondItem="nKW-Fb-3q3" secondAttribute="bottom" id="68x-KQ-5SV"/>
                 <constraint firstItem="nKW-Fb-3q3" firstAttribute="top" secondItem="Kee-Q2-Jru" secondAttribute="bottom" id="9er-6p-SYB"/>
                 <constraint firstItem="nKW-Fb-3q3" firstAttribute="leading" secondItem="DoN-JX-aNB" secondAttribute="leading" id="S5E-T2-7Mh"/>
                 <constraint firstAttribute="trailing" secondItem="nKW-Fb-3q3" secondAttribute="trailing" id="XUM-MX-O9g"/>

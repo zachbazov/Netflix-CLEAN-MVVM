@@ -38,9 +38,3 @@ struct SearchCollectionViewCellViewModel {
         self.logoImageURL = URL(string: self.logoImagePath)
     }
 }
-
-extension SearchCollectionViewCellViewModel {
-    func toMedia() -> Media {
-        return media!
-    }
-}

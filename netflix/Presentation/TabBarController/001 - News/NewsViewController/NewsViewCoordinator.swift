@@ -5,14 +5,50 @@
 //  Created by Zach Bazov on 20/12/2022.
 //
 
-import Foundation
+import UIKit
 
-final class NewsViewCoordinator: Coordinate {
-    enum Screen {
-        case news
-    }
-    
+private protocol NewsCoordinable {
+    func allocateDetailController()
+}
+
+final class NewsViewCoordinator {
     var viewController: NewsViewController?
-    
-    func showScreen(_ screen: Screen) {}
+    var section: Section?
+    var media: Media?
+    var shouldScreenRotate: Bool = false
+}
+
+extension NewsViewCoordinator {
+    private func allocateDetailController() {
+        guard let section = section, let media = media else { return }
+        /// An `HomeViewModel` reference is needed to gain access to the sections data.
+        let homeNavigation = Application.current.rootCoordinator.tabCoordinator.home!
+        /// Extract home's view model reference.
+        let homeController = homeNavigation.viewControllers.first! as! HomeViewController
+        let homeViewModel = homeController.viewModel!
+        /// Allocate the detail controller and it's dependencies.
+        let controller = DetailViewController()
+        let viewModel = DetailViewModel(section: section, media: media, with: homeViewModel)
+        controller.viewModel = viewModel
+        controller.viewModel.coordinator = DetailViewCoordinator()
+        controller.viewModel.coordinator?.viewController = controller
+        controller.viewModel.isRotated = shouldScreenRotate
+        /// Wrap the controller with a navigation controller.
+        let navigation = UINavigationController(rootViewController: controller)
+        navigation.setNavigationBarHidden(true, animated: false)
+        /// Present the navigation controller.
+        viewController?.present(navigation, animated: true)
+    }
+}
+
+extension NewsViewCoordinator: Coordinate {
+    /// View representation type.
+    enum Screen {
+        case detail
+    }
+    /// Screen presentation control.
+    /// - Parameter screen: The screen to be allocated and presented.
+    func showScreen(_ screen: Screen) {
+        if case .detail = screen { allocateDetailController() }
+    }
 }
