@@ -7,32 +7,22 @@
 
 import UIKit
 
-private protocol DataSourceInput {}
-
-private protocol DataSourceOutput {
-    associatedtype T
-    var items: [T] { get }
-    var collectionView: UICollectionView { get }
-    var numberOfSections: Int { get }
-}
-
-private typealias DataSource = DataSourceInput & DataSourceOutput
-
-final class DetailCollectionViewDataSource<T>: NSObject,
-                                               DataSource,
-                                               UICollectionViewDelegate,
-                                               UICollectionViewDataSource {
+final class DetailCollectionViewDataSource<T>: NSObject, UICollectionViewDelegate, UICollectionViewDataSource {
     private let viewModel: DetailViewModel
     fileprivate let numberOfSections = 1
     fileprivate let collectionView: UICollectionView
     let items: [T]
-    
+    /// Create a generic detail collection view data source object.
+    /// - Parameters:
+    ///   - collectionView: Corresponding collection view.
+    ///   - items: Represented data.
+    ///   - viewModel: Coordinating view model.
     init(collectionView: UICollectionView, items: [T], with viewModel: DetailViewModel) {
         self.viewModel = viewModel
         self.collectionView = collectionView
         self.items = items
     }
-    
+    // MARK: Delegate & DataSource
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         return numberOfSections
     }
@@ -43,12 +33,11 @@ final class DetailCollectionViewDataSource<T>: NSObject,
     
     func collectionView(_ collectionView: UICollectionView,
                         cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        switch viewModel.navigationViewState.value {
-        case .episodes:
+        if case .episodes = viewModel.navigationViewState.value {
             return EpisodeCollectionViewCell.create(on: collectionView, for: indexPath, with: viewModel)
-        case .trailers:
+        } else if case .trailers = viewModel.navigationViewState.value {
             return TrailerCollectionViewCell.create(on: collectionView, for: indexPath, with: viewModel)
-        default:
+        } else {
             return CollectionViewCell.create(on: collectionView,
                                              reuseIdentifier: StandardCollectionViewCell.reuseIdentifier,
                                              section: viewModel.section,

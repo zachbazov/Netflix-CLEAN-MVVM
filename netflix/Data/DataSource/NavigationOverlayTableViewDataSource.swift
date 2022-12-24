@@ -7,15 +7,16 @@
 
 import UIKit
 
-final class NavigationOverlayTableViewDataSource: NSObject,
-                                                  UITableViewDelegate,
-                                                  UITableViewDataSource {
+final class NavigationOverlayTableViewDataSource: NSObject {
     private let viewModel: NavigationOverlayViewModel
-    
+    /// Create a navigation overlay table view data source object.
+    /// - Parameter viewModel: Coordinating view model.
     init(with viewModel: NavigationOverlayViewModel) {
         self.viewModel = viewModel
     }
-    
+}
+
+extension NavigationOverlayTableViewDataSource: UITableViewDelegate, UITableViewDataSource {
     func numberOfSections(in tableView: UITableView) -> Int {
         return viewModel.numberOfSections
     }

@@ -7,10 +7,13 @@
 
 import UIKit.UITableView
 
+// NOTE:
+// To be fixed:
+// Table view cell size invalidation.
+
 final class NewsTableViewDataSource: NSObject {
     private let viewModel: NewsViewModel
     private let numberOfSections: Int = 1
-    private var cell: NewsTableViewCell!
     /// Create a news table view data source object.
     /// - Parameter viewModel: Coordinating view model.
     init(with viewModel: NewsViewModel) {
@@ -24,7 +27,6 @@ extension NewsTableViewDataSource {
         tableView.delegate = self
         tableView.dataSource = self
         tableView.reloadData()
-        tableView.rowHeight = UITableView.automaticDimension
     }
 }
 
@@ -38,15 +40,11 @@ extension NewsTableViewDataSource: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        cell = NewsTableViewCell.create(in: tableView, for: indexPath, with: viewModel)
-        return cell
+        return NewsTableViewCell.create(in: tableView, for: indexPath, with: viewModel)
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        let bounds = viewModel.coordinator!.viewController!.tableViewContainer.bounds.size
-        let cellPosterImageHeight = cell?.posterImageViewHeight ?? .zero
-        let cellHeight = bounds.height - cellPosterImageHeight
-        return bounds.height - (bounds.height - cellHeight)
+        return UITableView.automaticDimension
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -57,11 +55,12 @@ extension NewsTableViewDataSource: UITableViewDelegate, UITableViewDataSource {
         let homeViewModel = homeController.viewModel
         let newsController = newsNavigation.viewControllers.first! as! NewsViewController
         let newsCoordinator = newsController.viewModel.coordinator!
-        let cellViewModel = viewModel.items.value[indexPath.row]
+        let cellViewModel = viewModel.items.value[row]
         let section = homeViewModel?.section(at: .resumable)
         newsCoordinator.section = section
         newsCoordinator.media = cellViewModel.media
         newsCoordinator.shouldScreenRotate = false
         newsCoordinator.showScreen(.detail)
     }
+    
 }

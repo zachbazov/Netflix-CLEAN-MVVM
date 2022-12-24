@@ -7,19 +7,22 @@
 
 import UIKit.UICollectionView
 
-final class BrowseOverlayCollectionViewDataSource: NSObject,
-                                                       UICollectionViewDelegate,
-                                                       UICollectionViewDataSource {
+final class BrowseOverlayCollectionViewDataSource: NSObject {
     private let coordinator: HomeViewCoordinator
     private let section: Section
     private let items: [Media]
-    
+    /// Create a browse overlay collection view data source object.
+    /// - Parameters:
+    ///   - section: Corresponding media's section object.
+    ///   - viewModel: Coordinating view model.
     init(section: Section, with viewModel: HomeViewModel) {
         self.coordinator = viewModel.coordinator!
         self.section = section
         self.items = section.media
     }
-    
+}
+
+extension BrowseOverlayCollectionViewDataSource: UICollectionViewDelegate, UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return items.count
     }

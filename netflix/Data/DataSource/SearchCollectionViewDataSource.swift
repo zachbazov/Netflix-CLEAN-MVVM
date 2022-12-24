@@ -7,26 +7,31 @@
 
 import UIKit.UICollectionView
 
-final class SearchCollectionViewDataSource: NSObject, UICollectionViewDelegate, UICollectionViewDataSource {
+final class SearchCollectionViewDataSource: NSObject {
     private let viewModel: SearchViewModel
-    
+    /// Create a search collection view data source object.
+    /// - Parameter viewModel: Coordinating view model.
     init(with viewModel: SearchViewModel) {
         self.viewModel = viewModel
     }
-    
+}
+
+extension SearchCollectionViewDataSource: UICollectionViewDelegate, UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return viewModel.items.value.count
     }
+    
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         return SearchCollectionViewCell.create(on: collectionView, for: indexPath, with: viewModel)
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let navigation = Application.current.rootCoordinator.tabCoordinator.viewController?.viewControllers?.first! as! UINavigationController
+        guard let row = indexPath.row as Int?, row >= 0, row <= viewModel.items.value.count - 1 else { return }
+        let navigation = Application.current.rootCoordinator.tabCoordinator.home!
         let controller = navigation.viewControllers.first! as! HomeViewController
         let coordinator = controller.viewModel.coordinator!
         let section = controller.viewModel.section(at: .resumable)
-        let cellViewModel = viewModel.items.value[indexPath.row]
+        let cellViewModel = viewModel.items.value[row]
         coordinator.section = section
         coordinator.media = cellViewModel.media
         coordinator.shouldScreenRotate = false

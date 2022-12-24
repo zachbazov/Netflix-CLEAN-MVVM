@@ -7,20 +7,20 @@
 
 import UIKit.UITableView
 
-final class DetailTableViewDataSource: NSObject,
-                                       UITableViewDelegate,
-                                       UITableViewDataSource {
-    fileprivate let viewModel: DetailViewModel
-    let tableView: UITableView
-    fileprivate let numberOfRows: Int = 1
-    fileprivate let numberOfSections = Index.allCases.count
-    
-    var infoCell: DetailInfoTableViewCell!
-    var descriptionCell: DetailDescriptionTableViewCell!
-    var panelCell: DetailPanelTableViewCell!
-    var navigationCell: DetailNavigationTableViewCell!
-    var collectionCell: DetailCollectionTableViewCell!
-    
+final class DetailTableViewDataSource: NSObject {
+    private let viewModel: DetailViewModel
+    private let tableView: UITableView
+    private let numberOfRows: Int = 1
+    private let numberOfSections = Index.allCases.count
+    private var infoCell: DetailInfoTableViewCell!
+    private var descriptionCell: DetailDescriptionTableViewCell!
+    private var panelCell: DetailPanelTableViewCell!
+    private var navigationCell: DetailNavigationTableViewCell!
+    private(set) var collectionCell: DetailCollectionTableViewCell!
+    /// Create a detail table view data source object.
+    /// - Parameters:
+    ///   - tableView: Corresponding table view.
+    ///   - viewModel: Coordinating view model.
     init(on tableView: UITableView, with viewModel: DetailViewModel) {
         self.tableView = tableView
         self.viewModel = viewModel
@@ -36,8 +36,10 @@ final class DetailTableViewDataSource: NSObject,
         navigationCell = nil
         collectionCell = nil
     }
-    
-    fileprivate func viewsDidRegister() {
+}
+
+extension DetailTableViewDataSource {
+    private func viewsDidRegister() {
         tableView.register(class: DetailInfoTableViewCell.self)
         tableView.register(class: DetailDescriptionTableViewCell.self)
         tableView.register(class: DetailPanelTableViewCell.self)
@@ -45,12 +47,47 @@ final class DetailTableViewDataSource: NSObject,
         tableView.register(class: DetailCollectionTableViewCell.self)
     }
     
-    fileprivate func dataSourceDidChange() {
+    private func dataSourceDidChange() {
         tableView.delegate = self
         tableView.dataSource = self
         tableView.reloadData()
     }
     
+    func contentSize(with state: DetailNavigationView.State) -> Float {
+        switch state {
+        case .episodes:
+            guard let season = viewModel.season.value as Season? else { return .zero }
+            let cellHeight = Float(156.0)
+            let lineSpacing = Float(8.0)
+            let itemsCount = Float(season.episodes.count)
+            let value = cellHeight * itemsCount + (lineSpacing * itemsCount)
+            return Float(value)
+        case .trailers:
+            guard let trailers = viewModel.media.resources.trailers as [String]? else { return .zero }
+            let cellHeight = Float(224.0)
+            let lineSpacing = Float(8.0)
+            let itemsCount = Float(trailers.count)
+            let value = cellHeight * itemsCount + (lineSpacing * itemsCount)
+            return Float(value)
+        default:
+            let cellHeight = Float(146.0)
+            let lineSpacing = Float(8.0)
+            let itemsPerLine = Float(3.0)
+            let topContentInset = Float(16.0)
+            let itemsCount = viewModel.homeDataSourceState == .series
+                ? Float(viewModel.section.media.count)
+                : Float(viewModel.section.media.count)
+            let roundedItemsOutput = (itemsCount / itemsPerLine).rounded(.awayFromZero)
+            let value =
+                roundedItemsOutput * cellHeight
+                + lineSpacing * roundedItemsOutput
+                + topContentInset
+            return Float(value)
+        }
+    }
+}
+
+extension DetailTableViewDataSource: UITableViewDelegate, UITableViewDataSource {
     func numberOfSections(in tableView: UITableView) -> Int {
         return numberOfSections
     }
@@ -102,41 +139,6 @@ final class DetailTableViewDataSource: NSObject,
             default:
                 return CGFloat(dataSource.contentSize(with: viewModel.navigationViewState.value))
             }
-        }
-    }
-}
-
-extension DetailTableViewDataSource {
-    func contentSize(with state: DetailNavigationView.State) -> Float {
-        switch state {
-        case .episodes:
-            guard let season = viewModel.season.value as Season? else { return .zero }
-            let cellHeight = Float(156.0)
-            let lineSpacing = Float(8.0)
-            let itemsCount = Float(season.episodes.count)
-            let value = cellHeight * itemsCount + (lineSpacing * itemsCount)
-            return Float(value)
-        case .trailers:
-            guard let trailers = viewModel.media.resources.trailers as [String]? else { return .zero }
-            let cellHeight = Float(224.0)
-            let lineSpacing = Float(8.0)
-            let itemsCount = Float(trailers.count)
-            let value = cellHeight * itemsCount + (lineSpacing * itemsCount)
-            return Float(value)
-        default:
-            let cellHeight = Float(146.0)
-            let lineSpacing = Float(8.0)
-            let itemsPerLine = Float(3.0)
-            let topContentInset = Float(16.0)
-            let itemsCount = viewModel.homeDataSourceState == .series
-                ? Float(viewModel.section.media.count)
-                : Float(viewModel.section.media.count)
-            let roundedItemsOutput = (itemsCount / itemsPerLine).rounded(.awayFromZero)
-            let value =
-                roundedItemsOutput * cellHeight
-                + lineSpacing * roundedItemsOutput
-                + topContentInset
-            return Float(value)
         }
     }
 }

@@ -7,27 +7,18 @@
 
 import UIKit
 
-private protocol DataSourceInput {
-    func viewDidLoad()
-    func dataSourceDidChange()
-}
-
-private protocol DataSourceOutput {
-    var collectionView: UICollectionView! { get }
-    var section: Section { get }
-}
-
-private typealias DataSource = DataSourceInput & DataSourceOutput
-
 final class HomeCollectionViewDataSource<Cell>: NSObject,
-                                                DataSource,
                                                 UICollectionViewDelegate,
                                                 UICollectionViewDataSource,
                                                 UICollectionViewDataSourcePrefetching where Cell: UICollectionViewCell {
-    weak var coordinator: HomeViewCoordinator!
-    weak var collectionView: UICollectionView!
-    fileprivate var section: Section
-    
+    private weak var coordinator: HomeViewCoordinator!
+    private weak var collectionView: UICollectionView!
+    private let section: Section
+    /// Create home's collection view data source object.
+    /// - Parameters:
+    ///   - collectionView: Corresponding collection view.
+    ///   - section: Corresponding media's section object.
+    ///   - viewModel: Coordinating view model.
     init(on collectionView: UICollectionView,
          section: Section,
          viewModel: HomeViewModel) {
@@ -42,18 +33,7 @@ final class HomeCollectionViewDataSource<Cell>: NSObject,
         collectionView = nil
         coordinator = nil
     }
-    
-    fileprivate func viewDidLoad() {
-        dataSourceDidChange()
-    }
-    
-    fileprivate func dataSourceDidChange() {
-        collectionView.delegate = self
-        collectionView.dataSource = self
-        collectionView.prefetchDataSource = self
-        collectionView.reloadData()
-    }
-    
+    // MARK: Delegate & DataSource
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return self.section.media.count
     }
@@ -76,4 +56,17 @@ final class HomeCollectionViewDataSource<Cell>: NSObject,
     func collectionView(_ collectionView: UICollectionView, prefetchItemsAt indexPaths: [IndexPath]) {}
     
     func collectionView(_ collectionView: UICollectionView, cancelPrefetchingForItemsAt indexPaths: [IndexPath]) {}
+}
+
+extension HomeCollectionViewDataSource {
+    private func viewDidLoad() {
+        dataSourceDidChange()
+    }
+    
+    private func dataSourceDidChange() {
+        collectionView.delegate = self
+        collectionView.dataSource = self
+        collectionView.prefetchDataSource = self
+        collectionView.reloadData()
+    }
 }

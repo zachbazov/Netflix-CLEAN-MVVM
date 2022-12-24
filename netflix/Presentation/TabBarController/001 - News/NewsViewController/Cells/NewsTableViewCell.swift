@@ -25,7 +25,6 @@ final class NewsTableViewCell: UITableViewCell {
     
     private var viewModel: NewsTableViewCellViewModel!
     private var representedIdentifier: String?
-    var posterImageViewHeight: CGFloat { return previewPosterImageView.bounds.size.height }
     /// Create a news table view cell object.
     /// - Parameters:
     ///   - tableView: Corresponding table view.

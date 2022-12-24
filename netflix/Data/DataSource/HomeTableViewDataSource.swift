@@ -8,25 +8,29 @@
 import UIKit
 
 final class HomeTableViewDataSource: NSObject {
-    weak var tableView: UITableView!
+    private weak var tableView: UITableView!
     private weak var viewModel: HomeViewModel!
-    
-    fileprivate let numberOfRows = 1
-    var displayCell: DisplayTableViewCell!
-    
+    private let numberOfRows = 1
+    private(set) var displayCell: DisplayTableViewCell!
+    /// Create an home's table view data source object.
+    /// - Parameters:
+    ///   - tableView: Corresponding table view.
+    ///   - viewModel: Coordinating view model.
     init(tableView: UITableView, viewModel: HomeViewModel) {
         self.tableView = tableView
         self.viewModel = viewModel
         super.init()
         self.viewDidLoad()
     }
-    
-    fileprivate func viewDidLoad() {
+}
+
+extension HomeTableViewDataSource {
+    private func viewDidLoad() {
         viewsDidRegister()
         dataSourceDidChange()
     }
     
-    fileprivate func viewsDidRegister() {
+    private func viewsDidRegister() {
         tableView.register(headerFooter: TableViewHeaderFooterView.self)
         tableView.register(nib: DisplayTableViewCell.self)
         tableView.register(class: RatedTableViewCell.self)
