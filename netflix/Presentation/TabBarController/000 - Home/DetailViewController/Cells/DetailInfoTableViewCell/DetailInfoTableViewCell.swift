@@ -8,14 +8,28 @@
 import UIKit
 
 final class DetailInfoTableViewCell: UITableViewCell {
-    /// Create a info table view cell object.
-    /// - Parameter viewModel: Coordinating view model.
-    init(with viewModel: DetailViewModel) {
-        super.init(style: .default, reuseIdentifier: DetailInfoTableViewCell.reuseIdentifier)
-        let viewModel = DetailInfoViewViewModel(with: viewModel)
-        let infoView = DetailInfoView(on: self.contentView, with: viewModel)
-        self.contentView.addSubview(infoView)
-        infoView.constraintToSuperview(self.contentView)
+    private var infoView: DetailInfoView!
+    /// Create a detail info table view cell object.
+    /// - Parameters:
+    ///   - tableView: Corresponding table view.
+    ///   - indexPath: The index path of the cel on the data source.
+    ///   - viewModel: Coordinating view model.
+    /// - Returns: A detail info table view cell.
+    static func create(on tableView: UITableView, for indexPath: IndexPath, with viewModel: DetailViewModel) -> DetailInfoTableViewCell {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: DetailInfoTableViewCell.reuseIdentifier, for: indexPath) as? DetailInfoTableViewCell else {
+            fatalError()
+        }
+        if cell.infoView == nil {
+            let viewModel = DetailInfoViewViewModel(with: viewModel)
+            cell.infoView = DetailInfoView(on: cell.contentView, with: viewModel)
+            cell.contentView.addSubview(cell.infoView)
+            cell.infoView.constraintToSuperview(cell.contentView)
+        }
+        return cell
+    }
+    
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
         self.viewDidConfigure()
     }
     

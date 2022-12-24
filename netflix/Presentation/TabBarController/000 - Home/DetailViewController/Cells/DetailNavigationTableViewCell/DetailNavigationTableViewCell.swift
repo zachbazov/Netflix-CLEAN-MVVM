@@ -8,20 +8,29 @@
 import UIKit
 
 final class DetailNavigationTableViewCell: UITableViewCell {
-    var navigationView: DetailNavigationView!
-    /// Create a navigation table view cell object.
-    /// - Parameter viewModel: Coordinating view model.
-    init(with viewModel: DetailViewModel) {
-        super.init(style: .default, reuseIdentifier: DetailNavigationTableViewCell.reuseIdentifier)
-        self.navigationView = DetailNavigationView(on: self.contentView, with: viewModel)
+    private var navigationView: DetailNavigationView!
+    /// Create a detail navigation table view cell object.
+    /// - Parameters:
+    ///   - tableView: Corresponding table view.
+    ///   - indexPath: The index path of the cell on the data source.
+    ///   - viewModel: Coordinating view model.
+    /// - Returns: A detail navigation table view cell.
+    static func create(on tableView: UITableView, for indexPath: IndexPath, with viewModel: DetailViewModel) -> DetailNavigationTableViewCell {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: DetailNavigationTableViewCell.reuseIdentifier, for: indexPath) as? DetailNavigationTableViewCell else {
+            fatalError()
+        }
+        if cell.navigationView == nil {
+            cell.navigationView = DetailNavigationView(on: cell.contentView, with: viewModel)
+        }
+        return cell
+    }
+    
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
         self.viewDidConfigure()
     }
     
     required init?(coder: NSCoder) { fatalError() }
-    
-    deinit {
-        navigationView = nil
-    }
 }
 
 extension DetailNavigationTableViewCell {

@@ -28,14 +28,6 @@ final class DetailTableViewDataSource: NSObject {
         self.viewsDidRegister()
         self.dataSourceDidChange()
     }
-    
-    deinit {
-        infoCell = nil
-        descriptionCell = nil
-        panelCell = nil
-        navigationCell = nil
-        collectionCell = nil
-    }
 }
 
 extension DetailTableViewDataSource {
@@ -100,23 +92,23 @@ extension DetailTableViewDataSource: UITableViewDelegate, UITableViewDataSource 
         guard let index = Index(rawValue: indexPath.section) else { fatalError() }
         if case .info = index {
             guard infoCell == nil else { return infoCell }
-            infoCell = DetailInfoTableViewCell(with: viewModel)
+            infoCell = DetailInfoTableViewCell.create(on: tableView, for: indexPath, with: viewModel)
             return infoCell
         } else if case .description = index {
             guard descriptionCell == nil else { return descriptionCell }
-            descriptionCell = DetailDescriptionTableViewCell(with: viewModel)
+            descriptionCell = DetailDescriptionTableViewCell.create(on: tableView, for: indexPath, with: viewModel)
             return descriptionCell
         } else if case .panel = index {
             guard panelCell == nil else { return panelCell }
-            panelCell = DetailPanelTableViewCell(with: viewModel)
+            panelCell = DetailPanelTableViewCell.create(on: tableView, for: indexPath, with: viewModel)
             return panelCell
         } else if case .navigation = index {
             guard navigationCell == nil else { return navigationCell }
-            navigationCell = DetailNavigationTableViewCell(with: viewModel)
+            navigationCell = DetailNavigationTableViewCell.create(on: tableView, for: indexPath, with: viewModel)
             return navigationCell
         } else {
             guard collectionCell == nil else { return collectionCell }
-            collectionCell = DetailCollectionTableViewCell(with: viewModel)
+            collectionCell = DetailCollectionTableViewCell.create(on: tableView, for: indexPath, with: viewModel)
             return collectionCell
         }
     }

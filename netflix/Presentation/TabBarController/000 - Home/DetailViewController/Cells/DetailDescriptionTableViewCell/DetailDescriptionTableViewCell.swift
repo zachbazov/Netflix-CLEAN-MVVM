@@ -8,14 +8,28 @@
 import UIKit
 
 final class DetailDescriptionTableViewCell: UITableViewCell {
-    /// Create a description table view cell object.
-    /// - Parameter viewModel: Coordinating view model.
-    init(with viewModel: DetailViewModel) {
-        super.init(style: .default, reuseIdentifier: DetailDescriptionTableViewCell.reuseIdentifier)
-        let viewModel = DetailDescriptionViewViewModel(with: viewModel.media)
-        let descriptionView = DetailDescriptionView(on: self.contentView, with: viewModel)
-        self.contentView.addSubview(descriptionView)
-        descriptionView.constraintToSuperview(self.contentView)
+    private var descriptionView: DetailDescriptionView!
+    /// Create a detail description table view cell object.
+    /// - Parameters:
+    ///   - tableView: Corresponding table view.
+    ///   - indexPath: The index path of the cell on the data source.
+    ///   - viewModel: Coordinating view model.
+    /// - Returns: A detail description table view cell.
+    static func create(on tableView: UITableView, for indexPath: IndexPath, with viewModel: DetailViewModel) -> DetailDescriptionTableViewCell {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: DetailDescriptionTableViewCell.reuseIdentifier, for: indexPath) as? DetailDescriptionTableViewCell else {
+            fatalError()
+        }
+        if cell.descriptionView == nil {
+            let viewModel = DetailDescriptionViewViewModel(with: viewModel.media)
+            cell.descriptionView = DetailDescriptionView(on: cell.contentView, with: viewModel)
+            cell.contentView.addSubview(cell.descriptionView)
+            cell.descriptionView.constraintToSuperview(cell.contentView)
+        }
+        return cell
+    }
+    
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
         self.viewDidConfigure()
     }
     

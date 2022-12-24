@@ -18,7 +18,7 @@ private protocol FetcherInput {
 private protocol FetcherOutput {
     static var shared: AsyncImageFetcher { get }
     var cache: NSCache<NSString, UIImage> { get }
-    var queue: OS_dispatch_queue_serial { get }
+    var queue: OS_dispatch_queue_concurrent { get }
 }
 
 private typealias Fetcher = FetcherInput & FetcherOutput
@@ -29,7 +29,7 @@ final class AsyncImageFetcher: Fetcher {
     fileprivate(set) var cache = NSCache<NSString, UIImage>()
     fileprivate(set) var searchCache = NSCache<NSString, UIImage>()
     fileprivate(set) var newsCache = NSCache<NSString, UIImage>()
-    fileprivate let queue = OS_dispatch_queue_serial(label: "com.netflix.utils.async-image-fetcher")
+    fileprivate let queue = OS_dispatch_queue_concurrent(label: "com.netflix.utils.async-image-fetcher")
     
     private init() {}
     
@@ -93,10 +93,10 @@ class ImageURLProtocol: URLProtocol {
     var block: DispatchWorkItem!
     
     private static let queue = DispatchQueue(label: "com.apple.imageLoaderURLProtocol",
-                                             qos: .background,
+                                             qos: .userInitiated,
                                              attributes: .concurrent,
                                              autoreleaseFrequency: .workItem,
-                                             target: .global(qos: .background))
+                                             target: .global(qos: .userInitiated))
     
     override class func canInit(with request: URLRequest) -> Bool {
         return true

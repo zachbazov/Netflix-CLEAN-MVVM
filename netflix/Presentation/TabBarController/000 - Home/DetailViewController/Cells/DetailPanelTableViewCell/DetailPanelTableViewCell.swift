@@ -8,18 +8,27 @@
 import UIKit
 
 final class DetailPanelTableViewCell: UITableViewCell {
-    var panelView: DetailPanelView!
-    /// Create a panel table view cell object.
-    /// - Parameter viewModel: Coordinating view model.
-    init(with viewModel: DetailViewModel) {
-        super.init(style: .default, reuseIdentifier: DetailPanelTableViewCell.reuseIdentifier)
-        self.panelView = DetailPanelView(on: self.contentView, with: viewModel)
-        self.contentView.addSubview(self.panelView)
-        self.viewDidConfigure()
+    private(set) var panelView: DetailPanelView!
+    /// Create a detail panel table view cell object.
+    /// - Parameters:
+    ///   - tableView: Corresponding table view.
+    ///   - indexPath: The index path of the cell on the data source.
+    ///   - viewModel: Coordinating view model.
+    /// - Returns: A detail panel table view cell.
+    static func create(on tableView: UITableView, for indexPath: IndexPath, with viewModel: DetailViewModel) -> DetailPanelTableViewCell {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: DetailPanelTableViewCell.reuseIdentifier, for: indexPath) as? DetailPanelTableViewCell else {
+            fatalError()
+        }
+        if cell.panelView == nil {
+            cell.panelView = DetailPanelView(on: cell.contentView, with: viewModel)
+            cell.contentView.addSubview(cell.panelView)
+        }
+        return cell
     }
     
-    deinit {
-        panelView = nil
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+        self.viewDidConfigure()
     }
     
     required init?(coder: NSCoder) { fatalError() }
