@@ -56,8 +56,8 @@ class CollectionViewCell: UICollectionViewCell {
     public func viewDidConfigure(with viewModel: CollectionViewCellViewModel) {
         guard representedIdentifier == viewModel.slug as NSString? else { return }
         
-        let posterImage = AsyncImageFetcher.shared.object(in: .home, for: viewModel.posterImageIdentifier)
-        let logoImage = AsyncImageFetcher.shared.object(in: .home, for: viewModel.logoImageIdentifier)
+        let posterImage = AsyncImageService.shared.object(for: viewModel.posterImageIdentifier)
+        let logoImage = AsyncImageService.shared.object(for: viewModel.logoImageIdentifier)
         coverImageView.image = posterImage
         logoImageView.image = logoImage
 
@@ -74,14 +74,12 @@ extension CollectionViewCell {
     ///   - completion: Completion handler.
     private func dataDidDownload(with viewModel: CollectionViewCellViewModel,
                                  completion: (() -> Void)?) {
-        AsyncImageFetcher.shared.load(
-            in: .home,
+        AsyncImageService.shared.load(
             url: viewModel.posterImageURL,
             identifier: viewModel.posterImageIdentifier) { _ in
                 asynchrony { completion?() }
             }
-        AsyncImageFetcher.shared.load(
-            in: .home,
+        AsyncImageService.shared.load(
             url: viewModel.logoImageURL,
             identifier: viewModel.logoImageIdentifier) { _ in
                 asynchrony { completion?() }

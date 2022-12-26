@@ -89,7 +89,7 @@ extension HomeTableViewDataSource: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        return TableViewHeaderFooterView(for: section, with: viewModel)
+        return TableViewHeaderFooterView.create(on: tableView, for: section, with: viewModel)
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {

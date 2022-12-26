@@ -24,15 +24,13 @@ struct DisplayViewConfiguration {
         view?.logoImageView.image = nil
         view?.genresLabel.attributedText = nil
         
-        AsyncImageFetcher.shared.load(
-            in: .home,
+        AsyncImageService.shared.load(
             url: viewModel.posterImageURL,
             identifier: viewModel.posterImageIdentifier) { image in
                 asynchrony { view?.posterImageView.image = image }
             }
         
-        AsyncImageFetcher.shared.load(
-            in: .home,
+        AsyncImageService.shared.load(
             url: viewModel.logoImageURL,
             identifier: viewModel.logoImageIdentifier) { image in
                 asynchrony { view?.logoImageView.image = image }

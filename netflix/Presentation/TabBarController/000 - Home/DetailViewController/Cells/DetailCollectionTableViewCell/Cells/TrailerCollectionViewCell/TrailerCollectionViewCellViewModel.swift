@@ -17,7 +17,7 @@ struct TrailerCollectionViewCellViewModel {
     init(with media: Media) {
         self.title = media.title
         self.posterImagePath = media.resources.previewPoster
-        self.posterImageIdentifier = .init(string: "detailPoster_\(media.slug)")
+        self.posterImageIdentifier = .init(string: "detail-poster_\(media.slug)")
         self.posterImageURL = .init(string: self.posterImagePath)
     }
 }

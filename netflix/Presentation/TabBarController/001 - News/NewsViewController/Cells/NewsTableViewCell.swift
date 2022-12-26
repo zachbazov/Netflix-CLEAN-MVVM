@@ -58,15 +58,13 @@ extension NewsTableViewCell {
     private func viewDidConfigure(with viewModel: NewsTableViewCellViewModel) {
         guard representedIdentifier == viewModel.media.slug else { return }
         
-        AsyncImageFetcher.shared.load(
-            in: .news,
+        AsyncImageService.shared.load(
             url: viewModel.previewPosterImageURL,
             identifier: viewModel.previewPosterImageIdentifier) { [weak self] image in
                 asynchrony { self?.previewPosterImageView.image = image }
             }
         
-        AsyncImageFetcher.shared.load(
-            in: .news,
+        AsyncImageService.shared.load(
             url: viewModel.displayLogoImageURL,
             identifier: viewModel.displayLogoImageIdentifier) { [weak self] image in
                 asynchrony { self?.logoImageView.image = image }

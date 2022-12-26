@@ -43,9 +43,8 @@ extension EpisodeCollectionViewCell {
     }
     
     private func dataDidDownload(with viewModel: EpisodeCollectionViewCellViewModel,
-                                     completion: (() -> Void)?) {
-        AsyncImageFetcher.shared.load(
-            in: .home,
+                                 completion: (() -> Void)?) {
+        AsyncImageService.shared.load(
             url: viewModel.posterImageURL,
             identifier: viewModel.posterImageIdentifier) { _ in
                 asynchrony { completion?() }
@@ -53,7 +52,7 @@ extension EpisodeCollectionViewCell {
     }
     
     private func viewDidLoad(at indexPath: IndexPath,
-                                 with viewModel: EpisodeCollectionViewCellViewModel) {
+                             with viewModel: EpisodeCollectionViewCellViewModel) {
         dataDidDownload(with: viewModel) { [weak self] in
             self?.viewDidConfigure(at: indexPath, with: viewModel)
         }
@@ -65,7 +64,7 @@ extension EpisodeCollectionViewCell {
                                       with viewModel: EpisodeCollectionViewCellViewModel) {
         guard let season = viewModel.season else { return }
         let episode = season.episodes[indexPath.row]
-        let image = AsyncImageFetcher.shared.object(in: .home, for: viewModel.posterImageIdentifier)
+        let image = AsyncImageService.shared.object(for: viewModel.posterImageIdentifier)
         imageView.image = image
         titleLabel.text = episode.title
         timestampLabel.text = viewModel.media.length

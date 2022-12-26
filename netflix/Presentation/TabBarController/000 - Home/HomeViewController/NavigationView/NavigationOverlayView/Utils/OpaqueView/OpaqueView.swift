@@ -28,8 +28,7 @@ extension OpaqueView {
         insertSubview(imageView, at: 0)
         insertSubview(blurView, at: 1)
         /// Download media resource.
-        AsyncImageFetcher.shared.load(
-            in: .home,
+        AsyncImageService.shared.load(
             url: viewModel.imageURL,
             identifier: viewModel.identifier) { [weak self] image in
                 asynchrony { self?.imageView.image = image }

@@ -64,7 +64,7 @@ extension RootCoordinator: RootCoordinable {
     /// instead of `reloadData()` used in collection types.
     func reallocateTabController() {
         /// Deallocate `homeCache` data from memory.
-        AsyncImageFetcher.shared.cache.removeAllObjects()
+        AsyncImageService.shared.cache.removeAllObjects()
         /// In-case there are valid children for root's coordinator, else eject.
         guard let homeNavigation = tabCoordinator.viewController?.viewControllers?.first! as! UINavigationController?,
               let homeViewController = homeNavigation.viewControllers.first! as! HomeViewController? else {

@@ -11,7 +11,7 @@ typealias RatedTableViewCell = TableViewCell<RatedCollectionViewCell>
 typealias ResumableTableViewCell = TableViewCell<ResumableCollectionViewCell>
 typealias StandardTableViewCell = TableViewCell<StandardCollectionViewCell>
 
-final class TableViewCell<T>: UITableViewCell where T: UICollectionViewCell {
+class TableViewCell<T>: UITableViewCell where T: UICollectionViewCell {
     private lazy var collectionView = createCollectionView()
     private var dataSource: HomeCollectionViewDataSource<T>!
     private var layout: CollectionViewLayout!

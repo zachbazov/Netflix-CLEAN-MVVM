@@ -125,7 +125,7 @@ extension SearchViewController {
         
         viewModel.items.value = []
         
-        AsyncImageFetcher.shared.searchCache.removeAllObjects()
+        AsyncImageService.shared.cache.removeAllObjects()
     }
 }
 

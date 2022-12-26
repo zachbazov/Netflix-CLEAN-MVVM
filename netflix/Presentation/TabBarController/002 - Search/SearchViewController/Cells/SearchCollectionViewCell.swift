@@ -50,15 +50,13 @@ class SearchCollectionViewCell: UICollectionViewCell {
     private func viewDidConfigure(with viewModel: SearchCollectionViewCellViewModel) {
         guard representedIdentifier == viewModel.slug as NSString? else { return }
         
-        AsyncImageFetcher.shared.load(
-            in: .search,
+        AsyncImageService.shared.load(
             url: viewModel.posterImageURL,
             identifier: viewModel.posterImageIdentifier) { [weak self] image in
                 asynchrony { self?.posterImageView.image = image }
             }
         
-        AsyncImageFetcher.shared.load(
-            in: .search,
+        AsyncImageService.shared.load(
             url: viewModel.logoImageURL,
             identifier: viewModel.logoImageIdentifier) { [weak self] image in
                 asynchrony { self?.logoImageView.image = image }

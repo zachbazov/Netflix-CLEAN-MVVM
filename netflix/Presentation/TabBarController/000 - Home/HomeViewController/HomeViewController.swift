@@ -90,10 +90,11 @@ extension HomeViewController {
         /// Remove and deallocate home view model and it's dependencies.
         viewModel.myList.removeObservers()
         viewModel.myList = nil
-        viewModel.coordinator = nil
-        viewModel = nil
         /// Remove controller observers.
         removeObservers()
+        /// Deallocate home's view model.
+        viewModel.coordinator = nil
+        viewModel = nil
         /// Remove from tab bar controller.
         removeFromParent()
     }

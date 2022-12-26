@@ -40,7 +40,7 @@ protocol DataTransferErrorLoggerInput {
     func log(error: Error)
 }
 
-struct DataTransferService {
+final class DataTransferService {
     private let networkService: NetworkService
     private let errorResolver: DataTransferErrorResolver
     private let errorLogger: DataTransferErrorLogger
@@ -58,7 +58,8 @@ extension DataTransferService: DataTransferServiceInput {
     func request<T, E>(with endpoint: E,
                        completion: @escaping CompletionHandler<T>) -> NetworkCancellable?
     where T: Decodable, T == E.Response, E: ResponseRequestable {
-        return self.networkService.request(endpoint: endpoint) { result in
+        return self.networkService.request(endpoint: endpoint) { [weak self] result in
+            guard let self = self else { return }
             switch result {
             case .success(let data):
                 let result: Result<T, DataTransferError> = self.decode(data: data,

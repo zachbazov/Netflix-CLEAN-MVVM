@@ -10,14 +10,23 @@ import UIKit
 final class TableViewHeaderFooterView: UITableViewHeaderFooterView {
     private var viewModel: TableViewHeaderFooterViewViewModel!
     private lazy var titleLabel = createLabel()
-    /// Create a table view header view.
+    /// Create a table view header view object.
     /// - Parameters:
+    ///   - tableView: Corresponding table view.
     ///   - section: The represented section for the header.
     ///   - viewModel: Coordinating view model.
-    init(for section: Int, with viewModel: HomeViewModel) {
-        super.init(reuseIdentifier: String(describing: TableViewHeaderFooterView.reuseIdentifier))
-        self.viewModel = .init()
-        self.viewDidConfigure(at: section, with: viewModel)
+    /// - Returns: A table view header footer view.
+    static func create(on tableView: UITableView, for section: Int, with viewModel: HomeViewModel) -> TableViewHeaderFooterView {
+        guard let cell = tableView.dequeueReusableHeaderFooterView(withIdentifier: reuseIdentifier) as? TableViewHeaderFooterView else {
+            fatalError()
+        }
+        cell.viewModel = TableViewHeaderFooterViewViewModel()
+        cell.viewDidConfigure(at: section, with: viewModel)
+        return cell
+    }
+    
+    override init(reuseIdentifier: String?) {
+        super.init(reuseIdentifier: reuseIdentifier)
     }
     
     required init?(coder: NSCoder) { fatalError() }

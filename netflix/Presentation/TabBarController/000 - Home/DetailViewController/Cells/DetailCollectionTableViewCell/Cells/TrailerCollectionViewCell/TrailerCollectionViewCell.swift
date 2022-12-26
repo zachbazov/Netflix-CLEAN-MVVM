@@ -39,9 +39,8 @@ extension TrailerCollectionViewCell {
     }
     
     private func dataDidDownload(with viewModel: TrailerCollectionViewCellViewModel,
-                         completion: (() -> Void)?) {
-        AsyncImageFetcher.shared.load(
-            in: .home,
+                                 completion: (() -> Void)?) {
+        AsyncImageService.shared.load(
             url: viewModel.posterImageURL,
             identifier: viewModel.posterImageIdentifier) { _ in completion?() }
     }
@@ -55,7 +54,7 @@ extension TrailerCollectionViewCell {
     }
     
     private func viewDidConfigure(with viewModel: TrailerCollectionViewCellViewModel) {
-        let image = AsyncImageFetcher.shared.object(in: .home, for: viewModel.posterImageIdentifier)
+        let image = AsyncImageService.shared.object(for: viewModel.posterImageIdentifier)
         posterImageView.image = image
         titleLabel.text = viewModel.title
     }

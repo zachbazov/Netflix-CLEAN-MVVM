@@ -61,8 +61,7 @@ extension PreviewView {
     }
     
     private func viewDidConfigure() {
-        AsyncImageFetcher.shared.load(
-            in: .home,
+        AsyncImageService.shared.load(
             url: viewModel.url,
             identifier: viewModel.identifier) { [weak self] image in
                 asynchrony { self?.imageView.image = image }

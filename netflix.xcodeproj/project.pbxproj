@@ -91,7 +91,7 @@
 		A18691F428C959810087DE3B /* SectionResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = A18691F328C959810087DE3B /* SectionResponse.swift */; };
 		A186921628CA2D100087DE3B /* TableViewCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A186921528CA2D100087DE3B /* TableViewCellViewModel.swift */; };
 		A186921C28CA2ED20087DE3B /* CollectionViewCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A186921B28CA2ED20087DE3B /* CollectionViewCellViewModel.swift */; };
-		A186923D28CAD45A0087DE3B /* AsyncImageFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = A186923C28CAD45A0087DE3B /* AsyncImageFetcher.swift */; };
+		A186923D28CAD45A0087DE3B /* AsyncImageService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A186923C28CAD45A0087DE3B /* AsyncImageService.swift */; };
 		A18B98FC28BEB62C0077A5A6 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A18B98FB28BEB62C0077A5A6 /* AppDelegate.swift */; };
 		A18B98FE28BEB62C0077A5A6 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A18B98FD28BEB62C0077A5A6 /* SceneDelegate.swift */; };
 		A18B990528BEB62E0077A5A6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A18B990428BEB62E0077A5A6 /* Assets.xcassets */; };
@@ -346,7 +346,7 @@
 		A18691F328C959810087DE3B /* SectionResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SectionResponse.swift; sourceTree = "<group>"; };
 		A186921528CA2D100087DE3B /* TableViewCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableViewCellViewModel.swift; sourceTree = "<group>"; };
 		A186921B28CA2ED20087DE3B /* CollectionViewCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionViewCellViewModel.swift; sourceTree = "<group>"; };
-		A186923C28CAD45A0087DE3B /* AsyncImageFetcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsyncImageFetcher.swift; sourceTree = "<group>"; };
+		A186923C28CAD45A0087DE3B /* AsyncImageService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsyncImageService.swift; sourceTree = "<group>"; };
 		A18B98F828BEB62C0077A5A6 /* netflix.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = netflix.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A18B98FB28BEB62C0077A5A6 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		A18B98FD28BEB62C0077A5A6 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -985,7 +985,6 @@
 		A18B993228BFC6FC0077A5A6 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
-				A186923C28CAD45A0087DE3B /* AsyncImageFetcher.swift */,
 				A1E81D0E28CFE21300D044EA /* CollectionViewLayout.swift */,
 				A1AE02D0293BA29A00AF0BD6 /* DeviceOrientation.swift */,
 				A18B997D28C03BB10077A5A6 /* Observable.swift */,
@@ -1116,6 +1115,7 @@
 				A18B997728C020FC0077A5A6 /* NetworkService.swift */,
 				A1C7E7A8292A784A004690B9 /* AuthService.swift */,
 				A18B997B28C029A30077A5A6 /* DataTransferService.swift */,
+				A186923C28CAD45A0087DE3B /* AsyncImageService.swift */,
 				A18B997928C0244D0077A5A6 /* Endpoint.swift */,
 			);
 			path = Network;
@@ -1836,7 +1836,7 @@
 				A130BCE4295135820070EA5E /* NewsTableViewDataSource.swift in Sources */,
 				A1741D2828E67CF800F3C46B /* DetailNavigationView.swift in Sources */,
 				A130BCD729511E820070EA5E /* NewsViewCoordinator.swift in Sources */,
-				A186923D28CAD45A0087DE3B /* AsyncImageFetcher.swift in Sources */,
+				A186923D28CAD45A0087DE3B /* AsyncImageService.swift in Sources */,
 				A1AA28E428F64F000011EE9D /* EpisodeCollectionViewCellViewModel.swift in Sources */,
 				A1C7E7AB292BC5C1004690B9 /* DisplayTableViewCellViewModel.swift in Sources */,
 				A1B3F98A28C54F510042DE9F /* AuthRepository.swift in Sources */,
