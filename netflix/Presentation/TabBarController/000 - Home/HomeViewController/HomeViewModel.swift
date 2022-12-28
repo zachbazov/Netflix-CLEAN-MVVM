@@ -13,7 +13,7 @@ final class HomeViewModel {
     let orientation = DeviceOrientation.shared
     
     let dataSourceState: Observable<HomeTableViewDataSource.State> = Observable(.all)
-    /// The media object for the `DisplayView` to present.
+    // The media object for the `DisplayView` to present.
     let displayMedia: Observable<Media?> = Observable(.none)
     
     private(set) var sections: [Section] = []
@@ -55,7 +55,6 @@ extension HomeViewModel {
         let navigationViewModel = coordinator?.viewController?.navigationView.viewModel
         navigationViewModel?.navigationViewDidAppear()
         
-//        let tabBarViewModel = Application.current.rootCoordinator.tabCoordinator.viewController?.viewModel
         dataSourceState.value = .all
         
         myList = MyList(with: self)

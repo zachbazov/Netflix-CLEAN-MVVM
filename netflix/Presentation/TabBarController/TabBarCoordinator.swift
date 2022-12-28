@@ -125,9 +125,7 @@ extension TabBarCoordinator: TabBarCoordinable {
         /// Allocate root's referencens.
         controller.viewModel = viewModel
         controller.viewModel.coordinator = coordinator
-        controller.viewModel.coordinator?.viewController = controller
         coordinator.viewController = controller
-        coordinator.viewController?.viewModel = viewModel
         /// Embed the view controller in a navigation controller.
         let navigation = UINavigationController(rootViewController: controller)
         /// Update the tag representor property.

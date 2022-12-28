@@ -41,15 +41,6 @@ class CollectionViewCell: UICollectionViewCell {
         representedIdentifier = nil
         viewModel = nil
     }
-    
-    override func prepareForReuse() {
-        super.prepareForReuse()
-        viewModel = nil
-        coverImageView.image = nil
-        logoImageView.image = nil
-        placeholderLabel.text = nil
-        representedIdentifier = nil
-    }
     /// Overridable configuration operation.
     /// Configure the view based on the view model.
     /// - Parameter viewModel: Coordinating view model.
