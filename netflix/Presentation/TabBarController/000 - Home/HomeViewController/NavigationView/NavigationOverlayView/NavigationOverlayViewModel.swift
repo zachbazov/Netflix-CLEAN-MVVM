@@ -135,7 +135,6 @@ extension NavigationOverlayViewModel {
                 isPresented.value = true
                 
                 if !hasTvExpanded && browseOverlayView.viewModel.isPresented {
-//                    browseOverlayView.dataSource?.updateItems()
                     return
                 } else if hasTvExpanded && browseOverlayView.viewModel.isPresented {
                     self.state = .mainMenu

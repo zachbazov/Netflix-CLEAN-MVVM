@@ -22,13 +22,6 @@ final class BrowseOverlayCollectionViewDataSource: NSObject {
     }
 }
 
-extension BrowseOverlayCollectionViewDataSource {
-    func updateItems() {
-        let browseOverlayView = coordinator.viewController!.browseOverlayView!
-        browseOverlayView.collectionView.reloadData()
-    }
-}
-
 extension BrowseOverlayCollectionViewDataSource: UICollectionViewDelegate, UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return items.count
