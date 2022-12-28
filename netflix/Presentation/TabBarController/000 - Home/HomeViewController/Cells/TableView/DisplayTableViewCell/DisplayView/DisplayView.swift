@@ -7,39 +7,6 @@
 
 import UIKit
 
-struct DisplayViewConfiguration {
-    private weak var view: DisplayView?
-    /// Create a configuration object for the display view.
-    /// - Parameters:
-    ///   - view: The view itself.
-    ///   - viewModel: Coordinating view model.
-    init(view: DisplayView, viewModel: DisplayViewViewModel) {
-        self.view = view
-        self.viewDidConfigure(with: viewModel)
-    }
-    /// Configure the view.
-    /// - Parameter viewModel: Coordinating view model.
-    func viewDidConfigure(with viewModel: DisplayViewViewModel) {
-        view?.posterImageView.image = nil
-        view?.logoImageView.image = nil
-        view?.genresLabel.attributedText = nil
-        
-        AsyncImageService.shared.load(
-            url: viewModel.posterImageURL,
-            identifier: viewModel.posterImageIdentifier) { image in
-                asynchrony { view?.posterImageView.image = image }
-            }
-        
-        AsyncImageService.shared.load(
-            url: viewModel.logoImageURL,
-            identifier: viewModel.logoImageIdentifier) { image in
-                asynchrony { view?.logoImageView.image = image }
-            }
-        
-        view?.genresLabel.attributedText = viewModel.attributedGenres
-    }
-}
-
 final class DisplayView: UIView, ViewInstantiable {
     @IBOutlet private(set) weak var posterImageView: UIImageView!
     @IBOutlet private(set) weak var logoImageView: UIImageView!
@@ -48,8 +15,7 @@ final class DisplayView: UIView, ViewInstantiable {
     @IBOutlet private weak var typeImageView: UIImageView!
     @IBOutlet private(set) weak var panelViewContainer: UIView!
     
-    var viewModel: DisplayViewViewModel!
-    private(set) var configuration: DisplayViewConfiguration!
+    private var viewModel: DisplayViewViewModel!
     private(set) var panelView: PanelView!
     /// Create a display view object.
     /// - Parameter viewModel: Coordinating view model.
@@ -60,12 +26,13 @@ final class DisplayView: UIView, ViewInstantiable {
         let mediaFromCache = mediaFromCache(with: homeViewModel)
         self.viewModel = DisplayViewViewModel(with: mediaFromCache)
         self.panelView = PanelView(on: panelViewContainer, with: viewModel)
-        self.configuration = DisplayViewConfiguration(view: self, viewModel: self.viewModel)
         self.viewDidLoad()
     }
     
-    required init?(coder: NSCoder) { super.init(coder: coder) }
-    
+    required init?(coder: NSCoder) { fatalError() }
+}
+
+extension DisplayView {
     private func viewDidLoad() {
         setupSubviews()
     }
@@ -85,6 +52,27 @@ final class DisplayView: UIView, ViewInstantiable {
 }
 
 extension DisplayView {
+    /// Configure the view.
+    /// - Parameter viewModel: Coordinating view model.
+    private func viewDidConfigure(with viewModel: DisplayViewViewModel) {
+        posterImageView.image = nil
+        logoImageView.image = nil
+        genresLabel.attributedText = nil
+        
+        AsyncImageService.shared.load(
+            url: viewModel.posterImageURL,
+            identifier: viewModel.posterImageIdentifier) { [weak self] image in
+                asynchrony { self?.posterImageView.image = image }
+            }
+        
+        AsyncImageService.shared.load(
+            url: viewModel.logoImageURL,
+            identifier: viewModel.logoImageIdentifier) { [weak self] image in
+                asynchrony { self?.logoImageView.image = image }
+            }
+        
+        genresLabel.attributedText = viewModel.attributedGenres
+    }
     /// Retrieve a media object from the display cache.
     /// - Parameter viewModel: Coordinating view model.
     /// - Returns: A media object.

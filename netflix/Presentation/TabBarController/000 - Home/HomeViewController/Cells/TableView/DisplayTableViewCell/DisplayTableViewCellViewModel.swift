@@ -57,13 +57,4 @@ extension DisplayTableViewCellViewModel {
             presentedMedia.value = homeViewModel.displayMediaCache[.films]
         }
     }
-    
-    func presentMediaDidChange() {
-        let homeViewModel = coordinator!.viewController!.viewModel!
-        let displayCell = coordinator!.viewController!.dataSource.displayCell!
-        let media = displayCell.displayView.mediaFromCache(with: homeViewModel)
-        let displayViewModel = DisplayViewViewModel(with: media)
-        displayCell.displayView.viewModel = displayViewModel
-        displayCell.displayView.configuration.viewDidConfigure(with: displayViewModel)
-    }
 }
