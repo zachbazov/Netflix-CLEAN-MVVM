@@ -19,7 +19,7 @@ struct DisplayViewConfiguration {
     }
     /// Configure the view.
     /// - Parameter viewModel: Coordinating view model.
-    private func viewDidConfigure(with viewModel: DisplayViewViewModel) {
+    func viewDidConfigure(with viewModel: DisplayViewViewModel) {
         view?.posterImageView.image = nil
         view?.logoImageView.image = nil
         view?.genresLabel.attributedText = nil
@@ -48,8 +48,8 @@ final class DisplayView: UIView, ViewInstantiable {
     @IBOutlet private weak var typeImageView: UIImageView!
     @IBOutlet private(set) weak var panelViewContainer: UIView!
     
-    private var viewModel: DisplayViewViewModel!
-    private var configuration: DisplayViewConfiguration!
+    var viewModel: DisplayViewViewModel!
+    private(set) var configuration: DisplayViewConfiguration!
     private(set) var panelView: PanelView!
     /// Create a display view object.
     /// - Parameter viewModel: Coordinating view model.
@@ -64,7 +64,7 @@ final class DisplayView: UIView, ViewInstantiable {
         self.viewDidLoad()
     }
     
-    required init?(coder: NSCoder) { fatalError() }
+    required init?(coder: NSCoder) { super.init(coder: coder) }
     
     private func viewDidLoad() {
         setupSubviews()
@@ -88,7 +88,7 @@ extension DisplayView {
     /// Retrieve a media object from the display cache.
     /// - Parameter viewModel: Coordinating view model.
     /// - Returns: A media object.
-    private func mediaFromCache(with viewModel: HomeViewModel) -> Media {
+    func mediaFromCache(with viewModel: HomeViewModel) -> Media {
         if case .all = viewModel.dataSourceState.value { return viewModel.displayMediaCache[.all]! }
         else if case .series = viewModel.dataSourceState.value { return viewModel.displayMediaCache[.series]! }
         else { return viewModel.displayMediaCache[.films]! }

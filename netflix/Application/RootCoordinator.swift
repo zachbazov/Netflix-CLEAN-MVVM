@@ -72,7 +72,7 @@ extension RootCoordinator: RootCoordinable {
         }
         /// Initiate `terminate()` operations to deallocate any objects referenced
         /// from `HomeViewController` group.
-        homeViewController.dataSource.displayCell.terminate()
+//        homeViewController.dataSource.displayCell.terminate()
         homeViewController.dataSource.terminate()
         homeViewController.terminate()
         /// Deallocate root references for the old instance.

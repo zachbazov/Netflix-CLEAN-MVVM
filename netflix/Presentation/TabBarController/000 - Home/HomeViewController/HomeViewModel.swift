@@ -55,8 +55,8 @@ extension HomeViewModel {
         let navigationViewModel = coordinator?.viewController?.navigationView.viewModel
         navigationViewModel?.navigationViewDidAppear()
         
-        let tabBarViewModel = Application.current.rootCoordinator.tabCoordinator.viewController?.viewModel
-        dataSourceState.value = tabBarViewModel!.latestHomeDataSourceState
+//        let tabBarViewModel = Application.current.rootCoordinator.tabCoordinator.viewController?.viewModel
+        dataSourceState.value = .all
         
         myList = MyList(with: self)
     }

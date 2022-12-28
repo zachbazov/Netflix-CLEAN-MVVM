@@ -87,19 +87,19 @@ extension NavigationView {
     }
     /// Reconfigure the view once reallocation occurs by changing home's data source state.
     private func viewDidReconfigure() {
-        let tabBarViewModel = Application.current.rootCoordinator.tabCoordinator.viewController?.viewModel
-        if tabBarViewModel?.latestHomeDataSourceState == .all {
-            self.homeItemView.viewModel.isSelected = true
-            self.viewModel.state.value = .home
-        } else if tabBarViewModel?.latestHomeDataSourceState == .series {
-            tabBarViewModel?.latestHomeNavigationState = .tvShows
-            self.tvShowsItemView.viewModel.isSelected = true
-            self.viewModel.state.value = .tvShows
-        } else if tabBarViewModel?.latestHomeDataSourceState == .films {
-            tabBarViewModel?.latestHomeNavigationState = .movies
-            self.moviesItemView.viewModel.isSelected = true
-            self.viewModel.state.value = .movies
-        }
+//        let tabBarViewModel = Application.current.rootCoordinator.tabCoordinator.viewController?.viewModel
+//        if tabBarViewModel?.latestHomeDataSourceState == .all {
+//            self.homeItemView.viewModel.isSelected = true
+//            self.viewModel.state.value = .home
+//        } else if tabBarViewModel?.latestHomeDataSourceState == .series {
+//            tabBarViewModel?.latestHomeNavigationState = .tvShows
+//            self.tvShowsItemView.viewModel.isSelected = true
+//            self.viewModel.state.value = .tvShows
+//        } else if tabBarViewModel?.latestHomeDataSourceState == .films {
+//            tabBarViewModel?.latestHomeNavigationState = .movies
+//            self.moviesItemView.viewModel.isSelected = true
+//            self.viewModel.state.value = .movies
+//        }
     }
 }
 
@@ -126,6 +126,7 @@ extension NavigationView {
         case tvShows
         case movies
         case categories
+        case allCategories
     }
 }
 
@@ -138,6 +139,7 @@ extension NavigationView.State: Valuable {
         case .categories: return Localization.TabBar.Home.Navigation().categories
         case .airPlay: return Localization.TabBar.Home.Navigation().airPlay
         case .account: return Localization.TabBar.Home.Navigation().account
+        default: return "All Categoriess"
         }
     }
 }

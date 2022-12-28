@@ -12,11 +12,15 @@ final class HomeTableViewDataSource: NSObject {
     private weak var viewModel: HomeViewModel!
     private let numberOfRows = 1
     private(set) var displayCell: DisplayTableViewCell!
+    var ratedCell: RatedTableViewCell!
+    var resumableCell: ResumableTableViewCell!
+    var standardCell: StandardTableViewCell!
     /// Create an home's table view data source object.
     /// - Parameters:
     ///   - tableView: Corresponding table view.
     ///   - viewModel: Coordinating view model.
     init(tableView: UITableView, viewModel: HomeViewModel) {
+        print("ds init")
         self.tableView = tableView
         self.viewModel = viewModel
         super.init()
@@ -66,17 +70,19 @@ extension HomeTableViewDataSource: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let index = Index(rawValue: indexPath.section) else { fatalError() }
-        
         if case .display = index {
-            guard displayCell == nil else { return displayCell }
+            guard displayCell == nil else {
+                displayCell.viewModel.presentMediaDidChange()
+                return displayCell
+            }
             displayCell = DisplayTableViewCell(for: indexPath, with: viewModel)
             return displayCell
         } else if case .rated = index {
-            return RatedTableViewCell(for: indexPath, with: viewModel)
+            return RatedTableViewCell.create(on: tableView, for: indexPath, with: viewModel)
         } else if case .resumable = index {
-            return ResumableTableViewCell(for: indexPath, with: viewModel)
+            return ResumableTableViewCell.create(on: tableView, for: indexPath, with: viewModel)
         } else {
-            return StandardTableViewCell(for: indexPath, with: viewModel)
+            return StandardTableViewCell.create(on: tableView, for: indexPath, with: viewModel)
         }
     }
     

@@ -60,6 +60,7 @@ extension NavigationViewViewModel {
             navigationView.itemsCenterXConstraint.constant = -32.0
         case .categories:
             break
+        default: break
         }
         
         navigationView.animateUsingSpring(withDuration: 0.33,

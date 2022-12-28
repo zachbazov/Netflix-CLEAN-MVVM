@@ -19,16 +19,23 @@ class TableViewCell<T>: UITableViewCell where T: UICollectionViewCell {
     /// - Parameters:
     ///   - indexPath: The index path from the table view data source.
     ///   - viewModel: Coordinating view model.
-    init(for indexPath: IndexPath, with viewModel: HomeViewModel) {
-        super.init(style: .default, reuseIdentifier: TableViewCell<T>.reuseIdentifier)
+    static func create(on tableView: UITableView, for indexPath: IndexPath, with viewModel: HomeViewModel) -> TableViewCell<T> {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: TableViewCell<T>.reuseIdentifier, for: indexPath) as? TableViewCell<T> else {
+            fatalError()
+        }
         let index = HomeTableViewDataSource.Index(rawValue: indexPath.section)!
         let section = viewModel.section(at: index)
-        self.dataSource = HomeCollectionViewDataSource(
-            on: collectionView,
+        cell.dataSource = HomeCollectionViewDataSource(
+            on: cell.collectionView,
             section: section,
             viewModel: viewModel)
-        self.viewDidLoad()
-        self.collectionViewDidLayout(for: section, with: viewModel)
+        cell.viewDidLoad()
+        cell.collectionViewDidLayout(for: section, with: viewModel)
+        return cell
+    }
+    
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
     }
     
     required init?(coder: NSCoder) { fatalError() }
