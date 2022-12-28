@@ -10,7 +10,7 @@ import UIKit.UICollectionView
 final class BrowseOverlayView: UIView {
     let viewModel: BrowseOverlayViewModel
     
-    private lazy var collectionView: UICollectionView = createCollectionView()
+    private(set) lazy var collectionView: UICollectionView = createCollectionView()
     
     var dataSource: BrowseOverlayCollectionViewDataSource? {
         didSet { dataSourceDidChange() }

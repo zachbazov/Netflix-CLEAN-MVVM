@@ -103,10 +103,23 @@ extension NavigationOverlayViewModel {
                 hasHomeExpanded = false
                 
                 browseOverlayView.viewModel.isPresented = false
+            } else if homeViewModel.dataSourceState.value != .all && !isPresented.value && !browseOverlayView.viewModel.isPresented {
+                hasTvExpanded = false
+                hasMoviesExpanded = false
+                
+                hasHomeExpanded = false
+                
+                homeViewModel.dataSourceState.value = .all
+                
+                latestState = .home
                 return
             }
             
-            if hasHomeExpanded && homeViewModel.dataSourceState.value != .all {
+            if homeViewModel.dataSourceState.value == .all && !isPresented.value && !browseOverlayView.viewModel.isPresented {
+                return
+            }
+            
+            if hasHomeExpanded {
                 hasTvExpanded = false
                 hasMoviesExpanded = false
                 
@@ -120,13 +133,14 @@ extension NavigationOverlayViewModel {
             if hasTvExpanded {
                 self.state = .mainMenu
                 isPresented.value = true
-                return
-            }
-            
-            if browseOverlayView.viewModel.isPresented {
-                self.state = .mainMenu
-                isPresented.value = true
-                return
+                
+                if !hasTvExpanded && browseOverlayView.viewModel.isPresented {
+//                    browseOverlayView.dataSource?.updateItems()
+                    return
+                } else if hasTvExpanded && browseOverlayView.viewModel.isPresented {
+                    self.state = .mainMenu
+                    isPresented.value = true
+                }
             }
             
             hasHomeExpanded = false
@@ -140,13 +154,13 @@ extension NavigationOverlayViewModel {
             if hasMoviesExpanded {
                 self.state = .mainMenu
                 isPresented.value = true
-                return
-            }
-            
-            if browseOverlayView.viewModel.isPresented {
-                self.state = .mainMenu
-                isPresented.value = true
-                return
+                
+                if !hasMoviesExpanded && browseOverlayView.viewModel.isPresented {
+                    return
+                } else if hasMoviesExpanded && browseOverlayView.viewModel.isPresented {
+                    self.state = .mainMenu
+                    isPresented.value = true
+                }
             }
             
             hasHomeExpanded = false
@@ -157,12 +171,17 @@ extension NavigationOverlayViewModel {
             
             latestState = .movies
         case .categories:
-            hasTvExpanded = false
-            hasMoviesExpanded = false
-            
             if !isPresented.value && !browseOverlayView.viewModel.isPresented {
                 self.state = .categories
                 isPresented.value = true
+            }
+            
+            if browseOverlayView.viewModel.isPresented {
+                self.state = .categories
+                isPresented.value = true
+            } else {
+                hasTvExpanded = false
+                hasMoviesExpanded = false
             }
         default: break
         }
