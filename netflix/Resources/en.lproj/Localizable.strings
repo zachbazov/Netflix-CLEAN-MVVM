@@ -20,7 +20,7 @@
 "HomeViewController.NavigationView.Categories.Title" = "Categories";
 "HomeViewController.NavigationView.AirPlay.Title" = "Air Play";
 "HomeViewController.NavigationView.Account.Title" = "Account";
-"HomeViewController.NavigationView.AllCategories.Title" = "All Categories"
+"HomeViewController.NavigationView.AllCategories.Title" = "All Categories";
 
 "HomeViewController.NavigationOverlayView.Home.Title" = "Home";
 "HomeViewController.NavigationOverlayView.MyList.Title" = "My List";

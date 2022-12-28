@@ -10,7 +10,6 @@ import UIKit
 private protocol RootCoordinable {
     func allocateAuthScreen()
     func allocateTabBarScreen()
-    func reallocateTabController()
 }
 
 final class RootCoordinator {
@@ -57,31 +56,6 @@ extension RootCoordinator: RootCoordinable {
         /// In-order for all the features to work properly,
         /// an authentication procedure is required.
         tabCoordinator.requestUserCredentials()
-    }
-    /// Reallocate tab bar controller and it's children.
-    /// In terms of memory-wise, i've found it to be a better approach,
-    /// to just terminate, store any essential properties, and reallocate the whole tab controller,
-    /// instead of `reloadData()` used in collection types.
-    func reallocateTabController() {
-        /// Deallocate `homeCache` data from memory.
-        AsyncImageService.shared.cache.removeAllObjects()
-        /// In-case there are valid children for root's coordinator, else eject.
-        guard let homeNavigation = tabCoordinator.viewController?.viewControllers?.first! as! UINavigationController?,
-              let homeViewController = homeNavigation.viewControllers.first! as! HomeViewController? else {
-            return
-        }
-        /// Initiate `terminate()` operations to deallocate any objects referenced
-        /// from `HomeViewController` group.
-//        homeViewController.dataSource.displayCell.terminate()
-        homeViewController.dataSource.terminate()
-        homeViewController.terminate()
-        /// Deallocate root references for the old instance.
-        tabCoordinator.viewController = nil
-        tabCoordinator.viewController?.viewModel.coordinator = nil
-        /// Deallocate root view controller.
-        viewController = nil
-        /// Once terminated, instantiate a new tab bar screen.
-        allocateTabBarScreen()
     }
 }
 

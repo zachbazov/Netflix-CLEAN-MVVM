@@ -27,6 +27,7 @@ final class DisplayView: UIView, ViewInstantiable {
         self.viewModel = DisplayViewViewModel(with: mediaFromCache)
         self.panelView = PanelView(on: panelViewContainer, with: viewModel)
         self.viewDidLoad()
+        self.viewDidConfigure(with: self.viewModel)
     }
     
     required init?(coder: NSCoder) { fatalError() }

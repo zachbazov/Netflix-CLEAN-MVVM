@@ -122,8 +122,6 @@ extension TabBarCoordinator: TabBarCoordinable {
         let coordinator = HomeViewCoordinator()
         let viewModel = HomeViewModel()
         let controller = HomeViewController()
-        /// In-case of reallocation, reset home's settings.
-        afterReallocationSettings(with: viewModel)
         /// Allocate root's referencens.
         controller.viewModel = viewModel
         controller.viewModel.coordinator = coordinator
@@ -183,37 +181,6 @@ extension TabBarCoordinator: TabBarCoordinable {
         configuration.tabBarItem(for: .downloads, with: navigation)
         return navigation
     }
-}
-
-extension TabBarCoordinator {
-    /// Due to reallocation, certain data needs to be stored,
-    /// in-order for the application flow flawlessly.
-    func afterReallocationSettings(with viewModel: HomeViewModel) {
-//        updateHomeTableViewDataSourceState(with: viewModel)
-//        updateHomeDisplayCache(with: viewModel)
-    }
-    /// Restating home's table view data source.
-    /// - Parameter viewModel: Coordinating view model.
-//    private func updateHomeTableViewDataSourceState(with viewModel: HomeViewModel) {
-//        let tabViewModel = viewController?.viewModel
-//        /// Based on the navigation view state, set home's table view data source state accordingly.
-//        if tabViewModel?.latestHomeNavigationState == .home {
-//            tabViewModel?.latestHomeDataSourceState = .all
-//        } else if tabViewModel?.latestHomeNavigationState == .tvShows {
-//            tabViewModel?.latestHomeDataSourceState = .series
-//        } else if tabViewModel?.latestHomeNavigationState == .movies {
-//            tabViewModel?.latestHomeDataSourceState = .films
-//        } else {}
-//        /// Pass the table view data source state to home's view model.
-//        viewModel.dataSourceState.value = tabViewModel!.latestHomeDataSourceState
-//    }
-    /// Restoring home's display cell media cache.
-    /// - Parameter viewModel: Coordinating view model.
-//    private func updateHomeDisplayCache(with viewModel: HomeViewModel) {
-//        let tabViewModel = viewController?.viewModel
-//        /// Pass the cache to home's view model.
-//        viewModel.displayMediaCache = tabViewModel!.latestDisplayCache
-//    }
 }
 
 extension TabBarCoordinator: Coordinate {
