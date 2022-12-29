@@ -7,6 +7,8 @@
 
 import Foundation
 
+// MARK: - View Protocol
+
 protocol View {
     associatedtype ViewModelType: ViewModel
     var viewModel: ViewModelType! { get set }

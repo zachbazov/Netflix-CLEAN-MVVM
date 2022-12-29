@@ -7,6 +7,8 @@
 
 import Foundation
 
+// MARK: - SearchResponseDTO Type
+
 struct SearchResponseDTO: Decodable {
     let status: String
     let results: Int

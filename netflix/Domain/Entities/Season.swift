@@ -7,6 +7,8 @@
 
 import Foundation
 
+// MARK: - Season Type
+
 struct Season {
     var mediaId: String
     var title: String

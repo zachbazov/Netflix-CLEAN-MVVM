@@ -7,11 +7,28 @@
 
 import Foundation
 
+// MARK: - AuthViewModelDelegate Protocol
+
+protocol AuthViewModelDelegate {
+    func requestUserCredentials()
+}
+
+// MARK: - AuthViewModel Type
+
 final class AuthViewModel {
+    
+    // MARK: ViewModel's Properties
+    
     var coordinator: AuthCoordinator?
+    
+    // MARK: Type's Properties
+    
     private let useCase: AuthUseCase
     private let authService = Application.current.authService
     private var authorizationTask: Cancellable? { willSet { authorizationTask?.cancel() } }
+    
+    // MARK: Initializer
+    
     /// Default initializer.
     /// Allocate `useCase` property and it's dependencies.
     init() {
@@ -21,15 +38,21 @@ final class AuthViewModel {
         self.useCase = AuthUseCase(authRepository: authRepository)
     }
     
+    // MARK: Deinitializer
+    
     deinit {
         coordinator = nil
         authorizationTask = nil
     }
 }
 
+// MARK: - ViewModel's Implementation
+
 extension AuthViewModel: ViewModel {
     func transform(input: Void) {}
 }
+
+// MARK: - AuthUseCase Implementation
 
 extension AuthViewModel {
     /// Use-case's sign-up operation.

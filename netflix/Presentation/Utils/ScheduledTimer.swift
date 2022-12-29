@@ -7,25 +7,22 @@
 
 import Foundation
 
-private protocol ScheduleInput {
-    func schedule(timeInterval: TimeInterval,
-                  target: Any,
-                  selector: Selector,
-                  repeats: Bool)
-    func invalidate()
-}
+// MARK: - ScheduledTimer Type
 
-private protocol ScheduleOutput {
-    var timer: Timer! { get }
-}
-
-private typealias Schedule = ScheduleInput & ScheduleOutput
-
-final class ScheduledTimer: Schedule {
+final class ScheduledTimer {
+    
+    // MARK: Properties
+    
     var timer: Timer!
     
-    deinit { timer = nil }
+    // MARK: Deinitializer
     
+    deinit { timer = nil }
+}
+
+// MARK: - Methods
+
+extension ScheduledTimer {
     func schedule(timeInterval: TimeInterval,
                   target: Any,
                   selector: Selector,

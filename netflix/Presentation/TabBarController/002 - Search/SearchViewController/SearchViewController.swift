@@ -7,16 +7,24 @@
 
 import UIKit
 
+// MARK: - SearchViewController Type
+
 final class SearchViewController: UIViewController {
+    
+    // MARK: Outlet Properties
+    
     @IBOutlet private var contentView: UIView!
     @IBOutlet private var searchBarContainer: UIView!
     @IBOutlet private var contentContainer: UIView!
     
-    var viewModel: SearchViewModel!
+    // MARK: Type's Properties
     
+    var viewModel: SearchViewModel!
     private lazy var collectionView = createCollectionView()
     private var dataSource: SearchCollectionViewDataSource!
     private var searchController = UISearchController(searchResultsController: nil)
+    
+    // MARK: UIViewController Lifecycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -29,7 +37,11 @@ final class SearchViewController: UIViewController {
         super.viewWillDisappear(animated)
         searchController.isActive = false
     }
-    
+}
+
+// MARK: - UI Setup
+
+extension SearchViewController {
     private func setupBehaviours() {
         addBehaviors([BackButtonEmptyTitleNavigationBarBehavior(),
                       BlackStyleNavigationBarBehavior()])
@@ -75,6 +87,8 @@ final class SearchViewController: UIViewController {
     }
 }
 
+// MARK: - Observers
+
 extension SearchViewController {
     private func setupObservers() {
         viewModel.items.observe(on: self) { [weak self] _ in self?.updateItems() }
@@ -89,6 +103,8 @@ extension SearchViewController {
         viewModel.query.remove(observer: self)
     }
 }
+
+// MARK: - Methods
 
 extension SearchViewController {
     private func updateItems() {
@@ -129,6 +145,8 @@ extension SearchViewController {
     }
 }
 
+// MARK: - UISearchBarDelegate Implementation
+
 extension SearchViewController: UISearchBarDelegate {
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         guard let text = searchBar.text, !text.isEmpty else { return }
@@ -140,6 +158,8 @@ extension SearchViewController: UISearchBarDelegate {
         viewModel?.didCancelSearch()
     }
 }
+
+// MARK: - UISearchControllerDelegate Implementation
 
 extension SearchViewController: UISearchControllerDelegate {
     func willPresentSearchController(_ searchController: UISearchController) {

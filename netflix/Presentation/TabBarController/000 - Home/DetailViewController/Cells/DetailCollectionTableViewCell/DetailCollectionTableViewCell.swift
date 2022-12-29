@@ -7,8 +7,16 @@
 
 import UIKit
 
+// MARK: - DetailCollectionTableViewCell Type
+
 final class DetailCollectionTableViewCell: UITableViewCell {
+    
+    // MARK: Properties
+    
     private(set) var detailCollectionView: DetailCollectionView!
+    
+    // MARK: Initializer
+    
     /// Create a detail collection table view cell object.
     /// - Parameters:
     ///   - tableView: Corresponding table view.
@@ -19,10 +27,7 @@ final class DetailCollectionTableViewCell: UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: DetailCollectionTableViewCell.reuseIdentifier, for: indexPath) as? DetailCollectionTableViewCell else {
             fatalError()
         }
-        if cell.detailCollectionView == nil {
-            cell.detailCollectionView = DetailCollectionView(on: cell.contentView, with: viewModel)
-            cell.contentView.addSubview(cell.detailCollectionView)
-        }
+        cell.detailCollectionView = DetailCollectionView(on: cell.contentView, with: viewModel)
         return cell
     }
     
@@ -33,6 +38,8 @@ final class DetailCollectionTableViewCell: UITableViewCell {
     
     required init?(coder: NSCoder) { fatalError() }
 }
+
+// MARK: - UI Setup
 
 extension DetailCollectionTableViewCell {
     private func viewDidConfigure() {

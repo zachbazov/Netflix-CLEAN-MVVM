@@ -7,8 +7,22 @@
 
 import UIKit
 
-final class AppAppearance {
-    static func setupAppearance() {
+// MARK: - Appearable Protocol
+
+private protocol Appearable {
+    static func `default`()
+    static func dark()
+}
+
+// MARK: - AppAppearance Type
+
+final class AppAppearance {}
+
+// MARK: - Appearable Implementation
+
+extension AppAppearance: Appearable {
+    /// Setup application's default appearance.
+    static func `default`() {
         if #available(iOS 15, *) {
             let barButtonItemAppearance = UIBarButtonItemAppearance()
             barButtonItemAppearance.configureWithDefault(for: .plain)
@@ -34,8 +48,8 @@ final class AppAppearance {
                 .font: UIFont.systemFont(ofSize: 17, weight: .heavy)]
         }
     }
-    
-    static func darkAppearance() {
+    /// Setup application's dark appearance.
+    static func dark() {
         if #available(iOS 15, *) {
             let barButtonItemAppearance = UIBarButtonItemAppearance()
             barButtonItemAppearance.configureWithDefault(for: .plain)

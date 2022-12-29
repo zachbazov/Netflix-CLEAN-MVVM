@@ -7,8 +7,8 @@
 
 import Foundation
 
+// MARK: - Mediable Protocol
+
 protocol Mediable {
     var id: String? { get }
 }
-
-extension Media: Mediable {}

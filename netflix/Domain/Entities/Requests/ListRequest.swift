@@ -7,7 +7,12 @@
 
 import Foundation
 
+// MARK: - ListRequest Type
+
 struct ListRequest {
+    
+    // MARK: GET Type
+    
     struct GET {
         let user: User
     }

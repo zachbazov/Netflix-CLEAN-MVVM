@@ -7,19 +7,25 @@
 
 import UIKit.UITableView
 
-// NOTE:
-// To be fixed:
-// Table view cell size invalidation.
+// MARK: - NewsTableViewDataSource Type
 
 final class NewsTableViewDataSource: NSObject {
+    
+    // MARK: Properties
+    
     private let viewModel: NewsViewModel
     private let numberOfSections: Int = 1
+    
+    // MARK: Initializer
+    
     /// Create a news table view data source object.
     /// - Parameter viewModel: Coordinating view model.
     init(with viewModel: NewsViewModel) {
         self.viewModel = viewModel
     }
 }
+
+// MARK: - UI Setup
 
 extension NewsTableViewDataSource {
     func dataSourceDidChange() {
@@ -29,6 +35,8 @@ extension NewsTableViewDataSource {
         tableView.reloadData()
     }
 }
+
+// MARK: - UITableViewDelegate & UITableViewDataSource Implementation
 
 extension NewsTableViewDataSource: UITableViewDelegate, UITableViewDataSource {
     func numberOfSections(in tableView: UITableView) -> Int {

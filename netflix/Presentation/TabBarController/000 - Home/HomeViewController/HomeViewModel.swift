@@ -7,7 +7,12 @@
 
 import Foundation
 
+// MARK: - HomeViewModel Type
+
 final class HomeViewModel {
+    
+    // MARK: Properties
+    
     var coordinator: HomeViewCoordinator?
     let useCase: HomeUseCase
     let orientation = DeviceOrientation.shared
@@ -24,6 +29,9 @@ final class HomeViewModel {
     
     private var sectionsTask: Cancellable? { willSet { sectionsTask?.cancel() } }
     private var mediaTask: Cancellable? { willSet { mediaTask?.cancel() } }
+    
+    // MARK: Initializer
+    
     /// Default initializer.
     /// Allocate `useCase` property and it's dependencies.
     init() {
@@ -37,6 +45,8 @@ final class HomeViewModel {
         self.viewDidLoad()
     }
     
+    // MARK: Deinitializer
+    
     deinit {
         myList?.removeObservers()
         myList = nil
@@ -45,6 +55,8 @@ final class HomeViewModel {
         coordinator = nil
     }
 }
+
+// MARK: - UI Setup
 
 extension HomeViewModel {
     func dataDidBeganLoading() {
@@ -70,11 +82,14 @@ extension HomeViewModel {
     }
 }
 
+// MARK: - ViewModel Implementation
+
 extension HomeViewModel: ViewModel {
     func transform(input: Void) {}
 }
 
 // MARK: - HomeUseCase implementation
+
 extension HomeViewModel {
     private func fetchSections() {
         sectionsTask = useCase.execute(
@@ -108,6 +123,8 @@ extension HomeViewModel {
             })
     }
 }
+
+// MARK: - Methods
 
 extension HomeViewModel {
     /// Given a specific index, returns a section object.

@@ -7,7 +7,12 @@
 
 import Foundation
 
+// MARK: - NavigationOverlayViewModel Type
+
 final class NavigationOverlayViewModel {
+    
+    // MARK: Properties
+    
     private let coordinator: HomeViewCoordinator
     let isPresented: Observable<Bool> = Observable(false)
     let items: Observable<[Valuable]> = Observable([])
@@ -17,12 +22,17 @@ final class NavigationOverlayViewModel {
     private var hasHomeExpanded = false
     private var hasTvExpanded = false
     private var hasMoviesExpanded = false
+    
+    // MARK: Initializer
+    
     /// Create a navigation overlay view view model object.
     /// - Parameter viewModel: Coordinating view model.
     init(with viewModel: HomeViewModel) {
         self.coordinator = viewModel.coordinator!
     }
 }
+
+// MARK: - Methods
 
 extension NavigationOverlayViewModel {
     /// Presentation of the view.

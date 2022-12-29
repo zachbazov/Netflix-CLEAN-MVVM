@@ -7,12 +7,18 @@
 
 import Foundation
 
+// MARK: - Trailer Type
+
 struct Trailer {
     var id: String?
     var urlPath: String
 }
 
+// MARK: - Mediable Implementation
+
 extension Trailer: Mediable {}
+
+// MARK: - Mapping
 
 extension Array where Element == String {
     func toDomain() -> Array<Trailer> { map { .init(urlPath: $0) } }

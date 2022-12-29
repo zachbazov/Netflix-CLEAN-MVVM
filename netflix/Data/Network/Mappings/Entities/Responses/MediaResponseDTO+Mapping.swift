@@ -7,12 +7,22 @@
 
 import CoreData
 
+// MARK: - MediaResponseDTO Type
+
 struct MediaResponseDTO {
+    
+    // MARK: GET Type
+    
     struct GET {
+        
+        // MARK: One Type
+        
         struct One: Decodable {
             let status: String
             let data: MediaDTO
         }
+        
+        // MARK: Many Type
         
         struct Many: Decodable {
             let status: String
@@ -21,6 +31,8 @@ struct MediaResponseDTO {
         }
     }
 }
+
+// MARK: - Mapping
 
 extension MediaResponseDTO.GET.One {
     func toDomain() -> MediaResponse.GET.One {

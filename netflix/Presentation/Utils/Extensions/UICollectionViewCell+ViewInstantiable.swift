@@ -7,4 +7,6 @@
 
 import UIKit
 
+// MARK: - UICollectionViewCell + ViewInstantiable
+
 extension UICollectionViewCell: ViewInstantiable {}

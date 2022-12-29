@@ -7,13 +7,20 @@
 
 import Foundation
 
+// MARK: - MyListViewModel Type
+
 final class MyListViewModel {
+    
+    // MARK: Properties
+    
     weak var coordinator: HomeViewCoordinator?
     private let user: UserDTO
     private let homeUseCase: HomeUseCase
     let list: Observable<Set<Media>> = Observable([])
     let section: Section
     private var task: Cancellable? { willSet { task?.cancel() } }
+    
+    // MARK: Initializer
     
     init(with viewModel: HomeViewModel) {
         self.coordinator = viewModel.coordinator
@@ -22,11 +29,15 @@ final class MyListViewModel {
         self.section = viewModel.section(at: .myList)
     }
     
+    // MARK: Deinitializer
+    
     deinit {
         coordinator = nil
         task = nil
     }
 }
+
+// MARK: - HomeUseCase Implementation
 
 extension MyListViewModel {
     func fetchList() {
@@ -80,7 +91,11 @@ extension MyListViewModel {
                 if case let .failure(error) = result { print(error) }
             })
     }
-    
+}
+
+// MARK: - Methods
+
+extension MyListViewModel {
     func shouldAddOrRemove(_ media: Media, uponSelection selected: Bool) {
         if selected {
             list.value.remove(media)
@@ -95,11 +110,11 @@ extension MyListViewModel {
     }
     
     func listDidReload() {
-        guard
-            coordinator!.viewController!.tableView.numberOfSections > 0,
-            let myListIndex = HomeTableViewDataSource.Index(rawValue: 6),
-            let section = coordinator!.viewController?.viewModel?.section(at: .myList)
-        else { return }
+        guard coordinator!.viewController!.tableView.numberOfSections > 0,
+              let myListIndex = HomeTableViewDataSource.Index(rawValue: 6),
+              let section = coordinator!.viewController?.viewModel?.section(at: .myList) else {
+            return
+        }
         filter(section: section)
         let index = IndexSet(integer: myListIndex.rawValue)
         coordinator!.viewController?.tableView.reloadSections(index, with: .automatic)
@@ -111,6 +126,7 @@ extension MyListViewModel {
     
     func filter(section: Section) {
         let homeViewModel = coordinator!.viewController!.viewModel!
+        
         guard !homeViewModel.isEmpty else { return }
         
         if section.id == homeViewModel.section(at: .myList).id {

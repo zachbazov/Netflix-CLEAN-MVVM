@@ -7,7 +7,12 @@
 
 import Foundation
 
+// MARK: - DetailNavigationViewItemViewModel Type
+
 final class DetailNavigationViewItemViewModel {
+    
+    // MARK: Properties
+    
     private let tag: Int
     private var isSelected: Bool
     
@@ -19,6 +24,9 @@ final class DetailNavigationViewItemViewModel {
         case .similarContent: return Localization.TabBar.Detail.Navigation().trailingItem
         }
     }
+    
+    // MARK: Initializer
+    
     /// Create a navigation view item view model object.
     /// - Parameter item: Corresponding item object.
     init(with item: DetailNavigationViewItem) {

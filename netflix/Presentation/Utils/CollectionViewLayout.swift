@@ -7,24 +7,17 @@
 
 import UIKit
 
-private protocol LayoutInput {}
+// MARK: - CollectionViewLayout Type
 
-private protocol LayoutOutput {
-    var layout: CollectionViewLayout.Layout! { get }
-    var itemsPerLine: CGFloat { get }
-    var lineSpacing: CGFloat { get }
-    var width: CGFloat { get }
-    var height: CGFloat { get }
-}
-
-private typealias Layout = LayoutInput & LayoutOutput
-
-final class CollectionViewLayout: UICollectionViewFlowLayout, Layout {
-    fileprivate var layout: Layout!
-    fileprivate var itemsPerLine: CGFloat = 3.0
-    fileprivate var lineSpacing: CGFloat = 8.0
+final class CollectionViewLayout: UICollectionViewFlowLayout {
     
-    fileprivate var width: CGFloat {
+    // MARK: Properties
+    
+    private var layout: Layout!
+    private var itemsPerLine: CGFloat = 3.0
+    private var lineSpacing: CGFloat = 8.0
+    
+    private var width: CGFloat {
         get {
             guard let width = super.collectionView!.bounds.width as CGFloat? else { return .zero }
             switch layout {
@@ -39,7 +32,7 @@ final class CollectionViewLayout: UICollectionViewFlowLayout, Layout {
         set {}
     }
     
-    fileprivate var height: CGFloat {
+    private var height: CGFloat {
         get {
             switch layout {
             case .rated: return super.collectionView!.bounds.height - lineSpacing
@@ -55,11 +48,15 @@ final class CollectionViewLayout: UICollectionViewFlowLayout, Layout {
         set {}
     }
     
+    // MARK: Initializer
+    
     convenience init(layout: Layout, scrollDirection: UICollectionView.ScrollDirection? = .horizontal) {
         self.init()
         self.layout = layout
         self.scrollDirection = scrollDirection == .horizontal ? .horizontal : .vertical
     }
+    
+    // MARK: UICollectionViewFlowLayout Lifecycle
     
     override func prepare() {
         super.prepare()
@@ -99,6 +96,8 @@ final class CollectionViewLayout: UICollectionViewFlowLayout, Layout {
         return super.shouldInvalidateLayout(forBoundsChange: newBounds)
     }
 }
+
+// MARK: - Layout Type
 
 extension CollectionViewLayout {
     /// Layout representation type.

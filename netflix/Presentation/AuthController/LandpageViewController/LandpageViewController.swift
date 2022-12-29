@@ -7,20 +7,33 @@
 
 import UIKit
 
+// MARK: - LandpageViewController Type
+
 final class LandpageViewController: UIViewController {
+    
+    // MARK: Outlet Properties
+    
     @IBOutlet private weak var statusBarGradientView: UIView!
     @IBOutlet private weak var topGradientView: UIView!
     @IBOutlet private weak var bottomGradientView: UIView!
     @IBOutlet private weak var signUpButton: UIButton!
     
+    // MARK: Type's Properties
+    
     var viewModel: AuthViewModel!
+    
+    // MARK: UIViewController Lifecycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setupBehaviors()
         setupSubviews()
     }
-    
+}
+
+// MARK: - UI Setup
+
+extension LandpageViewController {
     private func setupBehaviors() {
         addBehaviors([BackButtonEmptyTitleNavigationBarBehavior(),
                       BlackStyleNavigationBarBehavior()])

@@ -7,30 +7,25 @@
 
 import Foundation
 
-private protocol RepositoryInput {
-    func getAll(completion: @escaping (Result<MediaResponseDTO.GET.Many, Error>) -> Void) -> Cancellable?
-    func getOne(request: MediaRequestDTO.GET.One,
-                cached: @escaping (MediaResponseDTO.GET.One?) -> Void,
-                completion: @escaping (Result<MediaResponseDTO.GET.One, Error>) -> Void) -> Cancellable?
+// MARK: - MediaRepositoryEndpoints Protocol
+
+protocol MediaRepositoryEndpoints {
+    static func getAllMedia() -> Endpoint<MediaResponseDTO.GET.Many>
+    static func getMedia(with request: MediaRequestDTO.GET.One) -> Endpoint<MediaResponseDTO.GET.One>
+    static func searchMedia(with request: SearchRequestDTO) -> Endpoint<SearchResponseDTO>
+    static func getSeason(with request: SeasonRequestDTO.GET) -> Endpoint<SeasonResponseDTO.GET>
 }
 
-private protocol RepositoryOutput {
-    var dataTransferService: DataTransferService { get }
-    var cache: MediaResponseStorage { get }
+// MARK: - MediaRepository Type
+
+struct MediaRepository {
+    let dataTransferService: DataTransferService
+    let cache: MediaResponseStorage
 }
 
-private typealias Repository = RepositoryInput & RepositoryOutput
+// MARK: - Methods
 
-final class MediaRepository: Repository {
-    fileprivate let dataTransferService: DataTransferService
-    fileprivate let cache: MediaResponseStorage
-    
-    init(dataTransferService: DataTransferService,
-         cache: MediaResponseStorage) {
-        self.dataTransferService = dataTransferService
-        self.cache = cache
-    }
-    
+extension MediaRepository {
     func getAll(completion: @escaping (Result<MediaResponseDTO.GET.Many, Error>) -> Void) -> Cancellable? {
         let task = RepositoryTask()
         

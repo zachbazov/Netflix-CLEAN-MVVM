@@ -7,8 +7,14 @@
 
 import Foundation
 
-struct MediaPage: Equatable {
+// MARK: - MediaPage Type
+
+struct MediaPage {
     let page: Int
     let totalPages: Int
     let media: [Media]
 }
+
+// MARK: - Equatable Implementation
+
+extension MediaPage: Equatable {}

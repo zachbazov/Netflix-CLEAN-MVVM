@@ -7,13 +7,23 @@
 
 import UIKit
 
+// MARK: - SearchCollectionViewCell Type
+
 class SearchCollectionViewCell: UICollectionViewCell {
+    
+    // MARK: Outlet Properties
+    
     @IBOutlet private var posterImageView: UIImageView!
     @IBOutlet private var logoImageView: UIImageView!
     @IBOutlet private var gradientView: UIView!
     
+    // MARK: Type's Properties
+    
     private var representedIdentifier: NSString?
     private var appliedGradient = false
+    
+    // MARK: Initializer
+    
     /// Create a search collection view cell object.
     /// - Parameters:
     ///   - collectionView: Corresponding collection view.
@@ -36,12 +46,18 @@ class SearchCollectionViewCell: UICollectionViewCell {
         return view
     }
     
+    // MARK: UICollectionViewCell Lifecycle
+    
     override func prepareForReuse() {
         super.prepareForReuse()
         posterImageView.image = nil
         logoImageView.image = nil
     }
-    
+}
+
+// MARK: - UI Setup
+
+extension SearchCollectionViewCell {
     private func setupSubviews() {
         setupGradientView()
         posterImageView.layer.cornerRadius = 10.0

@@ -7,21 +7,36 @@
 
 import UIKit
 
+// MARK: - SignUpViewController Type
+
 final class SignUpViewController: UIViewController {
+    
+    // MARK: Outlet Properties
+    
     @IBOutlet private weak var nameTextField: UITextField!
     @IBOutlet private weak var emailTextField: UITextField!
     @IBOutlet private weak var passwordTextField: UITextField!
     @IBOutlet private weak var passwordConfirmTextField: UITextField!
     @IBOutlet private weak var signUpButton: UIButton!
     
+    // MARK: Type's Properties
+    
     var viewModel: SignUpViewModel?
+    
+    // MARK: UIViewController Lifecycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        AppAppearance.darkAppearance()
+        // Setup dark appearance.
+        AppAppearance.dark()
+        // Setup subviews.
         setupSubviews()
     }
-    
+}
+
+// MARK: - UI Setup
+
+extension SignUpViewController {
     private func setupSubviews() {
         setAttributes(for: [nameTextField,
                             emailTextField,
@@ -40,6 +55,8 @@ final class SignUpViewController: UIViewController {
         passwordConfirmTextField.addTarget(self, action: #selector(textFieldValueDidChange), for: .editingChanged)
     }
 }
+
+// MARK: - Methods
 
 extension SignUpViewController {
     @objc

@@ -7,11 +7,7 @@
 
 import UIKit
 
-extension UIViewController {
-    var sceneDelegate: SceneDelegate? {
-        return UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate
-    }
-}
+// MARK: - UIViewController + Child
 
 extension UIViewController {
     func add(child: UIViewController, container: UIView) {
@@ -31,10 +27,13 @@ extension UIViewController {
     }
 }
 
+// MARK: - UIViewController + UITextField Attributes
+
 extension UIViewController {
     func setAttributes(for fields: [UITextField]) {
         for field in fields {
-            field.setPlaceholderAtrributes(string: field.placeholder ?? .init(), attributes: NSAttributedString.placeholderAttributes)
+            field.setPlaceholderAtrributes(string: field.placeholder ?? .init(),
+                                           attributes: NSAttributedString.placeholderAttributes)
         }
     }
 }

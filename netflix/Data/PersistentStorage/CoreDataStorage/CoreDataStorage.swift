@@ -7,32 +7,26 @@
 
 import CoreData
 
+// MARK: - CoreDataStorageError Type
+
 enum CoreDataStorageError: Error {
     case readError(Error)
     case saveError(Error)
     case deleteError(Error)
 }
 
-private protocol StorageInput {
-    init()
-    func url(for container: NSPersistentContainer) -> URL?
-    func transformersDidRegister()
-    func context() -> NSManagedObjectContext
-    func performBackgroundTask(_ block: @escaping (NSManagedObjectContext) -> Void)
-    func saveContext()
-}
+// MARK: - CoreDataStorage Type
 
-private protocol StorageOutput {
-    static var shared: CoreDataStorage { get }
-    var persistentContainer: NSPersistentContainer { get }
-}
-
-private typealias Storage = StorageInput & StorageOutput
-
-final class CoreDataStorage: Storage {
-    static let shared = CoreDataStorage()
+final class CoreDataStorage {
     
-    fileprivate lazy var persistentContainer: NSPersistentContainer = {
+    // MARK: Singleton Pattern
+    
+    static let shared = CoreDataStorage()
+    private init() {}
+    
+    // MARK: Properties
+    
+    private lazy var persistentContainer: NSPersistentContainer = {
         transformersDidRegister()
 
         let container = NSPersistentContainer(name: "CoreDataStorage")
@@ -43,24 +37,32 @@ final class CoreDataStorage: Storage {
         }
         return container
     }()
-    
-    fileprivate init() {}
-    
-    fileprivate func url(for container: NSPersistentContainer) -> URL? {
+}
+
+// MARK: - UI Setup
+
+extension CoreDataStorage {
+    private func url(for container: NSPersistentContainer) -> URL? {
         let persistentStore = container.persistentStoreCoordinator.persistentStores.first!
         let url = container.persistentStoreCoordinator.url(for: persistentStore)
         printIfDebug("persistentStore url \(url)")
         return url
     }
     
-    fileprivate func transformersDidRegister() {
+    private func transformersDidRegister() {
         ValueTransformer.setValueTransformer(ValueTransformer<UserDTO>(),
                                              forName: .userTransformer)
         ValueTransformer.setValueTransformer(ValueTransformer<MediaResourcesDTO>(),
                                              forName: .mediaResourcesTransformer)
     }
-    
-    func context() -> NSManagedObjectContext { persistentContainer.viewContext }
+}
+
+// MARK: - Methods
+
+extension CoreDataStorage {
+    func context() -> NSManagedObjectContext {
+        return persistentContainer.viewContext
+    }
     
     func performBackgroundTask(_ block: @escaping (NSManagedObjectContext) -> Void) {
         persistentContainer.performBackgroundTask(block)

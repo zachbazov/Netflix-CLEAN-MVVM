@@ -7,8 +7,16 @@
 
 import UIKit
 
+// MARK: - DetailDescriptionTableViewCell Type
+
 final class DetailDescriptionTableViewCell: UITableViewCell {
+    
+    // MARK: Properties
+    
     private var descriptionView: DetailDescriptionView!
+    
+    // MARK: Initializer
+    
     /// Create a detail description table view cell object.
     /// - Parameters:
     ///   - tableView: Corresponding table view.
@@ -19,12 +27,10 @@ final class DetailDescriptionTableViewCell: UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: DetailDescriptionTableViewCell.reuseIdentifier, for: indexPath) as? DetailDescriptionTableViewCell else {
             fatalError()
         }
-        if cell.descriptionView == nil {
-            let viewModel = DetailDescriptionViewViewModel(with: viewModel.media)
-            cell.descriptionView = DetailDescriptionView(on: cell.contentView, with: viewModel)
-            cell.contentView.addSubview(cell.descriptionView)
-            cell.descriptionView.constraintToSuperview(cell.contentView)
-        }
+        let viewModel = DetailDescriptionViewViewModel(with: viewModel.media)
+        cell.descriptionView = DetailDescriptionView(on: cell.contentView, with: viewModel)
+        cell.contentView.addSubview(cell.descriptionView)
+        cell.descriptionView.constraintToSuperview(cell.contentView)
         return cell
     }
     
@@ -35,6 +41,8 @@ final class DetailDescriptionTableViewCell: UITableViewCell {
     
     required init?(coder: NSCoder) { fatalError() }
 }
+
+// MARK: - UI Setup
 
 extension DetailDescriptionTableViewCell {
     private func viewDidConfigure() {

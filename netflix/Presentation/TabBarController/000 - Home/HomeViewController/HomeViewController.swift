@@ -7,18 +7,29 @@
 
 import UIKit
 
+// MARK: - HomeViewController Type
+
 final class HomeViewController: UIViewController {
+    
+    // MARK: UIViewController Lifecycle Properties
+    
     override var preferredStatusBarStyle: UIStatusBarStyle { .lightContent }
+    
+    // MARK: Outlet Properties
     
     @IBOutlet private(set) var tableView: UITableView!
     @IBOutlet private(set) var navigationViewContainer: UIView!
     @IBOutlet private(set) var navigationViewTopConstraint: NSLayoutConstraint!
     @IBOutlet private(set) var browseOverlayViewContainer: UIView!
     
+    // MARK: Type's Properties
+    
     var viewModel: HomeViewModel!
     var navigationView: NavigationView!
     var browseOverlayView: BrowseOverlayView!
     private(set) var dataSource: HomeTableViewDataSource!
+    
+    // MARK: UIViewController Lifecycle Methods
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -27,7 +38,11 @@ final class HomeViewController: UIViewController {
         setupObservers()
         viewModel.dataDidBeganLoading()
     }
-    
+}
+
+// MARK: - UI Setup
+
+extension HomeViewController {
     private func setupBehaviors() {
         addBehaviors([BackButtonEmptyTitleNavigationBarBehavior(),
                       BlackStyleNavigationBarBehavior()])
@@ -53,6 +68,8 @@ final class HomeViewController: UIViewController {
     }
 }
 
+// MARK: - Observers
+
 extension HomeViewController {
     private func setupObservers() {
         viewModel.dataSourceState.observe(on: self) { [weak self] state in
@@ -73,29 +90,5 @@ extension HomeViewController {
             viewModel.dataSourceState.remove(observer: self)
             viewModel.displayMedia.remove(observer: self)
         }
-    }
-}
-
-extension HomeViewController {
-    /// Deallocating this view controller entirely.
-    func terminate() {
-        /// Remove and deallocate navigation view and it's dependencies.
-        navigationView.navigationOverlayView.removeFromSuperview()
-        navigationView.navigationOverlayView = nil
-        navigationView.removeFromSuperview()
-        navigationView = nil
-        /// Remove and deallocate browse overlay view.
-        browseOverlayView.removeFromSuperview()
-        browseOverlayView = nil
-        /// Remove and deallocate home view model and it's dependencies.
-        viewModel.myList.removeObservers()
-        viewModel.myList = nil
-        /// Remove controller observers.
-        removeObservers()
-        /// Deallocate home's view model.
-        viewModel.coordinator = nil
-        viewModel = nil
-        /// Remove from tab bar controller.
-        removeFromParent()
     }
 }

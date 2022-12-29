@@ -7,12 +7,20 @@
 
 import Foundation
 
+// MARK: - NewsViewModel Type
+
 final class NewsViewModel {
+    
+    // MARK: Properties
+    
     var coordinator: NewsViewCoordinator?
     private let useCase: NewsUseCase
     let items: Observable<[NewsTableViewCellViewModel]> = Observable([])
     var isEmpty: Bool { return items.value.isEmpty }
     private var mediaLoadTask: Cancellable? { willSet { mediaLoadTask?.cancel() } }
+    
+    // MARK: Initializer
+    
     /// Default initializer.
     /// Allocate `useCase` property and it's dependencies.
     init() {
@@ -23,15 +31,21 @@ final class NewsViewModel {
     }
 }
 
+// MARK: - ViewModel Implementaiton
+
 extension NewsViewModel: ViewModel {
     func transform(input: Void) {}
 }
+
+// MARK: - UI Setup
 
 extension NewsViewModel {
     func viewDidLoad() {
         fetchUpcomingMedia()
     }
 }
+
+// MARK: - NewsUseCase Implementation
 
 extension NewsViewModel {
     private func fetchUpcomingMedia() {

@@ -7,13 +7,21 @@
 
 import UIKit
 
+// MARK: - NavigationOverlayView Type
+
 final class NavigationOverlayView: UIView {
+    
+    // MARK: Properties
+    
     let viewModel: NavigationOverlayViewModel
     let dataSource: NavigationOverlayTableViewDataSource
     let opaqueView = OpaqueView(frame: UIScreen.main.bounds)
     let footerView: NavigationOverlayFooterView
     let tabBar: UITabBar
     private(set) lazy var tableView: UITableView = createTableView()
+    
+    // MARK: Initializer
+    
     /// Create a navigation overlay view object.
     /// - Parameter viewModel: Coordinating view model.
     init(with viewModel: HomeViewModel) {
@@ -35,12 +43,18 @@ final class NavigationOverlayView: UIView {
     
     required init?(coder: NSCoder) { fatalError() }
     
+    // MARK: Deinitializer
+    
     deinit {
         removeObservers()
         tableView.removeFromSuperview()
         footerView.removeFromSuperview()
     }
-    
+}
+
+// MARK: - UI Setup
+
+extension NavigationOverlayView {
     private func createTableView() -> UITableView {
         let tableView = UITableView(frame: UIScreen.main.bounds, style: .plain)
         tableView.showsVerticalScrollIndicator = false
@@ -51,6 +65,8 @@ final class NavigationOverlayView: UIView {
         return tableView
     }
 }
+
+// MARK: - Observers
 
 extension NavigationOverlayView {
     private func setupObservers() {
@@ -65,7 +81,10 @@ extension NavigationOverlayView {
     }
 }
 
+// MARK: - Category Type
+
 extension NavigationOverlayView {
+    /// Genres representation type.
     enum Category: Int, CaseIterable {
         case home
         case myList
@@ -82,6 +101,8 @@ extension NavigationOverlayView {
         case documentary
     }
 }
+
+// MARK: - Valuable Implementation
 
 extension NavigationOverlayView.Category: Valuable {
     var stringValue: String {
@@ -102,6 +123,8 @@ extension NavigationOverlayView.Category: Valuable {
         }
     }
 }
+
+// MARK: - Methods
 
 extension NavigationOverlayView.Category {
     func toSection(with viewModel: HomeViewModel) -> Section {

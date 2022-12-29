@@ -7,6 +7,8 @@
 
 import Foundation
 
+// MARK: - AuthService Type
+
 final class AuthService {
     private let coreDataStorage: CoreDataStorage = .shared
     
@@ -25,7 +27,11 @@ final class AuthService {
         }
         return nil
     }
-    
+}
+
+// MARK: - Methods
+
+extension AuthService {
     func performCachedAuthorizationSession(_ completion: @escaping (AuthRequest) -> Void) {
         guard let email = latestCachedUser?.email,
               let password = latestCachedUser?.password else {
@@ -37,7 +43,7 @@ final class AuthService {
         
         completion(requestQuery.toDomain())
     }
-    
+
     func authenticate(user: UserDTO?) {
         self.user = user
     }

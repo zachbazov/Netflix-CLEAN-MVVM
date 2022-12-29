@@ -7,7 +7,12 @@
 
 import Foundation
 
+// MARK: - CollectionViewCellViewModel Type
+
 struct CollectionViewCellViewModel: Equatable {
+    
+    // MARK: Properties
+    
     let indexPath: IndexPath
     let title: String
     let slug: String
@@ -20,6 +25,9 @@ struct CollectionViewCellViewModel: Equatable {
     var logoImageIdentifier: NSString
     var logoImageURL: URL!
     let presentedLogoAlignment: PresentedLogoAlignment
+    
+    // MARK: Initializer
+    
     /// Create a collection view cell view model object.
     /// - Parameters:
     ///   - media: Represented media object.

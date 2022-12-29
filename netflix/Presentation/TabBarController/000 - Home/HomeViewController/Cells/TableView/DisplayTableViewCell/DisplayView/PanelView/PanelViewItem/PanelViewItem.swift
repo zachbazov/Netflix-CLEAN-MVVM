@@ -7,12 +7,20 @@
 
 import UIKit
 
+// MARK: - PanelViewItemConfiguration Type
+
 final class PanelViewItemConfiguration {
+    
+    // MARK: Properties
+    
     fileprivate weak var view: PanelViewItem?
     private var viewModel: DisplayTableViewCellViewModel
     private var gestureRecognizers: [GestureGecognizer]
     private var tapRecognizer: UITapGestureRecognizer!
     private var longPressRecognizer: UILongPressGestureRecognizer!
+    
+    // MARK: Initializer
+    
     /// Create a new panel view object.
     /// - Parameters:
     ///   - view: Instantiating view.
@@ -28,6 +36,8 @@ final class PanelViewItemConfiguration {
         self.viewDidConfigure()
     }
     
+    // MARK: Deinitializer
+    
     deinit {
         view?.removeFromSuperview()
         view = nil
@@ -36,7 +46,10 @@ final class PanelViewItemConfiguration {
     }
 }
 
+// MARK: - UI Setup
+
 extension PanelViewItemConfiguration {
+    /// Gesture representation type.
     enum GestureGecognizer {
         case tap
         case longPress
@@ -114,13 +127,23 @@ extension PanelViewItemConfiguration {
     func viewDidLongPress() {}
 }
 
+// MARK: - PanelViewItem Type
+
 final class PanelViewItem: UIView, ViewInstantiable {
+    
+    // MARK: Outlet Properties
+    
     @IBOutlet private(set) weak var titleLabel: UILabel!
     @IBOutlet private(set) weak var imageView: UIImageView!
+    
+    // MARK: Type's Properties
     
     private(set) var configuration: PanelViewItemConfiguration!
     private(set) var viewModel: PanelViewItemViewModel!
     private(set) var isSelected = false
+    
+    // MARK: Initializer
+    
     /// Create a panel view item object.
     /// - Parameters:
     ///   - parent: Instantiating view.
@@ -136,6 +159,8 @@ final class PanelViewItem: UIView, ViewInstantiable {
     }
     
     required init?(coder: NSCoder) { fatalError() }
+    
+    // MARK: Deinitializer
     
     deinit {
         configuration.view = nil

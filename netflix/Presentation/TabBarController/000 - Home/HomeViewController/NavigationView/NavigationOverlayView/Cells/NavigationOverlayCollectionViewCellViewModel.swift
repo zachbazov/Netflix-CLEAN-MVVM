@@ -7,6 +7,8 @@
 
 import Foundation
 
+// MARK: - NavigationOverlayCollectionViewCellViewModel Type
+
 struct NavigationOverlayCollectionViewCellViewModel {
     let title: String
 }

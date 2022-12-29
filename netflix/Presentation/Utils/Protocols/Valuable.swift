@@ -7,6 +7,8 @@
 
 import Foundation
 
+// MARK: - Valuable Protocol
+
 protocol Valuable {
     var stringValue: String { get }
 }

@@ -7,7 +7,12 @@
 
 import UIKit
 
+// MARK: - NewsTableViewCell Type
+
 final class NewsTableViewCell: UITableViewCell {
+    
+    // MARK: Outlet Properties
+    
     @IBOutlet private weak var previewPosterImageView: UIImageView!
     @IBOutlet private weak var ageRestrictionView: AgeRestrictionView!
     @IBOutlet private weak var monthLabel: UILabel!
@@ -23,8 +28,13 @@ final class NewsTableViewCell: UITableViewCell {
     @IBOutlet private weak var descriptionTextView: UITextView!
     @IBOutlet private weak var genresLabel: UILabel!
     
+    // MARK: Type's Properties
+    
     private var viewModel: NewsTableViewCellViewModel!
     private var representedIdentifier: String?
+    
+    // MARK: Initializer
+    
     /// Create a news table view cell object.
     /// - Parameters:
     ///   - tableView: Corresponding table view.
@@ -46,15 +56,17 @@ final class NewsTableViewCell: UITableViewCell {
         view.viewDidConfigure(with: view.viewModel)
         return view
     }
-    
+}
+
+// MARK: - UI Setup
+
+extension NewsTableViewCell {
     private func setupSubviews() {
         selectionStyle = .none
         backgroundColor = .black
         previewPosterImageView.layer.cornerRadius = 10.0
     }
-}
-
-extension NewsTableViewCell {
+    
     private func viewDidConfigure(with viewModel: NewsTableViewCellViewModel) {
         guard representedIdentifier == viewModel.media.slug else { return }
         

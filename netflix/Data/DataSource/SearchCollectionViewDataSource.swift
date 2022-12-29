@@ -7,14 +7,24 @@
 
 import UIKit.UICollectionView
 
+// MARK: - SearchCollectionViewDataSource Type
+
 final class SearchCollectionViewDataSource: NSObject {
+    
+    // MARK: Properties
+    
     private let viewModel: SearchViewModel
+    
+    // MARK: Initializer
+    
     /// Create a search collection view data source object.
     /// - Parameter viewModel: Coordinating view model.
     init(with viewModel: SearchViewModel) {
         self.viewModel = viewModel
     }
 }
+
+// MARK: - UICollectionViewDelegate & UICollectionViewDataSource Implementation
 
 extension SearchCollectionViewDataSource: UICollectionViewDelegate, UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {

@@ -7,11 +7,19 @@
 
 import UIKit
 
+// MARK: - DetailCollectionView Type
+
 final class DetailCollectionView: UIView {
+    
+    // MARK: Properties
+    
     private let viewModel: DetailViewModel
     private lazy var collectionView = createCollectionView()
     private var dataSource: DetailCollectionViewDataSource<Mediable>!
     private var layout: CollectionViewLayout!
+    
+    // MARK: Initializer
+    
     /// Create a detail collection view object.
     /// - Parameters:
     ///   - parent: Instantiating view.
@@ -27,11 +35,17 @@ final class DetailCollectionView: UIView {
     
     required init?(coder: NSCoder) { fatalError() }
     
+    // MARK: Deinitializer
+    
     deinit {
         layout = nil
         dataSource = nil
     }
-    
+}
+
+// MARK: - UI Setup
+
+extension DetailCollectionView {
     private func createCollectionView() -> UICollectionView {
         let collectionView = UICollectionView(frame: bounds, collectionViewLayout: .init())
         collectionView.backgroundColor = .black
@@ -45,9 +59,7 @@ final class DetailCollectionView: UIView {
         addSubview(collectionView)
         return collectionView
     }
-}
-
-extension DetailCollectionView {
+    
     private func dataDidLoad() {
         if viewModel.navigationViewState.value == .episodes {
             let cellViewModel = EpisodeCollectionViewCellViewModel(with: viewModel)
@@ -60,8 +72,13 @@ extension DetailCollectionView {
     
     private func viewDidLoad() {
         dataDidLoad()
+        
     }
-    
+}
+
+// MARK: - Methods
+
+extension DetailCollectionView {
     func dataSourceDidChange() {
         layout = nil
         collectionView.delegate = nil

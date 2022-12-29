@@ -7,6 +7,8 @@
 
 import UIKit
 
+// MARK: - BackButtonEmptyTitleNavigationBarBehavior Type
+
 struct BackButtonEmptyTitleNavigationBarBehavior: ViewControllerLifecycleBehavior {
     func viewDidLoad(viewController: UIViewController) {
         viewController.navigationItem.backBarButtonItem = UIBarButtonItem(

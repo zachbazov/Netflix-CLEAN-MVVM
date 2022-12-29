@@ -7,6 +7,8 @@
 
 import UIKit
 
+// MARK: - UINavigationController + Identifier
+
 extension UINavigationController {
     var representedScreenIdentifier: Int? { return navigationBar.tag }
 }

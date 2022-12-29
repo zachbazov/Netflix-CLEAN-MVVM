@@ -7,8 +7,13 @@
 
 import UIKit
 
+// MARK: - MediaResourcesDTO Type
+
 @objc
 public final class MediaResourcesDTO: NSObject, Codable, NSSecureCoding {
+    
+    // MARK: Properties
+    
     let posters: [String]
     let logos: [String]
     let trailers: [String]
@@ -20,6 +25,8 @@ public final class MediaResourcesDTO: NSObject, Codable, NSSecureCoding {
     let presentedLogo: String
     let presentedDisplayLogo: String
     let presentedLogoAlignment: String
+    
+    // MARK: Initializer
     
     init(posters: [String],
          logos: [String],
@@ -44,6 +51,8 @@ public final class MediaResourcesDTO: NSObject, Codable, NSSecureCoding {
         self.presentedDisplayLogo = presentedDisplayLogo
         self.presentedLogoAlignment = presentedLogoAlignment
     }
+    
+    // MARK: NSSecureCoding Implementation
     
     public static var supportsSecureCoding: Bool { true }
     
@@ -76,19 +85,21 @@ public final class MediaResourcesDTO: NSObject, Codable, NSSecureCoding {
     }
 }
 
+// MARK: - MediaType Type
+
 enum MediaType: String, Codable {
   case series
   case film
 }
+
+// MARK: - MediaDTO Type
 
 struct MediaDTO: Codable {
     let id: String?
     let type: MediaType
     let title: String
     let slug: String
-    
     let createdAt: String
-    
     let rating: Float
     let description: String
     let cast: String
@@ -96,18 +107,17 @@ struct MediaDTO: Codable {
     let duration: String?
     let length: String
     let genres: [String]
-    
     let hasWatched: Bool
     let isHD: Bool
     let isExclusive: Bool
     let isNewRelease: Bool
     let isSecret: Bool
-    
     let resources: MediaResourcesDTO
-    
     let seasons: [String]?
     let numberOfEpisodes: Int?
 }
+
+// MARK: - Mapping
 
 extension MediaResourcesDTO {
     func toDomain() -> MediaResources {

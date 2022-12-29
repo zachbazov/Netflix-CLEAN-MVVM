@@ -7,10 +7,18 @@
 
 import UIKit
 
+// MARK: - DetailPanelViewItemConfiguration Type
+
 final class DetailPanelViewItemConfiguration {
+    
+    // MARK: Properties
+    
     private weak var view: DetailPanelViewItem!
     private let myList: MyList
     private let section: Section
+    
+    // MARK: Initializer
+    
     /// Create a panel view item configuration object.
     /// - Parameters:
     ///   - view: Corresponding view.
@@ -23,10 +31,10 @@ final class DetailPanelViewItemConfiguration {
         self.viewDidRegisterRecognizers()
     }
     
-    deinit {
-        view = nil
-    }
+    deinit { view = nil }
 }
+
+// MARK: - UI Setup
 
 extension DetailPanelViewItemConfiguration {
     private func viewDidRegisterRecognizers() {
@@ -76,6 +84,8 @@ extension DetailPanelViewItemConfiguration {
     }
 }
 
+// MARK: - Item Type
+
 extension DetailPanelViewItemConfiguration {
     /// Item representation type.
     enum Item: Int {
@@ -85,7 +95,12 @@ extension DetailPanelViewItemConfiguration {
     }
 }
 
+// MARK: - DetailPanelViewItem Type
+
 final class DetailPanelViewItem: UIView {
+    
+    // MARK: Properties
+    
     private(set) var configuration: DetailPanelViewItemConfiguration!
     var viewModel: DetailPanelViewItemViewModel!
     
@@ -93,6 +108,9 @@ final class DetailPanelViewItem: UIView {
     fileprivate lazy var label = createLabel()
     
     var isSelected = false
+    
+    // MARK: Initializer
+    
     /// Create a panel view item object.
     /// - Parameters:
     ///   - parent: Instantiating view.
@@ -108,11 +126,17 @@ final class DetailPanelViewItem: UIView {
     
     required init?(coder: NSCoder) { fatalError() }
     
+    // MARK: Deinitalizer
+    
     deinit {
         configuration = nil
         viewModel = nil
     }
-    
+}
+
+// MARK: - UI Setup
+
+extension DetailPanelViewItem {
     private func createLabel() -> UILabel {
         let label = UILabel()
         label.textColor = .white

@@ -7,9 +7,17 @@
 
 import UIKit
 
+// MARK: - TableViewHeaderFooterView Type
+
 final class TableViewHeaderFooterView: UITableViewHeaderFooterView {
+    
+    // MARK: Properties
+    
     private var viewModel: TableViewHeaderFooterViewViewModel!
     private lazy var titleLabel = createLabel()
+    
+    // MARK: Initializer
+    
     /// Create a table view header view object.
     /// - Parameters:
     ///   - tableView: Corresponding table view.
@@ -31,6 +39,8 @@ final class TableViewHeaderFooterView: UITableViewHeaderFooterView {
     
     required init?(coder: NSCoder) { fatalError() }
 }
+
+// MARK: - UI Setup
 
 extension TableViewHeaderFooterView {
     private func createLabel() -> UILabel {

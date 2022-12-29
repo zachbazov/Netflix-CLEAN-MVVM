@@ -7,6 +7,8 @@
 
 import UIKit
 
+// MARK: - UITableView + Register
+
 extension UITableView {
     func register<T: UITableViewHeaderFooterView>(headerFooter type: T.Type) {
         register(type, forHeaderFooterViewReuseIdentifier: type.reuseIdentifier)

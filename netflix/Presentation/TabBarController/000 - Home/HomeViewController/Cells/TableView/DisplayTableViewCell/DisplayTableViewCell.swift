@@ -7,9 +7,17 @@
 
 import UIKit
 
+// MARK: - DisplayTableViewCell Type
+
 final class DisplayTableViewCell: UITableViewCell {
+    
+    // MARK: Properties
+    
     private(set) var displayView: DisplayView!
     private(set) var viewModel: DisplayTableViewCellViewModel!
+    
+    // MARK: Initializer
+    
     /// Create a display table view cell object.
     /// - Parameters:
     ///   - tableView: Corresponding table view.
@@ -37,6 +45,8 @@ final class DisplayTableViewCell: UITableViewCell {
     }
     
     required init?(coder: NSCoder) { fatalError() }
+    
+    // MARK: UITableViewCell Lifecycle
     
     override func prepareForReuse() {
         super.prepareForReuse()

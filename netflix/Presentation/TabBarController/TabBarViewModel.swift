@@ -7,9 +7,13 @@
 
 import UIKit
 
+// MARK: - TabBarViewModel Type
+
 final class TabBarViewModel {
     var coordinator: TabBarCoordinator?
 }
+
+// MARK: - ViewModel Implementation
 
 extension TabBarViewModel: ViewModel {
     func transform(input: Void) {}

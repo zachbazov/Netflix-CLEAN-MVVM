@@ -7,8 +7,8 @@
 
 import Foundation
 
-// MARK: - Media's Presentation Resource Path extension.
-// Provides indication into the resources array in a media object.
+// MARK: - PresentedLogoAlignment Type
+
 enum PresentedLogoAlignment: String {
     case top
     case midTop = "mid-top"
@@ -16,6 +16,8 @@ enum PresentedLogoAlignment: String {
     case midBottom = "mid-bottom"
     case bottom
 }
+
+// MARK: - PresentedPoster Type
 
 enum PresentedPoster: String {
     case first = "0"
@@ -25,6 +27,8 @@ enum PresentedPoster: String {
     case fifth = "4"
     case sixth = "5"
 }
+
+// MARK: - PresentedLogo Type
 
 enum PresentedLogo: String {
     case first = "0"
@@ -36,6 +40,8 @@ enum PresentedLogo: String {
     case seventh = "6"
 }
 
+// MARK: - PresentedDisplayLogo Type
+
 enum PresentedDisplayLogo: String {
     case first = "0"
     case second = "1"
@@ -45,6 +51,8 @@ enum PresentedDisplayLogo: String {
     case sixth = "5"
     case seventh = "6"
 }
+
+// MARK: - Media + Resource Path Provider
 
 extension Media {
     func path<T>(forResourceOfType type: T.Type) -> String? {
@@ -87,11 +95,17 @@ extension Media {
 }
 
 // MARK: - Media + Attributed Genres String
+
 extension Media {
+    
+    // MARK: Presentor Type
+    
     enum Presentor {
         case display
         case news
     }
+    
+    // MARK: Methods
     
     func attributedString(for presentor: Presentor) -> NSMutableAttributedString {
         guard let symbol = " · " as String?,

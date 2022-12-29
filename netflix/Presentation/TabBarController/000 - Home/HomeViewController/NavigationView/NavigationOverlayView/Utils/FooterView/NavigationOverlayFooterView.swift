@@ -7,9 +7,17 @@
 
 import UIKit
 
+// MARK: - NavigationOverlayFooterView Type
+
 final class NavigationOverlayFooterView: UIView {
+    
+    // MARK: Properties
+    
     private let viewModel: NavigationOverlayViewModel
     private lazy var button = createButton()
+    
+    // MARK: Initializer
+    
     /// Create a navigation overlay footer view object.
     /// - Parameters:
     ///   - parent: Instantiating view.
@@ -26,6 +34,8 @@ final class NavigationOverlayFooterView: UIView {
     
     required init?(coder: NSCoder) { fatalError() }
 }
+
+// MARK: - UI Setup
 
 extension NavigationOverlayFooterView {
     private func createButton() -> UIButton {

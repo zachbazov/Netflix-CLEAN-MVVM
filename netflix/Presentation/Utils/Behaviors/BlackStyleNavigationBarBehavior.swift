@@ -7,6 +7,8 @@
 
 import UIKit
 
+// MARK: - BlackStyleNavigationBarBehavior Type
+
 struct BlackStyleNavigationBarBehavior: ViewControllerLifecycleBehavior {
     func viewDidLoad(viewController: UIViewController) {
         viewController.navigationController?.navigationBar.barStyle = .black

@@ -7,7 +7,12 @@
 
 import AVKit
 
+// MARK: - MediaPlayerView Type
+
 final class MediaPlayerView: UIView {
+    
+    // MARK: Properties
+    
     var mediaPlayer: MediaPlayer!
     var overlayView: MediaPlayerOverlayView!
     var viewModel: MediaPlayerViewViewModel!
@@ -16,18 +21,22 @@ final class MediaPlayerView: UIView {
     
     weak var delegate: MediaPlayerDelegate?
     
+    // MARK: Initializer
+    
     init(on parent: UIView, with viewModel: DetailViewModel) {
         super.init(frame: parent.bounds)
         self.delegate = self
         self.viewModel = MediaPlayerViewViewModel(with: viewModel)
-        self.mediaPlayer = .create(on: self)
-        self.overlayView = .create(on: self)
+        self.mediaPlayer = MediaPlayer(on: self)
+        self.overlayView = MediaPlayerOverlayView(on: self)
         self.addSubview(self.overlayView)
         self.viewDidRegisterRecognizers(on: self)
         self.overlayView.constraintToSuperview(self)
     }
     
     required init?(coder: NSCoder) { fatalError() }
+    
+    // MARK: Deinitializer
     
     deinit {
         removeObservers()
@@ -37,7 +46,11 @@ final class MediaPlayerView: UIView {
         prepareToPlay = nil
         delegate = nil
     }
-    
+}
+
+// MARK: - UI Setup
+
+extension MediaPlayerView {
     private func viewDidLoad() {
         mediaPlayer.mediaPlayerLayer.playerLayer.frame = mediaPlayer.mediaPlayerLayer.bounds
         mediaPlayer.mediaPlayerLayer.playerLayer.videoGravity = .resizeAspectFill
@@ -48,19 +61,18 @@ final class MediaPlayerView: UIView {
                                                    action: #selector(overlayView.didSelect))
         parent.addGestureRecognizer(tapRecognizer)
     }
-    
-    func removeObservers() {
-        if let timeObserverToken = overlayView?.configuration.observers.timeObserverToken {
-            printIfDebug("Removed `MediaPlayerView` observers.")
-            mediaPlayer?.player.removeTimeObserver(timeObserverToken)
-        }
-    }
-    
+}
+
+// MARK: - Methods
+
+extension MediaPlayerView {
     func stopPlayer() {
         guard let mediaPlayer = mediaPlayer else { return }
         playerDidStop(mediaPlayer)
     }
 }
+
+// MARK: - MediaPlayerDelegate Implementation
 
 extension MediaPlayerView: MediaPlayerDelegate {
     func playerDidPlay(_ mediaPlayer: MediaPlayer) {
@@ -81,4 +93,15 @@ extension MediaPlayerView: MediaPlayerDelegate {
     
     func player(_ mediaPlayer: MediaPlayer,
                 willVerifyUrl url: URL) -> Bool { UIApplication.shared.canOpenURL(url) }
+}
+
+// MARK: - Observers
+
+extension MediaPlayerView {
+    func removeObservers() {
+        if let timeObserverToken = overlayView?.configuration.observers.timeObserverToken {
+            printIfDebug("Removed `MediaPlayerView` observers.")
+            mediaPlayer?.player.removeTimeObserver(timeObserverToken)
+        }
+    }
 }

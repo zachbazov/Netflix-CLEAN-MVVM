@@ -7,12 +7,16 @@
 
 import Foundation
 
+// MARK: - DataTransferError Type
+
 enum DataTransferError: Error {
     case noResponse
     case parsing(Error)
     case networkFailure(NetworkError)
     case resolvedNetworlFailure(Error)
 }
+
+// MARK: - DataTransferServiceInput Protocol
 
 protocol DataTransferServiceInput {
     typealias CompletionHandler<T> = (Result<T, DataTransferError>) -> Void
@@ -28,51 +32,49 @@ protocol DataTransferServiceInput {
         completion: @escaping CompletionHandler<Void>) -> NetworkCancellable? where E.Response == Void
 }
 
+// MARK: - DataTransferErrorResolverInput Protocol
+
 protocol DataTransferErrorResolverInput {
     func resolve(error: NetworkError) -> Error
 }
+
+// MARK: - ResponseDecoder Protocol
 
 protocol ResponseDecoder {
     func decode<T: Decodable>(_ data: Data) throws -> T
 }
 
+// MARK: - DataTransferErrorLoggerInput Protocol
+
 protocol DataTransferErrorLoggerInput {
     func log(error: Error)
 }
 
-final class DataTransferService {
-    private let networkService: NetworkService
-    private let errorResolver: DataTransferErrorResolver
-    private let errorLogger: DataTransferErrorLogger
-    
-    init(with networkService: NetworkService,
-         errorResolver: DataTransferErrorResolver = DataTransferErrorResolver(),
-         errorLogger: DataTransferErrorLogger = DataTransferErrorLogger()) {
-        self.networkService = networkService
-        self.errorResolver = errorResolver
-        self.errorLogger = errorLogger
-    }
+// MARK: - DataTransferService Type
+
+struct DataTransferService {
+    let networkService: NetworkService
+    let errorResolver = DataTransferErrorResolver()
+    let errorLogger = DataTransferErrorLogger()
 }
 
+// MARK: - DataTransferServiceInput Implementation
+
 extension DataTransferService: DataTransferServiceInput {
-    func request<T, E>(with endpoint: E,
-                       completion: @escaping CompletionHandler<T>) -> NetworkCancellable?
+    func request<T, E>(
+        with endpoint: E,
+        completion: @escaping CompletionHandler<T>) -> NetworkCancellable?
     where T: Decodable, T == E.Response, E: ResponseRequestable {
-        return self.networkService.request(endpoint: endpoint) { [weak self] result in
-            guard let self = self else { return }
+        return self.networkService.request(endpoint: endpoint) { result in
             switch result {
             case .success(let data):
                 let result: Result<T, DataTransferError> = self.decode(data: data,
                                                                        decoder: endpoint.responseDecoder)
-                DispatchQueue.main.async {
-                    return completion(result)
-                }
+                asynchrony { return completion(result) }
             case .failure(let error):
                 self.errorLogger.log(error: error)
                 let error = self.resolve(networkError: error)
-                DispatchQueue.main.async {
-                    return completion(.failure(error))
-                }
+                asynchrony { return completion(.failure(error)) }
             }
         }
     }
@@ -115,6 +117,8 @@ extension DataTransferService: DataTransferServiceInput {
     }
 }
 
+// MARK: - DataTransferErrorLogger Type
+
 struct DataTransferErrorLogger: DataTransferErrorLoggerInput {
     func log(error: Error) {
         printIfDebug("------------")
@@ -122,14 +126,16 @@ struct DataTransferErrorLogger: DataTransferErrorLoggerInput {
     }
 }
 
+// MARK: - DataTransferErrorResolver Type
+
 struct DataTransferErrorResolver: DataTransferErrorResolverInput {
     func resolve(error: NetworkError) -> Error { error }
 }
 
-final class JSONResponseDecoder: ResponseDecoder {
+// MARK: - JSONResponseDecoder Type
+
+struct JSONResponseDecoder: ResponseDecoder {
     private let decoder = JSONDecoder()
-    
-    init() {}
     
     func decode<T>(_ data: Data) throws -> T where T: Decodable {
         return try decoder.decode(T.self, from: data)

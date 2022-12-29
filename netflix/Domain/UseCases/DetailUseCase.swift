@@ -7,31 +7,27 @@
 
 import Foundation
 
-private protocol UseCaseInput {
-    func request<T>(for response: T.Type,
-                    with request: SeasonRequestDTO.GET,
-                    completion: @escaping (Result<SeasonResponse.GET, Error>) -> Void) -> Cancellable?
-    func execute<T>(for response: T.Type,
-                    with request: SeasonRequestDTO.GET,
-                    completion: @escaping (Result<SeasonResponse.GET, Error>) -> Void) -> Cancellable?
-}
+// MARK: - DetailUseCase Type
 
-private protocol UseCaseOutput {
-    var seasonsRepository: SeasonRepository { get }
-}
-
-private typealias UseCase = UseCaseInput & UseCaseOutput
-
-final class DetailUseCase: UseCase {
-    fileprivate let seasonsRepository: SeasonRepository
+final class DetailUseCase {
+    
+    // MARK: Properties
+    
+    private let seasonsRepository: SeasonRepository
+    
+    // MARK: Initializer
     
     init(seasonsRepository: SeasonRepository) {
         self.seasonsRepository = seasonsRepository
     }
-    
-    fileprivate func request<T>(for response: T.Type,
-                                with request: SeasonRequestDTO.GET,
-                                completion: @escaping (Result<SeasonResponse.GET, Error>) -> Void) -> Cancellable? {
+}
+
+// MARK: - Methods
+
+extension DetailUseCase {
+    private func request<T>(for response: T.Type,
+                            with request: SeasonRequestDTO.GET,
+                            completion: @escaping (Result<SeasonResponse.GET, Error>) -> Void) -> Cancellable? {
         return seasonsRepository.getSeason(with: request) { result in
             switch result {
             case .success(let response):

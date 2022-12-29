@@ -7,14 +7,17 @@
 
 import Foundation
 
+// MARK: - ListDTO Type
+
 struct ListDTO: Decodable {
     let user: String
     var media: [MediaDTO]
 }
 
+// MARK: - Mapping
+
 extension ListDTO {
     func toDomain() -> List {
-        return .init(user: user,
-                     media: media.map { $0.toDomain() })
+        return .init(user: user, media: media.map { $0.toDomain() })
     }
 }

@@ -7,6 +7,8 @@
 
 import Foundation
 
+// MARK: - NewsRequestDTO Type
+
 struct NewsRequestDTO {
     let queryParams: [String: Any]
 }

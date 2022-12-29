@@ -7,7 +7,12 @@
 
 import Foundation
 
+// MARK: - SeasonResponse Type
+
 struct SeasonResponse {
+    
+    // MARK: GET Type
+    
     struct GET {
         let status: String
         let data: Season

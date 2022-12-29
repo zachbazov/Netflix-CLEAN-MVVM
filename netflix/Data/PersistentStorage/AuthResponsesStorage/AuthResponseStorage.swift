@@ -7,42 +7,35 @@
 
 import CoreData
 
-private protocol StorageInput {
-    func fetchRequest(for requestDTO: AuthRequestDTO) -> NSFetchRequest<AuthRequestEntity>
-    func getResponse(for request: AuthRequestDTO,
-                     completion: @escaping (Result<AuthResponseDTO?, CoreDataStorageError>) -> Void)
-    func save(response: AuthResponseDTO,
-              for request: AuthRequestDTO)
-    func deleteResponse(for request: AuthRequestDTO,
-                        in context: NSManagedObjectContext)
-}
+// MARK: - AuthResponseStorage Type
 
-private protocol StorageOutput {
-    var coreDataStorage: CoreDataStorage { get }
-}
-
-private typealias Storage = StorageInput & StorageOutput
-
-final class AuthResponseStorage: Storage {
-    fileprivate let coreDataStorage: CoreDataStorage
-    fileprivate let authService: AuthService
+final class AuthResponseStorage {
+    
+    // MARK: Properties
+    
+    private let coreDataStorage: CoreDataStorage
+    private let authService: AuthService
+    
+    // MARK: Initializer
     
     init(coreDataStorage: CoreDataStorage = .shared,
          authService: AuthService) {
         self.coreDataStorage = coreDataStorage
         self.authService = authService
     }
-    
-    fileprivate func fetchRequest(for requestDTO: AuthRequestDTO) -> NSFetchRequest<AuthRequestEntity> {
+}
+
+// MARK: - Methods
+
+extension AuthResponseStorage {
+    private func fetchRequest(for requestDTO: AuthRequestDTO) -> NSFetchRequest<AuthRequestEntity> {
         let request: NSFetchRequest = AuthRequestEntity.fetchRequest()
         request.predicate = NSPredicate(format: "%K = %@",
                                         #keyPath(AuthRequestEntity.user),
                                         requestDTO.user)
         return request
     }
-}
-
-extension AuthResponseStorage {
+    
     func getResponse(for request: AuthRequestDTO,
                      completion: @escaping (Result<AuthResponseDTO?, CoreDataStorageError>) -> Void) {
         coreDataStorage.performBackgroundTask { [weak self] context in

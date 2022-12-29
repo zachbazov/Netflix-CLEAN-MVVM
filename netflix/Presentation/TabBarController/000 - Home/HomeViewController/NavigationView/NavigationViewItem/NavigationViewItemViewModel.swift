@@ -7,12 +7,20 @@
 
 import Foundation
 
+// MARK: - NavigationViewItemViewModel Type
+
 struct NavigationViewItemViewModel {
+    
+    // MARK: Properties
+    
     let coordinator: HomeViewCoordinator
     let tag: Int
     var title: String!
     var image: String!
     var isSelected: Bool
+    
+    // MARK: Initializer
+    
     /// Create a navigation view item view model object.
     /// - Parameters:
     ///   - tag: View indicator.
@@ -25,6 +33,8 @@ struct NavigationViewItemViewModel {
         self.image = image(for: tag)
     }
 }
+
+// MARK: - Methods
 
 extension NavigationViewItemViewModel {
     private func title(for tag: Int) -> String? {

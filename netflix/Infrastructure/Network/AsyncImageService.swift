@@ -7,7 +7,12 @@
 
 import UIKit
 
+// MARK: - URLImageProtocol Type
+
 class URLImageProtocol: URLProtocol {
+    
+    // MARK: Properties
+    
     var cancelledOrComplete: Bool = false
     var block: DispatchWorkItem!
     
@@ -16,12 +21,15 @@ class URLImageProtocol: URLProtocol {
                                              attributes: .concurrent,
                                              autoreleaseFrequency: .workItem,
                                              target: .global(qos: .background))
+    
     static func urlSession() -> URLSession {
         let config = URLSessionConfiguration.ephemeral
         config.protocolClasses = [URLImageProtocol.classForCoder()]
         config.timeoutIntervalForRequest = 70
         return URLSession(configuration: config)
     }
+    
+    // MARK: URLProtocol Lifecycle
     
     override class func canInit(with request: URLRequest) -> Bool {
         return true
@@ -73,12 +81,21 @@ class URLImageProtocol: URLProtocol {
     }
 }
 
+// MARK: - AsyncImageService Type
+
 final class AsyncImageService {
-    static var shared = AsyncImageService()
-    private(set) var cache = NSCache<NSString, UIImage>()
     
+    // MARK: Singleton Pattern
+    
+    static var shared = AsyncImageService()
     private init() {}
+    
+    // MARK: Properties
+    
+    private(set) var cache = NSCache<NSString, UIImage>()
 }
+
+// MARK: - Methods
 
 extension AsyncImageService {
     private func set(_ image: UIImage, forKey identifier: NSString) {
@@ -108,14 +125,5 @@ extension AsyncImageService {
             self.set(image, forKey: identifier)
             asynchrony { completion(image) }
         }.resume()
-    }
-}
-
-extension AsyncImageService {
-    /// Cache representation type.
-    enum Cache {
-        case home
-        case search
-        case news
     }
 }

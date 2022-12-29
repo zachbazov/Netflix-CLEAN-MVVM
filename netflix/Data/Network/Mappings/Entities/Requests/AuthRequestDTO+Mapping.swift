@@ -7,9 +7,13 @@
 
 import Foundation
 
+// MARK: - AuthRequestDTO Type
+
 struct AuthRequestDTO: Decodable {
     let user: UserDTO
 }
+
+// MARK: - Mapping
 
 extension AuthRequestDTO {
     func toDomain() -> AuthRequest {

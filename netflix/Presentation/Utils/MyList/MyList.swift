@@ -7,19 +7,34 @@
 
 import UIKit
 
+// MARK: - MyList Type
+
 final class MyList {
+    
+    // MARK: Properties
+    
     let viewModel: MyListViewModel
+    
+    // MARK: Initializer
     
     init(with viewModel: HomeViewModel) {
         self.viewModel = MyListViewModel(with: viewModel)
         self.viewDidLoad()
     }
-    
+}
+
+// MARK: - UI Setup
+
+extension MyList {
     private func viewDidLoad() {
         setupObservers()
         viewModel.fetchList()
     }
-    
+}
+
+// MARK: - Observers
+
+extension MyList {
     private func setupObservers() {
         viewModel.list.observe(on: self) { [weak self] _ in
             self?.viewModel.listDidReload()

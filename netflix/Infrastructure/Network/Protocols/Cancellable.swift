@@ -7,6 +7,8 @@
 
 import Foundation
 
+// MARK: - Cancellable Protocol
+
 protocol Cancellable {
     func cancel()
 }

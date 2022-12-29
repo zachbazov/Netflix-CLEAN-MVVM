@@ -7,15 +7,18 @@
 
 import Foundation
 
+// MARK: - MediaEntity Type
+
 @objc(MediaEntity)
 public final class MediaEntity: NSObject, Codable, NSSecureCoding {
+    
+    // MARK: Properties
+    
     var id: String?
     var type: String?
     var title: String?
     var slug: String?
-    
     var createdAt: String?
-    
     var rating: Float?
     var desc: String?
     var cast: String?
@@ -23,17 +26,16 @@ public final class MediaEntity: NSObject, Codable, NSSecureCoding {
     var duration: String?
     var length: String?
     var genres: [String]?
-    
     var hasWatched: Bool?
     var isHD: Bool?
     var isExclusive: Bool?
     var isNewRelease: Bool?
     var isSecret: Bool?
-    
     var resources: MediaResourcesDTO?
-    
     var seasons: [String]?
     var numberOfEpisodes: Int?
+    
+    // MARK: Initializer
     
     init(id: String?,
          type: String,
@@ -76,6 +78,8 @@ public final class MediaEntity: NSObject, Codable, NSSecureCoding {
         self.seasons = seasons
         self.numberOfEpisodes = numberOfEpisodes
     }
+    
+    // MARK: NSSecureCoding Lifecycle
     
     public static var supportsSecureCoding: Bool { true }
     
@@ -125,6 +129,8 @@ public final class MediaEntity: NSObject, Codable, NSSecureCoding {
         coder.encode(numberOfEpisodes, forKey: "numberOfEpisodes")
     }
 }
+
+// MARK: - Mapping
 
 extension MediaEntity {
     func toDTO() -> MediaDTO {

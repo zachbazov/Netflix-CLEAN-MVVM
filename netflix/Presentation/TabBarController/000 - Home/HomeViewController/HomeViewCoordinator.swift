@@ -7,9 +7,13 @@
 
 import UIKit
 
+// MARK: - HomeCoordinable Protocol
+
 private protocol HomeCoordinable {
     func allocateDetailController()
 }
+
+// MARK: - HomeViewCoordinator Type
 
 final class HomeViewCoordinator {
     var viewController: HomeViewController?
@@ -17,6 +21,8 @@ final class HomeViewCoordinator {
     var media: Media?
     var shouldScreenRotate: Bool = false
 }
+
+// MARK: - HomeCoordinable Implementation
 
 extension HomeViewCoordinator: HomeCoordinable {
     func allocateDetailController() {
@@ -37,6 +43,8 @@ extension HomeViewCoordinator: HomeCoordinable {
         viewController?.present(navigation, animated: true)
     }
 }
+
+// MARK: - Coordinate Implementation
 
 extension HomeViewCoordinator: Coordinate {
     /// View representation type.

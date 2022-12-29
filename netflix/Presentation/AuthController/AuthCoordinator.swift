@@ -7,6 +7,8 @@
 
 import UIKit
 
+// MARK: - AuthCoordinable Protocol
+
 private protocol AuthCoordinable {
     func allocateLandpageDependencies() -> LandpageViewController
     func allocateSignInDependencies() -> SignInViewController
@@ -14,12 +16,16 @@ private protocol AuthCoordinable {
     func present(_ sender: Any)
 }
 
+// MARK: - AuthCoordinator Type
+
 final class AuthCoordinator {
     var viewController: AuthController?
     private lazy var landpageController: LandpageViewController = allocateLandpageDependencies()
     private lazy var signInController: SignInViewController = allocateSignInDependencies()
     private lazy var signUpController: SignUpViewController = allocateSignUpDependencies()
 }
+
+// MARK: - AuthCoordinable Implementation
 
 extension AuthCoordinator: AuthCoordinable {
     fileprivate func allocateLandpageDependencies() -> LandpageViewController {
@@ -56,6 +62,8 @@ extension AuthCoordinator: AuthCoordinable {
         }
     }
 }
+
+// MARK: - Coordinate Implementation
 
 extension AuthCoordinator: Coordinate {
     /// View representation type.

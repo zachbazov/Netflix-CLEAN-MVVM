@@ -7,6 +7,8 @@
 
 import Foundation
 
+// MARK: - MediaRequest Type
+
 struct MediaRequest {
     var user: UserDTO? = nil
     let media: MediaRequestDTO

@@ -7,9 +7,13 @@
 
 import Foundation
 
+// MARK: - DownloadsViewModel Type
+
 final class DownloadsViewModel {
     var coordinator: DownloadsViewCoordinator?
 }
+
+// MARK: - ViewModel Implementation
 
 extension DownloadsViewModel: ViewModel {
     func transform(input: Void) {}

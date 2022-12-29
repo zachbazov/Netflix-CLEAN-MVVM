@@ -7,7 +7,12 @@
 
 import Foundation
 
+// MARK: - DetailPanelViewItemViewModel Type
+
 final class DetailPanelViewItemViewModel {
+    
+    // MARK: Properties
+    
     let tag: Int
     let isSelected: Observable<Bool>
     var media: Media!
@@ -29,6 +34,9 @@ final class DetailPanelViewItemViewModel {
         case .share: return Localization.TabBar.Detail.Panel().trailingItem
         }
     }
+    
+    // MARK: Initializer
+    
     /// Create a panel view item view model object.
     /// - Parameters:
     ///   - item: Corresponding view.
@@ -40,11 +48,15 @@ final class DetailPanelViewItemViewModel {
         self.setupObservers(on: item)
     }
     
+    // MARK: Deinitializer
+    
     deinit {
         removeObservers()
         media = nil
     }
 }
+
+// MARK: - Observers
 
 extension DetailPanelViewItemViewModel {
     private func setupObservers(on item: DetailPanelViewItem) {

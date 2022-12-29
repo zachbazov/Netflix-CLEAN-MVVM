@@ -7,8 +7,16 @@
 
 import Foundation
 
+// MARK: - SearchViewModel Type
+
 final class SearchViewModel {
+    
+    // MARK: ViewModel's Properties
+    
     var coordinator: SearchViewCoordinator?
+    
+    // MARK: Type's Properties
+    
     private let useCase: SearchUseCase
     
     private var currentPage: Int = 0
@@ -24,6 +32,9 @@ final class SearchViewModel {
     private var isEmpty: Bool { return items.value.isEmpty }
     
     private var mediaLoadTask: Cancellable? { willSet { mediaLoadTask?.cancel() } }
+    
+    // MARK: Initializer
+    
     /// Default initializer.
     /// Allocate `useCase` property and it's dependencies.
     init() {
@@ -34,9 +45,13 @@ final class SearchViewModel {
     }
 }
 
+// MARK: - ViewModel Implementation
+
 extension SearchViewModel: ViewModel {
     func transform(input: Void) {}
 }
+
+// MARK: - Methods
 
 extension SearchViewModel {
     private func appendPage(_ mediaPage: MediaPage) {
@@ -78,6 +93,8 @@ extension SearchViewModel {
     }
 }
 
+// MARK: - UI Setup
+
 extension SearchViewModel {
     func viewDidLoad() {}
     
@@ -96,9 +113,13 @@ extension SearchViewModel {
     }
 }
 
+// MARK: - Array Extension
+
 private extension Array where Element == MediaPage {
     var media: [Media] { flatMap { $0.media } }
 }
+
+// MARK: - SearchLoading Type
 
 enum SearchLoading {
     case fullscreen

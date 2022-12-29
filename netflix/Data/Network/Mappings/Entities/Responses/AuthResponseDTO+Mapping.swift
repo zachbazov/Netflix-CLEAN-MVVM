@@ -7,11 +7,15 @@
 
 import CoreData
 
+// MARK: - AuthResponseDTO Type
+
 struct AuthResponseDTO: Decodable {
     var status: String?
     let token: String
     let data: UserDTO?
 }
+
+// MARK: - Mapping
 
 extension AuthResponseDTO {
     func toDomain() -> AuthResponse {

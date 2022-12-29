@@ -7,6 +7,8 @@
 
 import AVKit
 
+// MARK: - MediaPlayerDelegate Protocol
+
 protocol MediaPlayerDelegate: AnyObject {
     func playerDidPlay(_ mediaPlayer: MediaPlayer)
     func playerDidStop(_ mediaPlayer: MediaPlayer)
@@ -14,23 +16,21 @@ protocol MediaPlayerDelegate: AnyObject {
     func player(_ mediaPlayer: MediaPlayer, willVerifyUrl url: URL) -> Bool
 }
 
-private protocol MediaPlayerOutput {
-    var player: AVPlayer { get }
-    var mediaPlayerLayer: MediaPlayerLayer! { get }
-}
+// MARK: - MediaPlayer Type
 
-private typealias MediaPlaying = MediaPlayerOutput
-
-struct MediaPlayer: MediaPlaying {
-    let player = AVPlayer()
-    var mediaPlayerLayer: MediaPlayerLayer!
+struct MediaPlayer {
     
-    static func create(on parent: UIView) -> MediaPlayer {
-        let mediaPlayerLayer = MediaPlayerLayer(frame: parent.bounds)
-        let view = MediaPlayer(mediaPlayerLayer: mediaPlayerLayer)
-        parent.addSubview(view.mediaPlayerLayer)
-        view.mediaPlayerLayer.constraintToSuperview(parent)
-        view.mediaPlayerLayer.player = view.player
-        return view
+    // MARK: Properties
+    
+    let player = AVPlayer()
+    let mediaPlayerLayer: MediaPlayerLayer
+    
+    // MARK: Initializer
+    
+    init(on parent: UIView) {
+        self.mediaPlayerLayer = MediaPlayerLayer(frame: parent.bounds)
+        parent.addSubview(self.mediaPlayerLayer)
+        self.mediaPlayerLayer.constraintToSuperview(parent)
+        self.mediaPlayerLayer.player = self.player
     }
 }

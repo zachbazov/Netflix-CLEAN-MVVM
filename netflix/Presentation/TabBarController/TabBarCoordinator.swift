@@ -7,6 +7,14 @@
 
 import UIKit
 
+// MARK: - TabBarEjectable Protocol
+
+protocol TabBarEjectable {
+    func ejectTabBarObservers()
+}
+
+// MARK: - TabBarCoordinable Protocol
+
 private protocol TabBarCoordinable {
     func allocateViewControllers()
     func homeDependencies() -> UINavigationController
@@ -15,13 +23,23 @@ private protocol TabBarCoordinable {
     func downloadsDependencies() -> UINavigationController
 }
 
+// MARK: - TabBarConfiguration Type
+
 private struct TabBarConfiguration {
-    /// TabBar item data representation.
+    
+    // MARK: TabBarItem Type
+    
     private struct TabBarItem {
+        
+        // MARK: Properties
+        
         let title: String
         let image: UIImage
         let tag: Int
         var navigationBarHidden: Bool?
+        
+        // MARK: Methods
+        
         /// Apply configuration a tab bar item.
         /// - Parameter controller: Receiver view controller.
         func applyConfig<T: UIViewController>(for controller: T) {
@@ -34,6 +52,9 @@ private struct TabBarConfiguration {
             }
         }
     }
+    
+    // MARK: Methods
+    
     /// Provide a tab bar item based on the screen type for a controller.
     /// - Parameters:
     ///   - screen: The screen type.
@@ -87,13 +108,26 @@ private struct TabBarConfiguration {
     }
 }
 
+// MARK: - TabBarCoordinator Type
+
 final class TabBarCoordinator {
+    
+    // MARK: Coordinate's Protocol Properties
+    
     weak var viewController: TabBarController?
+    
+    // MARK: Type's Properties
+    
     private let configuration = TabBarConfiguration()
     private(set) var home: UINavigationController!
     private(set) var news: UINavigationController!
     private(set) var search: UINavigationController!
     private var downloads: UIViewController!
+}
+
+// MARK: - AuthViewModelDelegate Implementation
+
+extension TabBarCoordinator: AuthViewModelDelegate {
     /// In-order to gain access to the home page,
     /// request the user credentials.
     func requestUserCredentials() {
@@ -101,6 +135,8 @@ final class TabBarCoordinator {
         viewModel.cachedAuthorizationSession { [weak self] in self?.allocateViewControllers() }
     }
 }
+
+// MARK: - TabBarCoordinable Implementation
 
 extension TabBarCoordinator: TabBarCoordinable {
     /// Allocate and set view controllers for the tab controller.
@@ -180,6 +216,8 @@ extension TabBarCoordinator: TabBarCoordinable {
         return navigation
     }
 }
+
+// MARK: - Coordinate Implementation
 
 extension TabBarCoordinator: Coordinate {
     /// View representation type.

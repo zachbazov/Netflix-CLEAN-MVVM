@@ -7,9 +7,22 @@
 
 import UIKit
 
+// MARK: - DetailCoordinable Protocol
+
+private protocol DetailCoordinable {
+    func allocateDetailController()
+}
+
+// MARK: - DetailViewCoordinator Type
+
 final class DetailViewCoordinator {
     weak var viewController: DetailViewController?
     var media: Media?
+}
+
+// MARK: - DetailCoordinable Implementation
+
+extension DetailViewCoordinator: DetailCoordinable {
     /// Create a new detail controller upon existed detail controller.
     /// - Parameter media: Corresponding media object.
     func allocateDetailController() {
@@ -29,6 +42,8 @@ final class DetailViewCoordinator {
         navigation?.setViewControllers([controller], animated: true)
     }
 }
+
+// MARK: - Coordinate Implementation
 
 extension DetailViewCoordinator: Coordinate {
     /// View representation type.

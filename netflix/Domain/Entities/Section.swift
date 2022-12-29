@@ -7,16 +7,25 @@
 
 import Foundation
 
+// MARK: - Section Type
+
 final class Section {
-    var id: Int
-    var title: String
+    
+    // MARK: Properties
+    
+    let id: Int
+    let title: String
     var media: [Media]
     
-    init(id: Int,
-         title: String,
-         media: [Media]) {
+    // MARK: Initializer
+    
+    init(id: Int, title: String, media: [Media]) {
         self.id = id
         self.title = title
         self.media = media
     }
 }
+
+// MARK: - Sectionable Implementation
+
+extension Section: Sectionable {}

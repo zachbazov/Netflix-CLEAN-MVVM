@@ -7,7 +7,11 @@
 
 import Foundation
 
+// MARK: - Reusable Protocol
+
 protocol Reusable {}
+
+// MARK: - Default Implementation
 
 extension Reusable {
     static var reuseIdentifier: String {

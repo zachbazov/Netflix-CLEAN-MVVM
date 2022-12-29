@@ -7,15 +7,24 @@
 
 import Foundation
 
+// MARK: - SignInViewModel Type
+
 final class SignInViewModel {
+    
+    // MARK: Properties
+    
     private let viewModel: AuthViewModel
     var email: String?
     var password: String?
+    
+    // MARK: Initializer
     
     init(with viewModel: AuthViewModel) {
         self.viewModel = viewModel
     }
 }
+
+// MARK: - Methods
 
 extension SignInViewModel {
     @objc

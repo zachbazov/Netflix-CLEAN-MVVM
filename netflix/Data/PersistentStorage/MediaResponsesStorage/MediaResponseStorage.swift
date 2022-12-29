@@ -7,28 +7,24 @@
 
 import CoreData
 
-private protocol StorageInput {
-    func getResponse(for request: MediaRequestDTO.GET.One,
-                     completion: @escaping (Result<MediaResponseDTO.GET.One?, CoreDataStorageError>) -> Void)
-    func save(response: MediaResponseDTO.GET.One,
-              for request: MediaRequestDTO.GET.One)
-    func deleteResponse(for request: MediaRequestDTO.GET.One,
-                        in context: NSManagedObjectContext)
-}
+// MARK: - MediaResponseStorage Type
 
-private protocol StorageOutput {
-    var coreDataStorage: CoreDataStorage { get }
-}
-
-private typealias Storage = StorageInput & StorageOutput
-
-final class MediaResponseStorage: Storage {
-    fileprivate let coreDataStorage: CoreDataStorage
+final class MediaResponseStorage {
+    
+    // MARK: Properties
+    
+    private let coreDataStorage: CoreDataStorage
+    
+    // MARK: Initializer
     
     init(coreDataStorage: CoreDataStorage = .shared) {
         self.coreDataStorage = coreDataStorage
     }
-    
+}
+
+// MARK: - Methods
+
+extension MediaResponseStorage {
     private func fetchRequest(for requestDTO: MediaRequestDTO.GET.One) -> NSFetchRequest<MediaRequestEntity> {
         let request: NSFetchRequest = MediaRequestEntity.fetchRequest()
         if requestDTO.slug != nil {
@@ -42,9 +38,7 @@ final class MediaResponseStorage: Storage {
                                         requestDTO.id ?? "")
         return request
     }
-}
-
-extension MediaResponseStorage {
+    
     func getResponse(for request: MediaRequestDTO.GET.One,
                      completion: @escaping (Result<MediaResponseDTO.GET.One?, CoreDataStorageError>) -> Void) {
         coreDataStorage.performBackgroundTask { context in

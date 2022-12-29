@@ -7,8 +7,16 @@
 
 import UIKit
 
+// MARK: - NavigationOverlayTableViewCell Type
+
 final class NavigationOverlayTableViewCell: UITableViewCell {
+    
+    // MARK: Properties
+    
     private lazy var titleLabel = createLabel()
+    
+    // MARK: Initializer
+    
     /// Create and dequeue a navigation overlay table view cell.
     /// - Parameters:
     ///   - tableView: Corresponding table view.
@@ -36,6 +44,8 @@ final class NavigationOverlayTableViewCell: UITableViewCell {
     
     required init?(coder: NSCoder) { fatalError() }
 }
+
+// MARK: - UI Setup
 
 extension NavigationOverlayTableViewCell {
     private func setupSubviews() {

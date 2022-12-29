@@ -7,33 +7,12 @@
 
 import Foundation
 
-private protocol AuthRepositoryEndpoints {
-    static func signUp(with authRequestDTO: AuthRequestDTO) -> Endpoint<AuthResponseDTO>
-    static func signIn(with authRequestDTO: AuthRequestDTO) -> Endpoint<AuthResponseDTO>
-}
-
-private protocol SectionsRepositoryEndpoints {
-    static func getAllSections() -> Endpoint<SectionResponseDTO.GET>
-}
-
-private protocol MediaRepositoryEndpoints {
-    static func getAllMedia() -> Endpoint<MediaResponseDTO.GET.Many>
-    static func getMedia(with request: MediaRequestDTO.GET.One) -> Endpoint<MediaResponseDTO.GET.One>
-    static func searchMedia(with request: SearchRequestDTO) -> Endpoint<SearchResponseDTO>
-}
-
-private protocol SeasonsRepositoryEndpoints {
-    static func getSeason(with request: SeasonRequestDTO.GET) -> Endpoint<SeasonResponseDTO.GET>
-}
-
-private protocol MyListRepositoryEndpoints {
-    static func getAllMyLists() -> Endpoint<ListResponseDTO.GET>
-    static func getMyList(with request: ListRequestDTO.GET) -> Endpoint<ListResponseDTO.GET>
-    static func createMyList(with request: ListRequestDTO.POST) -> Endpoint<ListResponseDTO.POST>
-    static func updateMyList(with request: ListRequestDTO.PATCH) -> Endpoint<ListResponseDTO.PATCH>
-}
+// MARK: - APIEndpoint Type
 
 struct APIEndpoint {
+    
+    // MARK: AuthRepository Type
+    
     struct AuthRepository: AuthRepositoryEndpoints {
         static func signUp(with authRequestDTO: AuthRequestDTO) -> Endpoint<AuthResponseDTO> {
             return Endpoint(path: "api/v1/users/signup",
@@ -54,6 +33,8 @@ struct APIEndpoint {
         }
     }
     
+    // MARK: SectionsRepository Type
+    
     struct SectionsRepository: SectionsRepositoryEndpoints {
         static func getAllSections() -> Endpoint<SectionResponseDTO.GET> {
             return Endpoint(path: "api/v1/sections",
@@ -61,6 +42,8 @@ struct APIEndpoint {
                             queryParameters: ["sort": "id"])
         }
     }
+    
+    // MARK: MediaRepository Type
     
     struct MediaRepository: MediaRepositoryEndpoints {
         static func getAllMedia() -> Endpoint<MediaResponseDTO.GET.Many> {
@@ -85,16 +68,16 @@ struct APIEndpoint {
                             method: .get,
                             queryParameters: request.queryParams)
         }
-    }
-    
-    struct SeasonsRepository: SeasonsRepositoryEndpoints {
+        
         static func getSeason(with request: SeasonRequestDTO.GET) -> Endpoint<SeasonResponseDTO.GET> {
             return Endpoint(path: "api/v1/media/\(request.slug!)/seasons/\(request.season!)",
                             method: .get)
         }
     }
     
-    struct MyListRepository: MyListRepositoryEndpoints {
+    // MARK: ListRepository Type
+    
+    struct ListRepository: ListRepositoryEndpoints {
         static func getAllMyLists() -> Endpoint<ListResponseDTO.GET> {
             return Endpoint(path: "api/v1/mylists",
                             method: .get)

@@ -7,6 +7,8 @@
 
 import UIKit
 
+// MARK: - ViewControllerLifecycleBehavior
+
 protocol ViewControllerLifecycleBehavior {
     func viewDidLoad(viewController: UIViewController)
     func viewWillAppear(viewController: UIViewController)
@@ -16,6 +18,8 @@ protocol ViewControllerLifecycleBehavior {
     func viewWillLayoutSubviews(viewController: UIViewController)
     func viewDidLayoutSubviews(viewController: UIViewController)
 }
+
+// MARK: - ViewControllerLifecycleBehavior
 
 extension ViewControllerLifecycleBehavior {
     func viewDidLoad(viewController: UIViewController) {}
@@ -27,7 +31,12 @@ extension ViewControllerLifecycleBehavior {
     func viewDidLayoutSubviews(viewController: UIViewController) {}
 }
 
+// MARK: - UIViewController + AddBehaviors
+
 extension UIViewController {
+    
+    // MARK: Methods
+    
     func addBehaviors(_ behaviors: [ViewControllerLifecycleBehavior]) {
         let behaviorViewController = LifecycleBehaviorViewController(behaviors: behaviors)
         
@@ -36,8 +45,15 @@ extension UIViewController {
         behaviorViewController.didMove(toParent: self)
     }
     
+    // MARK: LifecycleBehaviorViewController Type
+    
     private final class LifecycleBehaviorViewController: UIViewController, UIGestureRecognizerDelegate {
+        
+        // MARK: Properties
+        
         private let behaviors: [ViewControllerLifecycleBehavior]
+        
+        // MARK: Initializer
         
         init(behaviors: [ViewControllerLifecycleBehavior]) {
             self.behaviors = behaviors
@@ -48,6 +64,8 @@ extension UIViewController {
         required init?(coder decoder: NSCoder) {
             fatalError("init(coder: has not been implemented")
         }
+        
+        // MARK: UIViewController Lifecycle
         
         override func viewDidLoad() {
             super.viewDidLoad()

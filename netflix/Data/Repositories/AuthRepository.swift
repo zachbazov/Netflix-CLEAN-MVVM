@@ -7,34 +7,23 @@
 
 import Foundation
 
-private protocol RepositoryInput {
-    func signUp(request: AuthRequest,
-                cached: @escaping (AuthResponseDTO?) -> Void,
-                completion: @escaping (Result<AuthResponseDTO, Error>) -> Void) -> Cancellable?
-    func signIn(request: AuthRequest,
-                cached: @escaping (AuthResponseDTO?) -> Void,
-                completion: @escaping (Result<AuthResponseDTO, Error>) -> Void) -> Cancellable?
+// MARK: - AuthRepositoryEndpoints Protocol
+
+protocol AuthRepositoryEndpoints {
+    static func signUp(with authRequestDTO: AuthRequestDTO) -> Endpoint<AuthResponseDTO>
+    static func signIn(with authRequestDTO: AuthRequestDTO) -> Endpoint<AuthResponseDTO>
 }
 
-private protocol RepositoryOutput {
-    var dataTransferService: DataTransferService { get }
-    var cache: AuthResponseStorage { get }
-}
+// MARK: - AuthRepository Type
 
-private typealias Repository = RepositoryInput & RepositoryOutput
-
-final class AuthRepository {
-    private let dataTransferService: DataTransferService
+struct AuthRepository {
+    let dataTransferService: DataTransferService
     let cache: AuthResponseStorage
-    
-    init(dataTransferService: DataTransferService,
-         cache: AuthResponseStorage) {
-        self.dataTransferService = dataTransferService
-        self.cache = cache
-    }
 }
 
-extension AuthRepository: RepositoryInput {
+// MARK: - Methods
+
+extension AuthRepository {
     func signUp(request: AuthRequest,
                 cached: @escaping (AuthResponseDTO?) -> Void,
                 completion: @escaping (Result<AuthResponseDTO, Error>) -> Void) -> Cancellable? {

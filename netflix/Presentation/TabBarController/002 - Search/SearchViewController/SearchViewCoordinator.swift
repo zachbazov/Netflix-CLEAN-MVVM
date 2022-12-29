@@ -7,9 +7,13 @@
 
 import Foundation
 
+// MARK: - SearchViewCoordinator Type
+
 final class SearchViewCoordinator {
     var viewController: SearchViewController?
 }
+
+// MARK: - Coordinate Implementation
 
 extension SearchViewCoordinator: Coordinate {
     /// View representation type.

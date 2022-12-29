@@ -7,13 +7,37 @@
 
 import Foundation
 
+// MARK: - SearchUseCaseRequestValue Type
+
+struct SearchUseCaseRequestValue {
+    let query: MediaQuery
+    let page: Int
+}
+
+// MARK: - MediaQuery Type
+
+struct MediaQuery: Equatable {
+    let query: String
+}
+
+// MARK: - SearchUseCase Type
+
 final class SearchUseCase {
+    
+    // MARK: Properties
+    
     private let mediaRepository: MediaRepository
+    
+    // MARK: Initializer
     
     init(mediaRepository: MediaRepository) {
         self.mediaRepository = mediaRepository
     }
-    
+}
+
+// MARK: - Methods
+
+extension SearchUseCase {
     func execute(
         requestValue: SearchUseCaseRequestValue,
         cached: @escaping (MediaPage) -> Void,
@@ -53,13 +77,4 @@ final class SearchUseCase {
             
             return task
         }
-}
-
-struct SearchUseCaseRequestValue {
-    let query: MediaQuery
-    let page: Int
-}
-
-struct MediaQuery: Equatable {
-    let query: String
 }

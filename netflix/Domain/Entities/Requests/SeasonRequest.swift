@@ -7,7 +7,12 @@
 
 import Foundation
 
+// MARK: - SeasonRequest Type
+
 struct SeasonRequest {
+    
+    // MARK: GET Type
+    
     struct GET {
         var id: String? = nil
         var slug: String? = nil

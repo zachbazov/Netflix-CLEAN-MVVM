@@ -7,7 +7,12 @@
 
 import Foundation
 
+// MARK: - DetailViewModel Type
+
 final class DetailViewModel {
+    
+    // MARK: Properties
+    
     var coordinator: DetailViewCoordinator?
     private let useCase: DetailUseCase
     let section: Section
@@ -20,6 +25,9 @@ final class DetailViewModel {
     private(set) var myList: MyList!
     private(set) var myListSection: Section!
     private var task: Cancellable? { willSet { task?.cancel() } }
+    
+    // MARK: Initializer
+    
     /// Create a detail view model object.
     /// - Parameters:
     ///   - section: The section that corresponds to the media object.
@@ -37,6 +45,8 @@ final class DetailViewModel {
         self.myListSection = viewModel.myList.viewModel.section
     }
     
+    // MARK: Deinitializer
+    
     deinit {
         isRotated = nil
         myList = nil
@@ -48,9 +58,13 @@ final class DetailViewModel {
     }
 }
 
+// MARK: - ViewModel Implementation
+
 extension DetailViewModel: ViewModel {
     func transform(input: Void) {}
 }
+
+// MARK: - Methods
 
 extension DetailViewModel {
     private func shouldScreenRotate() {
@@ -68,12 +82,16 @@ extension DetailViewModel {
     }
 }
 
+// MARK: - DetailUseCase Implementation
+
 extension DetailViewModel {
     func getSeason(with request: SeasonRequestDTO.GET, completion: @escaping () -> Void) {
         task = useCase.execute(for: SeasonResponse.self,
                                with: request) { [weak self] result in
             if case let .success(responseDTO) = result {
-                self?.season.value = responseDTO.data
+                var season = responseDTO.data
+                season.episodes = season.episodes.sorted { $0.episode < $1.episode }
+                self?.season.value = season
                 completion()
             }
             if case let .failure(error) = result { print(error) }

@@ -7,7 +7,12 @@
 
 import Foundation
 
+// MARK: - DetailInfoViewViewModel Type
+
 struct DetailInfoViewViewModel {
+    
+    // MARK: Properties
+    
     let state: HomeTableViewDataSource.State
     let mediaType: String
     let title: String
@@ -15,6 +20,9 @@ struct DetailInfoViewViewModel {
     let duration: String
     let length: String
     let isHD: Bool
+    
+    // MARK: Initializer
+    
     /// Create a info view view model object.
     /// - Parameter viewModel: Coordinating view model.
     init(with viewModel: DetailViewModel) {

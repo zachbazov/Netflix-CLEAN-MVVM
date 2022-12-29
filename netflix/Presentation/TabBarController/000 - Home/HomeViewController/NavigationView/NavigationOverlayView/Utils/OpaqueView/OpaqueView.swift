@@ -7,11 +7,15 @@
 
 import UIKit
 
+// MARK: - OpaqueView Type
+
 final class OpaqueView: UIView {
     private var imageView: UIImageView!
     private var blurView: UIVisualEffectView!
     private(set) var viewModel: OpaqueViewViewModel!
 }
+
+// MARK: - UI Setup
 
 extension OpaqueView {
     private func viewDidConfigure() {

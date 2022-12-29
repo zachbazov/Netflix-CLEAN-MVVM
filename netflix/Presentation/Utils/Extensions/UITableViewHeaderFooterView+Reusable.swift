@@ -7,4 +7,6 @@
 
 import UIKit
 
+// MARK: - UItableViewHeaderFooterView + Reusable
+
 extension UITableViewHeaderFooterView: Reusable {}

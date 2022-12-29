@@ -7,26 +7,39 @@
 
 import UIKit.UINavigationController
 
+// MARK: - NavigationController Type
+
 class NavigationController: UINavigationController {
+    
+    // MARK: Properties
+    
     weak var progress: UIProgressView!
     
     var isProgressHidden: Bool = true {
-        didSet {
-            setupProgress()
-        }
+        didSet { setupProgress() }
     }
+    
+    // MARK: UINavigationController Lifecycle
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupUI()
+        setupSubviews()
     }
+}
 
-    func setupUI() {
+// MARK: - UI Setup
+
+extension NavigationController {
+    private func setupSubviews() {
         navigationBar.prefersLargeTitles = false
         navigationBar.barStyle = .black
         navigationBar.tintColor = .white
     }
+}
 
+// MARK: - Methods
+
+extension NavigationController {
     private func setupProgress() {
         if isProgressHidden {
             if progress != nil {
@@ -47,24 +60,5 @@ class NavigationController: UINavigationController {
                 ])
             self.progress = progress
         }
-    }
-}
-
-extension UIViewController {
-    func addNavigationItemTitleView() {
-        let asset = "netflix-logo-2"
-        
-        let point = CGPoint(x: 0.0, y: 0.0)
-        let size = CGSize(width: 80.0, height: 24.0)
-        let rect = CGRect(origin: point, size: size)
-        
-        let titleView = UIView(frame: rect)
-        let image = UIImage(named: asset)
-        let imageView = UIImageView(image: image)
-        imageView.frame = CGRect(x: 0.0, y: 0.0, width: size.width, height: size.height)
-        imageView.center = CGPoint(x: titleView.center.x, y: titleView.center.y)
-        
-        titleView.addSubview(imageView)
-        navigationItem.titleView = titleView
     }
 }

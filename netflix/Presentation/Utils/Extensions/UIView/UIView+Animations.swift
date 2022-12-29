@@ -7,6 +7,8 @@
 
 import UIKit
 
+// MARK: - UIView + Animations (Spring)
+
 extension UIView {
     func animateUsingSpring(withDuration duration: TimeInterval,
                             withDamping damping: CGFloat,
@@ -31,10 +33,17 @@ extension UIView {
     }
 }
 
+// MARK: - UIView + Animations (Alpha)
+
 extension UIView {
-    fileprivate var defaultAnimationDuration: TimeInterval { return 0.3 }
-    fileprivate var semiTransparent: CGFloat { return 0.5 }
-    fileprivate var nonTransparent: CGFloat { return 1.0 }
+    
+    // MARK: Properties
+    
+    private var defaultAnimationDuration: TimeInterval { return 0.3 }
+    private var semiTransparent: CGFloat { return 0.5 }
+    private var nonTransparent: CGFloat { return 1.0 }
+    
+    // MARK: Methods
     
     func setAlphaAnimation(using gesture: UIGestureRecognizer? = nil,
                            duration: TimeInterval? = nil,

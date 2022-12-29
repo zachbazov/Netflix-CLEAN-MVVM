@@ -7,6 +7,8 @@
 
 import UIKit
 
+// MARK: - CALayer Extension
+
 extension CALayer {
     func shadow(_ color: UIColor, radius: CGFloat, opacity: Float) {
         shadowColor = color.cgColor

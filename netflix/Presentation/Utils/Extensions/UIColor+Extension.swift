@@ -7,6 +7,8 @@
 
 import UIKit
 
+// MARK: - UIColor Extension
+
 extension UIColor {
     static func hexColor(_ hex: String) -> UIColor {
         var hexString = hex.trimmingCharacters(in: .whitespacesAndNewlines).uppercased()
@@ -23,9 +25,7 @@ extension UIColor {
                        blue: CGFloat(rgb & 0x0000FF) / 255,
                        alpha: 1.0)
     }
-}
-
-extension UIColor {
+    
     static func rgbColor(red: CGFloat, green: CGFloat, blue: CGFloat) -> UIColor {
         return UIColor(red: red / 255, green: green / 255, blue: blue / 255, alpha: 1.0)
     }

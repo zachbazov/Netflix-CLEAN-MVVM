@@ -7,6 +7,8 @@
 
 import Foundation
 
+// MARK: - SeasonDTO Type
+
 struct SeasonDTO: Decodable {
     let mediaId: String
     let title: String
@@ -14,6 +16,8 @@ struct SeasonDTO: Decodable {
     let season: Int
     let episodes: [EpisodeDTO]
 }
+
+// MARK: - Mapping
 
 extension SeasonDTO {
     func toDomain() -> Season {

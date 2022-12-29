@@ -7,7 +7,12 @@
 
 import UIKit
 
+// MARK: - ResumableCollectionViewCell Type
+
 final class ResumableCollectionViewCell: CollectionViewCell {
+    
+    // MARK: Outlet Properties
+    
     @IBOutlet private weak var actionBoxView: UIView!
     @IBOutlet private weak var optionsButton: UIButton!
     @IBOutlet private weak var infoButton: UIButton!
@@ -16,11 +21,15 @@ final class ResumableCollectionViewCell: CollectionViewCell {
     @IBOutlet private weak var playButton: UIButton!
     @IBOutlet private weak var progressView: UIProgressView!
     
+    // MARK: CollectionViewCell Lifecycle
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         self.viewDidLoad()
     }
 }
+
+// MARK: - UI Setup
 
 extension ResumableCollectionViewCell {
     private func viewDidLoad() {

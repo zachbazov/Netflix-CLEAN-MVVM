@@ -7,4 +7,6 @@
 
 import UIKit
 
+// MARK: - UITableViewCell + ViewInstantiable
+
 extension UITableViewCell: ViewInstantiable {}

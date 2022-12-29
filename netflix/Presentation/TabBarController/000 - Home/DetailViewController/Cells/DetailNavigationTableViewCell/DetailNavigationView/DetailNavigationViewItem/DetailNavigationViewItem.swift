@@ -7,9 +7,17 @@
 
 import UIKit
 
+// MARK: - DetailNavigationViewItemConfiguration Type
+
 final class DetailNavigationViewItemConfiguration {
+    
+    // MARK: Properties
+    
     private weak var view: DetailNavigationViewItem!
     private weak var navigationView: DetailNavigationView!
+    
+    // MARK: Initializer
+    
     /// Create a navigation view item configuration object.
     /// - Parameters:
     ///   - view: Corresponding view.
@@ -18,8 +26,9 @@ final class DetailNavigationViewItemConfiguration {
         self.view = view
         self.navigationView = navigationView
         self.viewDidRegisterRecognizers()
-        self.viewDidConfigure()
     }
+    
+    // MARK: Deinitializer
     
     deinit {
         view = nil
@@ -27,21 +36,11 @@ final class DetailNavigationViewItemConfiguration {
     }
 }
 
+// MARK: - UI Setup
+
 extension DetailNavigationViewItemConfiguration {
     private func viewDidRegisterRecognizers() {
         view.button.addTarget(self, action: #selector(viewDidTap), for: .touchUpInside)
-    }
-    
-    private func viewDidConfigure() {
-        if navigationView.viewModel.media.type == .series {
-            navigationView.viewModel.navigationViewState.value = .episodes
-            navigationView.leadingViewContainer.isHidden(false)
-            navigationView.centerViewContainer.isHidden(true)
-        } else {
-            navigationView.viewModel.navigationViewState.value = .trailers
-            navigationView.leadingViewContainer.isHidden(true)
-            navigationView.centerViewContainer.isHidden(false)
-        }
     }
     
     @objc
@@ -52,13 +51,21 @@ extension DetailNavigationViewItemConfiguration {
     }
 }
 
+// MARK: - DetailNavigationViewItem Type
+
 final class DetailNavigationViewItem: UIView {
+    
+    // MARK: Properties
+    
     private var configuration: DetailNavigationViewItemConfiguration!
     private var viewModel: DetailNavigationViewItemViewModel!
     private lazy var indicatorView = createIndicatorView()
     fileprivate lazy var button = createButton()
     var isSelected = false
     private(set) var widthConstraint: NSLayoutConstraint!
+    
+    // MARK: Initializer
+    
     /// Create a navigation view item object.
     /// - Parameters:
     ///   - navigationView: Root navigation view object.
@@ -76,12 +83,18 @@ final class DetailNavigationViewItem: UIView {
     
     required init?(coder: NSCoder) { fatalError() }
     
+    // MARK: Deinitializer
+    
     deinit {
         widthConstraint = nil
         configuration = nil
         viewModel = nil
     }
-    
+}
+
+// MARK: - UI Setup
+
+extension DetailNavigationViewItem {
     private func createIndicatorView() -> UIView {
         let view = UIView()
         view.backgroundColor = .systemRed
@@ -97,9 +110,7 @@ final class DetailNavigationViewItem: UIView {
         addSubview(view)
         return view
     }
-}
-
-extension DetailNavigationViewItem {
+    
     private func viewDidConfigure() {
         widthConstraint = indicatorView.widthAnchor.constraint(equalToConstant: bounds.width)
         chainConstraintToSuperview(linking: indicatorView, to: button, withWidthAnchor: widthConstraint)

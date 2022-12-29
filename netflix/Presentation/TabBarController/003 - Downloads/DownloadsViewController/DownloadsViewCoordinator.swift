@@ -7,9 +7,13 @@
 
 import Foundation
 
+// MARK: - DownloadsViewCoordinator Type
+
 final class DownloadsViewCoordinator {
     var viewController: DownloadsViewController?
 }
+
+// MARK: - Coordinate Implementation
 
 extension DownloadsViewCoordinator: Coordinate {
     /// View representation type.

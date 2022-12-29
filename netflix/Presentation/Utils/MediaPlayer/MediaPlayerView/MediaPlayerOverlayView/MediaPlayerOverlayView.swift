@@ -7,30 +7,27 @@
 
 import AVKit
 
-private protocol ConfigurationInput {
-    func viewDidRegisterObservers()
-    func viewDidConfigure()
-    func viewDidTap(_ view: UIButton)
-}
+// MARK: - MediaPlayerOverlayViewConfiguration Type
 
-private protocol ConfigurationOutput {
-    var durationThreshold: CGFloat! { get }
-    var repeats: Bool! { get }
-    var mediaPlayerView: MediaPlayerView! { get }
-    var overlayView: MediaPlayerOverlayView! { get }
-    var observers: MediaPlayerObservers { get }
-    var timer: ScheduledTimer { get }
-}
-
-private typealias Configuration = ConfigurationInput & ConfigurationOutput
-
-final class MediaPlayerOverlayViewConfiguration: Configuration {
-    fileprivate var durationThreshold: CGFloat!
-    fileprivate var repeats: Bool!
+final class MediaPlayerOverlayViewConfiguration {
+    
+    // MARK: Properties
+    
+    private var durationThreshold: CGFloat!
+    private var repeats: Bool!
     fileprivate weak var mediaPlayerView: MediaPlayerView!
     fileprivate weak var overlayView: MediaPlayerOverlayView!
-    fileprivate(set) var observers: MediaPlayerObservers = .init()
-    fileprivate var timer: ScheduledTimer = .init()
+    private(set) var observers = MediaPlayerObservers()
+    fileprivate var timer = ScheduledTimer()
+    
+    // MARK: Initializer
+    
+    init(durationThreshold: CGFloat? = 3.0, repeats: Bool? = true) {
+        self.durationThreshold = durationThreshold
+        self.repeats = repeats
+    }
+    
+    // MARK: Deinitializer
     
     deinit {
         removeObservers()
@@ -40,16 +37,124 @@ final class MediaPlayerOverlayViewConfiguration: Configuration {
         durationThreshold = nil
         repeats = nil
     }
-    
-    static func create(durationThreshold: CGFloat? = 3.0,
-                       repeats: Bool? = true) -> MediaPlayerOverlayViewConfiguration {
-        let configuration = MediaPlayerOverlayViewConfiguration()
-        configuration.durationThreshold = durationThreshold
-        configuration.repeats = repeats
-        return configuration
+}
+
+// MARK: - UI Setup
+
+extension MediaPlayerOverlayViewConfiguration {
+    func viewDidConfigure() {
+        guard let player = mediaPlayerView?.mediaPlayer?.player as AVPlayer?,
+              let overlayView = overlayView,
+              let item = player.currentItem else {
+            return
+        }
+        switch item.status {
+        case .failed:
+            overlayView.playButton.isEnabled = false
+            overlayView.trackingSlider.isEnabled = false
+            overlayView.startTimeLabel.isEnabled = false
+            overlayView.durationLabel.isEnabled = false
+        case .readyToPlay:
+            overlayView.playButton.isEnabled = true
+            let newDurationInSeconds = Float(item.duration.seconds)
+            let currentTime = Float(CMTimeGetSeconds(player.currentTime()))
+            overlayView.trackingSlider.isEnabled = true
+            overlayView.startTimeLabel.isEnabled = true
+            overlayView.durationLabel.isEnabled = true
+            
+            overlayView.progressView.setProgress(currentTime, animated: true)
+            overlayView.trackingSlider.maximumValue = newDurationInSeconds
+            overlayView.trackingSlider.value = currentTime
+            overlayView.startTimeLabel.text = overlayView.viewModel.timeString(currentTime)
+            overlayView.durationLabel.text = overlayView.viewModel.timeString(newDurationInSeconds)
+        default:
+            overlayView.playButton.isEnabled = false
+            overlayView.trackingSlider.isEnabled = false
+            overlayView.startTimeLabel.isEnabled = false
+            overlayView.durationLabel.isEnabled = false
+        }
     }
     
-    fileprivate func viewDidRegisterObservers() {
+    func setupPlayButton() {
+        guard let player = mediaPlayerView?.mediaPlayer?.player as AVPlayer? else { return }
+        
+        var systemImage: UIImage
+        switch player.timeControlStatus {
+        case .playing:
+            systemImage = .init(systemName: "pause")!
+        case .paused,
+                .waitingToPlayAtSpecifiedRate:
+            systemImage = .init(systemName: "arrowtriangle.right.fill")!
+        default:
+            systemImage = .init(systemName: "pause")!
+        }
+        
+        guard let image = systemImage as UIImage? else { return }
+        overlayView.playButton.setImage(image, for: .normal)
+    }
+}
+
+// MARK: - Methods
+
+extension MediaPlayerOverlayViewConfiguration {
+    func startTimer(target: Any, selector: Selector) {
+        timer.schedule(timeInterval: overlayView.configuration.durationThreshold,
+                       target: target,
+                       selector: selector,
+                       repeats: overlayView.configuration.repeats)
+    }
+    
+    func viewDidTap(_ view: UIButton) {
+        guard let item = MediaPlayerOverlayView.Item(rawValue: view.tag) else { return }
+        switch item {
+        case .airPlay:
+            print(item.rawValue)
+        case .rotate:
+            let orientation = DeviceOrientation.shared
+            orientation.rotate()
+        case .backward:
+            if mediaPlayerView?.mediaPlayer?.player.currentItem?.currentTime() == .zero {
+                if let player = mediaPlayerView?.mediaPlayer?.player as AVPlayer?,
+                   let duration = player.currentItem?.duration {
+                    player.currentItem?.seek(to: duration, completionHandler: nil)
+                }
+            }
+            let time = CMTime(value: 15, timescale: 1)
+            DispatchQueue.main.async { [weak self] in
+                guard
+                    let self = self,
+                    let player = self.mediaPlayerView?.mediaPlayer?.player as AVPlayer?
+                else { return }
+                player.seek(to: player.currentTime() - time)
+                let progress = Float(player.currentTime().seconds)
+                    / Float(player.currentItem?.duration.seconds ?? .zero) - 10.0
+                    / Float(player.currentItem?.duration.seconds ?? .zero)
+                self.overlayView.progressView.progress = progress
+            }
+        case .play:
+            guard let player = mediaPlayerView?.mediaPlayer?.player as AVPlayer? else { return }
+            player.timeControlStatus == .playing ? player.pause() : player.play()
+        case .forward:
+            guard let player = mediaPlayerView?.mediaPlayer?.player as AVPlayer? else { return }
+            if player.currentItem?.currentTime() == player.currentItem?.duration {
+                player.currentItem?.seek(to: .zero, completionHandler: nil)
+            }
+            let time = CMTime(value: 15, timescale: 1)
+            player.seek(to: player.currentTime() + time)
+            let progress = Float(player.currentTime().seconds)
+                / Float(player.currentItem?.duration.seconds ?? .zero) + 10.0
+                / Float(player.currentItem?.duration.seconds ?? .zero)
+            self.overlayView?.progressView?.progress = progress
+        case .mute:
+            print(item.rawValue)
+        }
+    }
+}
+
+// MARK: - Observers
+
+extension MediaPlayerOverlayViewConfiguration {
+    fileprivate func setupObservers() {
         guard let player = mediaPlayerView.mediaPlayer.player as AVPlayer? else { return }
         
         let timeScale = CMTimeScale(NSEC_PER_SEC)
@@ -104,110 +209,6 @@ final class MediaPlayerOverlayViewConfiguration: Configuration {
              changeHandler: { [weak self] _, _ in self?.viewDidConfigure() })
     }
     
-    func viewDidConfigure() {
-        guard
-            let player = mediaPlayerView?.mediaPlayer?.player as AVPlayer?,
-            let overlayView = overlayView,
-            let item = player.currentItem
-        else { return }
-        switch item.status {
-        case .failed:
-            overlayView.playButton.isEnabled = false
-            overlayView.trackingSlider.isEnabled = false
-            overlayView.startTimeLabel.isEnabled = false
-            overlayView.durationLabel.isEnabled = false
-        case .readyToPlay:
-            overlayView.playButton.isEnabled = true
-            let newDurationInSeconds = Float(item.duration.seconds)
-            let currentTime = Float(CMTimeGetSeconds(player.currentTime()))
-            overlayView.trackingSlider.isEnabled = true
-            overlayView.startTimeLabel.isEnabled = true
-            overlayView.durationLabel.isEnabled = true
-            
-            overlayView.progressView.setProgress(currentTime, animated: true)
-            overlayView.trackingSlider.maximumValue = newDurationInSeconds
-            overlayView.trackingSlider.value = currentTime
-            overlayView.startTimeLabel.text = overlayView.viewModel.timeString(currentTime)
-            overlayView.durationLabel.text = overlayView.viewModel.timeString(newDurationInSeconds)
-        default:
-            overlayView.playButton.isEnabled = false
-            overlayView.trackingSlider.isEnabled = false
-            overlayView.startTimeLabel.isEnabled = false
-            overlayView.durationLabel.isEnabled = false
-        }
-    }
-    
-    func viewDidTap(_ view: UIButton) {
-        guard let item = MediaPlayerOverlayView.Item(rawValue: view.tag) else { return }
-        switch item {
-        case .airPlay:
-            print(item.rawValue)
-        case .rotate:
-            let orientation = DeviceOrientation.shared
-            orientation.rotate()
-        case .backward:
-            if mediaPlayerView?.mediaPlayer?.player.currentItem?.currentTime() == .zero {
-                if let player = mediaPlayerView?.mediaPlayer?.player as AVPlayer?,
-                   let duration = player.currentItem?.duration {
-                    player.currentItem?.seek(to: duration, completionHandler: nil)
-                }
-            }
-            let time = CMTime(value: 15, timescale: 1)
-            DispatchQueue.main.async { [weak self] in
-                guard
-                    let self = self,
-                    let player = self.mediaPlayerView?.mediaPlayer?.player as AVPlayer?
-                else { return }
-                player.seek(to: player.currentTime() - time)
-                let progress = Float(player.currentTime().seconds)
-                    / Float(player.currentItem?.duration.seconds ?? .zero) - 10.0
-                    / Float(player.currentItem?.duration.seconds ?? .zero)
-                self.overlayView.progressView.progress = progress
-            }
-        case .play:
-            guard let player = mediaPlayerView?.mediaPlayer?.player as AVPlayer? else { return }
-            player.timeControlStatus == .playing ? player.pause() : player.play()
-        case .forward:
-            guard let player = mediaPlayerView?.mediaPlayer?.player as AVPlayer? else { return }
-            if player.currentItem?.currentTime() == player.currentItem?.duration {
-                player.currentItem?.seek(to: .zero, completionHandler: nil)
-            }
-            let time = CMTime(value: 15, timescale: 1)
-            player.seek(to: player.currentTime() + time)
-            let progress = Float(player.currentTime().seconds)
-                / Float(player.currentItem?.duration.seconds ?? .zero) + 10.0
-                / Float(player.currentItem?.duration.seconds ?? .zero)
-            self.overlayView?.progressView?.progress = progress
-        case .mute:
-            print(item.rawValue)
-        }
-    }
-    
-    func setupPlayButton() {
-        guard let player = mediaPlayerView?.mediaPlayer?.player as AVPlayer? else { return }
-        
-        var systemImage: UIImage
-        switch player.timeControlStatus {
-        case .playing:
-            systemImage = .init(systemName: "pause")!
-        case .paused,
-                .waitingToPlayAtSpecifiedRate:
-            systemImage = .init(systemName: "arrowtriangle.right.fill")!
-        default:
-            systemImage = .init(systemName: "pause")!
-        }
-        
-        guard let image = systemImage as UIImage? else { return }
-        overlayView.playButton.setImage(image, for: .normal)
-    }
-    
-    func startTimer(target: Any, selector: Selector) {
-        timer.schedule(timeInterval: overlayView.configuration.durationThreshold,
-                       target: target,
-                       selector: selector,
-                       repeats: overlayView.configuration.repeats)
-    }
-    
     func removeObservers() {
         printIfDebug("Removed `MediaPlayerOverlayView` observers.")
         observers.playerItemStatusObserver?.invalidate()
@@ -227,7 +228,12 @@ final class MediaPlayerOverlayViewConfiguration: Configuration {
     }
 }
 
+// MARK: - MediaPlayerOverlayView Type
+
 final class MediaPlayerOverlayView: UIView, ViewInstantiable {
+    
+    // MARK: Item Type
+    
     fileprivate enum Item: Int {
         case airPlay
         case rotate
@@ -236,6 +242,8 @@ final class MediaPlayerOverlayView: UIView, ViewInstantiable {
         case forward
         case mute
     }
+    
+    // MARK: Outlet Properties
     
     @IBOutlet private weak var airPlayButton: UIButton!
     @IBOutlet private weak var rotateButton: UIButton!
@@ -251,10 +259,31 @@ final class MediaPlayerOverlayView: UIView, ViewInstantiable {
     @IBOutlet private(set) weak var timeSeparatorLabel: UILabel!
     @IBOutlet private weak var gradientView: UIView!
     
-    fileprivate(set) var configuration: MediaPlayerOverlayViewConfiguration!
-    fileprivate weak var mediaPlayerView: MediaPlayerView!
+    // MARK: Type's Properties
+    
+    private(set) var configuration: MediaPlayerOverlayViewConfiguration!
+    private weak var mediaPlayerView: MediaPlayerView!
     var viewModel: MediaPlayerOverlayViewViewModel!
-    fileprivate var mediaPlayerViewModel: MediaPlayerViewViewModel!
+    private var mediaPlayerViewModel: MediaPlayerViewViewModel!
+    
+    // MARK: Initializer
+    
+    init(on parent: MediaPlayerView) {
+        super.init(frame: parent.bounds)
+        self.nibDidLoad()
+        self.mediaPlayerView = parent
+        self.mediaPlayerViewModel = parent.viewModel
+        self.viewModel = MediaPlayerOverlayViewViewModel()
+        self.configuration = MediaPlayerOverlayViewConfiguration()
+        self.configuration.overlayView = self
+        self.configuration.mediaPlayerView = parent
+        self.configuration.setupObservers()
+        self.viewDidLoad()
+    }
+    
+    required init?(coder: NSCoder) { fatalError() }
+    
+    // MARK: Deinitializer
     
     deinit {
         mediaPlayerView = nil
@@ -262,64 +291,11 @@ final class MediaPlayerOverlayView: UIView, ViewInstantiable {
         viewModel = nil
         configuration = nil
     }
+}
 
-    static func create(on parent: MediaPlayerView) -> MediaPlayerOverlayView {
-        let view = MediaPlayerOverlayView(frame: parent.bounds)
-        view.nibDidLoad()
-        view.mediaPlayerView = parent
-        createViewModel(on: parent, with: view)
-        createConfiguration(on: parent, with: view)
-        view.viewDidLoad()
-        return view
-    }
-    
-    @discardableResult
-    private static func createViewModel(on parent: MediaPlayerView,
-                                        with view: MediaPlayerOverlayView) -> MediaPlayerOverlayViewViewModel {
-        view.mediaPlayerViewModel = parent.viewModel
-        view.viewModel = .init()
-        return view.viewModel
-    }
-    
-    @discardableResult
-    private static func createConfiguration(on parent: MediaPlayerView,
-                                            with view: MediaPlayerOverlayView) -> MediaPlayerOverlayViewConfiguration {
-        view.configuration = .create(durationThreshold: 3.0, repeats: true)
-        view.configuration.overlayView = view
-        view.configuration.mediaPlayerView = parent
-        view.configuration.viewDidRegisterObservers()
-        return view.configuration
-    }
-    
-    fileprivate func viewDidLoad() {
-        setupSubviews()
-        
-        viewWillAppear()
-    }
-    
-    private func setupSubviews() {
-        gradientView.backgroundColor = .black.withAlphaComponent(0.5)
-        
-        titleLabel.text = mediaPlayerViewModel.media.title
-        
-        setupTargets(airPlayButton,
-                     rotateButton,
-                     backwardButton,
-                     playButton,
-                     forwardButton,
-                     muteButton)
-        
-        trackingSlider.addTarget(self,
-                                 action: #selector(valueDidChange(for:)),
-                                 for: .valueChanged)
-    }
-    
-    private func setupTargets(_ targets: UIButton...) {
-        targets.forEach { $0.addTarget(self,
-                                       action: #selector(didSelect(view:)),
-                                       for: .touchUpInside) }
-    }
-    
+// MARK: - UI Setup
+
+extension MediaPlayerOverlayView {
     func viewWillAppear() {
         configuration.startTimer(target: self, selector: #selector(viewWillDisappear))
         
@@ -370,5 +346,37 @@ final class MediaPlayerOverlayView: UIView, ViewInstantiable {
         let newTime = CMTime(seconds: Double(slider.value), preferredTimescale: 600)
         player.seek(to: newTime, toleranceBefore: .zero, toleranceAfter: .zero)
         progressView.setProgress(progressView.progress + Float(newTime.seconds), animated: true)
+    }
+}
+
+// MARK: - Methods
+
+extension MediaPlayerOverlayView {
+    private func viewDidLoad() {
+        setupSubviews()
+        viewWillAppear()
+    }
+    
+    private func setupSubviews() {
+        gradientView.backgroundColor = .black.withAlphaComponent(0.5)
+        
+        titleLabel.text = mediaPlayerViewModel.media.title
+        
+        setupTargets(airPlayButton,
+                     rotateButton,
+                     backwardButton,
+                     playButton,
+                     forwardButton,
+                     muteButton)
+        
+        trackingSlider.addTarget(self,
+                                 action: #selector(valueDidChange(for:)),
+                                 for: .valueChanged)
+    }
+    
+    private func setupTargets(_ targets: UIButton...) {
+        targets.forEach { $0.addTarget(self,
+                                       action: #selector(didSelect(view:)),
+                                       for: .touchUpInside) }
     }
 }

@@ -7,8 +7,14 @@
 
 import UIKit
 
+// MARK: - AppDelegate Type
+
 @main
-class AppDelegate: UIResponder, UIApplicationDelegate {
+class AppDelegate: UIResponder {}
+
+// MARK: - UIApplicationDelegate Implementation
+
+extension AppDelegate: UIApplicationDelegate {
     func application(_ application: UIApplication,
                      didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         return true

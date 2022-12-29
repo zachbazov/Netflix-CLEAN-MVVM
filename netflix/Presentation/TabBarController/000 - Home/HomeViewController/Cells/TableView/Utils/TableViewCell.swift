@@ -7,14 +7,24 @@
 
 import UIKit
 
+// MARK: - Cell Types
+
 typealias RatedTableViewCell = TableViewCell<RatedCollectionViewCell>
 typealias ResumableTableViewCell = TableViewCell<ResumableCollectionViewCell>
 typealias StandardTableViewCell = TableViewCell<StandardCollectionViewCell>
 
+// MARK: - TableViewCell<T> Type
+
 class TableViewCell<T>: UITableViewCell where T: UICollectionViewCell {
+    
+    // MARK: Properties
+    
     private lazy var collectionView = createCollectionView()
     private var dataSource: HomeCollectionViewDataSource<T>!
     private var layout: CollectionViewLayout!
+    
+    // MARK: Initializer
+    
     /// Create a table view cell which holds a collection view.
     /// - Parameters:
     ///   - indexPath: The index path from the table view data source.
@@ -39,7 +49,11 @@ class TableViewCell<T>: UITableViewCell where T: UICollectionViewCell {
     }
     
     required init?(coder: NSCoder) { fatalError() }
-    
+}
+
+// MARK: - UI Setup
+
+extension TableViewCell {
     private func createCollectionView() -> UICollectionView {
         let collectionView = UICollectionView(frame: bounds, collectionViewLayout: .init())
         collectionView.backgroundColor = .black
@@ -55,6 +69,8 @@ class TableViewCell<T>: UITableViewCell where T: UICollectionViewCell {
         backgroundColor = .black
     }
 }
+
+// MARK: - Methods
 
 extension TableViewCell {
     /// Setting a layout for the collection view.
@@ -75,7 +91,10 @@ extension TableViewCell {
     }
 }
 
+// MARK: - SortOptions Type
+
 extension TableViewCell {
+    /// Sort representation type.
     enum SortOptions {
         case rating
     }

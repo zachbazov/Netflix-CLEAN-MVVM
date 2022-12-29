@@ -7,17 +7,27 @@
 
 import Foundation
 
+// MARK: - BrowseOverlayViewModel Type
+
 final class BrowseOverlayViewModel {
+    
+    // MARK: Properties
+    
     private let coordinator: HomeViewCoordinator
-    
-    init(with viewModel: HomeViewModel) {
-        self.coordinator = viewModel.coordinator!
-    }
-    
     var isPresented = false {
         didSet { shouldDisplayOrHide() }
     }
     
+    // MARK: Initializer
+    
+    init(with viewModel: HomeViewModel) {
+        self.coordinator = viewModel.coordinator!
+    }
+}
+
+// MARK: - Methods
+
+extension BrowseOverlayViewModel {
     private func shouldDisplayOrHide() {
         guard let homeViewController = coordinator.viewController else { return }
         

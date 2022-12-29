@@ -7,13 +7,20 @@
 
 import Foundation
 
+// MARK: - SectionResponseDTO Type
+
 struct SectionResponseDTO {
+    
+    // MARK: GET Type
+    
     struct GET: Decodable {
         let status: String
         let results: Int
         let data: [SectionDTO]
     }
 }
+
+// MARK: - Mapping
 
 extension SectionResponseDTO.GET {
     func toDomain() -> SectionResponse.GET {

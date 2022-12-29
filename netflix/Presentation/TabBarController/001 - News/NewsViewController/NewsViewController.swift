@@ -7,14 +7,23 @@
 
 import UIKit
 
+// MARK: - NewsViewController Type
+
 final class NewsViewController: UIViewController {
+    
+    // MARK: Outlet Properties
+    
     @IBOutlet private var navigationViewContainer: UIView!
     @IBOutlet private(set) var tableViewContainer: UIView!
+    
+    // MARK: Type's Properties
     
     var viewModel: NewsViewModel!
     private var navigationView: NewsNavigationView!
     private(set) var tableView: UITableView!
     private var dataSource: NewsTableViewDataSource!
+    
+    // MARK: UIViewController Lifecycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -22,6 +31,11 @@ final class NewsViewController: UIViewController {
         setupObservers()
         viewModel.viewDidLoad()
     }
+}
+
+// MARK: - UI Setup
+
+extension NewsViewController {
     
     private func setupSubviews() {
         setupNavigationView()
@@ -47,6 +61,8 @@ final class NewsViewController: UIViewController {
         dataSource = NewsTableViewDataSource(with: viewModel)
     }
 }
+
+// MARK: - Observers
 
 extension NewsViewController {
     private func setupObservers() {

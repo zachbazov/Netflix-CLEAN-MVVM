@@ -7,8 +7,16 @@
 
 import UIKit.UIApplication
 
+// MARK: - DeviceOrientation Type
+
 final class DeviceOrientation {
+    
+    // MARK: Singleton Pattern
+    
     static let shared = DeviceOrientation()
+    private init() {}
+    
+    // MARK: Properties
     
     private(set) var orientationLock: UIInterfaceOrientationMask = .all
     private var orientation: UIInterfaceOrientationMask = .portrait {
@@ -18,9 +26,11 @@ final class DeviceOrientation {
     private var windowScene: UIWindowScene? {
         return UIApplication.shared.connectedScenes.first as? UIWindowScene
     }
-    
-    private init() {}
-    
+}
+
+// MARK: - Methods
+
+extension DeviceOrientation {
     func set(orientation: UIInterfaceOrientationMask) {
         if #available(iOS 16.0, *) {
             windowScene?.requestGeometryUpdate(.iOS(interfaceOrientations: orientation))

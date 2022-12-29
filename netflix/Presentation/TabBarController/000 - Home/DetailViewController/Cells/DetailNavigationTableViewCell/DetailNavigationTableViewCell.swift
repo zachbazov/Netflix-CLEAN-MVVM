@@ -7,8 +7,16 @@
 
 import UIKit
 
+// MARK: - DetailNavigationTableViewCell Type
+
 final class DetailNavigationTableViewCell: UITableViewCell {
+    
+    // MARK: Properties
+    
     private var navigationView: DetailNavigationView!
+    
+    // MARK: Initializer
+    
     /// Create a detail navigation table view cell object.
     /// - Parameters:
     ///   - tableView: Corresponding table view.
@@ -19,9 +27,7 @@ final class DetailNavigationTableViewCell: UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: DetailNavigationTableViewCell.reuseIdentifier, for: indexPath) as? DetailNavigationTableViewCell else {
             fatalError()
         }
-        if cell.navigationView == nil {
-            cell.navigationView = DetailNavigationView(on: cell.contentView, with: viewModel)
-        }
+        cell.navigationView = DetailNavigationView(on: cell.contentView, with: viewModel)
         return cell
     }
     
@@ -32,6 +38,8 @@ final class DetailNavigationTableViewCell: UITableViewCell {
     
     required init?(coder: NSCoder) { fatalError() }
 }
+
+// MARK: - UI Setup
 
 extension DetailNavigationTableViewCell {
     private func viewDidConfigure() {

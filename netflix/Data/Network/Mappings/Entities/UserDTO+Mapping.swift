@@ -7,8 +7,13 @@
 
 import CoreData
 
+// MARK: - UserDTO Type
+
 @objc(UserDTO)
 public final class UserDTO: NSObject, Codable, NSSecureCoding {
+    
+    // MARK: Properties
+    
     var _id: String?
     var name: String?
     var email: String?
@@ -17,6 +22,8 @@ public final class UserDTO: NSObject, Codable, NSSecureCoding {
     var role: String?
     var active: Bool?
     var token: String?
+    
+    // MARK: Initializer
     
     init(_id: String? = nil,
          name: String? = nil,
@@ -35,6 +42,8 @@ public final class UserDTO: NSObject, Codable, NSSecureCoding {
         self.active = active
         self.token = token
     }
+    
+    // MARK: NSSecureCoding Implementation
     
     public static var supportsSecureCoding: Bool {
         return true
@@ -62,6 +71,8 @@ public final class UserDTO: NSObject, Codable, NSSecureCoding {
         self.token = coder.decodeObject(of: [UserDTO.self, NSString.self], forKey: "token") as? String
     }
 }
+
+// MARK: - Mapping
 
 extension UserDTO {
     func toDomain() -> User {

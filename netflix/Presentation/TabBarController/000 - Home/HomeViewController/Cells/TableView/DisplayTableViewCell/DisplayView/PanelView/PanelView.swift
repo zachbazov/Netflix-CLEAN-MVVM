@@ -7,14 +7,24 @@
 
 import UIKit
 
+// MARK: - PanelView Type
+
 final class PanelView: UIView, ViewInstantiable {
+    
+    // MARK: Outlet Properties
+    
     @IBOutlet private weak var playButton: UIButton!
     @IBOutlet private(set) weak var leadingItemViewContainer: UIView!
     @IBOutlet private(set) weak var trailingItemViewContainer: UIView!
     
+    // MARK: Type's Properties
+    
     var viewModel: DisplayTableViewCellViewModel!
     var leadingItemView: PanelViewItem!
     var trailingItemView: PanelViewItem!
+    
+    // MARK: Initializer
+    
     /// Create a panel view object.
     /// - Parameters:
     ///   - parent: Instantiating view.
@@ -32,6 +42,8 @@ final class PanelView: UIView, ViewInstantiable {
     
     required init?(coder: NSCoder) { fatalError() }
     
+    // MARK: Deinitializer
+    
     deinit {
         removeObservers()
         leadingItemView?.removeFromSuperview()
@@ -41,6 +53,8 @@ final class PanelView: UIView, ViewInstantiable {
         viewModel = nil
     }
 }
+
+// MARK: - UI Setup
 
 extension PanelView {
     private func viewDidConfigure() {
@@ -60,7 +74,11 @@ extension PanelView {
         coordinator.shouldScreenRotate = rotated
         coordinator.showScreen(.detail)
     }
-    
+}
+
+// MARK: - Observers
+
+extension PanelView {
     func removeObservers() {
         printIfDebug("Removed `PanelView` observers.")
         leadingItemView?.viewModel?.removeObservers()

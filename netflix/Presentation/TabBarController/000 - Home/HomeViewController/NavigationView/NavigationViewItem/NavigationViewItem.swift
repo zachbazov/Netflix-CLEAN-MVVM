@@ -7,8 +7,16 @@
 
 import UIKit
 
+// MARK: - NavigationViewItemConfiguration Type
+
 final class NavigationViewItemConfiguration {
+    
+    // MARK: Properties
+    
     private weak var item: NavigationViewItem!
+    
+    // MARK: Initializer
+    
     /// Create a configuration object for the item.
     /// - Parameter item: Corresponding view.
     init(with item: NavigationViewItem) {
@@ -16,11 +24,15 @@ final class NavigationViewItemConfiguration {
         self.viewDidLoad()
     }
     
+    // MARK: Deinitializer
+    
     deinit {
         item?.removeFromSuperview()
         item = nil
     }
 }
+
+// MARK: - UI Setup
 
 extension NavigationViewItemConfiguration {
     private func viewDidLoad() {
@@ -71,10 +83,18 @@ extension NavigationViewItemConfiguration {
     }
 }
 
+// MARK: - NavigationViewItem Type
+
 final class NavigationViewItem: UIView {
+    
+    // MARK: Properties
+    
     fileprivate lazy var button = UIButton(type: .system)
     fileprivate var configuration: NavigationViewItemConfiguration!
     var viewModel: NavigationViewItemViewModel!
+    
+    // MARK: Initializer
+    
     /// Create a navigation view item object.
     /// - Parameters:
     ///   - parent: Instantiating view.
@@ -90,14 +110,18 @@ final class NavigationViewItem: UIView {
     
     required init?(coder: NSCoder) { fatalError() }
     
+    // MARK: Deinitializer
+    
     deinit {
         configuration = nil
         viewModel = nil
     }
 }
 
+// MARK: - UI Setup
+
 extension NavigationViewItem {
-    /// Configure an item and change it according to the navigation state.
+    /// Configure the `categories` button item and change it according to the navigation state.
     /// - Parameter state: Corresponding navigation state.
     func viewDidConfigure(for state: NavigationView.State) {
         guard let tag = NavigationView.State(rawValue: tag) else { return }

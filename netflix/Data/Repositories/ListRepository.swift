@@ -7,31 +7,30 @@
 
 import Foundation
 
-private protocol RepositoryInput {
-    func getAll(completion: @escaping (Result<ListResponseDTO.GET, Error>) -> Void) -> Cancellable?
-    func getOne(request: ListRequestDTO.GET,
-                completion: @escaping (Result<ListResponseDTO.GET, Error>) -> Void) -> Cancellable?
-    func createOne(request: ListRequestDTO.POST,
-                   completion: @escaping (Result<ListResponseDTO.POST, Error>) -> Void) -> Cancellable?
-    func updateOne(request: ListRequestDTO.PATCH,
-                   completion: @escaping (Result<ListResponseDTO.PATCH, Error>) -> Void) -> Cancellable?
+// MARK: - ListRepositoryEndpoints Protocol
+
+protocol ListRepositoryEndpoints {
+    static func getAllMyLists() -> Endpoint<ListResponseDTO.GET>
+    static func getMyList(with request: ListRequestDTO.GET) -> Endpoint<ListResponseDTO.GET>
+    static func createMyList(with request: ListRequestDTO.POST) -> Endpoint<ListResponseDTO.POST>
+    static func updateMyList(with request: ListRequestDTO.PATCH) -> Endpoint<ListResponseDTO.PATCH>
 }
 
-private protocol RepositoryOutput {
-    var dataTransferService: DataTransferService { get }
-}
+// MARK: - ListRepository Type
 
-private typealias Repository = RepositoryInput & RepositoryOutput
-
-struct ListRepository: Repository {
+struct ListRepository {
     let dataTransferService: DataTransferService
-    
+}
+
+// MARK: - Methods
+
+extension ListRepository {
     func getAll(completion: @escaping (Result<ListResponseDTO.GET, Error>) -> Void) -> Cancellable? {
         let task = RepositoryTask()
         
         guard !task.isCancelled else { return nil }
         
-        let endpoint = APIEndpoint.MyListRepository.getAllMyLists()
+        let endpoint = APIEndpoint.ListRepository.getAllMyLists()
         task.networkTask = dataTransferService.request(with: endpoint) { result in
             switch result {
             case .success(let response):
@@ -51,7 +50,7 @@ struct ListRepository: Repository {
         
         guard !task.isCancelled else { return nil }
         
-        let endpoint = APIEndpoint.MyListRepository.getMyList(with: requestDTO)
+        let endpoint = APIEndpoint.ListRepository.getMyList(with: requestDTO)
         task.networkTask = dataTransferService.request(with: endpoint) { result in
             switch result {
             case .success(let response):
@@ -70,7 +69,7 @@ struct ListRepository: Repository {
         
         guard !task.isCancelled else { return nil }
         
-        let endpoint = APIEndpoint.MyListRepository.createMyList(with: request)
+        let endpoint = APIEndpoint.ListRepository.createMyList(with: request)
         task.networkTask = dataTransferService.request(
             with: endpoint,
             completion: { result in
@@ -91,7 +90,7 @@ struct ListRepository: Repository {
         
         guard !task.isCancelled else { return nil }
         
-        let endpoint = APIEndpoint.MyListRepository.updateMyList(with: request)
+        let endpoint = APIEndpoint.ListRepository.updateMyList(with: request)
         task.networkTask = dataTransferService.request(
             with: endpoint,
             completion: { result in

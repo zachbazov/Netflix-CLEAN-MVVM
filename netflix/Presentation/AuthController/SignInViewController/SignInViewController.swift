@@ -7,19 +7,34 @@
 
 import UIKit
 
+// MARK: - SignInViewController Type
+
 final class SignInViewController: UIViewController {
+    
+    // MARK: Outlet Properties
+    
     @IBOutlet weak var emailTextField: UITextField!
     @IBOutlet weak var passwordTextField: UITextField!
     @IBOutlet weak var signInButton: UIButton!
     
+    // MARK: Type's Properties
+    
     var viewModel: SignInViewModel?
+    
+    // MARK: UIViewController Lifecycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        AppAppearance.darkAppearance()
+        // Setup dark appearance.
+        AppAppearance.dark()
+        // Setup subviews.
         setupSubviews()
     }
-    
+}
+
+// MARK: - UI Setup
+
+extension SignInViewController {
     private func setupSubviews() {
         setAttributes(for: [emailTextField, passwordTextField])
         signInButton.setLayerBorder(.black, width: 1.5)
@@ -33,6 +48,8 @@ final class SignInViewController: UIViewController {
         passwordTextField.addTarget(self, action: #selector(textFieldValueDidChange), for: .editingChanged)
     }
 }
+
+// MARK: - Methods
 
 extension SignInViewController {
     @objc

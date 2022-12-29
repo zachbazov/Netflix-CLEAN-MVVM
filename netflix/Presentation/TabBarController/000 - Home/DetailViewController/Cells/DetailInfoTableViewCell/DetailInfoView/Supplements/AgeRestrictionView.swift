@@ -7,8 +7,16 @@
 
 import UIKit
 
+// MARK: - AgeRestrictionView Type
+
 final class AgeRestrictionView: UIView {
+    
+    // MARK: Properties
+    
     private lazy var label = createLabel()
+    
+    // MARK: Initializer
+    
     /// Create an age restriction view object.
     /// - Parameter parent: Instantiating view.
     init(on parent: UIView) {
@@ -19,6 +27,15 @@ final class AgeRestrictionView: UIView {
     }
     
     required init?(coder: NSCoder) { fatalError() }
+}
+
+// MARK: - UI Setup
+
+extension AgeRestrictionView {
+    private func viewDidConfigure() {
+        layer.cornerRadius = 2.0
+        backgroundColor = .hexColor("#535353")
+    }
     
     private func createLabel() -> UILabel {
         let label = UILabel(frame: bounds)
@@ -27,12 +44,5 @@ final class AgeRestrictionView: UIView {
         label.textAlignment = .center
         label.text = "PG-13"
         return label
-    }
-}
-
-extension AgeRestrictionView {
-    private func viewDidConfigure() {
-        layer.cornerRadius = 2.0
-        backgroundColor = .hexColor("#535353")
     }
 }

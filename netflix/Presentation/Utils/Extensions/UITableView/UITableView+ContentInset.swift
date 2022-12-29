@@ -7,6 +7,8 @@
 
 import UIKit.UITableView
 
+// MARK: - UITableView + ContentInset
+
 extension UITableView {
     func centerVertically(on parent: UIView) {
         let navigationOverlayFooterHeight = CGFloat(80.0)

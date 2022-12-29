@@ -7,9 +7,13 @@
 
 import UIKit
 
+// MARK: - NewsCoordinable Protocol
+
 private protocol NewsCoordinable {
     func allocateDetailController()
 }
+
+// MARK: - NewsViewCoordinator Type
 
 final class NewsViewCoordinator {
     var viewController: NewsViewController?
@@ -18,8 +22,10 @@ final class NewsViewCoordinator {
     var shouldScreenRotate: Bool = false
 }
 
-extension NewsViewCoordinator {
-    private func allocateDetailController() {
+// MARK: - NewsCoordinable Implementation
+
+extension NewsViewCoordinator: NewsCoordinable {
+    fileprivate func allocateDetailController() {
         guard let section = section, let media = media else { return }
         /// An `HomeViewModel` reference is needed to gain access to the sections data.
         let homeNavigation = Application.current.rootCoordinator.tabCoordinator.home!
@@ -40,6 +46,8 @@ extension NewsViewCoordinator {
         viewController?.present(navigation, animated: true)
     }
 }
+
+// MARK: - Coordinate Implementation
 
 extension NewsViewCoordinator: Coordinate {
     /// View representation type.

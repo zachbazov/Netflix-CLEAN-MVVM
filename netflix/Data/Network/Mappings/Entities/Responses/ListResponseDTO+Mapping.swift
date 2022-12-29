@@ -7,22 +7,33 @@
 
 import Foundation
 
+// MARK: - ListResponseDTO Type
+
 struct ListResponseDTO {
+    
+    // MARK: GET Type
+    
     struct GET: Decodable {
         let status: String
         let data: ListDTO
     }
+    
+    // MARK: POST Type
     
     struct POST: Decodable {
         let status: String
         var data: ListDTO
     }
     
+    // MARK: PATCH Type
+    
     struct PATCH: Decodable {
         let status: String
         var data: ListDTO
     }
 }
+
+// MARK: - Mapping
 
 extension ListResponseDTO.GET {
     func toDomain() -> ListResponse.GET {

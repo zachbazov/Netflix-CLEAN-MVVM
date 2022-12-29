@@ -7,10 +7,18 @@
 
 import Foundation
 
+// MARK: - OpaqueViewViewModel Type
+
 struct OpaqueViewViewModel {
+    
+    // MARK: Properties
+    
     let imagePath: String
     let identifier: NSString
     let imageURL: URL
+    
+    // MARK: Initializer
+    
     /// Create a opaque view view model object.
     /// - Parameter media: Corresponding media object.
     init(with media: Media) {

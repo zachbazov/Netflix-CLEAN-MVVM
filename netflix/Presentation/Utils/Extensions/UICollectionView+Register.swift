@@ -7,6 +7,8 @@
 
 import UIKit
 
+// MARK: - UICollectionView + Register
+
 extension UICollectionView {
     func registerNib(_ views: UIView.Type...) {
         views.forEach {

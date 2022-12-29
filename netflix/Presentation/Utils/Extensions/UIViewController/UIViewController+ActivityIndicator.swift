@@ -7,7 +7,9 @@
 
 import UIKit
 
-extension UITableViewController {
+// MARK: - UIViewController + ActivityIndicator
+
+extension UIViewController {
     func createActivityIndicator(of size: CGSize) -> UIActivityIndicatorView {
         let style: UIActivityIndicatorView.Style
         

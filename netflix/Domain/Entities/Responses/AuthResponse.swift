@@ -7,6 +7,8 @@
 
 import Foundation
 
+// MARK: - AuthResponse Type
+
 struct AuthResponse {
     var status: String?
     let token: String

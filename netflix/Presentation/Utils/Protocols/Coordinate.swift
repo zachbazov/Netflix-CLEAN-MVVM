@@ -7,6 +7,8 @@
 
 import UIKit.UIViewController
 
+// MARK: - Coordinate Protocol
+
 protocol Coordinate {
     associatedtype Screen
     associatedtype View: UIViewController

@@ -7,29 +7,17 @@
 
 import Foundation
 
-private protocol UseCaseInput {
-    func request<T, U>(for response: T.Type,
-                       request: U?,
-                       cached: ((T?) -> Void)?,
-                       completion: ((Result<T, Error>) -> Void)?) -> Cancellable?
-    func execute<T, U>(for response: T.Type,
-                       request: U?,
-                       cached: ((T?) -> Void)?,
-                       completion: ((Result<T, Error>) -> Void)?) -> Cancellable?
-}
+// MARK: - HomeUseCase Type
 
-private protocol UseCaseOutput {
-    var sectionsRepository: SectionRepository { get }
-    var mediaRepository: MediaRepository { get }
-    var listRepository: ListRepository { get }
-}
-
-private typealias UseCase = UseCaseInput & UseCaseOutput
-
-final class HomeUseCase: UseCase {
-    fileprivate let sectionsRepository: SectionRepository
-    fileprivate(set) var mediaRepository: MediaRepository
-    fileprivate(set) var listRepository: ListRepository
+final class HomeUseCase {
+    
+    // MARK: Properties
+    
+    private let sectionsRepository: SectionRepository
+    private(set) var mediaRepository: MediaRepository
+    private(set) var listRepository: ListRepository
+    
+    // MARK: Initializer
     
     init(sectionsRepository: SectionRepository,
          mediaRepository: MediaRepository,
@@ -38,11 +26,15 @@ final class HomeUseCase: UseCase {
         self.mediaRepository = mediaRepository
         self.listRepository = listRepository
     }
-    
-    fileprivate func request<T, U>(for response: T.Type,
-                                   request: U? = nil,
-                                   cached: ((T?) -> Void)?,
-                                   completion: ((Result<T, Error>) -> Void)?) -> Cancellable? {
+}
+
+// MARK: - Methods
+
+extension HomeUseCase {
+    private func request<T, U>(for response: T.Type,
+                               request: U? = nil,
+                               cached: ((T?) -> Void)?,
+                               completion: ((Result<T, Error>) -> Void)?) -> Cancellable? {
         switch response {
         case is SectionResponse.GET.Type:
             return sectionsRepository.getAll { result in

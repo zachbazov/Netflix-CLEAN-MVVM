@@ -7,11 +7,19 @@
 
 import UIKit
 
+// MARK: - HomeTableViewDataSource Type
+
 final class HomeTableViewDataSource: NSObject {
+    
+    // MARK: Properties
+    
     private weak var tableView: UITableView!
     private weak var viewModel: HomeViewModel!
     private let numberOfRows = 1
     private(set) var displayCell: DisplayTableViewCell!
+    
+    // MARK: Initializer
+    
     /// Create an home's table view data source object.
     /// - Parameters:
     ///   - tableView: Corresponding table view.
@@ -23,6 +31,8 @@ final class HomeTableViewDataSource: NSObject {
         self.viewDidLoad()
     }
 }
+
+// MARK: - UI Setup
 
 extension HomeTableViewDataSource {
     private func viewDidLoad() {
@@ -47,6 +57,8 @@ extension HomeTableViewDataSource {
         tableView.reloadData()
     }
 }
+
+// MARK: - UITableViewDelegate & UITableViewDataSource Implementation
 
 extension HomeTableViewDataSource: UITableViewDelegate, UITableViewDataSource {
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -90,6 +102,8 @@ extension HomeTableViewDataSource: UITableViewDelegate, UITableViewDataSource {
     }
 }
 
+// MARK: - UIScrollViewDelegate via UITableView Implementation
+
 extension HomeTableViewDataSource {
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         guard let homeViewController = viewModel.coordinator?.viewController,
@@ -111,8 +125,12 @@ extension HomeTableViewDataSource {
     }
 }
 
+// MARK: - Types
+
 extension HomeTableViewDataSource {
-    /// Section's index representation type.
+    
+    // MARK: Index Type
+    
     enum Index: Int, CaseIterable {
         case display
         case rated
@@ -131,13 +149,17 @@ extension HomeTableViewDataSource {
         case familyNchildren
         case documentary
     }
-    /// Data source's state representation type.
+    
+    // MARK: State Type
+    
     enum State: Int, CaseIterable {
         case all
         case series
         case films
     }
 }
+
+// MARK: - Valuable Implementation
 
 extension HomeTableViewDataSource.Index: Valuable {
     var stringValue: String {

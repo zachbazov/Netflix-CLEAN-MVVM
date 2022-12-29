@@ -7,35 +7,38 @@
 
 import Foundation
 
+// MARK: - AuthUseCaseRequestValue Type
+
 struct AuthUseCaseRequestValue {
     var method: AuthMethod
     let request: AuthRequest
 }
+
+// MARK: - AuthMethod Type
 
 enum AuthMethod {
     case signup
     case signin
 }
 
-private protocol UseCaseInput {
-    func execute(requestValue: AuthUseCaseRequestValue,
-                 cached: @escaping (AuthResponseDTO?) -> Void,
-                 completion: @escaping (Result<AuthResponseDTO, Error>) -> Void) -> Cancellable?
-}
+// MARK: - AuthUseCase Type
 
-private protocol UseCaseOutput {
-    var authRepository: AuthRepository { get }
-}
-
-private typealias UseCase = UseCaseInput & UseCaseOutput
-
-final class AuthUseCase: UseCase {
+final class AuthUseCase {
+    
+    // MARK: Properties
+    
     let authRepository: AuthRepository
+    
+    // MARK: Initializer
     
     init(authRepository: AuthRepository) {
         self.authRepository = authRepository
     }
-    
+}
+
+// MARK: - Methods
+
+extension AuthUseCase {
     private func request(requestValue: AuthUseCaseRequestValue,
                          cached: @escaping (AuthResponseDTO?) -> Void,
                          completion: @escaping (Result<AuthResponseDTO, Error>) -> Void) -> Cancellable? {

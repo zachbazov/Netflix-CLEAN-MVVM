@@ -7,6 +7,8 @@
 
 import UIKit
 
+// MARK: - AuthController Type
+
 final class AuthController: NavigationController, View {
     var viewModel: AuthViewModel!
 }

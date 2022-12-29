@@ -7,6 +7,8 @@
 
 import Foundation
 
+// MARK: - HTTPMethodType Type
+
 enum HTTPMethodType: String {
     case get    = "GET"
     case head   = "HEAD"
@@ -16,47 +18,31 @@ enum HTTPMethodType: String {
     case delete = "DELETE"
 }
 
+// MARK: - BodyEncoding Type
+
 enum BodyEncoding {
     case jsonSerializationData
     case stringEncodingAscii
 }
 
-final class Endpoint<R>: ResponseRequestable {
+// MARK: - Endpoint type
+
+struct Endpoint<R>: ResponseRequestable {
     typealias Response = R
     
     let path: String
-    let isFullPath: Bool
+    var isFullPath: Bool = false
     let method: HTTPMethodType
-    let headerParameters: [String : String]
-    let queryParametersEncodable: Encodable?
-    let queryParameters: [String : Any]
-    let bodyParametersEncodable: Encodable?
-    let bodyParameters: [String : Any]
-    let bodyEncoding: BodyEncoding
-    let responseDecoder: ResponseDecoder
-    
-    init(path: String,
-         isFullPath: Bool = false,
-         method: HTTPMethodType,
-         headerParameters: [String: String] = [:],
-         queryParametersEncodable: Encodable? = nil,
-         queryParameters: [String: Any] = [:],
-         bodyParametersEncodable: Encodable? = nil,
-         bodyParameters: [String: Any] = [:],
-         bodyEncoding: BodyEncoding = .jsonSerializationData,
-         responseDecoder: ResponseDecoder = JSONResponseDecoder()) {
-        self.path = path
-        self.isFullPath = isFullPath
-        self.method = method
-        self.headerParameters = headerParameters
-        self.queryParametersEncodable = queryParametersEncodable
-        self.queryParameters = queryParameters
-        self.bodyParametersEncodable = bodyParametersEncodable
-        self.bodyParameters = bodyParameters
-        self.bodyEncoding = bodyEncoding
-        self.responseDecoder = responseDecoder
-    }
+    var headerParameters: [String : String] = [:]
+    var queryParametersEncodable: Encodable? = nil
+    var queryParameters: [String : Any] = [:]
+    var bodyParametersEncodable: Encodable? = nil
+    var bodyParameters: [String : Any] = [:]
+    var bodyEncoding: BodyEncoding = .jsonSerializationData
+    let responseDecoder: ResponseDecoder = JSONResponseDecoder()
 }
+
+// MARK: - Requestable Protocol
 
 protocol Requestable {
     var path: String { get }
@@ -71,6 +57,8 @@ protocol Requestable {
     
     func urlRequest(with config: NetworkConfigurable) throws -> URLRequest
 }
+
+// MARK: - Requestable Implementation
 
 extension Requestable {
     func url(with config: NetworkConfigurable) throws -> URL {
@@ -125,15 +113,21 @@ extension Requestable {
     }
 }
 
+// MARK: - ResponseRequestable Protocol
+
 protocol ResponseRequestable: Requestable {
     associatedtype Response
     
     var responseDecoder: ResponseDecoder { get }
 }
 
+// MARK: - RequestGenerationError Type
+
 enum RequestGenerationError: Error {
     case components
 }
+
+// MARK: - Dictionary Extension
 
 private extension Dictionary {
     var queryString: String {
@@ -142,6 +136,8 @@ private extension Dictionary {
             .addingPercentEncoding(withAllowedCharacters: NSCharacterSet.urlQueryAllowed) ?? ""
     }
 }
+
+// MARK: - Encodable Extension
 
 private extension Encodable {
     func toDictionary() throws -> [String: Any]? {

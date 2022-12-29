@@ -7,7 +7,11 @@
 
 import UIKit
 
+// MARK: - ViewInstantiable Protocol
+
 protocol ViewInstantiable: UIView, Reusable {}
+
+// MARK: - Default Implementation
 
 extension ViewInstantiable {
     static var nib: UINib { UINib(nibName: reuseIdentifier, bundle: nil) }

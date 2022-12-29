@@ -7,6 +7,8 @@
 
 import Foundation
 
+// MARK: - TableViewHeaderFooterViewViewModel Type
+
 struct TableViewHeaderFooterViewViewModel {
     func title(_ sections: [Section], forHeaderAt index: Int) -> String {
         return String(describing: sections[index].title)

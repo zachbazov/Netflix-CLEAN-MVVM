@@ -7,7 +7,12 @@
 
 import Foundation
 
+// MARK: - PanelViewItemViewModel Type
+
 final class PanelViewItemViewModel {
+    
+    // MARK: Properties
+    
     let tag: Int
     let isSelected: Observable<Bool>
     var media: Media!
@@ -25,6 +30,9 @@ final class PanelViewItemViewModel {
         let trailing = trailingTitle
         return tag == 0 ? leading : trailing
     }
+    
+    // MARK: Initializer
+    
     /// Create a panel view item view model object.
     /// - Parameters:
     ///   - item: Corresponding view.
@@ -36,10 +44,14 @@ final class PanelViewItemViewModel {
         self.setupObservers(on: item)
     }
     
+    // MARK: Deinitializer
+    
     deinit {
         media = nil
     }
 }
+
+// MARK: - Observers
 
 extension PanelViewItemViewModel {
     private func setupObservers(on item: PanelViewItem) {

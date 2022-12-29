@@ -7,15 +7,25 @@
 
 import UIKit
 
+// MARK: - DetailNavigationView Type
+
 final class DetailNavigationView: UIView, ViewInstantiable {
+    
+    // MARK: Outlet Properties
+    
     @IBOutlet private(set) weak var leadingViewContainer: UIView!
     @IBOutlet private(set) weak var centerViewContainer: UIView!
     @IBOutlet private(set) weak var trailingViewContrainer: UIView!
+    
+    // MARK: Type's Properties
     
     let viewModel: DetailViewModel
     private(set) var leadingItem: DetailNavigationViewItem!
     private(set) var centerItem: DetailNavigationViewItem!
     private(set) var trailingItem: DetailNavigationViewItem!
+    
+    // MARK: Initializer
+    
     /// Create a navigation view object.
     /// - Parameters:
     ///   - parent: Instantiating view.
@@ -23,9 +33,9 @@ final class DetailNavigationView: UIView, ViewInstantiable {
     init(on parent: UIView, with viewModel: DetailViewModel) {
         self.viewModel = viewModel
         super.init(frame: .zero)
+        self.nibDidLoad()
         parent.addSubview(self)
         self.constraintToSuperview(parent)
-        self.nibDidLoad()
         self.leadingItem = DetailNavigationViewItem(navigationView: self, on: self.leadingViewContainer, with: viewModel)
         self.centerItem = DetailNavigationViewItem(navigationView: self, on: self.centerViewContainer, with: viewModel)
         self.trailingItem = DetailNavigationViewItem(navigationView: self, on: self.trailingViewContrainer, with: viewModel)
@@ -34,6 +44,8 @@ final class DetailNavigationView: UIView, ViewInstantiable {
     
     required init?(coder: NSCoder) { fatalError() }
     
+    // MARK: Deinitializer
+    
     deinit {
         leadingItem = nil
         centerItem = nil
@@ -41,11 +53,27 @@ final class DetailNavigationView: UIView, ViewInstantiable {
     }
 }
 
+// MARK: - UI Setup
+
 extension DetailNavigationView {
     private func viewDidLoad() {
         backgroundColor = .black
-        /// Initial navigation state selection based on the navigation view state.
+        
+        // Initial settings based on the navigation view state.
+        viewDidConfigure()
         stateDidChange(view: viewModel.navigationViewState.value == .episodes ? leadingItem : centerItem)
+    }
+    
+    private func viewDidConfigure() {
+        if viewModel.media.type == .series {
+            viewModel.navigationViewState.value = .episodes
+            leadingViewContainer.isHidden(false)
+            centerViewContainer.isHidden(true)
+        } else {
+            viewModel.navigationViewState.value = .trailers
+            leadingViewContainer.isHidden(true)
+            centerViewContainer.isHidden(false)
+        }
     }
     
     func stateDidChange(view: DetailNavigationViewItem) {
@@ -63,6 +91,8 @@ extension DetailNavigationView {
         animateUsingSpring(withDuration: 0.5, withDamping: 1.0, initialSpringVelocity: 1.0)
     }
 }
+
+// MARK: - Methods
 
 extension DetailNavigationView {
     func redMarkerConstraintValueDidChange(for state: DetailNavigationView.State) {
@@ -83,6 +113,8 @@ extension DetailNavigationView {
         }
     }
 }
+
+// MARK: - State Type
 
 extension DetailNavigationView {
     /// Item representation type.

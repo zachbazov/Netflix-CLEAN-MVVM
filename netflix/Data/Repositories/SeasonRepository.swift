@@ -7,24 +7,13 @@
 
 import Foundation
 
-private protocol RepositoryInput {
-    func getSeason(with request: SeasonRequestDTO.GET,
-                   completion: @escaping (Result<SeasonResponseDTO.GET, Error>) -> Void) -> Cancellable?
+// MARK: - SeasonRepository Type
+
+struct SeasonRepository {
+    let dataTransferService: DataTransferService
 }
 
-private protocol RepositoryOutput {
-    var dataTransferService: DataTransferService { get }
-}
-
-private typealias Repository = RepositoryInput
-
-struct SeasonRepository: Repository {
-    fileprivate let dataTransferService: DataTransferService
-    
-    init(dataTransferService: DataTransferService) {
-        self.dataTransferService = dataTransferService
-    }
-}
+// MARK: - Methods
 
 extension SeasonRepository {
     func getSeason(with request: SeasonRequestDTO.GET,
@@ -33,7 +22,7 @@ extension SeasonRepository {
         
         guard !task.isCancelled else { return nil }
         
-        let endpoint = APIEndpoint.SeasonsRepository.getSeason(with: request)
+        let endpoint = APIEndpoint.MediaRepository.getSeason(with: request)
         task.networkTask = dataTransferService.request(with: endpoint) { result in
             switch result {
             case .success(let response):

@@ -7,6 +7,8 @@
 
 import Foundation
 
+// MARK: - Debug Print
+
 func printIfDebug(_ string: String) {
     #if DEBUG
     print(string)

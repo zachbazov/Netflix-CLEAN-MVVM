@@ -7,10 +7,18 @@
 
 import UIKit
 
+// MARK: - PreviewView Type
+
 final class PreviewView: UIView {
+    
+    // MARK: Properties
+    
     private var viewModel: PreviewViewViewModel!
     private(set) var mediaPlayerView: MediaPlayerView!
     private(set) lazy var imageView = createImageView()
+    
+    // MARK: Initializer
+    
     /// Create a preview view object.
     /// - Parameters:
     ///   - parent: Instantiating view.
@@ -26,21 +34,25 @@ final class PreviewView: UIView {
     
     required init?(coder: NSCoder) { fatalError() }
     
+    // MARK: Deinitializer
+    
     deinit {
         mediaPlayerView = nil
         viewModel = nil
         mediaPlayerView = nil
     }
-    
+}
+
+// MARK: - UI Setup
+
+extension PreviewView {
     private func createImageView() -> UIImageView {
         let imageView = UIImageView(frame: bounds)
         imageView.contentMode = .scaleAspectFit
         addSubview(imageView)
         return imageView
     }
-}
-
-extension PreviewView {
+    
     private func createMediaPlayer(on parent: UIView,
                                    view: PreviewView,
                                    with viewModel: DetailViewModel) -> MediaPlayerView {

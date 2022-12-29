@@ -7,6 +7,8 @@
 
 import UIKit
 
+// MARK: - UIView + Constraints
+
 extension UIView {
     func constraintToSuperview(_ view: UIView) {
         translatesAutoresizingMaskIntoConstraints = false

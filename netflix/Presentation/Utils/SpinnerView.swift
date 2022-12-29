@@ -7,9 +7,15 @@
 
 import UIKit
 
+// MARK: - SpinnerView Type
+
 final class SpinnerView {
     static var spinner: UIActivityIndicatorView?
+}
 
+// MARK: - Methods
+
+extension SpinnerView {
     static func show() {
         asynchrony {
             NotificationCenter.default.addObserver(self,

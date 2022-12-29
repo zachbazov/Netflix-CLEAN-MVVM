@@ -7,29 +7,49 @@
 
 import Foundation
 
+// MARK: - Localization Type
+
 struct Localization {
+    
+    // MARK: Auth Type
+    
     struct Auth {
+        
+        // MARK: Landpage Type
+        
         struct Landpage {
             let signInBarButton = NSLocalizedString("LandpageViewController.BarButton.Title",
                                                     comment: "Sign In Button")
         }
     }
     
+    // MARK: TabBar Type
+    
     struct TabBar {
+        
+        // MARK: Coordinator Type
+        
         struct Coordinator {
             let homeButton = NSLocalizedString("TabBarCoordinator.TabBarItem.Home.Title",
-                                                      comment: "Home Button")
+                                               comment: "Home Button")
             let searchButton = NSLocalizedString("TabBarCoordinator.TabBarItem.Search.Title",
-                                                      comment: "Search Button")
+                                                 comment: "Search Button")
         }
         
+        // MARK: Home Type
+        
         struct Home {
+            
+            // MARK: Panel Type
+            
             struct Panel {
                 let leadingTitle = NSLocalizedString("HomeViewController.PanelViewItem.Leading.Title",
                                                      comment: "My List Button")
                 let trailingTitle = NSLocalizedString("HomeViewController.PanelViewItem.Trailing.Title",
                                                       comment: "Info Button")
             }
+            
+            // MARK: Navigation Type
             
             struct Navigation {
                 let home = NSLocalizedString("HomeViewController.NavigationView.Home.Title",
@@ -77,12 +97,19 @@ struct Localization {
             }
         }
         
+        // MARK: Detail Type
+        
         struct Detail {
+            
+            // MARK: Panel Type
+            
             struct Panel {
                 let leadingItem = NSLocalizedString("DetailViewController.PanelViewItem.Leading.Title", comment: "My List Buttton")
                 let centerItem = NSLocalizedString("DetailViewController.PanelViewItem.Center.Title", comment: "Rate Buttton")
                 let trailingItem = NSLocalizedString("DetailViewController.PanelViewItem.Trailing.Title", comment: "Share Buttton")
             }
+            
+            // MARK: Navigation Type
             
             struct Navigation {
                 let leadingItem = NSLocalizedString("DetailViewController.NavigationViewItem.Leading.Title", comment: "Episodes Button")

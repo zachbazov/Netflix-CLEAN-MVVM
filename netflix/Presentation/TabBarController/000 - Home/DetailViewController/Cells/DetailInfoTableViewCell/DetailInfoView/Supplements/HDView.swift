@@ -7,8 +7,16 @@
 
 import UIKit
 
+// MARK: - HDView Type
+
 final class HDView: UIView {
+    
+    // MARK: Properties
+    
     private lazy var label = createLabel()
+    
+    // MARK: Initializer
+    
     /// Create an HD view object.
     /// - Parameter parent: Instantiating view.
     init(on parent: UIView) {
@@ -19,6 +27,15 @@ final class HDView: UIView {
     }
     
     required init?(coder: NSCoder) { fatalError() }
+}
+
+// MARK: - UI Setup
+
+extension HDView {
+    private func viewDidConfigure() {
+        layer.cornerRadius = 2.0
+        backgroundColor = .hexColor("#414141")
+    }
     
     private func createLabel() -> UILabel {
         let label = UILabel(frame: bounds)
@@ -27,12 +44,5 @@ final class HDView: UIView {
         label.textAlignment = .center
         label.text = "HD"
         return label
-    }
-}
-
-extension HDView {
-    private func viewDidConfigure() {
-        layer.cornerRadius = 2.0
-        backgroundColor = .hexColor("#414141")
     }
 }

@@ -7,6 +7,8 @@
 
 import Foundation
 
+// MARK: - JWT Type
+
 struct JWT {
     let token: String
 }

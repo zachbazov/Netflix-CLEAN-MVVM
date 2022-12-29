@@ -8,22 +8,9 @@
 import Foundation
 import Combine
 
-private protocol ObserverInput {}
+// MARK: - MediaPlayerObservers
 
-protocol ObserverOutput {
-    var timeObserverToken: Any! { get set }
-    var playerItemStatusObserver: NSKeyValueObservation! { get set }
-    var playerItemFastForwardObserver: NSKeyValueObservation! { get set }
-    var playerItemReverseObserver: NSKeyValueObservation! { get set }
-    var playerItemFastReverseObserver: NSKeyValueObservation! { get set }
-    var playerTimeControlStatusObserver: NSKeyValueObservation! { get set }
-    var playerItemDidEndPlayingObserver: AnyCancellable! { get set }
-    var cancelBag: Set<AnyCancellable>! { get set }
-}
-
-private typealias Observer = ObserverInput & ObserverOutput
-
-struct MediaPlayerObservers: Observer {
+struct MediaPlayerObservers {
     var timeObserverToken: Any!
     var playerItemStatusObserver: NSKeyValueObservation!
     var playerItemFastForwardObserver: NSKeyValueObservation!

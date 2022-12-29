@@ -7,6 +7,8 @@
 
 import Foundation
 
+// MARK: - NetworkError Type
+
 enum NetworkError: Error {
     case error(statusCode: Int, data: Data?)
     case notConnected
@@ -15,11 +17,17 @@ enum NetworkError: Error {
     case urlGeneration
 }
 
+// MARK: - NetworkCancellable Protocol
+
 protocol NetworkCancellable {
     func cancel()
 }
 
+// MARK: - URLSessionTask Extension
+
 extension URLSessionTask: NetworkCancellable {}
+
+// MARK: - NetworkServiceInput Protocol
 
 protocol NetworkServiceInput {
     typealias CompletionHandler = (Result<Data?, NetworkError>) -> Void
@@ -28,6 +36,8 @@ protocol NetworkServiceInput {
                  completion: @escaping CompletionHandler) -> NetworkCancellable?
 }
 
+// MARK: - NetworkSessionManagerInput Protocol
+
 protocol NetworkSessionManagerInput {
     typealias CompletionHandler = (Data?, URLResponse?, Error?) -> Void
     
@@ -35,25 +45,25 @@ protocol NetworkSessionManagerInput {
                  completion: @escaping CompletionHandler) -> NetworkCancellable
 }
 
+// MARK: - NetworkErrorLoggerInput Protocol
+
 private protocol NetworkErrorLoggerInput {
     func log(request: URLRequest)
     func log(responseData data: Data?, response: URLResponse?)
     func log(error: Error)
 }
 
+// MARK: - NetworkService Type
+
 struct NetworkService {
-    private let config: NetworkConfigurable
-    private let sessionManager: NetworkSessionManager
-    private let logger: NetworkErrorLogger
-    
-    init(config: NetworkConfigurable,
-         sessionManager: NetworkSessionManager = NetworkSessionManager(),
-         logger: NetworkErrorLogger = NetworkErrorLogger()) {
-        self.config = config
-        self.sessionManager = sessionManager
-        self.logger = logger
-    }
-    
+    let config: NetworkConfigurable
+    let sessionManager = NetworkSessionManager()
+    let logger = NetworkErrorLogger()
+}
+
+// MARK: - Methods
+
+extension NetworkService {
     private func request(request: URLRequest,
                          completion: @escaping CompletionHandler) -> NetworkCancellable {
         let sessionDataTask = sessionManager.request(request) { data, response, requestError in
@@ -90,6 +100,8 @@ struct NetworkService {
     }
 }
 
+// MARK: - NetworkServiceInput Implementation
+
 extension NetworkService: NetworkServiceInput {
     func request(endpoint: Requestable,
                  completion: @escaping CompletionHandler) -> NetworkCancellable? {
@@ -103,6 +115,8 @@ extension NetworkService: NetworkServiceInput {
     }
 }
 
+// MARK: - NetworkSessionManager Type
+
 struct NetworkSessionManager: NetworkSessionManagerInput {
     func request(_ request: URLRequest,
                  completion: @escaping CompletionHandler) -> NetworkCancellable {
@@ -111,6 +125,8 @@ struct NetworkSessionManager: NetworkSessionManagerInput {
         return task
     }
 }
+
+// MARK: - NetworkErrorLogger Type
 
 struct NetworkErrorLogger: NetworkErrorLoggerInput {
     func log(request: URLRequest) {

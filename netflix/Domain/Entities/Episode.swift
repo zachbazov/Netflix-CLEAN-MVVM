@@ -7,6 +7,8 @@
 
 import Foundation
 
+// MARK: - Episode Type
+
 struct Episode {
     var id: String?
     var mediaId: String
@@ -16,5 +18,7 @@ struct Episode {
     var episode: Int
     var url: String
 }
+
+// MARK: - Mediable Implementation
 
 extension Episode: Mediable {}

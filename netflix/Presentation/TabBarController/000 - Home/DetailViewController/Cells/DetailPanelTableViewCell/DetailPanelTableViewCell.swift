@@ -7,8 +7,16 @@
 
 import UIKit
 
+// MARK: - DetailPanelTableViewCell Type
+
 final class DetailPanelTableViewCell: UITableViewCell {
+    
+    // MARK: Properties
+    
     private(set) var panelView: DetailPanelView!
+    
+    // MARK: Initailizer
+    
     /// Create a detail panel table view cell object.
     /// - Parameters:
     ///   - tableView: Corresponding table view.
@@ -19,10 +27,8 @@ final class DetailPanelTableViewCell: UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: DetailPanelTableViewCell.reuseIdentifier, for: indexPath) as? DetailPanelTableViewCell else {
             fatalError()
         }
-        if cell.panelView == nil {
-            cell.panelView = DetailPanelView(on: cell.contentView, with: viewModel)
-            cell.contentView.addSubview(cell.panelView)
-        }
+        cell.panelView = DetailPanelView(on: cell.contentView, with: viewModel)
+        cell.contentView.addSubview(cell.panelView)
         return cell
     }
     
@@ -33,6 +39,8 @@ final class DetailPanelTableViewCell: UITableViewCell {
     
     required init?(coder: NSCoder) { fatalError() }
 }
+
+// MARK: - UI Setup
 
 extension DetailPanelTableViewCell {
     private func viewDidConfigure() {

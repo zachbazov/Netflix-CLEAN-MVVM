@@ -7,6 +7,8 @@
 
 import UIKit
 
+// MARK: - UIView + Gradients
+
 extension UIView {
     func addGradientLayer(frame: CGRect,
                           colors: [UIColor],
@@ -26,6 +28,8 @@ extension UIView {
         self.layer.addSublayer(gradient)
     }
 }
+
+// MARK: - UIView + Visibility
 
 extension UIView {
     func isHidden(_ hidden: Bool) {

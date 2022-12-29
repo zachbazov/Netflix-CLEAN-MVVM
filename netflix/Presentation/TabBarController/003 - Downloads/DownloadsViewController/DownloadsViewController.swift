@@ -7,20 +7,32 @@
 
 import UIKit
 
+// MARK: - DownloadsViewController Type
+
 final class DownloadsViewController: UIViewController {
+    
+    // MARK: Outlet Properties
+    
     @IBOutlet private var navigationViewContainer: UIView!
     @IBOutlet private var downloadsViewContainer: UIView!
     
-    var viewModel: DownloadsViewModel!
+    // MARK: Type's Properties
     
+    var viewModel: DownloadsViewModel!
     private var navigationView: DownloadsNavigationView!
     private var downloadsView: DownloadsView!
+    
+    // MARK: UIViewController Lifecycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setupSubviews()
     }
-    
+}
+
+// MARK: - UI Setup
+
+extension DownloadsViewController {
     private func setupSubviews() {
         setupDownloadsNavigationView()
         setupDownloadsView()

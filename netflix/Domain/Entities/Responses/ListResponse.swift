@@ -7,7 +7,12 @@
 
 import Foundation
 
+// MARK: - ListResponse Type
+
 struct ListResponse {
+    
+    // MARK: GET Type
+    
     struct GET {
         let status: String
         let data: List

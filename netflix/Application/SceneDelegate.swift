@@ -7,28 +7,37 @@
 
 import UIKit
 
+// MARK: - SceneDelegate Type
+
 class SceneDelegate: UIResponder {
     var window: UIWindow?
 }
 
+// MARK: - UIWindowSceneDelegate Protocol
+
 extension SceneDelegate: UIWindowSceneDelegate {
+    /// Occurs once the scene is about to connect to the app.
+    /// - Parameters:
+    ///   - scene: Corresponding scene.
+    ///   - session: Scene's session.
+    ///   - connectionOptions: Scene's options to apply.
     func scene(_ scene: UIScene,
                willConnectTo session: UISceneSession,
                options connectionOptions: UIScene.ConnectionOptions) {
         guard let windowScene = (scene as? UIWindowScene) else { return }
-        /// Apply application appearance configurations.
-        AppAppearance.setupAppearance()
-        /// Allocate root's references.
+        // Apply application appearance configurations.
+        AppAppearance.default()
+        // Allocate root's references.
         window = UIWindow(windowScene: windowScene)
+        // Invoke main entry-point.
         Application.current.root(in: window)
-        /// Stack and present the window.
+        // Stack and present the window.
         window?.makeKeyAndVisible()
     }
-    
-    /// Top level ejection point.
-    /// - Parameter scene: Current window's sceneto be ejected.
+    /// Occurs once the scene has been disconnected from the app.
+    /// - Parameter scene: Corresponding scene.
     func sceneDidDisconnect(_ scene: UIScene) {
-        removeTabBarObservers()
+        ejectTabBarObservers()
     }
     
     func sceneDidBecomeActive(_ scene: UIScene) {}
@@ -40,38 +49,39 @@ extension SceneDelegate: UIWindowSceneDelegate {
     func sceneDidEnterBackground(_ scene: UIScene) {}
 }
 
-extension SceneDelegate {
-    private func removeTabBarObservers() {
-        /// Remove `HomeViewController` observers.
-        /// The observers of `DetailViewController` will be removed once home's instance is deallocated.
-        if let tabCoordinator = Application.current.rootCoordinator.tabCoordinator,
-           let homeController = tabCoordinator.home.viewControllers.first! as? HomeViewController {
-            /// Remove home's data source display children observers.
+// MARK: - TabBarEjectable Implementation
+
+extension SceneDelegate: TabBarEjectable {
+    /// Remove all tar-bar related observers.
+    /// The observers of `DetailViewController` will be removed automatically once home's instance is deallocated.
+    func ejectTabBarObservers() {
+        guard let tabCoordinator = Application.current.rootCoordinator.tabCoordinator else { return }
+        // Remove any home-related observers.
+        if let homeController = tabCoordinator.home.viewControllers.first! as? HomeViewController {
+            // Remove panel view observers.
             if let displayCell = homeController.dataSource.displayCell,
                let panelView = displayCell.displayView.panelView as PanelView? {
                 panelView.removeObservers()
             }
-            /// Remove home's navigation view and view's overlay observers.
+            // Remove navigation & navigation overlay views observers.
             if let navigationView = homeController.navigationView,
                let navigationOverlayView = navigationView.navigationOverlayView {
                 navigationView.removeObservers()
                 navigationOverlayView.removeObservers()
             }
-            /// Remove my list observers.
+            // Remove my-list observers.
             if let myList = homeController.viewModel.myList {
                 myList.removeObservers()
             }
-            /// Remove home's view model observers.
+            
             homeController.removeObservers()
         }
-        /// Remove `NewsViewController` observers.
-        if let tabCoordinator = Application.current.rootCoordinator.tabCoordinator,
-           let newsController = tabCoordinator.news.viewControllers.first! as? NewsViewController {
+        // In-case of a valid news controller instance, remove it's observers.
+        if let newsController = tabCoordinator.news.viewControllers.first! as? NewsViewController {
             newsController.removeObservers()
         }
-        /// Remove `SearchViewController` observers.
-        if let tabCoordinator = Application.current.rootCoordinator.tabCoordinator,
-           let searchController = tabCoordinator.search.viewControllers.first! as? SearchViewController {
+        // In-case of a valid search controller instance, remove it's observers.
+        if let searchController = tabCoordinator.search.viewControllers.first! as? SearchViewController {
             searchController.removeObservers()
         }
     }

@@ -7,7 +7,12 @@
 
 import Foundation
 
+// MARK: - SectionResponse Type
+
 struct SectionResponse {
+    
+    // MARK: GET Type
+    
     struct GET {
         let status: String
         let results: Int

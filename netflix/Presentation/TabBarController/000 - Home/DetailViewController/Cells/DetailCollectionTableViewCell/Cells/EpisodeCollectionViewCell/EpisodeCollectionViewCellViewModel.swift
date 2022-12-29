@@ -7,12 +7,20 @@
 
 import Foundation
 
+// MARK: - EpisodeCollectionViewCellViewModel Type
+
 struct EpisodeCollectionViewCellViewModel {
+    
+    // MARK: Properties
+    
     let media: Media
     let posterImagePath: String
     let posterImageIdentifier: NSString
     var posterImageURL: URL!
     var season: Season!
+    
+    // MARK: Initializer
+    
     /// Create an episode collection view cell view model object.
     /// - Parameter viewModel: Coordinating view model.
     init(with viewModel: DetailViewModel) {

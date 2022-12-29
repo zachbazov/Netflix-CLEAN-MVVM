@@ -7,14 +7,19 @@
 
 import UIKit.UICollectionView
 
+// MARK: - BrowseOverlayView Type
+
 final class BrowseOverlayView: UIView {
+    
+    // MARK: Properties
+    
     let viewModel: BrowseOverlayViewModel
-    
     private(set) lazy var collectionView: UICollectionView = createCollectionView()
-    
     var dataSource: BrowseOverlayCollectionViewDataSource? {
         didSet { dataSourceDidChange() }
     }
+    
+    // MARK: Initializer
     
     init(on parent: UIView, with viewModel: HomeViewModel) {
         self.viewModel = BrowseOverlayViewModel(with: viewModel)
@@ -29,7 +34,11 @@ final class BrowseOverlayView: UIView {
     }
     
     required init?(coder: NSCoder) { fatalError() }
-    
+}
+
+// MARK: - UI Setup
+
+extension BrowseOverlayView {
     private func createCollectionView() -> UICollectionView {
         let layout = CollectionViewLayout(layout: .navigationOverlay, scrollDirection: .vertical)
         let collectionView = UICollectionView(frame: bounds, collectionViewLayout: layout)
@@ -40,7 +49,11 @@ final class BrowseOverlayView: UIView {
         addSubview(collectionView)
         return collectionView
     }
-    
+}
+
+// MARK: - Methods
+
+extension BrowseOverlayView {
     private func dataSourceDidChange() {
         collectionView.delegate = dataSource
         collectionView.dataSource = dataSource

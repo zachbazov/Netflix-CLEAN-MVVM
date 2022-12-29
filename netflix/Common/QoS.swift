@@ -7,6 +7,8 @@
 
 import Foundation
 
+// MARK: - Asynchronous Block
+
 func asynchrony(_ block: @escaping () -> Void) {
     DispatchQueue.main.async { block() }
 }

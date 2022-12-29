@@ -7,10 +7,18 @@
 
 import Foundation
 
+// MARK: - NavigationViewViewModel Type
+
 final class NavigationViewViewModel {
+    
+    // MARK: Properties
+    
     private let coordinator: HomeViewCoordinator
     private let items: [NavigationViewItem]
     let state: Observable<NavigationView.State> = Observable(.home)
+    
+    // MARK: Initializer
+    
     /// Create a navigation view view model object.
     /// - Parameters:
     ///   - items: Represented items on the navigation.
@@ -20,6 +28,8 @@ final class NavigationViewViewModel {
         self.items = items
     }
 }
+
+// MARK: - Methods
 
 extension NavigationViewViewModel {
     /// Animate the first appearance of the navigation view.

@@ -7,10 +7,14 @@
 
 import UIKit
 
+// MARK: - RootCoordinable Protocol
+
 private protocol RootCoordinable {
     func allocateAuthScreen()
     func allocateTabBarScreen()
 }
+
+// MARK: - RootCoordinator Type
 
 final class RootCoordinator {
     weak var viewController: UIViewController?
@@ -18,6 +22,8 @@ final class RootCoordinator {
     private(set) var tabCoordinator: TabBarCoordinator!
     private(set) var tabViewModel: TabBarViewModel!
 }
+
+// MARK: - RootCoordinable Implementation
 
 extension RootCoordinator: RootCoordinable {
     /// Allocating and presenting the authorization screen.
@@ -58,6 +64,8 @@ extension RootCoordinator: RootCoordinable {
         tabCoordinator.requestUserCredentials()
     }
 }
+
+// MARK: - Coordinate Implementation
 
 extension RootCoordinator: Coordinate {
     /// View representation type.

@@ -7,14 +7,25 @@
 
 import Foundation
 
+// MARK: - NewsUseCase Type
+
 final class NewsUseCase {
+    
+    // MARK: Properties
+    
     private let mediaRepository: MediaRepository
+    
+    // MARK: Initializer
     
     init(mediaRepository: MediaRepository) {
         self.mediaRepository = mediaRepository
     }
-    
-    func execute(completion: @escaping (Result<NewsResponseDTO, Error>) -> Void) -> Cancellable? {
+}
+
+// MARK: - Methods
+
+extension NewsUseCase {
+    private func execute(completion: @escaping (Result<NewsResponseDTO, Error>) -> Void) -> Cancellable? {
             return fetchUpcomingMedia { result in
                 if case let .success(responseDTO) = result {
                     completion(.success(responseDTO))

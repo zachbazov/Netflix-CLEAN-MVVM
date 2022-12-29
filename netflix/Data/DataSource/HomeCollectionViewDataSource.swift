@@ -7,13 +7,21 @@
 
 import UIKit
 
+// MARK: - HomeCollectionViewDataSource Type
+
 final class HomeCollectionViewDataSource<Cell>: NSObject,
                                                 UICollectionViewDelegate,
                                                 UICollectionViewDataSource,
                                                 UICollectionViewDataSourcePrefetching where Cell: UICollectionViewCell {
+    
+    // MARK: Properties
+    
     private weak var coordinator: HomeViewCoordinator!
     private weak var collectionView: UICollectionView!
     private let section: Section
+    
+    // MARK: Initializer
+    
     /// Create home's collection view data source object.
     /// - Parameters:
     ///   - collectionView: Corresponding collection view.
@@ -29,11 +37,15 @@ final class HomeCollectionViewDataSource<Cell>: NSObject,
         self.viewDidLoad()
     }
     
+    // MARK: Deinitializer
+    
     deinit {
         collectionView = nil
         coordinator = nil
     }
-    // MARK: Delegate & DataSource
+    
+    // MARK: UICollectionViewDelegate & UICollectionViewDataSource & UICollectionViewDataSourcePrefetching Implementation
+    
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return self.section.media.count
     }
@@ -57,6 +69,8 @@ final class HomeCollectionViewDataSource<Cell>: NSObject,
     
     func collectionView(_ collectionView: UICollectionView, cancelPrefetchingForItemsAt indexPaths: [IndexPath]) {}
 }
+
+// MARK: - UI Setup
 
 extension HomeCollectionViewDataSource {
     private func viewDidLoad() {
