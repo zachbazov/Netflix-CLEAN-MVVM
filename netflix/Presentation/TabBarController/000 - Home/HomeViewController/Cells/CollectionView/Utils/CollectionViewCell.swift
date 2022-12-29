@@ -54,6 +54,18 @@ class CollectionViewCell: UICollectionViewCell {
         viewModel = nil
     }
     
+    // MARK: UICollectionViewCell Lifecycle
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        coverImageView.image = nil
+        logoImageView.image = nil
+        placeholderLabel.text = nil
+        logoBottomConstraint.constant = .zero
+        representedIdentifier = nil
+        viewModel = nil
+    }
+    
     // MARK: UI Setup
     
     /// Overridable configuration operation.
