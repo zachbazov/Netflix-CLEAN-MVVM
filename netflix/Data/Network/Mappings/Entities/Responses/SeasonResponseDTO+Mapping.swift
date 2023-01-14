@@ -15,7 +15,7 @@ struct SeasonResponseDTO {
     
     struct GET: Decodable {
         let status: String
-        let data: SeasonDTO
+        var data: [SeasonDTO]
     }
 }
 
@@ -24,6 +24,6 @@ struct SeasonResponseDTO {
 extension SeasonResponseDTO.GET {
     func toDomain() -> SeasonResponse.GET {
         return .init(status: status,
-                     data: data.toDomain())
+                     data: data.first?.toDomain() ?? .init(mediaId: "", title: "", slug: "", season: 0, episodes: []))
     }
 }

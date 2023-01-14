@@ -53,7 +53,7 @@ extension NavigationOverlayTableViewDataSource {
     /// Data source state representation.
     enum State: Int {
         case none
-        case mainMenu
-        case categories
+        case main
+        case genres
     }
 }

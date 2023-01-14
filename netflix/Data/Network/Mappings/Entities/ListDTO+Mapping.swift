@@ -9,15 +9,29 @@ import Foundation
 
 // MARK: - ListDTO Type
 
-struct ListDTO: Decodable {
-    let user: String
-    var media: [MediaDTO]
+struct ListDTO {
+    
+    struct GET: Decodable {
+        let user: String
+        let media: [MediaDTO]
+    }
+    
+    struct POST: Decodable {
+        let user: String
+        let media: [String]
+    }
 }
 
 // MARK: - Mapping
 
-extension ListDTO {
-    func toDomain() -> List {
+extension ListDTO.GET {
+    func toDomain() -> List.GET {
         return .init(user: user, media: media.map { $0.toDomain() })
+    }
+}
+
+extension ListDTO.POST {
+    func toDomain() -> List.POST {
+        return .init(user: user, media: media)
     }
 }

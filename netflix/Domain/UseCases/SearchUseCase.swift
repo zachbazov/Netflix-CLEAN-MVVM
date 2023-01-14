@@ -58,7 +58,7 @@ extension SearchUseCase {
         page: Int,
         cached: @escaping (MediaPage) -> Void,
         completion: @escaping (Result<MediaPage, Error>) -> Void) -> Cancellable? {
-            let requestDTO = SearchRequestDTO(title: query.query, page: nil)
+            let requestDTO = SearchRequestDTO(regex: query.query)
             let task = RepositoryTask()
             
             guard !task.isCancelled else { return nil }

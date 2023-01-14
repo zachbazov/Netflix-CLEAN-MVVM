@@ -47,7 +47,7 @@ extension SignUpViewModel {
                 /// Authenticate the user.
                 authService.authenticate(user: userDTO)
                 /// Present tab bar screen.
-                coordinator.showScreen(.tabBar)
+                asynchrony { coordinator.showScreen(.tabBar) }
             }
             if case let .failure(error) = result { print(error) }
         }

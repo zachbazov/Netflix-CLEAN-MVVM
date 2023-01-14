@@ -49,26 +49,10 @@ extension MyListViewModel {
             completion: { [weak self] result in
                 guard let self = self else { return }
                 if case let .success(responseDTO) = result {
-                    self.list.value = responseDTO.data.toDomain().media.toSet()
-                    self.section.media = self.list.value.toArray()
-                }
-                if case let .failure(error) = result { print(error) }
-            })
-    }
-    
-    func createList() {
-        guard let media = section.media as [Media]? else { return }
-        let requestDTO = ListRequestDTO.POST(user: user._id!,
-                                             media: media.toObjectIDs())
-        task = homeUseCase.execute(
-            for: ListResponseDTO.POST.self,
-            request: requestDTO,
-            cached: { _ in },
-            completion: { [weak self] result in
-                guard let self = self else { return }
-                if case let .success(responseDTO) = result {
-                    self.list.value = responseDTO.data.toDomain().media.toSet()
-                    self.section.media = self.list.value.toArray()
+                    if let data = responseDTO.data.first {
+                        self.list.value = data.toDomain().media.toSet()
+                        self.section.media = self.list.value.toArray()
+                    }
                 }
                 if case let .failure(error) = result { print(error) }
             })
@@ -84,8 +68,7 @@ extension MyListViewModel {
             cached: { _ in },
             completion: { [weak self] result in
                 guard let self = self else { return }
-                if case let .success(responseDTO) = result {
-                    self.list.value = responseDTO.data.toDomain().media.toSet()
+                if case .success = result {
                     self.section.media = self.list.value.toArray()
                 }
                 if case let .failure(error) = result { print(error) }
@@ -133,8 +116,8 @@ extension MyListViewModel {
             var media = list.value
             switch homeViewModel.dataSourceState.value {
             case .all: break
-            case .series: media = media.filter { $0.type == .series }
-            case .films: media = media.filter { $0.type == .film }
+            case .tvShows: media = media.filter { $0.type == .series }
+            case .movies: media = media.filter { $0.type == .film }
             }
             homeViewModel.sections[section.id].media = media.toArray()
         }

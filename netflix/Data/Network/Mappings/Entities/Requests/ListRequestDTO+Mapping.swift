@@ -24,13 +24,6 @@ struct ListRequestDTO {
         let user: String
         let media: [String]
     }
-    
-    // MARK: POST Type
-    
-    struct POST: Decodable {
-        let user: String
-        let media: [String]
-    }
 }
 
 // MARK: - Mapping

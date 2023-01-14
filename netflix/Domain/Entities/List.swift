@@ -10,6 +10,13 @@ import Foundation
 // MARK: - List Type
 
 struct List {
-    let user: String
-    var media: [Media]
+    struct GET {
+        let user: String
+        var media: [Media]
+    }
+    
+    struct POST {
+        let user: String
+        var media: [String]
+    }
 }

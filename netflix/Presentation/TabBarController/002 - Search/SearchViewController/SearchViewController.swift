@@ -68,6 +68,7 @@ extension SearchViewController {
         searchController.searchBar.searchTextField.backgroundColor = .hexColor("#2B2B2B")
         searchController.searchBar.searchTextField.superview?.backgroundColor = .black
         searchController.searchBar.searchTextField.keyboardAppearance = .dark
+        searchController.searchBar.searchTextField.autocapitalizationType = .none
         searchBarContainer.addSubview(searchController.searchBar)
         definesPresentationContext = true
         if #available(iOS 13.0, *) {

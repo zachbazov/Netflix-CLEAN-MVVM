@@ -98,17 +98,13 @@ extension PanelViewItemConfiguration {
         }
         switch tag {
         case .myList:
-            /// In-case the user doesn't have a list yet.
-            if viewModel.myList.viewModel.list.value.isEmpty {
-                viewModel.myList.viewModel.createList()
-            }
             /// Since, the tap event occurs from the `PanelViewItem`,
             /// the presenting view on the `DisplayView` is to be interacted.
             let media = viewModel.presentedMedia.value!
-            /// Add or remove the object from the list.
+            // Add or remove the object from the list.
             viewModel.myList.viewModel.shouldAddOrRemove(media, uponSelection: view.viewModel.isSelected.value)
         case .info:
-            /// Allocate a new detail controller.
+            // Allocate a new detail controller.
             let coordinator = viewModel.coordinator!
             let section = viewModel.sectionAt(.resumable)
             let media = viewModel.presentedMedia.value!

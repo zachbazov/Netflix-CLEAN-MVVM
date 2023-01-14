@@ -67,11 +67,6 @@ extension DetailPanelViewItemConfiguration {
         guard let viewModel = view.viewModel else { return }
         switch tag {
         case .myList:
-            /// In-case the user doesn't have a list yet.
-            if myList.viewModel.list.value.isEmpty {
-                myList.viewModel.createList()
-            }
-            
             let media = viewModel.media!
             myList.viewModel.shouldAddOrRemove(media, uponSelection: viewModel.isSelected.value)
         case .rate: print("rate")

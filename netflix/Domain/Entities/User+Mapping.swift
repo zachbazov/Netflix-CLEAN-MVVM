@@ -18,6 +18,7 @@ struct User {
     let role: String?
     let active: Bool?
     var token: String?
+    var mylist: [String]?
 }
 
 // MARK: - Mapping
@@ -31,6 +32,7 @@ extension User {
                      passwordConfirm: passwordConfirm,
                      role: role,
                      active: active,
-                     token: token)
+                     token: token,
+                     mylist: mylist)
     }
 }

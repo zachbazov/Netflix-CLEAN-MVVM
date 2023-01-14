@@ -48,8 +48,8 @@ extension MediaRepository {
                 cached: @escaping (MediaResponseDTO.GET.One?) -> Void,
                 completion: @escaping (Result<MediaResponseDTO.GET.One, Error>) -> Void) -> Cancellable? {
         let requestDTO = MediaRequestDTO.GET.One(user: request.user,
-                                             id: request.id,
-                                             slug: request.slug)
+                                                 id: request.id,
+                                                 slug: request.slug)
         let task = RepositoryTask()
         
         guard !task.isCancelled else { return nil }

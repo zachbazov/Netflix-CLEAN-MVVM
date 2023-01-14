@@ -84,18 +84,6 @@ extension HomeUseCase {
                         completion?(.failure(error))
                     }
                 })
-        case is ListResponseDTO.POST.Type:
-            guard let request = request as? ListRequestDTO.POST else { return nil }
-            return listRepository.createOne(
-                request: request,
-                completion: { result in
-                    switch result {
-                    case .success(let response):
-                        completion?(.success(response as! T))
-                    case .failure(let error):
-                        completion?(.failure(error))
-                    }
-                })
         case is ListResponseDTO.PATCH.Type:
             guard let request = request as? ListRequestDTO.PATCH else { return nil }
             return listRepository.updateOne(request: request) { result in

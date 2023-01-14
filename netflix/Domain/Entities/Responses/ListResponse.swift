@@ -15,6 +15,6 @@ struct ListResponse {
     
     struct GET {
         let status: String
-        let data: List
+        let data: List.GET
     }
 }

@@ -10,6 +10,5 @@ import Foundation
 // MARK: - SearchRequestDTO Type
 
 struct SearchRequestDTO: Encodable {
-    let title: String
-    let page: Int?
+    let regex: String
 }

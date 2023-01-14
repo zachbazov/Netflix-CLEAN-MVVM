@@ -22,6 +22,7 @@ public final class UserDTO: NSObject, Codable, NSSecureCoding {
     var role: String?
     var active: Bool?
     var token: String?
+    var mylist: [String]?
     
     // MARK: Initializer
     
@@ -32,7 +33,8 @@ public final class UserDTO: NSObject, Codable, NSSecureCoding {
          passwordConfirm: String? = nil,
          role: String? = nil,
          active: Bool? = nil,
-         token: String? = nil) {
+         token: String? = nil,
+         mylist: [String]? = []) {
         self._id = _id
         self.name = name
         self.email = email
@@ -41,6 +43,7 @@ public final class UserDTO: NSObject, Codable, NSSecureCoding {
         self.role = role
         self.active = active
         self.token = token
+        self.mylist = mylist
     }
     
     // MARK: NSSecureCoding Implementation
@@ -58,6 +61,7 @@ public final class UserDTO: NSObject, Codable, NSSecureCoding {
         coder.encode(role, forKey: "role")
         coder.encode(active, forKey: "active")
         coder.encode(token, forKey: "token")
+        coder.encode(mylist, forKey: "mylist")
     }
     
     public required init?(coder: NSCoder) {
@@ -69,6 +73,7 @@ public final class UserDTO: NSObject, Codable, NSSecureCoding {
         self.role = coder.decodeObject(of: [UserDTO.self, NSString.self], forKey: "role") as? String
         self.active = coder.decodeObject(of: [UserDTO.self, NSNumber.self], forKey: "active") as? Bool
         self.token = coder.decodeObject(of: [UserDTO.self, NSString.self], forKey: "token") as? String
+        self.mylist = coder.decodeObject(of: [NSArray.self, NSString.self], forKey: "mylist") as? [String]
     }
 }
 
@@ -83,7 +88,8 @@ extension UserDTO {
                      passwordConfirm: passwordConfirm,
                      role: role,
                      active: active,
-                     token: token)
+                     token: token,
+                     mylist: mylist)
     }
 }
 
@@ -97,6 +103,7 @@ extension UserDTO {
         entity.passwordConfirm = passwordConfirm
         entity.role = role
         entity.active = active ?? true
+        entity.mylist = mylist
         return entity
     }
 }

@@ -15,21 +15,14 @@ struct ListResponseDTO {
     
     struct GET: Decodable {
         let status: String
-        let data: ListDTO
-    }
-    
-    // MARK: POST Type
-    
-    struct POST: Decodable {
-        let status: String
-        var data: ListDTO
+        var data: [ListDTO.GET]
     }
     
     // MARK: PATCH Type
     
     struct PATCH: Decodable {
         let status: String
-        var data: ListDTO
+        var data: ListDTO.POST
     }
 }
 
@@ -37,6 +30,6 @@ struct ListResponseDTO {
 
 extension ListResponseDTO.GET {
     func toDomain() -> ListResponse.GET {
-        return .init(status: status, data: data.toDomain())
+        return .init(status: status, data: data.first!.toDomain())
     }
 }

@@ -48,19 +48,19 @@ struct APIEndpoint {
     struct MediaRepository: MediaRepositoryEndpoints {
         static func getAllMedia() -> Endpoint<MediaResponseDTO.GET.Many> {
             return Endpoint(path: "api/v1/media",
-                            method: .get,
-                            queryParameters: ["sort": "id"])
+                            method: .get)
         }
         
         static func getMedia(with request: MediaRequestDTO.GET.One) -> Endpoint<MediaResponseDTO.GET.One> {
-            let assertion = request.id == nil ? request.slug! : request.id!
-            return Endpoint(path: "api/v1/media/\(assertion)",
-                            method: .get)
+            return Endpoint(path: "api/v1/media",
+                            method: .get,
+                            queryParameters: ["slug": request.slug ?? "", "id": request.id ?? ""])
         }
         
         static func searchMedia(with request: SearchRequestDTO) -> Endpoint<SearchResponseDTO> {
-            return Endpoint(path: "api/v1/media/search/\(request.title)",
-                            method: .get)
+            return Endpoint(path: "api/v1/media/search",
+                            method: .get,
+                            queryParameters: ["slug": request.regex, "title": request.regex])
         }
         
         static func getUpcomingMedia(with request: NewsRequestDTO) -> Endpoint<NewsResponseDTO> {
@@ -70,35 +70,26 @@ struct APIEndpoint {
         }
         
         static func getSeason(with request: SeasonRequestDTO.GET) -> Endpoint<SeasonResponseDTO.GET> {
-            return Endpoint(path: "api/v1/media/\(request.slug!)/seasons/\(request.season!)",
-                            method: .get)
+            return Endpoint(path: "api/v1/seasons",
+                            method: .get,
+                            queryParameters: ["slug": request.slug ?? "",
+                                              "season": request.season ?? 1])
         }
     }
     
     // MARK: ListRepository Type
     
     struct ListRepository: ListRepositoryEndpoints {
-        static func getAllMyLists() -> Endpoint<ListResponseDTO.GET> {
-            return Endpoint(path: "api/v1/mylists",
-                            method: .get)
-        }
-        
         static func getMyList(with request: ListRequestDTO.GET) -> Endpoint<ListResponseDTO.GET> {
-            return Endpoint(path: "api/v1/mylists/\(request.user._id ?? "")",
-                            method: .get)
-        }
-        
-        static func createMyList(with request: ListRequestDTO.POST) -> Endpoint<ListResponseDTO.POST> {
-            return Endpoint(path: "api/v1/mylists/\(request.user)",
-                            method: .post,
-                            bodyParameters: ["user": request.user,
-                                             "media": request.media],
-                            bodyEncoding: .jsonSerializationData)
+            return Endpoint(path: "api/v1/mylists",
+                            method: .get,
+                            queryParameters: ["user": request.user._id!])
         }
         
         static func updateMyList(with request: ListRequestDTO.PATCH) -> Endpoint<ListResponseDTO.PATCH> {
-            return Endpoint(path: "api/v1/mylists/\(request.user)",
+            return Endpoint(path: "api/v1/mylists",
                             method: .patch,
+                            queryParameters: ["user": request.user],
                             bodyParameters: ["user": request.user,
                                              "media": request.media],
                             bodyEncoding: .jsonSerializationData)

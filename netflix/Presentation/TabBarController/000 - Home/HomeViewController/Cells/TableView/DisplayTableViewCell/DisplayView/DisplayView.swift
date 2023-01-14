@@ -93,7 +93,7 @@ extension DisplayView {
     /// - Returns: A media object.
     private func mediaFromCache(with viewModel: HomeViewModel) -> Media {
         if case .all = viewModel.dataSourceState.value { return viewModel.displayMediaCache[.all]! }
-        else if case .series = viewModel.dataSourceState.value { return viewModel.displayMediaCache[.series]! }
-        else { return viewModel.displayMediaCache[.films]! }
+        else if case .tvShows = viewModel.dataSourceState.value { return viewModel.displayMediaCache[.tvShows]! }
+        else { return viewModel.displayMediaCache[.movies]! }
     }
 }

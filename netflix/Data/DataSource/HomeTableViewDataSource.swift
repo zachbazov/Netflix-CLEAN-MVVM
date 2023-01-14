@@ -154,8 +154,8 @@ extension HomeTableViewDataSource {
     
     enum State: Int, CaseIterable {
         case all
-        case series
-        case films
+        case tvShows
+        case movies
     }
 }
 

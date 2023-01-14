@@ -14,3 +14,7 @@ extension Array where Element == Media {
     func toObjectIDs() -> [String] { map { String($0.id!) } }
     func toSet() -> Set<Element> { Set(self) }
 }
+
+extension Array where Element == String {
+    func toSet() -> Set<Element> { Set(self) }
+}

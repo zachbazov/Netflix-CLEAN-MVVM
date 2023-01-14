@@ -90,7 +90,7 @@ extension DetailViewModel {
                                with: request) { [weak self] result in
             if case let .success(responseDTO) = result {
                 var season = responseDTO.data
-                season.episodes = season.episodes.sorted { $0.episode < $1.episode }
+                season!.episodes = season!.episodes.sorted { $0.episode < $1.episode }
                 self?.season.value = season
                 completion()
             }

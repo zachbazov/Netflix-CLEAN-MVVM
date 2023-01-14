@@ -15,6 +15,6 @@ struct SeasonResponse {
     
     struct GET {
         let status: String
-        let data: Season
+        var data: Season?
     }
 }

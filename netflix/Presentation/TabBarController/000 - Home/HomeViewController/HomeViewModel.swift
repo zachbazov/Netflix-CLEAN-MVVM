@@ -154,7 +154,7 @@ extension HomeViewModel {
                     .sorted { $0.rating > $1.rating }
                     .filter { $0.rating > 7.5 }
                     .slice(10)
-            } else if case .series = dataSourceState.value {
+            } else if case .tvShows = dataSourceState.value {
                 return media
                     .filter { $0.type == .series }
                     .sorted { $0.rating > $1.rating }
@@ -170,7 +170,7 @@ extension HomeViewModel {
         } else if case .resumable = index {
             if case .all = dataSourceState.value {
                 return media.shuffled()
-            } else if case .series = dataSourceState.value {
+            } else if case .tvShows = dataSourceState.value {
                 return media.shuffled().filter { $0.type == .series }
             } else {
                 return media.shuffled().filter { $0.type == .film }
@@ -180,7 +180,7 @@ extension HomeViewModel {
             let media = myList.viewModel.list.value
             if case .all = dataSourceState.value {
                 return media.shuffled()
-            } else if case .series = dataSourceState.value {
+            } else if case .tvShows = dataSourceState.value {
                 return media.shuffled().filter { $0.type == .series }
             } else {
                 return media.shuffled().filter { $0.type == .film }
@@ -189,7 +189,7 @@ extension HomeViewModel {
             let value = Float(7.5)
             if case .all = dataSourceState.value {
                 return media.filter { $0.rating > value }
-            } else if case .series = dataSourceState.value {
+            } else if case .tvShows = dataSourceState.value {
                 return media.filter { $0.type == .series }.filter { $0.rating > value }
             } else {
                 return media.filter { $0.type == .film }.filter { $0.rating > value }
@@ -199,7 +199,7 @@ extension HomeViewModel {
                 return media
                     .shuffled()
                     .filter { $0.genres.contains(sections[index.rawValue].title) }
-            } else if case .series = dataSourceState.value {
+            } else if case .tvShows = dataSourceState.value {
                 return media
                     .shuffled()
                     .filter { $0.type == .series }
