@@ -38,12 +38,15 @@ extension AuthService {
     func authenticate(user: UserDTO?) {
         print("authenticate", user!.email!)
         self.user = user
+        UserGlobal.user = user
+        if let password = user?.password {
+            UserGlobal.password = password
+        }
     }
     
     func deauthenticate() {
         print("deauthenticate", UserGlobal.user!.email!)
-        let userDTO = UserDTO(_id: UserGlobal.user?._id, name: UserGlobal.user?.name, email: UserGlobal.user?.email, password: UserGlobal.password, passwordConfirm: UserGlobal.user?.passwordConfirm, role: UserGlobal.user?.role, active: UserGlobal.user?.active, token: UserGlobal.user?.token, mylist: UserGlobal.user?.mylist)
-        let requestDTO = AuthRequestDTO(user: userDTO)
+        let requestDTO = AuthRequestDTO(user: UserGlobal.user!)
         
         coreDataStorage.performBackgroundTask { [weak self] context in
             self?.authResponseStorage.deleteResponse(for: requestDTO, in: context) {

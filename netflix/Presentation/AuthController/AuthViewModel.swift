@@ -105,7 +105,6 @@ extension AuthViewModel {
                 }
                 if case let .failure(error) = result {
                     print("Unresolved error \(error)")
-//                    self.authService.deauthenticate()
                 }
             }
         }
