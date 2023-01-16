@@ -44,7 +44,7 @@ extension AuthResponseStorage {
                 let fetchRequest = self.fetchRequest(for: request)
                 let requestEntity = try context.fetch(fetchRequest).first
                 
-                self.authService.user = requestEntity?.response?.data
+                UserGlobal.user = requestEntity?.response?.data
                 
                 completion(.success(requestEntity?.response?.toDTO()))
             } catch {
@@ -52,23 +52,6 @@ extension AuthResponseStorage {
             }
         }
     }
-    
-//    func getVoidResponse(completion: @escaping (Result<Void, CoreDataStorageError>) -> Void) {
-//        coreDataStorage.performBackgroundTask { [weak self] context in
-//            guard let self = self else { return }
-//            do {
-//                let requestDTO = AuthRequestDTO(user: UserGlobal.user!)
-//                let fetchRequest = self.fetchRequest(for: requestDTO)
-//                let requestEntity = try context.fetch(fetchRequest).first
-//                
-//                self.authService.user = requestEntity?.response?.data
-//                
-//                completion(.success(Void()))
-//            } catch {
-//                completion(.failure(CoreDataStorageError.readError(error)))
-//            }
-//        }
-//    }
     
     func save(response: AuthResponseDTO, for request: AuthRequestDTO) {
         coreDataStorage.performBackgroundTask { [weak self] context in
@@ -86,7 +69,7 @@ extension AuthResponseStorage {
                 responseEntity.token = response.token
                 responseEntity.data = response.data
                 
-                self.authService.user = response.data
+                UserGlobal.user = response.data
                 
                 try context.save()
             } catch {
@@ -100,7 +83,7 @@ extension AuthResponseStorage {
         do {
             if let result = try context.fetch(fetchRequest) as [AuthRequestEntity]? {
                 for r in result where r.user?.email ?? "" == UserGlobal.user?.email ?? "" {
-                    print("deleting", r.user?.toDomain())
+                    print("deleting", r.user!.toDomain().email)
                     context.delete(r.response!)
                     context.delete(r)
                     

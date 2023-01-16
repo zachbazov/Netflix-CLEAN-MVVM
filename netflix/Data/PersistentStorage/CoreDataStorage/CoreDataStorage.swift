@@ -35,7 +35,7 @@ final class CoreDataStorage {
                 assertionFailure("CoreDataStorage unresolved error \(error), \(error.userInfo)")
             }
         }
-        url(for: container)
+//        printContainerUrl(for: container)
         return container
     }()
 }
@@ -43,11 +43,10 @@ final class CoreDataStorage {
 // MARK: - UI Setup
 
 extension CoreDataStorage {
-    private func url(for container: NSPersistentContainer) -> URL? {
+    private func printContainerUrl(for container: NSPersistentContainer) {
         let persistentStore = container.persistentStoreCoordinator.persistentStores.first!
         let url = container.persistentStoreCoordinator.url(for: persistentStore)
         printIfDebug("persistentStore url \(url)")
-        return url
     }
     
     private func transformersDidRegister() {

@@ -24,7 +24,7 @@ final class MyListViewModel {
     
     init(with viewModel: HomeViewModel) {
         self.coordinator = viewModel.coordinator
-        self.user = Application.current.authService.user ?? .init()
+        self.user = UserGlobal.user!
         self.homeUseCase = viewModel.useCase
         self.section = viewModel.section(at: .myList)
     }

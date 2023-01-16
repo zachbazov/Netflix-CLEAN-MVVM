@@ -14,17 +14,12 @@ final class AuthService {
     private var authResponseStorage: AuthResponseStorage {
         Application.current.authResponseCache
     }
-    
-    let userDefaults = UserDefaults.standard
-    
-    var user: UserDTO?
 }
 
 // MARK: - Methods
 
 extension AuthService {
     func performCachedAuthorizationSession(_ completion: @escaping (AuthRequest) -> Void) {
-        print("performCachedAuthorizationSession")
         guard let email = UserGlobal.user?.email,
               let password = UserGlobal.password as String? else {
             return
@@ -36,8 +31,6 @@ extension AuthService {
     }
 
     func authenticate(user: UserDTO?) {
-        print("authenticate", user!.email!)
-        self.user = user
         UserGlobal.user = user
         if let password = user?.password {
             UserGlobal.password = password
@@ -45,7 +38,6 @@ extension AuthService {
     }
     
     func deauthenticate() {
-        print("deauthenticate", UserGlobal.user!.email!)
         let requestDTO = AuthRequestDTO(user: UserGlobal.user!)
         
         coreDataStorage.performBackgroundTask { [weak self] context in
@@ -58,7 +50,6 @@ extension AuthService {
                     case .success:
                         UserDefaults.standard.removeObject(forKey: "latestAuthenticationOnDevice")
                         UserDefaults.standard.removeObject(forKey: "latestAuthenticationPasswordOnDevice")
-                        self?.user = nil
                         UserGlobal.user = nil
                         UserGlobal.password = nil
                         
