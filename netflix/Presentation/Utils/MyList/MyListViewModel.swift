@@ -49,10 +49,8 @@ extension MyListViewModel {
             completion: { [weak self] result in
                 guard let self = self else { return }
                 if case let .success(responseDTO) = result {
-                    if let data = responseDTO.data.first {
-                        self.list.value = data.toDomain().media.toSet()
-                        self.section.media = self.list.value.toArray()
-                    }
+                    self.list.value = responseDTO.data.first!.toDomain().media.toSet()
+                    self.section.media = self.list.value.toArray()
                 }
                 if case let .failure(error) = result { print(error) }
             })

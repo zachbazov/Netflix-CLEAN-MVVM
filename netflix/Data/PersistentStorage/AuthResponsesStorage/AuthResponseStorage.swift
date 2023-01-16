@@ -13,7 +13,7 @@ final class AuthResponseStorage {
     
     // MARK: Properties
     
-    private let coreDataStorage: CoreDataStorage
+    let coreDataStorage: CoreDataStorage
     private let authService: AuthService
     
     // MARK: Initializer
@@ -28,11 +28,11 @@ final class AuthResponseStorage {
 // MARK: - Methods
 
 extension AuthResponseStorage {
-    private func fetchRequest(for requestDTO: AuthRequestDTO) -> NSFetchRequest<AuthRequestEntity> {
+    func fetchRequest(for requestDTO: AuthRequestDTO) -> NSFetchRequest<AuthRequestEntity> {
         let request: NSFetchRequest = AuthRequestEntity.fetchRequest()
         request.predicate = NSPredicate(format: "%K = %@",
-                                        #keyPath(AuthRequestEntity.user),
-                                        requestDTO.user)
+                                        #keyPath(AuthRequestEntity.user.email),
+                                        requestDTO.user.email!)
         return request
     }
     
@@ -78,13 +78,15 @@ extension AuthResponseStorage {
         }
     }
     
-    func deleteResponse(for request: AuthRequestDTO, in context: NSManagedObjectContext) {
-        let fetchRequest = fetchRequest(for: request)
+    func deleteResponse(for request: AuthRequestDTO, in context: NSManagedObjectContext, completion: (() -> Void)? = nil) {
+        let fetchRequest = AuthRequestEntity.fetchRequest()
         do {
             if let result = try context.fetch(fetchRequest) as [AuthRequestEntity]? {
-                for r in result {
-                    context.delete(r)
+                for r in result where r.user?.email ?? "" == UserGlobal.user?.email ?? "" {
                     context.delete(r.response!)
+                    context.delete(r)
+                    
+                    if context.hasChanges { try context.save() }
                 }
             }
         } catch {

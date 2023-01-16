@@ -11,40 +11,55 @@ import Foundation
 
 final class AuthService {
     private let coreDataStorage: CoreDataStorage = .shared
+    private var authResponseStorage: AuthResponseStorage {
+        Application.current.authResponseCache
+    }
+    
+    let userDefaults = UserDefaults.standard
     
     var user: UserDTO?
-    
-    var latestCachedUser: UserDTO? {
-        let request = AuthRequestEntity.fetchRequest()
-        do {
-            guard let entities = try coreDataStorage.context().fetch(request) as [AuthRequestEntity]?,
-                  let lastKnownEntity = entities.last else {
-                return nil
-            }
-            return UserDTO(email: lastKnownEntity.user!.email, password: lastKnownEntity.user!.password)
-        } catch {
-            printIfDebug("Unresolved error \(error) ")
-        }
-        return nil
-    }
 }
 
 // MARK: - Methods
 
 extension AuthService {
     func performCachedAuthorizationSession(_ completion: @escaping (AuthRequest) -> Void) {
-        guard let email = latestCachedUser?.email,
-              let password = latestCachedUser?.password else {
+        print("performCachedAuthorizationSession")
+        guard let email = UserGlobal.user?.email,
+              let password = UserGlobal.password as String? else {
             return
         }
         let userDTO = UserDTO(email: email, password: password)
         let requestDTO = AuthRequestDTO(user: userDTO)
-        let requestQuery = AuthRequestDTO(user: requestDTO.user)
         
-        completion(requestQuery.toDomain())
+        completion(requestDTO.toDomain())
     }
 
     func authenticate(user: UserDTO?) {
+        print("authenticate", user?.toDomain())
         self.user = user
     }
+    
+    func deauthenticate() {
+        print("deauthenticate")
+        let userDTO = UserDTO(_id: UserGlobal.user?._id, name: UserGlobal.user?.name, email: UserGlobal.user?.email, password: UserGlobal.password, passwordConfirm: UserGlobal.user?.passwordConfirm, role: UserGlobal.user?.role, active: UserGlobal.user?.active, token: UserGlobal.user?.token, mylist: UserGlobal.user?.mylist)
+        let requestDTO = AuthRequestDTO(user: userDTO)
+        
+        coreDataStorage.performBackgroundTask { [weak self] context in
+            self?.authResponseStorage.deleteResponse(for: requestDTO, in: context) {
+                
+            }
+        }
+        
+        self.user = nil
+        UserGlobal.user = nil
+        UserGlobal.password = nil
+        UserDefaults.standard.removeObject(forKey: "latestAuthenticationOnDevice")
+        UserDefaults.standard.removeObject(forKey: "latestAuthenticationPasswordOnDevice")
+        
+        asynchrony {
+            Application.current.rootCoordinator.showScreen(.auth)
+        }
+    }
 }
+

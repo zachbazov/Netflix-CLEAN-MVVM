@@ -104,6 +104,10 @@ extension HomeViewModel {
                     /// Execute media fetching operation.
                     self.fetchMedia()
                 }
+                if case let .failure(error) = result {
+                    print(error)
+                    Application.current.authService.deauthenticate()
+                }
             })
     }
     

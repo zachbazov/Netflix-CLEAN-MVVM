@@ -35,6 +35,7 @@ final class CoreDataStorage {
                 assertionFailure("CoreDataStorage unresolved error \(error), \(error.userInfo)")
             }
         }
+        url(for: container)
         return container
     }()
 }

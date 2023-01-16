@@ -19,6 +19,7 @@ struct AuthUseCaseRequestValue {
 enum AuthMethod {
     case signup
     case signin
+    case signout
 }
 
 // MARK: - AuthUseCase Type
@@ -56,6 +57,15 @@ extension AuthUseCase {
         case .signin:
             return authRepository.signIn(request: requestValue.request,
                                          cached: cached) { result in
+                switch result {
+                case .success(let response):
+                    completion(.success(response))
+                case .failure(let error):
+                    completion(.failure(error))
+                }
+            }
+        case .signout:
+            return authRepository.signOut(request: requestValue.request) { result in
                 switch result {
                 case .success(let response):
                     completion(.success(response))

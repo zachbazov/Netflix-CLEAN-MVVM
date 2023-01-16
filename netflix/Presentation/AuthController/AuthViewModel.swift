@@ -98,13 +98,25 @@ extension AuthViewModel {
                 if case let .success(responseDTO) = result {
                     let userDTO = responseDTO.data
                     userDTO?.token = responseDTO.token
-                    /// Reauthenticate the user.
+                    // Reauthenticate the user.
                     self.authService.authenticate(user: userDTO)
-                    /// Grant access to the `TabBar` scene.
-                    asynchrony { completion() }
+                    // Grant access to the `TabBar` scene.
+                    completion()
                 }
-                if case let .failure(error) = result { print("Unresolved error \(error)") }
+                if case let .failure(error) = result {
+                    print("Unresolved error \(error)")
+                    self.authService.deauthenticate()
+                }
             }
         }
+    }
+    
+    func signOut(request: AuthRequest, completion: @escaping (Result<AuthResponseDTO, Error>) -> Void) {
+        authService.deauthenticate()
+        let requestValue = AuthUseCaseRequestValue(method: .signout, request: request)
+        authorizationTask = useCase.execute(
+            requestValue: requestValue,
+            cached: { _ in },
+            completion: { _ in })
     }
 }

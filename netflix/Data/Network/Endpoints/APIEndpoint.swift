@@ -31,6 +31,10 @@ struct APIEndpoint {
                                              "password": authRequestDTO.user.password!],
                             bodyEncoding: .jsonSerializationData)
         }
+        
+        static func signOut(with authRequestDTO: AuthRequestDTO) -> Endpoint<AuthResponseDTO> {
+            return Endpoint(path: "api/v1/users/signout", method: .get)
+        }
     }
     
     // MARK: SectionsRepository Type
@@ -83,7 +87,7 @@ struct APIEndpoint {
         static func getMyList(with request: ListRequestDTO.GET) -> Endpoint<ListResponseDTO.GET> {
             return Endpoint(path: "api/v1/mylists",
                             method: .get,
-                            queryParameters: ["user": request.user._id!])
+                            queryParameters: ["user": request.user._id ?? ""])
         }
         
         static func updateMyList(with request: ListRequestDTO.PATCH) -> Endpoint<ListResponseDTO.PATCH> {

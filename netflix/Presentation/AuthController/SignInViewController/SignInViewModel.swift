@@ -35,14 +35,19 @@ extension SignInViewModel {
         let userDTO = UserDTO(email: email, password: password)
         let requestDTO = AuthRequestDTO(user: userDTO)
         /// Invoke a sign-up request.
-        viewModel.signIn(request: requestDTO.toDomain()) { result in
+        viewModel.signIn(request: requestDTO.toDomain()) { [weak self] result in
             if case let .success(responseDTO) = result {
                 let userDTO = responseDTO.data
                 userDTO?.token = responseDTO.token
                 /// Authenticate the user.
                 authService.authenticate(user: userDTO)
+                UserGlobal.user = userDTO!
+                UserGlobal.password = self!.password!
+                
                 /// Present the tab bar screen.
-                coordinator.showScreen(.tabBar)
+                asynchrony {
+                    coordinator.showScreen(.tabBar)
+                }
             }
             if case let .failure(error) = result { print(error) }
         }
