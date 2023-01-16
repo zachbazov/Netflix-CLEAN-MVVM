@@ -68,6 +68,7 @@ extension AuthUseCase {
             return authRepository.signOut(request: requestValue.request) { result in
                 switch result {
                 case .success(let response):
+                    print("gta123", response)
                     completion(.success(response))
                 case .failure(let error):
                     completion(.failure(error))

@@ -83,10 +83,13 @@ extension AuthResponseStorage {
         do {
             if let result = try context.fetch(fetchRequest) as [AuthRequestEntity]? {
                 for r in result where r.user?.email ?? "" == UserGlobal.user?.email ?? "" {
+                    print("deleting", r.user?.toDomain())
                     context.delete(r.response!)
                     context.delete(r)
                     
                     if context.hasChanges { try context.save() }
+                    
+                    completion?()
                 }
             }
         } catch {

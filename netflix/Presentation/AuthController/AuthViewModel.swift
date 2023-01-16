@@ -33,7 +33,7 @@ final class AuthViewModel {
     /// Allocate `useCase` property and it's dependencies.
     init() {
         let dataTransferService = Application.current.dataTransferService
-        let authResponseCache = AuthResponseStorage(authService: authService)
+        let authResponseCache = Application.current.authResponseCache
         let authRepository = AuthRepository(dataTransferService: dataTransferService, cache: authResponseCache)
         self.useCase = AuthUseCase(authRepository: authRepository)
     }
@@ -105,18 +105,29 @@ extension AuthViewModel {
                 }
                 if case let .failure(error) = result {
                     print("Unresolved error \(error)")
-                    self.authService.deauthenticate()
+//                    self.authService.deauthenticate()
                 }
             }
         }
     }
     
     func signOut(request: AuthRequest, completion: @escaping (Result<AuthResponseDTO, Error>) -> Void) {
-        authService.deauthenticate()
+//        authService.deauthenticate()
         let requestValue = AuthUseCaseRequestValue(method: .signout, request: request)
         authorizationTask = useCase.execute(
             requestValue: requestValue,
-            cached: { _ in },
-            completion: { _ in })
+            cached: { response in
+                print("9999ggg", response)
+            },
+            completion: { result in
+                switch result {
+                case .success(let response):
+                    print(666, response)
+                    completion(.success(response))
+                case .failure(let error):
+                    print("888", error)
+                    completion(.failure(error))
+                }
+            })
     }
 }

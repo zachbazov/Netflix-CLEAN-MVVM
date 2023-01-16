@@ -58,17 +58,7 @@ extension NavigationViewViewModel {
             break
         case .account:
             let authService = Application.current.authService
-            let authViewModel = AuthViewModel()
-            let authRequest = AuthRequest(user: UserGlobal.user!.toDomain())
-            authViewModel.signOut(request: authRequest) { result in
-                switch result {
-                case .success(let response):
-                    print(222, response)
-//                    Application.current.authService.deauthenticate()
-                case .failure(let error):
-                    print(111, error)
-                }
-            }
+            authService.deauthenticate()
         case .tvShows:
             navigationView.tvShowsItemViewContainer.isHidden(false)
             navigationView.moviesItemViewContainer.isHidden(true)

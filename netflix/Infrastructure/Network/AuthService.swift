@@ -41,24 +41,31 @@ extension AuthService {
     }
     
     func deauthenticate() {
+//        let authService = Application.current.authService
+        
         print("deauthenticate")
         let userDTO = UserDTO(_id: UserGlobal.user?._id, name: UserGlobal.user?.name, email: UserGlobal.user?.email, password: UserGlobal.password, passwordConfirm: UserGlobal.user?.passwordConfirm, role: UserGlobal.user?.role, active: UserGlobal.user?.active, token: UserGlobal.user?.token, mylist: UserGlobal.user?.mylist)
         let requestDTO = AuthRequestDTO(user: userDTO)
         
         coreDataStorage.performBackgroundTask { [weak self] context in
+            print("Acc11", UserGlobal.user!.toDomain())
             self?.authResponseStorage.deleteResponse(for: requestDTO, in: context) {
                 
+                let authViewModel = AuthViewModel()
+                let authRequest = AuthRequest(user: UserGlobal.user!.toDomain())
+                print("Acc22", UserGlobal.user!.toDomain())
+                authViewModel.signOut(request: authRequest) { _ in
+                    UserDefaults.standard.removeObject(forKey: "latestAuthenticationOnDevice")
+                    UserDefaults.standard.removeObject(forKey: "latestAuthenticationPasswordOnDevice")
+                    self?.user = nil
+                    UserGlobal.user = nil
+                    UserGlobal.password = nil
+                    
+                    asynchrony {
+                        Application.current.rootCoordinator.showScreen(.auth)
+                    }
+                }
             }
-        }
-        
-        self.user = nil
-        UserGlobal.user = nil
-        UserGlobal.password = nil
-        UserDefaults.standard.removeObject(forKey: "latestAuthenticationOnDevice")
-        UserDefaults.standard.removeObject(forKey: "latestAuthenticationPasswordOnDevice")
-        
-        asynchrony {
-            Application.current.rootCoordinator.showScreen(.auth)
         }
     }
 }
