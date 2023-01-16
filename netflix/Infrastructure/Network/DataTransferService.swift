@@ -106,7 +106,6 @@ extension DataTransferService: DataTransferServiceInput {
             let result: T = try decoder.decode(data)
             return .success(result)
         } catch {
-            print("qq,", error.localizedDescription)
             self.errorLogger.log(error: error)
             return .failure(.parsing(error))
         }
@@ -123,7 +122,7 @@ extension DataTransferService: DataTransferServiceInput {
 struct DataTransferErrorLogger: DataTransferErrorLoggerInput {
     func log(error: Error) {
         printIfDebug("------------")
-        printIfDebug("s, \(error)")
+        printIfDebug("\(error)")
     }
 }
 

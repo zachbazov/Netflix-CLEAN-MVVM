@@ -111,21 +111,16 @@ extension AuthViewModel {
         }
     }
     
-    func signOut(request: AuthRequest, completion: @escaping (Result<AuthResponseDTO, Error>) -> Void) {
-//        authService.deauthenticate()
-        let requestValue = AuthUseCaseRequestValue(method: .signout, request: request)
+    func signOut(completion: @escaping (Result<Void, Error>) -> Void) {
         authorizationTask = useCase.execute(
-            requestValue: requestValue,
             cached: { response in
-                print("9999ggg", response)
+                print("cachedSignOut", response)
             },
             completion: { result in
                 switch result {
-                case .success(let response):
-                    print(666, response)
-                    completion(.success(response))
+                case .success(let void):
+                    completion(.success(void))
                 case .failure(let error):
-                    print("888", error)
                     completion(.failure(error))
                 }
             })

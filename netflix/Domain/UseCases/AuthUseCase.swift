@@ -64,15 +64,18 @@ extension AuthUseCase {
                     completion(.failure(error))
                 }
             }
-        case .signout:
-            return authRepository.signOut(request: requestValue.request) { result in
-                switch result {
-                case .success(let response):
-                    print("gta123", response)
-                    completion(.success(response))
-                case .failure(let error):
-                    completion(.failure(error))
-                }
+        default: return nil
+        }
+    }
+    
+    private func request(cached: @escaping (AuthResponseDTO?) -> Void,
+                         completion: @escaping (Result<Void, Error>) -> Void) -> Cancellable? {
+        return authRepository.signOut() { result in
+            switch result {
+            case .success(let void):
+                completion(.success(void))
+            case .failure(let error):
+                completion(.failure(error))
             }
         }
     }
@@ -82,6 +85,12 @@ extension AuthUseCase {
                  completion: @escaping (Result<AuthResponseDTO, Error>) -> Void) -> Cancellable? {
         return request(requestValue: requestValue,
                        cached: cached,
+                       completion: completion)
+    }
+    
+    func execute(cached: @escaping (AuthResponseDTO?) -> Void,
+                 completion: @escaping (Result<Void, Error>) -> Void) -> Cancellable? {
+        return request(cached: cached,
                        completion: completion)
     }
 }

@@ -32,7 +32,7 @@ struct APIEndpoint {
                             bodyEncoding: .jsonSerializationData)
         }
         
-        static func signOut(with authRequestDTO: AuthRequestDTO) -> Endpoint<AuthResponseDTO> {
+        static func signOut() -> Endpoint<Void> {
             return Endpoint(path: "api/v1/users/signout", method: .get)
         }
     }

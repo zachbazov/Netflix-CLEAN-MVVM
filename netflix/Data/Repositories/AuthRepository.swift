@@ -76,13 +76,13 @@ extension AuthRepository {
         return task
     }
     
-    func signOut(request: AuthRequest, completion: @escaping (Result<AuthResponseDTO, Error>) -> Void) -> Cancellable? {
-        let requestDTO = AuthRequestDTO(user: request.user.toDTO())
+    func signOut(completion: @escaping (Result<Void, Error>) -> Void) -> Cancellable? {
+        let requestDTO = AuthRequestDTO(user: UserGlobal.user!)
         let task = RepositoryTask()
-        print("signOutsignOut", request.user)
+        print("signOutsignOut", requestDTO.user.toDomain())
         guard !task.isCancelled else { return nil }
         
-        let endpoint = APIEndpoint.AuthRepository.signOut(with: requestDTO)
+        let endpoint = APIEndpoint.AuthRepository.signOut()
         task.networkTask = self.dataTransferService.request(with: endpoint, completion: { result in
             if case let .success(responseDTO) = result {
                 completion(.success(responseDTO))

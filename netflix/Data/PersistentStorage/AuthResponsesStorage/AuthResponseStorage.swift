@@ -53,6 +53,23 @@ extension AuthResponseStorage {
         }
     }
     
+//    func getVoidResponse(completion: @escaping (Result<Void, CoreDataStorageError>) -> Void) {
+//        coreDataStorage.performBackgroundTask { [weak self] context in
+//            guard let self = self else { return }
+//            do {
+//                let requestDTO = AuthRequestDTO(user: UserGlobal.user!)
+//                let fetchRequest = self.fetchRequest(for: requestDTO)
+//                let requestEntity = try context.fetch(fetchRequest).first
+//                
+//                self.authService.user = requestEntity?.response?.data
+//                
+//                completion(.success(Void()))
+//            } catch {
+//                completion(.failure(CoreDataStorageError.readError(error)))
+//            }
+//        }
+//    }
+    
     func save(response: AuthResponseDTO, for request: AuthRequestDTO) {
         coreDataStorage.performBackgroundTask { [weak self] context in
             guard let self = self else { return }
