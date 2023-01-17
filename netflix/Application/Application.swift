@@ -54,42 +54,58 @@ extension Application: ApplicationRooting {
     /// - Parameter window: Application's root window.
     func root(in window: UIWindow?) {
         rootCoordinator.window = window
-        // In-case there is a previously registered sign by the user, present the tab-bar screen.
-        if UserGlobal.user?.token != nil {
-            rootCoordinator.showScreen(.tabBar)
-            return
-        }
-        // Otherwise, present the authorization screen.
-        rootCoordinator.showScreen(.auth)
-    }
-}
-
-
-
-
-
-@propertyWrapper
-struct UserDefault<T: Codable> {
-    let key: String
-    let defaultValue: T
-    
-    var wrappedValue: T {
-        get {
-            if let data = UserDefaults.standard.object(forKey: key) as? Data,
-               let user = try? JSONDecoder().decode(T.self, from: data) {
-                return user
-            }
-            return defaultValue
-        }
-        set {
-            if let encoded = try? JSONEncoder().encode(newValue) {
-                UserDefaults.standard.set(encoded, forKey: key)
+        
+        authResponseCache.getResp { [weak self] result in
+            guard let self = self else { return }
+            switch result {
+            case .success(let request):
+                asynchrony {
+                    // In-case there is a previously registered sign by the user, present the tab-bar screen.
+                    if let user = request?.response?.data {
+                        let userDTO = user
+                        userDTO.password = request?.user.password
+                        
+                        self.authService.user = userDTO
+                        
+                        self.rootCoordinator.showScreen(.tabBar)
+                        return
+                    }
+                    // Otherwise, present the authorization screen.
+                    self.rootCoordinator.showScreen(.auth)
+                }
+            case .failure(let error):
+                printIfDebug(.debug, "respError \(error)")
             }
         }
     }
 }
 
-enum UserGlobal {
-    @UserDefault(key: "latestAuthenticationOnDevice", defaultValue: UserDTO()) static var user: UserDTO?
-    @UserDefault(key: "latestAuthenticationPasswordOnDevice", defaultValue: String()) static var password: String?
-}
+
+
+
+
+//@propertyWrapper
+//struct UserDefault<T: Codable> {
+//    let key: String
+//    let defaultValue: T
+//
+//    var wrappedValue: T {
+//        get {
+//            if let data = UserDefaults.standard.object(forKey: key) as? Data,
+//               let user = try? JSONDecoder().decode(T.self, from: data) {
+//                return user
+//            }
+//            return defaultValue
+//        }
+//        set {
+//            if let encoded = try? JSONEncoder().encode(newValue) {
+//                UserDefaults.standard.set(encoded, forKey: key)
+//            }
+//        }
+//    }
+//}
+//
+//enum UserGlobal {
+//    @UserDefault(key: "latestAuthenticationOnDevice", defaultValue: UserDTO()) static var user: UserDTO?
+//    @UserDefault(key: "latestAuthenticationPasswordOnDevice", defaultValue: String()) static var password: String?
+//}

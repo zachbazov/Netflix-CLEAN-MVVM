@@ -17,6 +17,6 @@ extension AuthRequestEntity {
                               passwordConfirm: user!.passwordConfirm,
                               role: user!.role,
                               active: user!.active)
-        return .init(user: userDTO)
+        return .init(user: userDTO, response: response?.toDTO())
     }
 }

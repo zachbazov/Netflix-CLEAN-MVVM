@@ -46,7 +46,7 @@ extension SignUpViewModel {
                 userDTO?.token = responseDTO.token
                 /// Authenticate the user.
                 authService.authenticate(user: userDTO)
-                UserGlobal.password = self!.password
+//                UserGlobal.password = self!.password
                 /// Present tab bar screen.
                 asynchrony { coordinator.showScreen(.tabBar) }
             }

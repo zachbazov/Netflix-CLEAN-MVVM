@@ -50,19 +50,19 @@ extension AuthRepository {
     func signIn(request: AuthRequest,
                 cached: @escaping (AuthResponseDTO?) -> Void,
                 completion: @escaping (Result<AuthResponseDTO, Error>) -> Void) -> Cancellable? {
-        printIfDebug(.debug, "signIn \(request.user)")
+//        printIfDebug(.debug, "signIn \(request.user)")
         let requestDTO = AuthRequestDTO(user: request.user.toDTO())
         let task = RepositoryTask()
         
         cache.getResponse(for: requestDTO) { result in
             if case let .success(responseDTO?) = result {
-                printIfDebug(.debug, "cachedResponse \(responseDTO)")
+//                printIfDebug(.debug, "cachedResponse \(responseDTO)")
                 cached(responseDTO)
                 return
             }
             
             guard !task.isCancelled else { return }
-            printIfDebug(.debug, "newResponse")
+//            printIfDebug(.debug, "newResponse")
             let endpoint = APIEndpoint.AuthRepository.signIn(with: requestDTO)
             task.networkTask = self.dataTransferService.request(with: endpoint) { result in
                 switch result {
@@ -79,11 +79,10 @@ extension AuthRepository {
     }
     
     func signOut(completion: @escaping (Result<Void, Error>) -> Void) -> Cancellable? {
-        let requestDTO = AuthRequestDTO(user: UserGlobal.user!)
         let task = RepositoryTask()
-        
+
         guard !task.isCancelled else { return nil }
-        
+
         let endpoint = APIEndpoint.AuthRepository.signOut()
         task.networkTask = self.dataTransferService.request(with: endpoint, completion: { result in
             if case let .success(responseDTO) = result {
@@ -93,7 +92,7 @@ extension AuthRepository {
                 completion(.failure(error))
             }
         })
-        
+
         return task
     }
 }

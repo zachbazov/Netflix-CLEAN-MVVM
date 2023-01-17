@@ -7,12 +7,6 @@
 
 import Foundation
 
-// MARK: - AuthViewModelDelegate Protocol
-
-protocol AuthViewModelDelegate {
-    func requestUserCredentials()
-}
-
 // MARK: - AuthViewModel Type
 
 final class AuthViewModel {
@@ -24,7 +18,6 @@ final class AuthViewModel {
     // MARK: Type's Properties
     
     private let useCase: AuthUseCase
-    private let authService = Application.current.authService
     private var authorizationTask: Cancellable? { willSet { authorizationTask?.cancel() } }
     
     // MARK: Initializer
@@ -55,7 +48,7 @@ extension AuthViewModel: ViewModel {
 // MARK: - AuthUseCase Implementation
 
 extension AuthViewModel {
-    /// Use-case's sign-up operation.
+    /// Sign up a user.
     /// - Parameters:
     ///   - request: Representation of the candidate user for the operation.
     ///   - completion: Completion handler with a response.
@@ -65,77 +58,28 @@ extension AuthViewModel {
         authorizationTask = useCase.execute(
             requestValue: requestValue,
             cached: { _ in },
-            completion: { result in
-                if case let .success(responseDTO) = result { completion(.success(responseDTO)) }
-                if case let .failure(error) = result { completion(.failure(error)) }
-            })
+            completion: completion)
     }
-    /// Use-case's sign-in operation.
+    /// Sign in a user.
     /// - Parameters:
     ///   - request: Representation of the candidate user for the operation.
-    ///   - completion: Completion handler with a response.
+    ///   - completion: Completion handler with a result object.
     func signIn(request: AuthRequest,
                 cached: @escaping (AuthResponseDTO?) -> Void,
                 completion: @escaping (Result<AuthResponseDTO, Error>) -> Void) {
         let requestValue = AuthUseCaseRequestValue(method: .signin, request: request)
         authorizationTask = useCase.execute(
             requestValue: requestValue,
-            cached: { response in
-                printIfDebug(.debug, "signIn cachedResponseeee \(response!)")
-                cached(response)
-            },
-            completion: { result in
-                if case let .success(responseDTO) = result { completion(.success(responseDTO)) }
-                if case let .failure(error) = result { completion(.failure(error)) }
-            })
+            cached: cached,
+            completion: completion)
     }
-    /// Cached authorization session.
-    /// In-case there is a registered last sign by a user in the cache,
-    /// perform a re-sign operation.
-    /// - Parameter completion: Completion handler.
-    func cachedAuthorizationSession(_ completion: @escaping () -> Void) {
-        authService.performCachedAuthorizationSession { [weak self] request in
-            guard let self = self else { return }
-            self.signIn(
-                request: request,
-                cached: { responseDTO in
-                    printIfDebug(.debug, "cachedAuthorizationSession cachedResponseeee \(responseDTO!)")
-                    let userDTO = responseDTO?.data
-                    userDTO?.token = responseDTO?.token
-                    // Reauthenticate the user.
-                    self.authService.authenticate(user: userDTO)
-                    // Grant access to the `TabBar` scene.
-                    completion()
-                },
-                completion: { result in
-                    if case let .success(responseDTO) = result {
-                        printIfDebug(.debug, "completion")
-                        let userDTO = responseDTO.data
-                        userDTO?.token = responseDTO.token
-                        // Reauthenticate the user.
-                        self.authService.authenticate(user: userDTO)
-                        // Grant access to the `TabBar` scene.
-                        completion()
-                    }
-                    if case let .failure(error) = result {
-                        printIfDebug(.error, "Unresolved error \(error)")
-                    }
-                })
-        }
-    }
-    
+    /// Sign out a user.
+    /// - Parameter completion: Completion handler with a result object.
     func signOut(completion: @escaping (Result<Void, Error>) -> Void) {
         authorizationTask = useCase.execute(
             cached: { response in
                 printIfDebug(.debug, "cachedSignOut \(response!)")
             },
-            completion: { result in
-                switch result {
-                case .success(let void):
-                    completion(.success(void))
-                case .failure(let error):
-                    completion(.failure(error))
-                }
-            })
+            completion: completion)
     }
 }

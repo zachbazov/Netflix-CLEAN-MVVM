@@ -36,6 +36,19 @@ extension AuthResponseStorage {
         return request
     }
     
+    func getResp(completion: @escaping (Result<AuthRequestDTO?, CoreDataStorageError>) -> Void) {
+        coreDataStorage.performBackgroundTask { context in
+            do {
+                let fetchRequest: NSFetchRequest = AuthRequestEntity.fetchRequest()
+                let requestEntity = try context.fetch(fetchRequest).first
+//                printIfDebug(.debug, "getRes \(requestEntity?.user?.toDomain())")
+                completion(.success(requestEntity?.toDTO()))
+            } catch {
+                completion(.failure(CoreDataStorageError.readError(error)))
+            }
+        }
+    }
+    
     func getResponse(for request: AuthRequestDTO,
                      completion: @escaping (Result<AuthResponseDTO?, CoreDataStorageError>) -> Void) {
         coreDataStorage.performBackgroundTask { [weak self] context in
@@ -44,8 +57,6 @@ extension AuthResponseStorage {
                 let fetchRequest = self.fetchRequest(for: request)
                 let requestEntity = try context.fetch(fetchRequest).first
                 printIfDebug(.debug, "getResponse \(requestEntity?.user?.toDomain())")
-//                UserGlobal.user = requestEntity?.response?.data
-                
                 completion(.success(requestEntity?.response?.toDTO()))
             } catch {
                 completion(.failure(CoreDataStorageError.readError(error)))
@@ -69,8 +80,6 @@ extension AuthResponseStorage {
                 responseEntity.token = response.token
                 responseEntity.data = response.data
                 printIfDebug(.debug, "save \(responseEntity.data!.toDomain())")
-                UserGlobal.user = response.data
-                
                 try context.save()
             } catch {
                 printIfDebug(.error, "CoreDataAuthResponseStorage unresolved error \(error), \((error as NSError).userInfo)")
@@ -81,15 +90,12 @@ extension AuthResponseStorage {
     func deleteResponse(for request: AuthRequestDTO, in context: NSManagedObjectContext, completion: (() -> Void)? = nil) {
         let fetchRequest = AuthRequestEntity.fetchRequest()
         do {
-            if let result = try context.fetch(fetchRequest) as [AuthRequestEntity]? {
-                for r in result where r.user!.email == UserGlobal.user!.email {
-                    context.delete(r.response!)
-                    context.delete(r)
-                    printIfDebug(.debug, "deleteResponse \(r.user?.toDomain())")
-                    try context.save()
-                    
-                    completion?()
-                }
+            if let result = try context.fetch(fetchRequest).first {
+                context.delete(result)
+                printIfDebug(.debug, "deleteResponse \(result)")
+                try context.save()
+                
+                completion?()
             }
         } catch {
             printIfDebug(.error, "Unresolved error \(error) occured as trying to delete object.")

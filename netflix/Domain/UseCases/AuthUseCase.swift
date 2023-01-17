@@ -45,30 +45,20 @@ extension AuthUseCase {
                          completion: @escaping (Result<AuthResponseDTO, Error>) -> Void) -> Cancellable? {
         switch requestValue.method {
         case .signup:
-            return authRepository.signUp(request: requestValue.request, cached: cached) { result in
-                switch result {
-                case .success(let response):
-                    completion(.success(response))
-                case .failure(let error):
-                    completion(.failure(error))
-                }
-            }
+            return authRepository.signUp(request: requestValue.request,
+                                         cached: cached,
+                                         completion: completion)
         case .signin:
-            return authRepository.signIn(request: requestValue.request, cached: cached, completion: completion)
+            return authRepository.signIn(request: requestValue.request,
+                                         cached: cached,
+                                         completion: completion)
         default: return nil
         }
     }
     
     private func request(cached: @escaping (AuthResponseDTO?) -> Void,
                          completion: @escaping (Result<Void, Error>) -> Void) -> Cancellable? {
-        return authRepository.signOut() { result in
-            switch result {
-            case .success(let void):
-                completion(.success(void))
-            case .failure(let error):
-                completion(.failure(error))
-            }
-        }
+        return authRepository.signOut(completion: completion)
     }
     
     func execute(requestValue: AuthUseCaseRequestValue,

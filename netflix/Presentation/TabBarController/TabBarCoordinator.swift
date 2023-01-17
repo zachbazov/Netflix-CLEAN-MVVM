@@ -125,26 +125,11 @@ final class TabBarCoordinator {
     private var downloads: UIViewController!
 }
 
-// MARK: - AuthViewModelDelegate Implementation
-
-extension TabBarCoordinator: AuthViewModelDelegate {
-    /// In-order to gain access to the home page,
-    /// request the user credentials.
-    func requestUserCredentials() {
-        let viewModel = AuthViewModel()
-        viewModel.cachedAuthorizationSession { [weak self] in
-            asynchrony {
-                self?.allocateViewControllers()
-            }
-        }
-    }
-}
-
 // MARK: - TabBarCoordinable Implementation
 
 extension TabBarCoordinator: TabBarCoordinable {
     /// Allocate and set view controllers for the tab controller.
-    fileprivate func allocateViewControllers() {
+    func allocateViewControllers() {
         /// Home's navigation view controls the state of the table view data source.
         /// Hence, `home` property will be initialized every time the state changes.
         home = homeDependencies()

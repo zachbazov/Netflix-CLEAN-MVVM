@@ -61,7 +61,7 @@ extension RootCoordinator: RootCoordinable {
         /// An authorization protection layer.
         /// In-order for all the features to work properly,
         /// an authentication procedure is required.
-        tabCoordinator.requestUserCredentials()
+        Application.current.authService.cachedAuthorizationSession()
     }
 }
 
