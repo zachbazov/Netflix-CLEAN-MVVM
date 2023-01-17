@@ -31,8 +31,8 @@ extension AuthResponseStorage {
     func fetchRequest(for requestDTO: AuthRequestDTO) -> NSFetchRequest<AuthRequestEntity> {
         let request: NSFetchRequest = AuthRequestEntity.fetchRequest()
         request.predicate = NSPredicate(format: "%K = %@",
-                                        #keyPath(AuthRequestEntity.user.email),
-                                        requestDTO.user.email!)
+                                        #keyPath(AuthRequestEntity.user),
+                                        requestDTO.user)
         return request
     }
     
@@ -42,11 +42,11 @@ extension AuthResponseStorage {
             guard let self = self else { return }
             do {
                 let fetchRequest = self.fetchRequest(for: request)
-                let requestEntity = try context.fetch(fetchRequest)
-                printIfDebug(.debug, "getResponse \(requestEntity.first?.user?.toDomain())")
-                UserGlobal.user = requestEntity.first?.response?.data
+                let requestEntity = try context.fetch(fetchRequest).first
+                printIfDebug(.debug, "getResponse \(requestEntity?.user?.toDomain())")
+//                UserGlobal.user = requestEntity?.response?.data
                 
-                completion(.success(requestEntity.first?.response?.toDTO()))
+                completion(.success(requestEntity?.response?.toDTO()))
             } catch {
                 completion(.failure(CoreDataStorageError.readError(error)))
             }

@@ -98,8 +98,14 @@ extension AuthViewModel {
             guard let self = self else { return }
             self.signIn(
                 request: request,
-                cached: { response in
-                    printIfDebug(.debug, "cachedAuthorizationSession cachedResponseeee \(response!)")
+                cached: { responseDTO in
+                    printIfDebug(.debug, "cachedAuthorizationSession cachedResponseeee \(responseDTO!)")
+                    let userDTO = responseDTO?.data
+                    userDTO?.token = responseDTO?.token
+                    // Reauthenticate the user.
+                    self.authService.authenticate(user: userDTO)
+                    // Grant access to the `TabBar` scene.
+                    completion()
                 },
                 completion: { result in
                     if case let .success(responseDTO) = result {
