@@ -81,6 +81,7 @@ extension AuthViewModel {
         authorizationTask = useCase.execute(
             requestValue: requestValue,
             cached: { response in
+                printIfDebug(.debug, "signIn cachedResponseeee \(response!)")
                 cached(response)
             },
             completion: { result in
@@ -98,7 +99,7 @@ extension AuthViewModel {
             self.signIn(
                 request: request,
                 cached: { response in
-                    printIfDebug(.debug, "cachedResponseeee \(response!)")
+                    printIfDebug(.debug, "cachedAuthorizationSession cachedResponseeee \(response!)")
                 },
                 completion: { result in
                     if case let .success(responseDTO) = result {

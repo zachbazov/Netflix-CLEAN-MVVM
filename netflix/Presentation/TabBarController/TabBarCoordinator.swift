@@ -132,8 +132,11 @@ extension TabBarCoordinator: AuthViewModelDelegate {
     /// request the user credentials.
     func requestUserCredentials() {
         let viewModel = AuthViewModel()
-        
-        viewModel.cachedAuthorizationSession { [weak self] in asynchrony { self?.allocateViewControllers() } }
+        viewModel.cachedAuthorizationSession { [weak self] in
+            asynchrony {
+                self?.allocateViewControllers()
+            }
+        }
     }
 }
 

@@ -54,15 +54,7 @@ extension AuthUseCase {
                 }
             }
         case .signin:
-            return authRepository.signIn(request: requestValue.request, cached: cached) { result in
-                switch result {
-                case .success(let response):
-                    cached(response)
-                    completion(.success(response))
-                case .failure(let error):
-                    completion(.failure(error))
-                }
-            }
+            return authRepository.signIn(request: requestValue.request, cached: cached, completion: completion)
         default: return nil
         }
     }
