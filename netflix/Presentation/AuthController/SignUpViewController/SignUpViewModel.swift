@@ -50,7 +50,9 @@ extension SignUpViewModel {
                 /// Present tab bar screen.
                 asynchrony { coordinator.showScreen(.tabBar) }
             }
-            if case let .failure(error) = result { print(error) }
+            if case let .failure(error) = result {
+                printIfDebug(.error, "\(error)")
+            }
         }
     }
 }

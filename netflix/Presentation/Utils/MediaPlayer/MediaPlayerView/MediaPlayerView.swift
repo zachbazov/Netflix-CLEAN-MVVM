@@ -100,7 +100,7 @@ extension MediaPlayerView: MediaPlayerDelegate {
 extension MediaPlayerView {
     func removeObservers() {
         if let timeObserverToken = overlayView?.configuration.observers.timeObserverToken {
-            printIfDebug("Removed `MediaPlayerView` observers.")
+            printIfDebug(.success, "Removed `MediaPlayerView` observers.")
             mediaPlayer?.player.removeTimeObserver(timeObserverToken)
         }
     }

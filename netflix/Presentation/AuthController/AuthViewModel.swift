@@ -75,12 +75,13 @@ extension AuthViewModel {
     ///   - request: Representation of the candidate user for the operation.
     ///   - completion: Completion handler with a response.
     func signIn(request: AuthRequest,
+                cached: @escaping (AuthResponseDTO?) -> Void,
                 completion: @escaping (Result<AuthResponseDTO, Error>) -> Void) {
         let requestValue = AuthUseCaseRequestValue(method: .signin, request: request)
         authorizationTask = useCase.execute(
             requestValue: requestValue,
             cached: { response in
-                if let response = response { completion(.success(response)) }
+                cached(response)
             },
             completion: { result in
                 if case let .success(responseDTO) = result { completion(.success(responseDTO)) }
@@ -94,26 +95,32 @@ extension AuthViewModel {
     func cachedAuthorizationSession(_ completion: @escaping () -> Void) {
         authService.performCachedAuthorizationSession { [weak self] request in
             guard let self = self else { return }
-            self.signIn(request: request) { result in
-                if case let .success(responseDTO) = result {
-                    let userDTO = responseDTO.data
-                    userDTO?.token = responseDTO.token
-                    // Reauthenticate the user.
-                    self.authService.authenticate(user: userDTO)
-                    // Grant access to the `TabBar` scene.
-                    completion()
-                }
-                if case let .failure(error) = result {
-                    print("Unresolved error \(error)")
-                }
-            }
+            self.signIn(
+                request: request,
+                cached: { response in
+                    printIfDebug(.debug, "cachedResponseeee \(response!)")
+                },
+                completion: { result in
+                    if case let .success(responseDTO) = result {
+                        printIfDebug(.debug, "completion")
+                        let userDTO = responseDTO.data
+                        userDTO?.token = responseDTO.token
+                        // Reauthenticate the user.
+                        self.authService.authenticate(user: userDTO)
+                        // Grant access to the `TabBar` scene.
+                        completion()
+                    }
+                    if case let .failure(error) = result {
+                        printIfDebug(.error, "Unresolved error \(error)")
+                    }
+                })
         }
     }
     
     func signOut(completion: @escaping (Result<Void, Error>) -> Void) {
         authorizationTask = useCase.execute(
             cached: { response in
-                print("cachedSignOut", response)
+                printIfDebug(.debug, "cachedSignOut \(response!)")
             },
             completion: { result in
                 switch result {

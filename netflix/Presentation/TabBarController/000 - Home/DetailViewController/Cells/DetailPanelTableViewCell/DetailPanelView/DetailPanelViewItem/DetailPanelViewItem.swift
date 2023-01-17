@@ -69,8 +69,8 @@ extension DetailPanelViewItemConfiguration {
         case .myList:
             let media = viewModel.media!
             myList.viewModel.shouldAddOrRemove(media, uponSelection: viewModel.isSelected.value)
-        case .rate: print("rate")
-        case .share: print("share")
+        case .rate: printIfDebug(.debug, "rate")
+        case .share: printIfDebug(.debug, "share")
         }
         /// Animate alpha effect.
         view.setAlphaAnimation(using: view.gestureRecognizers!.first) {

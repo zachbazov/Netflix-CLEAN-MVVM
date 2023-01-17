@@ -31,7 +31,7 @@ extension AuthService {
     }
 
     func authenticate(user: UserDTO?) {
-        print("authenticate", user?.toDomain())
+        printIfDebug(.debug, "authenticate \(user?.toDomain())")
         UserGlobal.user = user
         if let token = user?.token {
             UserGlobal.user?.token = token
@@ -42,6 +42,7 @@ extension AuthService {
     }
     
     func deauthenticate() {
+        printIfDebug(.debug, "deauthenticate")
         let requestDTO = AuthRequestDTO(user: UserGlobal.user!)
         
         coreDataStorage.performBackgroundTask { [weak self] context in
@@ -61,7 +62,7 @@ extension AuthService {
                             Application.current.rootCoordinator.showScreen(.auth)
                         }
                     case .failure(let error):
-                        print(error)
+                        printIfDebug(.error, "\(error)")
                     }
                 }
             }

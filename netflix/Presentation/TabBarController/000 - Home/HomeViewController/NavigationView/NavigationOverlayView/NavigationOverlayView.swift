@@ -75,7 +75,7 @@ extension NavigationOverlayView {
     }
     
     func removeObservers() {
-        printIfDebug("Removed `NavigationOverlayView` observers.")
+        printIfDebug(.success, "Removed `NavigationOverlayView` observers.")
         viewModel.isPresented.remove(observer: self)
         viewModel.items.remove(observer: self)
     }

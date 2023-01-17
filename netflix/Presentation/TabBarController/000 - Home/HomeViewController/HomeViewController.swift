@@ -86,7 +86,7 @@ extension HomeViewController {
     
     func removeObservers() {
         if let viewModel = viewModel {
-            printIfDebug("Removed `HomeViewModel` observers.")
+            printIfDebug(.success, "Removed `HomeViewModel` observers.")
             viewModel.dataSourceState.remove(observer: self)
             viewModel.displayMedia.remove(observer: self)
         }

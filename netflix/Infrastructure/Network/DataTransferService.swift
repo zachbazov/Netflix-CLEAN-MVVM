@@ -121,8 +121,8 @@ extension DataTransferService: DataTransferServiceInput {
 
 struct DataTransferErrorLogger: DataTransferErrorLoggerInput {
     func log(error: Error) {
-        printIfDebug("------------")
-        printIfDebug("\(error)")
+        printIfDebug(.none, "------------")
+        printIfDebug(.error, "\(error)")
     }
 }
 

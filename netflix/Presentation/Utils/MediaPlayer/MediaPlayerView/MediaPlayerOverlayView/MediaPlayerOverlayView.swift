@@ -108,7 +108,7 @@ extension MediaPlayerOverlayViewConfiguration {
         guard let item = MediaPlayerOverlayView.Item(rawValue: view.tag) else { return }
         switch item {
         case .airPlay:
-            print(item.rawValue)
+            printIfDebug(.debug, "\(item.rawValue)")
         case .rotate:
             let orientation = DeviceOrientation.shared
             orientation.rotate()
@@ -146,7 +146,7 @@ extension MediaPlayerOverlayViewConfiguration {
                 / Float(player.currentItem?.duration.seconds ?? .zero)
             self.overlayView?.progressView?.progress = progress
         case .mute:
-            print(item.rawValue)
+            printIfDebug(.debug, "\(item.rawValue)")
         }
     }
 }
@@ -210,7 +210,7 @@ extension MediaPlayerOverlayViewConfiguration {
     }
     
     func removeObservers() {
-        printIfDebug("Removed `MediaPlayerOverlayView` observers.")
+        printIfDebug(.success, "Removed `MediaPlayerOverlayView` observers.")
         observers.playerItemStatusObserver?.invalidate()
         observers.playerItemFastForwardObserver?.invalidate()
         observers.playerItemReverseObserver?.invalidate()

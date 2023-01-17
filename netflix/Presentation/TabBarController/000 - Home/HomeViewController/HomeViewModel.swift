@@ -105,8 +105,8 @@ extension HomeViewModel {
                     self.fetchMedia()
                 }
                 if case let .failure(error) = result {
-                    print(error)
-                    Application.current.authService.deauthenticate()
+                    printIfDebug(.error, "\(error)")
+//                    Application.current.authService.deauthenticate()
                 }
             })
     }

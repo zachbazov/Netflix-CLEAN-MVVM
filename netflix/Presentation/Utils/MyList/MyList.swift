@@ -43,7 +43,7 @@ extension MyList {
     
     func removeObservers() {
         if let list = viewModel.list as Observable<Set<Media>>? {
-            printIfDebug("Removed `MyList` observers.")
+            printIfDebug(.success, "Removed `MyList` observers.")
             list.remove(observer: self)
         }
     }

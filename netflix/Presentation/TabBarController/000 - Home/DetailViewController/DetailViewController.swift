@@ -72,7 +72,7 @@ extension DetailViewController {
     
     func removeObservers() {
         if let viewModel = viewModel {
-            printIfDebug("Removed `DetailViewModel` observers.")
+            printIfDebug(.success, "Removed `DetailViewModel` observers.")
             viewModel.navigationViewState.remove(observer: self)
             viewModel.season.remove(observer: self)
         }

@@ -74,7 +74,7 @@ extension NewsViewController {
     
     func removeObservers() {
         if let viewModel = viewModel {
-            printIfDebug("Removed `NewsViewModel` observers.")
+            printIfDebug(.success, "Removed `NewsViewModel` observers.")
             viewModel.items.remove(observer: self)
         }
     }

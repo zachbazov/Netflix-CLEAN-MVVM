@@ -68,7 +68,7 @@ extension DetailPanelView {
 
 extension DetailPanelView {
     private func removeObservers() {
-        printIfDebug("Removed `DetailPanelView` observers.")
+        printIfDebug(.success, "Removed `DetailPanelView` observers.")
         leadingItem?.viewModel?.removeObservers()
         centerItem?.viewModel?.removeObservers()
         trailingItem?.viewModel?.removeObservers()

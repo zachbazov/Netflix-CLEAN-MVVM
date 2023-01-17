@@ -45,8 +45,7 @@ extension AuthUseCase {
                          completion: @escaping (Result<AuthResponseDTO, Error>) -> Void) -> Cancellable? {
         switch requestValue.method {
         case .signup:
-            return authRepository.signUp(request: requestValue.request,
-                                         cached: cached) { result in
+            return authRepository.signUp(request: requestValue.request, cached: cached) { result in
                 switch result {
                 case .success(let response):
                     completion(.success(response))
@@ -55,10 +54,10 @@ extension AuthUseCase {
                 }
             }
         case .signin:
-            return authRepository.signIn(request: requestValue.request,
-                                         cached: cached) { result in
+            return authRepository.signIn(request: requestValue.request, cached: cached) { result in
                 switch result {
                 case .success(let response):
+                    cached(response)
                     completion(.success(response))
                 case .failure(let error):
                     completion(.failure(error))

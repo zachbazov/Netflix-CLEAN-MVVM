@@ -110,7 +110,7 @@ extension NavigationView {
     }
     
     func removeObservers() {
-        printIfDebug("Removed `NavigationView` observers.")
+        printIfDebug(.success, "Removed `NavigationView` observers.")
         viewModel.state.remove(observer: self)
     }
 }

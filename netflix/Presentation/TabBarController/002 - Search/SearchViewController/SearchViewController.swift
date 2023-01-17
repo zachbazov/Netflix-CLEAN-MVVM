@@ -98,7 +98,7 @@ extension SearchViewController {
     }
     
     func removeObservers() {
-        printIfDebug("Removed `SearchViewModel` observers.")
+        printIfDebug(.success, "Removed `SearchViewModel` observers.")
         viewModel.items.remove(observer: self)
         viewModel.loading.remove(observer: self)
         viewModel.query.remove(observer: self)

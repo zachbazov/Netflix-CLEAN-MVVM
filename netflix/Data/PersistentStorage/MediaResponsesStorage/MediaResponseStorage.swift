@@ -64,7 +64,7 @@ extension MediaResponseStorage {
                 
                 try context.save()
             } catch {
-                printIfDebug("CoreDataAuthResponseStorage unresolved error \(error), \((error as NSError).userInfo)")
+                printIfDebug(.error, "CoreDataAuthResponseStorage unresolved error \(error), \((error as NSError).userInfo)")
             }
         }
     }
@@ -80,7 +80,7 @@ extension MediaResponseStorage {
                 }
             }
         } catch {
-            printIfDebug("Unresolved error \(error) occured as trying to delete object.")
+            printIfDebug(.error, "Unresolved error \(error) occured as trying to delete object.")
         }
     }
 }

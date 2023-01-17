@@ -130,16 +130,16 @@ struct NetworkSessionManager: NetworkSessionManagerInput {
 
 struct NetworkErrorLogger: NetworkErrorLoggerInput {
     func log(request: URLRequest) {
-        printIfDebug("-------------")
-        printIfDebug("request: \(request.url!)")
-        printIfDebug("headers: \(request.allHTTPHeaderFields!)")
-        printIfDebug("method: \(request.httpMethod!)")
+        printIfDebug(.linebreak, "-------------")
+        printIfDebug(.network, "request: \(request.url!)")
+        printIfDebug(.network, "headers: \(request.allHTTPHeaderFields!)")
+        printIfDebug(.network, "method: \(request.httpMethod!)")
         if let httpBody = request.httpBody,
            let json = (try? JSONSerialization.jsonObject(with: httpBody, options: []) as? [String: AnyObject]),
            let result = json as [String: AnyObject]? {
-            printIfDebug("body: \(String(describing: result))")
+            printIfDebug(.network, "body: \(String(describing: result))")
         } else if let httpBody = request.httpBody, let resultString = String(data: httpBody, encoding: .utf8) {
-            printIfDebug("body: \(String(describing: resultString))")
+            printIfDebug(.network, "body: \(String(describing: resultString))")
         }
     }
     
@@ -148,9 +148,9 @@ struct NetworkErrorLogger: NetworkErrorLoggerInput {
         
         if let dataDict = try? JSONSerialization.jsonObject(with: data) as? [String: Any] {
 //            printIfDebug("responseData: \(String(describing: dataDict))")
-            printIfDebug("response: \(dataDict["status"]!)")
+            printIfDebug(.network, "response: \(dataDict["status"]!)")
         }
     }
     
-    func log(error: Error) { printIfDebug("\(error)") }
+    func log(error: Error) { printIfDebug(.error, "\(error)") }
 }

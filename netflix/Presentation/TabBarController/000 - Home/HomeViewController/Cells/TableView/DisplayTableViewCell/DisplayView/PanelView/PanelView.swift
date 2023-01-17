@@ -80,7 +80,7 @@ extension PanelView {
 
 extension PanelView {
     func removeObservers() {
-        printIfDebug("Removed `PanelView` observers.")
+        printIfDebug(.success, "Removed `PanelView` observers.")
         leadingItemView?.viewModel?.removeObservers()
         trailingItemView?.viewModel.removeObservers()
     }

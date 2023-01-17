@@ -81,7 +81,7 @@ extension SearchViewModel {
                 if case let .success(page) = result {
                     self.appendPage(page)
                 } else if case let .failure(error) = result {
-                    print(error)
+                    printIfDebug(.error, "\(error)")
                 }
                 self.loading.value = .none
             })

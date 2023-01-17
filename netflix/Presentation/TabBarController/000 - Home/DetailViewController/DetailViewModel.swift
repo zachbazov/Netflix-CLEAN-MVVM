@@ -94,7 +94,9 @@ extension DetailViewModel {
                 self?.season.value = season
                 completion()
             }
-            if case let .failure(error) = result { print(error) }
+            if case let .failure(error) = result {
+                printIfDebug(.error, "\(error)")
+            }
         }
     }
 }

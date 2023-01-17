@@ -52,7 +52,9 @@ extension MyListViewModel {
                     self.list.value = responseDTO.data.first!.toDomain().media.toSet()
                     self.section.media = self.list.value.toArray()
                 }
-                if case let .failure(error) = result { print(error) }
+                if case let .failure(error) = result {
+                    printIfDebug(.error, "\(error)")
+                }
             })
     }
     
@@ -69,7 +71,9 @@ extension MyListViewModel {
                 if case .success = result {
                     self.section.media = self.list.value.toArray()
                 }
-                if case let .failure(error) = result { print(error) }
+                if case let .failure(error) = result {
+                    printIfDebug(.error, "\(error)")
+                }
             })
     }
 }

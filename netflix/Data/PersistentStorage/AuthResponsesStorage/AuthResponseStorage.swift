@@ -42,11 +42,11 @@ extension AuthResponseStorage {
             guard let self = self else { return }
             do {
                 let fetchRequest = self.fetchRequest(for: request)
-                let requestEntity = try context.fetch(fetchRequest).first
+                let requestEntity = try context.fetch(fetchRequest)
+                printIfDebug(.debug, "getResponse \(requestEntity.first?.user?.toDomain())")
+                UserGlobal.user = requestEntity.first?.response?.data
                 
-                UserGlobal.user = requestEntity?.response?.data
-                
-                completion(.success(requestEntity?.response?.toDTO()))
+                completion(.success(requestEntity.first?.response?.toDTO()))
             } catch {
                 completion(.failure(CoreDataStorageError.readError(error)))
             }
@@ -68,12 +68,12 @@ extension AuthResponseStorage {
                 responseEntity.request = requestEntity
                 responseEntity.token = response.token
                 responseEntity.data = response.data
-                
+                printIfDebug(.debug, "save \(responseEntity.data!.toDomain())")
                 UserGlobal.user = response.data
                 
                 try context.save()
             } catch {
-                printIfDebug("CoreDataAuthResponseStorage unresolved error \(error), \((error as NSError).userInfo)")
+                printIfDebug(.error, "CoreDataAuthResponseStorage unresolved error \(error), \((error as NSError).userInfo)")
             }
         }
     }
@@ -85,14 +85,14 @@ extension AuthResponseStorage {
                 for r in result where r.user!.email == UserGlobal.user!.email {
                     context.delete(r.response!)
                     context.delete(r)
-                    
+                    printIfDebug(.debug, "deleteResponse \(r.user?.toDomain())")
                     try context.save()
                     
                     completion?()
                 }
             }
         } catch {
-            printIfDebug("Unresolved error \(error) occured as trying to delete object.")
+            printIfDebug(.error, "Unresolved error \(error) occured as trying to delete object.")
         }
     }
 }

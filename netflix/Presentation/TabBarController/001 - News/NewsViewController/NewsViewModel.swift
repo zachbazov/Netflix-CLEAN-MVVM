@@ -53,7 +53,7 @@ extension NewsViewModel {
             if case let .success(responseDTO) = result {
                 self?.items.value = responseDTO.toCellViewModels()
             } else if case let .failure(error) = result {
-                print(error)
+                printIfDebug(.error, "\(error)")
             }
         }
     }
