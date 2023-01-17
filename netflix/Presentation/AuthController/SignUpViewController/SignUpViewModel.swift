@@ -40,12 +40,13 @@ extension SignUpViewModel {
                               passwordConfirm: passwordConfirm)
         let requestDTO = AuthRequestDTO(user: userDTO)
         /// Invoke a sign-up request.
-        viewModel.signUp(request: requestDTO.toDomain()) { result in
+        viewModel.signUp(request: requestDTO.toDomain()) { [weak self] result in
             if case let .success(responseDTO) = result {
                 let userDTO = responseDTO.data
                 userDTO?.token = responseDTO.token
                 /// Authenticate the user.
                 authService.authenticate(user: userDTO)
+                UserGlobal.password = self!.password
                 /// Present tab bar screen.
                 asynchrony { coordinator.showScreen(.tabBar) }
             }

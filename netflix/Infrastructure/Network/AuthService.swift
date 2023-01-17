@@ -31,7 +31,11 @@ extension AuthService {
     }
 
     func authenticate(user: UserDTO?) {
+        print("authenticate", user?.toDomain())
         UserGlobal.user = user
+        if let token = user?.token {
+            UserGlobal.user?.token = token
+        }
         if let password = user?.password {
             UserGlobal.password = password
         }

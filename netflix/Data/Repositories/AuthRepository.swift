@@ -79,7 +79,7 @@ extension AuthRepository {
     func signOut(completion: @escaping (Result<Void, Error>) -> Void) -> Cancellable? {
         let requestDTO = AuthRequestDTO(user: UserGlobal.user!)
         let task = RepositoryTask()
-        print("signOutsignOut", requestDTO.user.toDomain())
+        
         guard !task.isCancelled else { return nil }
         
         let endpoint = APIEndpoint.AuthRepository.signOut()

@@ -31,13 +31,13 @@ extension SignInViewModel {
     func signInButtonDidTap() {
         let authService = Application.current.authService
         let coordinator = Application.current.rootCoordinator
-        /// User's data transfer object.
+        // User's data transfer object.
         let userDTO = UserDTO(email: email, password: password)
         
-        /// Authenticate the user.
+        // Authenticate the user.
         authService.authenticate(user: userDTO)
         
-        /// Present the tab bar screen.
+        // Present the tab bar screen.
         asynchrony {
             coordinator.showScreen(.tabBar)
         }
