@@ -57,7 +57,7 @@ extension AuthUseCase {
     }
     
     private func request(cached: @escaping (AuthResponseDTO?) -> Void,
-                         completion: @escaping (Result<Void, Error>) -> Void) -> Cancellable? {
+                         completion: @escaping (Result<Void, DataTransferError>) -> Void) -> Cancellable? {
         return authRepository.signOut(completion: completion)
     }
     
@@ -70,8 +70,7 @@ extension AuthUseCase {
     }
     
     func execute(cached: @escaping (AuthResponseDTO?) -> Void,
-                 completion: @escaping (Result<Void, Error>) -> Void) -> Cancellable? {
-        return request(cached: cached,
-                       completion: completion)
+                 completion: @escaping (Result<Void, DataTransferError>) -> Void) -> Cancellable? {
+        return request(cached: cached, completion: completion)
     }
 }

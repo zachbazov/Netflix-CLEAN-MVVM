@@ -75,7 +75,7 @@ extension AuthViewModel {
     }
     /// Sign out a user.
     /// - Parameter completion: Completion handler with a result object.
-    func signOut(completion: @escaping (Result<Void, Error>) -> Void) {
+    func signOut(completion: @escaping (Result<Void, DataTransferError>) -> Void) {
         authorizationTask = useCase.execute(
             cached: { response in
                 printIfDebug(.debug, "cachedSignOut \(response!)")

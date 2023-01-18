@@ -78,21 +78,14 @@ extension AuthRepository {
         return task
     }
     
-    func signOut(completion: @escaping (Result<Void, Error>) -> Void) -> Cancellable? {
+    func signOut(completion: @escaping (Result<Void, DataTransferError>) -> Void) -> Cancellable? {
         let task = RepositoryTask()
-
+        
         guard !task.isCancelled else { return nil }
-
+        
         let endpoint = APIEndpoint.AuthRepository.signOut()
-        task.networkTask = self.dataTransferService.request(with: endpoint, completion: { result in
-            if case let .success(responseDTO) = result {
-                completion(.success(responseDTO))
-            }
-            if case let .failure(error) = result {
-                completion(.failure(error))
-            }
-        })
-
+        task.networkTask = self.dataTransferService.request(with: endpoint, completion: completion)
+        
         return task
     }
 }

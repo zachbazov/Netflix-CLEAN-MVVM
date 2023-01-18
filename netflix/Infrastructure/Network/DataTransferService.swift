@@ -80,7 +80,7 @@ extension DataTransferService: DataTransferServiceInput {
     }
     
     func request<E>(with endpoint: E,
-                    completion: @escaping CompletionHandler<Void>) -> NetworkCancellable?
+                    completion: @escaping (Result<Void, DataTransferError>) -> Void) -> NetworkCancellable?
     where E: ResponseRequestable, E.Response == Void { 
         return self.networkService.request(endpoint: endpoint) { result in
             switch result {

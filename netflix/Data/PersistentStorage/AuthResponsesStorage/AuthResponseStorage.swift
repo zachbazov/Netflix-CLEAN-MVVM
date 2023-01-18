@@ -56,7 +56,7 @@ extension AuthResponseStorage {
             do {
                 let fetchRequest = self.fetchRequest(for: request)
                 let requestEntity = try context.fetch(fetchRequest).first
-                printIfDebug(.debug, "getResponse \(requestEntity?.user?.toDomain())")
+//                printIfDebug(.debug, "getResponse \(requestEntity?.user?.toDomain())")
                 completion(.success(requestEntity?.response?.toDTO()))
             } catch {
                 completion(.failure(CoreDataStorageError.readError(error)))
@@ -79,7 +79,7 @@ extension AuthResponseStorage {
                 responseEntity.request = requestEntity
                 responseEntity.token = response.token
                 responseEntity.data = response.data
-                printIfDebug(.debug, "save \(responseEntity.data!.toDomain())")
+//                printIfDebug(.debug, "save \(responseEntity.data!.toDomain())")
                 try context.save()
             } catch {
                 printIfDebug(.error, "CoreDataAuthResponseStorage unresolved error \(error), \((error as NSError).userInfo)")
@@ -92,7 +92,7 @@ extension AuthResponseStorage {
         do {
             if let result = try context.fetch(fetchRequest).first {
                 context.delete(result)
-                printIfDebug(.debug, "deleteResponse \(result)")
+//                printIfDebug(.debug, "deleteResponse \(result)")
                 try context.save()
                 
                 completion?()
