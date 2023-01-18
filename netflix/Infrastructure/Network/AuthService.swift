@@ -20,54 +20,74 @@ final class AuthService {
 // MARK: - Methods
 
 extension AuthService {
-    func performCachedAuthorizationSession(_ completion: @escaping (AuthRequest) -> Void) {
-        guard let email = user?.email,
-              let password = user?.password else {
-            return
+    /// Check for the latest authentication response signed by user.
+    /// In case there is a valid response, pass the user data with the completion.
+    /// In case there isn't a valid response, pass nil with the completion.
+    /// - Parameter completion: Completion handler that passes a valid or an invalid user data.
+    func response(completion: @escaping (UserDTO?) -> Void) {
+        authResponseStorage.getResponse { [weak self] result in
+            guard let self = self else { return }
+            switch result {
+            case .success(let response):
+                asynchrony {
+                    // In case there is a valid response.
+                    if let user = response?.data {
+                        user.password = response?.request?.user.password
+                        // Authenticate the user.
+                        self.authenticate(user: user)
+                        // Pass the data within the completion handler.
+                        completion(user)
+                        return
+                    }
+                    // In case there isn't a valid response.
+                    completion(nil)
+                }
+            case .failure(let error):
+                printIfDebug(.error, "\(error)")
+            }
         }
-        let userDTO = UserDTO(email: email, password: password)
-        let requestDTO = AuthRequestDTO(user: userDTO)
-
-        completion(requestDTO.toDomain())
     }
     /// Cached authorization session.
     /// In-case there is a registered last sign by a user in the cache,
     /// perform a re-sign operation.
     /// - Parameter completion: Completion handler.
     func cachedAuthorizationSession() {
-        performCachedAuthorizationSession { [weak self] request in
-            guard let self = self else { return }
-            let authViewModel = AuthViewModel()
-            authViewModel.signIn(
-                request: request,
-                cached: { responseDTO in
+        guard let email = user?.email,
+              let password = user?.password else {
+            return
+        }
+        let userDTO = UserDTO(email: email, password: password)
+        let requestDTO = AuthRequestDTO(user: userDTO)
+        let authViewModel = AuthViewModel()
+        authViewModel.signIn(
+            request: requestDTO.toDomain(),
+            cached: { responseDTO in
 //                    printIfDebug(.debug, "cachedAuthorizationSession cachedResponseeee \(responseDTO!)")
-                    let userDTO = responseDTO?.data
-                    userDTO?.token = responseDTO?.token
-                    
+                let userDTO = responseDTO?.data
+                userDTO?.token = responseDTO?.token
+                
+                self.authenticate(user: userDTO)
+                // Grant access to the `TabBar` scene.
+                asynchrony {
+                    Application.current.rootCoordinator.tabCoordinator.allocateViewControllers()
+                }
+            },
+            completion: { result in
+                if case let .success(responseDTO) = result {
+//                        printIfDebug(.debug, "completion")
+                    let userDTO = responseDTO.data
+                    userDTO?.token = responseDTO.token
+                    // Reauthenticate the user.
                     self.authenticate(user: userDTO)
                     // Grant access to the `TabBar` scene.
                     asynchrony {
                         Application.current.rootCoordinator.tabCoordinator.allocateViewControllers()
                     }
-                },
-                completion: { result in
-                    if case let .success(responseDTO) = result {
-//                        printIfDebug(.debug, "completion")
-                        let userDTO = responseDTO.data
-                        userDTO?.token = responseDTO.token
-                        // Reauthenticate the user.
-                        self.authenticate(user: userDTO)
-                        // Grant access to the `TabBar` scene.
-                        asynchrony {
-                            Application.current.rootCoordinator.tabCoordinator.allocateViewControllers()
-                        }
-                    }
-                    if case let .failure(error) = result {
-                        printIfDebug(.error, "Unresolved error \(error)")
-                    }
-                })
-        }
+                }
+                if case let .failure(error) = result {
+                    printIfDebug(.error, "Unresolved error \(error)")
+                }
+            })
     }
     
     func authenticate(user: UserDTO?) {

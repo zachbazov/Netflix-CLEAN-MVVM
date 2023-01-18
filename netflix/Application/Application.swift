@@ -44,6 +44,16 @@ extension Application {
         let networkService = NetworkService(config: config)
         return DataTransferService(networkService: networkService)
     }
+    /// Check for the last signed authentication response by the user.
+    /// In case there is a valid response present the TabBar screen.
+    /// In case there isn't a valid response present the Auth screen.
+    private func cachedAuthorizationResponse() {
+        authService.response { [weak self] userDTO in
+            guard let self = self else { return }
+            // Present a screen according to the response.
+            userDTO != nil ? self.rootCoordinator.showScreen(.tabBar) : self.rootCoordinator.showScreen(.auth)
+        }
+    }
 }
 
 // MARK: - ApplicationRooting Implementation
@@ -54,58 +64,7 @@ extension Application: ApplicationRooting {
     /// - Parameter window: Application's root window.
     func root(in window: UIWindow?) {
         rootCoordinator.window = window
-        
-        authResponseCache.getResp { [weak self] result in
-            guard let self = self else { return }
-            switch result {
-            case .success(let response):
-                asynchrony {
-                    // In-case there is a previously registered sign by the user, present the tab-bar screen.
-                    if let user = response?.data {
-                        let userDTO = user
-                        userDTO.password = response?.request?.user.password
-                        
-                        self.authService.user = userDTO
-                        
-                        self.rootCoordinator.showScreen(.tabBar)
-                        return
-                    }
-                    // Otherwise, present the authorization screen.
-                    self.rootCoordinator.showScreen(.auth)
-                }
-            case .failure(let error):
-                printIfDebug(.debug, "respError \(error)")
-            }
-        }
+        // Check for the latest signed response by the user.
+        cachedAuthorizationResponse()
     }
 }
-
-
-
-
-
-//@propertyWrapper
-//struct UserDefault<T: Codable> {
-//    let key: String
-//    let defaultValue: T
-//
-//    var wrappedValue: T {
-//        get {
-//            if let data = UserDefaults.standard.object(forKey: key) as? Data,
-//               let user = try? JSONDecoder().decode(T.self, from: data) {
-//                return user
-//            }
-//            return defaultValue
-//        }
-//        set {
-//            if let encoded = try? JSONEncoder().encode(newValue) {
-//                UserDefaults.standard.set(encoded, forKey: key)
-//            }
-//        }
-//    }
-//}
-//
-//enum UserGlobal {
-//    @UserDefault(key: "latestAuthenticationOnDevice", defaultValue: UserDTO()) static var user: UserDTO?
-//    @UserDefault(key: "latestAuthenticationPasswordOnDevice", defaultValue: String()) static var password: String?
-//}

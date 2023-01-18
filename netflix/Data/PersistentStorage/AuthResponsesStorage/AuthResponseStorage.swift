@@ -36,28 +36,21 @@ extension AuthResponseStorage {
         return request
     }
     
-    func getResp(completion: @escaping (Result<AuthResponseDTO?, CoreDataStorageError>) -> Void) {
-        coreDataStorage.performBackgroundTask { context in
-            do {
-                let fetchRequest: NSFetchRequest = AuthResponseEntity.fetchRequest()
-                let responseEntity = try context.fetch(fetchRequest).first
-//                printIfDebug(.debug, "getRes \(responseEntity?.data?.toDomain())")
-                completion(.success(responseEntity?.toDTO()))
-            } catch {
-                completion(.failure(CoreDataStorageError.readError(error)))
-            }
-        }
-    }
-    
-    func getResponse(for request: AuthRequestDTO,
+    func getResponse(for request: AuthRequestDTO? = nil,
                      completion: @escaping (Result<AuthResponseDTO?, CoreDataStorageError>) -> Void) {
         coreDataStorage.performBackgroundTask { [weak self] context in
             guard let self = self else { return }
             do {
-                let fetchRequest = self.fetchRequest(for: request)
-                let requestEntity = try context.fetch(fetchRequest).first
-//                printIfDebug(.debug, "getResponse \(requestEntity?.user?.toDomain())")
-                completion(.success(requestEntity?.response?.toDTO()))
+                if let request = request {
+                    let fetchRequest: NSFetchRequest = self.fetchRequest(for: request)
+                    let requestEntity = try context.fetch(fetchRequest).first
+//                    printIfDebug(.debug, "getResponse \(requestEntity?.user?.toDomain())")
+                    return completion(.success(requestEntity?.response?.toDTO()))
+                }
+                let fetchRequest: NSFetchRequest = AuthResponseEntity.fetchRequest()
+                let responseEntity = try context.fetch(fetchRequest).first
+//                    printIfDebug(.debug, "getRes \(responseEntity?.data?.toDomain())")
+                completion(.success(responseEntity?.toDTO()))
             } catch {
                 completion(.failure(CoreDataStorageError.readError(error)))
             }
@@ -79,10 +72,10 @@ extension AuthResponseStorage {
                 responseEntity.request = requestEntity
                 responseEntity.token = response.token
                 responseEntity.data = response.data
-                printIfDebug(.debug, "save \(responseEntity.data!.toDomain())")
+//                printIfDebug(.debug, "save \(responseEntity.data!.toDomain())")
                 try context.save()
             } catch {
-//                printIfDebug(.error, "CoreDataAuthResponseStorage unresolved error \(error), \((error as NSError).userInfo)")
+                printIfDebug(.error, "CoreDataAuthResponseStorage unresolved error \(error), \((error as NSError).userInfo)")
             }
         }
     }

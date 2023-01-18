@@ -56,17 +56,17 @@ extension AuthUseCase {
         }
     }
     
-    private func request(cached: @escaping (AuthResponseDTO?) -> Void,
-                         completion: @escaping (Result<Void, DataTransferError>) -> Void) -> Cancellable? {
-        return authRepository.signOut(completion: completion)
-    }
-    
     func execute(requestValue: AuthUseCaseRequestValue,
                  cached: @escaping (AuthResponseDTO?) -> Void,
                  completion: @escaping (Result<AuthResponseDTO, Error>) -> Void) -> Cancellable? {
         return request(requestValue: requestValue,
                        cached: cached,
                        completion: completion)
+    }
+    
+    private func request(cached: @escaping (AuthResponseDTO?) -> Void,
+                         completion: @escaping (Result<Void, DataTransferError>) -> Void) -> Cancellable? {
+        return authRepository.signOut(completion: completion)
     }
     
     func execute(cached: @escaping (AuthResponseDTO?) -> Void,
