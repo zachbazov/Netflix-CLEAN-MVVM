@@ -31,11 +31,11 @@ extension AuthService {
             case .success(let response):
                 asynchrony {
                     // In case there is a valid response.
-                    if let response = response, let user = response.data {
+                    if let response = response {
                         // Authenticate the user.
                         self.authenticate(for: response)
                         // Pass the data within the completion handler.
-                        completion(user)
+                        completion(self.user)
                         return
                     }
                     // In case there isn't a valid response.
@@ -50,6 +50,7 @@ extension AuthService {
     /// In case there is a registered last sign by a user in the cache,
     /// perform an authentication based on the cache data.
     func cachedAuthorizationRequest(completion: @escaping () -> Void) {
+        printIfDebug(.debug, "cachedAuthorizationRequest \(user?.toDomain())")
         guard let email = user?.email,
               let password = user?.password else {
             return
@@ -60,6 +61,7 @@ extension AuthService {
         authViewModel.signIn(
             request: requestDTO.toDomain(),
             cached: { [weak self] responseDTO in
+                printIfDebug(.debug, "cachedddd")
                 guard let self = self, let responseDTO = responseDTO else { return }
                 self.authenticate(for: responseDTO)
                 completion()
@@ -67,6 +69,7 @@ extension AuthService {
             completion: { [weak self] result in
                 if case let .success(responseDTO) = result {
                     guard let self = self else { return }
+                    printIfDebug(.debug, "comppppleee")
                     self.authenticate(for: responseDTO)
                     completion()
                 }
