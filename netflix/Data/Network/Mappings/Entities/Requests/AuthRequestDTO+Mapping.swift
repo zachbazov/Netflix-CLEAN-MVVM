@@ -11,7 +11,6 @@ import Foundation
 
 struct AuthRequestDTO: Decodable {
     let user: UserDTO
-    var response: AuthResponseDTO?
 }
 
 // MARK: - Mapping

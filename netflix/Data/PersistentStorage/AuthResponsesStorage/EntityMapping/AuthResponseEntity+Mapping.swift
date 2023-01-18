@@ -12,7 +12,9 @@ import CoreData
 extension AuthResponseEntity {
     func toDTO() -> AuthResponseDTO? {
         guard let token = token else { return nil }
-        return .init(token: token, data: data)
+        return .init(token: token,
+                     data: data,
+                     request: request?.toDTO())
     }
 }
 

@@ -36,13 +36,13 @@ extension AuthResponseStorage {
         return request
     }
     
-    func getResp(completion: @escaping (Result<AuthRequestDTO?, CoreDataStorageError>) -> Void) {
+    func getResp(completion: @escaping (Result<AuthResponseDTO?, CoreDataStorageError>) -> Void) {
         coreDataStorage.performBackgroundTask { context in
             do {
-                let fetchRequest: NSFetchRequest = AuthRequestEntity.fetchRequest()
-                let requestEntity = try context.fetch(fetchRequest).first
-//                printIfDebug(.debug, "getRes \(requestEntity?.user?.toDomain())")
-                completion(.success(requestEntity?.toDTO()))
+                let fetchRequest: NSFetchRequest = AuthResponseEntity.fetchRequest()
+                let responseEntity = try context.fetch(fetchRequest).first
+//                printIfDebug(.debug, "getRes \(responseEntity?.data?.toDomain())")
+                completion(.success(responseEntity?.toDTO()))
             } catch {
                 completion(.failure(CoreDataStorageError.readError(error)))
             }
@@ -79,10 +79,10 @@ extension AuthResponseStorage {
                 responseEntity.request = requestEntity
                 responseEntity.token = response.token
                 responseEntity.data = response.data
-//                printIfDebug(.debug, "save \(responseEntity.data!.toDomain())")
+                printIfDebug(.debug, "save \(responseEntity.data!.toDomain())")
                 try context.save()
             } catch {
-                printIfDebug(.error, "CoreDataAuthResponseStorage unresolved error \(error), \((error as NSError).userInfo)")
+//                printIfDebug(.error, "CoreDataAuthResponseStorage unresolved error \(error), \((error as NSError).userInfo)")
             }
         }
     }

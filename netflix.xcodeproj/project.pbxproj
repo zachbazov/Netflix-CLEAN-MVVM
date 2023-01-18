@@ -1223,8 +1223,8 @@
 		A18B999F28C0FEA70077A5A6 /* EntityMapping */ = {
 			isa = PBXGroup;
 			children = (
-				A18B99A028C0FEC40077A5A6 /* AuthResponseEntity+Mapping.swift */,
 				A1B93C802900CF2900AF2C7F /* AuthRequestEntity+Mapping.swift */,
+				A18B99A028C0FEC40077A5A6 /* AuthResponseEntity+Mapping.swift */,
 			);
 			path = EntityMapping;
 			sourceTree = "<group>";

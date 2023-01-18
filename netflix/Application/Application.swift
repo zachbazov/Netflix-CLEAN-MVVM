@@ -58,12 +58,12 @@ extension Application: ApplicationRooting {
         authResponseCache.getResp { [weak self] result in
             guard let self = self else { return }
             switch result {
-            case .success(let request):
+            case .success(let response):
                 asynchrony {
                     // In-case there is a previously registered sign by the user, present the tab-bar screen.
-                    if let user = request?.response?.data {
+                    if let user = response?.data {
                         let userDTO = user
-                        userDTO.password = request?.user.password
+                        userDTO.password = response?.request?.user.password
                         
                         self.authService.user = userDTO
                         

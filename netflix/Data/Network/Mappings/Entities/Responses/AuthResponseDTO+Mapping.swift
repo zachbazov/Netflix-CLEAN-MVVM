@@ -13,6 +13,7 @@ struct AuthResponseDTO: Decodable {
     var status: String?
     let token: String
     let data: UserDTO?
+    var request: AuthRequestDTO?
 }
 
 // MARK: - Mapping
@@ -21,7 +22,8 @@ extension AuthResponseDTO {
     func toDomain() -> AuthResponse {
         return .init(status: status,
                      token: token,
-                     data: data?.toDomain())
+                     data: data?.toDomain(),
+                     request: request?.toDomain())
     }
 }
 
