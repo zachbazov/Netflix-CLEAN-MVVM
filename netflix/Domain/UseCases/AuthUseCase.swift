@@ -28,7 +28,7 @@ final class AuthUseCase {
     
     // MARK: Properties
     
-    let authRepository: AuthRepository
+    private let authRepository: AuthRepository
     
     // MARK: Initializer
     

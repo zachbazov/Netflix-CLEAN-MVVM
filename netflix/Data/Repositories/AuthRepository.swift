@@ -27,7 +27,6 @@ extension AuthRepository {
     func signUp(request: AuthRequest,
                 cached: @escaping (AuthResponseDTO?) -> Void,
                 completion: @escaping (Result<AuthResponseDTO, Error>) -> Void) -> Cancellable? {
-        
         let requestDTO = AuthRequestDTO(user: request.user.toDTO())
         let task = RepositoryTask()
         

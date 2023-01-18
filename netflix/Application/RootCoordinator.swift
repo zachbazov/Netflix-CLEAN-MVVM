@@ -61,7 +61,12 @@ extension RootCoordinator: RootCoordinable {
         /// An authorization protection layer.
         /// In-order for all the features to work properly,
         /// an authentication procedure is required.
-        Application.current.authService.cachedAuthorizationSession()
+        Application.current.authService.cachedAuthorizationRequest() {
+            asynchrony { [weak self] in
+                guard let self = self else { return }
+                self.tabCoordinator.allocateViewControllers()
+            }
+        }
     }
 }
 
