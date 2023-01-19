@@ -42,10 +42,13 @@ extension SignUpViewModel {
         /// Invoke a sign-up request.
         viewModel.signUp(request: requestDTO.toDomain()) { result in
             if case let .success(responseDTO) = result {
-                /// Authenticate the user.
-                authService.authenticate(for: responseDTO)
-                /// Present the tab bar screen.
-                asynchrony { coordinator.showScreen(.tabBar) }
+                let user = userDTO
+                user._id = responseDTO.data?._id
+                user.token = responseDTO.token
+                authService.authenticate(user: user)
+                authService.cachedAuthorizationRequest {
+                    asynchrony { coordinator.showScreen(.tabBar) }
+                }
             }
             if case let .failure(error) = result {
                 printIfDebug(.error, "\(error)")

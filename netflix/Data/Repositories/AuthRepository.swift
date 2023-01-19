@@ -25,7 +25,6 @@ struct AuthRepository {
 
 extension AuthRepository {
     func signUp(request: AuthRequest,
-                cached: @escaping (AuthResponseDTO?) -> Void,
                 completion: @escaping (Result<AuthResponseDTO, Error>) -> Void) -> Cancellable? {
         let requestDTO = AuthRequestDTO(user: request.user.toDTO())
         let task = RepositoryTask()
@@ -38,6 +37,7 @@ extension AuthRepository {
             case .success(let response):
                 self.cache.save(response: response, for: requestDTO)
                 completion(.success(response))
+                printIfDebug(.debug, "authrepo \(response.request?.toDomain())")
             case .failure(let error):
                 completion(.failure(error))
             }

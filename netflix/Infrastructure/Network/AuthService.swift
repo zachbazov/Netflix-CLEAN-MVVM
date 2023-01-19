@@ -32,14 +32,19 @@ extension AuthService {
                 asynchrony {
                     // In case there is a valid response.
                     if let response = response {
-                        // Authenticate the user.
-                        self.authenticate(for: response)
-                        // Pass the data within the completion handler.
-                        completion(self.user)
+                        asynchrony {
+                            // Authenticate the user.
+                            self.authenticate(for: response)
+                            printIfDebug(.debug, "MyResponse \(self.user?.toDomain())")
+                            // Pass the data within the completion handler.
+                            completion(self.user)
+                        }
                         return
                     }
-                    // In case there isn't a valid response.
-                    completion(nil)
+                    asynchrony {
+                        // In case there isn't a valid response.
+                        completion(nil)
+                    }
                 }
             case .failure(let error):
                 printIfDebug(.error, "\(error)")
@@ -85,6 +90,7 @@ extension AuthService {
     func authenticate(for response: AuthResponseDTO?) {
         self.user = response?.data
         self.user?.password = response?.request?.user.password
+        printIfDebug(.debug, "authenticate \(self.user?.toDomain())")
     }
     /// Authentication by user.
     /// Used for sign in authentication operation without a response object.

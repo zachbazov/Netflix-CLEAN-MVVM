@@ -90,7 +90,7 @@
                 <constraint firstItem="FaQ-Vg-c21" firstAttribute="trailing" secondItem="gGS-wt-u6j" secondAttribute="trailing" id="MUx-oN-RPM"/>
                 <constraint firstItem="Cia-jA-2Wf" firstAttribute="leading" secondItem="FaQ-Vg-c21" secondAttribute="leading" constant="32" id="Nd4-L1-Mr6"/>
                 <constraint firstItem="jH4-qh-zaO" firstAttribute="leading" secondItem="FaQ-Vg-c21" secondAttribute="leading" id="PMT-JA-2XG"/>
-                <constraint firstItem="FaQ-Vg-c21" firstAttribute="trailing" secondItem="TIx-6l-aJy" secondAttribute="trailing" id="Sxo-kn-Vdq"/>
+                <constraint firstAttribute="trailing" secondItem="TIx-6l-aJy" secondAttribute="trailing" id="Sxo-kn-Vdq"/>
                 <constraint firstItem="xYO-IO-tMv" firstAttribute="centerX" secondItem="wy8-RZ-gdV" secondAttribute="centerX" id="USt-vt-Lrr"/>
                 <constraint firstItem="ljo-Ym-7yw" firstAttribute="top" secondItem="wy8-RZ-gdV" secondAttribute="top" id="Wzf-kr-cUD"/>
                 <constraint firstItem="xYO-IO-tMv" firstAttribute="leading" secondItem="wy8-RZ-gdV" secondAttribute="leading" constant="32" id="XRY-47-2m9"/>
@@ -105,7 +105,7 @@
                 <constraint firstItem="FaQ-Vg-c21" firstAttribute="trailing" secondItem="V4O-zc-QVg" secondAttribute="trailing" constant="8" id="tbu-G7-gW6"/>
                 <constraint firstItem="xYO-IO-tMv" firstAttribute="centerY" secondItem="wy8-RZ-gdV" secondAttribute="centerY" constant="-44" id="uCY-It-fZd"/>
                 <constraint firstItem="ljo-Ym-7yw" firstAttribute="leading" secondItem="wy8-RZ-gdV" secondAttribute="leading" id="wsa-tf-ipI"/>
-                <constraint firstItem="TIx-6l-aJy" firstAttribute="leading" secondItem="FaQ-Vg-c21" secondAttribute="leading" id="xJA-Va-nMC"/>
+                <constraint firstItem="TIx-6l-aJy" firstAttribute="leading" secondItem="wy8-RZ-gdV" secondAttribute="leading" id="xJA-Va-nMC"/>
                 <constraint firstItem="ljo-Ym-7yw" firstAttribute="bottom" secondItem="jH4-qh-zaO" secondAttribute="bottom" id="yuh-B8-KVl"/>
             </constraints>
             <point key="canvasLocation" x="662" y="43"/>

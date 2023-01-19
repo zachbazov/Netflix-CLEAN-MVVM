@@ -40,20 +40,27 @@ final class AuthUseCase {
 // MARK: - Methods
 
 extension AuthUseCase {
+    
+    // MARK: Sign Up
+    
+    private func request(requestValue: AuthUseCaseRequestValue,
+                         completion: @escaping (Result<AuthResponseDTO, Error>) -> Void) -> Cancellable? {
+        return authRepository.signUp(request: requestValue.request, completion: completion)
+    }
+    
+    func execute(requestValue: AuthUseCaseRequestValue,
+                 completion: @escaping (Result<AuthResponseDTO, Error>) -> Void) -> Cancellable? {
+        return request(requestValue: requestValue, completion: completion)
+    }
+    
+    // MARK: Sign In
+    
     private func request(requestValue: AuthUseCaseRequestValue,
                          cached: @escaping (AuthResponseDTO?) -> Void,
                          completion: @escaping (Result<AuthResponseDTO, Error>) -> Void) -> Cancellable? {
-        switch requestValue.method {
-        case .signup:
-            return authRepository.signUp(request: requestValue.request,
-                                         cached: cached,
-                                         completion: completion)
-        case .signin:
-            return authRepository.signIn(request: requestValue.request,
-                                         cached: cached,
-                                         completion: completion)
-        default: return nil
-        }
+        return authRepository.signIn(request: requestValue.request,
+                                     cached: cached,
+                                     completion: completion)
     }
     
     func execute(requestValue: AuthUseCaseRequestValue,
@@ -64,13 +71,13 @@ extension AuthUseCase {
                        completion: completion)
     }
     
-    private func request(cached: @escaping (AuthResponseDTO?) -> Void,
-                         completion: @escaping (Result<Void, DataTransferError>) -> Void) -> Cancellable? {
+    // MARK: Sign Out
+    
+    private func request(completion: @escaping (Result<Void, DataTransferError>) -> Void) -> Cancellable? {
         return authRepository.signOut(completion: completion)
     }
     
-    func execute(cached: @escaping (AuthResponseDTO?) -> Void,
-                 completion: @escaping (Result<Void, DataTransferError>) -> Void) -> Cancellable? {
-        return request(cached: cached, completion: completion)
+    func execute(completion: @escaping (Result<Void, DataTransferError>) -> Void) -> Cancellable? {
+        return request(completion: completion)
     }
 }

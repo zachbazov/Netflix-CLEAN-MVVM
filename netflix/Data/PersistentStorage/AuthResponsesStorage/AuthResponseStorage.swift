@@ -72,7 +72,8 @@ extension AuthResponseStorage {
                 responseEntity.request = requestEntity
                 responseEntity.token = response.token
                 responseEntity.data = response.data
-//                printIfDebug(.debug, "save \(responseEntity.data!.toDomain())")
+                printIfDebug(.debug, "save \(responseEntity.data!.toDomain())")
+                printIfDebug(.debug, "saveResReq \(responseEntity.request?.toDTO().toDomain())")
                 try context.save()
             } catch {
                 printIfDebug(.error, "CoreDataAuthResponseStorage unresolved error \(error), \((error as NSError).userInfo)")
