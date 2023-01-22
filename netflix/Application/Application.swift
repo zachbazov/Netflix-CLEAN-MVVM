@@ -50,8 +50,7 @@ extension Application {
     private func cachedAuthorizationResponse() {
         authService.response { [weak self] userDTO in
             guard let self = self else { return }
-            printIfDebug(.debug, "resp \(userDTO?.toDomain())")
-            // Present a screen according to the response.
+            // Present the screen according to the response.
             userDTO != nil ? self.rootCoordinator.showScreen(.tabBar) : self.rootCoordinator.showScreen(.auth)
         }
     }

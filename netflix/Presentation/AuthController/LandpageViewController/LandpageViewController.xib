@@ -27,9 +27,9 @@
                     <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                 </imageView>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="gGS-wt-u6j" userLabel="Status Bar Gradient View">
-                    <rect key="frame" x="0.0" y="59" width="393" height="24"/>
+                    <rect key="frame" x="0.0" y="59" width="393" height="20"/>
                     <constraints>
-                        <constraint firstAttribute="height" constant="24" id="2eq-BY-ELs"/>
+                        <constraint firstAttribute="height" constant="20" id="2eq-BY-ELs"/>
                     </constraints>
                 </view>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="TIx-6l-aJy" userLabel="Top Gradient View">
@@ -90,7 +90,6 @@
                 <constraint firstItem="FaQ-Vg-c21" firstAttribute="trailing" secondItem="gGS-wt-u6j" secondAttribute="trailing" id="MUx-oN-RPM"/>
                 <constraint firstItem="Cia-jA-2Wf" firstAttribute="leading" secondItem="FaQ-Vg-c21" secondAttribute="leading" constant="32" id="Nd4-L1-Mr6"/>
                 <constraint firstItem="jH4-qh-zaO" firstAttribute="leading" secondItem="FaQ-Vg-c21" secondAttribute="leading" id="PMT-JA-2XG"/>
-                <constraint firstAttribute="trailing" secondItem="TIx-6l-aJy" secondAttribute="trailing" id="Sxo-kn-Vdq"/>
                 <constraint firstItem="xYO-IO-tMv" firstAttribute="centerX" secondItem="wy8-RZ-gdV" secondAttribute="centerX" id="USt-vt-Lrr"/>
                 <constraint firstItem="ljo-Ym-7yw" firstAttribute="top" secondItem="wy8-RZ-gdV" secondAttribute="top" id="Wzf-kr-cUD"/>
                 <constraint firstItem="xYO-IO-tMv" firstAttribute="leading" secondItem="wy8-RZ-gdV" secondAttribute="leading" constant="32" id="XRY-47-2m9"/>
@@ -98,6 +97,8 @@
                 <constraint firstItem="V4O-zc-QVg" firstAttribute="leading" secondItem="FaQ-Vg-c21" secondAttribute="leading" constant="8" id="ZOX-jy-f55"/>
                 <constraint firstAttribute="trailing" secondItem="xYO-IO-tMv" secondAttribute="trailing" constant="32" id="a9Y-fd-GCW"/>
                 <constraint firstAttribute="bottom" secondItem="ljo-Ym-7yw" secondAttribute="bottom" id="h3t-ee-G7R"/>
+                <constraint firstItem="TIx-6l-aJy" firstAttribute="leading" secondItem="FaQ-Vg-c21" secondAttribute="leading" id="jqJ-IE-QUB"/>
+                <constraint firstItem="TIx-6l-aJy" firstAttribute="trailing" secondItem="FaQ-Vg-c21" secondAttribute="trailing" id="lKk-u2-y1q"/>
                 <constraint firstItem="FaQ-Vg-c21" firstAttribute="bottom" secondItem="V4O-zc-QVg" secondAttribute="bottom" constant="16" id="nbF-7F-d5w"/>
                 <constraint firstItem="jH4-qh-zaO" firstAttribute="top" secondItem="TIx-6l-aJy" secondAttribute="bottom" id="pLu-kQ-X5z"/>
                 <constraint firstItem="gGS-wt-u6j" firstAttribute="leading" secondItem="FaQ-Vg-c21" secondAttribute="leading" id="qJe-mg-9Eu"/>
@@ -105,7 +106,6 @@
                 <constraint firstItem="FaQ-Vg-c21" firstAttribute="trailing" secondItem="V4O-zc-QVg" secondAttribute="trailing" constant="8" id="tbu-G7-gW6"/>
                 <constraint firstItem="xYO-IO-tMv" firstAttribute="centerY" secondItem="wy8-RZ-gdV" secondAttribute="centerY" constant="-44" id="uCY-It-fZd"/>
                 <constraint firstItem="ljo-Ym-7yw" firstAttribute="leading" secondItem="wy8-RZ-gdV" secondAttribute="leading" id="wsa-tf-ipI"/>
-                <constraint firstItem="TIx-6l-aJy" firstAttribute="leading" secondItem="wy8-RZ-gdV" secondAttribute="leading" id="xJA-Va-nMC"/>
                 <constraint firstItem="ljo-Ym-7yw" firstAttribute="bottom" secondItem="jH4-qh-zaO" secondAttribute="bottom" id="yuh-B8-KVl"/>
             </constraints>
             <point key="canvasLocation" x="662" y="43"/>

@@ -69,6 +69,8 @@ extension DetailPanelViewItemConfiguration {
         case .myList:
             let media = viewModel.media!
             myList.viewModel.shouldAddOrRemove(media, uponSelection: viewModel.isSelected.value)
+            
+            myList.viewModel.coordinator?.viewController?.browseOverlayView.collectionView.reloadData()
         case .rate: printIfDebug(.debug, "rate")
         case .share: printIfDebug(.debug, "share")
         }

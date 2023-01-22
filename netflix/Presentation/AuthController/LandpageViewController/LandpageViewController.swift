@@ -29,6 +29,11 @@ final class LandpageViewController: UIViewController {
         setupBehaviors()
         setupSubviews()
     }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        setupGradientViews()
+    }
 }
 
 // MARK: - UI Setup
@@ -41,7 +46,6 @@ extension LandpageViewController {
     
     private func setupSubviews() {
         setupNavigationBarButtonItem()
-        setupGradientViews()
         setupTargets()
     }
     
@@ -57,22 +61,22 @@ extension LandpageViewController {
     private func setupGradientViews() {
         statusBarGradientView.addGradientLayer(
             frame: statusBarGradientView.bounds,
-            colors: [.black.withAlphaComponent(0.75),
-                     .black.withAlphaComponent(0.5),
+            colors: [.black.withAlphaComponent(0.5),
+                     .black.withAlphaComponent(0.25),
                      .clear],
             locations: [0.0, 0.5, 1.0])
         
         topGradientView.addGradientLayer(
             frame: topGradientView.bounds,
             colors: [.clear,
-                     .black.withAlphaComponent(0.75),
-                     .black.withAlphaComponent(0.9)],
+                     .black.withAlphaComponent(0.5),
+                     .black.withAlphaComponent(0.75)],
             locations: [0.0, 0.5, 1.0])
         
         bottomGradientView.addGradientLayer(
             frame: bottomGradientView.bounds,
-            colors: [.black.withAlphaComponent(0.9),
-                     .black.withAlphaComponent(0.75),
+            colors: [.black.withAlphaComponent(0.75),
+                     .black.withAlphaComponent(0.5),
                      .clear],
             locations: [0.0, 0.5, 1.0])
     }

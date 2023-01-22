@@ -37,7 +37,6 @@ extension AuthRepository {
             case .success(let response):
                 self.cache.save(response: response, for: requestDTO)
                 completion(.success(response))
-                printIfDebug(.debug, "authrepo \(response.request?.toDomain())")
             case .failure(let error):
                 completion(.failure(error))
             }
@@ -49,7 +48,6 @@ extension AuthRepository {
     func signIn(request: AuthRequest,
                 cached: @escaping (AuthResponseDTO?) -> Void,
                 completion: @escaping (Result<AuthResponseDTO, Error>) -> Void) -> Cancellable? {
-        printIfDebug(.debug, "signIn \(request.user)")
         let requestDTO = AuthRequestDTO(user: request.user.toDTO())
         let task = RepositoryTask()
         

@@ -55,7 +55,6 @@ extension AuthService {
     /// In case there is a registered last sign by a user in the cache,
     /// perform an authentication based on the cache data.
     func cachedAuthorizationRequest(completion: @escaping () -> Void) {
-        printIfDebug(.debug, "cachedAuthorizationRequest \(user?.toDomain())")
         guard let email = user?.email,
               let password = user?.password else {
             return
@@ -90,7 +89,6 @@ extension AuthService {
     func authenticate(for response: AuthResponseDTO?) {
         self.user = response?.data
         self.user?.password = response?.request?.user.password
-        printIfDebug(.debug, "authenticate \(self.user?.toDomain())")
     }
     /// Authentication by user.
     /// Used for sign in authentication operation without a response object.

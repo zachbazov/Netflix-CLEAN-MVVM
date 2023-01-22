@@ -36,23 +36,12 @@ extension SignInViewModel {
               let password = password else {
             return
         }
-        
-        
-        // User's data transfer object.
+        // Create a new user.
         let userDTO = UserDTO(email: email, password: password)
-        // Authenticate the user.
-//        authService.authenticate(user: userDTO)
-        // Present the tab bar screen.
-//        asynchrony {
-//            coordinator.showScreen(.tabBar)
-//        }
-        
-        printIfDebug(.debug, "signInButtonDidTap \(userDTO.toDomain())")
-        
-        
+        // Create a new sign in request user-based.
         let requestDTO = AuthRequestDTO(user: userDTO)
-        let authViewModel = AuthViewModel()
-        authViewModel.signIn(
+        // Invoke the request.
+        viewModel.signIn(
             request: requestDTO.toDomain(),
             cached: { responseDTO in
                 printIfDebug(.debug, "cachedddd")

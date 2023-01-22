@@ -65,12 +65,6 @@ extension RootCoordinator: RootCoordinable {
             guard let self = self else { return }
             self.tabCoordinator.showScreen(.home)
         }
-//        Application.current.authService.cachedAuthorizationRequest() {
-//            asynchrony { [weak self] in
-//                guard let self = self else { return }
-//                self.tabCoordinator.allocateViewControllers()
-//            }
-//        }
     }
 }
 
