@@ -29,6 +29,10 @@ final class SignInViewModel {
 extension SignInViewModel {
     @objc
     func signInButtonDidTap() {
+        signInRequest()
+    }
+    
+    private func signInRequest() {
         let authService = Application.current.authService
         let coordinator = Application.current.rootCoordinator
         
@@ -41,27 +45,10 @@ extension SignInViewModel {
         // Create a new sign in request user-based.
         let requestDTO = AuthRequestDTO(user: userDTO)
         // Invoke the request.
-        viewModel.signIn(
-            request: requestDTO.toDomain(),
-            cached: { responseDTO in
-                printIfDebug(.debug, "cachedddd")
-                guard let responseDTO = responseDTO else { return }
-                authService.authenticate(for: responseDTO)
-                asynchrony {
-                    coordinator.showScreen(.tabBar)
-                }
-            },
-            completion: { result in
-                if case let .success(responseDTO) = result {
-                    printIfDebug(.debug, "comppppleee")
-                    authService.authenticate(for: responseDTO)
-                    asynchrony {
-                        coordinator.showScreen(.tabBar)
-                    }
-                }
-                if case let .failure(error) = result {
-                    printIfDebug(.error, "Unresolved error \(error)")
-                }
-            })
+        authService.signInRequest(request: requestDTO) {
+            asynchrony {
+                coordinator.showScreen(.tabBar)
+            }
+        }
     }
 }

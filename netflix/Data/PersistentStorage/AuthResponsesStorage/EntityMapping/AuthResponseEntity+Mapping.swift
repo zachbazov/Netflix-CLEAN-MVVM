@@ -18,21 +18,7 @@ extension AuthResponseEntity {
     }
 }
 
-// MARK: - AuthRequestDTO + Mapping
-
-extension AuthRequestDTO {
-    func toEntity(in context: NSManagedObjectContext) -> AuthRequestEntity {
-        let entity: AuthRequestEntity = .init(context: context)
-        entity.user?._id = user._id
-        entity.user?.name = user.name
-        entity.user?.email = user.email
-        entity.user?.password = user.password
-        entity.user?.passwordConfirm = user.passwordConfirm
-        entity.user?.role = user.role
-        entity.user?.active = user.active
-        return entity
-    }
-}
+// MARK: - Mapping
 
 extension AuthResponseDTO {
     func toEntity(in context: NSManagedObjectContext) -> AuthResponseEntity {

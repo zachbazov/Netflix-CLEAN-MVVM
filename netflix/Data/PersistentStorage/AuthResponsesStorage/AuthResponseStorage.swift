@@ -44,12 +44,12 @@ extension AuthResponseStorage {
                 if let request = request {
                     let fetchRequest: NSFetchRequest = self.fetchRequest(for: request)
                     let requestEntity = try context.fetch(fetchRequest).first
-//                    printIfDebug(.debug, "getResponse \(requestEntity?.user?.toDomain())")
+                    printIfDebug(.debug, "getResponse \(requestEntity?.toDTO())")
                     return completion(.success(requestEntity?.response?.toDTO()))
                 }
                 let fetchRequest: NSFetchRequest = AuthResponseEntity.fetchRequest()
                 let responseEntity = try context.fetch(fetchRequest).first
-//                    printIfDebug(.debug, "getRes \(responseEntity?.data?.toDomain())")
+                printIfDebug(.debug, "getRes \(responseEntity?.request)")
                 completion(.success(responseEntity?.toDTO()))
             } catch {
                 completion(.failure(CoreDataStorageError.readError(error)))
@@ -69,11 +69,13 @@ extension AuthResponseStorage {
                 requestEntity.response = responseEntity
                 requestEntity.user = request.user
                 
+                response.data?.token = response.token
+                response.data?.password = request.user.password
+                
                 responseEntity.request = requestEntity
                 responseEntity.token = response.token
                 responseEntity.data = response.data
-                printIfDebug(.debug, "save \(responseEntity.data!.toDomain())")
-                printIfDebug(.debug, "saveResReq \(responseEntity.request?.toDTO().toDomain())")
+                
                 try context.save()
             } catch {
                 printIfDebug(.error, "CoreDataAuthResponseStorage unresolved error \(error), \((error as NSError).userInfo)")
@@ -86,7 +88,7 @@ extension AuthResponseStorage {
         do {
             if let result = try context.fetch(fetchRequest).first {
                 context.delete(result)
-//                printIfDebug(.debug, "deleteResponse \(result)")
+                
                 try context.save()
                 
                 completion?()

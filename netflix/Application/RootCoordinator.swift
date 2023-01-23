@@ -44,27 +44,15 @@ extension RootCoordinator: RootCoordinable {
     /// Allocating and presenting the tab bar screen.
     fileprivate func allocateTabBarScreen() {
         let controller = TabBarController()
-        /// Both `tabViewModel` and `tabCoordinator` are wrapped due to
-        /// reallocation possibility by the user,
-        /// as the state of the navigation view in `HomeViewController` changes.
-        /// Hence, to avoid any memory issues...
-        /// single instance should suffice to fill this app requirements to represent data efficiently.
         if tabViewModel == nil { tabViewModel = TabBarViewModel() }
         if tabCoordinator == nil { tabCoordinator = TabBarCoordinator() }
-        /// Allocate root's references.
         tabViewModel.coordinator = tabCoordinator
         controller.viewModel = tabViewModel
         controller.viewModel.coordinator = tabCoordinator
         tabCoordinator.viewController = controller
         self.viewController = controller
         window?.rootViewController = controller
-        /// An authorization protection layer.
-        /// In-order for all the features to work properly,
-        /// an authentication procedure is required.
-        asynchrony { [weak self] in
-            guard let self = self else { return }
-            self.tabCoordinator.showScreen(.home)
-        }
+        tabCoordinator.showScreen(.home)
     }
 }
 

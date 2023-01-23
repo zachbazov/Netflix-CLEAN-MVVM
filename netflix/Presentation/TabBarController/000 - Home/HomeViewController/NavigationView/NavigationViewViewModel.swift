@@ -58,7 +58,7 @@ extension NavigationViewViewModel {
             break
         case .account:
             let authService = Application.current.authService
-            authService.deauthenticate()
+            authService.signOutRequest()
         case .tvShows:
             navigationView.tvShowsItemViewContainer.isHidden(false)
             navigationView.moviesItemViewContainer.isHidden(true)

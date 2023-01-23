@@ -47,16 +47,8 @@ extension SignUpViewModel {
         let requestDTO = AuthRequestDTO(user: userDTO)
         // Invoke the request.
         viewModel.signUp(request: requestDTO.toDomain()) { result in
-            if case let .success(responseDTO) = result {
-                /// Update the user data object with the id and the token of the response.
-                /// The response `data` property stands for a user object type.
-                userDTO._id = responseDTO.data?._id
-                userDTO.token = responseDTO.token
-                // Update the service's user property.
-                authService.authenticate(user: userDTO)
-                // Invoke a cached authorization request.
-                authService.cachedAuthorizationRequest {
-                    // Present the TabBar screen.
+            if case .success = result {
+                authService.signInRequest(request: requestDTO) {
                     asynchrony { coordinator.showScreen(.tabBar) }
                 }
             }

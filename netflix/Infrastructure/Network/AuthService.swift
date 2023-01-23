@@ -20,6 +20,18 @@ final class AuthService {
 // MARK: - Methods
 
 extension AuthService {
+    /// Set and manipulate the `user` property.
+    /// - Parameters:
+    ///   - request: Auth request object.
+    ///   - response: Auth response object.
+    func setUser(request: AuthRequestDTO?, response: AuthResponseDTO) {
+        user = response.data
+        user?._id = response.data?._id
+        user?.token = response.token
+        if let request = request {
+            user?.password = request.user.password
+        }
+    }
     /// Check for the latest authentication response signed by user.
     /// In case there is a valid response, pass the user data with the completion.
     /// In case there isn't a valid response, pass nil with the completion.
@@ -32,49 +44,38 @@ extension AuthService {
                 asynchrony {
                     // In case there is a valid response.
                     if let response = response {
-                        asynchrony {
-                            // Authenticate the user.
-                            self.authenticate(for: response)
-                            printIfDebug(.debug, "MyResponse \(self.user?.toDomain())")
-                            // Pass the data within the completion handler.
-                            completion(self.user)
-                        }
+                        // Set the user.
+                        self.setUser(request: nil, response: response)
+                        // Pass the data within the completion handler.
+                        completion(self.user)
                         return
                     }
-                    asynchrony {
-                        // In case there isn't a valid response.
-                        completion(nil)
-                    }
+                    // In case there isn't a valid response.
+                    completion(nil)
                 }
             case .failure(let error):
                 printIfDebug(.error, "\(error)")
             }
         }
     }
-    /// Cached authorization request.
-    /// In case there is a registered last sign by a user in the cache,
+    /// Invoke a sign in request.
+    /// In case there is a stored response for the user in the cache,
     /// perform an authentication based on the cache data.
-    func cachedAuthorizationRequest(completion: @escaping () -> Void) {
-        guard let email = user?.email,
-              let password = user?.password else {
-            return
-        }
-        let userDTO = UserDTO(email: email, password: password)
-        let requestDTO = AuthRequestDTO(user: userDTO)
-        let authViewModel = AuthViewModel()
-        authViewModel.signIn(
-            request: requestDTO.toDomain(),
+    func signInRequest(request: AuthRequestDTO, completion: @escaping () -> Void) {
+        let viewModel = AuthViewModel()
+        viewModel.signIn(
+            request: request.toDomain(),
             cached: { [weak self] responseDTO in
                 printIfDebug(.debug, "cachedddd")
                 guard let self = self, let responseDTO = responseDTO else { return }
-                self.authenticate(for: responseDTO)
+                self.setUser(request: request, response: responseDTO)
                 completion()
             },
             completion: { [weak self] result in
                 if case let .success(responseDTO) = result {
                     guard let self = self else { return }
                     printIfDebug(.debug, "comppppleee")
-                    self.authenticate(for: responseDTO)
+                    self.setUser(request: request, response: responseDTO)
                     completion()
                 }
                 if case let .failure(error) = result {
@@ -82,23 +83,8 @@ extension AuthService {
                 }
             })
     }
-    /// Authentication by response.
-    /// Used for sign in and out authentication operations with a response object.
-    /// This property is used by other features of the application.
-    /// - Parameter response: API's response callback result object.
-    func authenticate(for response: AuthResponseDTO?) {
-        self.user = response?.data
-        self.user?.password = response?.request?.user.password
-    }
-    /// Authentication by user.
-    /// Used for sign in authentication operation without a response object.
-    /// This property is used by other features of the application.
-    /// - Parameter user: User object.
-    func authenticate(user: UserDTO) {
-        self.user = user
-    }
     /// Invoke a sign out request for the user.
-    func deauthenticate() {
+    func signOutRequest() {
         // Create an auth request for the user.
         let requestDTO = AuthRequestDTO(user: user!)
         // Perform a background task using core data storage.
@@ -125,4 +111,3 @@ extension AuthService {
         }
     }
 }
-
