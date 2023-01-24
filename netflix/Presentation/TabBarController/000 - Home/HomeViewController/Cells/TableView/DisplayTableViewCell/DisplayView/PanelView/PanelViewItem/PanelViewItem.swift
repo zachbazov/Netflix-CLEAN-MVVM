@@ -103,7 +103,7 @@ extension PanelViewItemConfiguration {
             let media = viewModel.presentedMedia.value!
             // Add or remove the object from the list.
             viewModel.myList.viewModel.shouldAddOrRemove(media, uponSelection: view.viewModel.isSelected.value)
-            
+            // Reload browse overlay's collection data.
             viewModel.coordinator?.viewController?.browseOverlayView.collectionView.reloadData()
         case .info:
             // Allocate a new detail controller.
