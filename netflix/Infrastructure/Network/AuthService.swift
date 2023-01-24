@@ -11,9 +11,7 @@ import Foundation
 
 final class AuthService {
     private let coreDataStorage: CoreDataStorage = .shared
-    private var authResponseStorage: AuthResponseStorage {
-        return Application.current.authResponseCache
-    }
+    private var authResponseStorage: AuthResponseStorage { Application.current.authResponseCache }
     private(set) var user: UserDTO?
     private(set) var request: AuthRequestDTO?
     private(set) var response: AuthResponseDTO?
@@ -71,8 +69,9 @@ extension AuthService {
         }
     }
     /// Invoke a sign in request.
-    /// In case there is a stored response for the user in the cache,
-    /// perform an authentication based on the cache data.
+    /// - Parameters:
+    ///   - request: Auth request object.
+    ///   - completion: Completion handler.
     func signInRequest(request: AuthRequestDTO, completion: @escaping () -> Void) {
         let viewModel = AuthViewModel()
         viewModel.signIn(
@@ -93,6 +92,10 @@ extension AuthService {
                 }
             })
     }
+    /// Invoke a sign up request.
+    /// - Parameters:
+    ///   - request: Auth request object.
+    ///   - completion: Completion handler.
     func signUpRequest(request: AuthRequestDTO, completion: @escaping () -> Void) {
         let viewModel = AuthViewModel()
         viewModel.signUp(request: request.toDomain()) { [weak self] result in
@@ -106,7 +109,7 @@ extension AuthService {
             }
         }
     }
-    /// Invoke a sign out request for the user.
+    /// Invoke a sign out request.
     func signOutRequest() {
         // Create an auth request for the user.
         let requestDTO = AuthRequestDTO(user: user!)
