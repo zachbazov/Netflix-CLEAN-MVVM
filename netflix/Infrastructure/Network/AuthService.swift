@@ -93,6 +93,19 @@ extension AuthService {
                 }
             })
     }
+    func signUpRequest(request: AuthRequestDTO, completion: @escaping () -> Void) {
+        let viewModel = AuthViewModel()
+        viewModel.signUp(request: request.toDomain()) { [weak self] result in
+            guard let self = self else { return }
+            if case let .success(responseDTO) = result {
+                self.setResponse(request: responseDTO.request, response: responseDTO)
+                completion()
+            }
+            if case let .failure(error) = result {
+                printIfDebug(.error, "\(error)")
+            }
+        }
+    }
     /// Invoke a sign out request for the user.
     func signOutRequest() {
         // Create an auth request for the user.

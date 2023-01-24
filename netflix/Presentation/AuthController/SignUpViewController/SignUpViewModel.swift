@@ -46,17 +46,10 @@ extension SignUpViewModel {
         // Create a new sign up request user-based.
         let requestDTO = AuthRequestDTO(user: userDTO)
         // Invoke the request.
-        viewModel.signUp(request: requestDTO.toDomain()) { result in
-            if case let .success(responseDTO) = result {
-                // Set authentication properties.
-                authService.setResponse(request: responseDTO.request, response: responseDTO)
-                // Present the TabBar screen.
-                asynchrony {
-                    coordinator.showScreen(.tabBar)
-                }
-            }
-            if case let .failure(error) = result {
-                printIfDebug(.error, "\(error)")
+        authService.signUpRequest(request: requestDTO) {
+            // Present the TabBar screen.
+            asynchrony {
+                coordinator.showScreen(.tabBar)
             }
         }
     }

@@ -46,21 +46,11 @@ extension SignInViewModel {
         // Create a new sign in request user-based.
         let requestDTO = AuthRequestDTO(user: userDTO)
         // Invoke the request.
-        viewModel.signIn(
-            request: requestDTO.toDomain(),
-            cached: { _ in },
-            completion: { result in
-                switch result {
-                case .success(let response):
-                    // Set authentication response.
-                    authService.setResponse(request: response.request, response: response)
-                    // Present the TabBar screen.
-                    asynchrony {
-                        coordinator.showScreen(.tabBar)
-                    }
-                case .failure(let error):
-                    printIfDebug(.error, "\(error)")
-                }
-            })
+        authService.signInRequest(request: requestDTO) {
+            // Present the TabBar screen.
+            asynchrony {
+                coordinator.showScreen(.tabBar)
+            }
+        }
     }
 }
