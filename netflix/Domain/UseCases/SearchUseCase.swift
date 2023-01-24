@@ -11,7 +11,6 @@ import Foundation
 
 struct SearchUseCaseRequestValue {
     let query: MediaQuery
-    let page: Int
 }
 
 // MARK: - MediaQuery Type
@@ -40,11 +39,10 @@ final class SearchUseCase {
 extension SearchUseCase {
     func execute(
         requestValue: SearchUseCaseRequestValue,
-        cached: @escaping (MediaPage) -> Void,
-        completion: @escaping (Result<MediaPage, Error>) -> Void) -> Cancellable? {
+        cached: @escaping ([Media]) -> Void,
+        completion: @escaping (Result<[Media], Error>) -> Void) -> Cancellable? {
             return fetchMediaList(
                 query: requestValue.query,
-                page: requestValue.page,
                 cached: { _ in },
                 completion: { result in
                     if case let .success(mediaPage) = result {
@@ -55,9 +53,8 @@ extension SearchUseCase {
     
     func fetchMediaList(
         query: MediaQuery,
-        page: Int,
-        cached: @escaping (MediaPage) -> Void,
-        completion: @escaping (Result<MediaPage, Error>) -> Void) -> Cancellable? {
+        cached: @escaping ([Media]) -> Void,
+        completion: @escaping (Result<[Media], Error>) -> Void) -> Cancellable? {
             let requestDTO = SearchRequestDTO(regex: query.query)
             let task = RepositoryTask()
             
@@ -66,10 +63,8 @@ extension SearchUseCase {
             let endpoint = APIEndpoint.MediaRepository.searchMedia(with: requestDTO)
             task.networkTask = Application.current.dataTransferService.request(with: endpoint, completion: { result in
                 if case let .success(responseDTO) = result {
-                    let mediaPage = MediaPage(page: 0,
-                                              totalPages: 1,
-                                              media: responseDTO.data.map { $0.toDomain() })
-                    completion(.success(mediaPage))
+                    let media = responseDTO.data.map { $0.toDomain() }
+                    completion(.success(media))
                 } else if case let .failure(error) = result {
                     completion(.failure(error))
                 }

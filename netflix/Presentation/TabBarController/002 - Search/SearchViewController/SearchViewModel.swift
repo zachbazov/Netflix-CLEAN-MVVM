@@ -18,13 +18,6 @@ final class SearchViewModel {
     // MARK: Type's Properties
     
     private let useCase: SearchUseCase
-    
-    private var currentPage: Int = 0
-    private var totalPageCount: Int = 1
-    private var hasMorePages: Bool { currentPage < totalPageCount }
-    private var nextPage: Int { hasMorePages ? currentPage + 1 : currentPage }
-    private var pages: [MediaPage] = []
-    
     let items: Observable<[SearchCollectionViewCellViewModel]> = Observable([])
     let loading: Observable<SearchLoading?> = Observable(.none)
     let query: Observable<String> = Observable("")
@@ -54,19 +47,11 @@ extension SearchViewModel: ViewModel {
 // MARK: - Methods
 
 extension SearchViewModel {
-    private func appendPage(_ mediaPage: MediaPage) {
-        currentPage = mediaPage.page
-        totalPageCount = mediaPage.totalPages
-        
-        pages = pages.filter { $0.page != mediaPage.page } + [mediaPage]
-        
-        items.value = pages.media.map(SearchCollectionViewCellViewModel.init)
+    private func set(media: [Media]) {
+        items.value = media.map(SearchCollectionViewCellViewModel.init)
     }
     
-    private func resetPages() {
-        currentPage = 0
-        totalPageCount = 1
-        pages.removeAll()
+    private func reset() {
         items.value.removeAll()
     }
     
@@ -75,11 +60,13 @@ extension SearchViewModel {
         query.value = mediaQuery.query
         
         mediaLoadTask = useCase.execute(
-            requestValue: SearchUseCaseRequestValue(query: mediaQuery, page: nextPage),
-            cached: appendPage,
+            requestValue: SearchUseCaseRequestValue(query: mediaQuery),
+            cached: { media in
+                // TBI
+            },
             completion: { result in
-                if case let .success(page) = result {
-                    self.appendPage(page)
+                if case let .success(media) = result {
+                    self.set(media: media)
                 } else if case let .failure(error) = result {
                     printIfDebug(.error, "\(error)")
                 }
@@ -88,7 +75,7 @@ extension SearchViewModel {
     }
     
     private func update(mediaQuery: MediaQuery) {
-        resetPages()
+        reset()
         load(mediaQuery: mediaQuery, loading: .fullscreen)
     }
 }
@@ -99,7 +86,6 @@ extension SearchViewModel {
     func viewDidLoad() {}
     
     func didLoadNextPage() {
-        guard hasMorePages, loading.value == .none else { return }
         load(mediaQuery: MediaQuery(query: query.value), loading: .nextPage)
     }
     
@@ -111,12 +97,6 @@ extension SearchViewModel {
     func didCancelSearch() {
         mediaLoadTask?.cancel()
     }
-}
-
-// MARK: - Array Extension
-
-private extension Array where Element == MediaPage {
-    var media: [Media] { flatMap { $0.media } }
 }
 
 // MARK: - SearchLoading Type
