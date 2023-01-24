@@ -53,13 +53,10 @@ extension AuthRepository {
         
         cache.getResponse(for: requestDTO) { result in
             if case let .success(responseDTO?) = result {
-                printIfDebug(.debug, "cachedResponse \(responseDTO)")
-                cached(responseDTO)
-                return
+                return cached(responseDTO)
             }
             
             guard !task.isCancelled else { return }
-            printIfDebug(.debug, "newResponse")
             let endpoint = APIEndpoint.AuthRepository.signIn(with: requestDTO)
             task.networkTask = self.dataTransferService.request(with: endpoint) { result in
                 switch result {

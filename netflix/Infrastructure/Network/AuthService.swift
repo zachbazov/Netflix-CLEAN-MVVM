@@ -15,16 +15,28 @@ final class AuthService {
         return Application.current.authResponseCache
     }
     private(set) var user: UserDTO?
+    private(set) var request: AuthRequestDTO?
+    private(set) var response: AuthResponseDTO?
 }
 
 // MARK: - Methods
 
 extension AuthService {
-    /// Set and manipulate the `user` property.
+    /// Assign the user and its request-response properties.
     /// - Parameters:
-    ///   - request: Auth request object.
-    ///   - response: Auth response object.
-    func setUser(request: AuthRequestDTO?, response: AuthResponseDTO) {
+    ///   - request: Request object via invocation.
+    ///   - response: Response object via invocation.
+    func setResponse(request: AuthRequestDTO?, response: AuthResponseDTO) {
+        self.request = request
+        self.response = response
+        
+        setUser(request: request, response: response)
+    }
+    /// Assign and manipulate the `user` property.
+    /// - Parameters:
+    ///   - request: Request object via invocation.
+    ///   - response: Response object via invocation.
+    private func setUser(request: AuthRequestDTO?, response: AuthResponseDTO) {
         user = response.data
         user?._id = response.data?._id
         user?.token = response.token
@@ -44,8 +56,8 @@ extension AuthService {
                 asynchrony {
                     // In case there is a valid response.
                     if let response = response {
-                        // Set the user.
-                        self.setUser(request: nil, response: response)
+                        // Set authentication properties.
+                        self.setResponse(request: response.request, response: response)
                         // Pass the data within the completion handler.
                         completion(self.user)
                         return
@@ -66,16 +78,14 @@ extension AuthService {
         viewModel.signIn(
             request: request.toDomain(),
             cached: { [weak self] responseDTO in
-                printIfDebug(.debug, "cachedddd")
                 guard let self = self, let responseDTO = responseDTO else { return }
-                self.setUser(request: request, response: responseDTO)
+                self.setResponse(request: request, response: responseDTO)
                 completion()
             },
             completion: { [weak self] result in
                 if case let .success(responseDTO) = result {
                     guard let self = self else { return }
-                    printIfDebug(.debug, "comppppleee")
-                    self.setUser(request: request, response: responseDTO)
+                    self.setResponse(request: request, response: responseDTO)
                     completion()
                 }
                 if case let .failure(error) = result {
@@ -97,7 +107,9 @@ extension AuthService {
                 authViewModel.signOut() { result in
                     switch result {
                     case .success:
-                        // Deallocate the user property.
+                        // Deallocate authentication properties.
+                        self.request = nil
+                        self.response = nil
                         self.user = nil
                         // Present the authentication screen.
                         asynchrony {

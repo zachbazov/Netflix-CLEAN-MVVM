@@ -34,7 +34,7 @@ extension SignUpViewModel {
     func signUpButtonDidTap() {
         signUpRequest()
     }
-    /// Invokes a sign up request by the newly created user credentials.
+    /// Invokes a sign up request by the user credentials.
     private func signUpRequest() {
         let authService = Application.current.authService
         let coordinator = Application.current.rootCoordinator
@@ -47,9 +47,12 @@ extension SignUpViewModel {
         let requestDTO = AuthRequestDTO(user: userDTO)
         // Invoke the request.
         viewModel.signUp(request: requestDTO.toDomain()) { result in
-            if case .success = result {
-                authService.signInRequest(request: requestDTO) {
-                    asynchrony { coordinator.showScreen(.tabBar) }
+            if case let .success(responseDTO) = result {
+                // Set authentication properties.
+                authService.setResponse(request: responseDTO.request, response: responseDTO)
+                // Present the TabBar screen.
+                asynchrony {
+                    coordinator.showScreen(.tabBar)
                 }
             }
             if case let .failure(error) = result {

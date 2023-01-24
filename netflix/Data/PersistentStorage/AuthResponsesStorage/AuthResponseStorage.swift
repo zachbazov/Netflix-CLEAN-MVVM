@@ -36,21 +36,26 @@ extension AuthResponseStorage {
         return request
     }
     
-    func getResponse(for request: AuthRequestDTO? = nil,
+    func getResponse(completion: @escaping (Result<AuthResponseDTO?, CoreDataStorageError>) -> Void) {
+        coreDataStorage.performBackgroundTask { context in
+            do {
+                let fetchRequest: NSFetchRequest = AuthResponseEntity.fetchRequest()
+                let responseEntity = try context.fetch(fetchRequest).first
+                completion(.success(responseEntity?.toDTO()))
+            } catch {
+                completion(.failure(CoreDataStorageError.readError(error)))
+            }
+        }
+    }
+    
+    func getResponse(for request: AuthRequestDTO,
                      completion: @escaping (Result<AuthResponseDTO?, CoreDataStorageError>) -> Void) {
         coreDataStorage.performBackgroundTask { [weak self] context in
             guard let self = self else { return }
             do {
-                if let request = request {
-                    let fetchRequest: NSFetchRequest = self.fetchRequest(for: request)
-                    let requestEntity = try context.fetch(fetchRequest).first
-                    printIfDebug(.debug, "getResponse \(requestEntity?.toDTO())")
-                    return completion(.success(requestEntity?.response?.toDTO()))
-                }
-                let fetchRequest: NSFetchRequest = AuthResponseEntity.fetchRequest()
-                let responseEntity = try context.fetch(fetchRequest).first
-                printIfDebug(.debug, "getRes \(responseEntity?.request)")
-                completion(.success(responseEntity?.toDTO()))
+                let fetchRequest: NSFetchRequest = self.fetchRequest(for: request)
+                let requestEntity = try context.fetch(fetchRequest).first
+                completion(.success(requestEntity?.response?.toDTO()))
             } catch {
                 completion(.failure(CoreDataStorageError.readError(error)))
             }
@@ -65,6 +70,13 @@ extension AuthResponseStorage {
                 
                 let requestEntity: AuthRequestEntity = request.toEntity(in: context)
                 let responseEntity: AuthResponseEntity = response.toEntity(in: context)
+                
+                request.user._id = response.data?._id
+                request.user.name = response.data?.name
+                request.user.role = response.data?.role
+                request.user.active = response.data?.active
+                request.user.mylist = response.data?.mylist
+                request.user.token = response.token
                 
                 requestEntity.response = responseEntity
                 requestEntity.user = request.user
@@ -83,12 +95,13 @@ extension AuthResponseStorage {
         }
     }
     
-    func deleteResponse(for request: AuthRequestDTO, in context: NSManagedObjectContext, completion: (() -> Void)? = nil) {
+    func deleteResponse(for request: AuthRequestDTO,
+                        in context: NSManagedObjectContext,
+                        completion: (() -> Void)? = nil) {
         let fetchRequest = AuthRequestEntity.fetchRequest()
         do {
             if let result = try context.fetch(fetchRequest).first {
                 context.delete(result)
-                
                 try context.save()
                 
                 completion?()

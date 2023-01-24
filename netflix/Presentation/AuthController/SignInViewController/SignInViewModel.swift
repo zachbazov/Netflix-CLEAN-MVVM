@@ -27,15 +27,16 @@ final class SignInViewModel {
 // MARK: - Methods
 
 extension SignInViewModel {
+    /// Occurs once the sign in button has been tapped.
     @objc
     func signInButtonDidTap() {
         signInRequest()
     }
-    
+    /// Invokes a sign in request for the user credentials.
     private func signInRequest() {
         let authService = Application.current.authService
         let coordinator = Application.current.rootCoordinator
-        
+        // Ensure the properties aren't nil.
         guard let email = email,
               let password = password else {
             return
@@ -45,10 +46,21 @@ extension SignInViewModel {
         // Create a new sign in request user-based.
         let requestDTO = AuthRequestDTO(user: userDTO)
         // Invoke the request.
-        authService.signInRequest(request: requestDTO) {
-            asynchrony {
-                coordinator.showScreen(.tabBar)
-            }
-        }
+        viewModel.signIn(
+            request: requestDTO.toDomain(),
+            cached: { _ in },
+            completion: { result in
+                switch result {
+                case .success(let response):
+                    // Set authentication response.
+                    authService.setResponse(request: response.request, response: response)
+                    // Present the TabBar screen.
+                    asynchrony {
+                        coordinator.showScreen(.tabBar)
+                    }
+                case .failure(let error):
+                    printIfDebug(.error, "\(error)")
+                }
+            })
     }
 }

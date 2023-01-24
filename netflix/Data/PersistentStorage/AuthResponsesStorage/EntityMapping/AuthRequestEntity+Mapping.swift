@@ -11,12 +11,14 @@ import CoreData
 
 extension AuthRequestEntity {
     func toDTO() -> AuthRequestDTO {
-        let userDTO = UserDTO(name: user!.name,
+        let userDTO = UserDTO(_id: user!._id,
+                              name: user!.name,
                               email: user!.email,
                               password: user!.password,
                               passwordConfirm: user!.passwordConfirm,
                               role: user!.role,
-                              active: user!.active)
+                              active: user!.active,
+                              mylist: user!.mylist)
         return .init(user: userDTO)
     }
 }
