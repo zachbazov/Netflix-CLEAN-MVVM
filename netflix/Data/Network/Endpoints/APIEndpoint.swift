@@ -50,15 +50,14 @@ struct APIEndpoint {
     // MARK: MediaRepository Type
     
     struct MediaRepository: MediaRepositoryEndpoints {
-        static func getAllMedia() -> Endpoint<MediaResponseDTO.GET.Many> {
-            return Endpoint(path: "api/v1/media",
-                            method: .get)
+        static func getAllMedia() -> Endpoint<MediaResponseDTO> {
+            return Endpoint(path: "api/v1/media", method: .get)
         }
         
-        static func getMedia(with request: MediaRequestDTO.GET.One) -> Endpoint<MediaResponseDTO.GET.One> {
+        static func getMedia(with request: MediaRequestDTO) -> Endpoint<MediaResponseDTO> {
             return Endpoint(path: "api/v1/media",
                             method: .get,
-                            queryParameters: ["slug": request.slug ?? "", "id": request.id ?? ""])
+                            queryParameters: request.slug != nil ? ["slug": request.slug ?? ""] : ["id": request.id ?? ""])
         }
         
         static func searchMedia(with request: SearchRequestDTO) -> Endpoint<SearchResponseDTO> {

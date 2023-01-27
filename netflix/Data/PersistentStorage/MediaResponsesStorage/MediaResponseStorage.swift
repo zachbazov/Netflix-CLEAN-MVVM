@@ -25,62 +25,50 @@ final class MediaResponseStorage {
 // MARK: - Methods
 
 extension MediaResponseStorage {
-    private func fetchRequest(for requestDTO: MediaRequestDTO.GET.One) -> NSFetchRequest<MediaRequestEntity> {
-        let request: NSFetchRequest = MediaRequestEntity.fetchRequest()
-        if requestDTO.slug != nil {
-            request.predicate = NSPredicate(format: "%K = %@",
-                                            #keyPath(MediaRequestEntity.slug),
-                                            requestDTO.slug ?? "")
-            return request
-        }
-        request.predicate = NSPredicate(format: "%K = %@",
-                                        #keyPath(MediaRequestEntity.identifier),
-                                        requestDTO.id ?? "")
+    private func fetchRequest() -> NSFetchRequest<MediaResponseEntity> {
+        let request: NSFetchRequest = MediaResponseEntity.fetchRequest()
         return request
     }
     
-    func getResponse(for request: MediaRequestDTO.GET.One,
-                     completion: @escaping (Result<MediaResponseDTO.GET.One?, CoreDataStorageError>) -> Void) {
+    func getResponse(completion: @escaping (Result<MediaResponseDTO?, CoreDataStorageError>) -> Void) {
         coreDataStorage.performBackgroundTask { context in
             do {
-                let fetchRequest = self.fetchRequest(for: request)
-                let requestEntity = try context.fetch(fetchRequest).first
-                
-                completion(.success(requestEntity?.response?.toDTO()))
+                let fetchRequest = self.fetchRequest()
+                let responseEntity = try context.fetch(fetchRequest).first
+                completion(.success(responseEntity?.toDTO()))
             } catch {
                 completion(.failure(CoreDataStorageError.readError(error)))
             }
         }
     }
     
-    func save(response: MediaResponseDTO.GET.One,
-              for request: MediaRequestDTO.GET.One) {
-        coreDataStorage.performBackgroundTask { context in
+    func save(response: MediaResponseDTO) {
+        coreDataStorage.performBackgroundTask { [weak self] context in
             do {
-                self.deleteResponse(for: request, in: context)
+                self?.deleteResponse(in: context)
                 
-                let requestEntity: MediaRequestEntity = request.toEntity(in: context)
-                requestEntity.response = response.toEntity(in: context)
+                let responseEntity: MediaResponseEntity = response.toEntity(in: context)
+                responseEntity.status = response.status
+                responseEntity.results = Int32(response.results)
+                responseEntity.data = response.data
                 
                 try context.save()
             } catch {
-                printIfDebug(.error, "CoreDataAuthResponseStorage unresolved error \(error), \((error as NSError).userInfo)")
+                printIfDebug(.error, "CoreDataMediaResponseStorage unresolved error \(error), \((error as NSError).userInfo)")
             }
         }
     }
     
-    func deleteResponse(for request: MediaRequestDTO.GET.One,
-                        in context: NSManagedObjectContext) {
-        let fetchRequest = self.fetchRequest(for: request)
+    func deleteResponse(in context: NSManagedObjectContext) {
+        let fetchRequest = MediaResponseEntity.fetchRequest()
         do {
-            if let result = try context.fetch(fetchRequest) as [MediaRequestEntity]? {
-                for r in result {
-                    context.delete(r)
-                    context.delete(r.response!)
-                }
+            if let result = try context.fetch(fetchRequest).first {
+                context.delete(result)
+                
+                try context.save()
             }
         } catch {
-            printIfDebug(.error, "Unresolved error \(error) occured as trying to delete object.")
+            printIfDebug(.error, "Unresolved error \((error as NSError).userInfo) occured as trying to delete object.")
         }
     }
 }

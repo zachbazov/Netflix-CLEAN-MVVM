@@ -49,9 +49,9 @@ extension DisplayTableViewCellViewModel {
             if case .all = $0 {
                 homeViewModel.displayMediaCache[$0] = media.randomElement()
             } else if case .tvShows = $0 {
-                homeViewModel.displayMediaCache[$0] = media.filter { $0.type == .series }.randomElement()!
+                homeViewModel.displayMediaCache[$0] = media.filter { $0.type == "series" }.randomElement()!
             } else if case .movies = $0 {
-                homeViewModel.displayMediaCache[$0] = media.filter { $0.type == .film }.randomElement()!
+                homeViewModel.displayMediaCache[$0] = media.filter { $0.type == "film" }.randomElement()!
             }
         }
     }

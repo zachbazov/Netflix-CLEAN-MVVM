@@ -31,6 +31,7 @@ extension AuthResponseDTO {
     func toEntity(in context: NSManagedObjectContext) -> AuthResponseEntity? {
         guard let data = data else { return nil }
         let entity: AuthResponseEntity = .init(context: context)
+        entity.status = status
         entity.token = token
         entity.data = data
         return entity

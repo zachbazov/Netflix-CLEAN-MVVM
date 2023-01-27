@@ -6,46 +6,13 @@
     </entity>
     <entity name="AuthResponseEntity" representedClassName="AuthResponseEntity" syncable="YES" codeGenerationType="class">
         <attribute name="data" optional="YES" attributeType="Transformable" valueTransformerName="UserTransformer" customClassName="UserDTO"/>
+        <attribute name="status" optional="YES" attributeType="String"/>
         <attribute name="token" optional="YES" attributeType="String"/>
         <relationship name="request" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="AuthRequestEntity" inverseName="response" inverseEntity="AuthRequestEntity"/>
     </entity>
-    <entity name="MediaRequestEntity" representedClassName="MediaRequestEntity" syncable="YES" codeGenerationType="class">
-        <attribute name="identifier" optional="YES" attributeType="String"/>
-        <attribute name="slug" optional="YES" attributeType="String"/>
-        <attribute name="user" optional="YES" attributeType="Transformable" valueTransformerName="UserTransformer" customClassName="UserDTO"/>
-        <relationship name="response" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="MediaResponseEntity" inverseName="request" inverseEntity="MediaResponseEntity"/>
-    </entity>
     <entity name="MediaResponseEntity" representedClassName="MediaResponseEntity" syncable="YES" codeGenerationType="class">
-        <attribute name="cast" optional="YES" attributeType="String"/>
-        <attribute name="createdAt" optional="YES" attributeType="String"/>
-        <attribute name="desc" optional="YES" attributeType="String"/>
-        <attribute name="duration" optional="YES" attributeType="String"/>
-        <attribute name="genres" optional="YES" attributeType="Transformable" valueTransformerName="NSSecureUnarchiveFromData" customClassName="[String]"/>
-        <attribute name="hasWatched" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
-        <attribute name="id" optional="YES" attributeType="String"/>
-        <attribute name="isExclusive" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
-        <attribute name="isHD" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
-        <attribute name="isNewRelease" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
-        <attribute name="isSecret" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
-        <attribute name="length" optional="YES" attributeType="String"/>
-        <attribute name="numberOfEpisodes" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
-        <attribute name="rating" optional="YES" attributeType="Float" defaultValueString="0.0" usesScalarValueType="YES"/>
-        <attribute name="resources" optional="YES" attributeType="Transformable" valueTransformerName="MediaResourcesTransformer" customClassName="MediaResourcesDTO"/>
-        <attribute name="seasons" optional="YES" attributeType="Transformable" valueTransformerName="NSSecureUnarchiveFromData" customClassName="[String]"/>
-        <attribute name="slug" optional="YES" attributeType="String"/>
-        <attribute name="title" optional="YES" attributeType="String"/>
-        <attribute name="type" optional="YES" attributeType="String"/>
-        <attribute name="writers" optional="YES" attributeType="String"/>
-        <relationship name="request" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="MediaRequestEntity" inverseName="response" inverseEntity="MediaRequestEntity"/>
-    </entity>
-    <entity name="UserEntity" representedClassName="UserEntity" syncable="YES" codeGenerationType="class">
-        <attribute name="active" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
-        <attribute name="email" optional="YES" attributeType="String"/>
-        <attribute name="identifier" optional="YES" attributeType="String"/>
-        <attribute name="mylist" optional="YES" attributeType="Transformable" valueTransformerName="NSSecureUnarchiveFromData" customClassName="[String]"/>
-        <attribute name="name" optional="YES" attributeType="String"/>
-        <attribute name="password" optional="YES" attributeType="String"/>
-        <attribute name="passwordConfirm" optional="YES" attributeType="String"/>
-        <attribute name="role" optional="YES" attributeType="String"/>
+        <attribute name="data" optional="YES" attributeType="Transformable" valueTransformerName="MediaTransformer" customClassName="[MediaDTO]"/>
+        <attribute name="results" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="status" optional="YES" attributeType="String"/>
     </entity>
 </model>

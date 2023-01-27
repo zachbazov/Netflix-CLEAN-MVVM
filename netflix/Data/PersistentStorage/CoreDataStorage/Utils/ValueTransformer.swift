@@ -11,6 +11,7 @@ import Foundation
 
 private enum ValueTransformerValue: String {
     case user = "UserTransformer"
+    case media = "MediaTransformer"
     case mediaResources = "MediaResourcesTransformer"
 }
 
@@ -18,6 +19,7 @@ private enum ValueTransformerValue: String {
 
 extension NSValueTransformerName {
     static let userTransformer = NSValueTransformerName(rawValue: ValueTransformerValue.user.rawValue)
+    static let mediaTransformer = NSValueTransformerName(rawValue: ValueTransformerValue.media.rawValue)
     static let mediaResourcesTransformer = NSValueTransformerName(rawValue: ValueTransformerValue.mediaResources.rawValue)
 }
 
@@ -35,14 +37,41 @@ final class ValueTransformer<T: NSObject>: NSSecureUnarchiveFromDataTransformer 
     
     override func transformedValue(_ value: Any?) -> Any? {
         guard let data = value as? Data else {
-            fatalError("Wrong data type: value must be a `MediaResources` object, received \(type(of: value)).")
+            fatalError("Wrong data type, received \(type(of: value)).")
         }
         return super.transformedValue(data)
     }
     
     override func reverseTransformedValue(_ value: Any?) -> Any? {
         guard let value = value as? T else {
-            fatalError("Wrong data type: value must be a `MediaResources` object, received \(type(of: value)).")
+            fatalError("Wrong data type, received \(type(of: value)).")
+        }
+        return super.reverseTransformedValue(value)
+    }
+}
+
+// MARK: - MediaValueTransformer Type
+
+final class MediaValueTransformer: NSSecureUnarchiveFromDataTransformer {
+    
+    // MARK: Properties
+    
+    override class func allowsReverseTransformation() -> Bool { true }
+    override class func transformedValueClass() -> AnyClass { MediaDTO.self }
+    override class var allowedTopLevelClasses: [AnyClass] { [NSArray.self, MediaDTO.self] }
+    
+    // MARK: NSSecureUnarchiveFromDataTransformer Lifecycle
+    
+    override func transformedValue(_ value: Any?) -> Any? {
+        guard let data = value as? Data else {
+            fatalError("Wrong data type, received \(type(of: value)).")
+        }
+        return super.transformedValue(data)
+    }
+    
+    override func reverseTransformedValue(_ value: Any?) -> Any? {
+        guard let value = value as? [MediaDTO] else {
+            fatalError("Wrong data type, received \(type(of: value)).")
         }
         return super.reverseTransformedValue(value)
     }

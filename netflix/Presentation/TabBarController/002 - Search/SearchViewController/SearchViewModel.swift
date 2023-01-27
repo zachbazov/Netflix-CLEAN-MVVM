@@ -32,8 +32,8 @@ final class SearchViewModel {
     /// Allocate `useCase` property and it's dependencies.
     init() {
         let dataTransferService = Application.current.dataTransferService
-        let mediaResponseCache = Application.current.mediaResponseCache
-        let mediaRepository = MediaRepository(dataTransferService: dataTransferService, cache: mediaResponseCache)
+//        let mediaResponseCache = Application.current.mediaResponseCache
+        let mediaRepository = MediaRepository(dataTransferService: dataTransferService)
         self.useCase = SearchUseCase(mediaRepository: mediaRepository)
     }
 }

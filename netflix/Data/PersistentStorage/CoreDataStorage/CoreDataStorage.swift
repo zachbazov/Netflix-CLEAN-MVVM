@@ -35,7 +35,7 @@ final class CoreDataStorage {
                 assertionFailure("CoreDataStorage unresolved error \(error), \(error.userInfo)")
             }
         }
-//        printContainerUrl(for: container)
+        printContainerUrl(for: container)
         return container
     }()
 }
@@ -46,7 +46,7 @@ extension CoreDataStorage {
     private func printContainerUrl(for container: NSPersistentContainer) {
         let persistentStore = container.persistentStoreCoordinator.persistentStores.first!
         let url = container.persistentStoreCoordinator.url(for: persistentStore)
-        printIfDebug(.url, "persistentStore url \(url)")
+//        printIfDebug(.url, "persistentStore url \(url)")
     }
     
     private func transformersDidRegister() {
@@ -54,6 +54,8 @@ extension CoreDataStorage {
                                              forName: .userTransformer)
         ValueTransformer.setValueTransformer(ValueTransformer<MediaResourcesDTO>(),
                                              forName: .mediaResourcesTransformer)
+        MediaValueTransformer.setValueTransformer(MediaValueTransformer(),
+                                             forName: .mediaTransformer)
     }
 }
 

@@ -36,9 +36,9 @@ final class HomeViewModel {
     /// Allocate `useCase` property and it's dependencies.
     init() {
         let dataTransferService = Application.current.dataTransferService
-        let mediaResponseCache = Application.current.mediaResponseCache
+//        let mediaResponseCache = Application.current.mediaResponseCache
         let sectionRepository = SectionRepository(dataTransferService: dataTransferService)
-        let mediaRepository = MediaRepository(dataTransferService: dataTransferService, cache: mediaResponseCache)
+        let mediaRepository = MediaRepository(dataTransferService: dataTransferService)
         let listRepository = ListRepository(dataTransferService: dataTransferService)
         let useCase = HomeUseCase(sectionsRepository: sectionRepository, mediaRepository: mediaRepository, listRepository: listRepository)
         self.useCase = useCase
@@ -61,6 +61,15 @@ final class HomeViewModel {
 extension HomeViewModel {
     func dataDidBeganLoading() {
         fetchSections()
+        
+//        useCase.mediaRepository.cache.getResponse { result in
+//            switch result {
+//            case .success(let response):
+//                printIfDebug(.debug, "rrrrr \(response)")
+//            case .failure(let error):
+//                printIfDebug(.debug, "err \(error)")
+//            }
+//        }
     }
     
     private func dataDidEndLoading() {
@@ -106,23 +115,26 @@ extension HomeViewModel {
                 }
                 if case let .failure(error) = result {
                     printIfDebug(.error, "\(error)")
-//                    Application.current.authService.deauthenticate()
                 }
             })
     }
     
     private func fetchMedia() {
         mediaTask = useCase.execute(
-            for: MediaResponse.GET.Many.self,
-            request: MediaRequestDTO.self,
-            cached: { _ in },
-            completion: { [weak self] result in
-                guard let self = self else { return }
-                if case let .success(response) = result {
-                    /// Allocate media with the response data.
-                    self.media = response.data
-                    /// Execute after data loading operations.
+            cached: { [weak self] responseDTO in
+                guard let self = self, let response = responseDTO else { return }
+                asynchrony {
+                    self.media = response.data.map { $0.toDomain() }
                     self.dataDidEndLoading()
+                }
+            }, completion: { [weak self] result in
+                guard let self = self else { return }
+                switch result {
+                case .success(let response):
+                    self.media = response.data.map { $0.toDomain() }
+                    self.dataDidEndLoading()
+                case .failure(let error):
+                    printIfDebug(.error, "\(error)")
                 }
             })
     }
@@ -160,13 +172,13 @@ extension HomeViewModel {
                     .slice(10)
             } else if case .tvShows = dataSourceState.value {
                 return media
-                    .filter { $0.type == .series }
+                    .filter { $0.type == "series" }
                     .sorted { $0.rating > $1.rating }
                     .filter { $0.rating > 7.5 }
                     .slice(10)
             } else {
                 return media
-                    .filter { $0.type == .film }
+                    .filter { $0.type == "film" }
                     .sorted { $0.rating > $1.rating }
                     .filter { $0.rating > 7.5 }
                     .slice(10)
@@ -175,9 +187,9 @@ extension HomeViewModel {
             if case .all = dataSourceState.value {
                 return media.shuffled()
             } else if case .tvShows = dataSourceState.value {
-                return media.shuffled().filter { $0.type == .series }
+                return media.shuffled().filter { $0.type == "series" }
             } else {
-                return media.shuffled().filter { $0.type == .film }
+                return media.shuffled().filter { $0.type == "film" }
             }
         } else if case .myList = index {
             
@@ -185,18 +197,18 @@ extension HomeViewModel {
             if case .all = dataSourceState.value {
                 return media.shuffled()
             } else if case .tvShows = dataSourceState.value {
-                return media.shuffled().filter { $0.type == .series }
+                return media.shuffled().filter { $0.type == "series" }
             } else {
-                return media.shuffled().filter { $0.type == .film }
+                return media.shuffled().filter { $0.type == "film" }
             }
         } else if case .blockbuster = index {
             let value = Float(7.5)
             if case .all = dataSourceState.value {
                 return media.filter { $0.rating > value }
             } else if case .tvShows = dataSourceState.value {
-                return media.filter { $0.type == .series }.filter { $0.rating > value }
+                return media.filter { $0.type == "series" }.filter { $0.rating > value }
             } else {
-                return media.filter { $0.type == .film }.filter { $0.rating > value }
+                return media.filter { $0.type == "film" }.filter { $0.rating > value }
             }
         } else {
             if case .all = dataSourceState.value {
@@ -206,12 +218,12 @@ extension HomeViewModel {
             } else if case .tvShows = dataSourceState.value {
                 return media
                     .shuffled()
-                    .filter { $0.type == .series }
+                    .filter { $0.type == "series" }
                     .filter { $0.genres.contains(sections[index.rawValue].title) }
             } else {
                 return media
                     .shuffled()
-                    .filter { $0.type == .film }
+                    .filter { $0.type == "film" }
                     .filter { $0.genres.contains(sections[index.rawValue].title) }
             }
         }

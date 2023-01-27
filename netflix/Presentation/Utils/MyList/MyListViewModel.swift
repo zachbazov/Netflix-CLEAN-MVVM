@@ -118,8 +118,8 @@ extension MyListViewModel {
             var media = list.value
             switch homeViewModel.dataSourceState.value {
             case .all: break
-            case .tvShows: media = media.filter { $0.type == .series }
-            case .movies: media = media.filter { $0.type == .film }
+            case .tvShows: media = media.filter { $0.type == "series" }
+            case .movies: media = media.filter { $0.type == "film" }
             }
             homeViewModel.sections[section.id].media = media.toArray()
         }

@@ -31,6 +31,17 @@ final class HomeUseCase {
 // MARK: - Methods
 
 extension HomeUseCase {
+    
+    private func request(cached: @escaping (MediaResponseDTO?) -> Void,
+                         completion: @escaping (Result<MediaResponseDTO, Error>) -> Void) -> Cancellable? {
+        return mediaRepository.getAll(cached: cached, completion: completion)
+    }
+    
+    func execute(cached: @escaping (MediaResponseDTO?) -> Void,
+                 completion: @escaping (Result<MediaResponseDTO, Error>) -> Void) -> Cancellable? {
+        return request(cached: cached, completion: completion)
+    }
+    
     private func request<T, U>(for response: T.Type,
                                request: U? = nil,
                                cached: ((T?) -> Void)?,
@@ -40,38 +51,53 @@ extension HomeUseCase {
             return sectionsRepository.getAll { result in
                 switch result {
                 case .success(let response):
-                    cached?(response as? T)
+//                    cached?(response as? T)
                     completion?(.success(response.toDomain() as! T))
                 case .failure(let error):
                     completion?(.failure(error))
                 }
             }
-        case is MediaResponse.GET.Many.Type:
-            return mediaRepository.getAll { result in
-                switch result {
-                case .success(let response):
-                    cached?(response as? T)
-                    completion?(.success(response.toDomain() as! T))
-                case .failure(let error):
-                    completion?(.failure(error))
-                }
+//        case is MediaResponse.Type:
+//            return mediaRepository.getAll { result in
+//                switch result {
+//                case .success(let response):
+////                    cached?(response as? T)
+//                    completion?(.success(response.toDomain() as! T))
+//                case .failure(let error):
+//                    completion?(.failure(error))
+//                }
+//            }
+        case is MediaResponseDTO.Type:
+            switch request {
+            case is Any.Type:
+                return mediaRepository.getAll(
+                    cached: { responseDTO in
+                        cached?(responseDTO as? T)
+                    },
+                    completion: { result in
+                        switch result {
+                        case .success(let response):
+                            completion?(.success(response as! T))
+                        case .failure(let error):
+                            completion?(.failure(error))
+                        }
+                    })
+            case is MediaRequestDTO.Type:
+                guard let request = request as? MediaRequestDTO else { return nil }
+                let requestDTO = MediaRequestDTO(id: request.id, slug: request.slug)
+                return mediaRepository.getOne(
+                    request: requestDTO,
+                    cached: { _ in },
+                    completion: { result in
+                        switch result {
+                        case .success(let response):
+                            completion?(.success(response as! T))
+                        case .failure(let error):
+                            completion?(.failure(error))
+                        }
+                    })
+            default: return nil
             }
-        case is MediaResponse.GET.One.Type:
-            guard let request = request as? MediaRequestDTO.GET.One else { return nil }
-            let requestDTO = MediaRequestDTO.GET.One(user: request.user,
-                                                     id: request.id,
-                                                     slug: request.slug)
-            return mediaRepository.getOne(
-                request: requestDTO,
-                cached: { _ in },
-                completion: { result in
-                    switch result {
-                    case .success(let response):
-                        completion?(.success(response as! T))
-                    case .failure(let error):
-                        completion?(.failure(error))
-                    }
-                })
         case is ListResponseDTO.GET.Type:
             guard let request = request as? ListRequestDTO.GET else { return nil }
             return listRepository.getOne(

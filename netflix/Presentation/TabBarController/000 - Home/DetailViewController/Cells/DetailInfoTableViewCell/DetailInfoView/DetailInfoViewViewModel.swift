@@ -30,13 +30,13 @@ struct DetailInfoViewViewModel {
         
         let media = viewModel.media
         
-        self.mediaType = media.type == .series
+        self.mediaType = media.type == "series"
             ? "S E R I E" : "F I L M"
         
         self.title = media.title
         self.downloadButtonTitle = "Download \(self.title)"
         
-        if media.type == .series {
+        if media.type == "series" {
             let numberOfSeasons = Int(media.seasons?.count ?? 1)
             self.duration = String(describing: media.duration)
             self.length = String(describing: numberOfSeasons > 1

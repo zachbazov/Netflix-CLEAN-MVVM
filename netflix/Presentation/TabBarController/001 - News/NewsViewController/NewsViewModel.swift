@@ -25,8 +25,8 @@ final class NewsViewModel {
     /// Allocate `useCase` property and it's dependencies.
     init() {
         let dataTransferService = Application.current.dataTransferService
-        let cache = Application.current.mediaResponseCache
-        let mediaRepository = MediaRepository(dataTransferService: dataTransferService, cache: cache)
+//        let cache = Application.current.mediaResponseCache
+        let mediaRepository = MediaRepository(dataTransferService: dataTransferService)
         self.useCase = NewsUseCase(mediaRepository: mediaRepository)
     }
 }

@@ -92,18 +92,3 @@ extension UserDTO {
                      mylist: mylist)
     }
 }
-
-extension UserDTO {
-    func toEntity(in context: NSManagedObjectContext) -> UserEntity? {
-        let entity: UserEntity = .init(context: context)
-        entity.identifier = _id
-        entity.name = name
-        entity.email = email
-        entity.password = password
-        entity.passwordConfirm = passwordConfirm
-        entity.role = role
-        entity.active = active ?? true
-        entity.mylist = mylist
-        return entity
-    }
-}

@@ -27,7 +27,7 @@ struct MediaResources {
 
 struct Media {
     let id: String?
-    let type: MediaType
+    let type: String
     let title: String
     let slug: String
     let createdAt: String
@@ -45,7 +45,7 @@ struct Media {
     let isSecret: Bool
     let resources: MediaResources
     let seasons: [String]?
-    let numberOfEpisodes: Int?
+//    let numberOfEpisodes: Int?
 }
 
 // MARK: - Mediable Implementation
@@ -86,8 +86,8 @@ extension Media {
                      isNewRelease: isNewRelease,
                      isSecret: isSecret,
                      resources: resources.toDTO(),
-                     seasons: seasons,
-                     numberOfEpisodes: numberOfEpisodes)
+                     seasons: seasons)
+//                     numberOfEpisodes: numberOfEpisodes)
     }
 }
 
