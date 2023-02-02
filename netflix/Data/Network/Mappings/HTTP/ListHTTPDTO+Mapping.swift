@@ -10,9 +10,7 @@ import Foundation
 // MARK: - ListHTTPDTO Type
 
 struct ListHTTPDTO {
-
     struct GET: HTTP {
-        
         struct Request: Decodable {
             let user: UserDTO
             var media: [MediaDTO]?
@@ -25,7 +23,6 @@ struct ListHTTPDTO {
     }
 
     struct PATCH: HTTP {
-        
         struct Request: Decodable {
             let user: String
             let media: [String]

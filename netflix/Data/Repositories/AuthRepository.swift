@@ -19,7 +19,7 @@ protocol AuthRepositoryEndpoints {
 
 struct AuthRepository {
     let dataTransferService: DataTransferService
-    let cache: AuthResponseStorage
+    let cache: AuthResponseStorage = Application.current.authResponseCache
 }
 
 // MARK: - Methods

@@ -7,6 +7,12 @@
 
 import Foundation
 
+// MARK: - SeasonRepositoryEndpoints Protocol
+
+protocol SeasonRepositoryEndpoints {
+    static func getSeason(with request: SeasonHTTPDTO.Request) -> Endpoint<SeasonHTTPDTO.Response>
+}
+
 // MARK: - SeasonRepository Type
 
 struct SeasonRepository {

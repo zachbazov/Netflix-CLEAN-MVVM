@@ -60,18 +60,22 @@ extension APIEndpoint: MediaRepositoryEndpoints {
                         queryParameters: request.slug != nil ? ["slug": request.slug ?? ""] : ["id": request.id ?? ""])
     }
     
-    static func searchMedia(with request: SearchHTTPDTO.Request) -> Endpoint<SearchHTTPDTO.Response> {
-        return Endpoint(path: "api/v1/media/search",
-                        method: .get,
-                        queryParameters: ["slug": request.regex, "title": request.regex])
-    }
-    
     static func getUpcomingMedia(with request: NewsHTTPDTO.Request) -> Endpoint<NewsHTTPDTO.Response> {
         return Endpoint(path: "api/v1/media",
                         method: .get,
                         queryParameters: request.queryParams)
     }
     
+    static func searchMedia(with request: SearchHTTPDTO.Request) -> Endpoint<SearchHTTPDTO.Response> {
+        return Endpoint(path: "api/v1/media/search",
+                        method: .get,
+                        queryParameters: ["slug": request.regex, "title": request.regex])
+    }
+}
+
+// MARK: - SeasonRepositoryEndpoints Implementation
+
+extension APIEndpoint: SeasonRepositoryEndpoints {
     static func getSeason(with request: SeasonHTTPDTO.Request) -> Endpoint<SeasonHTTPDTO.Response> {
         return Endpoint(path: "api/v1/seasons",
                         method: .get,

@@ -26,8 +26,7 @@ final class AuthViewModel {
     /// Allocate `useCase` property and it's dependencies.
     init() {
         let dataTransferService = Application.current.dataTransferService
-        let authResponseCache = Application.current.authResponseCache
-        let authRepository = AuthRepository(dataTransferService: dataTransferService, cache: authResponseCache)
+        let authRepository = AuthRepository(dataTransferService: dataTransferService)
         self.useCase = AuthUseCase(authRepository: authRepository)
     }
     
