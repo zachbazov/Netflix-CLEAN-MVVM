@@ -10,7 +10,6 @@ import Foundation
 // MARK: - SectionHTTPDTO Type
 
 struct SectionHTTPDTO: HTTP {
-    
     typealias Request = Void
 
     struct Response: Decodable {

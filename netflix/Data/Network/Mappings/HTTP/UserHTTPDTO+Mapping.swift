@@ -10,7 +10,6 @@ import CoreData
 // MARK: - UserHTTPDTO Type
 
 struct UserHTTPDTO: HTTP {
-    
     struct Request: Decodable {
         let user: UserDTO
     }

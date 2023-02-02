@@ -10,7 +10,6 @@ import Foundation
 // MARK: - SeasonHTTP Type
 
 struct SeasonHTTPDTO: HTTP {
-    
     struct Request {
         var id: String? = nil
         var slug: String? = nil

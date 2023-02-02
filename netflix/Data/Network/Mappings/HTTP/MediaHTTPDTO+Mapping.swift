@@ -10,7 +10,6 @@ import CoreData
 // MARK: - MediaHTTPDTO Type
 
 struct MediaHTTPDTO: HTTP {
-    
     struct Request: Decodable {
         let id: String?
         let slug: String?
