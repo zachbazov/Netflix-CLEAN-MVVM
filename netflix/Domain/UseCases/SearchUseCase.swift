@@ -22,12 +22,7 @@ struct MediaQuery: Equatable {
 // MARK: - SearchUseCase Type
 
 final class SearchUseCase {
-    
-    // MARK: Properties
-    
     private let mediaRepository: MediaRepository
-    
-    // MARK: Initializer
     
     init(mediaRepository: MediaRepository) {
         self.mediaRepository = mediaRepository

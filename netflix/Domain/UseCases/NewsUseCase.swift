@@ -10,12 +10,7 @@ import Foundation
 // MARK: - NewsUseCase Type
 
 final class NewsUseCase {
-    
-    // MARK: Properties
-    
     private let mediaRepository: MediaRepository
-    
-    // MARK: Initializer
     
     init(mediaRepository: MediaRepository) {
         self.mediaRepository = mediaRepository
@@ -37,7 +32,7 @@ extension NewsUseCase {
     
     func fetchUpcomingMedia(completion: @escaping (Result<NewsHTTPDTO.Response, Error>) -> Void) -> Cancellable? {
             let params = ["isNewRelease": true]
-        let requestDTO = NewsHTTPDTO.Request(queryParams: params)
+            let requestDTO = NewsHTTPDTO.Request(queryParams: params)
             let task = RepositoryTask()
             let dataTransferService = Application.current.dataTransferService
             

@@ -61,3 +61,47 @@ extension AuthUseCase {
         return request(completion: completion)
     }
 }
+
+/*
+ extension AuthUseCase {
+     private func request<T, U>(for response: T.Type,
+                                request: U? = nil,
+                                cached: ((T?) -> Void)?,
+                                completion: ((Result<T, Error>) -> Void)?) -> Cancellable? {
+         switch request {
+         case is UserHTTPDTO.Request.Type:
+             guard let request = request as? UserHTTPDTO.Request else { return nil }
+             if let cached = cached as? ((UserHTTPDTO.Response?) -> Void) {
+                 let completion = completion as? ((Result<UserHTTPDTO.Response, Error>) -> Void) ?? { _ in }
+                 return authRepository.signIn(request: request,
+                                              cached: cached,
+                                              completion: completion)
+             } else {
+                 let completion = completion as? ((Result<UserHTTPDTO.Response, Error>) -> Void) ?? { _ in }
+                 return authRepository.signUp(request: request,
+                                              completion: completion)
+             }
+         default: return nil
+         }
+     }
+     
+     func execute<T, U>(for response: T.Type,
+                        request: U? = nil,
+                        cached: ((T?) -> Void)?,
+                        completion: ((Result<T, Error>) -> Void)?) -> Cancellable? {
+         return self.request(for: response,
+                             request: request,
+                             cached: cached,
+                             completion: completion)
+     }
+     
+     private func request(completion: @escaping (Result<Void, DataTransferError>) -> Void) -> Cancellable? {
+         return authRepository.signOut(completion: completion)
+     }
+     
+     func execute(completion: @escaping (Result<Void, DataTransferError>) -> Void) -> Cancellable? {
+         return request(completion: completion)
+     }
+ }
+
+ */

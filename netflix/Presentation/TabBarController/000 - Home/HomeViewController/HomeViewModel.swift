@@ -36,11 +36,12 @@ final class HomeViewModel {
     /// Allocate `useCase` property and it's dependencies.
     init() {
         let dataTransferService = Application.current.dataTransferService
-//        let mediaResponseCache = Application.current.mediaResponseCache
         let sectionRepository = SectionRepository(dataTransferService: dataTransferService)
         let mediaRepository = MediaRepository(dataTransferService: dataTransferService)
         let listRepository = ListRepository(dataTransferService: dataTransferService)
-        let useCase = HomeUseCase(sectionsRepository: sectionRepository, mediaRepository: mediaRepository, listRepository: listRepository)
+        let useCase = HomeUseCase(sectionsRepository: sectionRepository,
+                                  mediaRepository: mediaRepository,
+                                  listRepository: listRepository)
         self.useCase = useCase
         self.viewDidLoad()
     }
@@ -61,15 +62,6 @@ final class HomeViewModel {
 extension HomeViewModel {
     func dataDidBeganLoading() {
         fetchSections()
-        
-//        useCase.mediaRepository.cache.getResponse { result in
-//            switch result {
-//            case .success(let response):
-//                printIfDebug(.debug, "rrrrr \(response)")
-//            case .failure(let error):
-//                printIfDebug(.debug, "err \(error)")
-//            }
-//        }
     }
     
     private func dataDidEndLoading() {
@@ -121,6 +113,8 @@ extension HomeViewModel {
     
     private func fetchMedia() {
         mediaTask = useCase.execute(
+            for: MediaHTTPDTO.Response.self,
+            request: Any.self,
             cached: { [weak self] responseDTO in
                 guard let self = self, let response = responseDTO else { return }
                 asynchrony {

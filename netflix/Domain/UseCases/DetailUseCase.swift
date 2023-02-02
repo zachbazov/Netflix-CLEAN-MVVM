@@ -10,12 +10,7 @@ import Foundation
 // MARK: - DetailUseCase Type
 
 final class DetailUseCase {
-    
-    // MARK: Properties
-    
     private let seasonsRepository: SeasonRepository
-    
-    // MARK: Initializer
     
     init(seasonsRepository: SeasonRepository) {
         self.seasonsRepository = seasonsRepository
