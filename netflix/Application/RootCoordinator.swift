@@ -54,8 +54,8 @@ extension RootCoordinator: RootCoordinable {
         window?.rootViewController = controller
         
         let authService = Application.current.authService
-        let requestDTO = AuthRequestDTO(user: authService.user!)
-        authService.signInRequest(request: requestDTO) { [weak self] in
+        let requestDTO = UserHTTPDTO.Request(user: authService.user!)
+        authService.signInRequest(requestDTO: requestDTO) { [weak self] in
             asynchrony {
                 self?.tabCoordinator.showScreen(.home)
             }

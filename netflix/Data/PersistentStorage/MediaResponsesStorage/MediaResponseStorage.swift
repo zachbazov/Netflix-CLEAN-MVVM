@@ -30,7 +30,7 @@ extension MediaResponseStorage {
         return request
     }
     
-    func getResponse(completion: @escaping (Result<MediaResponseDTO?, CoreDataStorageError>) -> Void) {
+    func getResponse(completion: @escaping (Result<MediaHTTPDTO.Response?, CoreDataStorageError>) -> Void) {
         coreDataStorage.performBackgroundTask { context in
             do {
                 let fetchRequest = self.fetchRequest()
@@ -42,7 +42,7 @@ extension MediaResponseStorage {
         }
     }
     
-    func save(response: MediaResponseDTO) {
+    func save(response: MediaHTTPDTO.Response) {
         coreDataStorage.performBackgroundTask { [weak self] context in
             do {
                 self?.deleteResponse(in: context)

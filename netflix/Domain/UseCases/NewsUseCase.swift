@@ -25,7 +25,7 @@ final class NewsUseCase {
 // MARK: - Methods
 
 extension NewsUseCase {
-    private func execute(completion: @escaping (Result<NewsResponseDTO, Error>) -> Void) -> Cancellable? {
+    private func execute(completion: @escaping (Result<NewsHTTPDTO.Response, Error>) -> Void) -> Cancellable? {
             return fetchUpcomingMedia { result in
                 if case let .success(responseDTO) = result {
                     completion(.success(responseDTO))
@@ -35,15 +35,15 @@ extension NewsUseCase {
             }
         }
     
-    func fetchUpcomingMedia(completion: @escaping (Result<NewsResponseDTO, Error>) -> Void) -> Cancellable? {
+    func fetchUpcomingMedia(completion: @escaping (Result<NewsHTTPDTO.Response, Error>) -> Void) -> Cancellable? {
             let params = ["isNewRelease": true]
-            let requestDTO = NewsRequestDTO(queryParams: params)
+        let requestDTO = NewsHTTPDTO.Request(queryParams: params)
             let task = RepositoryTask()
             let dataTransferService = Application.current.dataTransferService
             
             guard !task.isCancelled else { return nil }
             
-            let endpoint = APIEndpoint.MediaRepository.getUpcomingMedia(with: requestDTO)
+            let endpoint = APIEndpoint.getUpcomingMedia(with: requestDTO)
             task.networkTask = dataTransferService.request(with: endpoint, completion: { result in
                 if case let .success(responseDTO) = result {
                     completion(.success(responseDTO))

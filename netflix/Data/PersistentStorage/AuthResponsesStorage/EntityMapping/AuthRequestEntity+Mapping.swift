@@ -10,7 +10,7 @@ import CoreData
 // MARK: - AuthRequestEntity + Mapping
 
 extension AuthRequestEntity {
-    func toDTO() -> AuthRequestDTO {
+    func toDTO() -> UserHTTPDTO.Request {
         let userDTO = UserDTO(_id: user!._id,
                               name: user!.name,
                               email: user!.email,
@@ -25,7 +25,7 @@ extension AuthRequestEntity {
 
 // MARK: - Mapping
 
-extension AuthRequestDTO {
+extension UserHTTPDTO.Request {
     func toEntity(in context: NSManagedObjectContext) -> AuthRequestEntity {
         let entity: AuthRequestEntity = .init(context: context)
         entity.user?._id = user._id

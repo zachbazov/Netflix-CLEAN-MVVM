@@ -10,8 +10,8 @@ import Foundation
 // MARK: - ListRepositoryEndpoints Protocol
 
 protocol ListRepositoryEndpoints {
-    static func getMyList(with request: ListRequestDTO.GET) -> Endpoint<ListResponseDTO.GET>
-    static func updateMyList(with request: ListRequestDTO.PATCH) -> Endpoint<ListResponseDTO.PATCH>
+    static func getMyList(with request: ListHTTPDTO.GET.Request) -> Endpoint<ListHTTPDTO.GET.Response>
+    static func updateMyList(with request: ListHTTPDTO.PATCH.Request) -> Endpoint<ListHTTPDTO.PATCH.Response>
 }
 
 // MARK: - ListRepository Type
@@ -23,14 +23,14 @@ struct ListRepository {
 // MARK: - Methods
 
 extension ListRepository {
-    func getOne(request: ListRequestDTO.GET,
-                completion: @escaping (Result<ListResponseDTO.GET, Error>) -> Void) -> Cancellable? {
-        let requestDTO = ListRequestDTO.GET(user: request.user)
+    func getOne(request: ListHTTPDTO.GET.Request,
+                completion: @escaping (Result<ListHTTPDTO.GET.Response, Error>) -> Void) -> Cancellable? {
+        let requestDTO = ListHTTPDTO.GET.Request(user: request.user)
         let task = RepositoryTask()
         
         guard !task.isCancelled else { return nil }
         
-        let endpoint = APIEndpoint.ListRepository.getMyList(with: requestDTO)
+        let endpoint = APIEndpoint.getMyList(with: requestDTO)
         task.networkTask = dataTransferService.request(with: endpoint) { result in
             switch result {
             case .success(let response):
@@ -43,13 +43,13 @@ extension ListRepository {
         return task
     }
     
-    func updateOne(request: ListRequestDTO.PATCH,
-                   completion: @escaping (Result<ListResponseDTO.PATCH, Error>) -> Void) -> Cancellable? {
+    func updateOne(request: ListHTTPDTO.PATCH.Request,
+                   completion: @escaping (Result<ListHTTPDTO.PATCH.Response, Error>) -> Void) -> Cancellable? {
         let task = RepositoryTask()
         
         guard !task.isCancelled else { return nil }
         
-        let endpoint = APIEndpoint.ListRepository.updateMyList(with: request)
+        let endpoint = APIEndpoint.updateMyList(with: request)
         task.networkTask = dataTransferService.request(
             with: endpoint,
             completion: { result in

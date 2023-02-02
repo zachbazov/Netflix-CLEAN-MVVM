@@ -26,8 +26,8 @@ final class DetailUseCase {
 
 extension DetailUseCase {
     private func request<T>(for response: T.Type,
-                            with request: SeasonRequestDTO.GET,
-                            completion: @escaping (Result<SeasonResponse.GET, Error>) -> Void) -> Cancellable? {
+                            with request: SeasonHTTPDTO.Request,
+                            completion: @escaping (Result<SeasonHTTP.Response, Error>) -> Void) -> Cancellable? {
         return seasonsRepository.getSeason(with: request) { result in
             switch result {
             case .success(let response):
@@ -39,8 +39,8 @@ extension DetailUseCase {
     }
     
     func execute<T>(for response: T.Type,
-                    with request: SeasonRequestDTO.GET,
-                    completion: @escaping (Result<SeasonResponse.GET, Error>) -> Void) -> Cancellable? {
+                    with request: SeasonHTTPDTO.Request,
+                    completion: @escaping (Result<SeasonHTTP.Response, Error>) -> Void) -> Cancellable? {
         return self.request(for: response, with: request, completion: completion)
     }
 }

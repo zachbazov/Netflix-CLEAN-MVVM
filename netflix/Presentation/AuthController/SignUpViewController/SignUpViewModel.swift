@@ -44,9 +44,9 @@ extension SignUpViewModel {
                               password: password,
                               passwordConfirm: passwordConfirm)
         // Create a new sign up request user-based.
-        let requestDTO = AuthRequestDTO(user: userDTO)
+        let requestDTO = UserHTTPDTO.Request(user: userDTO)
         // Invoke the request.
-        authService.signUpRequest(request: requestDTO) {
+        authService.signUpRequest(requestDTO: requestDTO) {
             // Present the TabBar screen.
             asynchrony {
                 coordinator.showScreen(.tabBar)

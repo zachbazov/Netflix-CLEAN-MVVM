@@ -1,19 +1,19 @@
 //
-//  SectionResponseDTO+Mapping.swift
+//  SectionHTTPDTO+Mapping.swift
 //  netflix
 //
-//  Created by Zach Bazov on 07/09/2022.
+//  Created by Zach Bazov on 01/02/2023.
 //
 
 import Foundation
 
-// MARK: - SectionResponseDTO Type
+// MARK: - SectionHTTPDTO Type
 
-struct SectionResponseDTO {
+struct SectionHTTPDTO: HTTP {
     
-    // MARK: GET Type
-    
-    struct GET: Decodable {
+    typealias Request = Void
+
+    struct Response: Decodable {
         let status: String
         let results: Int
         let data: [SectionDTO]
@@ -22,8 +22,8 @@ struct SectionResponseDTO {
 
 // MARK: - Mapping
 
-extension SectionResponseDTO.GET {
-    func toDomain() -> SectionResponse.GET {
+extension SectionHTTPDTO.Response {
+    func toDomain() -> SectionHTTP.Response {
         return .init(status: status,
                      results: results,
                      data: data.map { $0.toDomain() })

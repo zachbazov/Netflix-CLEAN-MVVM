@@ -85,21 +85,13 @@ public final class MediaResourcesDTO: NSObject, Codable, NSSecureCoding {
     }
 }
 
-// MARK: - MediaType Type
-
-//@objc public final class MediaType: NSObject, Codable {
-//    enum CodingKeys: String, CodingKey {
-//        case series
-//        case film = "films"
-//    }
-//
-//    var series = "series"
-//    var film = "films"
-//}
-
 // MARK: - MediaDTO Type
 
-@objc(MediaDTO) public final class MediaDTO: NSObject, Codable, NSSecureCoding {
+@objc(MediaDTO)
+public final class MediaDTO: NSObject, Codable, NSSecureCoding {
+    
+    // MARK: CodingKeys Type
+    
     enum CodingKeys: String, CodingKey {
         case id
         case type
@@ -107,7 +99,7 @@ public final class MediaResourcesDTO: NSObject, Codable, NSSecureCoding {
         case slug
         case createdAt
         case rating
-        case desc = "description"
+        case _description = "description"
         case cast
         case writers
         case duration
@@ -120,8 +112,9 @@ public final class MediaResourcesDTO: NSObject, Codable, NSSecureCoding {
         case isSecret
         case resources
         case seasons
-//        case numberOfEpisodes
     }
+    
+    // MARK: Properties
     
     let id: String?
     let type: String
@@ -129,7 +122,7 @@ public final class MediaResourcesDTO: NSObject, Codable, NSSecureCoding {
     let slug: String
     let createdAt: String
     let rating: Float
-    let desc: String
+    let _description: String
     let cast: String
     let writers: String?
     let duration: String?
@@ -142,7 +135,8 @@ public final class MediaResourcesDTO: NSObject, Codable, NSSecureCoding {
     let isSecret: Bool
     let resources: MediaResourcesDTO
     let seasons: [String]?
-//    let numberOfEpisodes: Int?
+    
+    // MARK: Initializer
     
     init(id: String?,
          type: String,
@@ -163,14 +157,13 @@ public final class MediaResourcesDTO: NSObject, Codable, NSSecureCoding {
          isSecret: Bool,
          resources: MediaResourcesDTO,
          seasons: [String]?) {
-//         numberOfEpisodes: Int?) {
         self.id = id
         self.type = type
         self.title = title
         self.slug = slug
         self.createdAt = createdAt
         self.rating = rating
-        self.desc = description
+        self._description = description
         self.cast = cast
         self.writers = writers
         self.duration = duration
@@ -183,34 +176,11 @@ public final class MediaResourcesDTO: NSObject, Codable, NSSecureCoding {
         self.isSecret = isSecret
         self.resources = resources
         self.seasons = seasons
-//        self.numberOfEpisodes = numberOfEpisodes
     }
     
     // MARK: NSSecureCoding Implementation
     
     public static var supportsSecureCoding: Bool { true }
-    
-    public init?(coder: NSCoder) {
-        self.id = coder.decodeObject(of: NSString.self, forKey: "id") as? String ?? ""
-        self.type = coder.decodeObject(of: NSString.self, forKey: "type") as? String ?? ""
-        self.title = coder.decodeObject(of: NSString.self, forKey: "title") as? String ?? ""
-        self.slug = coder.decodeObject(of: NSString.self, forKey: "slug") as? String ?? ""
-        self.createdAt = coder.decodeObject(of: NSString.self, forKey: "createdAt") as? String ?? ""
-        self.rating = coder.decodeFloat(forKey: "rating")
-        self.desc = coder.decodeObject(of: NSString.self, forKey: "desc") as? String ?? ""
-        self.cast = coder.decodeObject(of: NSString.self, forKey: "cast") as? String ?? ""
-        self.writers = coder.decodeObject(of: NSString.self, forKey: "writers") as? String ?? ""
-        self.duration = coder.decodeObject(of: NSString.self, forKey: "duration") as? String ?? ""
-        self.length = coder.decodeObject(of: NSString.self, forKey: "length") as? String ?? ""
-        self.genres = coder.decodeObject(of: [NSArray.self, NSString.self], forKey: "genres") as? [String] ?? []
-        self.hasWatched = coder.decodeBool(forKey: "hasWatched")
-        self.isHD = coder.decodeBool(forKey: "isHD")
-        self.isExclusive = coder.decodeBool(forKey: "isExclusive")
-        self.isNewRelease = coder.decodeBool(forKey: "isNewRelease")
-        self.isSecret = coder.decodeBool(forKey: "isSecret")
-        self.resources = coder.decodeObject(of: MediaResourcesDTO.self, forKey: "resources")!
-        self.seasons = coder.decodeObject(of: [NSArray.self, NSString.self], forKey: "seasons") as? [String] ?? []
-    }
 
     public func encode(with coder: NSCoder) {
         coder.encode(id, forKey: "id")
@@ -219,7 +189,7 @@ public final class MediaResourcesDTO: NSObject, Codable, NSSecureCoding {
         coder.encode(slug, forKey: "slug")
         coder.encode(createdAt, forKey: "createdAt")
         coder.encode(rating, forKey: "rating")
-        coder.encode(desc, forKey: "desc")
+        coder.encode(_description, forKey: "desc")
         coder.encode(cast, forKey: "cast")
         coder.encode(writers, forKey: "writers")
         coder.encode(duration, forKey: "duration")
@@ -232,6 +202,28 @@ public final class MediaResourcesDTO: NSObject, Codable, NSSecureCoding {
         coder.encode(isSecret, forKey: "isSecret")
         coder.encode(resources, forKey: "resources")
         coder.encode(seasons, forKey: "seasons")
+    }
+    
+    public init?(coder: NSCoder) {
+        self.id = coder.decodeObject(of: NSString.self, forKey: "id") as? String ?? ""
+        self.type = coder.decodeObject(of: NSString.self, forKey: "type") as? String ?? ""
+        self.title = coder.decodeObject(of: NSString.self, forKey: "title") as? String ?? ""
+        self.slug = coder.decodeObject(of: NSString.self, forKey: "slug") as? String ?? ""
+        self.createdAt = coder.decodeObject(of: NSString.self, forKey: "createdAt") as? String ?? ""
+        self.rating = coder.decodeFloat(forKey: "rating")
+        self._description = coder.decodeObject(of: NSString.self, forKey: "desc") as? String ?? ""
+        self.cast = coder.decodeObject(of: NSString.self, forKey: "cast") as? String ?? ""
+        self.writers = coder.decodeObject(of: NSString.self, forKey: "writers") as? String ?? ""
+        self.duration = coder.decodeObject(of: NSString.self, forKey: "duration") as? String ?? ""
+        self.length = coder.decodeObject(of: NSString.self, forKey: "length") as? String ?? ""
+        self.genres = coder.decodeObject(of: [NSArray.self, NSString.self], forKey: "genres") as? [String] ?? []
+        self.hasWatched = coder.decodeBool(forKey: "hasWatched")
+        self.isHD = coder.decodeBool(forKey: "isHD")
+        self.isExclusive = coder.decodeBool(forKey: "isExclusive")
+        self.isNewRelease = coder.decodeBool(forKey: "isNewRelease")
+        self.isSecret = coder.decodeBool(forKey: "isSecret")
+        self.resources = coder.decodeObject(of: MediaResourcesDTO.self, forKey: "resources")!
+        self.seasons = coder.decodeObject(of: [NSArray.self, NSString.self], forKey: "seasons") as? [String] ?? []
     }
 }
 
@@ -261,7 +253,7 @@ extension MediaDTO {
                      slug: slug,
                      createdAt: createdAt,
                      rating: rating,
-                     description: description,
+                     description: _description,
                      cast: cast,
                      writers: writers ?? "",
                      duration: duration ?? "",
@@ -274,6 +266,11 @@ extension MediaDTO {
                      isSecret: isSecret,
                      resources: resources.toDomain(),
                      seasons: seasons)
-        //                     numberOfEpisodes: numberOfEpisodes)
+    }
+}
+
+extension Array where Element == MediaDTO {
+    func toDomain() -> [Media] {
+        return map { $0.toDomain() }
     }
 }

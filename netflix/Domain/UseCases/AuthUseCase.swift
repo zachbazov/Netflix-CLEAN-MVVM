@@ -7,30 +7,10 @@
 
 import Foundation
 
-// MARK: - AuthUseCaseRequestValue Type
-
-struct AuthUseCaseRequestValue {
-    var method: AuthMethod
-    let request: AuthRequest
-}
-
-// MARK: - AuthMethod Type
-
-enum AuthMethod {
-    case signup
-    case signin
-    case signout
-}
-
 // MARK: - AuthUseCase Type
 
 final class AuthUseCase {
-    
-    // MARK: Properties
-    
     private let authRepository: AuthRepository
-    
-    // MARK: Initializer
     
     init(authRepository: AuthRepository) {
         self.authRepository = authRepository
@@ -43,30 +23,30 @@ extension AuthUseCase {
     
     // MARK: Sign Up
     
-    private func request(requestValue: AuthUseCaseRequestValue,
-                         completion: @escaping (Result<AuthResponseDTO, Error>) -> Void) -> Cancellable? {
-        return authRepository.signUp(request: requestValue.request, completion: completion)
+    private func request(requestDTO: UserHTTPDTO.Request,
+                         completion: @escaping (Result<UserHTTPDTO.Response, Error>) -> Void) -> Cancellable? {
+        return authRepository.signUp(request: requestDTO, completion: completion)
     }
     
-    func execute(requestValue: AuthUseCaseRequestValue,
-                 completion: @escaping (Result<AuthResponseDTO, Error>) -> Void) -> Cancellable? {
-        return request(requestValue: requestValue, completion: completion)
+    func execute(requestDTO: UserHTTPDTO.Request,
+                 completion: @escaping (Result<UserHTTPDTO.Response, Error>) -> Void) -> Cancellable? {
+        return request(requestDTO: requestDTO, completion: completion)
     }
     
     // MARK: Sign In
     
-    private func request(requestValue: AuthUseCaseRequestValue,
-                         cached: @escaping (AuthResponseDTO?) -> Void,
-                         completion: @escaping (Result<AuthResponseDTO, Error>) -> Void) -> Cancellable? {
-        return authRepository.signIn(request: requestValue.request,
+    private func request(requestDTO: UserHTTPDTO.Request,
+                         cached: @escaping (UserHTTPDTO.Response?) -> Void,
+                         completion: @escaping (Result<UserHTTPDTO.Response, Error>) -> Void) -> Cancellable? {
+        return authRepository.signIn(request: requestDTO,
                                      cached: cached,
                                      completion: completion)
     }
     
-    func execute(requestValue: AuthUseCaseRequestValue,
-                 cached: @escaping (AuthResponseDTO?) -> Void,
-                 completion: @escaping (Result<AuthResponseDTO, Error>) -> Void) -> Cancellable? {
-        return request(requestValue: requestValue,
+    func execute(requestDTO: UserHTTPDTO.Request,
+                 cached: @escaping (UserHTTPDTO.Response?) -> Void,
+                 completion: @escaping (Result<UserHTTPDTO.Response, Error>) -> Void) -> Cancellable? {
+        return request(requestDTO: requestDTO,
                        cached: cached,
                        completion: completion)
     }

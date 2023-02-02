@@ -21,5 +21,7 @@ extension Trailer: Mediable {}
 // MARK: - Mapping
 
 extension Array where Element == String {
-    func toDomain() -> Array<Trailer> { map { .init(urlPath: $0) } }
+    func toDomain() -> [Trailer] {
+        return map { .init(urlPath: $0) }
+    }
 }

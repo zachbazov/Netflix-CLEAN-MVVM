@@ -102,14 +102,14 @@ extension HomeViewModel: ViewModel {
 extension HomeViewModel {
     private func fetchSections() {
         sectionsTask = useCase.execute(
-            for: SectionResponse.GET.self,
+            for: SectionHTTPDTO.Response.self,
             request: Any.self,
             cached: { _ in },
             completion: { [weak self] result in
                 guard let self = self else { return }
                 if case let .success(response) = result {
                     /// Allocate sections with the response data.
-                    self.sections = response.data
+                    self.sections = response.data.toDomain()
                     /// Execute media fetching operation.
                     self.fetchMedia()
                 }
@@ -124,14 +124,14 @@ extension HomeViewModel {
             cached: { [weak self] responseDTO in
                 guard let self = self, let response = responseDTO else { return }
                 asynchrony {
-                    self.media = response.data.map { $0.toDomain() }
+                    self.media = response.data.toDomain()
                     self.dataDidEndLoading()
                 }
             }, completion: { [weak self] result in
                 guard let self = self else { return }
                 switch result {
                 case .success(let response):
-                    self.media = response.data.map { $0.toDomain() }
+                    self.media = response.data.toDomain()
                     self.dataDidEndLoading()
                 case .failure(let error):
                     printIfDebug(.error, "\(error)")

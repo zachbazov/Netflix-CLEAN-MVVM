@@ -24,3 +24,9 @@ extension SectionDTO {
                      media: media.map { $0.toDomain() })
     }
 }
+
+extension Array where Element == SectionDTO {
+    func toDomain() -> [Section] {
+        return map { $0.toDomain() }
+    }
+}

@@ -16,13 +16,13 @@ struct SeasonRepository {
 // MARK: - Methods
 
 extension SeasonRepository {
-    func getSeason(with request: SeasonRequestDTO.GET,
-                   completion: @escaping (Result<SeasonResponseDTO.GET, Error>) -> Void) -> Cancellable? {
+    func getSeason(with request: SeasonHTTPDTO.Request,
+                   completion: @escaping (Result<SeasonHTTPDTO.Response, Error>) -> Void) -> Cancellable? {
         let task = RepositoryTask()
         
         guard !task.isCancelled else { return nil }
         
-        let endpoint = APIEndpoint.MediaRepository.getSeason(with: request)
+        let endpoint = APIEndpoint.getSeason(with: request)
         task.networkTask = dataTransferService.request(with: endpoint) { result in
             switch result {
             case .success(let response):

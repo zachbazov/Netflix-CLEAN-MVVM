@@ -17,7 +17,7 @@ struct DetailCollectionViewViewModel {
     var media: Media!
     var section: Section!
     var season: Observable<Season?>!
-    var fetchSeason: ((SeasonRequestDTO.GET, @escaping () -> Void) -> Void)?
+    var fetchSeason: ((SeasonHTTPDTO.Request, @escaping () -> Void) -> Void)?
     
     // MARK: Initializer
     

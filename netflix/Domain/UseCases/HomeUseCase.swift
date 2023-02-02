@@ -32,13 +32,13 @@ final class HomeUseCase {
 
 extension HomeUseCase {
     
-    private func request(cached: @escaping (MediaResponseDTO?) -> Void,
-                         completion: @escaping (Result<MediaResponseDTO, Error>) -> Void) -> Cancellable? {
+    private func request(cached: @escaping (MediaHTTPDTO.Response?) -> Void,
+                         completion: @escaping (Result<MediaHTTPDTO.Response, Error>) -> Void) -> Cancellable? {
         return mediaRepository.getAll(cached: cached, completion: completion)
     }
     
-    func execute(cached: @escaping (MediaResponseDTO?) -> Void,
-                 completion: @escaping (Result<MediaResponseDTO, Error>) -> Void) -> Cancellable? {
+    func execute(cached: @escaping (MediaHTTPDTO.Response?) -> Void,
+                 completion: @escaping (Result<MediaHTTPDTO.Response, Error>) -> Void) -> Cancellable? {
         return request(cached: cached, completion: completion)
     }
     
@@ -47,27 +47,16 @@ extension HomeUseCase {
                                cached: ((T?) -> Void)?,
                                completion: ((Result<T, Error>) -> Void)?) -> Cancellable? {
         switch response {
-        case is SectionResponse.GET.Type:
+        case is SectionHTTPDTO.Response.Type:
             return sectionsRepository.getAll { result in
                 switch result {
                 case .success(let response):
-//                    cached?(response as? T)
-                    completion?(.success(response.toDomain() as! T))
+                    completion?(.success(response as! T))
                 case .failure(let error):
                     completion?(.failure(error))
                 }
             }
-//        case is MediaResponse.Type:
-//            return mediaRepository.getAll { result in
-//                switch result {
-//                case .success(let response):
-////                    cached?(response as? T)
-//                    completion?(.success(response.toDomain() as! T))
-//                case .failure(let error):
-//                    completion?(.failure(error))
-//                }
-//            }
-        case is MediaResponseDTO.Type:
+        case is MediaHTTPDTO.Response.Type:
             switch request {
             case is Any.Type:
                 return mediaRepository.getAll(
@@ -82,9 +71,9 @@ extension HomeUseCase {
                             completion?(.failure(error))
                         }
                     })
-            case is MediaRequestDTO.Type:
-                guard let request = request as? MediaRequestDTO else { return nil }
-                let requestDTO = MediaRequestDTO(id: request.id, slug: request.slug)
+            case is MediaHTTPDTO.Request.Type:
+                guard let request = request as? MediaHTTPDTO.Request else { return nil }
+                let requestDTO = MediaHTTPDTO.Request(id: request.id, slug: request.slug)
                 return mediaRepository.getOne(
                     request: requestDTO,
                     cached: { _ in },
@@ -98,8 +87,8 @@ extension HomeUseCase {
                     })
             default: return nil
             }
-        case is ListResponseDTO.GET.Type:
-            guard let request = request as? ListRequestDTO.GET else { return nil }
+        case is ListHTTPDTO.GET.Response.Type:
+            guard let request = request as? ListHTTPDTO.GET.Request else { return nil }
             return listRepository.getOne(
                 request: request,
                 completion: { result in
@@ -110,8 +99,8 @@ extension HomeUseCase {
                         completion?(.failure(error))
                     }
                 })
-        case is ListResponseDTO.PATCH.Type:
-            guard let request = request as? ListRequestDTO.PATCH else { return nil }
+        case is ListHTTPDTO.PATCH.Response.Type:
+            guard let request = request as? ListHTTPDTO.PATCH.Request else { return nil }
             return listRepository.updateOne(request: request) { result in
                 switch result {
                 case .success(let response):

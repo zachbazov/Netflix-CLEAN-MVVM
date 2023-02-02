@@ -10,7 +10,7 @@ import Foundation
 // MARK: - SectionsRepositoryEndpoints Protocol
 
 protocol SectionsRepositoryEndpoints {
-    static func getAllSections() -> Endpoint<SectionResponseDTO.GET>
+    static func getAllSections() -> Endpoint<SectionHTTPDTO.Response>
 }
 
 // MARK: - SectionRepository Type
@@ -22,12 +22,12 @@ struct SectionRepository {
 // MARK: - Methods
 
 extension SectionRepository {
-    func getAll(completion: @escaping (Result<SectionResponseDTO.GET, Error>) -> Void) -> Cancellable? {
+    func getAll(completion: @escaping (Result<SectionHTTPDTO.Response, Error>) -> Void) -> Cancellable? {
         let task = RepositoryTask()
         
         guard !task.isCancelled else { return nil }
         
-        let endpoint = APIEndpoint.SectionsRepository.getAllSections()
+        let endpoint = APIEndpoint.getAllSections()
         task.networkTask = dataTransferService.request(with: endpoint) { result in
             switch result {
             case .success(let response):

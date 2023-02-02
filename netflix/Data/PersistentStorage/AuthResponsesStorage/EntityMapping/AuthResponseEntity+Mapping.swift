@@ -10,7 +10,7 @@ import CoreData
 // MARK: - AuthResponseEntity + Mapping
 
 extension AuthResponseEntity {
-    func toDTO() -> AuthResponseDTO? {
+    func toDTO() -> UserHTTPDTO.Response? {
         guard let token = token else { return nil }
         return .init(status: status,
                      token: token,
@@ -21,7 +21,7 @@ extension AuthResponseEntity {
 
 // MARK: - Mapping
 
-extension AuthResponseDTO {
+extension UserHTTPDTO.Response {
     func toEntity(in context: NSManagedObjectContext) -> AuthResponseEntity {
         let entity: AuthResponseEntity = .init(context: context)
         entity.status = status

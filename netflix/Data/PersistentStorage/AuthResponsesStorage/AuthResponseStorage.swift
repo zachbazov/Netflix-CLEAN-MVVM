@@ -28,7 +28,7 @@ final class AuthResponseStorage {
 // MARK: - Methods
 
 extension AuthResponseStorage {
-    func fetchRequest(for requestDTO: AuthRequestDTO) -> NSFetchRequest<AuthRequestEntity> {
+    func fetchRequest(for requestDTO: UserHTTPDTO.Request) -> NSFetchRequest<AuthRequestEntity> {
         let request: NSFetchRequest = AuthRequestEntity.fetchRequest()
         request.predicate = NSPredicate(format: "%K = %@",
                                         #keyPath(AuthRequestEntity.user),
@@ -36,7 +36,7 @@ extension AuthResponseStorage {
         return request
     }
     
-    func getResponse(completion: @escaping (Result<AuthResponseDTO?, CoreDataStorageError>) -> Void) {
+    func getResponse(completion: @escaping (Result<UserHTTPDTO.Response?, CoreDataStorageError>) -> Void) {
         coreDataStorage.performBackgroundTask { context in
             do {
                 let fetchRequest: NSFetchRequest = AuthResponseEntity.fetchRequest()
@@ -48,8 +48,8 @@ extension AuthResponseStorage {
         }
     }
     
-    func getResponse(for request: AuthRequestDTO,
-                     completion: @escaping (Result<AuthResponseDTO?, CoreDataStorageError>) -> Void) {
+    func getResponse(for request: UserHTTPDTO.Request,
+                     completion: @escaping (Result<UserHTTPDTO.Response?, CoreDataStorageError>) -> Void) {
         coreDataStorage.performBackgroundTask { [weak self] context in
             guard let self = self else { return }
             do {
@@ -62,7 +62,7 @@ extension AuthResponseStorage {
         }
     }
     
-    func save(response: AuthResponseDTO, for request: AuthRequestDTO) {
+    func save(response: UserHTTPDTO.Response, for request: UserHTTPDTO.Request) {
         coreDataStorage.performBackgroundTask { [weak self] context in
             guard let self = self else { return }
             do {
@@ -95,7 +95,7 @@ extension AuthResponseStorage {
         }
     }
     
-    func deleteResponse(for request: AuthRequestDTO,
+    func deleteResponse(for request: UserHTTPDTO.Request,
                         in context: NSManagedObjectContext,
                         completion: (() -> Void)? = nil) {
         let fetchRequest = AuthRequestEntity.fetchRequest()

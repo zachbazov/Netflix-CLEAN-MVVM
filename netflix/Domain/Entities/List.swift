@@ -9,14 +9,13 @@ import Foundation
 
 // MARK: - List Type
 
-struct List {
-    struct GET {
-        let user: String
-        var media: [Media]
-    }
+final class List<T> {
     
-    struct POST {
-        let user: String
-        var media: [String]
+    let user: String
+    var media: [T]
+    
+    init(user: String, media: [T]) {
+        self.user = user
+        self.media = media
     }
 }

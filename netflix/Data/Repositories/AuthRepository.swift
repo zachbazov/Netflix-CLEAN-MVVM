@@ -10,8 +10,9 @@ import Foundation
 // MARK: - AuthRepositoryEndpoints Protocol
 
 protocol AuthRepositoryEndpoints {
-    static func signUp(with authRequestDTO: AuthRequestDTO) -> Endpoint<AuthResponseDTO>
-    static func signIn(with authRequestDTO: AuthRequestDTO) -> Endpoint<AuthResponseDTO>
+    static func signUp(with requestDTO: UserHTTPDTO.Request) -> Endpoint<UserHTTPDTO.Response>
+    static func signIn(with requestDTO: UserHTTPDTO.Request) -> Endpoint<UserHTTPDTO.Response>
+    static func signOut() -> Endpoint<Void>
 }
 
 // MARK: - AuthRepository Type
@@ -24,14 +25,14 @@ struct AuthRepository {
 // MARK: - Methods
 
 extension AuthRepository {
-    func signUp(request: AuthRequest,
-                completion: @escaping (Result<AuthResponseDTO, Error>) -> Void) -> Cancellable? {
-        let requestDTO = AuthRequestDTO(user: request.user.toDTO())
+    func signUp(request: UserHTTPDTO.Request,
+                completion: @escaping (Result<UserHTTPDTO.Response, Error>) -> Void) -> Cancellable? {
+        let requestDTO = UserHTTPDTO.Request(user: request.user)
         let task = RepositoryTask()
         
         guard !task.isCancelled else { return nil }
         
-        let endpoint = APIEndpoint.AuthRepository.signUp(with: requestDTO)
+        let endpoint = APIEndpoint.signUp(with: requestDTO)
         task.networkTask = dataTransferService.request(with: endpoint) { result in
             switch result {
             case .success(let response):
@@ -45,10 +46,10 @@ extension AuthRepository {
         return task
     }
     
-    func signIn(request: AuthRequest,
-                cached: @escaping (AuthResponseDTO?) -> Void,
-                completion: @escaping (Result<AuthResponseDTO, Error>) -> Void) -> Cancellable? {
-        let requestDTO = AuthRequestDTO(user: request.user.toDTO())
+    func signIn(request: UserHTTPDTO.Request,
+                cached: @escaping (UserHTTPDTO.Response?) -> Void,
+                completion: @escaping (Result<UserHTTPDTO.Response, Error>) -> Void) -> Cancellable? {
+        let requestDTO = UserHTTPDTO.Request(user: request.user)
         let task = RepositoryTask()
         
         cache.getResponse(for: requestDTO) { result in
@@ -57,7 +58,7 @@ extension AuthRepository {
             }
             
             guard !task.isCancelled else { return }
-            let endpoint = APIEndpoint.AuthRepository.signIn(with: requestDTO)
+            let endpoint = APIEndpoint.signIn(with: requestDTO)
             task.networkTask = self.dataTransferService.request(with: endpoint) { result in
                 switch result {
                 case .success(let response):
@@ -77,7 +78,7 @@ extension AuthRepository {
         
         guard !task.isCancelled else { return nil }
         
-        let endpoint = APIEndpoint.AuthRepository.signOut()
+        let endpoint = APIEndpoint.signOut()
         task.networkTask = self.dataTransferService.request(with: endpoint, completion: completion)
         
         return task

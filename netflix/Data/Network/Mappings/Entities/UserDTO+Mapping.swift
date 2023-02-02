@@ -16,7 +16,7 @@ public final class UserDTO: NSObject, Codable, NSSecureCoding {
     
     var _id: String?
     var name: String?
-    @objc var email: String?
+    var email: String?
     var password: String?
     var passwordConfirm: String?
     var role: String?
@@ -48,9 +48,7 @@ public final class UserDTO: NSObject, Codable, NSSecureCoding {
     
     // MARK: NSSecureCoding Implementation
     
-    public static var supportsSecureCoding: Bool {
-        return true
-    }
+    public static var supportsSecureCoding: Bool { true }
     
     public func encode(with coder: NSCoder) {
         coder.encode(_id, forKey: "_id")

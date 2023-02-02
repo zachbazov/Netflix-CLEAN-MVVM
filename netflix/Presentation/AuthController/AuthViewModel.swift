@@ -52,21 +52,19 @@ extension AuthViewModel {
     /// - Parameters:
     ///   - request: Representation of the candidate user for the operation.
     ///   - completion: Completion handler with a response.
-    func signUp(request: AuthRequest,
-                completion: @escaping (Result<AuthResponseDTO, Error>) -> Void) {
-        let requestValue = AuthUseCaseRequestValue(method: .signup, request: request)
-        authorizationTask = useCase.execute(requestValue: requestValue, completion: completion)
+    func signUp(requestDTO: UserHTTPDTO.Request,
+                completion: @escaping (Result<UserHTTPDTO.Response, Error>) -> Void) {
+        authorizationTask = useCase.execute(requestDTO: requestDTO, completion: completion)
     }
     /// Sign in a user.
     /// - Parameters:
     ///   - request: Representation of the candidate user for the operation.
     ///   - cached: Cached authorization handler.
     ///   - completion: Authorization completion handler.
-    func signIn(request: AuthRequest,
-                cached: @escaping (AuthResponseDTO?) -> Void,
-                completion: @escaping (Result<AuthResponseDTO, Error>) -> Void) {
-        let requestValue = AuthUseCaseRequestValue(method: .signin, request: request)
-        authorizationTask = useCase.execute(requestValue: requestValue, cached: cached, completion: completion)
+    func signIn(requestDTO: UserHTTPDTO.Request,
+                cached: @escaping (UserHTTPDTO.Response?) -> Void,
+                completion: @escaping (Result<UserHTTPDTO.Response, Error>) -> Void) {
+        authorizationTask = useCase.execute(requestDTO: requestDTO, cached: cached, completion: completion)
     }
     /// Sign out a user.
     /// - Parameter completion: Completion handler with a result object.

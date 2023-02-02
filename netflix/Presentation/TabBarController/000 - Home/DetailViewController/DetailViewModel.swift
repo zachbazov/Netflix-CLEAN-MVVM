@@ -85,8 +85,8 @@ extension DetailViewModel {
 // MARK: - DetailUseCase Implementation
 
 extension DetailViewModel {
-    func getSeason(with request: SeasonRequestDTO.GET, completion: @escaping () -> Void) {
-        task = useCase.execute(for: SeasonResponse.self,
+    func getSeason(with request: SeasonHTTPDTO.Request, completion: @escaping () -> Void) {
+        task = useCase.execute(for: SeasonHTTPDTO.Response.self,
                                with: request) { [weak self] result in
             if case let .success(responseDTO) = result {
                 var season = responseDTO.data

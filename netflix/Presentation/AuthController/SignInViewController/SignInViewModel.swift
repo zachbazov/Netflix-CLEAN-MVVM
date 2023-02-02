@@ -44,9 +44,9 @@ extension SignInViewModel {
         // Create a new user.
         let userDTO = UserDTO(email: email, password: password)
         // Create a new sign in request user-based.
-        let requestDTO = AuthRequestDTO(user: userDTO)
+        let requestDTO = UserHTTPDTO.Request(user: userDTO)
         // Invoke the request.
-        authService.signInRequest(request: requestDTO) {
+        authService.signInRequest(requestDTO: requestDTO) {
             // Present the TabBar screen.
             asynchrony {
                 coordinator.showScreen(.tabBar)

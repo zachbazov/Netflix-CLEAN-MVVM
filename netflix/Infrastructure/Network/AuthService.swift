@@ -13,8 +13,8 @@ final class AuthService {
     private let coreDataStorage: CoreDataStorage = .shared
     private var authResponseStorage: AuthResponseStorage { Application.current.authResponseCache }
     private(set) var user: UserDTO?
-    private(set) var request: AuthRequestDTO?
-    private(set) var response: AuthResponseDTO?
+    private(set) var request: UserHTTPDTO.Request?
+    private(set) var response: UserHTTPDTO.Response?
 }
 
 // MARK: - Methods
@@ -24,7 +24,7 @@ extension AuthService {
     /// - Parameters:
     ///   - request: Request object via invocation.
     ///   - response: Response object via invocation.
-    func setResponse(request: AuthRequestDTO?, response: AuthResponseDTO) {
+    func setResponse(request: UserHTTPDTO.Request?, response: UserHTTPDTO.Response) {
         self.request = request
         self.response = response
         
@@ -34,7 +34,7 @@ extension AuthService {
     /// - Parameters:
     ///   - request: Request object via invocation.
     ///   - response: Response object via invocation.
-    private func setUser(request: AuthRequestDTO?, response: AuthResponseDTO) {
+    private func setUser(request: UserHTTPDTO.Request?, response: UserHTTPDTO.Response) {
         user = response.data
         user?._id = response.data?._id
         user?.token = response.token
@@ -72,19 +72,19 @@ extension AuthService {
     /// - Parameters:
     ///   - request: Auth request object.
     ///   - completion: Completion handler.
-    func signInRequest(request: AuthRequestDTO, completion: @escaping () -> Void) {
+    func signInRequest(requestDTO: UserHTTPDTO.Request, completion: @escaping () -> Void) {
         let viewModel = AuthViewModel()
         viewModel.signIn(
-            request: request.toDomain(),
+            requestDTO: requestDTO,
             cached: { [weak self] responseDTO in
                 guard let self = self, let responseDTO = responseDTO else { return }
-                self.setResponse(request: request, response: responseDTO)
+                self.setResponse(request: requestDTO, response: responseDTO)
                 completion()
             },
             completion: { [weak self] result in
                 if case let .success(responseDTO) = result {
                     guard let self = self else { return }
-                    self.setResponse(request: request, response: responseDTO)
+                    self.setResponse(request: requestDTO, response: responseDTO)
                     completion()
                 }
                 if case let .failure(error) = result {
@@ -96,9 +96,9 @@ extension AuthService {
     /// - Parameters:
     ///   - request: Auth request object.
     ///   - completion: Completion handler.
-    func signUpRequest(request: AuthRequestDTO, completion: @escaping () -> Void) {
+    func signUpRequest(requestDTO: UserHTTPDTO.Request, completion: @escaping () -> Void) {
         let viewModel = AuthViewModel()
-        viewModel.signUp(request: request.toDomain()) { [weak self] result in
+        viewModel.signUp(requestDTO: requestDTO) { [weak self] result in
             guard let self = self else { return }
             if case let .success(responseDTO) = result {
                 self.setResponse(request: responseDTO.request, response: responseDTO)
@@ -112,7 +112,7 @@ extension AuthService {
     /// Invoke a sign out request.
     func signOutRequest() {
         // Create an auth request for the user.
-        let requestDTO = AuthRequestDTO(user: user!)
+        let requestDTO = UserHTTPDTO.Request(user: user!)
         // Perform a background task using core data storage.
         coreDataStorage.performBackgroundTask { [weak self] context in
             guard let self = self else { return }

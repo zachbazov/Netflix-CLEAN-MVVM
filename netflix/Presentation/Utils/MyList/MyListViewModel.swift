@@ -41,9 +41,9 @@ final class MyListViewModel {
 
 extension MyListViewModel {
     func fetchList() {
-        let requestDTO = ListRequestDTO.GET(user: user)
+        let requestDTO = ListHTTPDTO.GET.Request(user: user)
         task = homeUseCase.execute(
-            for: ListResponseDTO.GET.self,
+            for: ListHTTPDTO.GET.Response.self,
             request: requestDTO,
             cached: { _ in },
             completion: { [weak self] result in
@@ -60,10 +60,10 @@ extension MyListViewModel {
     
     fileprivate func updateList() {
         guard let media = section.media as [Media]? else { return }
-        let requestDTO = ListRequestDTO.PATCH(user: user._id!,
+        let requestDTO = ListHTTPDTO.PATCH.Request(user: user._id!,
                                               media: media.toObjectIDs())
         task = homeUseCase.execute(
-            for: ListResponseDTO.PATCH.self,
+            for: ListHTTPDTO.PATCH.Response.self,
             request: requestDTO,
             cached: { _ in },
             completion: { [weak self] result in
