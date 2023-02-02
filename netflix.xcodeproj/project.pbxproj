@@ -135,6 +135,11 @@
 		A1A71AA3298B2A63001C6AB1 /* SeasonHTTP.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1A71AA2298B2A63001C6AB1 /* SeasonHTTP.swift */; };
 		A1A71AA5298B2A67001C6AB1 /* SectionHTTP.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1A71AA4298B2A67001C6AB1 /* SectionHTTP.swift */; };
 		A1A71AA7298B2A6C001C6AB1 /* ListHTTP.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1A71AA6298B2A6C001C6AB1 /* ListHTTP.swift */; };
+		A1A71AAA298B867D001C6AB1 /* MediaRepository+Endpoints.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1A71AA9298B867D001C6AB1 /* MediaRepository+Endpoints.swift */; };
+		A1A71AAC298B86D7001C6AB1 /* AuthRepository+Endpoints.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1A71AAB298B86D7001C6AB1 /* AuthRepository+Endpoints.swift */; };
+		A1A71AAE298B86DD001C6AB1 /* SectionRepository+Endpoints.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1A71AAD298B86DD001C6AB1 /* SectionRepository+Endpoints.swift */; };
+		A1A71AB0298B86E3001C6AB1 /* SeasonRepository+Endpoints.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1A71AAF298B86E3001C6AB1 /* SeasonRepository+Endpoints.swift */; };
+		A1A71AB2298B86E7001C6AB1 /* ListRepository+Endpoints.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1A71AB1298B86E7001C6AB1 /* ListRepository+Endpoints.swift */; };
 		A1AA28C628F487290011EE9D /* MediaPlayerOverlayViewViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1AA28C528F487290011EE9D /* MediaPlayerOverlayViewViewModel.swift */; };
 		A1AA28C828F487E70011EE9D /* MediaPlayerObservers.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1AA28C728F487E70011EE9D /* MediaPlayerObservers.swift */; };
 		A1AA28CC28F4C3710011EE9D /* MediaPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1AA28CB28F4C3710011EE9D /* MediaPlayer.swift */; };
@@ -382,6 +387,11 @@
 		A1A71AA2298B2A63001C6AB1 /* SeasonHTTP.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeasonHTTP.swift; sourceTree = "<group>"; };
 		A1A71AA4298B2A67001C6AB1 /* SectionHTTP.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SectionHTTP.swift; sourceTree = "<group>"; };
 		A1A71AA6298B2A6C001C6AB1 /* ListHTTP.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListHTTP.swift; sourceTree = "<group>"; };
+		A1A71AA9298B867D001C6AB1 /* MediaRepository+Endpoints.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MediaRepository+Endpoints.swift"; sourceTree = "<group>"; };
+		A1A71AAB298B86D7001C6AB1 /* AuthRepository+Endpoints.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AuthRepository+Endpoints.swift"; sourceTree = "<group>"; };
+		A1A71AAD298B86DD001C6AB1 /* SectionRepository+Endpoints.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SectionRepository+Endpoints.swift"; sourceTree = "<group>"; };
+		A1A71AAF298B86E3001C6AB1 /* SeasonRepository+Endpoints.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SeasonRepository+Endpoints.swift"; sourceTree = "<group>"; };
+		A1A71AB1298B86E7001C6AB1 /* ListRepository+Endpoints.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ListRepository+Endpoints.swift"; sourceTree = "<group>"; };
 		A1AA28C528F487290011EE9D /* MediaPlayerOverlayViewViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaPlayerOverlayViewViewModel.swift; sourceTree = "<group>"; };
 		A1AA28C728F487E70011EE9D /* MediaPlayerObservers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaPlayerObservers.swift; sourceTree = "<group>"; };
 		A1AA28CB28F4C3710011EE9D /* MediaPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaPlayer.swift; sourceTree = "<group>"; };
@@ -1010,6 +1020,8 @@
 		A18B994028BFD96E0077A5A6 /* Entities */ = {
 			isa = PBXGroup;
 			children = (
+				A18B995E28BFFCA10077A5A6 /* Protocols */,
+				A1B98BB4298AD251001B7B62 /* HTTP */,
 				A18B997F28C03CA20077A5A6 /* JWT.swift */,
 				A18B994928BFD9DD0077A5A6 /* User+Mapping.swift */,
 				A18B994128BFD9C70077A5A6 /* Section.swift */,
@@ -1018,8 +1030,6 @@
 				A18B994728BFD9DA0077A5A6 /* Episode.swift */,
 				A1AA28E728F6909B0011EE9D /* Trailer+Mapping.swift */,
 				A19956DC29019A3900B7D655 /* List.swift */,
-				A1B98BB4298AD251001B7B62 /* HTTP */,
-				A18B995E28BFFCA10077A5A6 /* Protocols */,
 			);
 			path = Entities;
 			sourceTree = "<group>";
@@ -1118,6 +1128,7 @@
 		A18B999028C0DE570077A5A6 /* Endpoints */ = {
 			isa = PBXGroup;
 			children = (
+				A1A71AA8298B865F001C6AB1 /* Protocols */,
 				A18B999128C0DE710077A5A6 /* APIEndpoint.swift */,
 			);
 			path = Endpoints;
@@ -1195,6 +1206,18 @@
 				A196AE0828C140A300C5D733 /* ValueTransformer.swift */,
 			);
 			path = Utils;
+			sourceTree = "<group>";
+		};
+		A1A71AA8298B865F001C6AB1 /* Protocols */ = {
+			isa = PBXGroup;
+			children = (
+				A1A71AAB298B86D7001C6AB1 /* AuthRepository+Endpoints.swift */,
+				A1A71AAD298B86DD001C6AB1 /* SectionRepository+Endpoints.swift */,
+				A1A71AA9298B867D001C6AB1 /* MediaRepository+Endpoints.swift */,
+				A1A71AAF298B86E3001C6AB1 /* SeasonRepository+Endpoints.swift */,
+				A1A71AB1298B86E7001C6AB1 /* ListRepository+Endpoints.swift */,
+			);
+			path = Protocols;
 			sourceTree = "<group>";
 		};
 		A1AA28CA28F48A1D0011EE9D /* PreviewView */ = {
@@ -1703,6 +1726,7 @@
 				A18D85272946750F00840045 /* DetailCollectionViewViewModel.swift in Sources */,
 				A130BCA4294FAA210070EA5E /* SearchCollectionViewDataSource.swift in Sources */,
 				A1B70A7F293D80C000C718C6 /* DetailViewCoordinator.swift in Sources */,
+				A1A71AAC298B86D7001C6AB1 /* AuthRepository+Endpoints.swift in Sources */,
 				A1AD25C528D4D35700F793B3 /* NavigationView.swift in Sources */,
 				A1AA28E828F6909B0011EE9D /* Trailer+Mapping.swift in Sources */,
 				A18B993828BFC7820077A5A6 /* UIViewController+AddBehaviors.swift in Sources */,
@@ -1730,6 +1754,7 @@
 				A1F56A6B28C6934B0089BD4F /* UIButton+Extension.swift in Sources */,
 				A18B997A28C0244D0077A5A6 /* Endpoint.swift in Sources */,
 				A1B93C812900CF2900AF2C7F /* AuthRequestEntity+Mapping.swift in Sources */,
+				A1A71AB0298B86E3001C6AB1 /* SeasonRepository+Endpoints.swift in Sources */,
 				A1BA1DB728DA209700730EA8 /* OpaqueViewViewModel.swift in Sources */,
 				A1741D2228E67CE200F3C46B /* DetailInfoView.swift in Sources */,
 				A130BCE7295136090070EA5E /* NewsTableViewCell.swift in Sources */,
@@ -1749,6 +1774,7 @@
 				A1B98BAB298A44EF001B7B62 /* SeasonHTTPDTO+Mapping.swift in Sources */,
 				A19956F4290F7F9900B7D655 /* ArraySlice+Extension.swift in Sources */,
 				A1BA1DA728D8BA9F00730EA8 /* UIView+Animations.swift in Sources */,
+				A1A71AB2298B86E7001C6AB1 /* ListRepository+Endpoints.swift in Sources */,
 				A1741D2428E67CEB00F3C46B /* DetailDescriptionView.swift in Sources */,
 				A1B70A96293E9FF600C718C6 /* ViewController.swift in Sources */,
 				A1741D2628E67CF200F3C46B /* DetailPanelView.swift in Sources */,
@@ -1771,6 +1797,7 @@
 				A18691D628C8423B0087DE3B /* DetailViewController.swift in Sources */,
 				A1B93C7F2900B69B00AF2C7F /* MediaResponseEntity+Mapping.swift in Sources */,
 				A18B993D28BFC9A40077A5A6 /* BlackStyleNavigationBarBehavior.swift in Sources */,
+				A1A71AAA298B867D001C6AB1 /* MediaRepository+Endpoints.swift in Sources */,
 				A1AA28C628F487290011EE9D /* MediaPlayerOverlayViewViewModel.swift in Sources */,
 				A130BCA6294FAFE10070EA5E /* SearchUseCase.swift in Sources */,
 				A1E81D4328D1600100D044EA /* UIColor+Extension.swift in Sources */,
@@ -1831,6 +1858,7 @@
 				A1B70A7D293D800300C718C6 /* AuthCoordinator.swift in Sources */,
 				A18B98FE28BEB62C0077A5A6 /* SceneDelegate.swift in Sources */,
 				A1AD25BC28D3FBDC00F793B3 /* UICollectionViewCell+ViewInstantiable.swift in Sources */,
+				A1A71AAE298B86DD001C6AB1 /* SectionRepository+Endpoints.swift in Sources */,
 				A1F56A5E28C679980089BD4F /* UIView+Extension.swift in Sources */,
 				A1E81D0D28CFE17100D044EA /* Reusable.swift in Sources */,
 				A18B994628BFD9D50077A5A6 /* Season.swift in Sources */,

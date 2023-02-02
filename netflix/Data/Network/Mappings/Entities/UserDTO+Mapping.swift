@@ -11,9 +11,6 @@ import CoreData
 
 @objc(UserDTO)
 public final class UserDTO: NSObject, Codable, NSSecureCoding {
-    
-    // MARK: Properties
-    
     var _id: String?
     var name: String?
     var email: String?
@@ -23,8 +20,6 @@ public final class UserDTO: NSObject, Codable, NSSecureCoding {
     var active: Bool?
     var token: String?
     var mylist: [String]?
-    
-    // MARK: Initializer
     
     init(_id: String? = nil,
          name: String? = nil,

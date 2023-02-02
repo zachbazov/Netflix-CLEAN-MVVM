@@ -11,9 +11,6 @@ import CoreData
 
 @objc
 public final class MediaResourcesDTO: NSObject, Codable, NSSecureCoding {
-    
-    // MARK: Properties
-    
     let posters: [String]
     let logos: [String]
     let trailers: [String]
@@ -25,8 +22,6 @@ public final class MediaResourcesDTO: NSObject, Codable, NSSecureCoding {
     let presentedLogo: String
     let presentedDisplayLogo: String
     let presentedLogoAlignment: String
-    
-    // MARK: Initializer
     
     init(posters: [String],
          logos: [String],
@@ -89,9 +84,6 @@ public final class MediaResourcesDTO: NSObject, Codable, NSSecureCoding {
 
 @objc(MediaDTO)
 public final class MediaDTO: NSObject, Codable, NSSecureCoding {
-    
-    // MARK: CodingKeys Type
-    
     enum CodingKeys: String, CodingKey {
         case id
         case type
@@ -114,8 +106,6 @@ public final class MediaDTO: NSObject, Codable, NSSecureCoding {
         case seasons
     }
     
-    // MARK: Properties
-    
     let id: String?
     let type: String
     let title: String
@@ -135,8 +125,6 @@ public final class MediaDTO: NSObject, Codable, NSSecureCoding {
     let isSecret: Bool
     let resources: MediaResourcesDTO
     let seasons: [String]?
-    
-    // MARK: Initializer
     
     init(id: String?,
          type: String,

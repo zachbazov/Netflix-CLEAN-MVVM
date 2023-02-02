@@ -10,7 +10,6 @@ import Foundation
 // MARK: - List Type
 
 final class List<T> {
-    
     let user: String
     var media: [T]
     
