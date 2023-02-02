@@ -10,9 +10,6 @@ import Foundation
 // MARK: - HomeViewModel Type
 
 final class HomeViewModel {
-    
-    // MARK: Properties
-    
     var coordinator: HomeViewCoordinator?
     let useCase: HomeUseCase
     let orientation = DeviceOrientation.shared
@@ -30,8 +27,6 @@ final class HomeViewModel {
     private var sectionsTask: Cancellable? { willSet { sectionsTask?.cancel() } }
     private var mediaTask: Cancellable? { willSet { mediaTask?.cancel() } }
     
-    // MARK: Initializer
-    
     /// Default initializer.
     /// Allocate `useCase` property and it's dependencies.
     init() {
@@ -45,8 +40,6 @@ final class HomeViewModel {
         self.useCase = useCase
         self.viewDidLoad()
     }
-    
-    // MARK: Deinitializer
     
     deinit {
         myList?.removeObservers()

@@ -26,7 +26,7 @@ struct AuthRepository {
 
 extension AuthRepository {
     func signUp(request: UserHTTPDTO.Request,
-                completion: @escaping (Result<UserHTTPDTO.Response, Error>) -> Void) -> Cancellable? {
+                completion: @escaping (Result<UserHTTPDTO.Response, DataTransferError>) -> Void) -> Cancellable? {
         let requestDTO = UserHTTPDTO.Request(user: request.user)
         let task = RepositoryTask()
         
@@ -48,7 +48,7 @@ extension AuthRepository {
     
     func signIn(request: UserHTTPDTO.Request,
                 cached: @escaping (UserHTTPDTO.Response?) -> Void,
-                completion: @escaping (Result<UserHTTPDTO.Response, Error>) -> Void) -> Cancellable? {
+                completion: @escaping (Result<UserHTTPDTO.Response, DataTransferError>) -> Void) -> Cancellable? {
         let requestDTO = UserHTTPDTO.Request(user: request.user)
         let task = RepositoryTask()
         

@@ -55,12 +55,12 @@ extension SearchViewModel {
         items.value.removeAll()
     }
     
-    private func load(mediaQuery: MediaQuery, loading: SearchLoading) {
+    private func load(requestDTO: SearchHTTPDTO.Request, loading: SearchLoading) {
         self.loading.value = loading
-        query.value = mediaQuery.query
+        query.value = requestDTO.regex
         
         mediaLoadTask = useCase.execute(
-            requestValue: SearchUseCaseRequestValue(query: mediaQuery),
+            requestDTO: requestDTO,
             cached: { media in
                 // TBI
             },
@@ -74,9 +74,9 @@ extension SearchViewModel {
             })
     }
     
-    private func update(mediaQuery: MediaQuery) {
+    private func update(requestDTO: SearchHTTPDTO.Request) {
         reset()
-        load(mediaQuery: mediaQuery, loading: .fullscreen)
+        load(requestDTO: requestDTO, loading: .fullscreen)
     }
 }
 
@@ -85,13 +85,14 @@ extension SearchViewModel {
 extension SearchViewModel {
     func viewDidLoad() {}
     
-    func didLoadNextPage() {
-        load(mediaQuery: MediaQuery(query: query.value), loading: .nextPage)
+    func didLoadNextPage(requestDTO: SearchHTTPDTO.Request) {
+        load(requestDTO: requestDTO, loading: .nextPage)
     }
     
     func didSearch(query: String) {
         guard !query.isEmpty else { return }
-        update(mediaQuery: MediaQuery(query: query))
+        let requestDTO = SearchHTTPDTO.Request(regex: query)
+        update(requestDTO: requestDTO)
     }
     
     func didCancelSearch() {

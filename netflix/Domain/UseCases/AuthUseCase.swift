@@ -20,88 +20,50 @@ final class AuthUseCase {
 // MARK: - Methods
 
 extension AuthUseCase {
-    
-    // MARK: Sign Up
-    
-    private func request(requestDTO: UserHTTPDTO.Request,
-                         completion: @escaping (Result<UserHTTPDTO.Response, Error>) -> Void) -> Cancellable? {
-        return authRepository.signUp(request: requestDTO, completion: completion)
+    /// Send a task operation according to the parameters.
+    /// In case data exists, exit the scope and execute the cached operation.
+    /// In case data doesn't exist, exit the scope and execute the completion handler.
+    /// - Parameters:
+    ///   - response: Expected response type.
+    ///   - request: Expected request type.
+    ///   - cached: Cached operation, if exists.
+    ///   - completion: Completion handler.
+    /// - Returns: A task operation.
+    private func request<T, U>(for response: T.Type,
+                               request: U? = nil,
+                               cached: ((T?) -> Void)?,
+                               completion: ((Result<T, DataTransferError>) -> Void)?) -> Cancellable? {
+        switch response {
+        case is UserHTTPDTO.Response.Type:
+            guard let request = request as? UserHTTPDTO.Request else { return nil }
+            let completion = completion as? ((Result<UserHTTPDTO.Response, DataTransferError>) -> Void) ?? { _ in }
+            // In case there is data in the storage, perform a sign-in task.
+            if let cached = cached as? ((UserHTTPDTO.Response?) -> Void) {
+                return authRepository.signIn(request: request, cached: cached, completion: completion)
+            }
+            // In case there isn't, perform a sign-up task.
+            return authRepository.signUp(request: request, completion: completion)
+        case is Void.Type:
+            // Perform a sign-out task.
+            let completion = completion as? ((Result<Void, DataTransferError>) -> Void) ?? { _ in }
+            return authRepository.signOut(completion: completion)
+        default: return nil
+        }
     }
-    
-    func execute(requestDTO: UserHTTPDTO.Request,
-                 completion: @escaping (Result<UserHTTPDTO.Response, Error>) -> Void) -> Cancellable? {
-        return request(requestDTO: requestDTO, completion: completion)
-    }
-    
-    // MARK: Sign In
-    
-    private func request(requestDTO: UserHTTPDTO.Request,
-                         cached: @escaping (UserHTTPDTO.Response?) -> Void,
-                         completion: @escaping (Result<UserHTTPDTO.Response, Error>) -> Void) -> Cancellable? {
-        return authRepository.signIn(request: requestDTO,
-                                     cached: cached,
-                                     completion: completion)
-    }
-    
-    func execute(requestDTO: UserHTTPDTO.Request,
-                 cached: @escaping (UserHTTPDTO.Response?) -> Void,
-                 completion: @escaping (Result<UserHTTPDTO.Response, Error>) -> Void) -> Cancellable? {
-        return request(requestDTO: requestDTO,
-                       cached: cached,
-                       completion: completion)
-    }
-    
-    // MARK: Sign Out
-    
-    private func request(completion: @escaping (Result<Void, DataTransferError>) -> Void) -> Cancellable? {
-        return authRepository.signOut(completion: completion)
-    }
-    
-    func execute(completion: @escaping (Result<Void, DataTransferError>) -> Void) -> Cancellable? {
-        return request(completion: completion)
+    /// Execute a task operation.
+    /// - Parameters:
+    ///   - response: Expected response type.
+    ///   - request: Expected request type.
+    ///   - cached: Cached operation, if exists.
+    ///   - completion: Completion handler.
+    /// - Returns: A task operation.
+    func execute<T, U>(for response: T.Type,
+                       request: U? = nil,
+                       cached: ((T?) -> Void)?,
+                       completion: ((Result<T, DataTransferError>) -> Void)?) -> Cancellable? {
+        return self.request(for: response,
+                            request: request,
+                            cached: cached,
+                            completion: completion)
     }
 }
-
-/*
- extension AuthUseCase {
-     private func request<T, U>(for response: T.Type,
-                                request: U? = nil,
-                                cached: ((T?) -> Void)?,
-                                completion: ((Result<T, Error>) -> Void)?) -> Cancellable? {
-         switch request {
-         case is UserHTTPDTO.Request.Type:
-             guard let request = request as? UserHTTPDTO.Request else { return nil }
-             if let cached = cached as? ((UserHTTPDTO.Response?) -> Void) {
-                 let completion = completion as? ((Result<UserHTTPDTO.Response, Error>) -> Void) ?? { _ in }
-                 return authRepository.signIn(request: request,
-                                              cached: cached,
-                                              completion: completion)
-             } else {
-                 let completion = completion as? ((Result<UserHTTPDTO.Response, Error>) -> Void) ?? { _ in }
-                 return authRepository.signUp(request: request,
-                                              completion: completion)
-             }
-         default: return nil
-         }
-     }
-     
-     func execute<T, U>(for response: T.Type,
-                        request: U? = nil,
-                        cached: ((T?) -> Void)?,
-                        completion: ((Result<T, Error>) -> Void)?) -> Cancellable? {
-         return self.request(for: response,
-                             request: request,
-                             cached: cached,
-                             completion: completion)
-     }
-     
-     private func request(completion: @escaping (Result<Void, DataTransferError>) -> Void) -> Cancellable? {
-         return authRepository.signOut(completion: completion)
-     }
-     
-     func execute(completion: @escaping (Result<Void, DataTransferError>) -> Void) -> Cancellable? {
-         return request(completion: completion)
-     }
- }
-
- */

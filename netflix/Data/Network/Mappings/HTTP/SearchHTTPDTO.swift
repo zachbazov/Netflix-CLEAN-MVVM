@@ -11,7 +11,7 @@ import Foundation
 
 struct SearchHTTPDTO: HTTP {
 
-    struct Request: Encodable {
+    struct Request: Equatable {
         let regex: String
     }
 

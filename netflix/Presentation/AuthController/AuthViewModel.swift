@@ -10,17 +10,10 @@ import Foundation
 // MARK: - AuthViewModel Type
 
 final class AuthViewModel {
-    
-    // MARK: ViewModel's Properties
-    
     var coordinator: AuthCoordinator?
-    
-    // MARK: Type's Properties
     
     private let useCase: AuthUseCase
     private var authorizationTask: Cancellable? { willSet { authorizationTask?.cancel() } }
-    
-    // MARK: Initializer
     
     /// Default initializer.
     /// Allocate `useCase` property and it's dependencies.
@@ -29,8 +22,6 @@ final class AuthViewModel {
         let authRepository = AuthRepository(dataTransferService: dataTransferService)
         self.useCase = AuthUseCase(authRepository: authRepository)
     }
-    
-    // MARK: Deinitializer
     
     deinit {
         coordinator = nil
@@ -52,8 +43,11 @@ extension AuthViewModel {
     ///   - request: Representation of the candidate user for the operation.
     ///   - completion: Completion handler with a response.
     func signUp(requestDTO: UserHTTPDTO.Request,
-                completion: @escaping (Result<UserHTTPDTO.Response, Error>) -> Void) {
-        authorizationTask = useCase.execute(requestDTO: requestDTO, completion: completion)
+                completion: @escaping (Result<UserHTTPDTO.Response, DataTransferError>) -> Void) {
+        authorizationTask = useCase.execute(for: UserHTTPDTO.Response.self,
+                                            request: requestDTO,
+                                            cached: nil,
+                                            completion: completion)
     }
     /// Sign in a user.
     /// - Parameters:
@@ -62,12 +56,18 @@ extension AuthViewModel {
     ///   - completion: Authorization completion handler.
     func signIn(requestDTO: UserHTTPDTO.Request,
                 cached: @escaping (UserHTTPDTO.Response?) -> Void,
-                completion: @escaping (Result<UserHTTPDTO.Response, Error>) -> Void) {
-        authorizationTask = useCase.execute(requestDTO: requestDTO, cached: cached, completion: completion)
+                completion: @escaping (Result<UserHTTPDTO.Response, DataTransferError>) -> Void) {
+        authorizationTask = useCase.execute(for: UserHTTPDTO.Response.self,
+                                            request: requestDTO,
+                                            cached: cached,
+                                            completion: completion)
     }
     /// Sign out a user.
     /// - Parameter completion: Completion handler with a result object.
     func signOut(completion: @escaping (Result<Void, DataTransferError>) -> Void) {
-        authorizationTask = useCase.execute(completion: completion)
+        authorizationTask = useCase.execute(for: Void.self,
+                                            request: Void.self,
+                                            cached: nil,
+                                            completion: completion)
     }
 }
