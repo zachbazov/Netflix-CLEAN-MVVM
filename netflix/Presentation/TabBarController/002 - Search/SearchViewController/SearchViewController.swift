@@ -10,21 +10,14 @@ import UIKit
 // MARK: - SearchViewController Type
 
 final class SearchViewController: UIViewController {
-    
-    // MARK: Outlet Properties
-    
     @IBOutlet private var contentView: UIView!
     @IBOutlet private var searchBarContainer: UIView!
     @IBOutlet private var contentContainer: UIView!
-    
-    // MARK: Type's Properties
     
     var viewModel: SearchViewModel!
     private lazy var collectionView = createCollectionView()
     private var dataSource: SearchCollectionViewDataSource!
     private var searchController = UISearchController(searchResultsController: nil)
-    
-    // MARK: UIViewController Lifecycle
     
     override func viewDidLoad() {
         super.viewDidLoad()

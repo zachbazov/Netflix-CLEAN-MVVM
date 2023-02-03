@@ -10,13 +10,7 @@ import UIKit.UICollectionView
 // MARK: - SearchCollectionViewDataSource Type
 
 final class SearchCollectionViewDataSource: NSObject {
-    
-    // MARK: Properties
-    
     private let viewModel: SearchViewModel
-    
-    // MARK: Initializer
-    
     /// Create a search collection view data source object.
     /// - Parameter viewModel: Coordinating view model.
     init(with viewModel: SearchViewModel) {

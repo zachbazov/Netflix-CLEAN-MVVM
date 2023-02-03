@@ -10,17 +10,11 @@ import UIKit.UITableView
 // MARK: - DetailTableViewDataSource Type
 
 final class DetailTableViewDataSource: NSObject {
-    
-    // MARK: Properties
-    
     private let viewModel: DetailViewModel
     private let tableView: UITableView
     private let numberOfRows: Int = 1
     private let numberOfSections = Index.allCases.count
     private(set) var collectionCell: DetailCollectionTableViewCell!
-    
-    // MARK: Initializer
-    
     /// Create a detail table view data source object.
     /// - Parameters:
     ///   - tableView: Corresponding table view.

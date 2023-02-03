@@ -10,16 +10,11 @@ import UIKit.UICollectionView
 // MARK: - BrowseOverlayView Type
 
 final class BrowseOverlayView: UIView {
-    
-    // MARK: Properties
-    
     let viewModel: BrowseOverlayViewModel
     private(set) lazy var collectionView: UICollectionView = createCollectionView()
     var dataSource: BrowseOverlayCollectionViewDataSource? {
         didSet { dataSourceDidChange() }
     }
-    
-    // MARK: Initializer
     
     init(on parent: UIView, with viewModel: HomeViewModel) {
         self.viewModel = BrowseOverlayViewModel(with: viewModel)

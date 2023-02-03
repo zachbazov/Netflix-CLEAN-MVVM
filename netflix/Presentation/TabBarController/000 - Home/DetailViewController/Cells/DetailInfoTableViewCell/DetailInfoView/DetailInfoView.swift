@@ -10,9 +10,6 @@ import UIKit
 // MARK: - DetailInfoView Type
 
 final class DetailInfoView: UIView, ViewInstantiable {
-    
-    // MARK: Outlet Properties
-    
     @IBOutlet private weak var mediaTypeLabel: UILabel!
     @IBOutlet private weak var gradientView: UIView!
     @IBOutlet private weak var titlelabel: UILabel!
@@ -23,13 +20,9 @@ final class DetailInfoView: UIView, ViewInstantiable {
     @IBOutlet private weak var playButton: UIButton!
     @IBOutlet private weak var downloadButton: UIButton!
     
-    // MARK: Type's Properties
-    
     private let viewModel: DetailInfoViewViewModel
     private var ageRestrictionView: AgeRestrictionView!
     private var hdView: HDView!
-    
-    // MARK: Initializer
     
     /// Create a detail info object.
     /// - Parameters:

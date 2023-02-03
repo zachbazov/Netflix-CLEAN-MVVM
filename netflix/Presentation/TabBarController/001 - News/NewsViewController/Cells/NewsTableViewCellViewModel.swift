@@ -10,9 +10,6 @@ import Foundation
 // MARK: - NewsTableViewCellViewModel Type
 
 struct NewsTableViewCellViewModel {
-    
-    // MARK: Properties
-    
     let media: Media
     let previewPosterImagePath: String
     let previewPosterImageIdentifier: NSString
@@ -22,9 +19,6 @@ struct NewsTableViewCellViewModel {
     var displayLogoImageURL: URL!
     let eta: String
     let mediaType: String
-    
-    // MARK: Initializer
-    
     /// Create a news table view cell view model object.
     /// - Parameter media: Corresponding media object.
     init(with media: Media) {

@@ -10,9 +10,6 @@ import Foundation
 // MARK: - DetailViewModel Type
 
 final class DetailViewModel {
-    
-    // MARK: Properties
-    
     var coordinator: DetailViewCoordinator?
     private let useCase: DetailUseCase
     let section: Section
@@ -25,9 +22,6 @@ final class DetailViewModel {
     private(set) var myList: MyList!
     private(set) var myListSection: Section!
     private var task: Cancellable? { willSet { task?.cancel() } }
-    
-    // MARK: Initializer
-    
     /// Create a detail view model object.
     /// - Parameters:
     ///   - section: The section that corresponds to the media object.
@@ -44,8 +38,6 @@ final class DetailViewModel {
         self.myList = viewModel.myList
         self.myListSection = viewModel.myList.viewModel.section
     }
-    
-    // MARK: Deinitializer
     
     deinit {
         isRotated = nil
@@ -71,7 +63,7 @@ extension DetailViewModel {
         orientation.setLock(orientation: .all)
         
         if isRotated ?? false {
-            asynchrony(dispatchingDelayInSeconds: 1) { [weak orientation] in
+            mainQueueDispatch(delayInSeconds: 1) { [weak orientation] in
                 orientation?.set(orientation: .landscapeLeft)
             }
         }

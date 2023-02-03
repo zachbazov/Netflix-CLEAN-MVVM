@@ -10,16 +10,10 @@ import UIKit
 // MARK: - DetailCollectionViewDataSource Type
 
 final class DetailCollectionViewDataSource<T>: NSObject, UICollectionViewDelegate, UICollectionViewDataSource {
-    
-    // MARK: Properties
-    
     private let viewModel: DetailViewModel
     fileprivate let numberOfSections = 1
     fileprivate let collectionView: UICollectionView
     let items: [T]
-    
-    // MARK: Initializer
-    
     /// Create a generic detail collection view data source object.
     /// - Parameters:
     ///   - collectionView: Corresponding collection view.

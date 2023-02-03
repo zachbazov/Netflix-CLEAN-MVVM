@@ -10,9 +10,6 @@ import Foundation
 // MARK: - SearchCollectionViewCellViewModel Type
 
 struct SearchCollectionViewCellViewModel {
-    
-    // MARK: Properties
-    
     var media: Media?
     let title: String
     let slug: String
@@ -25,9 +22,6 @@ struct SearchCollectionViewCellViewModel {
     var logoImageIdentifier: NSString
     var logoImageURL: URL!
     let presentedLogoAlignment: PresentedLogoAlignment
-    
-    // MARK: Initializer
-    
     /// Create a search collection view cell view model object.
     /// - Parameter media: Corresponding media object.
     init(media: Media) {

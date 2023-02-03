@@ -10,15 +10,9 @@ import Foundation
 // MARK: - NavigationViewViewModel Type
 
 final class NavigationViewViewModel {
-    
-    // MARK: Properties
-    
     private let coordinator: HomeViewCoordinator
     private let items: [NavigationViewItem]
     let state: Observable<NavigationView.State> = Observable(.home)
-    
-    // MARK: Initializer
-    
     /// Create a navigation view view model object.
     /// - Parameters:
     ///   - items: Represented items on the navigation.

@@ -10,17 +10,11 @@ import Foundation
 // MARK: - DetailCollectionViewViewModel Type
 
 struct DetailCollectionViewViewModel {
-    
-    // MARK: Properties
-    
     var navigationViewState: Observable<DetailNavigationView.State>!
     var media: Media!
     var section: Section!
     var season: Observable<Season?>!
     var fetchSeason: ((SeasonHTTPDTO.Request, @escaping () -> Void) -> Void)?
-    
-    // MARK: Initializer
-    
     /// Create a detail collection view view model object.
     /// - Parameter viewModel: Coordinating view model.
     init(with viewModel: DetailViewModel) {

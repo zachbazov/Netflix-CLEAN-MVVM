@@ -10,9 +10,6 @@ import UIKit
 // MARK: - DisplayView Type
 
 final class DisplayView: UIView, ViewInstantiable {
-    
-    // MARK: Outlet Properties
-    
     @IBOutlet private(set) weak var posterImageView: UIImageView!
     @IBOutlet private(set) weak var logoImageView: UIImageView!
     @IBOutlet private weak var bottomGradientView: UIView!
@@ -20,12 +17,8 @@ final class DisplayView: UIView, ViewInstantiable {
     @IBOutlet private weak var typeImageView: UIImageView!
     @IBOutlet private(set) weak var panelViewContainer: UIView!
     
-    // MARK: Type's Properties
-    
     private var viewModel: DisplayViewViewModel!
     private(set) var panelView: PanelView!
-    
-    // MARK: Initializer
     
     /// Create a display view object.
     /// - Parameter viewModel: Coordinating view model.
@@ -72,13 +65,13 @@ extension DisplayView {
         AsyncImageService.shared.load(
             url: viewModel.posterImageURL,
             identifier: viewModel.posterImageIdentifier) { [weak self] image in
-                asynchrony { self?.posterImageView.image = image }
+                mainQueueDispatch { self?.posterImageView.image = image }
             }
         
         AsyncImageService.shared.load(
             url: viewModel.logoImageURL,
             identifier: viewModel.logoImageIdentifier) { [weak self] image in
-                asynchrony { self?.logoImageView.image = image }
+                mainQueueDispatch { self?.logoImageView.image = image }
             }
         
         genresLabel.attributedText = viewModel.attributedGenres

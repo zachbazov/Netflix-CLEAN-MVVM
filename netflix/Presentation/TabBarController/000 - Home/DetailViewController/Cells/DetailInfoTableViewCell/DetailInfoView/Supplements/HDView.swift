@@ -10,13 +10,7 @@ import UIKit
 // MARK: - HDView Type
 
 final class HDView: UIView {
-    
-    // MARK: Properties
-    
     private lazy var label = createLabel()
-    
-    // MARK: Initializer
-    
     /// Create an HD view object.
     /// - Parameter parent: Instantiating view.
     init(on parent: UIView) {

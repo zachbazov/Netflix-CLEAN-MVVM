@@ -10,21 +10,13 @@ import UIKit
 // MARK: - NavigationViewItemConfiguration Type
 
 final class NavigationViewItemConfiguration {
-    
-    // MARK: Properties
-    
     private weak var item: NavigationViewItem!
-    
-    // MARK: Initializer
-    
     /// Create a configuration object for the item.
     /// - Parameter item: Corresponding view.
     init(with item: NavigationViewItem) {
         self.item = item
         self.viewDidLoad()
     }
-    
-    // MARK: Deinitializer
     
     deinit {
         item?.removeFromSuperview()
@@ -86,15 +78,9 @@ extension NavigationViewItemConfiguration {
 // MARK: - NavigationViewItem Type
 
 final class NavigationViewItem: UIView {
-    
-    // MARK: Properties
-    
     fileprivate lazy var button = UIButton(type: .system)
     fileprivate var configuration: NavigationViewItemConfiguration!
     var viewModel: NavigationViewItemViewModel!
-    
-    // MARK: Initializer
-    
     /// Create a navigation view item object.
     /// - Parameters:
     ///   - parent: Instantiating view.
@@ -109,8 +95,6 @@ final class NavigationViewItem: UIView {
     }
     
     required init?(coder: NSCoder) { fatalError() }
-    
-    // MARK: Deinitializer
     
     deinit {
         configuration = nil

@@ -104,7 +104,7 @@ extension AsyncImageService {
     
     func load(url: URL, identifier: NSString, completion: @escaping (UIImage?) -> Void) {
         if let cachedImage = object(for: identifier) {
-            return asynchrony { completion(cachedImage) }
+            return mainQueueDispatch { completion(cachedImage) }
         }
         
         URLImageProtocol.urlSession().dataTask(with: url) { [weak self] data, response, error in
@@ -115,7 +115,7 @@ extension AsyncImageService {
                 return
             }
             self.set(image, forKey: identifier)
-            asynchrony { completion(image) }
+            mainQueueDispatch { completion(image) }
         }.resume()
     }
 }

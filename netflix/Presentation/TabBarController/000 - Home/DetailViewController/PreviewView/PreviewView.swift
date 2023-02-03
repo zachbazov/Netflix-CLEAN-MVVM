@@ -10,15 +10,9 @@ import UIKit
 // MARK: - PreviewView Type
 
 final class PreviewView: UIView {
-    
-    // MARK: Properties
-    
     private var viewModel: PreviewViewViewModel!
     private(set) var mediaPlayerView: MediaPlayerView!
     private(set) lazy var imageView = createImageView()
-    
-    // MARK: Initializer
-    
     /// Create a preview view object.
     /// - Parameters:
     ///   - parent: Instantiating view.
@@ -33,8 +27,6 @@ final class PreviewView: UIView {
     }
     
     required init?(coder: NSCoder) { fatalError() }
-    
-    // MARK: Deinitializer
     
     deinit {
         mediaPlayerView = nil
@@ -76,7 +68,7 @@ extension PreviewView {
         AsyncImageService.shared.load(
             url: viewModel.url,
             identifier: viewModel.identifier) { [weak self] image in
-                asynchrony { self?.imageView.image = image }
+                mainQueueDispatch { self?.imageView.image = image }
             }
     }
 }

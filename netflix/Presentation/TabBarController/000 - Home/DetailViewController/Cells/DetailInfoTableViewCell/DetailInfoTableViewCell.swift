@@ -10,13 +10,7 @@ import UIKit
 // MARK: - DetailInfoTableViewCell Type
 
 final class DetailInfoTableViewCell: UITableViewCell {
-    
-    // MARK: Properties
-    
     private var infoView: DetailInfoView!
-    
-    // MARK: Initializer
-    
     /// Create a detail info table view cell object.
     /// - Parameters:
     ///   - tableView: Corresponding table view.

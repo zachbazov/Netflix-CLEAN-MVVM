@@ -10,9 +10,6 @@ import UIKit
 // MARK: - RatedCollectionViewCell Type
 
 final class RatedCollectionViewCell: CollectionViewCell {
-    
-    // MARK: TextLayer Type
-    
     /// A text layer representation for the cell.
     private final class TextLayer: CATextLayer {
         override func draw(in ctx: CGContext) {
@@ -23,19 +20,13 @@ final class RatedCollectionViewCell: CollectionViewCell {
         }
     }
     
-    // MARK: Properties
-    
     private let layerView = UIView()
     private let textLayer = TextLayer()
-    
-    // MARK: Deinitializer
     
     deinit {
         textLayer.removeFromSuperlayer()
         layerView.removeFromSuperview()
     }
-    
-    // MARK: CollectionViewCell Lifecycle
     
     override func awakeFromNib() {
         super.awakeFromNib()

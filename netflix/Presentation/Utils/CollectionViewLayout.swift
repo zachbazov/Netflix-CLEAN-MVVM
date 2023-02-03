@@ -10,9 +10,6 @@ import UIKit
 // MARK: - CollectionViewLayout Type
 
 final class CollectionViewLayout: UICollectionViewFlowLayout {
-    
-    // MARK: Properties
-    
     private var layout: Layout!
     private var itemsPerLine: CGFloat = 3.0
     private var lineSpacing: CGFloat = 8.0
@@ -47,8 +44,6 @@ final class CollectionViewLayout: UICollectionViewFlowLayout {
         }
         set {}
     }
-    
-    // MARK: Initializer
     
     convenience init(layout: Layout, scrollDirection: UICollectionView.ScrollDirection? = .horizontal) {
         self.init()

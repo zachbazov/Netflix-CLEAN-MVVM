@@ -10,15 +10,10 @@ import Foundation
 // MARK: - BrowseOverlayViewModel Type
 
 final class BrowseOverlayViewModel {
-    
-    // MARK: Properties
-    
     private let coordinator: HomeViewCoordinator
     var isPresented = false {
         didSet { shouldDisplayOrHide() }
     }
-    
-    // MARK: Initializer
     
     init(with viewModel: HomeViewModel) {
         self.coordinator = viewModel.coordinator!

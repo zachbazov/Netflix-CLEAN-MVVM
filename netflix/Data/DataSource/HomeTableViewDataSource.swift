@@ -10,16 +10,10 @@ import UIKit
 // MARK: - HomeTableViewDataSource Type
 
 final class HomeTableViewDataSource: NSObject {
-    
-    // MARK: Properties
-    
     private weak var tableView: UITableView!
     private weak var viewModel: HomeViewModel!
     private let numberOfRows = 1
     private(set) var displayCell: DisplayTableViewCell!
-    
-    // MARK: Initializer
-    
     /// Create an home's table view data source object.
     /// - Parameters:
     ///   - tableView: Corresponding table view.

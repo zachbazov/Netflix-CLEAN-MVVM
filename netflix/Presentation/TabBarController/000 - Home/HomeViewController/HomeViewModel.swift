@@ -110,7 +110,7 @@ extension HomeViewModel {
             request: Any.self,
             cached: { [weak self] responseDTO in
                 guard let self = self, let response = responseDTO else { return }
-                asynchrony {
+                mainQueueDispatch {
                     self.media = response.data.toDomain()
                     self.dataDidEndLoading()
                 }

@@ -10,13 +10,7 @@ import UIKit
 // MARK: - DetailPanelTableViewCell Type
 
 final class DetailPanelTableViewCell: UITableViewCell {
-    
-    // MARK: Properties
-    
     private(set) var panelView: DetailPanelView!
-    
-    // MARK: Initailizer
-    
     /// Create a detail panel table view cell object.
     /// - Parameters:
     ///   - tableView: Corresponding table view.

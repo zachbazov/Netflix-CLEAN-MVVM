@@ -10,20 +10,13 @@ import Foundation
 // MARK: - Observable Type
 
 final class Observable<Value> {
-    
-    // MARK: Observer Type
-    
     private struct Observer<Value> {
         private(set) weak var observer: AnyObject?
         let block: (Value) -> Void
     }
     
-    // MARK: Properties
-    
     private var observers = [Observer<Value>]()
     var value: Value { didSet { notifyObservers() } }
-    
-    // MARK: Initializer
     
     init(_ value: Value) { self.value = value }
 }
@@ -32,7 +25,7 @@ final class Observable<Value> {
 
 extension Observable {
     private func notifyObservers() {
-        for observer in observers { asynchrony { observer.block(self.value) } }
+        for observer in observers { mainQueueDispatch { observer.block(self.value) } }
     }
     
     func observe(on observer: AnyObject, block: @escaping (Value) -> Void) {

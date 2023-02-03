@@ -10,21 +10,13 @@ import UIKit
 // MARK: - CollectionViewCell Type
 
 class CollectionViewCell: UICollectionViewCell {
-    
-    // MARK: Outlet Properties
-    
     @IBOutlet private weak var coverImageView: UIImageView!
     @IBOutlet private weak var logoImageView: UIImageView!
     @IBOutlet private weak var placeholderLabel: UILabel!
     @IBOutlet private weak var logoBottomConstraint: NSLayoutConstraint!
     
-    // MARK: Type's Properties
-    
     private var viewModel: CollectionViewCellViewModel!
     private var representedIdentifier: NSString?
-    
-    // MARK: Initializer
-    
     /// Create a collection view cell object.
     /// - Parameters:
     ///   - collectionView: The referenced collection view.
@@ -47,14 +39,10 @@ class CollectionViewCell: UICollectionViewCell {
         return view
     }
     
-    // MARK: Deinitializer
-    
     deinit {
         representedIdentifier = nil
         viewModel = nil
     }
-    
-    // MARK: UICollectionViewCell Lifecycle
     
     override func prepareForReuse() {
         super.prepareForReuse()
@@ -65,9 +53,6 @@ class CollectionViewCell: UICollectionViewCell {
         representedIdentifier = nil
         viewModel = nil
     }
-    
-    // MARK: UI Setup
-    
     /// Overridable configuration operation.
     /// Configure the view based on the view model.
     /// - Parameter viewModel: Coordinating view model.
@@ -97,12 +82,12 @@ extension CollectionViewCell {
         AsyncImageService.shared.load(
             url: viewModel.posterImageURL,
             identifier: viewModel.posterImageIdentifier) { _ in
-                asynchrony { completion?() }
+                mainQueueDispatch { completion?() }
             }
         AsyncImageService.shared.load(
             url: viewModel.logoImageURL,
             identifier: viewModel.logoImageIdentifier) { _ in
-                asynchrony { completion?() }
+                mainQueueDispatch { completion?() }
             }
     }
     /// View's initials setup.

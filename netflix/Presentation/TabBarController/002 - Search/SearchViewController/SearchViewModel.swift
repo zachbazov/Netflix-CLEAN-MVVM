@@ -10,12 +10,7 @@ import Foundation
 // MARK: - SearchViewModel Type
 
 final class SearchViewModel {
-    
-    // MARK: ViewModel's Properties
-    
     var coordinator: SearchViewCoordinator?
-    
-    // MARK: Type's Properties
     
     private let useCase: SearchUseCase
     let items: Observable<[SearchCollectionViewCellViewModel]> = Observable([])
@@ -25,14 +20,10 @@ final class SearchViewModel {
     private var isEmpty: Bool { return items.value.isEmpty }
     
     private var mediaLoadTask: Cancellable? { willSet { mediaLoadTask?.cancel() } }
-    
-    // MARK: Initializer
-    
     /// Default initializer.
     /// Allocate `useCase` property and it's dependencies.
     init() {
         let dataTransferService = Application.current.dataTransferService
-//        let mediaResponseCache = Application.current.mediaResponseCache
         let mediaRepository = MediaRepository(dataTransferService: dataTransferService)
         self.useCase = SearchUseCase(mediaRepository: mediaRepository)
     }

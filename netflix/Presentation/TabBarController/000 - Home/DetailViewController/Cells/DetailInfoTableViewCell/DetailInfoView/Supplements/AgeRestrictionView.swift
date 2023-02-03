@@ -10,13 +10,7 @@ import UIKit
 // MARK: - AgeRestrictionView Type
 
 final class AgeRestrictionView: UIView {
-    
-    // MARK: Properties
-    
     private lazy var label = createLabel()
-    
-    // MARK: Initializer
-    
     /// Create an age restriction view object.
     /// - Parameter parent: Instantiating view.
     init(on parent: UIView) {

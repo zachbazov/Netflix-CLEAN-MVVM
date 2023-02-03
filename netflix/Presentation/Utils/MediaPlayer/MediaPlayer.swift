@@ -19,13 +19,8 @@ protocol MediaPlayerDelegate: AnyObject {
 // MARK: - MediaPlayer Type
 
 struct MediaPlayer {
-    
-    // MARK: Properties
-    
     let player = AVPlayer()
     let mediaPlayerLayer: MediaPlayerLayer
-    
-    // MARK: Initializer
     
     init(on parent: UIView) {
         self.mediaPlayerLayer = MediaPlayerLayer(frame: parent.bounds)

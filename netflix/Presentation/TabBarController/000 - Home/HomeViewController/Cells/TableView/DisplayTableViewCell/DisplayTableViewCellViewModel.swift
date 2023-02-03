@@ -10,16 +10,10 @@ import Foundation
 // MARK: - DisplayTableViewCellViewModel Type
 
 struct DisplayTableViewCellViewModel {
-    
-    // MARK: Properties
-    
     weak var coordinator: HomeViewCoordinator?
     let presentedMedia: Observable<Media?>
     let myList: MyList
     let sectionAt: (HomeTableViewDataSource.Index) -> Section
-    
-    // MARK: Initializer
-    
     /// Create a display table view cell view model.
     /// - Parameter viewModel: Coordinating view model.
     init(with viewModel: HomeViewModel) {

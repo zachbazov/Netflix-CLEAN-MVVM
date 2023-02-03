@@ -10,13 +10,8 @@ import UIKit.UIApplication
 // MARK: - DeviceOrientation Type
 
 final class DeviceOrientation {
-    
-    // MARK: Singleton Pattern
-    
     static let shared = DeviceOrientation()
     private init() {}
-    
-    // MARK: Properties
     
     private(set) var orientationLock: UIInterfaceOrientationMask = .all
     private var orientation: UIInterfaceOrientationMask = .portrait {

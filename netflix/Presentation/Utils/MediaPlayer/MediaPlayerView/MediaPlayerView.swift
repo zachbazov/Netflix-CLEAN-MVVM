@@ -10,9 +10,6 @@ import AVKit
 // MARK: - MediaPlayerView Type
 
 final class MediaPlayerView: UIView {
-    
-    // MARK: Properties
-    
     var mediaPlayer: MediaPlayer!
     var overlayView: MediaPlayerOverlayView!
     var viewModel: MediaPlayerViewViewModel!
@@ -20,8 +17,6 @@ final class MediaPlayerView: UIView {
     var prepareToPlay: ((Bool) -> Void)?
     
     weak var delegate: MediaPlayerDelegate?
-    
-    // MARK: Initializer
     
     init(on parent: UIView, with viewModel: DetailViewModel) {
         super.init(frame: parent.bounds)
@@ -35,8 +30,6 @@ final class MediaPlayerView: UIView {
     }
     
     required init?(coder: NSCoder) { fatalError() }
-    
-    // MARK: Deinitializer
     
     deinit {
         removeObservers()

@@ -10,9 +10,6 @@ import UIKit
 // MARK: - NewsTableViewCell Type
 
 final class NewsTableViewCell: UITableViewCell {
-    
-    // MARK: Outlet Properties
-    
     @IBOutlet private weak var previewPosterImageView: UIImageView!
     @IBOutlet private weak var ageRestrictionView: AgeRestrictionView!
     @IBOutlet private weak var monthLabel: UILabel!
@@ -28,13 +25,8 @@ final class NewsTableViewCell: UITableViewCell {
     @IBOutlet private weak var descriptionTextView: UITextView!
     @IBOutlet private weak var genresLabel: UILabel!
     
-    // MARK: Type's Properties
-    
     private var viewModel: NewsTableViewCellViewModel!
     private var representedIdentifier: String?
-    
-    // MARK: Initializer
-    
     /// Create a news table view cell object.
     /// - Parameters:
     ///   - tableView: Corresponding table view.
@@ -73,13 +65,13 @@ extension NewsTableViewCell {
         AsyncImageService.shared.load(
             url: viewModel.previewPosterImageURL,
             identifier: viewModel.previewPosterImageIdentifier) { [weak self] image in
-                asynchrony { self?.previewPosterImageView.image = image }
+                mainQueueDispatch { self?.previewPosterImageView.image = image }
             }
         
         AsyncImageService.shared.load(
             url: viewModel.displayLogoImageURL,
             identifier: viewModel.displayLogoImageIdentifier) { [weak self] image in
-                asynchrony { self?.logoImageView.image = image }
+                mainQueueDispatch { self?.logoImageView.image = image }
             }
         
         etaTillOnAir.text = viewModel.eta

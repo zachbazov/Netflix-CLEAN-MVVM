@@ -10,17 +10,11 @@ import Foundation
 // MARK: - PreviewViewViewModel Type
 
 struct PreviewViewViewModel {
-    
-    // MARK: Properties
-    
     let title: String
     let slug: String
     let posterImagePath: String
     let identifier: NSString
     let url: URL
-    
-    // MARK: Initializer
-    
     /// Create a preview view view model object.
     /// - Parameter media: Corresponding media object.
     init(with media: Media) {

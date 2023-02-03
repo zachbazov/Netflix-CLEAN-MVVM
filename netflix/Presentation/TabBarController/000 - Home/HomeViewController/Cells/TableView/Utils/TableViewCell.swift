@@ -16,15 +16,9 @@ typealias StandardTableViewCell = TableViewCell<StandardCollectionViewCell>
 // MARK: - TableViewCell<T> Type
 
 class TableViewCell<T>: UITableViewCell where T: UICollectionViewCell {
-    
-    // MARK: Properties
-    
     private lazy var collectionView = createCollectionView()
     private var dataSource: HomeCollectionViewDataSource<T>!
     private var layout: CollectionViewLayout!
-    
-    // MARK: Initializer
-    
     /// Create a table view cell which holds a collection view.
     /// - Parameters:
     ///   - indexPath: The index path from the table view data source.

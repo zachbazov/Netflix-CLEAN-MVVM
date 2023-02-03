@@ -10,19 +10,11 @@ import UIKit
 // MARK: - DetailDescriptionView Type
 
 final class DetailDescriptionView: UIView, ViewInstantiable {
-    
-    // MARK: Outlet Properties
-    
     @IBOutlet private weak var descriptionTextView: UITextView!
     @IBOutlet private weak var castLabel: UILabel!
     @IBOutlet private weak var writersLabel: UILabel!
     
-    // MARK: Properties
-    
     private let viewModel: DetailDescriptionViewViewModel
-    
-    // MARK: Initializer
-    
     /// Create a description view object.
     /// - Parameters:
     ///   - parent: Instantiating view.

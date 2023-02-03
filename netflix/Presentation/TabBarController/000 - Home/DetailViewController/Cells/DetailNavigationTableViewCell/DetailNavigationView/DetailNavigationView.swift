@@ -10,22 +10,14 @@ import UIKit
 // MARK: - DetailNavigationView Type
 
 final class DetailNavigationView: UIView, ViewInstantiable {
-    
-    // MARK: Outlet Properties
-    
     @IBOutlet private(set) weak var leadingViewContainer: UIView!
     @IBOutlet private(set) weak var centerViewContainer: UIView!
     @IBOutlet private(set) weak var trailingViewContrainer: UIView!
-    
-    // MARK: Type's Properties
     
     let viewModel: DetailViewModel
     private(set) var leadingItem: DetailNavigationViewItem!
     private(set) var centerItem: DetailNavigationViewItem!
     private(set) var trailingItem: DetailNavigationViewItem!
-    
-    // MARK: Initializer
-    
     /// Create a navigation view object.
     /// - Parameters:
     ///   - parent: Instantiating view.
@@ -43,8 +35,6 @@ final class DetailNavigationView: UIView, ViewInstantiable {
     }
     
     required init?(coder: NSCoder) { fatalError() }
-    
-    // MARK: Deinitializer
     
     deinit {
         leadingItem = nil

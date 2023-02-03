@@ -10,9 +10,6 @@ import AVKit
 // MARK: - MediaPlayerViewItem Type
 
 final class MediaPlayerViewItem: AVPlayerItem {
-    
-    // MARK: Initializer
-    
     override init(asset: AVAsset,
                   automaticallyLoadedAssetKeys: [String]?) {
         super.init(asset: asset,

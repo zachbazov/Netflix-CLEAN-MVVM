@@ -10,19 +10,12 @@ import UIKit
 // MARK: - DetailViewController Type
 
 final class DetailViewController: UIViewController {
-    
-    // MARK: Outlet Properties
-    
     @IBOutlet private(set) weak var tableView: UITableView!
     @IBOutlet private(set) weak var previewContainer: UIView!
-    
-    // MARK: Properties
     
     var viewModel: DetailViewModel!
     private(set) var previewView: PreviewView!
     private(set) var dataSource: DetailTableViewDataSource!
-    
-    // MARK: Deinitializer
     
     deinit {
         viewModel.resetOrientation()
@@ -31,8 +24,6 @@ final class DetailViewController: UIViewController {
         dataSource = nil
         viewModel = nil
     }
-    
-    // MARK: UIViewController Lifecycle
     
     override func viewDidLoad() {
         super.viewDidLoad()

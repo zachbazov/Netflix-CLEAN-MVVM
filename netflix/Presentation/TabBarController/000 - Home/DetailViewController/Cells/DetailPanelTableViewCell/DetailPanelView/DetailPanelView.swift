@@ -10,21 +10,13 @@ import UIKit
 // MARK: - DetailPanelView Type
 
 final class DetailPanelView: UIView, ViewInstantiable {
-    
-    // MARK: Outlet Properties
-    
     @IBOutlet private weak var leadingViewContainer: UIView!
     @IBOutlet private weak var centerViewContainer: UIView!
     @IBOutlet private weak var trailingViewContainer: UIView!
     
-    // MARK: Properties
-    
     private(set) var leadingItem: DetailPanelViewItem!
     private(set) var centerItem: DetailPanelViewItem!
     private(set) var trailingItem: DetailPanelViewItem!
-    
-    // MARK: Initializer
-    
     /// Create a panel view object.
     /// - Parameters:
     ///   - parent: Instantiating view.
@@ -39,8 +31,6 @@ final class DetailPanelView: UIView, ViewInstantiable {
     }
     
     required init?(coder: NSCoder) { fatalError() }
-    
-    // MARK: Deinitializer
     
     deinit {
         removeObservers()

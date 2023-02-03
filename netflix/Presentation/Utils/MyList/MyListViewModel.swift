@@ -10,9 +10,6 @@ import Foundation
 // MARK: - MyListViewModel Type
 
 final class MyListViewModel {
-    
-    // MARK: Properties
-    
     weak var coordinator: HomeViewCoordinator?
     private let user: UserDTO
     private let homeUseCase: HomeUseCase
@@ -20,16 +17,12 @@ final class MyListViewModel {
     let section: Section
     private var task: Cancellable? { willSet { task?.cancel() } }
     
-    // MARK: Initializer
-    
     init(with viewModel: HomeViewModel) {
         self.coordinator = viewModel.coordinator
         self.user = Application.current.authService.user!
         self.homeUseCase = viewModel.useCase
         self.section = viewModel.section(at: .myList)
     }
-    
-    // MARK: Deinitializer
     
     deinit {
         coordinator = nil
@@ -61,7 +54,7 @@ extension MyListViewModel {
     fileprivate func updateList() {
         guard let media = section.media as [Media]? else { return }
         let requestDTO = ListHTTPDTO.PATCH.Request(user: user._id!,
-                                              media: media.toObjectIDs())
+                                                   media: media.toObjectIDs())
         task = homeUseCase.execute(
             for: ListHTTPDTO.PATCH.Response.self,
             request: requestDTO,

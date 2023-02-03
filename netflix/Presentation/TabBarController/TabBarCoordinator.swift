@@ -26,20 +26,11 @@ private protocol TabBarCoordinable {
 // MARK: - TabBarConfiguration Type
 
 private struct TabBarConfiguration {
-    
-    // MARK: TabBarItem Type
-    
     private struct TabBarItem {
-        
-        // MARK: Properties
-        
         let title: String
         let image: UIImage
         let tag: Int
         var navigationBarHidden: Bool?
-        
-        // MARK: Methods
-        
         /// Apply configuration a tab bar item.
         /// - Parameter controller: Receiver view controller.
         func applyConfig<T: UIViewController>(for controller: T) {
@@ -52,9 +43,6 @@ private struct TabBarConfiguration {
             }
         }
     }
-    
-    // MARK: Methods
-    
     /// Provide a tab bar item based on the screen type for a controller.
     /// - Parameters:
     ///   - screen: The screen type.
@@ -111,12 +99,7 @@ private struct TabBarConfiguration {
 // MARK: - TabBarCoordinator Type
 
 final class TabBarCoordinator {
-    
-    // MARK: Coordinate's Protocol Properties
-    
     weak var viewController: TabBarController?
-    
-    // MARK: Type's Properties
     
     private let configuration = TabBarConfiguration()
     private(set) var home: UINavigationController!

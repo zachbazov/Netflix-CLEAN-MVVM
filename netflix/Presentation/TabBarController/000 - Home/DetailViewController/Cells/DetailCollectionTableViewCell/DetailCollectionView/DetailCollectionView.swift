@@ -10,16 +10,10 @@ import UIKit
 // MARK: - DetailCollectionView Type
 
 final class DetailCollectionView: UIView {
-    
-    // MARK: Properties
-    
     private let viewModel: DetailViewModel
     private lazy var collectionView = createCollectionView()
     private var dataSource: DetailCollectionViewDataSource<Mediable>!
     private var layout: CollectionViewLayout!
-    
-    // MARK: Initializer
-    
     /// Create a detail collection view object.
     /// - Parameters:
     ///   - parent: Instantiating view.
@@ -34,8 +28,6 @@ final class DetailCollectionView: UIView {
     }
     
     required init?(coder: NSCoder) { fatalError() }
-    
-    // MARK: Deinitializer
     
     deinit {
         layout = nil

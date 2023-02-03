@@ -10,15 +10,9 @@ import UIKit
 // MARK: - DetailPanelViewItemConfiguration Type
 
 final class DetailPanelViewItemConfiguration {
-    
-    // MARK: Properties
-    
     private weak var view: DetailPanelViewItem!
     private let myList: MyList
     private let section: Section
-    
-    // MARK: Initializer
-    
     /// Create a panel view item configuration object.
     /// - Parameters:
     ///   - view: Corresponding view.
@@ -95,9 +89,6 @@ extension DetailPanelViewItemConfiguration {
 // MARK: - DetailPanelViewItem Type
 
 final class DetailPanelViewItem: UIView {
-    
-    // MARK: Properties
-    
     private(set) var configuration: DetailPanelViewItemConfiguration!
     var viewModel: DetailPanelViewItemViewModel!
     
@@ -105,9 +96,6 @@ final class DetailPanelViewItem: UIView {
     fileprivate lazy var label = createLabel()
     
     var isSelected = false
-    
-    // MARK: Initializer
-    
     /// Create a panel view item object.
     /// - Parameters:
     ///   - parent: Instantiating view.
@@ -122,8 +110,6 @@ final class DetailPanelViewItem: UIView {
     }
     
     required init?(coder: NSCoder) { fatalError() }
-    
-    // MARK: Deinitalizer
     
     deinit {
         configuration = nil

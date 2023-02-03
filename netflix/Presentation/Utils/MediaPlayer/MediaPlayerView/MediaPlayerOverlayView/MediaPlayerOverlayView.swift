@@ -10,9 +10,6 @@ import AVKit
 // MARK: - MediaPlayerOverlayViewConfiguration Type
 
 final class MediaPlayerOverlayViewConfiguration {
-    
-    // MARK: Properties
-    
     private var durationThreshold: CGFloat!
     private var repeats: Bool!
     fileprivate weak var mediaPlayerView: MediaPlayerView!
@@ -20,14 +17,10 @@ final class MediaPlayerOverlayViewConfiguration {
     private(set) var observers = MediaPlayerObservers()
     fileprivate var timer = ScheduledTimer()
     
-    // MARK: Initializer
-    
     init(durationThreshold: CGFloat? = 3.0, repeats: Bool? = true) {
         self.durationThreshold = durationThreshold
         self.repeats = repeats
     }
-    
-    // MARK: Deinitializer
     
     deinit {
         removeObservers()
@@ -231,9 +224,6 @@ extension MediaPlayerOverlayViewConfiguration {
 // MARK: - MediaPlayerOverlayView Type
 
 final class MediaPlayerOverlayView: UIView, ViewInstantiable {
-    
-    // MARK: Item Type
-    
     fileprivate enum Item: Int {
         case airPlay
         case rotate
@@ -242,8 +232,6 @@ final class MediaPlayerOverlayView: UIView, ViewInstantiable {
         case forward
         case mute
     }
-    
-    // MARK: Outlet Properties
     
     @IBOutlet private weak var airPlayButton: UIButton!
     @IBOutlet private weak var rotateButton: UIButton!
@@ -259,14 +247,10 @@ final class MediaPlayerOverlayView: UIView, ViewInstantiable {
     @IBOutlet private(set) weak var timeSeparatorLabel: UILabel!
     @IBOutlet private weak var gradientView: UIView!
     
-    // MARK: Type's Properties
-    
     private(set) var configuration: MediaPlayerOverlayViewConfiguration!
     private weak var mediaPlayerView: MediaPlayerView!
     var viewModel: MediaPlayerOverlayViewViewModel!
     private var mediaPlayerViewModel: MediaPlayerViewViewModel!
-    
-    // MARK: Initializer
     
     init(on parent: MediaPlayerView) {
         super.init(frame: parent.bounds)
@@ -282,8 +266,6 @@ final class MediaPlayerOverlayView: UIView, ViewInstantiable {
     }
     
     required init?(coder: NSCoder) { fatalError() }
-    
-    // MARK: Deinitializer
     
     deinit {
         mediaPlayerView = nil

@@ -10,20 +10,12 @@ import UIKit
 // MARK: - SearchCollectionViewCell Type
 
 class SearchCollectionViewCell: UICollectionViewCell {
-    
-    // MARK: Outlet Properties
-    
     @IBOutlet private var posterImageView: UIImageView!
     @IBOutlet private var logoImageView: UIImageView!
     @IBOutlet private var gradientView: UIView!
     
-    // MARK: Type's Properties
-    
     private var representedIdentifier: NSString?
     private var appliedGradient = false
-    
-    // MARK: Initializer
-    
     /// Create a search collection view cell object.
     /// - Parameters:
     ///   - collectionView: Corresponding collection view.
@@ -46,8 +38,6 @@ class SearchCollectionViewCell: UICollectionViewCell {
         return view
     }
     
-    // MARK: UICollectionViewCell Lifecycle
-    
     override func prepareForReuse() {
         super.prepareForReuse()
         posterImageView.image = nil
@@ -69,13 +59,13 @@ extension SearchCollectionViewCell {
         AsyncImageService.shared.load(
             url: viewModel.posterImageURL,
             identifier: viewModel.posterImageIdentifier) { [weak self] image in
-                asynchrony { self?.posterImageView.image = image }
+                mainQueueDispatch { self?.posterImageView.image = image }
             }
         
         AsyncImageService.shared.load(
             url: viewModel.logoImageURL,
             identifier: viewModel.logoImageIdentifier) { [weak self] image in
-                asynchrony { self?.logoImageView.image = image }
+                mainQueueDispatch { self?.logoImageView.image = image }
             }
     }
     

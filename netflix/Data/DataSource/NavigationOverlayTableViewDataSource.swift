@@ -10,13 +10,7 @@ import UIKit
 // MARK: - NavigationOverlayTableViewDataSource Type
 
 final class NavigationOverlayTableViewDataSource: NSObject {
-    
-    // MARK: Properties
-    
     private let viewModel: NavigationOverlayViewModel
-    
-    // MARK: Initializer
-    
     /// Create a navigation overlay table view data source object.
     /// - Parameter viewModel: Coordinating view model.
     init(with viewModel: NavigationOverlayViewModel) {

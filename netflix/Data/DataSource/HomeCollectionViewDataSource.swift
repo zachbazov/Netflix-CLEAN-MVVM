@@ -13,15 +13,9 @@ final class HomeCollectionViewDataSource<Cell>: NSObject,
                                                 UICollectionViewDelegate,
                                                 UICollectionViewDataSource,
                                                 UICollectionViewDataSourcePrefetching where Cell: UICollectionViewCell {
-    
-    // MARK: Properties
-    
     private weak var coordinator: HomeViewCoordinator!
     private weak var collectionView: UICollectionView!
     private let section: Section
-    
-    // MARK: Initializer
-    
     /// Create home's collection view data source object.
     /// - Parameters:
     ///   - collectionView: Corresponding collection view.
@@ -36,8 +30,6 @@ final class HomeCollectionViewDataSource<Cell>: NSObject,
         super.init()
         self.viewDidLoad()
     }
-    
-    // MARK: Deinitializer
     
     deinit {
         collectionView = nil

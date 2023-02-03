@@ -10,22 +10,15 @@ import Foundation
 // MARK: - NewsViewModel Type
 
 final class NewsViewModel {
-    
-    // MARK: Properties
-    
     var coordinator: NewsViewCoordinator?
     private let useCase: NewsUseCase
     let items: Observable<[NewsTableViewCellViewModel]> = Observable([])
     var isEmpty: Bool { return items.value.isEmpty }
     private var mediaLoadTask: Cancellable? { willSet { mediaLoadTask?.cancel() } }
-    
-    // MARK: Initializer
-    
     /// Default initializer.
     /// Allocate `useCase` property and it's dependencies.
     init() {
         let dataTransferService = Application.current.dataTransferService
-//        let cache = Application.current.mediaResponseCache
         let mediaRepository = MediaRepository(dataTransferService: dataTransferService)
         self.useCase = NewsUseCase(mediaRepository: mediaRepository)
     }
@@ -52,7 +45,8 @@ extension NewsViewModel {
         mediaLoadTask = useCase.fetchUpcomingMedia { [weak self] result in
             if case let .success(responseDTO) = result {
                 self?.items.value = responseDTO.toCellViewModels()
-            } else if case let .failure(error) = result {
+            }
+            if case let .failure(error) = result {
                 printIfDebug(.error, "\(error)")
             }
         }

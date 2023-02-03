@@ -10,12 +10,7 @@ import UIKit
 // MARK: - MyList Type
 
 final class MyList {
-    
-    // MARK: Properties
-    
     let viewModel: MyListViewModel
-    
-    // MARK: Initializer
     
     init(with viewModel: HomeViewModel) {
         self.viewModel = MyListViewModel(with: viewModel)

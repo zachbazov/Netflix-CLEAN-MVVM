@@ -10,14 +10,9 @@ import Foundation
 // MARK: - TableViewCellViewModel Type
 
 struct TableViewCellViewModel {
-    
-    // MARK: Properties
-    
     let id: Int
     let title: String
     let media: [Media]
-    
-    // MARK: Initializer
     
     init(section: Section) {
         self.id = section.id

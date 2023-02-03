@@ -35,7 +35,7 @@ extension OpaqueView {
         AsyncImageService.shared.load(
             url: viewModel.imageURL,
             identifier: viewModel.identifier) { [weak self] image in
-                asynchrony { self?.imageView.image = image }
+                mainQueueDispatch { self?.imageView.image = image }
             }
     }
     /// Release changes for the view by the view model.

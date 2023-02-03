@@ -10,18 +10,12 @@ import UIKit
 // MARK: - NavigationOverlayView Type
 
 final class NavigationOverlayView: UIView {
-    
-    // MARK: Properties
-    
     let viewModel: NavigationOverlayViewModel
     let dataSource: NavigationOverlayTableViewDataSource
     let opaqueView = OpaqueView(frame: UIScreen.main.bounds)
     let footerView: NavigationOverlayFooterView
     let tabBar: UITabBar
     private(set) lazy var tableView: UITableView = createTableView()
-    
-    // MARK: Initializer
-    
     /// Create a navigation overlay view object.
     /// - Parameter viewModel: Coordinating view model.
     init(with viewModel: HomeViewModel) {
@@ -42,8 +36,6 @@ final class NavigationOverlayView: UIView {
     }
     
     required init?(coder: NSCoder) { fatalError() }
-    
-    // MARK: Deinitializer
     
     deinit {
         removeObservers()

@@ -10,15 +10,9 @@ import UIKit.UICollectionView
 // MARK: - BrowseOverlayCollectionViewDataSource Type
 
 final class BrowseOverlayCollectionViewDataSource: NSObject {
-    
-    // MARK: Properties
-    
     private let coordinator: HomeViewCoordinator
     private let section: Section
     private let items: [Media]
-    
-    // MARK: Initializer
-    
     /// Create a browse overlay collection view data source object.
     /// - Parameters:
     ///   - section: Corresponding media's section object.

@@ -10,17 +10,11 @@ import UIKit
 // MARK: - DownloadsView Type
 
 final class DownloadsView: UIView, ViewInstantiable {
-    
-    // MARK: Outlet Properties
-    
     @IBOutlet private var titleLabel: UILabel!
     @IBOutlet private var infoTextView: UITextView!
     @IBOutlet private var imageView: UIImageView!
     @IBOutlet private var setupButton: UIButton!
     @IBOutlet private var canDownloadButton: UIButton!
-    
-    // MARK: Initializer
-    
     /// Create a downloads view object.
     /// - Parameter parent: Instantiating view.
     init(on parent: UIView) {

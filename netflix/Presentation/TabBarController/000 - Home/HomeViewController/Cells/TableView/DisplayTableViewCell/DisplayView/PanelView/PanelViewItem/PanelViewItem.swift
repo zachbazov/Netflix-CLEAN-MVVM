@@ -10,17 +10,11 @@ import UIKit
 // MARK: - PanelViewItemConfiguration Type
 
 final class PanelViewItemConfiguration {
-    
-    // MARK: Properties
-    
     fileprivate weak var view: PanelViewItem?
     private var viewModel: DisplayTableViewCellViewModel
     private var gestureRecognizers: [GestureGecognizer]
     private var tapRecognizer: UITapGestureRecognizer!
     private var longPressRecognizer: UILongPressGestureRecognizer!
-    
-    // MARK: Initializer
-    
     /// Create a new panel view object.
     /// - Parameters:
     ///   - view: Instantiating view.
@@ -35,8 +29,6 @@ final class PanelViewItemConfiguration {
         self.viewDidRegisterRecognizers()
         self.viewDidConfigure()
     }
-    
-    // MARK: Deinitializer
     
     deinit {
         view?.removeFromSuperview()

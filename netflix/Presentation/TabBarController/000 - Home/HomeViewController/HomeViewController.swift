@@ -10,26 +10,17 @@ import UIKit
 // MARK: - HomeViewController Type
 
 final class HomeViewController: UIViewController {
-    
-    // MARK: UIViewController Lifecycle Properties
-    
     override var preferredStatusBarStyle: UIStatusBarStyle { .lightContent }
-    
-    // MARK: Outlet Properties
     
     @IBOutlet private(set) var tableView: UITableView!
     @IBOutlet private(set) var navigationViewContainer: UIView!
     @IBOutlet private(set) var navigationViewTopConstraint: NSLayoutConstraint!
     @IBOutlet private(set) var browseOverlayViewContainer: UIView!
     
-    // MARK: Type's Properties
-    
     var viewModel: HomeViewModel!
     var navigationView: NavigationView!
     var browseOverlayView: BrowseOverlayView!
     private(set) var dataSource: HomeTableViewDataSource!
-    
-    // MARK: UIViewController Lifecycle Methods
     
     override func viewDidLoad() {
         super.viewDidLoad()

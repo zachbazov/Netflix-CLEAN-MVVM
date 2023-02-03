@@ -10,13 +10,7 @@ import UIKit
 // MARK: - DetailNavigationTableViewCell Type
 
 final class DetailNavigationTableViewCell: UITableViewCell {
-    
-    // MARK: Properties
-    
     private var navigationView: DetailNavigationView!
-    
-    // MARK: Initializer
-    
     /// Create a detail navigation table view cell object.
     /// - Parameters:
     ///   - tableView: Corresponding table view.

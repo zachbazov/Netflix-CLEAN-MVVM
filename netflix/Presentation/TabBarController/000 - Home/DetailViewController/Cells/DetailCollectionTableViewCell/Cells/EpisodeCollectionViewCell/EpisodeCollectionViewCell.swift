@@ -10,18 +10,12 @@ import UIKit
 // MARK: - EpisodeCollectionViewCell Type
 
 final class EpisodeCollectionViewCell: UICollectionViewCell {
-    
-    // MARK: Outlet Properties
-    
     @IBOutlet private weak var imageView: UIImageView!
     @IBOutlet private weak var titleLabel: UILabel!
     @IBOutlet private weak var timestampLabel: UILabel!
     @IBOutlet private weak var descriptionTextView: UITextView!
     @IBOutlet private weak var playButton: UIButton!
     @IBOutlet private weak var downloadButton: UIButton!
-    
-    // MARK: Initializer
-    
     /// Create an episode collection view cell object.
     /// - Parameters:
     ///   - collectionView: Corresponding collection view.
@@ -57,7 +51,7 @@ extension EpisodeCollectionViewCell {
         AsyncImageService.shared.load(
             url: viewModel.posterImageURL,
             identifier: viewModel.posterImageIdentifier) { _ in
-                asynchrony { completion?() }
+                mainQueueDispatch { completion?() }
             }
     }
     

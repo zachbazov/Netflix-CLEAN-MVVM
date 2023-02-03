@@ -48,7 +48,7 @@ extension SignUpViewModel {
         // Invoke the request.
         authService.signUpRequest(requestDTO: requestDTO) {
             // Present the TabBar screen.
-            asynchrony {
+            mainQueueDispatch {
                 coordinator.showScreen(.tabBar)
             }
         }

@@ -10,15 +10,9 @@ import Foundation
 // MARK: - DetailDescriptionViewViewModel Type
 
 struct DetailDescriptionViewViewModel {
-    
-    // MARK: Properties
-    
     let description: String
     let cast: String
     let writers: String
-    
-    // MARK: Initializer
-    
     /// Create a description view view model object.
     /// - Parameter media: Corresponding media object.
     init(with media: Media) {

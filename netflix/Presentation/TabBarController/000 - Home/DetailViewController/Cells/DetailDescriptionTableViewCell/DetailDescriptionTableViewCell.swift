@@ -10,13 +10,7 @@ import UIKit
 // MARK: - DetailDescriptionTableViewCell Type
 
 final class DetailDescriptionTableViewCell: UITableViewCell {
-    
-    // MARK: Properties
-    
     private var descriptionView: DetailDescriptionView!
-    
-    // MARK: Initializer
-    
     /// Create a detail description table view cell object.
     /// - Parameters:
     ///   - tableView: Corresponding table view.

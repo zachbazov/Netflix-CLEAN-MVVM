@@ -56,7 +56,7 @@ extension RootCoordinator: RootCoordinable {
         let authService = Application.current.authService
         let requestDTO = UserHTTPDTO.Request(user: authService.user!)
         authService.signInRequest(requestDTO: requestDTO) { [weak self] in
-            asynchrony {
+            mainQueueDispatch {
                 self?.tabCoordinator.showScreen(.home)
             }
         }

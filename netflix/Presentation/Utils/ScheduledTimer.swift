@@ -10,12 +10,7 @@ import Foundation
 // MARK: - ScheduledTimer Type
 
 final class ScheduledTimer {
-    
-    // MARK: Properties
-    
     var timer: Timer!
-    
-    // MARK: Deinitializer
     
     deinit { timer = nil }
 }

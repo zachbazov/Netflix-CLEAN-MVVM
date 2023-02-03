@@ -10,9 +10,6 @@ import UIKit
 // MARK: - NavigationView Type
 
 final class NavigationView: UIView, ViewInstantiable {
-    
-    // MARK: Outlet Properties
-    
     @IBOutlet private weak var gradientView: UIView!
     @IBOutlet private weak var homeItemViewContainer: UIView!
     @IBOutlet private weak var airPlayItemViewContainer: UIView!
@@ -21,8 +18,6 @@ final class NavigationView: UIView, ViewInstantiable {
     @IBOutlet private(set) weak var moviesItemViewContainer: UIView!
     @IBOutlet private(set) weak var categoriesItemViewContainer: UIView!
     @IBOutlet private(set) weak var itemsCenterXConstraint: NSLayoutConstraint!
-    
-    // MARK: Type's Properties
     
     private(set) var viewModel: NavigationViewViewModel!
     var navigationOverlayView: NavigationOverlayView!
@@ -33,9 +28,6 @@ final class NavigationView: UIView, ViewInstantiable {
     private(set) var tvShowsItemView: NavigationViewItem!
     private(set) var moviesItemView: NavigationViewItem!
     private(set) var categoriesItemView: NavigationViewItem!
-    
-    // MARK: Initializer
-    
     /// Create a navigation view object.
     /// - Parameters:
     ///   - parent: Instantiating view.
@@ -65,8 +57,6 @@ final class NavigationView: UIView, ViewInstantiable {
     }
     
     required init?(coder: NSCoder) { fatalError() }
-    
-    // MARK: Deinitializer
     
     deinit {
         removeObservers()

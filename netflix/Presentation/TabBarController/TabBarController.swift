@@ -10,12 +10,7 @@ import UIKit
 // MARK: - TabBarController Type
 
 final class TabBarController: UITabBarController, View {
-    
-    // MARK: Properties
-    
     var viewModel: TabBarViewModel!
-    
-    // MARK: UIViewController Lifecycle
     
     override func viewDidLoad() {
         super.viewDidLoad()

@@ -17,7 +17,7 @@ final class SpinnerView {
 
 extension SpinnerView {
     static func show() {
-        asynchrony {
+        mainQueueDispatch {
             NotificationCenter.default.addObserver(self,
                                                    selector: #selector(update),
                                                    name: UIDevice.orientationDidChangeNotification,
@@ -36,7 +36,7 @@ extension SpinnerView {
     }
 
     static func hide() {
-        asynchrony {
+        mainQueueDispatch {
             guard let spinner = spinner else { return }
             spinner.stopAnimating()
             spinner.removeFromSuperview()
@@ -46,7 +46,7 @@ extension SpinnerView {
 
     @objc
     static func update() {
-        asynchrony {
+        mainQueueDispatch {
             if spinner != nil {
                 hide()
                 show()

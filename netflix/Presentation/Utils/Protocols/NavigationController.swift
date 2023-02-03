@@ -10,17 +10,12 @@ import UIKit.UINavigationController
 // MARK: - NavigationController Type
 
 class NavigationController: UINavigationController {
-    
-    // MARK: Properties
-    
     weak var progress: UIProgressView!
     
     var isProgressHidden: Bool = true {
         didSet { setupProgress() }
     }
     
-    // MARK: UINavigationController Lifecycle
-
     override func viewDidLoad() {
         super.viewDidLoad()
         setupSubviews()

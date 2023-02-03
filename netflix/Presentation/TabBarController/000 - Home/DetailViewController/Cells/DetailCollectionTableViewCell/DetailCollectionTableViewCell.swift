@@ -10,13 +10,7 @@ import UIKit
 // MARK: - DetailCollectionTableViewCell Type
 
 final class DetailCollectionTableViewCell: UITableViewCell {
-    
-    // MARK: Properties
-    
     private(set) var detailCollectionView: DetailCollectionView!
-    
-    // MARK: Initializer
-    
     /// Create a detail collection table view cell object.
     /// - Parameters:
     ///   - tableView: Corresponding table view.

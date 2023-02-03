@@ -10,14 +10,8 @@ import UIKit.UITableView
 // MARK: - NewsTableViewDataSource Type
 
 final class NewsTableViewDataSource: NSObject {
-    
-    // MARK: Properties
-    
     private let viewModel: NewsViewModel
     private let numberOfSections: Int = 1
-    
-    // MARK: Initializer
-    
     /// Create a news table view data source object.
     /// - Parameter viewModel: Coordinating view model.
     init(with viewModel: NewsViewModel) {

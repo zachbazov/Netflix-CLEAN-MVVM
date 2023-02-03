@@ -10,9 +10,6 @@ import Foundation
 // MARK: - DisplayViewViewModel Type
 
 struct DisplayViewViewModel {
-    
-    // MARK: Properties
-    
     let slug: String
     let genres: [String]
     let posterImagePath: String
@@ -22,9 +19,6 @@ struct DisplayViewViewModel {
     var logoImageIdentifier: NSString
     var logoImageURL: URL!
     var attributedGenres: NSMutableAttributedString!
-    
-    // MARK: Initializer
-    
     /// Create a view model based on a media object.
     /// - Parameter media: The media object represented on the display view.
     init(with media: Media) {

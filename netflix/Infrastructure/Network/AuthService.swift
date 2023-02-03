@@ -51,7 +51,7 @@ extension AuthService {
             guard let self = self else { return }
             switch result {
             case .success(let response):
-                asynchrony {
+                mainQueueDispatch {
                     // In case there is a valid response.
                     if let response = response {
                         // Set authentication properties.
@@ -128,7 +128,7 @@ extension AuthService {
                         self.response = nil
                         self.user = nil
                         // Present the authentication screen.
-                        asynchrony {
+                        mainQueueDispatch {
                             Application.current.rootCoordinator.showScreen(.auth)
                         }
                     case .failure(let error):

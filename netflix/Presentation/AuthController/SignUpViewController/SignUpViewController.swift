@@ -10,16 +10,11 @@ import UIKit
 // MARK: - SignUpViewController Type
 
 final class SignUpViewController: UIViewController {
-    
-    // MARK: Outlet Properties
-    
     @IBOutlet private weak var nameTextField: UITextField!
     @IBOutlet private weak var emailTextField: UITextField!
     @IBOutlet private weak var passwordTextField: UITextField!
     @IBOutlet private weak var passwordConfirmTextField: UITextField!
     @IBOutlet private weak var signUpButton: UIButton!
-    
-    // MARK: Type's Properties
     
     var viewModel: SignUpViewModel?
     

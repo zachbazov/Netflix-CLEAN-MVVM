@@ -10,15 +10,9 @@ import UIKit
 // MARK: - TrailerCollectionViewCell Type
 
 final class TrailerCollectionViewCell: UICollectionViewCell {
-    
-    // MARK: Outlet Properties
-    
     @IBOutlet private weak var posterImageView: UIImageView!
     @IBOutlet private weak var titleLabel: UILabel!
     @IBOutlet private weak var playButton: UIButton!
-    
-    // MARK: Initializer
-    
     /// Create a trailer collection view cell object.
     /// - Parameters:
     ///   - collectionView: Corresponding collection view.

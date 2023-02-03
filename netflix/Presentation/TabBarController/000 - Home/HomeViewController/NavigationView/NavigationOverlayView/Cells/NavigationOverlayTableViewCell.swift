@@ -10,13 +10,7 @@ import UIKit
 // MARK: - NavigationOverlayTableViewCell Type
 
 final class NavigationOverlayTableViewCell: UITableViewCell {
-    
-    // MARK: Properties
-    
     private lazy var titleLabel = createLabel()
-    
-    // MARK: Initializer
-    
     /// Create and dequeue a navigation overlay table view cell.
     /// - Parameters:
     ///   - tableView: Corresponding table view.
