@@ -1034,13 +1034,13 @@
 			path = Entities;
 			sourceTree = "<group>";
 		};
-		A18B995328BFF1260077A5A6 /* Mappings */ = {
+		A18B995328BFF1260077A5A6 /* DataMappings */ = {
 			isa = PBXGroup;
 			children = (
 				A18B999928C0E0120077A5A6 /* Entities */,
 				A1B98BA5298A4177001B7B62 /* HTTP */,
 			);
-			path = Mappings;
+			path = DataMappings;
 			sourceTree = "<group>";
 		};
 		A18B995E28BFFCA10077A5A6 /* Protocols */ = {
@@ -1068,7 +1068,7 @@
 			isa = PBXGroup;
 			children = (
 				A18B999028C0DE570077A5A6 /* Endpoints */,
-				A18B995328BFF1260077A5A6 /* Mappings */,
+				A18B995328BFF1260077A5A6 /* DataMappings */,
 			);
 			path = Network;
 			sourceTree = "<group>";

@@ -31,7 +31,7 @@ final class ValueTransformer<T: NSObject>: NSSecureUnarchiveFromDataTransformer 
     
     override class func allowsReverseTransformation() -> Bool { true }
     override class func transformedValueClass() -> AnyClass { T.self }
-    override class var allowedTopLevelClasses: [AnyClass] { [T.self] }
+    override class var allowedTopLevelClasses: [AnyClass] { [NSArray.self, T.self] }
     
     // MARK: NSSecureUnarchiveFromDataTransformer Lifecycle
     
@@ -44,34 +44,10 @@ final class ValueTransformer<T: NSObject>: NSSecureUnarchiveFromDataTransformer 
     
     override func reverseTransformedValue(_ value: Any?) -> Any? {
         guard let value = value as? T else {
-            fatalError("Wrong data type, received \(type(of: value)).")
-        }
-        return super.reverseTransformedValue(value)
-    }
-}
-
-// MARK: - MediaValueTransformer Type
-
-final class MediaValueTransformer: NSSecureUnarchiveFromDataTransformer {
-    
-    // MARK: Properties
-    
-    override class func allowsReverseTransformation() -> Bool { true }
-    override class func transformedValueClass() -> AnyClass { MediaDTO.self }
-    override class var allowedTopLevelClasses: [AnyClass] { [NSArray.self, MediaDTO.self] }
-    
-    // MARK: NSSecureUnarchiveFromDataTransformer Lifecycle
-    
-    override func transformedValue(_ value: Any?) -> Any? {
-        guard let data = value as? Data else {
-            fatalError("Wrong data type, received \(type(of: value)).")
-        }
-        return super.transformedValue(data)
-    }
-    
-    override func reverseTransformedValue(_ value: Any?) -> Any? {
-        guard let value = value as? [MediaDTO] else {
-            fatalError("Wrong data type, received \(type(of: value)).")
+            guard let value = value as? [T] else {
+                fatalError("Wrong data type, received \(type(of: value)).")
+            }
+            return super.reverseTransformedValue(value)
         }
         return super.reverseTransformedValue(value)
     }
