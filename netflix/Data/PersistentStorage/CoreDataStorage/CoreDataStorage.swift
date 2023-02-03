@@ -18,13 +18,8 @@ enum CoreDataStorageError: Error {
 // MARK: - CoreDataStorage Type
 
 final class CoreDataStorage {
-    
-    // MARK: Singleton Pattern
-    
     static let shared = CoreDataStorage()
     private init() {}
-    
-    // MARK: Properties
     
     private lazy var persistentContainer: NSPersistentContainer = {
         transformersDidRegister()

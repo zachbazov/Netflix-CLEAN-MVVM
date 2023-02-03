@@ -7,22 +7,17 @@
 
 import UIKit
 
-// MARK: - ApplicationRooting Protocol
+// MARK: - Applicable Protocol
 
-private protocol ApplicationRooting {
+private protocol Applicable {
     func root(in window: UIWindow?)
 }
 
 // MARK: - Application Type
 
 final class Application {
-    
-    // MARK: Singleton Pattern
-    
     static let current = Application()
     private init() {}
-    
-    // MARK: Properties
     
     let rootCoordinator = RootCoordinator()
     let configuration = AppConfiguration()
@@ -56,9 +51,9 @@ extension Application {
     }
 }
 
-// MARK: - ApplicationRooting Implementation
+// MARK: - Applicable Implementation
 
-extension Application: ApplicationRooting {
+extension Application: Applicable {
     /// Main entry-point for the app.
     /// Allocate a root view controller for the window.
     /// - Parameter window: Application's root window.

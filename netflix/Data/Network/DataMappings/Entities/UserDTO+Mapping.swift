@@ -9,7 +9,7 @@ import CoreData
 
 // MARK: - UserDTO Type
 
-@objc(UserDTO)
+@objc
 public final class UserDTO: NSObject, Codable, NSSecureCoding {
     var _id: String?
     var name: String?

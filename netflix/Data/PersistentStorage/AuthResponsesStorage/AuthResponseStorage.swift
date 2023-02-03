@@ -10,13 +10,8 @@ import CoreData
 // MARK: - AuthResponseStorage Type
 
 final class AuthResponseStorage {
-    
-    // MARK: Properties
-    
     let coreDataStorage: CoreDataStorage
     private let authService: AuthService
-    
-    // MARK: Initializer
     
     init(coreDataStorage: CoreDataStorage = .shared,
          authService: AuthService) {

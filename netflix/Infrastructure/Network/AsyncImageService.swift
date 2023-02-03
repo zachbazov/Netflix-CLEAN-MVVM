@@ -10,9 +10,6 @@ import UIKit
 // MARK: - URLImageProtocol Type
 
 class URLImageProtocol: URLProtocol {
-    
-    // MARK: Properties
-    
     var cancelledOrComplete: Bool = false
     var block: DispatchWorkItem!
     
@@ -84,13 +81,8 @@ class URLImageProtocol: URLProtocol {
 // MARK: - AsyncImageService Type
 
 final class AsyncImageService {
-    
-    // MARK: Singleton Pattern
-    
     static var shared = AsyncImageService()
     private init() {}
-    
-    // MARK: Properties
     
     private(set) var cache = NSCache<NSString, UIImage>()
 }

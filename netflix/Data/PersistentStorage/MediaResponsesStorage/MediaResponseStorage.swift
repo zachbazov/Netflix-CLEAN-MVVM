@@ -10,12 +10,7 @@ import CoreData
 // MARK: - MediaResponseStorage Type
 
 final class MediaResponseStorage {
-    
-    // MARK: Properties
-    
     private let coreDataStorage: CoreDataStorage
-    
-    // MARK: Initializer
     
     init(coreDataStorage: CoreDataStorage = .shared) {
         self.coreDataStorage = coreDataStorage

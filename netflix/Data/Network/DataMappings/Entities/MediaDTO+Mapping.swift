@@ -82,7 +82,7 @@ public final class MediaResourcesDTO: NSObject, Codable, NSSecureCoding {
 
 // MARK: - MediaDTO Type
 
-@objc(MediaDTO)
+@objc
 public final class MediaDTO: NSObject, Codable, NSSecureCoding {
     enum CodingKeys: String, CodingKey {
         case id

@@ -26,9 +26,6 @@ extension NSValueTransformerName {
 // MARK: - ValueTransformer Type
 
 final class ValueTransformer<T: NSObject>: NSSecureUnarchiveFromDataTransformer {
-    
-    // MARK: Properties
-    
     override class func allowsReverseTransformation() -> Bool { true }
     override class func transformedValueClass() -> AnyClass { T.self }
     override class var allowedTopLevelClasses: [AnyClass] { [NSArray.self, T.self] }
