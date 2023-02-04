@@ -7,25 +7,38 @@
 
 import Foundation
 
+// MARK: - HomeUseCaseProtocol Protocol
+
+private protocol HomeUseCaseProtocol {
+    var sectionsRepository: SectionRepository { get }
+    var mediaRepository: MediaRepository { get }
+    var listRepository: ListRepository { get }
+    
+    func execute<T, U>(for response: T.Type,
+                       request: U?,
+                       cached: ((T?) -> Void)?,
+                       completion: ((Result<T, Error>) -> Void)?) -> Cancellable?
+}
+
 // MARK: - HomeUseCase Type
 
 final class HomeUseCase {
-    private let sectionsRepository: SectionRepository
-    private let mediaRepository: MediaRepository
-    private let listRepository: ListRepository
+    fileprivate let sectionsRepository: SectionRepository
+    fileprivate let mediaRepository: MediaRepository
+    fileprivate let listRepository: ListRepository
     
-    init(sectionsRepository: SectionRepository,
-         mediaRepository: MediaRepository,
-         listRepository: ListRepository) {
+    required init(sectionsRepository: SectionRepository,
+                  mediaRepository: MediaRepository,
+                  listRepository: ListRepository) {
         self.sectionsRepository = sectionsRepository
         self.mediaRepository = mediaRepository
         self.listRepository = listRepository
     }
 }
 
-// MARK: - Methods
+// MARK: - HomeUseCaseProtocol Implementation
 
-extension HomeUseCase {
+extension HomeUseCase: HomeUseCaseProtocol {
     private func request<T, U>(for response: T.Type,
                                request: U? = nil,
                                cached: ((T?) -> Void)?,

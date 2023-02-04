@@ -81,9 +81,9 @@ extension DetailViewModel {
         task = useCase.execute(for: SeasonHTTPDTO.Response.self,
                                with: request) { [weak self] result in
             if case let .success(responseDTO) = result {
-                var season = responseDTO.data
-                season!.episodes = season!.episodes.sorted { $0.episode < $1.episode }
-                self?.season.value = season
+                var season = responseDTO.data.first!
+                season.episodes = season.episodes.sorted { $0.episode < $1.episode }
+                self?.season.value = season.toDomain()
                 completion()
             }
             if case let .failure(error) = result {

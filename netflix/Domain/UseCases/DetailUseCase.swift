@@ -7,35 +7,38 @@
 
 import Foundation
 
+// MARK: - DetailUseCaseProtocol Protocol
+
+private protocol DetailUseCaseProtocol {
+    var seasonsRepository: SeasonRepository { get }
+    
+    func execute<T>(for response: T.Type,
+                    with request: SeasonHTTPDTO.Request,
+                    completion: @escaping (Result<SeasonHTTPDTO.Response, Error>) -> Void) -> Cancellable?
+}
+
 // MARK: - DetailUseCase Type
 
 final class DetailUseCase {
-    private let seasonsRepository: SeasonRepository
+    fileprivate let seasonsRepository: SeasonRepository
     
-    init(seasonsRepository: SeasonRepository) {
+    required init(seasonsRepository: SeasonRepository) {
         self.seasonsRepository = seasonsRepository
     }
 }
 
-// MARK: - Methods
+// MARK: - DetailUseCaseProtocol Implementation
 
-extension DetailUseCase {
+extension DetailUseCase: DetailUseCaseProtocol {
     private func request<T>(for response: T.Type,
-                            with request: SeasonHTTPDTO.Request,
-                            completion: @escaping (Result<SeasonHTTP.Response, Error>) -> Void) -> Cancellable? {
-        return seasonsRepository.getSeason(with: request) { result in
-            switch result {
-            case .success(let response):
-                completion(.success(response.toDomain()))
-            case .failure(let error):
-                completion(.failure(error))
-            }
-        }
+                            request: SeasonHTTPDTO.Request,
+                            completion: @escaping (Result<SeasonHTTPDTO.Response, Error>) -> Void) -> Cancellable? {
+        return seasonsRepository.getSeason(request: request, completion: completion)
     }
     
     func execute<T>(for response: T.Type,
                     with request: SeasonHTTPDTO.Request,
-                    completion: @escaping (Result<SeasonHTTP.Response, Error>) -> Void) -> Cancellable? {
-        return self.request(for: response, with: request, completion: completion)
+                    completion: @escaping (Result<SeasonHTTPDTO.Response, Error>) -> Void) -> Cancellable? {
+        return self.request(for: response, request: request, completion: completion)
     }
 }

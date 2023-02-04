@@ -14,7 +14,7 @@ struct SeasonDTO: Decodable {
     let title: String
     let slug: String
     let season: Int
-    let episodes: [EpisodeDTO]
+    var episodes: [EpisodeDTO]
 }
 
 // MARK: - Mapping

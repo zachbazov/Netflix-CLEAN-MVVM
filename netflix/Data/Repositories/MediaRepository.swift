@@ -14,9 +14,9 @@ struct MediaRepository {
     let cache: MediaResponseStorage = Application.current.mediaResponseCache
 }
 
-// MARK: - Methods
+// MARK: - MediaRepositoryProtocol Implementation
 
-extension MediaRepository {
+extension MediaRepository: MediaRepositoryProtocol {
     func getAll(cached: @escaping (MediaHTTPDTO.Response?) -> Void,
                 completion: @escaping (Result<MediaHTTPDTO.Response, Error>) -> Void) -> Cancellable? {
         let task = RepositoryTask()
@@ -59,6 +59,48 @@ extension MediaRepository {
                 completion(.failure(error))
             }
         }
+        
+        return task
+    }
+    
+    func search(requestDTO: SearchHTTPDTO.Request,
+                cached: @escaping ([Media]) -> Void,
+                completion: @escaping (Result<[Media], Error>) -> Void) -> Cancellable? {
+        let task = RepositoryTask()
+        
+        guard !task.isCancelled else { return nil }
+        
+        let endpoint = APIEndpoint.searchMedia(with: requestDTO)
+        task.networkTask = Application.current.dataTransferService.request(
+            with: endpoint,
+            completion: { result in
+                if case let .success(responseDTO) = result {
+                    let media = responseDTO.data.toDomain()
+                    completion(.success(media))
+                } else if case let .failure(error) = result {
+                    completion(.failure(error))
+                }
+            })
+        
+        return task
+    }
+    
+    func getUpcomings(completion: @escaping (Result<NewsHTTPDTO.Response, Error>) -> Void) -> Cancellable? {
+        let params = ["isNewRelease": true]
+        let requestDTO = NewsHTTPDTO.Request(queryParams: params)
+        let task = RepositoryTask()
+        let dataTransferService = Application.current.dataTransferService
+        
+        guard !task.isCancelled else { return nil }
+        
+        let endpoint = APIEndpoint.getUpcomingMedia(with: requestDTO)
+        task.networkTask = dataTransferService.request(with: endpoint, completion: { result in
+            if case let .success(responseDTO) = result {
+                completion(.success(responseDTO))
+            } else if case let .failure(error) = result {
+                completion(.failure(error))
+            }
+        })
         
         return task
     }

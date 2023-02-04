@@ -14,9 +14,9 @@ struct AuthRepository {
     let cache: AuthResponseStorage = Application.current.authResponseCache
 }
 
-// MARK: - Methods
+// MARK: - AuthRepositoryProtocol Implementation
 
-extension AuthRepository {
+extension AuthRepository: AuthRepositoryProtocol {
     func signUp(request: UserHTTPDTO.Request,
                 completion: @escaping (Result<UserHTTPDTO.Response, DataTransferError>) -> Void) -> Cancellable? {
         let requestDTO = UserHTTPDTO.Request(user: request.user)

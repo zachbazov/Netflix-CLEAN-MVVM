@@ -7,51 +7,38 @@
 
 import Foundation
 
+// MARK: - SearchUseCaseProtocol Protocol
+
+private protocol SearchUseCaseProtocol {
+    var mediaRepository: MediaRepository { get }
+    
+    func execute(requestDTO: SearchHTTPDTO.Request,
+                 cached: @escaping ([Media]) -> Void,
+                 completion: @escaping (Result<[Media], Error>) -> Void) -> Cancellable?
+}
+
 // MARK: - SearchUseCase Type
 
 final class SearchUseCase {
-    private let mediaRepository: MediaRepository
+    fileprivate let mediaRepository: MediaRepository
     
-    init(mediaRepository: MediaRepository) {
+    required init(mediaRepository: MediaRepository) {
         self.mediaRepository = mediaRepository
     }
 }
 
-// MARK: - Methods
+// MARK: - SearchUseCaseProtocol Implementation
 
-extension SearchUseCase {
+extension SearchUseCase: SearchUseCaseProtocol {
+    private func request(requestDTO: SearchHTTPDTO.Request,
+                         cached: @escaping ([Media]) -> Void,
+                         completion: @escaping (Result<[Media], Error>) -> Void) -> Cancellable? {
+        return mediaRepository.search(requestDTO: requestDTO, cached: cached, completion: completion)
+    }
+    
     func execute(requestDTO: SearchHTTPDTO.Request,
                  cached: @escaping ([Media]) -> Void,
                  completion: @escaping (Result<[Media], Error>) -> Void) -> Cancellable? {
-        return fetchMediaList(
-            requestDTO: requestDTO,
-            cached: { _ in },
-            completion: { result in
-                if case let .success(data) = result {
-                    completion(.success(data))
-                }
-            })
-    }
-    
-    private func fetchMediaList(requestDTO: SearchHTTPDTO.Request,
-                                cached: @escaping ([Media]) -> Void,
-                                completion: @escaping (Result<[Media], Error>) -> Void) -> Cancellable? {
-        let task = RepositoryTask()
-        
-        guard !task.isCancelled else { return nil }
-        
-        let endpoint = APIEndpoint.searchMedia(with: requestDTO)
-        task.networkTask = Application.current.dataTransferService.request(
-            with: endpoint,
-            completion: { result in
-                if case let .success(responseDTO) = result {
-                    let media = responseDTO.data.toDomain()
-                    completion(.success(media))
-                } else if case let .failure(error) = result {
-                    completion(.failure(error))
-                }
-            })
-        
-        return task
+        return request(requestDTO: requestDTO, cached: cached, completion: completion)
     }
 }

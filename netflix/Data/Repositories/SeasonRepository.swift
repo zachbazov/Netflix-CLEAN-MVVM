@@ -13,10 +13,10 @@ struct SeasonRepository {
     let dataTransferService: DataTransferService
 }
 
-// MARK: - Methods
+// MARK: - SeasonRepositoryProtocol Implementation
 
-extension SeasonRepository {
-    func getSeason(with request: SeasonHTTPDTO.Request,
+extension SeasonRepository: SeasonRepositoryProtocol {
+    func getSeason(request: SeasonHTTPDTO.Request,
                    completion: @escaping (Result<SeasonHTTPDTO.Response, Error>) -> Void) -> Cancellable? {
         let task = RepositoryTask()
         

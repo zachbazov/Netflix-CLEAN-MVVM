@@ -7,19 +7,30 @@
 
 import Foundation
 
+// MARK: - AuthUseCaseProtocol Protocol
+
+private protocol AuthUseCaseProtocol {
+    var authRepository: AuthRepository { get }
+    
+    func execute<T, U>(for response: T.Type,
+                       request: U?,
+                       cached: ((T?) -> Void)?,
+                       completion: ((Result<T, DataTransferError>) -> Void)?) -> Cancellable?
+}
+
 // MARK: - AuthUseCase Type
 
 final class AuthUseCase {
-    private let authRepository: AuthRepository
+    fileprivate let authRepository: AuthRepository
     
-    init(authRepository: AuthRepository) {
+    required init(authRepository: AuthRepository) {
         self.authRepository = authRepository
     }
 }
 
-// MARK: - Methods
+// MARK: - AuthUseCaseProtocol Implementation
 
-extension AuthUseCase {
+extension AuthUseCase: AuthUseCaseProtocol {
     /// Send a task operation according to the parameters.
     /// In case data exists, exit the scope and execute the cached operation.
     /// In case data doesn't exist, exit the scope and execute the completion handler.

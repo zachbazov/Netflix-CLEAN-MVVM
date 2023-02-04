@@ -13,9 +13,9 @@ struct SectionRepository {
     let dataTransferService: DataTransferService
 }
 
-// MARK: - Methods
+// MARK: - SectionRepositoryProtocol Implementation
 
-extension SectionRepository {
+extension SectionRepository: SectionRepositoryProtocol {
     func getAll(completion: @escaping (Result<SectionHTTPDTO.Response, Error>) -> Void) -> Cancellable? {
         let task = RepositoryTask()
         

@@ -7,46 +7,32 @@
 
 import Foundation
 
+// MARK: - NewsUseCaseProtocol Protocol
+
+private protocol NewsUseCaseProtocol {
+    var mediaRepository: MediaRepository { get }
+    
+    func execute(completion: @escaping (Result<NewsHTTPDTO.Response, Error>) -> Void) -> Cancellable?
+}
+
 // MARK: - NewsUseCase Type
 
 final class NewsUseCase {
-    private let mediaRepository: MediaRepository
+    fileprivate let mediaRepository: MediaRepository
     
-    init(mediaRepository: MediaRepository) {
+    required init(mediaRepository: MediaRepository) {
         self.mediaRepository = mediaRepository
     }
 }
 
-// MARK: - Methods
+// MARK: - NewsUseCaseProtocol Implementation
 
-extension NewsUseCase {
-    private func execute(completion: @escaping (Result<NewsHTTPDTO.Response, Error>) -> Void) -> Cancellable? {
-            return fetchUpcomingMedia { result in
-                if case let .success(responseDTO) = result {
-                    completion(.success(responseDTO))
-                } else if case let .failure(error) = result {
-                    completion(.failure(error))
-                }
-            }
-        }
+extension NewsUseCase: NewsUseCaseProtocol {
+    private func request(completion: @escaping (Result<NewsHTTPDTO.Response, Error>) -> Void) -> Cancellable? {
+        return mediaRepository.getUpcomings(completion: completion)
+    }
     
-    func fetchUpcomingMedia(completion: @escaping (Result<NewsHTTPDTO.Response, Error>) -> Void) -> Cancellable? {
-            let params = ["isNewRelease": true]
-            let requestDTO = NewsHTTPDTO.Request(queryParams: params)
-            let task = RepositoryTask()
-            let dataTransferService = Application.current.dataTransferService
-            
-            guard !task.isCancelled else { return nil }
-            
-            let endpoint = APIEndpoint.getUpcomingMedia(with: requestDTO)
-            task.networkTask = dataTransferService.request(with: endpoint, completion: { result in
-                if case let .success(responseDTO) = result {
-                    completion(.success(responseDTO))
-                } else if case let .failure(error) = result {
-                    completion(.failure(error))
-                }
-            })
-            
-            return task
-        }
+    func execute(completion: @escaping (Result<NewsHTTPDTO.Response, Error>) -> Void) -> Cancellable? {
+        return request(completion: completion)
+    }
 }

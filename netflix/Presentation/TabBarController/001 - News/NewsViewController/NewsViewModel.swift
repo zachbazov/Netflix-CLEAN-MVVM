@@ -42,7 +42,7 @@ extension NewsViewModel {
 
 extension NewsViewModel {
     private func fetchUpcomingMedia() {
-        mediaLoadTask = useCase.fetchUpcomingMedia { [weak self] result in
+        mediaLoadTask = useCase.execute { [weak self] result in
             if case let .success(responseDTO) = result {
                 self?.items.value = responseDTO.toCellViewModels()
             }

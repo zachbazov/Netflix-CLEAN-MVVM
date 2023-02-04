@@ -13,9 +13,9 @@ struct ListRepository {
     let dataTransferService: DataTransferService
 }
 
-// MARK: - Methods
+// MARK: - ListRepositoryProtocol Implementation
 
-extension ListRepository {
+extension ListRepository: ListRepositoryProtocol {
     func getOne(request: ListHTTPDTO.GET.Request,
                 completion: @escaping (Result<ListHTTPDTO.GET.Response, Error>) -> Void) -> Cancellable? {
         let requestDTO = ListHTTPDTO.GET.Request(user: request.user)
