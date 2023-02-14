@@ -13,7 +13,6 @@ final class AppConfiguration {
     
     // MARK: API's Properties
     
-    /// Load the values from the application .plist file.
     lazy var apiScheme: String = {
         guard let scheme = Bundle.main.object(forInfoDictionaryKey: "API Scheme") as? String else {
             fatalError("API Scheme must be set on the property list file.")

@@ -9,8 +9,13 @@ import Foundation
 
 // MARK: - SectionRepository Type
 
-struct SectionRepository {
+final class SectionRepository: Repository {
     let dataTransferService: DataTransferService
+    var task: Cancellable? { willSet { task?.cancel() } }
+    
+    init(dataTransferService: DataTransferService) {
+        self.dataTransferService = dataTransferService
+    }
 }
 
 // MARK: - SectionRepositoryProtocol Implementation

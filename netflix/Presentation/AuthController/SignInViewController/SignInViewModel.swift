@@ -34,8 +34,8 @@ extension SignInViewModel {
     }
     /// Invokes a sign in request for the user credentials.
     private func signInRequest() {
-        let authService = Application.current.authService
-        let coordinator = Application.current.rootCoordinator
+        let authService = Application.app.services.authentication
+        let coordinator = Application.app.sceneCoordinator
         // Ensure the properties aren't nil.
         guard let email = email,
               let password = password else {
@@ -49,7 +49,7 @@ extension SignInViewModel {
         authService.signInRequest(requestDTO: requestDTO) {
             // Present the TabBar screen.
             mainQueueDispatch {
-                coordinator.showScreen(.tabBar)
+                coordinator.deploy(screen: .tabBar)
             }
         }
     }

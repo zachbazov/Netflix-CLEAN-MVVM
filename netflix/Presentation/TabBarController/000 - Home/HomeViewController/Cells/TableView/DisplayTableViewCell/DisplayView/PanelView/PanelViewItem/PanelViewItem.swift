@@ -105,7 +105,7 @@ extension PanelViewItemConfiguration {
             coordinator.section = section
             coordinator.media = media
             coordinator.shouldScreenRotate = false
-            coordinator.showScreen(.detail)
+            coordinator.deploy(screen: .detail)
         }
         /// Set alpha animations for button as the event occurs.
         view.setAlphaAnimation(using: view.gestureRecognizers!.first) {

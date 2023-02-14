@@ -22,7 +22,7 @@ extension SpinnerView {
                                                    selector: #selector(update),
                                                    name: UIDevice.orientationDidChangeNotification,
                                                    object: nil)
-            if spinner == nil, let window = Application.current.rootCoordinator.window {
+            if spinner == nil, let window = Application.app.sceneCoordinator.window {
                 let frame = UIScreen.main.bounds
                 let spinner = UIActivityIndicatorView(frame: frame)
                 spinner.backgroundColor = UIColor.black.withAlphaComponent(0.2)

@@ -22,5 +22,5 @@ extension DownloadsViewCoordinator: Coordinate {
     }
     /// Screen presentation control.
     /// - Parameter screen: The screen to be allocated and presented.
-    func showScreen(_ screen: Screen) {}
+    func deploy(screen: Screen) {}
 }

@@ -9,9 +9,16 @@ import Foundation
 
 // MARK: - MediaRepository Type
 
-struct MediaRepository {
+final class MediaRepository: Repository {
     let dataTransferService: DataTransferService
-    let cache: MediaResponseStorage = Application.current.mediaResponseCache
+    let responseStorage: MediaResponseStorage
+    var task: Cancellable? { willSet { task?.cancel() } }
+    
+    init(dataTransferService: DataTransferService,
+         responseStorage: MediaResponseStorage = Application.app.stores.mediaResponses) {
+        self.dataTransferService = dataTransferService
+        self.responseStorage = responseStorage
+    }
 }
 
 // MARK: - MediaRepositoryProtocol Implementation
@@ -21,17 +28,19 @@ extension MediaRepository: MediaRepositoryProtocol {
                 completion: @escaping (Result<MediaHTTPDTO.Response, Error>) -> Void) -> Cancellable? {
         let task = RepositoryTask()
         
-        cache.getResponse { result in
+        responseStorage.getResponse { [weak self] result in
+            guard let self = self else { return }
             if case let .success(responseDTO?) = result {
                 return cached(responseDTO)
             }
             
             guard !task.isCancelled else { return }
+            
             let endpoint = APIEndpoint.getAllMedia()
-            task.networkTask = dataTransferService.request(with: endpoint) { result in
+            task.networkTask = self.dataTransferService.request(with: endpoint) { result in
                 switch result {
                 case .success(let response):
-                    self.cache.save(response: response)
+                    self.responseStorage.save(response: response)
                     completion(.success(response))
                 case .failure(let error):
                     completion(.failure(error))
@@ -71,7 +80,7 @@ extension MediaRepository: MediaRepositoryProtocol {
         guard !task.isCancelled else { return nil }
         
         let endpoint = APIEndpoint.searchMedia(with: requestDTO)
-        task.networkTask = Application.current.dataTransferService.request(
+        task.networkTask = Application.app.services.dataTransfer.request(
             with: endpoint,
             completion: { result in
                 if case let .success(responseDTO) = result {
@@ -89,7 +98,7 @@ extension MediaRepository: MediaRepositoryProtocol {
         let params = ["isNewRelease": true]
         let requestDTO = NewsHTTPDTO.Request(queryParams: params)
         let task = RepositoryTask()
-        let dataTransferService = Application.current.dataTransferService
+        let dataTransferService = Application.app.services.dataTransfer
         
         guard !task.isCancelled else { return nil }
         

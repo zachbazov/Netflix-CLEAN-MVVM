@@ -10,7 +10,5 @@ import Foundation
 // MARK: - SectionRepositoryProtocol Protocol
 
 protocol SectionRepositoryProtocol {
-    var dataTransferService: DataTransferService { get }
-    
     func getAll(completion: @escaping (Result<SectionHTTPDTO.Response, Error>) -> Void) -> Cancellable?
 }

@@ -12,20 +12,14 @@ import Foundation
 final class AuthViewModel {
     var coordinator: AuthCoordinator?
     
-    private let useCase: AuthUseCase
-    private var authorizationTask: Cancellable? { willSet { authorizationTask?.cancel() } }
+    private lazy var repository: AuthRepository = createRepository()
+    private lazy var router = Router<AuthRepository>(repository: repository)
     
-    /// Default initializer.
-    /// Allocate `useCase` property and it's dependencies.
-    init() {
-        let dataTransferService = Application.current.dataTransferService
-        let authRepository = AuthRepository(dataTransferService: dataTransferService)
-        self.useCase = AuthUseCase(authRepository: authRepository)
-    }
+    var task: Cancellable? { willSet { task?.cancel() } }
     
-    deinit {
-        coordinator = nil
-        authorizationTask = nil
+    private func createRepository() -> AuthRepository {
+        let dataTransferService = Application.app.services.dataTransfer
+        return AuthRepository(dataTransferService: dataTransferService)
     }
 }
 
@@ -44,10 +38,10 @@ extension AuthViewModel {
     ///   - completion: Completion handler with a response.
     func signUp(requestDTO: UserHTTPDTO.Request,
                 completion: @escaping (Result<UserHTTPDTO.Response, DataTransferError>) -> Void) {
-        authorizationTask = useCase.execute(for: UserHTTPDTO.Response.self,
-                                            request: requestDTO,
-                                            cached: nil,
-                                            completion: completion)
+        repository.task = router.request(for: UserHTTPDTO.Response.self,
+                                         request: requestDTO,
+                                         cached: nil,
+                                         completion: completion)
     }
     /// Sign in a user.
     /// - Parameters:
@@ -57,17 +51,17 @@ extension AuthViewModel {
     func signIn(requestDTO: UserHTTPDTO.Request,
                 cached: @escaping (UserHTTPDTO.Response?) -> Void,
                 completion: @escaping (Result<UserHTTPDTO.Response, DataTransferError>) -> Void) {
-        authorizationTask = useCase.execute(for: UserHTTPDTO.Response.self,
-                                            request: requestDTO,
-                                            cached: cached,
-                                            completion: completion)
+        repository.task = router.request(for: UserHTTPDTO.Response.self,
+                                         request: requestDTO,
+                                         cached: cached,
+                                         completion: completion)
     }
     /// Sign out a user.
     /// - Parameter completion: Completion handler with a result object.
     func signOut(completion: @escaping (Result<Void, DataTransferError>) -> Void) {
-        authorizationTask = useCase.execute(for: Void.self,
-                                            request: Void.self,
-                                            cached: nil,
-                                            completion: completion)
+        repository.task = router.request(for: Void.self,
+                                         request: Void.self,
+                                         cached: nil,
+                                         completion: completion)
     }
 }

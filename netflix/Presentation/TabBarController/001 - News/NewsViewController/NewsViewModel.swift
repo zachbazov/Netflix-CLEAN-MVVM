@@ -12,13 +12,15 @@ import Foundation
 final class NewsViewModel {
     var coordinator: NewsViewCoordinator?
     private let useCase: NewsUseCase
+    
+    private var mediaLoadTask: Cancellable? {
+        willSet { mediaLoadTask?.cancel() }
+    }
     let items: Observable<[NewsTableViewCellViewModel]> = Observable([])
     var isEmpty: Bool { return items.value.isEmpty }
-    private var mediaLoadTask: Cancellable? { willSet { mediaLoadTask?.cancel() } }
-    /// Default initializer.
-    /// Allocate `useCase` property and it's dependencies.
+    
     init() {
-        let dataTransferService = Application.current.dataTransferService
+        let dataTransferService = Application.app.services.dataTransfer
         let mediaRepository = MediaRepository(dataTransferService: dataTransferService)
         self.useCase = NewsUseCase(mediaRepository: mediaRepository)
     }

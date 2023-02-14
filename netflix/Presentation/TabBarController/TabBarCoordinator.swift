@@ -201,7 +201,7 @@ extension TabBarCoordinator: Coordinate {
     }
     /// Screen presentation control.
     /// - Parameter screen: The screen to be allocated and presented.
-    func showScreen(_ screen: Screen) {
+    func deploy(screen: Screen) {
         if case .home = screen { allocateViewControllers() }
     }
 }

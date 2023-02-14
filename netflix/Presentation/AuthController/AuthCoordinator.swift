@@ -7,12 +7,12 @@
 
 import UIKit
 
-// MARK: - AuthCoordinable Protocol
+// MARK: - AuthCoordinatorProtocol Protocol
 
-private protocol AuthCoordinable {
-    func allocateLandpageDependencies() -> LandpageViewController
-    func allocateSignInDependencies() -> SignInViewController
-    func allocateSignUpDependencies() -> SignUpViewController
+private protocol AuthCoordinatorProtocol {
+    func deployLandpageDependencies() -> LandpageViewController
+    func deploySignInDependencies() -> SignInViewController
+    func deploySignUpDependencies() -> SignUpViewController
     func present(_ sender: Any)
 }
 
@@ -20,28 +20,29 @@ private protocol AuthCoordinable {
 
 final class AuthCoordinator {
     var viewController: AuthController?
-    private lazy var landpageController: LandpageViewController = allocateLandpageDependencies()
-    private lazy var signInController: SignInViewController = allocateSignInDependencies()
-    private lazy var signUpController: SignUpViewController = allocateSignUpDependencies()
+    
+    private lazy var landpageController: LandpageViewController = deployLandpageDependencies()
+    private lazy var signInController: SignInViewController = deploySignInDependencies()
+    private lazy var signUpController: SignUpViewController = deploySignUpDependencies()
 }
 
-// MARK: - AuthCoordinable Implementation
+// MARK: - AuthCoordinatorProtocol Implementation
 
-extension AuthCoordinator: AuthCoordinable {
-    fileprivate func allocateLandpageDependencies() -> LandpageViewController {
+extension AuthCoordinator: AuthCoordinatorProtocol {
+    fileprivate func deployLandpageDependencies() -> LandpageViewController {
         let controller = LandpageViewController()
         controller.viewModel = viewController?.viewModel
         return controller
     }
     
-    fileprivate func allocateSignInDependencies() -> SignInViewController {
+    fileprivate func deploySignInDependencies() -> SignInViewController {
         let controller = SignInViewController()
         let viewModel = SignInViewModel(with: viewController!.viewModel)
         controller.viewModel = viewModel
         return controller
     }
     
-    fileprivate func allocateSignUpDependencies() -> SignUpViewController {
+    fileprivate func deploySignUpDependencies() -> SignUpViewController {
         let controller = SignUpViewController()
         let viewModel = SignUpViewModel(with: viewController!.viewModel)
         controller.viewModel = viewModel
@@ -74,9 +75,9 @@ extension AuthCoordinator: Coordinate {
     }
     /// Screen presentation control.
     /// - Parameter screen: The screen to be allocated and presented.
-    func showScreen(_ screen: Screen) {
-        if case .landpage = screen { present(landpageController) }
-        else if case .signIn = screen { present(signInController) }
-        else { present(signUpController) }
+    func deploy(screen: Screen) {
+        if case .landpage = screen { return present(landpageController) }
+        else if case .signIn = screen { return present(signInController) }
+        present(signUpController)
     }
 }

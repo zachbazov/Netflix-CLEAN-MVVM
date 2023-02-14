@@ -11,19 +11,20 @@ import Foundation
 
 final class SearchViewModel {
     var coordinator: SearchViewCoordinator?
-    
     private let useCase: SearchUseCase
+    
+    private var mediaLoadTask: Cancellable? {
+        willSet { mediaLoadTask?.cancel() }
+    }
+    
     let items: Observable<[SearchCollectionViewCellViewModel]> = Observable([])
     let loading: Observable<SearchLoading?> = Observable(.none)
     let query: Observable<String> = Observable("")
     private let error: Observable<String> = Observable("")
     private var isEmpty: Bool { return items.value.isEmpty }
     
-    private var mediaLoadTask: Cancellable? { willSet { mediaLoadTask?.cancel() } }
-    /// Default initializer.
-    /// Allocate `useCase` property and it's dependencies.
     init() {
-        let dataTransferService = Application.current.dataTransferService
+        let dataTransferService = Application.app.services.dataTransfer
         let mediaRepository = MediaRepository(dataTransferService: dataTransferService)
         self.useCase = SearchUseCase(mediaRepository: mediaRepository)
     }

@@ -6,12 +6,22 @@
 //
 
 import Foundation
+import UIKit
 
 // MARK: - HomeViewModel Type
 
 final class HomeViewModel {
     var coordinator: HomeViewCoordinator?
-    let useCase: HomeUseCase
+    
+    private lazy var sectionRepository: SectionRepository = createSectionRepository()
+    private lazy var sectionRouter = Router<SectionRepository>(repository: sectionRepository)
+    
+    private lazy var mediaRepository: MediaRepository = createMediaRepository()
+    private lazy var mediaRouter = Router<MediaRepository>(repository: mediaRepository)
+    
+    private(set) lazy var listRepository: ListRepository = createListRepository()
+    private(set) lazy var listRouter = Router<ListRepository>(repository: listRepository)
+    
     let orientation = DeviceOrientation.shared
     
     let dataSourceState: Observable<HomeTableViewDataSource.State> = Observable(.all)
@@ -24,29 +34,25 @@ final class HomeViewModel {
     var myList: MyList!
     var displayMediaCache: [HomeTableViewDataSource.State: Media] = [:]
     
-    private var sectionsTask: Cancellable? { willSet { sectionsTask?.cancel() } }
-    private var mediaTask: Cancellable? { willSet { mediaTask?.cancel() } }
-    
-    /// Default initializer.
-    /// Allocate `useCase` property and it's dependencies.
-    init() {
-        let dataTransferService = Application.current.dataTransferService
-        let sectionRepository = SectionRepository(dataTransferService: dataTransferService)
-        let mediaRepository = MediaRepository(dataTransferService: dataTransferService)
-        let listRepository = ListRepository(dataTransferService: dataTransferService)
-        let useCase = HomeUseCase(sectionsRepository: sectionRepository,
-                                  mediaRepository: mediaRepository,
-                                  listRepository: listRepository)
-        self.useCase = useCase
-        self.viewDidLoad()
-    }
-    
     deinit {
         myList?.removeObservers()
         myList = nil
-        mediaTask = nil
-        sectionsTask = nil
         coordinator = nil
+    }
+    
+    private func createSectionRepository() -> SectionRepository {
+        let dataTransferService = Application.app.services.dataTransfer
+        return SectionRepository(dataTransferService: dataTransferService)
+    }
+    
+    private func createMediaRepository() -> MediaRepository {
+        let dataTransferService = Application.app.services.dataTransfer
+        return MediaRepository(dataTransferService: dataTransferService)
+    }
+    
+    private func createListRepository() -> ListRepository {
+        let dataTransferService = Application.app.services.dataTransfer
+        return ListRepository(dataTransferService: dataTransferService)
     }
 }
 
@@ -66,8 +72,9 @@ extension HomeViewModel {
         myList = MyList(with: self)
     }
     
-    private func viewDidLoad() {
+    func viewDidLoad() {
         setupOrientation()
+        dataDidBeganLoading()
     }
     
     private func setupOrientation() {
@@ -86,7 +93,7 @@ extension HomeViewModel: ViewModel {
 
 extension HomeViewModel {
     private func fetchSections() {
-        sectionsTask = useCase.execute(
+        sectionRepository.task = sectionRouter.request(
             for: SectionHTTPDTO.Response.self,
             request: Any.self,
             cached: { _ in },
@@ -105,7 +112,7 @@ extension HomeViewModel {
     }
     
     private func fetchMedia() {
-        mediaTask = useCase.execute(
+        mediaRepository.task = mediaRouter.request(
             for: MediaHTTPDTO.Response.self,
             request: Any.self,
             cached: { [weak self] responseDTO in

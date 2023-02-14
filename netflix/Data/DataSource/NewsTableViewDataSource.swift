@@ -51,8 +51,8 @@ extension NewsTableViewDataSource: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         guard let row = indexPath.row as Int?, row >= 0, row <= viewModel.items.value.count - 1 else { return }
-        let homeNavigation = Application.current.rootCoordinator.tabCoordinator.home!
-        let newsNavigation = Application.current.rootCoordinator.tabCoordinator.news!
+        let homeNavigation = Application.app.sceneCoordinator.tabCoordinator.home!
+        let newsNavigation = Application.app.sceneCoordinator.tabCoordinator.news!
         let homeController = homeNavigation.viewControllers.first! as! HomeViewController
         let homeViewModel = homeController.viewModel
         let newsController = newsNavigation.viewControllers.first! as! NewsViewController
@@ -62,7 +62,6 @@ extension NewsTableViewDataSource: UITableViewDelegate, UITableViewDataSource {
         newsCoordinator.section = section
         newsCoordinator.media = cellViewModel.media
         newsCoordinator.shouldScreenRotate = false
-        newsCoordinator.showScreen(.detail)
+        newsCoordinator.deploy(screen: .detail)
     }
-    
 }

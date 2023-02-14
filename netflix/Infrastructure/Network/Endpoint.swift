@@ -39,7 +39,7 @@ struct Endpoint<R>: ResponseRequestable {
     var bodyParametersEncodable: Encodable? = nil
     var bodyParameters: [String : Any] = [:]
     var bodyEncoding: BodyEncoding = .jsonSerializationData
-    let responseDecoder: ResponseDecoder = JSONResponseDecoder()
+    var responseDecoder: ResponseDecoder = JSONResponseDecoder()
 }
 
 // MARK: - Requestable Protocol
@@ -98,7 +98,6 @@ extension Requestable {
         
         urlRequest.httpMethod = method.rawValue
         urlRequest.allHTTPHeaderFields = allHeaders
-        urlRequest.setValue("application/json", forHTTPHeaderField: "content-type")
         
         return urlRequest
     }

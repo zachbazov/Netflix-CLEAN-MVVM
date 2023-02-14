@@ -15,5 +15,5 @@ protocol Coordinate {
     
     var viewController: View? { get set }
     
-    func showScreen(_ screen: Screen)
+    func deploy(screen: Screen)
 }

@@ -36,8 +36,8 @@ extension SignUpViewModel {
     }
     /// Invokes a sign up request by the user credentials.
     private func signUpRequest() {
-        let authService = Application.current.authService
-        let coordinator = Application.current.rootCoordinator
+        let authService = Application.app.services.authentication
+        let coordinator = Application.app.sceneCoordinator
         // Create a new user.
         let userDTO = UserDTO(name: name,
                               email: email,
@@ -49,7 +49,7 @@ extension SignUpViewModel {
         authService.signUpRequest(requestDTO: requestDTO) {
             // Present the TabBar screen.
             mainQueueDispatch {
-                coordinator.showScreen(.tabBar)
+                coordinator.deploy(screen: .tabBar)
             }
         }
     }

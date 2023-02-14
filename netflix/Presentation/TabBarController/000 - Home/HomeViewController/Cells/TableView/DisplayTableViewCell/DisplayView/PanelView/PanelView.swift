@@ -62,7 +62,7 @@ extension PanelView {
         coordinator.section = section
         coordinator.media = media
         coordinator.shouldScreenRotate = rotated
-        coordinator.showScreen(.detail)
+        coordinator.deploy(screen: .detail)
     }
 }
 

@@ -28,7 +28,7 @@ extension NewsViewCoordinator: NewsCoordinable {
     fileprivate func allocateDetailController() {
         guard let section = section, let media = media else { return }
         /// An `HomeViewModel` reference is needed to gain access to the sections data.
-        let homeNavigation = Application.current.rootCoordinator.tabCoordinator.home!
+        let homeNavigation = Application.app.sceneCoordinator.tabCoordinator.home!
         /// Extract home's view model reference.
         let homeController = homeNavigation.viewControllers.first! as! HomeViewController
         let homeViewModel = homeController.viewModel!
@@ -56,7 +56,7 @@ extension NewsViewCoordinator: Coordinate {
     }
     /// Screen presentation control.
     /// - Parameter screen: The screen to be allocated and presented.
-    func showScreen(_ screen: Screen) {
+    func deploy(screen: Screen) {
         if case .detail = screen { allocateDetailController() }
     }
 }

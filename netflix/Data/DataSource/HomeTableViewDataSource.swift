@@ -66,7 +66,8 @@ extension HomeTableViewDataSource: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let index = Index(rawValue: indexPath.section) else { fatalError() }
         if case .display = index {
-            return DisplayTableViewCell.create(on: tableView, for: indexPath, with: viewModel)
+            displayCell = DisplayTableViewCell.create(on: tableView, for: indexPath, with: viewModel)
+            return displayCell
         } else if case .rated = index {
             return RatedTableViewCell.create(on: tableView, for: indexPath, with: viewModel)
         } else if case .resumable = index {

@@ -54,7 +54,7 @@ final class HomeCollectionViewDataSource<Cell>: NSObject,
         coordinator.section = section
         coordinator.media = media
         coordinator.shouldScreenRotate = false
-        coordinator.showScreen(.detail)
+        coordinator.deploy(screen: .detail)
     }
     
     func collectionView(_ collectionView: UICollectionView, prefetchItemsAt indexPaths: [IndexPath]) {}

@@ -27,7 +27,7 @@ final class HomeViewController: UIViewController {
         setupBehaviors()
         setupSubviews()
         setupObservers()
-        viewModel.dataDidBeganLoading()
+        viewModel.viewDidLoad()
     }
 }
 

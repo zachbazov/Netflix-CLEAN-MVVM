@@ -51,7 +51,7 @@ extension NavigationViewViewModel {
         case .airPlay:
             break
         case .account:
-            let authService = Application.current.authService
+            let authService = Application.app.services.authentication
             authService.signOutRequest()
         case .tvShows:
             navigationView.tvShowsItemViewContainer.isHidden(false)

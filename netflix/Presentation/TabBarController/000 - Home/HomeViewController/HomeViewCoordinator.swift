@@ -53,7 +53,7 @@ extension HomeViewCoordinator: Coordinate {
     }
     /// Screen representation control.
     /// - Parameter screen: The screen to be allocated and presented.
-    func showScreen(_ screen: Screen) {
+    func deploy(screen: Screen) {
         if case .detail = screen { allocateDetailController() }
     }
 }

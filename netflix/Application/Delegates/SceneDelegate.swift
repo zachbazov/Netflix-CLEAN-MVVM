@@ -29,10 +29,8 @@ extension SceneDelegate: UIWindowSceneDelegate {
         AppAppearance.default()
         // Allocate root's references.
         window = UIWindow(windowScene: windowScene)
-        // Invoke main entry-point.
-        Application.current.root(in: window)
-        // Stack and present the window.
-        window?.makeKeyAndVisible()
+        // Deploy the application.
+        Application.app.deployScene(in: window)
     }
     /// Occurs once the scene has been disconnected from the app.
     /// - Parameter scene: Corresponding scene.
@@ -55,7 +53,7 @@ extension SceneDelegate: TabBarEjectable {
     /// Remove all tar-bar related observers.
     /// The observers of `DetailViewController` will be removed automatically once home's instance is deallocated.
     func ejectTabBarObservers() {
-        guard let tabCoordinator = Application.current.rootCoordinator.tabCoordinator else { return }
+        guard let tabCoordinator = Application.app.sceneCoordinator.tabCoordinator else { return }
         // Remove any home-related observers.
         if let homeController = tabCoordinator.home.viewControllers.first! as? HomeViewController {
             // Remove panel view observers.

@@ -44,6 +44,6 @@ extension BrowseOverlayCollectionViewDataSource: UICollectionViewDelegate, UICol
         coordinator.section = section
         coordinator.media = media
         coordinator.shouldScreenRotate = false
-        coordinator.showScreen(.detail)
+        coordinator.deploy(screen: .detail)
     }
 }

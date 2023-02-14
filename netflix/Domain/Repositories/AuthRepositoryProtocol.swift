@@ -10,8 +10,6 @@ import Foundation
 // MARK: - AuthRepositoryProtocol Protocol
 
 protocol AuthRepositoryProtocol {
-    var dataTransferService: DataTransferService { get }
-    
     func signUp(request: UserHTTPDTO.Request,
                 completion: @escaping (Result<UserHTTPDTO.Response, DataTransferError>) -> Void) -> Cancellable?
     func signIn(request: UserHTTPDTO.Request,

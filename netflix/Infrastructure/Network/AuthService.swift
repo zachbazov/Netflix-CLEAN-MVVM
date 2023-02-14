@@ -11,7 +11,7 @@ import Foundation
 
 final class AuthService {
     private let coreDataStorage: CoreDataStorage = .shared
-    private var authResponseStorage: AuthResponseStorage { Application.current.authResponseCache }
+    private var authResponseStorage: AuthResponseStorage { return Application.app.stores.authResponses }
     private(set) var user: UserDTO?
     private(set) var request: UserHTTPDTO.Request?
     private(set) var response: UserHTTPDTO.Response?
@@ -129,7 +129,7 @@ extension AuthService {
                         self.user = nil
                         // Present the authentication screen.
                         mainQueueDispatch {
-                            Application.current.rootCoordinator.showScreen(.auth)
+                            Application.app.sceneCoordinator.deploy(screen: .auth)
                         }
                     case .failure(let error):
                         printIfDebug(.error, "\(error)")
