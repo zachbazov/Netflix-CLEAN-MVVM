@@ -10,13 +10,9 @@ import Foundation
 // MARK: - AuthRepository Type
 
 final class AuthRepository: Repository {
-//    typealias T = AuthRepositoryProtocol
-    
     let dataTransferService: DataTransferService
     let responseStorage: AuthResponseStorage
     var task: Cancellable? { willSet { task?.cancel() } }
-    
-    
     
     init(dataTransferService: DataTransferService,
          responseStorage: AuthResponseStorage = Application.app.stores.authResponses) {

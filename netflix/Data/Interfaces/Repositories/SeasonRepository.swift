@@ -9,8 +9,13 @@ import Foundation
 
 // MARK: - SeasonRepository Type
 
-struct SeasonRepository {
+final class SeasonRepository: Repository {
     let dataTransferService: DataTransferService
+    var task: Cancellable? { willSet { task?.cancel() } }
+    
+    init(dataTransferService: DataTransferService) {
+        self.dataTransferService = dataTransferService
+    }
 }
 
 // MARK: - SeasonRepositoryProtocol Implementation

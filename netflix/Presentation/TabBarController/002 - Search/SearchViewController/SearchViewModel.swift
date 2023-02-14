@@ -11,10 +11,13 @@ import Foundation
 
 final class SearchViewModel {
     var coordinator: SearchViewCoordinator?
-    private let useCase: SearchUseCase
     
-    private var mediaLoadTask: Cancellable? {
-        willSet { mediaLoadTask?.cancel() }
+    private lazy var repository: MediaRepository = createMediaRepository()
+    private lazy var router = Router<MediaRepository>(repository: repository)
+    
+    private func createMediaRepository() -> MediaRepository {
+        let dataTransferService = Application.app.services.dataTransfer
+        return MediaRepository(dataTransferService: dataTransferService)
     }
     
     let items: Observable<[SearchCollectionViewCellViewModel]> = Observable([])
@@ -22,12 +25,6 @@ final class SearchViewModel {
     let query: Observable<String> = Observable("")
     private let error: Observable<String> = Observable("")
     private var isEmpty: Bool { return items.value.isEmpty }
-    
-    init() {
-        let dataTransferService = Application.app.services.dataTransfer
-        let mediaRepository = MediaRepository(dataTransferService: dataTransferService)
-        self.useCase = SearchUseCase(mediaRepository: mediaRepository)
-    }
 }
 
 // MARK: - ViewModel Implementation
@@ -51,8 +48,9 @@ extension SearchViewModel {
         self.loading.value = loading
         query.value = requestDTO.regex
         
-        mediaLoadTask = useCase.execute(
-            requestDTO: requestDTO,
+        repository.task = router.request(
+            for: [Media].self,
+            request: requestDTO,
             cached: { media in
                 // TBI
             },
@@ -88,7 +86,7 @@ extension SearchViewModel {
     }
     
     func didCancelSearch() {
-        mediaLoadTask?.cancel()
+        repository.task?.cancel()
     }
 }
 

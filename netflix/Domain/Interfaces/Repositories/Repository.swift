@@ -8,7 +8,6 @@
 import Foundation
 
 protocol Repository {
-//    associatedtype Object: HTTP
     var dataTransferService: DataTransferService { get }
     var task: Cancellable? { get set }
 }

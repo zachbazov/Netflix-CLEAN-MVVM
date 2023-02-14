@@ -9,9 +9,13 @@ import Foundation
 
 // MARK: - ListRepository Type
 
-struct ListRepository: Repository {
+final class ListRepository: Repository {
     let dataTransferService: DataTransferService
     var task: Cancellable? { willSet { task?.cancel() } }
+    
+    init(dataTransferService: DataTransferService) {
+        self.dataTransferService = dataTransferService
+    }
 }
 
 // MARK: - ListRepositoryProtocol Implementation

@@ -10,8 +10,6 @@ import Foundation
 // MARK: - SeasonRepositoryProtocol Protocol
 
 protocol SeasonRepositoryProtocol {
-    var dataTransferService: DataTransferService { get }
-    
     func getSeason(request: SeasonHTTPDTO.Request,
                    completion: @escaping (Result<SeasonHTTPDTO.Response, Error>) -> Void) -> Cancellable?
 }

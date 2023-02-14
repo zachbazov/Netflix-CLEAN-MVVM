@@ -11,11 +11,9 @@ import Foundation
 
 final class DetailViewModel {
     var coordinator: DetailViewCoordinator?
-    private let useCase: DetailUseCase
     
-    private var task: Cancellable? {
-        willSet { task?.cancel() }
-    }
+    private lazy var seasonRepository: SeasonRepository = createSeasonRepository()
+    private lazy var seasonRouter = Router<SeasonRepository>(repository: seasonRepository)
     
     let section: Section
     var media: Media
@@ -32,10 +30,6 @@ final class DetailViewModel {
     ///   - media: Corresponding media object.
     ///   - viewModel: Coordinating view model.
     init(section: Section, media: Media, with viewModel: HomeViewModel) {
-        let dataTransferService = Application.app.services.dataTransfer
-        let repository = SeasonRepository(dataTransferService: dataTransferService)
-        let useCase = DetailUseCase(seasonsRepository: repository)
-        self.useCase = useCase
         self.section = section
         self.media = media
         self.homeDataSourceState = viewModel.dataSourceState.value
@@ -50,7 +44,11 @@ final class DetailViewModel {
         season.value = nil
         navigationViewState = nil
         homeDataSourceState = nil
-        task = nil
+    }
+    
+    private func createSeasonRepository() -> SeasonRepository {
+        let dataTransferService = Application.app.services.dataTransfer
+        return SeasonRepository(dataTransferService: dataTransferService)
     }
 }
 
@@ -82,8 +80,8 @@ extension DetailViewModel {
 
 extension DetailViewModel {
     func getSeason(with request: SeasonHTTPDTO.Request, completion: @escaping () -> Void) {
-        task = useCase.execute(for: SeasonHTTPDTO.Response.self,
-                               with: request) { [weak self] result in
+        seasonRepository.task = seasonRouter.request(for: SeasonHTTPDTO.Response.self,
+                                                     request: request) { [weak self] result in
             if case let .success(responseDTO) = result {
                 var season = responseDTO.data.first!
                 season.episodes = season.episodes.sorted { $0.episode < $1.episode }
