@@ -83,17 +83,6 @@ extension APIEndpoint: MediaRepositoryEndpoints {
     }
 }
 
-// MARK: - ImageRepositoryEndpoints Implementation
-
-extension APIEndpoint: ImageRepositoryEndpoints {
-    static func getImage(with request: ImageHTTPDTO.Request) -> Endpoint<ImageHTTPDTO.Response> {
-        return Endpoint(path: "api/v1/images",
-                        method: .get,
-                        headerParameters: ["content-type": "application/json"],
-                        queryParameters: ["name": request.name])
-    }
-}
-
 // MARK: - SeasonRepositoryEndpoints Implementation
 
 extension APIEndpoint: SeasonRepositoryEndpoints {
