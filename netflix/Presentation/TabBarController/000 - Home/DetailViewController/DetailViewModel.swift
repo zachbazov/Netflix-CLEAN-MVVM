@@ -12,8 +12,7 @@ import Foundation
 final class DetailViewModel {
     var coordinator: DetailViewCoordinator?
     
-    private lazy var seasonRepository: SeasonRepository = createSeasonRepository()
-    private lazy var seasonRouter = Router<SeasonRepository>(repository: seasonRepository)
+    private let useCase = SeasonUseCase()
     
     let section: Section
     var media: Media
@@ -45,11 +44,6 @@ final class DetailViewModel {
         navigationViewState = nil
         homeDataSourceState = nil
     }
-    
-    private func createSeasonRepository() -> SeasonRepository {
-        let dataTransferService = Application.app.services.dataTransfer
-        return SeasonRepository(dataTransferService: dataTransferService)
-    }
 }
 
 // MARK: - ViewModel Implementation
@@ -80,8 +74,10 @@ extension DetailViewModel {
 
 extension DetailViewModel {
     func getSeason(with request: SeasonHTTPDTO.Request, completion: @escaping () -> Void) {
-        seasonRepository.task = seasonRouter.request(for: SeasonHTTPDTO.Response.self,
-                                                     request: request) { [weak self] result in
+        useCase.repository.task = useCase.request(for: SeasonHTTPDTO.Response.self,
+                                                  request: request,
+                                                  cached: nil,
+                                                  completion: { [weak self] result in
             if case let .success(responseDTO) = result {
                 var season = responseDTO.data.first!
                 season.episodes = season.episodes.sorted { $0.episode < $1.episode }
@@ -91,6 +87,6 @@ extension DetailViewModel {
             if case let .failure(error) = result {
                 printIfDebug(.error, "\(error)")
             }
-        }
+        })
     }
 }

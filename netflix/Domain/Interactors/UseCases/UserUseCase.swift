@@ -1,5 +1,5 @@
 //
-//  Router+AuthRepository.swift
+//  UserUseCase.swift
 //  netflix
 //
 //  Created by Zach Bazov on 14/02/2023.
@@ -7,7 +7,16 @@
 
 import Foundation
 
-extension Router<AuthRepository> {
+// MARK: - UserUseCase Type
+
+final class UserUseCase: UseCase {
+    typealias T = UserRepository
+    let repository = UserRepository()
+}
+
+// MARK: - RouteRequestable Implementation
+
+extension UserUseCase: RouteRequestable {
     /// Send a task operation according to the parameters.
     /// In case data exists, exit the scope and execute the cached operation.
     /// In case data doesn't exist, exit the scope and execute the completion handler.
@@ -23,7 +32,6 @@ extension Router<AuthRepository> {
                        completion: ((Result<T, DataTransferError>) -> Void)?) -> Cancellable? {
         switch response {
         case is UserHTTPDTO.Response.Type:
-            guard let repository = repository as AuthRepository? else { return nil }
             guard let request = request as? UserHTTPDTO.Request else { return nil }
             let completion = completion as? ((Result<UserHTTPDTO.Response, DataTransferError>) -> Void) ?? { _ in }
             // In case there is data in the storage, perform a sign-in task.
@@ -33,7 +41,6 @@ extension Router<AuthRepository> {
             // In case there isn't, perform a sign-up task.
             return repository.signUp(request: request, completion: completion)
         case is Void.Type:
-            guard let repository = repository as AuthRepository? else { return nil }
             // Perform a sign-out task.
             let completion = completion as? ((Result<Void, DataTransferError>) -> Void) ?? { _ in }
             return repository.signOut(completion: completion)

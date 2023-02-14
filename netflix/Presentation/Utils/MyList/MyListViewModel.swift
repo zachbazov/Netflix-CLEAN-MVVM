@@ -11,24 +11,21 @@ import Foundation
 
 final class MyListViewModel {
     weak var coordinator: HomeViewCoordinator?
+    
+    private let useCase = ListUseCase()
+    
     private let user: UserDTO
-    private var repository: Repository
-    private let router: Router<ListRepository>
     let list: Observable<Set<Media>> = Observable([])
     let section: Section
-//    private var task: Cancellable? { willSet { task?.cancel() } }
     
     init(with viewModel: HomeViewModel) {
         self.coordinator = viewModel.coordinator
         self.user = Application.app.services.authentication.user!
-        self.repository = viewModel.listRepository
-        self.router = viewModel.listRouter
         self.section = viewModel.section(at: .myList)
     }
     
     deinit {
         coordinator = nil
-//        task = nil
     }
 }
 
@@ -37,7 +34,7 @@ final class MyListViewModel {
 extension MyListViewModel {
     func fetchList() {
         let requestDTO = ListHTTPDTO.GET.Request(user: user)
-        repository.task = router.request(
+        useCase.repository.task = useCase.request(
             for: ListHTTPDTO.GET.Response.self,
             request: requestDTO,
             cached: { _ in },
@@ -57,7 +54,7 @@ extension MyListViewModel {
         guard let media = section.media as [Media]? else { return }
         let requestDTO = ListHTTPDTO.PATCH.Request(user: user._id!,
                                                    media: media.toObjectIDs())
-        repository.task = router.request(
+        useCase.repository.task = useCase.request(
             for: ListHTTPDTO.PATCH.Response.self,
             request: requestDTO,
             cached: { _ in },

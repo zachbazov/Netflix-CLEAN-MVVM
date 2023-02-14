@@ -1,5 +1,5 @@
 //
-//  AuthRepository.swift
+//  UserRepository.swift
 //  netflix
 //
 //  Created by Zach Bazov on 05/09/2022.
@@ -7,23 +7,17 @@
 
 import Foundation
 
-// MARK: - AuthRepository Type
+// MARK: - UserRepository Type
 
-final class AuthRepository: Repository {
-    let dataTransferService: DataTransferService
-    let responseStorage: AuthResponseStorage
+final class UserRepository: Repository {
+    let dataTransferService: DataTransferService = Application.app.services.dataTransfer
+    let responseStorage: AuthResponseStorage = Application.app.stores.authResponses
     var task: Cancellable? { willSet { task?.cancel() } }
-    
-    init(dataTransferService: DataTransferService,
-         responseStorage: AuthResponseStorage = Application.app.stores.authResponses) {
-        self.dataTransferService = dataTransferService
-        self.responseStorage = responseStorage
-    }
 }
 
 // MARK: - AuthRepositoryProtocol Implementation
 
-extension AuthRepository: AuthRepositoryProtocol {
+extension UserRepository: AuthRepositoryProtocol {
     func signUp(request: UserHTTPDTO.Request,
                 completion: @escaping (Result<UserHTTPDTO.Response, DataTransferError>) -> Void) -> Cancellable? {
         let requestDTO = UserHTTPDTO.Request(user: request.user)

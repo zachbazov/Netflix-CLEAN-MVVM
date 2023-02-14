@@ -10,15 +10,9 @@ import Foundation
 // MARK: - MediaRepository Type
 
 final class MediaRepository: Repository {
-    let dataTransferService: DataTransferService
-    let responseStorage: MediaResponseStorage
+    let dataTransferService: DataTransferService = Application.app.services.dataTransfer
+    let responseStorage: MediaResponseStorage = Application.app.stores.mediaResponses
     var task: Cancellable? { willSet { task?.cancel() } }
-    
-    init(dataTransferService: DataTransferService,
-         responseStorage: MediaResponseStorage = Application.app.stores.mediaResponses) {
-        self.dataTransferService = dataTransferService
-        self.responseStorage = responseStorage
-    }
 }
 
 // MARK: - MediaRepositoryProtocol Implementation

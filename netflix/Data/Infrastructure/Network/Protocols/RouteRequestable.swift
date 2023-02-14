@@ -7,7 +7,7 @@
 
 import Foundation
 
-protocol Routable {
+protocol RouteRequestable {
     func request<T, U>(for response: T.Type,
                        request: U?,
                        cached: ((T?) -> Void)?,
@@ -18,7 +18,7 @@ protocol Routable {
                        completion: ((Result<T, Error>) -> Void)?) -> Cancellable?
 }
 
-extension Routable {
+extension RouteRequestable {
     func request<T, U>(for response: T.Type,
                        request: U?,
                        cached: ((T?) -> Void)?,

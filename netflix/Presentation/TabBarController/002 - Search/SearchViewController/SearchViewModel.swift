@@ -12,13 +12,7 @@ import Foundation
 final class SearchViewModel {
     var coordinator: SearchViewCoordinator?
     
-    private lazy var repository: MediaRepository = createMediaRepository()
-    private lazy var router = Router<MediaRepository>(repository: repository)
-    
-    private func createMediaRepository() -> MediaRepository {
-        let dataTransferService = Application.app.services.dataTransfer
-        return MediaRepository(dataTransferService: dataTransferService)
-    }
+    private let useCase = MediaUseCase()
     
     let items: Observable<[SearchCollectionViewCellViewModel]> = Observable([])
     let loading: Observable<SearchLoading?> = Observable(.none)
@@ -48,7 +42,7 @@ extension SearchViewModel {
         self.loading.value = loading
         query.value = requestDTO.regex
         
-        repository.task = router.request(
+        useCase.repository.task = useCase.request(
             for: [Media].self,
             request: requestDTO,
             cached: { media in
@@ -86,7 +80,7 @@ extension SearchViewModel {
     }
     
     func didCancelSearch() {
-        repository.task?.cancel()
+        useCase.repository.task?.cancel()
     }
 }
 

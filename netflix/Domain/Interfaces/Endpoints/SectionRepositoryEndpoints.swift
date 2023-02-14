@@ -1,5 +1,5 @@
 //
-//  SectionRepository+Endpoints.swift
+//  SectionRepositoryEndpoints.swift
 //  netflix
 //
 //  Created by Zach Bazov on 02/02/2023.

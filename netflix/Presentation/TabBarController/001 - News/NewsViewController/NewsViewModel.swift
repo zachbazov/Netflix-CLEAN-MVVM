@@ -12,16 +12,10 @@ import Foundation
 final class NewsViewModel {
     var coordinator: NewsViewCoordinator?
     
-    private lazy var repository: MediaRepository = createMediaRepository()
-    private lazy var router = Router<MediaRepository>(repository: repository)
+    private let useCase = MediaUseCase()
     
     let items: Observable<[NewsTableViewCellViewModel]> = Observable([])
     var isEmpty: Bool { return items.value.isEmpty }
-    
-    private func createMediaRepository() -> MediaRepository {
-        let dataTransferService = Application.app.services.dataTransfer
-        return MediaRepository(dataTransferService: dataTransferService)
-    }
 }
 
 // MARK: - ViewModel Implementaiton
@@ -42,7 +36,7 @@ extension NewsViewModel {
 
 extension NewsViewModel {
     private func fetchUpcomingMedia() {
-        repository.task = router.request(for: NewsHTTPDTO.Response.self, request: Any.self, cached: nil, completion: { [weak self] result in
+        useCase.repository.task = useCase.request(for: NewsHTTPDTO.Response.self, request: Any.self, cached: nil, completion: { [weak self] result in
             if case let .success(responseDTO) = result {
                 self?.items.value = responseDTO.toCellViewModels()
             }

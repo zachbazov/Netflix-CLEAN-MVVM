@@ -13,14 +13,8 @@ import UIKit
 final class HomeViewModel {
     var coordinator: HomeViewCoordinator?
     
-    private lazy var sectionRepository: SectionRepository = createSectionRepository()
-    private lazy var sectionRouter = Router<SectionRepository>(repository: sectionRepository)
-    
-    private lazy var mediaRepository: MediaRepository = createMediaRepository()
-    private lazy var mediaRouter = Router<MediaRepository>(repository: mediaRepository)
-    
-    private(set) lazy var listRepository: ListRepository = createListRepository()
-    private(set) lazy var listRouter = Router<ListRepository>(repository: listRepository)
+    lazy var sectionUseCase = SectionUseCase()
+    lazy var mediaUseCase = MediaUseCase()
     
     let orientation = DeviceOrientation.shared
     
@@ -38,21 +32,6 @@ final class HomeViewModel {
         myList?.removeObservers()
         myList = nil
         coordinator = nil
-    }
-    
-    private func createSectionRepository() -> SectionRepository {
-        let dataTransferService = Application.app.services.dataTransfer
-        return SectionRepository(dataTransferService: dataTransferService)
-    }
-    
-    private func createMediaRepository() -> MediaRepository {
-        let dataTransferService = Application.app.services.dataTransfer
-        return MediaRepository(dataTransferService: dataTransferService)
-    }
-    
-    private func createListRepository() -> ListRepository {
-        let dataTransferService = Application.app.services.dataTransfer
-        return ListRepository(dataTransferService: dataTransferService)
     }
 }
 
@@ -93,7 +72,7 @@ extension HomeViewModel: ViewModel {
 
 extension HomeViewModel {
     private func fetchSections() {
-        sectionRepository.task = sectionRouter.request(
+        sectionUseCase.repository.task = sectionUseCase.request(
             for: SectionHTTPDTO.Response.self,
             request: Any.self,
             cached: { _ in },
@@ -112,7 +91,7 @@ extension HomeViewModel {
     }
     
     private func fetchMedia() {
-        mediaRepository.task = mediaRouter.request(
+        mediaUseCase.repository.task = mediaUseCase.request(
             for: MediaHTTPDTO.Response.self,
             request: Any.self,
             cached: { [weak self] responseDTO in

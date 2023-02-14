@@ -10,12 +10,8 @@ import Foundation
 // MARK: - ListRepository Type
 
 final class ListRepository: Repository {
-    let dataTransferService: DataTransferService
+    let dataTransferService: DataTransferService = Application.app.services.dataTransfer
     var task: Cancellable? { willSet { task?.cancel() } }
-    
-    init(dataTransferService: DataTransferService) {
-        self.dataTransferService = dataTransferService
-    }
 }
 
 // MARK: - ListRepositoryProtocol Implementation

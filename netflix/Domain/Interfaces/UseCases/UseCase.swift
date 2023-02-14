@@ -10,6 +10,4 @@ import Foundation
 protocol UseCase {
     associatedtype T: Repository
     var repository: T { get }
-    
-    func createRepository() -> T
 }
