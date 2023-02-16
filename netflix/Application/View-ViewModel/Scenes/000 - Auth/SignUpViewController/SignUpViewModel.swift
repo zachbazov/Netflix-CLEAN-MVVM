@@ -25,7 +25,8 @@ private typealias ViewModelProtocol = ViewModelInput & ViewModelOutput
 
 // MARK: - SignUpViewModel Type
 
-final class SignUpViewModel {
+final class SignUpViewModel: ControllerViewModel {
+    var coordinator: AuthCoordinator?
     private let viewModel: AuthViewModel
     
     var name: String?
@@ -36,6 +37,8 @@ final class SignUpViewModel {
     init(with viewModel: AuthViewModel) {
         self.viewModel = viewModel
     }
+    
+    func transform(input: Void) {}
 }
 
 // MARK: - Methods

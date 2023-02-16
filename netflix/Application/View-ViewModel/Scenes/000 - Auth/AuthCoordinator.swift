@@ -10,7 +10,7 @@ import UIKit
 // MARK: - CoordinatorProtocol Type
 
 private protocol CoordinatorInput {
-    func createNavigationController(rootViewController: ViewController) -> NavigationController
+    func createNavigationController(rootViewController: UIViewController) -> NavigationController
     func createLandpageController() -> LandpageViewController
     func createSignInController() -> SignInViewController
     func createSignUpController() -> SignUpViewController
@@ -41,7 +41,7 @@ final class AuthCoordinator {
 // MARK: - CoordinatorProtocol Implementation
 
 extension AuthCoordinator: CoordinatorProtocol {
-    fileprivate func createNavigationController(rootViewController: ViewController) -> NavigationController {
+    fileprivate func createNavigationController(rootViewController: UIViewController) -> NavigationController {
         return NavigationController(rootViewController: rootViewController)
     }
     

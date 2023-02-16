@@ -15,6 +15,6 @@ final class TabBarViewModel {
 
 // MARK: - ViewControllerViewModel Implementation
 
-extension TabBarViewModel: ViewControllerViewModel {
+extension TabBarViewModel: ControllerViewModel {
     func transform(input: Void) {}
 }

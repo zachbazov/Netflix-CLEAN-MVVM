@@ -9,7 +9,7 @@ import UIKit
 
 // MARK: - TabBarController Type
 
-final class TabBarController: TabController, ViewControllerModeling {
+final class TabBarController: TabController {
     var viewModel: TabBarViewModel!
     
     override func viewDidLoad() {

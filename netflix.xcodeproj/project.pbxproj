@@ -180,7 +180,7 @@
 		A1AE02D1293BA29A00AF0BD6 /* DeviceOrientation.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1AE02D0293BA29A00AF0BD6 /* DeviceOrientation.swift */; };
 		A1AEB442299E0DD10016DE2B /* SceneObserverUnbinding.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1AEB441299E0DD10016DE2B /* SceneObserverUnbinding.swift */; };
 		A1AEB444299E15D20016DE2B /* TabController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1AEB443299E15D20016DE2B /* TabController.swift */; };
-		A1AEB446299E16670016DE2B /* ViewControllerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1AEB445299E16670016DE2B /* ViewControllerViewModel.swift */; };
+		A1AEB446299E16670016DE2B /* ControllerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1AEB445299E16670016DE2B /* ControllerViewModel.swift */; };
 		A1B0DE562954590E00307866 /* UITableView+ContentInset.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B0DE552954590E00307866 /* UITableView+ContentInset.swift */; };
 		A1B0DE5A29560F5900307866 /* UINavigationController+Identifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B0DE5929560F5900307866 /* UINavigationController+Identifier.swift */; };
 		A1B1B0A8299AEDDE0070AD29 /* Services.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B1B0A7299AEDDE0070AD29 /* Services.swift */; };
@@ -218,7 +218,7 @@
 		A1B70A8E293E72D700C718C6 /* SignUpViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = A1B70A8D293E72D700C718C6 /* SignUpViewController.xib */; };
 		A1B70A90293E762000C718C6 /* LandpageViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = A1B70A8F293E762000C718C6 /* LandpageViewController.xib */; };
 		A1B70A94293E9FA400C718C6 /* NavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B70A93293E9FA400C718C6 /* NavigationController.swift */; };
-		A1B70A96293E9FF600C718C6 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B70A95293E9FF600C718C6 /* ViewController.swift */; };
+		A1B70A96293E9FF600C718C6 /* Controller.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B70A95293E9FF600C718C6 /* Controller.swift */; };
 		A1B70A9E293EC5D600C718C6 /* AuthController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B70A9D293EC5D600C718C6 /* AuthController.swift */; };
 		A1B70AA529400ACE00C718C6 /* SignInViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B70AA429400ACD00C718C6 /* SignInViewModel.swift */; };
 		A1B70AA729400B0E00C718C6 /* SignUpViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B70AA629400B0E00C718C6 /* SignUpViewModel.swift */; };
@@ -448,7 +448,7 @@
 		A1AE02D0293BA29A00AF0BD6 /* DeviceOrientation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceOrientation.swift; sourceTree = "<group>"; };
 		A1AEB441299E0DD10016DE2B /* SceneObserverUnbinding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneObserverUnbinding.swift; sourceTree = "<group>"; };
 		A1AEB443299E15D20016DE2B /* TabController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabController.swift; sourceTree = "<group>"; };
-		A1AEB445299E16670016DE2B /* ViewControllerViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewControllerViewModel.swift; sourceTree = "<group>"; };
+		A1AEB445299E16670016DE2B /* ControllerViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ControllerViewModel.swift; sourceTree = "<group>"; };
 		A1B0DE552954590E00307866 /* UITableView+ContentInset.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITableView+ContentInset.swift"; sourceTree = "<group>"; };
 		A1B0DE5929560F5900307866 /* UINavigationController+Identifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UINavigationController+Identifier.swift"; sourceTree = "<group>"; };
 		A1B1B0A7299AEDDE0070AD29 /* Services.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Services.swift; sourceTree = "<group>"; };
@@ -486,7 +486,7 @@
 		A1B70A8D293E72D700C718C6 /* SignUpViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SignUpViewController.xib; sourceTree = "<group>"; };
 		A1B70A8F293E762000C718C6 /* LandpageViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = LandpageViewController.xib; sourceTree = "<group>"; };
 		A1B70A93293E9FA400C718C6 /* NavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationController.swift; sourceTree = "<group>"; };
-		A1B70A95293E9FF600C718C6 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		A1B70A95293E9FF600C718C6 /* Controller.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Controller.swift; sourceTree = "<group>"; };
 		A1B70A9D293EC5D600C718C6 /* AuthController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthController.swift; sourceTree = "<group>"; };
 		A1B70AA429400ACD00C718C6 /* SignInViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInViewModel.swift; sourceTree = "<group>"; };
 		A1B70AA629400B0E00C718C6 /* SignUpViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpViewModel.swift; sourceTree = "<group>"; };
@@ -1330,8 +1330,8 @@
 			children = (
 				A1AEB443299E15D20016DE2B /* TabController.swift */,
 				A1B70A93293E9FA400C718C6 /* NavigationController.swift */,
-				A1B70A95293E9FF600C718C6 /* ViewController.swift */,
-				A1AEB445299E16670016DE2B /* ViewControllerViewModel.swift */,
+				A1B70A95293E9FF600C718C6 /* Controller.swift */,
+				A1AEB445299E16670016DE2B /* ControllerViewModel.swift */,
 				A1B70A6E293D578200C718C6 /* View.swift */,
 				A1B70A70293D578600C718C6 /* ViewModel.swift */,
 				A1B70A89293E5E0400C718C6 /* Coordinate.swift */,
@@ -1918,7 +1918,7 @@
 				A1BA1DA728D8BA9F00730EA8 /* UIView+Animations.swift in Sources */,
 				A1A71AB2298B86E7001C6AB1 /* ListRepositoryEndpoints.swift in Sources */,
 				A1741D2428E67CEB00F3C46B /* DetailDescriptionView.swift in Sources */,
-				A1B70A96293E9FF600C718C6 /* ViewController.swift in Sources */,
+				A1B70A96293E9FF600C718C6 /* Controller.swift in Sources */,
 				A1741D2628E67CF200F3C46B /* DetailPanelView.swift in Sources */,
 				A1741D5E28EE61E700F3C46B /* MediaPlayerOverlayView.swift in Sources */,
 				A1BA1DBD28DCB69100730EA8 /* NavigationOverlayTableViewCell.swift in Sources */,
@@ -1987,7 +1987,7 @@
 				A1A71ABD298D8460001C6AB1 /* ListRepositoryProtocol.swift in Sources */,
 				A1BA1DC228DCB7D700730EA8 /* NavigationOverlayTableViewDataSource.swift in Sources */,
 				A130BCB929510C900070EA5E /* DownloadsViewCoordinator.swift in Sources */,
-				A1AEB446299E16670016DE2B /* ViewControllerViewModel.swift in Sources */,
+				A1AEB446299E16670016DE2B /* ControllerViewModel.swift in Sources */,
 				A1B93C832900D2A800AF2C7F /* QoS.swift in Sources */,
 				A18B999E28C0E6D80077A5A6 /* AuthResponseStorage.swift in Sources */,
 				A1BA1DA328D8149B00730EA8 /* UIImage+Rendering.swift in Sources */,

@@ -90,7 +90,7 @@ extension HomeViewModel {
 
 // MARK: - ViewModel Implementation
 
-extension HomeViewModel: ViewModel {
+extension HomeViewModel: ControllerViewModel {
     func transform(input: Void) {}
 }
 

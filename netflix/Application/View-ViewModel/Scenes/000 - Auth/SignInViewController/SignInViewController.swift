@@ -17,14 +17,10 @@ private typealias ViewControllerProtocol = ViewControllerInput
 
 // MARK: - SignInViewController Type
 
-final class SignInViewController: ViewController {
+final class SignInViewController: Controller<SignInViewModel> {
     @IBOutlet weak var emailTextField: UITextField!
     @IBOutlet weak var passwordTextField: UITextField!
     @IBOutlet weak var signInButton: UIButton!
-    
-    var viewModel: SignInViewModel?
-    
-    // MARK: UIViewController Lifecycle
     
     override func viewDidLoad() {
         super.viewDidLoad()

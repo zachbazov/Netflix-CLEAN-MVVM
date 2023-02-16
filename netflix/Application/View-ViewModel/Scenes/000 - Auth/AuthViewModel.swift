@@ -33,7 +33,7 @@ final class AuthViewModel {
 
 // MARK: - ViewControllerViewModel Implementation
 
-extension AuthViewModel: ViewControllerViewModel {
+extension AuthViewModel: ControllerViewModel {
     func transform(input: Void) {}
 }
 

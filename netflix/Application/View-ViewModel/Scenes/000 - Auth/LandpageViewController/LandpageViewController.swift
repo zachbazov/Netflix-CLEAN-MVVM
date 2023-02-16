@@ -17,13 +17,11 @@ private typealias ViewControllerProtocol = ViewControllerOutput
 
 // MARK: - LandpageViewController Type
 
-final class LandpageViewController: ViewController {
+final class LandpageViewController: Controller<AuthViewModel> {
     @IBOutlet private weak var statusBarGradientView: UIView!
     @IBOutlet private weak var topGradientView: UIView!
     @IBOutlet private weak var bottomGradientView: UIView!
     @IBOutlet private weak var signUpButton: UIButton!
-    
-    var viewModel: AuthViewModel!
     
     private var hasGradient = false
     

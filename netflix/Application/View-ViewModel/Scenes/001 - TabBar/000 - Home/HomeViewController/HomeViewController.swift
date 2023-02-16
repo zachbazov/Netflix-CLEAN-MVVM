@@ -19,13 +19,11 @@ private typealias ViewControllerProtocol = ViewControllerOutput
 
 // MARK: - HomeViewController Type
 
-final class HomeViewController: ViewController, ViewControllerProtocol {
+final class HomeViewController: Controller<HomeViewModel>, ViewControllerProtocol {
     @IBOutlet private(set) var tableView: UITableView!
     @IBOutlet private(set) var navigationViewContainer: UIView!
     @IBOutlet private(set) var navigationViewTopConstraint: NSLayoutConstraint!
     @IBOutlet private(set) var browseOverlayViewContainer: UIView!
-    
-    var viewModel: HomeViewModel!
     
     private(set) var dataSource: HomeTableViewDataSource!
     

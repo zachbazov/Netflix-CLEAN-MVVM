@@ -1,5 +1,5 @@
 //
-//  ViewController.swift
+//  Controller.swift
 //  netflix
 //
 //  Created by Zach Bazov on 05/12/2022.
@@ -7,15 +7,22 @@
 
 import UIKit
 
-private protocol ViewControllerObserving {
+private protocol ControllerObserving {
     func viewObserversDidBind()
     func viewObserversDidUnbind()
 }
 
-class ViewController: UIViewController {
+protocol Controllable {
+    associatedtype T: ControllerViewModel
+    var viewModel: T! { get set }
+}
+
+class Controller<T>: UIViewController, Controllable where T: ControllerViewModel {
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return .lightContent
     }
+    
+    var viewModel: T!
     
     func viewDidDeployBehaviors() {
         addBehaviors([BackButtonEmptyTitleNavigationBarBehavior(),
@@ -50,4 +57,4 @@ class ViewController: UIViewController {
     func viewObserversDidUnbind() {}
 }
 
-extension ViewController: ViewControllerObserving {}
+extension Controller: ControllerObserving {}
