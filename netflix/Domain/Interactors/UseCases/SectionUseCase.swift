@@ -16,7 +16,7 @@ final class SectionUseCase: UseCase {
 
 // MARK: - RouteRequestable Implementation
 
-extension SectionUseCase: RouteRequestable {
+extension SectionUseCase: RequestableRoute {
     func request<T, U>(for response: T.Type,
                        request: U? = nil,
                        cached: ((T?) -> Void)?,

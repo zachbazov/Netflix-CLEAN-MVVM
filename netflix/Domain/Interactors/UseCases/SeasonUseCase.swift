@@ -16,7 +16,7 @@ final class SeasonUseCase: UseCase {
 
 // MARK: - RouteRequestable Implementation
 
-extension SeasonUseCase: RouteRequestable {
+extension SeasonUseCase: RequestableRoute {
     func request<T, U>(for response: T.Type,
                        request: U?,
                        cached: ((T?) -> Void)?,

@@ -16,7 +16,7 @@ final class ListUseCase: UseCase {
 
 // MARK: - RouteRequestable Implementation
 
-extension ListUseCase: RouteRequestable {
+extension ListUseCase: RequestableRoute {
     func request<T, U>(for response: T.Type,
                        request: U? = nil,
                        cached: ((T?) -> Void)?,

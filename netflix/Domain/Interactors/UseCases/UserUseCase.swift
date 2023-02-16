@@ -14,9 +14,9 @@ final class UserUseCase: UseCase {
     let repository = UserRepository()
 }
 
-// MARK: - RouteRequestable Implementation
+// MARK: - RequestableRoute Implementation
 
-extension UserUseCase: RouteRequestable {
+extension UserUseCase: RequestableRoute {
     /// Send a task operation according to the parameters.
     /// In case data exists, exit the scope and execute the cached operation.
     /// In case data doesn't exist, exit the scope and execute the completion handler.

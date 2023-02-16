@@ -7,13 +7,20 @@
 
 import UIKit
 
-// MARK: - ApplicationProtocol Protocol
+// MARK: - ApplicationProtocol Type
 
-private protocol ApplicationProtocol {
-    var sceneCoordinator: SceneCoordinator { get }
-    
+private protocol ApplicationInput {
     func deployScene(in window: UIWindow?)
+    func resignUserFromCachedData()
 }
+
+private protocol ApplicationOutput {
+    var services: AppServices { get }
+    var stores: AppStores { get }
+    var sceneCoordinator: Coordinator { get }
+}
+
+private typealias ApplicationProtocol = ApplicationInput & ApplicationOutput
 
 // MARK: - Application Type
 
@@ -24,28 +31,22 @@ final class Application {
     private(set) lazy var services = AppServices()
     private(set) lazy var stores = AppStores(services: services)
     
-    let sceneCoordinator = SceneCoordinator()
-}
-
-// MARK: - Private Methods
-
-extension Application {
-    /// Check for the last signed authentication response by the user.
-    /// In case there is a valid response present the TabBar screen.
-    /// In case there isn't a valid response present the Auth screen.
-    private func cachedAuthorizationResponse() {
-        services.authentication.response { [weak self] userDTO in
-            guard let self = self else { return }
-            guard userDTO != nil else { return self.sceneCoordinator.deploy(screen: .auth) }
-            self.sceneCoordinator.deploy(screen: .tabBar)
-        }
-    }
+    let sceneCoordinator = Coordinator()
 }
 
 // MARK: - ApplicationProtocol Implementation
 
 extension Application: ApplicationProtocol {
-    /// Main entry-point for the app.
+    /// Check for the last signed authentication response by the user.
+    /// In case there is a valid response present the TabBar screen.
+    /// In case there isn't a valid response present the Auth screen.
+    fileprivate func resignUserFromCachedData() {
+        services.authentication.resign { [weak self] userDTO in
+            guard let self = self else { return }
+            guard userDTO != nil else { return self.sceneCoordinator.coordinate(to: .auth) }
+            self.sceneCoordinator.coordinate(to: .tabBar)
+        }
+    }
     /// Allocate a root view controller for the window.
     /// - Parameter window: Application's root window.
     func deployScene(in window: UIWindow?) {
@@ -53,6 +54,6 @@ extension Application: ApplicationProtocol {
         // Stack and present the window.
         window?.makeKeyAndVisible()
         // Check for the latest signed response by the user.
-        cachedAuthorizationResponse()
+        resignUserFromCachedData()
     }
 }

@@ -7,20 +7,23 @@
 
 import Foundation
 
-// MARK: - AppStoresProtocol Protocol
+// MARK: - StoresProtocol Type
 
-protocol AppStoresProtocol {
+private protocol StoresOutput {
     var authResponses: AuthResponseStorage { get }
     var mediaResponses: MediaResponseStorage { get }
+    var services: AppServices { get }
 }
+
+private typealias StoresProtocol = StoresOutput
 
 // MARK: - AppStores Type
 
-final class AppStores: AppStoresProtocol {
+final class AppStores: StoresProtocol {
     private(set) lazy var authResponses = AuthResponseStorage(authService: services.authentication)
     private(set) lazy var mediaResponses = MediaResponseStorage()
     
-    private let services: AppServices
+    fileprivate let services: AppServices
     
     init(services: AppServices) {
         self.services = services

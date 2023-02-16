@@ -16,7 +16,7 @@ final class MediaUseCase: UseCase {
 
 // MARK: - RouteRequestable Implementation
 
-extension MediaUseCase: RouteRequestable {
+extension MediaUseCase: RequestableRoute {
     func request<T, U>(for response: T.Type,
                        request: U? = nil,
                        cached: ((T?) -> Void)?,

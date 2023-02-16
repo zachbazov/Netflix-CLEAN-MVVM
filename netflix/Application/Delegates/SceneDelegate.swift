@@ -13,7 +13,7 @@ class SceneDelegate: UIResponder {
     var window: UIWindow?
 }
 
-// MARK: - UIWindowSceneDelegate Protocol
+// MARK: - UIWindowSceneDelegate Implementation
 
 extension SceneDelegate: UIWindowSceneDelegate {
     /// Occurs once the scene is about to connect to the app.
@@ -26,16 +26,17 @@ extension SceneDelegate: UIWindowSceneDelegate {
                options connectionOptions: UIScene.ConnectionOptions) {
         guard let windowScene = (scene as? UIWindowScene) else { return }
         // Apply application appearance configurations.
-        AppAppearance.default()
+        AppTheme.default()
         // Allocate root's references.
         window = UIWindow(windowScene: windowScene)
         // Deploy the application.
-        Application.app.deployScene(in: window)
+        let application = Application.app
+        application.deployScene(in: window)
     }
     /// Occurs once the scene has been disconnected from the app.
     /// - Parameter scene: Corresponding scene.
     func sceneDidDisconnect(_ scene: UIScene) {
-        ejectTabBarObservers()
+        sceneObserversDidUnbind()
     }
     
     func sceneDidBecomeActive(_ scene: UIScene) {}
@@ -47,18 +48,18 @@ extension SceneDelegate: UIWindowSceneDelegate {
     func sceneDidEnterBackground(_ scene: UIScene) {}
 }
 
-// MARK: - TabBarEjectable Implementation
+// MARK: - TabBarObserverUnbinding Implementation
 
-extension SceneDelegate: TabBarEjectable {
+extension SceneDelegate: SceneObserverUnbinding {
     /// Remove all tar-bar related observers.
     /// The observers of `DetailViewController` will be removed automatically once home's instance is deallocated.
-    func ejectTabBarObservers() {
+    func sceneObserversDidUnbind() {
         guard let tabCoordinator = Application.app.sceneCoordinator.tabCoordinator else { return }
         // Remove any home-related observers.
         if let homeController = tabCoordinator.home.viewControllers.first! as? HomeViewController {
             // Remove panel view observers.
-            if let displayCell = homeController.dataSource.displayCell,
-               let panelView = displayCell.displayView.panelView as PanelView? {
+            if let showcaseCell = homeController.dataSource.showcaseCell,
+               let panelView = showcaseCell.showcaseView.panelView as PanelView? {
                 panelView.removeObservers()
             }
             // Remove navigation & navigation overlay views observers.
@@ -68,11 +69,11 @@ extension SceneDelegate: TabBarEjectable {
                 navigationOverlayView.removeObservers()
             }
             // Remove my-list observers.
-            if let myList = homeController.viewModel.myList {
+            if let myList = homeController.viewModel.myList as MyList? {
                 myList.removeObservers()
             }
             
-            homeController.removeObservers()
+            homeController.viewObserversDidUnbind()
         }
         // In-case of a valid news controller instance, remove it's observers.
         if let newsController = tabCoordinator.news.viewControllers.first! as? NewsViewController {
