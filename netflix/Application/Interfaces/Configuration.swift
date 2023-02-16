@@ -1,5 +1,5 @@
 //
-//  AppConfiguration.swift
+//  Configuration.swift
 //  netflix
 //
 //  Created by Zach Bazov on 31/08/2022.
@@ -7,9 +7,9 @@
 
 import Foundation
 
-// MARK: - AppConfiguration Type
+// MARK: - Configuration Type
 
-final class AppConfiguration {
+final class Configuration {
     
     // MARK: API's Properties
     

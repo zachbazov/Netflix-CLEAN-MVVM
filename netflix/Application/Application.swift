@@ -15,8 +15,8 @@ private protocol ApplicationInput {
 }
 
 private protocol ApplicationOutput {
-    var services: AppServices { get }
-    var stores: AppStores { get }
+    var services: Services { get }
+    var stores: Stores { get }
     var sceneCoordinator: Coordinator { get }
 }
 
@@ -28,8 +28,8 @@ final class Application {
     static let app = Application()
     private init() {}
     
-    private(set) lazy var services = AppServices()
-    private(set) lazy var stores = AppStores(services: services)
+    private(set) lazy var services = Services()
+    private(set) lazy var stores = Stores(services: services)
     
     let sceneCoordinator = Coordinator()
 }

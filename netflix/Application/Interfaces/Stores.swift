@@ -1,5 +1,5 @@
 //
-//  AppStores.swift
+//  Stores.swift
 //  netflix
 //
 //  Created by Zach Bazov on 14/02/2023.
@@ -12,20 +12,20 @@ import Foundation
 private protocol StoresOutput {
     var authResponses: AuthResponseStorage { get }
     var mediaResponses: MediaResponseStorage { get }
-    var services: AppServices { get }
+    var services: Services { get }
 }
 
 private typealias StoresProtocol = StoresOutput
 
-// MARK: - AppStores Type
+// MARK: - Stores Type
 
-final class AppStores: StoresProtocol {
+final class Stores: StoresProtocol {
     private(set) lazy var authResponses = AuthResponseStorage(authService: services.authentication)
     private(set) lazy var mediaResponses = MediaResponseStorage()
     
-    fileprivate let services: AppServices
+    fileprivate let services: Services
     
-    init(services: AppServices) {
+    init(services: Services) {
         self.services = services
     }
 }

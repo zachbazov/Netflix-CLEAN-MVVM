@@ -26,7 +26,7 @@ extension SceneDelegate: UIWindowSceneDelegate {
                options connectionOptions: UIScene.ConnectionOptions) {
         guard let windowScene = (scene as? UIWindowScene) else { return }
         // Apply application appearance configurations.
-        AppTheme.default()
+        Theme.default()
         // Allocate root's references.
         window = UIWindow(windowScene: windowScene)
         // Deploy the application.

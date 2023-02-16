@@ -1,5 +1,5 @@
 //
-//  AppServices.swift
+//  Services.swift
 //  netflix
 //
 //  Created by Zach Bazov on 14/02/2023.
@@ -7,7 +7,7 @@
 
 import Foundation
 
-// MARK: - AppServicesProtocol Type
+// MARK: - ServicesProtocol Type
 
 private protocol ServicesInput {
     func createDataTransferService() -> DataTransferService
@@ -20,22 +20,22 @@ private protocol ServicesOutput {
 
 private typealias ServicesProtocol = ServicesInput & ServicesOutput
 
-// MARK: - AppServices Type
+// MARK: - Services Type
 
-final class AppServices {
+final class Services {
     private(set) lazy var authentication = AuthService()
     private(set) lazy var dataTransfer: DataTransferService = createDataTransferService()
     
-    private let configuration: AppConfiguration
+    private let configuration: Configuration
     
-    init(configuration: AppConfiguration = AppConfiguration()) {
+    init(configuration: Configuration = Configuration()) {
         self.configuration = configuration
     }
 }
 
 // MARK: - ServicesProtocol Implementation
 
-extension AppServices: ServicesProtocol {
+extension Services: ServicesProtocol {
     /// Allocate the service that manages the application networking.
     /// - Returns: A data transfer service object.
     fileprivate func createDataTransferService() -> DataTransferService {

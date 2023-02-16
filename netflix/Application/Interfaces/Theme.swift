@@ -1,5 +1,5 @@
 //
-//  AppTheme.swift
+//  Theme.swift
 //  netflix
 //
 //  Created by Zach Bazov on 05/09/2022.
@@ -14,13 +14,13 @@ private protocol ThemingBehavior {
     static func dark()
 }
 
-// MARK: - AppTheme Type
+// MARK: - Theme Type
 
-final class AppTheme {}
+final class Theme {}
 
 // MARK: - ThemingBehavior Implementation
 
-extension AppTheme: ThemingBehavior {
+extension Theme: ThemingBehavior {
     /// Setup application's default appearance.
     static func `default`() {
         if #available(iOS 15, *) {
