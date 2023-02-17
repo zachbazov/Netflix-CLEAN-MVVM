@@ -47,8 +47,8 @@ extension SignInViewModel: ViewModelProtocol {
     }
     /// Invokes a sign in request for the user credentials.
     fileprivate func signInRequest() {
-        let authService = Application.app.services.authentication
-        let coordinator = Application.app.sceneCoordinator
+        let authService = Application.app.dependencies.services.authentication
+        let coordinator = Application.app.dependencies.coordinator
         // Ensure the properties aren't nil.
         guard let email = email, let password = password else { return }
         // Create a new user.

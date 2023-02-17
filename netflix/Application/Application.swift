@@ -15,9 +15,7 @@ private protocol ApplicationInput {
 }
 
 private protocol ApplicationOutput {
-    var services: Services { get }
-    var stores: Stores { get }
-    var sceneCoordinator: Coordinator { get }
+    var dependencies: Application.Dependencies { get }
 }
 
 private typealias ApplicationProtocol = ApplicationInput & ApplicationOutput
@@ -28,10 +26,14 @@ final class Application {
     static let app = Application()
     private init() {}
     
-    lazy var services = Services()
-    lazy var stores = Stores(services: services)
+    struct Dependencies {
+        let coordinator: Coordinator
+        let services: Services
+        let stores: Stores
+    }
     
-    let sceneCoordinator = Coordinator()
+    let container = Container()
+    lazy var dependencies = container.createApplicationDependencies()
 }
 
 // MARK: - ApplicationProtocol Implementation
@@ -41,16 +43,18 @@ extension Application: ApplicationProtocol {
     /// In case there is a valid response present the TabBar screen.
     /// In case there isn't a valid response present the Auth screen.
     fileprivate func resignUserFromCachedData() {
-        services.authentication.resign { [weak self] userDTO in
+        dependencies.services.authentication.resign { [weak self] userDTO in
             guard let self = self else { return }
-            guard userDTO != nil else { return self.sceneCoordinator.coordinate(to: .auth) }
-            self.sceneCoordinator.coordinate(to: .tabBar)
+            guard userDTO != nil else {
+                return self.dependencies.coordinator.coordinate(to: .auth)
+            }
+            self.dependencies.coordinator.coordinate(to: .tabBar)
         }
     }
     /// Allocate a root view controller for the window.
     /// - Parameter window: Application's root window.
     func deployScene(in window: UIWindow?) {
-        sceneCoordinator.window = window
+        dependencies.coordinator.window = window
         // Stack and present the window.
         window?.makeKeyAndVisible()
         // Check for the latest signed response by the user.

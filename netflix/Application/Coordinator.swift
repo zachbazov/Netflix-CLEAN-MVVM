@@ -62,7 +62,7 @@ extension Coordinator: CoordinatorProtocol {
         case .auth:
             authCoordinator.coordinate(to: .landpage)
         case .tabBar:
-            let authService = Application.app.services.authentication
+            let authService = Application.app.dependencies.services.authentication
             let requestDTO = UserHTTPDTO.Request(user: authService.user!)
             authService.signIn(for: requestDTO) { [weak self] in
                 guard let self = self else { return }

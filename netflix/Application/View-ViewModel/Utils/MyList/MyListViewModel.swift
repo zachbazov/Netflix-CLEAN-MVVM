@@ -20,7 +20,7 @@ final class MyListViewModel {
     
     init(with viewModel: HomeViewModel) {
         self.coordinator = viewModel.coordinator
-        self.user = Application.app.services.authentication.user!
+        self.user = Application.app.dependencies.services.authentication.user!
         self.section = viewModel.section(at: .myList)
     }
     

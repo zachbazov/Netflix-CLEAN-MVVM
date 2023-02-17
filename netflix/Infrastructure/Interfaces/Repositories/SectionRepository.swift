@@ -10,7 +10,7 @@ import Foundation
 // MARK: - SectionRepository Type
 
 final class SectionRepository: Repository {
-    let dataTransferService: DataTransferService = Application.app.services.dataTransfer
+    let dataTransferService: DataTransferService = Application.app.dependencies.services.dataTransfer
     var task: Cancellable? { willSet { task?.cancel() } }
 }
 

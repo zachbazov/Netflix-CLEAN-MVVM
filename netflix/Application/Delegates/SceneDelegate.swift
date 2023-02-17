@@ -54,7 +54,7 @@ extension SceneDelegate: SceneObserverUnbinding {
     /// Remove all tar-bar related observers.
     /// The observers of `DetailViewController` will be removed automatically once home's instance is deallocated.
     func sceneObserversDidUnbind() {
-        guard let tabCoordinator = Application.app.sceneCoordinator.tabCoordinator else { return }
+        guard let tabCoordinator = Application.app.dependencies.coordinator.tabCoordinator else { return }
         // Remove any home-related observers.
         if let homeController = tabCoordinator.home.viewControllers.first! as? HomeViewController {
             // Remove panel view observers.

@@ -51,8 +51,8 @@ extension NewsTableViewDataSource: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         guard let row = indexPath.row as Int?, row >= 0, row <= viewModel.items.value.count - 1 else { return }
-        let homeNavigation = Application.app.sceneCoordinator.tabCoordinator.home!
-        let newsNavigation = Application.app.sceneCoordinator.tabCoordinator.news!
+        let homeNavigation = Application.app.dependencies.coordinator.tabCoordinator.home!
+        let newsNavigation = Application.app.dependencies.coordinator.tabCoordinator.news!
         let homeController = homeNavigation.viewControllers.first! as! HomeViewController
         let homeViewModel = homeController.viewModel
         let newsController = newsNavigation.viewControllers.first! as! NewsViewController

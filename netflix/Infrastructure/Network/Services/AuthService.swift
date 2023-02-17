@@ -34,7 +34,7 @@ class AuthService {
     var user: UserDTO?
     private(set) var request: UserHTTPDTO.Request?
     private(set) var response: UserHTTPDTO.Response?
-    fileprivate var responses: AuthResponseStorage { return Application.app.stores.authResponses }
+    fileprivate var responses: AuthResponseStorage { return Application.app.dependencies.stores.authResponses }
     
     /// Check for the latest authentication response signed by user.
     /// In case there is a valid response, pass the user data with the completion.
@@ -150,7 +150,7 @@ extension AuthService: AuthServiceProtocol {
                         self.user = nil
                         // Present the authentication screen.
                         mainQueueDispatch {
-                            let sceneCoordinator = Application.app.sceneCoordinator
+                            let sceneCoordinator = Application.app.dependencies.coordinator
                             sceneCoordinator.coordinate(to: .auth)
                         }
                     case .failure(let error):
