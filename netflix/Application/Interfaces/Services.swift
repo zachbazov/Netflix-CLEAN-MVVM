@@ -23,7 +23,7 @@ private typealias ServicesProtocol = ServicesInput & ServicesOutput
 // MARK: - Services Type
 
 final class Services {
-    private(set) lazy var authentication = AuthService()
+    lazy var authentication = AuthService()
     private(set) lazy var dataTransfer: DataTransferService = createDataTransferService()
     
     private let configuration: Configuration
@@ -38,7 +38,7 @@ final class Services {
 extension Services: ServicesProtocol {
     /// Allocate the service that manages the application networking.
     /// - Returns: A data transfer service object.
-    fileprivate func createDataTransferService() -> DataTransferService {
+    func createDataTransferService() -> DataTransferService {
         let url = URL(string: configuration.apiScheme + "://" + configuration.apiHost)!
         let config = NetworkConfig(baseURL: url)
         let service = NetworkService(config: config)

@@ -28,8 +28,8 @@ final class Application {
     static let app = Application()
     private init() {}
     
-    private(set) lazy var services = Services()
-    private(set) lazy var stores = Stores(services: services)
+    lazy var services = Services()
+    lazy var stores = Stores(services: services)
     
     let sceneCoordinator = Coordinator()
 }

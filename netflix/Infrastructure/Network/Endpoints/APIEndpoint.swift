@@ -18,7 +18,7 @@ extension APIEndpoint: AuthRepositoryEndpoints {
         return Endpoint(path: "api/v1/users/signup",
                         method: .post,
                         headerParameters: ["content-type": "application/json"],
-                        bodyParameters: ["name": authRequestDTO.user.name!,
+                        bodyParameters: ["name": authRequestDTO.user.name ?? "Undefined",
                                          "email": authRequestDTO.user.email!,
                                          "password": authRequestDTO.user.password!,
                                          "passwordConfirm": authRequestDTO.user.passwordConfirm!],

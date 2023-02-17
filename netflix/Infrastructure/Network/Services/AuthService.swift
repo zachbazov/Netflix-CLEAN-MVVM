@@ -30,38 +30,12 @@ private typealias AuthServiceProtocol = AuthServiceInput & AuthServiceOutput
 
 // MARK: - AuthService Type
 
-final class AuthService {
-    private(set) var user: UserDTO?
+class AuthService {
+    var user: UserDTO?
     private(set) var request: UserHTTPDTO.Request?
     private(set) var response: UserHTTPDTO.Response?
     fileprivate var responses: AuthResponseStorage { return Application.app.stores.authResponses }
-}
-
-// MARK: - AuthServiceProtocol Implementation
-
-extension AuthService: AuthServiceProtocol {
-    /// Assign the user and its request-response properties.
-    /// - Parameters:
-    ///   - request: Request object via invocation.
-    ///   - response: Response object via invocation.
-    func setResponse(request: UserHTTPDTO.Request?, response: UserHTTPDTO.Response) {
-        self.request = request
-        self.response = response
-        
-        setUser(request: request, response: response)
-    }
-    /// Assign and manipulate the `user` property.
-    /// - Parameters:
-    ///   - request: Request object via invocation.
-    ///   - response: Response object via invocation.
-    fileprivate func setUser(request: UserHTTPDTO.Request?, response: UserHTTPDTO.Response) {
-        user = response.data
-        user?._id = response.data?._id
-        user?.token = response.token
-        if let request = request {
-            user?.password = request.user.password
-        }
-    }
+    
     /// Check for the latest authentication response signed by user.
     /// In case there is a valid response, pass the user data with the completion.
     /// In case there isn't a valid response, pass nil with the completion.
@@ -111,6 +85,33 @@ extension AuthService: AuthServiceProtocol {
                     printIfDebug(.error, "Unresolved error \(error)")
                 }
             })
+    }
+}
+
+// MARK: - AuthServiceProtocol Implementation
+
+extension AuthService: AuthServiceProtocol {
+    /// Assign the user and its request-response properties.
+    /// - Parameters:
+    ///   - request: Request object via invocation.
+    ///   - response: Response object via invocation.
+    func setResponse(request: UserHTTPDTO.Request?, response: UserHTTPDTO.Response) {
+        self.request = request
+        self.response = response
+        
+        setUser(request: request, response: response)
+    }
+    /// Assign and manipulate the `user` property.
+    /// - Parameters:
+    ///   - request: Request object via invocation.
+    ///   - response: Response object via invocation.
+    fileprivate func setUser(request: UserHTTPDTO.Request?, response: UserHTTPDTO.Response) {
+        user = response.data
+        user?._id = response.data?._id
+        user?.token = response.token
+        if let request = request {
+            user?.password = request.user.password
+        }
     }
     /// Invoke a sign up request.
     /// - Parameters:

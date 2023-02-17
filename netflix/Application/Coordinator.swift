@@ -37,7 +37,7 @@ final class Coordinator {
 
 extension Coordinator: CoordinatorProtocol {
     /// Allocating and presenting the authorization screen.
-    fileprivate func createAuthController() {
+    func createAuthController() {
         authCoordinator = AuthCoordinator()
         let viewModel = AuthViewModel()
         let controller = AuthController()
@@ -47,7 +47,7 @@ extension Coordinator: CoordinatorProtocol {
         window?.rootViewController = controller
     }
     /// Allocating and presenting the tab bar screen.
-    fileprivate func createTabBarController() {
+    func createTabBarController() {
         tabCoordinator = TabBarCoordinator()
         let controller = TabBarController()
         let viewModel = TabBarViewModel()
@@ -57,7 +57,7 @@ extension Coordinator: CoordinatorProtocol {
         window?.rootViewController = controller
     }
     
-    fileprivate func deploy(_ screen: Screen) {
+    func deploy(_ screen: Screen) {
         switch screen {
         case .auth:
             authCoordinator.coordinate(to: .landpage)
