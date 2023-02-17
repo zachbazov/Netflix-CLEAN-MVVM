@@ -15,7 +15,7 @@ final class CoordinatorTests: XCTestCase {
     override func setUp() {
         super.setUp()
         application = Application.app
-        coordinator = application.coordinator
+        coordinator = application.dependencies.coordinator
     }
     
     override func tearDown() {
