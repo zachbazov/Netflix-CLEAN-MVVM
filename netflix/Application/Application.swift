@@ -11,11 +11,13 @@ import UIKit
 
 private protocol ApplicationInput {
     func deployScene(in window: UIWindow?)
-    func resignUserFromCachedData()
+    func resign()
 }
 
 private protocol ApplicationOutput {
-    var dependencies: Application.Dependencies { get }
+    var coordinator: Coordinator { get }
+    var services: Services { get }
+    var stores: Stores { get }
 }
 
 private typealias ApplicationProtocol = ApplicationInput & ApplicationOutput
@@ -26,14 +28,9 @@ final class Application {
     static let app = Application()
     private init() {}
     
-    struct Dependencies {
-        let coordinator: Coordinator
-        let services: Services
-        let stores: Stores
-    }
-    
-    let container = Container()
-    lazy var dependencies = container.createApplicationDependencies()
+    lazy var coordinator = Coordinator()
+    lazy var services = Services()
+    lazy var stores = Stores(services: services)
 }
 
 // MARK: - ApplicationProtocol Implementation
@@ -42,22 +39,22 @@ extension Application: ApplicationProtocol {
     /// Check for the last signed authentication response by the user.
     /// In case there is a valid response present the TabBar screen.
     /// In case there isn't a valid response present the Auth screen.
-    fileprivate func resignUserFromCachedData() {
-        dependencies.services.authentication.resign { [weak self] userDTO in
+    fileprivate func resign() {
+        services.authentication.resign { [weak self] userDTO in
             guard let self = self else { return }
             guard userDTO != nil else {
-                return self.dependencies.coordinator.coordinate(to: .auth)
+                return self.coordinator.coordinate(to: .auth)
             }
-            self.dependencies.coordinator.coordinate(to: .tabBar)
+            self.coordinator.coordinate(to: .tabBar)
         }
     }
     /// Allocate a root view controller for the window.
     /// - Parameter window: Application's root window.
     func deployScene(in window: UIWindow?) {
-        dependencies.coordinator.window = window
+        coordinator.window = window
         // Stack and present the window.
         window?.makeKeyAndVisible()
         // Check for the latest signed response by the user.
-        resignUserFromCachedData()
+        resign()
     }
 }

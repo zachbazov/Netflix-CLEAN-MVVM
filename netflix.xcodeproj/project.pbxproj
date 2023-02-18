@@ -165,8 +165,6 @@
 		A1AC9F96299F8C5700DAD66D /* ConfigurationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1AC9F95299F8C5700DAD66D /* ConfigurationTests.swift */; };
 		A1AC9F98299F8E1000DAD66D /* CoordinatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1AC9F97299F8E1000DAD66D /* CoordinatorTests.swift */; };
 		A1AC9F9C299FA80B00DAD66D /* AuthServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1AC9F9B299FA80B00DAD66D /* AuthServiceTests.swift */; };
-		A1AC9F9E299FB74200DAD66D /* Container.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1AC9F9D299FB74200DAD66D /* Container.swift */; };
-		A1AC9FA1299FCC4E00DAD66D /* ApplicationFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1AC9FA0299FCC4E00DAD66D /* ApplicationFactory.swift */; };
 		A1AD25A028D2987B00F793B3 /* ShowcaseTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1AD259F28D2987B00F793B3 /* ShowcaseTableViewCell.swift */; };
 		A1AD25A228D29A1000F793B3 /* ShowcaseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1AD25A128D29A1000F793B3 /* ShowcaseView.swift */; };
 		A1AD25A428D29A7800F793B3 /* ShowcaseView.xib in Resources */ = {isa = PBXBuildFile; fileRef = A1AD25A328D29A7800F793B3 /* ShowcaseView.xib */; };
@@ -452,8 +450,6 @@
 		A1AC9F95299F8C5700DAD66D /* ConfigurationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigurationTests.swift; sourceTree = "<group>"; };
 		A1AC9F97299F8E1000DAD66D /* CoordinatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoordinatorTests.swift; sourceTree = "<group>"; };
 		A1AC9F9B299FA80B00DAD66D /* AuthServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthServiceTests.swift; sourceTree = "<group>"; };
-		A1AC9F9D299FB74200DAD66D /* Container.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Container.swift; sourceTree = "<group>"; };
-		A1AC9FA0299FCC4E00DAD66D /* ApplicationFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApplicationFactory.swift; sourceTree = "<group>"; };
 		A1AD259F28D2987B00F793B3 /* ShowcaseTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowcaseTableViewCell.swift; sourceTree = "<group>"; };
 		A1AD25A128D29A1000F793B3 /* ShowcaseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowcaseView.swift; sourceTree = "<group>"; };
 		A1AD25A328D29A7800F793B3 /* ShowcaseView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ShowcaseView.xib; sourceTree = "<group>"; };
@@ -974,7 +970,6 @@
 			children = (
 				A1B70A7A293D7B7000C718C6 /* Application.swift */,
 				A1B70A72293D6DC500C718C6 /* Coordinator.swift */,
-				A1AC9F9D299FB74200DAD66D /* Container.swift */,
 				A18B991628BEBD040077A5A6 /* Configuration.swift */,
 				A1F56A5B28C668100089BD4F /* Theme.swift */,
 				A1B1B0A7299AEDDE0070AD29 /* Services.swift */,
@@ -1246,7 +1241,6 @@
 		A1A71AB3298D8196001C6AB1 /* Interfaces */ = {
 			isa = PBXGroup;
 			children = (
-				A1AC9F9F299FC9EB00DAD66D /* Factories */,
 				A1B1B0BF299B87700070AD29 /* Repositories */,
 				A1B1B0C2299B883D0070AD29 /* UseCases */,
 				A1B1B0CA299B96B80070AD29 /* Endpoints */,
@@ -1370,14 +1364,6 @@
 				A1AC9F9B299FA80B00DAD66D /* AuthServiceTests.swift */,
 			);
 			path = Services;
-			sourceTree = "<group>";
-		};
-		A1AC9F9F299FC9EB00DAD66D /* Factories */ = {
-			isa = PBXGroup;
-			children = (
-				A1AC9FA0299FCC4E00DAD66D /* ApplicationFactory.swift */,
-			);
-			path = Factories;
 			sourceTree = "<group>";
 		};
 		A1AD25A928D2A6AE00F793B3 /* DisplayView */ = {
@@ -2042,7 +2028,6 @@
 				A1B98BA7298A419A001B7B62 /* UserHTTPDTO+Mapping.swift in Sources */,
 				A1741D1528E67AA900F3C46B /* DetailViewModel.swift in Sources */,
 				A18B999228C0DE710077A5A6 /* APIEndpoint.swift in Sources */,
-				A1AC9FA1299FCC4E00DAD66D /* ApplicationFactory.swift in Sources */,
 				A1AA28D228F590AF0011EE9D /* TrailerCollectionViewCell.swift in Sources */,
 				A1B98BA9298A4373001B7B62 /* MediaHTTPDTO+Mapping.swift in Sources */,
 				A1BA1DA528D818C400730EA8 /* CALayer+Shadow.swift in Sources */,
@@ -2178,7 +2163,6 @@
 				A19956DF29019A7700B7D655 /* ListDTO+Mapping.swift in Sources */,
 				A130BCE02951344C0070EA5E /* NewsNavigationView.swift in Sources */,
 				A130BCDB29511E8C0070EA5E /* NewsViewController.swift in Sources */,
-				A1AC9F9E299FB74200DAD66D /* Container.swift in Sources */,
 				A130BCC7295115AC0070EA5E /* DownloadsNavigationView.swift in Sources */,
 				A1E81D0F28CFE21300D044EA /* CollectionViewLayout.swift in Sources */,
 				A1B98BAF298A48B2001B7B62 /* SearchHTTPDTO.swift in Sources */,

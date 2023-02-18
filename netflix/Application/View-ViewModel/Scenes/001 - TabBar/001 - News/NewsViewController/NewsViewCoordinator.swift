@@ -28,7 +28,7 @@ extension NewsViewCoordinator: NewsCoordinable {
     fileprivate func allocateDetailController() {
         guard let section = section, let media = media else { return }
         /// An `HomeViewModel` reference is needed to gain access to the sections data.
-        let homeNavigation = Application.app.dependencies.coordinator.tabCoordinator.home!
+        let homeNavigation = Application.app.coordinator.tabCoordinator.home!
         /// Extract home's view model reference.
         let homeController = homeNavigation.viewControllers.first! as! HomeViewController
         let homeViewModel = homeController.viewModel!

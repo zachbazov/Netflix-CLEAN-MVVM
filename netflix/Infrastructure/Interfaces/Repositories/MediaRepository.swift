@@ -10,8 +10,8 @@ import Foundation
 // MARK: - MediaRepository Type
 
 final class MediaRepository: Repository {
-    let dataTransferService: DataTransferService = Application.app.dependencies.services.dataTransfer
-    let responseStorage: MediaResponseStorage = Application.app.dependencies.stores.mediaResponses
+    let dataTransferService: DataTransferService = Application.app.services.dataTransfer
+    let responseStorage: MediaResponseStorage = Application.app.stores.mediaResponses
     var task: Cancellable? { willSet { task?.cancel() } }
 }
 
@@ -74,7 +74,7 @@ extension MediaRepository: MediaRepositoryProtocol {
         guard !task.isCancelled else { return nil }
         
         let endpoint = APIEndpoint.searchMedia(with: requestDTO)
-        task.networkTask = Application.app.dependencies.services.dataTransfer.request(
+        task.networkTask = Application.app.services.dataTransfer.request(
             with: endpoint,
             completion: { result in
                 if case let .success(responseDTO) = result {
@@ -92,7 +92,7 @@ extension MediaRepository: MediaRepositoryProtocol {
         let params = ["isNewRelease": true]
         let requestDTO = NewsHTTPDTO.Request(queryParams: params)
         let task = RepositoryTask()
-        let dataTransferService = Application.app.dependencies.services.dataTransfer
+        let dataTransferService = Application.app.services.dataTransfer
         
         guard !task.isCancelled else { return nil }
         

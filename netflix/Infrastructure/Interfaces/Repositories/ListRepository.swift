@@ -10,7 +10,7 @@ import Foundation
 // MARK: - ListRepository Type
 
 final class ListRepository: Repository {
-    let dataTransferService: DataTransferService = Application.app.dependencies.services.dataTransfer
+    let dataTransferService: DataTransferService = Application.app.services.dataTransfer
     var task: Cancellable? { willSet { task?.cancel() } }
 }
 

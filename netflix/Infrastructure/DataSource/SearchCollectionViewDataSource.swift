@@ -31,7 +31,7 @@ extension SearchCollectionViewDataSource: UICollectionViewDelegate, UICollection
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         guard let row = indexPath.row as Int?, row >= 0, row <= viewModel.items.value.count - 1 else { return }
-        let navigation = Application.app.dependencies.coordinator.tabCoordinator.home!
+        let navigation = Application.app.coordinator.tabCoordinator.home!
         let controller = navigation.viewControllers.first! as! HomeViewController
         let coordinator = controller.viewModel.coordinator!
         let section = controller.viewModel.section(at: .resumable)

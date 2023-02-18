@@ -51,8 +51,8 @@ extension SignUpViewModel {
     }
     /// Invokes a sign up request by the user credentials.
     private func signUpRequest() {
-        let authService = Application.app.dependencies.services.authentication
-        let coordinator = Application.app.dependencies.coordinator
+        let authService = Application.app.services.authentication
+        let coordinator = Application.app.coordinator
         // Create a new user.
         let userDTO = UserDTO(name: name,
                               email: email,

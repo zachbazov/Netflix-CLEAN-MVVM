@@ -10,8 +10,8 @@ import Foundation
 // MARK: - UserRepository Type
 
 final class UserRepository: Repository {
-    let dataTransferService: DataTransferService = Application.app.dependencies.services.dataTransfer
-    let responseStorage: AuthResponseStorage = Application.app.dependencies.stores.authResponses
+    let dataTransferService: DataTransferService = Application.app.services.dataTransfer
+    let responseStorage: AuthResponseStorage = Application.app.stores.authResponses
     var task: Cancellable? { willSet { task?.cancel() } }
 }
 
