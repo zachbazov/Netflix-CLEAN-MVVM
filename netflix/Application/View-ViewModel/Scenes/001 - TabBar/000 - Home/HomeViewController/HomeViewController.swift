@@ -32,24 +32,24 @@ final class HomeViewController: Controller<HomeViewModel>, ViewControllerProtoco
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        super.viewDidDeployBehaviors()
-        viewDidDeploySubviews()
-        viewObserversDidBind()
+        super.viewDidLoadBehaviors()
+        viewDidConfigure()
+        viewDidBindObservers()
         viewModel.viewDidLoad()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        viewDidLockOrientation(.portrait)
+        super.didLockDeviceOrientation(.portrait)
     }
     
-    override func viewDidDeploySubviews() {
+    override func viewDidConfigure() {
         setupDataSource()
         setupNavigationView()
         setupBrowseOverlayView()
     }
     
-    override func viewObserversDidBind() {
+    override func viewDidBindObservers() {
         viewModel.dataSourceState.observe(on: self) { [weak self] state in
             /// Release data source changes.
             self?.dataSource.dataSourceDidChange()
@@ -62,7 +62,7 @@ final class HomeViewController: Controller<HomeViewModel>, ViewControllerProtoco
         }
     }
     
-    override func viewObserversDidUnbind() {
+    override func viewDidUnbindObservers() {
         if let viewModel = viewModel {
             printIfDebug(.success, "Removed `HomeViewModel` observers.")
             viewModel.dataSourceState.remove(observer: self)

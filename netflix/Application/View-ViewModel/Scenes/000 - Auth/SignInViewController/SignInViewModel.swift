@@ -23,7 +23,7 @@ private typealias ViewModelProtocol = ViewModelInput & ViewModelOutput
 
 // MARK: - SignInViewModel Type
 
-final class SignInViewModel: ControllerViewModel {
+final class SignInViewModel: ViewModel {
     var coordinator: AuthCoordinator?
     private let viewModel: AuthViewModel
     
@@ -37,12 +37,16 @@ final class SignInViewModel: ControllerViewModel {
     func transform(input: Void) {}
 }
 
+extension SignInViewModel: Coordinable {}
+
 // MARK: - ViewModelProtocol Implementation
 
 extension SignInViewModel: ViewModelProtocol {
     /// Occurs once the sign in button has been tapped.
     @objc
     func signInButtonDidTap() {
+        ActivityIndicatorView.viewDidShow()
+        
         signInRequest()
     }
     /// Invokes a sign in request for the user credentials.
@@ -57,6 +61,8 @@ extension SignInViewModel: ViewModelProtocol {
         let requestDTO = UserHTTPDTO.Request(user: userDTO)
         // Invoke the request.
         authService.signIn(for: requestDTO) {
+            // Hide indicator.
+            ActivityIndicatorView.viewDidHide()
             // Present the TabBar screen.
             mainQueueDispatch {
                 coordinator.coordinate(to: .tabBar)

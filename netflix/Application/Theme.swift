@@ -7,7 +7,7 @@
 
 import UIKit
 
-// MARK: - ThemingBehavior Protocol
+// MARK: - ThemingBehavior Type
 
 private protocol ThemingBehavior {
     static func `default`()

@@ -11,13 +11,14 @@ import UIKit
 
 private protocol ApplicationInput {
     func deployScene(in window: UIWindow?)
-    func resign()
 }
 
 private protocol ApplicationOutput {
     var coordinator: Coordinator { get }
     var services: Services { get }
     var stores: Stores { get }
+    
+    func resign()
 }
 
 private typealias ApplicationProtocol = ApplicationInput & ApplicationOutput

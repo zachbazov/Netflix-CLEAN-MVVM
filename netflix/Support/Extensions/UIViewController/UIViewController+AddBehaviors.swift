@@ -35,8 +35,6 @@ extension ViewControllerLifecycleBehavior {
 
 extension UIViewController {
     
-    // MARK: Methods
-    
     func addBehaviors(_ behaviors: [ViewControllerLifecycleBehavior]) {
         let behaviorViewController = LifecycleBehaviorViewController(behaviors: behaviors)
         
@@ -48,12 +46,7 @@ extension UIViewController {
     // MARK: LifecycleBehaviorViewController Type
     
     private final class LifecycleBehaviorViewController: UIViewController, UIGestureRecognizerDelegate {
-        
-        // MARK: Properties
-        
         private let behaviors: [ViewControllerLifecycleBehavior]
-        
-        // MARK: Initializer
         
         init(behaviors: [ViewControllerLifecycleBehavior]) {
             self.behaviors = behaviors
@@ -64,8 +57,6 @@ extension UIViewController {
         required init?(coder decoder: NSCoder) {
             fatalError("init(coder: has not been implemented")
         }
-        
-        // MARK: UIViewController Lifecycle
         
         override func viewDidLoad() {
             super.viewDidLoad()

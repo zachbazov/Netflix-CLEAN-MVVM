@@ -7,14 +7,37 @@
 
 import AVKit
 
+// MARK: - ConfigurationProtocol Type
+
+private protocol ConfigurationInput {
+    func startTimer(target: Any, selector: Selector)
+    func viewDidTap(_ view: UIButton)
+}
+
+private protocol ConfigurationOutput {
+    var durationThreshold: CGFloat! { get }
+    var repeats: Bool! { get }
+    var mediaPlayerView: MediaPlayerView! { get }
+    var overlayView: MediaPlayerOverlayView! { get }
+    var observers: MediaPlayerObservers { get }
+    var timer: ScheduledTimer { get }
+    
+    func viewDidConfigure()
+    func setupPlayButton()
+    func viewDidBindObservers()
+    func viewDidUnbindObservers()
+}
+
+private typealias ConfigurationProtocol = ConfigurationInput & ConfigurationOutput
+
 // MARK: - MediaPlayerOverlayViewConfiguration Type
 
 final class MediaPlayerOverlayViewConfiguration {
-    private var durationThreshold: CGFloat!
-    private var repeats: Bool!
+    fileprivate var durationThreshold: CGFloat!
+    fileprivate var repeats: Bool!
     fileprivate weak var mediaPlayerView: MediaPlayerView!
     fileprivate weak var overlayView: MediaPlayerOverlayView!
-    private(set) var observers = MediaPlayerObservers()
+    fileprivate(set) var observers = MediaPlayerObservers()
     fileprivate var timer = ScheduledTimer()
     
     init(durationThreshold: CGFloat? = 3.0, repeats: Bool? = true) {
@@ -23,7 +46,7 @@ final class MediaPlayerOverlayViewConfiguration {
     }
     
     deinit {
-        removeObservers()
+        viewDidUnbindObservers()
         timer.invalidate()
         mediaPlayerView = nil
         overlayView = nil
@@ -32,9 +55,9 @@ final class MediaPlayerOverlayViewConfiguration {
     }
 }
 
-// MARK: - UI Setup
+// MARK: - ConfigurationProtocol Implementation
 
-extension MediaPlayerOverlayViewConfiguration {
+extension MediaPlayerOverlayViewConfiguration: ConfigurationProtocol {
     func viewDidConfigure() {
         guard let player = mediaPlayerView?.mediaPlayer?.player as AVPlayer?,
               let overlayView = overlayView,
@@ -85,11 +108,7 @@ extension MediaPlayerOverlayViewConfiguration {
         guard let image = systemImage as UIImage? else { return }
         overlayView.playButton.setImage(image, for: .normal)
     }
-}
-
-// MARK: - Methods
-
-extension MediaPlayerOverlayViewConfiguration {
+    
     func startTimer(target: Any, selector: Selector) {
         timer.schedule(timeInterval: overlayView.configuration.durationThreshold,
                        target: target,
@@ -142,12 +161,8 @@ extension MediaPlayerOverlayViewConfiguration {
             printIfDebug(.debug, "\(item.rawValue)")
         }
     }
-}
-
-// MARK: - Observers
-
-extension MediaPlayerOverlayViewConfiguration {
-    fileprivate func setupObservers() {
+    
+    fileprivate func viewDidBindObservers() {
         guard let player = mediaPlayerView.mediaPlayer.player as AVPlayer? else { return }
         
         let timeScale = CMTimeScale(NSEC_PER_SEC)
@@ -202,7 +217,7 @@ extension MediaPlayerOverlayViewConfiguration {
              changeHandler: { [weak self] _, _ in self?.viewDidConfigure() })
     }
     
-    func removeObservers() {
+    func viewDidUnbindObservers() {
         printIfDebug(.success, "Removed `MediaPlayerOverlayView` observers.")
         observers.playerItemStatusObserver?.invalidate()
         observers.playerItemFastForwardObserver?.invalidate()
@@ -221,18 +236,25 @@ extension MediaPlayerOverlayViewConfiguration {
     }
 }
 
+// MARK: -  ViewProtocol Type
+
+private protocol ViewInput {
+    func valueDidChange(for slider: UISlider)
+    func didSelect(view: Any)
+    func didTarget(_ views: UIButton...)
+}
+
+private protocol ViewOutput {
+    var configuration: MediaPlayerOverlayViewConfiguration! { get }
+    var mediaPlayerView: MediaPlayerView! { get }
+    var mediaPlayerViewModel: MediaPlayerViewViewModel! { get }
+}
+
+private typealias ViewProtocol = ViewInput & ViewOutput
+
 // MARK: - MediaPlayerOverlayView Type
 
-final class MediaPlayerOverlayView: UIView, ViewInstantiable {
-    fileprivate enum Item: Int {
-        case airPlay
-        case rotate
-        case backward
-        case play
-        case forward
-        case mute
-    }
-    
+final class MediaPlayerOverlayView: View<MediaPlayerOverlayViewViewModel>, ViewInstantiable {
     @IBOutlet private weak var airPlayButton: UIButton!
     @IBOutlet private weak var rotateButton: UIButton!
     @IBOutlet private(set) weak var backwardButton: UIButton!
@@ -248,9 +270,8 @@ final class MediaPlayerOverlayView: UIView, ViewInstantiable {
     @IBOutlet private weak var gradientView: UIView!
     
     private(set) var configuration: MediaPlayerOverlayViewConfiguration!
-    private weak var mediaPlayerView: MediaPlayerView!
-    var viewModel: MediaPlayerOverlayViewViewModel!
-    private var mediaPlayerViewModel: MediaPlayerViewViewModel!
+    fileprivate weak var mediaPlayerView: MediaPlayerView!
+    fileprivate var mediaPlayerViewModel: MediaPlayerViewViewModel!
     
     init(on parent: MediaPlayerView) {
         super.init(frame: parent.bounds)
@@ -261,7 +282,7 @@ final class MediaPlayerOverlayView: UIView, ViewInstantiable {
         self.configuration = MediaPlayerOverlayViewConfiguration()
         self.configuration.overlayView = self
         self.configuration.mediaPlayerView = parent
-        self.configuration.setupObservers()
+        self.configuration.viewDidBindObservers()
         self.viewDidLoad()
     }
     
@@ -273,12 +294,37 @@ final class MediaPlayerOverlayView: UIView, ViewInstantiable {
         viewModel = nil
         configuration = nil
     }
-}
-
-// MARK: - UI Setup
-
-extension MediaPlayerOverlayView {
-    func viewWillAppear() {
+    
+    override func viewDidLoad() {
+        viewDidConfigure()
+        viewDidDeploySubviews()
+        viewWillAppear()
+    }
+    
+    override func viewDidDeploySubviews() {
+        viewDidTargetSubviews()
+    }
+    
+    override func viewDidConfigure() {
+        gradientView.backgroundColor = .black.withAlphaComponent(0.5)
+        
+        titleLabel.text = mediaPlayerViewModel.media.title
+    }
+    
+    override func viewDidTargetSubviews() {
+        didTarget(airPlayButton,
+                  rotateButton,
+                  backwardButton,
+                  playButton,
+                  forwardButton,
+                  muteButton)
+        
+        trackingSlider.addTarget(self,
+                                 action: #selector(valueDidChange(for:)),
+                                 for: .valueChanged)
+    }
+    
+    override func viewWillAppear() {
         configuration.startTimer(target: self, selector: #selector(viewWillDisappear))
         
         progressView.isHidden(true)
@@ -297,7 +343,7 @@ extension MediaPlayerOverlayView {
     }
     
     @objc
-    func viewWillDisappear() {
+    override func viewWillDisappear() {
         configuration.timer.invalidate()
         
         progressView.isHidden(false)
@@ -314,7 +360,11 @@ extension MediaPlayerOverlayView {
         titleLabel.isHidden(true)
         timeSeparatorLabel.isHidden(true)
     }
-    
+}
+
+// MARK: - ViewProtocol Type
+
+extension MediaPlayerOverlayView: ViewProtocol {
     @objc
     func didSelect(view: Any) {
         viewWillAppear()
@@ -329,36 +379,24 @@ extension MediaPlayerOverlayView {
         player.seek(to: newTime, toleranceBefore: .zero, toleranceAfter: .zero)
         progressView.setProgress(progressView.progress + Float(newTime.seconds), animated: true)
     }
+    
+    fileprivate func didTarget(_ views: UIButton...) {
+        views.forEach { $0.addTarget(self,
+                                     action: #selector(didSelect(view:)),
+                                     for: .touchUpInside) }
+    }
 }
 
-// MARK: - Methods
+// MARK: - Item Type
 
 extension MediaPlayerOverlayView {
-    private func viewDidLoad() {
-        setupSubviews()
-        viewWillAppear()
-    }
-    
-    private func setupSubviews() {
-        gradientView.backgroundColor = .black.withAlphaComponent(0.5)
-        
-        titleLabel.text = mediaPlayerViewModel.media.title
-        
-        setupTargets(airPlayButton,
-                     rotateButton,
-                     backwardButton,
-                     playButton,
-                     forwardButton,
-                     muteButton)
-        
-        trackingSlider.addTarget(self,
-                                 action: #selector(valueDidChange(for:)),
-                                 for: .valueChanged)
-    }
-    
-    private func setupTargets(_ targets: UIButton...) {
-        targets.forEach { $0.addTarget(self,
-                                       action: #selector(didSelect(view:)),
-                                       for: .touchUpInside) }
+    /// Overlay Item representation type.
+    fileprivate enum Item: Int {
+        case airPlay
+        case rotate
+        case backward
+        case play
+        case forward
+        case mute
     }
 }

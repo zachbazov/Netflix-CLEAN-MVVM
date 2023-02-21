@@ -28,7 +28,7 @@ final class ShowcaseView: View<ShowcaseViewViewModel>, ViewInstantiable {
         self.viewModel = ShowcaseViewViewModel(with: media)
         self.panelView = PanelView(on: panelViewContainer, with: viewModel)
         self.viewDidDeploySubviews()
-        self.viewDidConfigure(with: self.viewModel)
+        self.viewDidConfigure()
     }
     
     required init?(coder: NSCoder) { fatalError() }
@@ -38,8 +38,7 @@ final class ShowcaseView: View<ShowcaseViewViewModel>, ViewInstantiable {
         setupImageContent()
     }
     
-    override func viewDidConfigure<T>(with viewModel: T) where T: ViewModel {
-        guard let viewModel = viewModel as? ShowcaseViewViewModel else { return }
+    override func viewDidConfigure() {
         posterImageView.image = nil
         logoImageView.image = nil
         genresLabel.attributedText = nil

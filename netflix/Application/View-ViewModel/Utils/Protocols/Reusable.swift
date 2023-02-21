@@ -7,7 +7,7 @@
 
 import Foundation
 
-// MARK: - Reusable Protocol
+// MARK: - Reusable Type
 
 protocol Reusable {}
 

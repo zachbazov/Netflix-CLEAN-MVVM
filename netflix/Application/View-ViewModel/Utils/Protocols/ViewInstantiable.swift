@@ -7,7 +7,7 @@
 
 import UIKit
 
-// MARK: - ViewInstantiable Protocol
+// MARK: - ViewInstantiable Type
 
 protocol ViewInstantiable: UIView, Reusable {}
 

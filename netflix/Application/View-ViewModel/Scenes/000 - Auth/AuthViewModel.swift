@@ -31,11 +31,13 @@ final class AuthViewModel {
     private let useCase = UserUseCase()
 }
 
-// MARK: - ViewControllerViewModel Implementation
+// MARK: - ViewModel Implementation
 
-extension AuthViewModel: ControllerViewModel {
-    func transform(input: Void) {}
-}
+extension AuthViewModel: ViewModel {}
+
+// MARK: - Coordinable Implementation
+
+extension AuthViewModel: Coordinable {}
 
 // MARK: - ViewModelProtocol Implementation
 

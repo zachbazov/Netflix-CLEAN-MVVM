@@ -110,11 +110,11 @@ extension SearchViewController {
     
     private func updateLoading(_ loading: SearchLoading?) {
         contentContainer.isHidden(true)
-        SpinnerView.hide()
+        ActivityIndicatorView.viewDidHide()
         
         switch loading {
         case .fullscreen:
-            SpinnerView.show()
+            ActivityIndicatorView.viewDidShow()
         case .nextPage:
             contentContainer.isHidden(false)
         case .none:

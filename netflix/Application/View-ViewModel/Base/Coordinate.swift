@@ -5,9 +5,17 @@
 //  Created by Zach Bazov on 05/12/2022.
 //
 
-import UIKit.UIViewController
+import UIKit
 
-// MARK: - Coordinate Protocol
+// MARK: - Coordinable Type
+
+protocol Coordinable {
+    associatedtype Coordinator: Coordinate
+    
+    var coordinator: Coordinator? { get set }
+}
+
+// MARK: - Coordinate Type
 
 protocol Coordinate {
     associatedtype Screen

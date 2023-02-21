@@ -7,6 +7,18 @@
 
 import Foundation
 
+// MARK: - ViewModelProtocol Type
+
+private protocol ViewModelInput {
+    func timeString(_ time: Float) -> String
+}
+
+private protocol ViewModelOutput {
+    var timeRemainingFormatter: DateComponentsFormatter { get }
+}
+
+private typealias ViewModelProtocol = ViewModelInput & ViewModelOutput
+
 // MARK: - MediaPlayerOverlayViewViewModel Type
 
 struct MediaPlayerOverlayViewViewModel {
@@ -23,3 +35,11 @@ struct MediaPlayerOverlayViewViewModel {
         return timeRemainingFormatter.string(for: components as DateComponents)!
     }
 }
+
+// MARK: - ViewModel Implementation
+
+extension MediaPlayerOverlayViewViewModel: ViewModel {}
+
+// MARK: - ViewModelProtocol Implementation
+
+extension MediaPlayerOverlayViewViewModel: ViewModelProtocol {}

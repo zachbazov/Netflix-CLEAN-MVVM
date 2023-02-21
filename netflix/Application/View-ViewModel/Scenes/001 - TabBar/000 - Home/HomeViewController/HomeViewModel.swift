@@ -64,7 +64,7 @@ final class HomeViewModel {
     lazy var myList = MyList(with: self)
     
     deinit {
-        myList.removeObservers()
+        myList.viewDidUnbindObservers()
         coordinator = nil
     }
 }
@@ -90,7 +90,7 @@ extension HomeViewModel {
 
 // MARK: - ViewModel Implementation
 
-extension HomeViewModel: ControllerViewModel {
+extension HomeViewModel: ViewModel, Coordinable {
     func transform(input: Void) {}
 }
 
@@ -112,6 +112,9 @@ extension HomeViewModel: ViewModelNetworking {
                 }
                 if case let .failure(error) = result {
                     printIfDebug(.error, "\(error)")
+                    // Perform a sign out operation, and send the user to the auth screen.
+                    let authService = Application.app.services.authentication
+                    authService.signOut()
                 }
             })
     }

@@ -24,7 +24,20 @@ final class SignInViewController: Controller<SignInViewModel> {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupSubviews()
+        viewDidConfigure()
+    }
+    
+    override func viewDidConfigure() {
+        setAttributes(for: [emailTextField, passwordTextField])
+        signInButton.setLayerBorder(.black, width: 1.5)
+        viewDidTargetSubviews()
+        didConfigureTitleView()
+    }
+    
+    override func viewDidTargetSubviews() {
+        signInButton.addTarget(viewModel, action: #selector(viewModel?.signInButtonDidTap), for: .touchUpInside)
+        emailTextField.addTarget(self, action: #selector(textFieldValueDidChange), for: .editingChanged)
+        passwordTextField.addTarget(self, action: #selector(textFieldValueDidChange), for: .editingChanged)
     }
 }
 
@@ -38,22 +51,5 @@ extension SignInViewController: ViewControllerProtocol {
         case passwordTextField: viewModel?.password = textField.text
         default: return
         }
-    }
-}
-
-// MARK: - Private UI Implementation
-
-extension SignInViewController {
-    private func setupSubviews() {
-        setAttributes(for: [emailTextField, passwordTextField])
-        signInButton.setLayerBorder(.black, width: 1.5)
-        setupTargets()
-        viewDidBrandNavigationItemTitleView()
-    }
-    
-    private func setupTargets() {
-        signInButton.addTarget(viewModel, action: #selector(viewModel?.signInButtonDidTap), for: .touchUpInside)
-        emailTextField.addTarget(self, action: #selector(textFieldValueDidChange), for: .editingChanged)
-        passwordTextField.addTarget(self, action: #selector(textFieldValueDidChange), for: .editingChanged)
     }
 }

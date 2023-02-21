@@ -7,8 +7,10 @@
 
 import UIKit
 
+// MARK: - TabController Type
+
 class TabController: UITabBarController {
-    func viewDidDeploySubviews() {
+    func viewDidConfigure() {
         tabBar.barStyle = .black
         tabBar.isTranslucent = false
     }

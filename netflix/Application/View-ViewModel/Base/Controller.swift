@@ -7,33 +7,49 @@
 
 import UIKit
 
-private protocol ControllerObserving {
-    func viewObserversDidBind()
-    func viewObserversDidUnbind()
-}
+// MARK: - Controller<T> Type
 
-protocol Controllable {
-    associatedtype T: ControllerViewModel
-    var viewModel: T! { get set }
-}
-
-class Controller<T>: UIViewController, Controllable where T: ControllerViewModel {
+class Controller<T>: UIViewController, ViewModeling where T: ViewModel {
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return .lightContent
     }
     
     var viewModel: T!
     
-    func viewDidDeployBehaviors() {
+    func viewDidLoadBehaviors() {
         addBehaviors([BackButtonEmptyTitleNavigationBarBehavior(),
                       BlackStyleNavigationBarBehavior()])
     }
     
     func viewDidDeploySubviews() {}
+    func viewDidConfigure() {}
+    func viewDidTargetSubviews() {}
     
-    func viewDidBrandNavigationItemTitleView(withNamedAsset asset: String = "netflix-logo-2") {
-        guard navigationController != nil else { return }
-        
+    func viewDidBindObservers() {}
+    func viewDidUnbindObservers() {}
+}
+
+// MARK: - ViewLifecycleBehavior Implementation
+
+extension Controller: ViewLifecycleBehavior {}
+
+// MARK: - ViewObserving Implementation
+
+extension Controller: ViewObserving {}
+
+// MARK: - DeviceOrienting Implementation
+
+extension Controller: DeviceOrienting {
+    func didLockDeviceOrientation(_ mask: UIInterfaceOrientationMask = .portrait) {
+        let orientation = DeviceOrientation.shared
+        orientation.setLock(orientation: mask)
+    }
+}
+
+// MARK: - NavigationControllerStyling Implementation
+
+extension Controller: NavigationControllerStyling {
+    func didConfigureTitleView(withAssetNamed asset: String = "netflix-logo-2") {
         let point = CGPoint(x: 0.0, y: 0.0)
         let size = CGSize(width: 80.0, height: 24.0)
         let rect = CGRect(origin: point, size: size)
@@ -47,14 +63,4 @@ class Controller<T>: UIViewController, Controllable where T: ControllerViewModel
         titleView.addSubview(imageView)
         navigationItem.titleView = titleView
     }
-    
-    func viewDidLockOrientation(_ mask: UIInterfaceOrientationMask = .portrait) {
-        let orientation = DeviceOrientation.shared
-        orientation.setLock(orientation: mask)
-    }
-    
-    func viewObserversDidBind() {}
-    func viewObserversDidUnbind() {}
 }
-
-extension Controller: ControllerObserving {}

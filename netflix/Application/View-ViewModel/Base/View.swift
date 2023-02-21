@@ -7,24 +7,44 @@
 
 import UIKit
 
-private protocol ViewObserving {
-    func viewObserversDidBind()
-    func viewObserversDidUnbind()
+// MARK: - ViewObserving Type
+
+protocol ViewObserving {
+    func viewDidBindObservers()
+    func viewDidUnbindObservers()
 }
 
-protocol Viewable {
+// MARK: - ViewModeling Type
+
+protocol ViewModeling {
     associatedtype T: ViewModel
     var viewModel: T! { get set }
 }
 
-class View<T>: UIView, Viewable where T: ViewModel {
+// MARK: - View<T> Type
+
+class View<T>: UIView where T: ViewModel {
     var viewModel: T!
     
+    func viewDidLoad() {}
     func viewDidDeploySubviews() {}
-    func viewDidConfigure<T: ViewModel>(with viewModel: T) {}
+    func viewDidConfigure() {}
+    func viewDidTargetSubviews() {}
+    func viewWillAppear() {}
+    func viewWillDisappear() {}
     
-    func viewObserversDidBind() {}
-    func viewObserversDidUnbind() {}
+    func viewDidBindObservers() {}
+    func viewDidUnbindObservers() {}
 }
+
+// MARK: - ViewModeling Implementation
+
+extension View: ViewModeling {}
+
+// MARK: - ViewLifecycleBehavior Implementation
+
+extension View: ViewLifecycleBehavior {}
+
+// MARK: - ViewObserving Implementation
 
 extension View: ViewObserving {}

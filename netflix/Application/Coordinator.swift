@@ -10,15 +10,15 @@ import UIKit
 // MARK: - CoordinatorProtocol Type
 
 private protocol CoordinatorInput {
-    func createAuthController()
-    func createTabBarController()
-    
     func deploy(_ screen: Coordinator.Screen)
 }
 
 private protocol CoordinatorOutput {
     var viewController: UIViewController? { get }
     var window: UIWindow? { get }
+    
+    func createAuthController()
+    func createTabBarController()
 }
 
 private typealias CoordinatorProtocol = CoordinatorInput & CoordinatorOutput
@@ -29,8 +29,8 @@ final class Coordinator {
     weak var viewController: UIViewController?
     weak var window: UIWindow? { didSet { viewController = window?.rootViewController } }
     
-    private(set) var authCoordinator: AuthCoordinator!
-    private(set) var tabCoordinator: TabBarCoordinator!
+    lazy var authCoordinator = AuthCoordinator()
+    lazy var tabCoordinator = TabBarCoordinator()
 }
 
 // MARK: - CoordinatorProtocol Implementation
@@ -45,6 +45,7 @@ extension Coordinator: CoordinatorProtocol {
         viewModel.coordinator = authCoordinator
         controller.viewModel = viewModel
         window?.rootViewController = controller
+        
     }
     /// Allocating and presenting the tab bar screen.
     func createTabBarController() {

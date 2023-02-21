@@ -7,12 +7,24 @@
 
 import AVKit
 
+// MARK: - ViewProtocol Type
+
+private protocol ViewInput {
+    var prepareToPlay: ((Bool) -> Void)? { get }
+}
+
+private protocol ViewOutput {
+    var mediaPlayer: MediaPlayer! { get }
+    var overlayView: MediaPlayerOverlayView! { get }
+}
+
+private typealias ViewProtocol = ViewInput & ViewOutput
+
 // MARK: - MediaPlayerView Type
 
-final class MediaPlayerView: UIView {
+final class MediaPlayerView: View<MediaPlayerViewViewModel> {
     var mediaPlayer: MediaPlayer!
     var overlayView: MediaPlayerOverlayView!
-    var viewModel: MediaPlayerViewViewModel!
     
     var prepareToPlay: ((Bool) -> Void)?
     
@@ -25,45 +37,41 @@ final class MediaPlayerView: UIView {
         self.mediaPlayer = MediaPlayer(on: self)
         self.overlayView = MediaPlayerOverlayView(on: self)
         self.addSubview(self.overlayView)
-        self.viewDidRegisterRecognizers(on: self)
+        self.viewDidTargetSubviews()
         self.overlayView.constraintToSuperview(self)
     }
     
     required init?(coder: NSCoder) { fatalError() }
     
     deinit {
-        removeObservers()
+        viewDidUnbindObservers()
         mediaPlayer = nil
         overlayView = nil
-        viewModel = nil
         prepareToPlay = nil
         delegate = nil
     }
-}
-
-// MARK: - UI Setup
-
-extension MediaPlayerView {
-    private func viewDidLoad() {
-        mediaPlayer.mediaPlayerLayer.playerLayer.frame = mediaPlayer.mediaPlayerLayer.bounds
-        mediaPlayer.mediaPlayerLayer.playerLayer.videoGravity = .resizeAspectFill
+    
+    override func viewDidConfigure() {
+        mediaPlayer.layer.playerLayer.frame = mediaPlayer.layer.bounds
+        mediaPlayer.layer.playerLayer.videoGravity = .resizeAspectFill
     }
     
-    private func viewDidRegisterRecognizers(on parent: UIView) {
-        let tapRecognizer = UITapGestureRecognizer(target: overlayView,
-                                                   action: #selector(overlayView.didSelect))
-        parent.addGestureRecognizer(tapRecognizer)
+    override func viewDidTargetSubviews() {
+        let tapRecognizer = UITapGestureRecognizer(target: overlayView, action: #selector(overlayView.didSelect))
+        addGestureRecognizer(tapRecognizer)
+    }
+    
+    override func viewDidUnbindObservers() {
+        if let timeObserverToken = overlayView?.configuration.observers.timeObserverToken {
+            printIfDebug(.success, "Removed `MediaPlayerView` observers.")
+            mediaPlayer?.player.removeTimeObserver(timeObserverToken)
+        }
     }
 }
 
-// MARK: - Methods
+// MARK: - ViewProtocol Implementation
 
-extension MediaPlayerView {
-    func stopPlayer() {
-        guard let mediaPlayer = mediaPlayer else { return }
-        playerDidStop(mediaPlayer)
-    }
-}
+extension MediaPlayerView: ViewProtocol {}
 
 // MARK: - MediaPlayerDelegate Implementation
 
@@ -85,16 +93,5 @@ extension MediaPlayerView: MediaPlayerDelegate {
     }
     
     func player(_ mediaPlayer: MediaPlayer,
-                willVerifyUrl url: URL) -> Bool { UIApplication.shared.canOpenURL(url) }
-}
-
-// MARK: - Observers
-
-extension MediaPlayerView {
-    func removeObservers() {
-        if let timeObserverToken = overlayView?.configuration.observers.timeObserverToken {
-            printIfDebug(.success, "Removed `MediaPlayerView` observers.")
-            mediaPlayer?.player.removeTimeObserver(timeObserverToken)
-        }
-    }
+                canOpenURL url: URL) -> Bool { UIApplication.shared.canOpenURL(url) }
 }

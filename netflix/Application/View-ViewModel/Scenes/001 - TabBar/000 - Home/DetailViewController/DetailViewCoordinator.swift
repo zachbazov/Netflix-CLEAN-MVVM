@@ -29,16 +29,18 @@ extension DetailViewCoordinator: DetailCoordinable {
         let navigation = viewController?.navigationController
         let controller = DetailViewController()
         let viewModel = viewController?.viewModel
-        /// Stop playing the player.
-        viewController?.previewView?.mediaPlayerView?.stopPlayer()
-        /// Deallocate the current controller.
+        // Stop playing the player.
+        if let mediaPlayerView = viewController?.previewView?.mediaPlayerView {
+            mediaPlayerView.delegate?.playerDidStop(mediaPlayerView.mediaPlayer)
+        }
+        // Deallocate the current controller.
         viewController = nil
-        /// Allocate the new controller.
+        // Allocate the new controller.
         controller.viewModel = viewModel
-        /// Depend on the new media object.
+        // Depend on the new media object.
         controller.viewModel.media = media!
         viewController = controller
-        /// Reallocate the navigation stack.
+        // Reallocate the navigation stack.
         navigation?.setViewControllers([controller], animated: true)
     }
 }

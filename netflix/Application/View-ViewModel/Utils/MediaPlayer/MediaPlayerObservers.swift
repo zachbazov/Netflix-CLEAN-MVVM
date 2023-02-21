@@ -8,6 +8,17 @@
 import Foundation
 import Combine
 
+protocol ObserversProtocol {
+    var timeObserverToken: Any! { get }
+    var playerItemStatusObserver: NSKeyValueObservation! { get }
+    var playerItemFastForwardObserver: NSKeyValueObservation! { get }
+    var playerItemReverseObserver: NSKeyValueObservation! { get }
+    var playerItemFastReverseObserver: NSKeyValueObservation! { get }
+    var playerTimeControlStatusObserver: NSKeyValueObservation! { get }
+    var playerItemDidEndPlayingObserver: AnyCancellable! { get }
+    var cancelBag: Set<AnyCancellable>! { get }
+}
+
 // MARK: - MediaPlayerObservers
 
 struct MediaPlayerObservers {

@@ -29,7 +29,7 @@ final class LandpageViewController: Controller<AuthViewModel> {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        super.viewDidDeployBehaviors()
+        super.viewDidLoadBehaviors()
         setupSubviews()
     }
     

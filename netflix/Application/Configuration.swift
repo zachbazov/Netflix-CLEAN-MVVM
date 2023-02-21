@@ -9,20 +9,26 @@ import Foundation
 
 // MARK: - Configuration Type
 
-final class Configuration {
+final class Configuration: APIBundleLoading {
     
-    // MARK: API's Properties
+    // MARK: APIBundleLoading Properties
     
     lazy var apiScheme: String = {
-        guard let scheme = Bundle.main.object(forInfoDictionaryKey: "API Scheme") as? String else {
-            fatalError("API Scheme must be set on the property list file.")
+        guard
+            let value = Localization.Configuration.API().scheme as String?,
+            let scheme = Bundle.main.object(forInfoDictionaryKey: value) as? String else {
+            let message = Localization.Configuration.API().schemeError
+            fatalError(message)
         }
         return scheme
     }()
     
     lazy var apiHost: String = {
-        guard let host = Bundle.main.object(forInfoDictionaryKey: "API Host") as? String else {
-            fatalError("API Host must be set on the property list file.")
+        guard
+            let value = Localization.Configuration.API().host as String?,
+            let host = Bundle.main.object(forInfoDictionaryKey: value) as? String else {
+            let message = Localization.Configuration.API().hostError
+            fatalError(message)
         }
         return host
     }()

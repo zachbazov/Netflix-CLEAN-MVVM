@@ -14,6 +14,7 @@ private protocol ServicesInput {
 }
 
 private protocol ServicesOutput {
+    var configuration: Configuration { get }
     var authentication: AuthService { get }
     var dataTransfer: DataTransferService { get }
 }
@@ -23,10 +24,10 @@ private typealias ServicesProtocol = ServicesInput & ServicesOutput
 // MARK: - Services Type
 
 final class Services {
-    lazy var authentication = AuthService()
-    private(set) lazy var dataTransfer: DataTransferService = createDataTransferService()
+    fileprivate let configuration: Configuration
     
-    private let configuration: Configuration
+    lazy var authentication = AuthService()
+    lazy var dataTransfer: DataTransferService = createDataTransferService()
     
     init(configuration: Configuration = Configuration()) {
         self.configuration = configuration

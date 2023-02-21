@@ -7,6 +7,16 @@
 
 import Foundation
 
+// MARK: - ViewModelProtocol Type
+
+private protocol ViewModelOutput {
+    var media: Media { get }
+    var item: MediaPlayerViewItem? { get }
+    var isPlaying: Bool { get }
+}
+
+private typealias ViewModelProtocol = ViewModelOutput
+
 // MARK: - MediaPlayerViewViewModel Type
 
 struct MediaPlayerViewViewModel {
@@ -20,3 +30,7 @@ struct MediaPlayerViewViewModel {
         self.isPlaying = false
     }
 }
+
+extension MediaPlayerViewViewModel: ViewModel {}
+
+extension MediaPlayerViewViewModel: ViewModelProtocol {}

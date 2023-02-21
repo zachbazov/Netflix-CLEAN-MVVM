@@ -7,6 +7,23 @@
 
 import Foundation
 
+// MARK: - TimerProtocol Type
+
+private protocol TimerInput {
+    func schedule(timeInterval: TimeInterval,
+                  target: Any,
+                  selector: Selector,
+                  repeats: Bool)
+}
+
+private protocol TimerOutput {
+    var timer: Timer! { get }
+    
+    func invalidate()
+}
+
+private typealias TimerProtocol = TimerInput & TimerOutput
+
 // MARK: - ScheduledTimer Type
 
 final class ScheduledTimer {
@@ -15,9 +32,9 @@ final class ScheduledTimer {
     deinit { timer = nil }
 }
 
-// MARK: - Methods
+// MARK: - TimerProtocol Implementation
 
-extension ScheduledTimer {
+extension ScheduledTimer: TimerProtocol {
     func schedule(timeInterval: TimeInterval,
                   target: Any,
                   selector: Selector,

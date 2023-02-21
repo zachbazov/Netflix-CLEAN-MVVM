@@ -7,7 +7,7 @@
 
 import UIKit
 
-// MARK: - Mutable Protocol
+// MARK: - Mutable Type
 
 protocol Mutable {
     associatedtype Cell where Cell: UICollectionViewCell

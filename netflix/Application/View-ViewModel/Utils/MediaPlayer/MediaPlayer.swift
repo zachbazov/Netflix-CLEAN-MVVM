@@ -7,25 +7,38 @@
 
 import AVKit
 
-// MARK: - MediaPlayerDelegate Protocol
+// MARK: - MediaPlayerDelegate Type
 
 protocol MediaPlayerDelegate: AnyObject {
     func playerDidPlay(_ mediaPlayer: MediaPlayer)
     func playerDidStop(_ mediaPlayer: MediaPlayer)
     func player(_ mediaPlayer: MediaPlayer, willReplaceItem item: AVPlayerItem?)
-    func player(_ mediaPlayer: MediaPlayer, willVerifyUrl url: URL) -> Bool
+    func player(_ mediaPlayer: MediaPlayer, canOpenURL url: URL) -> Bool
 }
+
+// MARK: - PlayerProtocol Type
+
+private protocol PlayerOutput {
+    var player: AVPlayer { get }
+    var layer: MediaPlayerLayer { get }
+}
+
+private typealias PlayerProtocol = PlayerOutput
 
 // MARK: - MediaPlayer Type
 
 struct MediaPlayer {
     let player = AVPlayer()
-    let mediaPlayerLayer: MediaPlayerLayer
+    let layer: MediaPlayerLayer
     
     init(on parent: UIView) {
-        self.mediaPlayerLayer = MediaPlayerLayer(frame: parent.bounds)
-        parent.addSubview(self.mediaPlayerLayer)
-        self.mediaPlayerLayer.constraintToSuperview(parent)
-        self.mediaPlayerLayer.player = self.player
+        self.layer = MediaPlayerLayer(frame: parent.bounds)
+        parent.addSubview(self.layer)
+        self.layer.constraintToSuperview(parent)
+        self.layer.player = self.player
     }
 }
+
+// MARK: - PlayerProtocol Implementation
+
+extension MediaPlayer: PlayerProtocol {}

@@ -7,14 +7,35 @@
 
 import Foundation
 
+// MARK: - ViewModelProtocol Type
+
+private protocol ViewModelInput {
+    func shouldAddOrRemove(_ media: Media, uponSelection selected: Bool)
+    func contains(_ media: Media, in list: [Media]) -> Bool
+    func filter(section: Section)
+}
+
+private protocol ViewModelOutput {
+    var coordinator: HomeViewCoordinator? { get }
+    var useCase: ListUseCase { get }
+    var user: UserDTO { get }
+    var list: Observable<Set<Media>> { get }
+    var section: Section { get }
+    
+    func fetchList()
+    func updateList()
+    func updateView()
+}
+
+private typealias ViewModelProtocol = ViewModelInput & ViewModelOutput
+
 // MARK: - MyListViewModel Type
 
 final class MyListViewModel {
     weak var coordinator: HomeViewCoordinator?
     
-    private let useCase = ListUseCase()
-    
-    private let user: UserDTO
+    fileprivate let useCase = ListUseCase()
+    fileprivate let user: UserDTO
     let list: Observable<Set<Media>> = Observable([])
     let section: Section
     
@@ -29,9 +50,9 @@ final class MyListViewModel {
     }
 }
 
-// MARK: - HomeUseCase Implementation
+// MARK: - ViewModelProtocol Implementation
 
-extension MyListViewModel {
+extension MyListViewModel: ViewModelProtocol {
     func fetchList() {
         let requestDTO = ListHTTPDTO.GET.Request(user: user)
         useCase.repository.task = useCase.request(
@@ -68,11 +89,18 @@ extension MyListViewModel {
                 }
             })
     }
-}
-
-// MARK: - Methods
-
-extension MyListViewModel {
+    
+    func updateView() {
+        guard coordinator!.viewController!.tableView.numberOfSections > 0,
+              let myListIndex = HomeTableViewDataSource.Index(rawValue: 6),
+              let section = coordinator!.viewController?.viewModel?.section(at: .myList) else {
+            return
+        }
+        filter(section: section)
+        let index = IndexSet(integer: myListIndex.rawValue)
+        coordinator!.viewController?.tableView.reloadSections(index, with: .automatic)
+    }
+    
     func shouldAddOrRemove(_ media: Media, uponSelection selected: Bool) {
         if selected {
             list.value.remove(media)
@@ -83,18 +111,7 @@ extension MyListViewModel {
         }
         
         updateList()
-        listDidReload()
-    }
-    
-    func listDidReload() {
-        guard coordinator!.viewController!.tableView.numberOfSections > 0,
-              let myListIndex = HomeTableViewDataSource.Index(rawValue: 6),
-              let section = coordinator!.viewController?.viewModel?.section(at: .myList) else {
-            return
-        }
-        filter(section: section)
-        let index = IndexSet(integer: myListIndex.rawValue)
-        coordinator!.viewController?.tableView.reloadSections(index, with: .automatic)
+        updateView()
     }
     
     func contains(_ media: Media, in list: [Media]) -> Bool {

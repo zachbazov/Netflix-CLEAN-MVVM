@@ -7,26 +7,42 @@
 
 import UIKit
 
+// MARK: - NavigationControllerStyling Type
+
+protocol NavigationControllerStyling {
+    func didConfigureTitleView(withAssetNamed asset: String)
+}
+
+// MARK: - NavigationProtocol Type
+
+private protocol NavigationOutput {
+    var isHidden: Bool { get }
+    
+    func viewDidConfigure()
+}
+
+private typealias NavigationProtocol = NavigationOutput
+
 // MARK: - NavigationController Type
 
 class NavigationController: UINavigationController {
-    var isHidden: Bool {
-        get { return isNavigationBarHidden }
-        set { setNavigationBarHidden(newValue, animated: false) }
-    }
-    
     override init(rootViewController: UIViewController) {
         super.init(rootViewController: rootViewController)
-        self.setupSubviews()
+        self.viewDidConfigure()
     }
     
     required init?(coder aDecoder: NSCoder) { fatalError() }
 }
 
-// MARK: - UI Setup
+// MARK: - NavigationProtocol Implementation
 
-extension NavigationController {
-    private func setupSubviews() {
+extension NavigationController: NavigationProtocol {
+    var isHidden: Bool {
+        get { return isNavigationBarHidden }
+        set { setNavigationBarHidden(newValue, animated: false) }
+    }
+    
+    func viewDidConfigure() {
         modalPresentationStyle = .fullScreen
         isHidden = false
         

@@ -11,9 +11,6 @@ import UIKit
 
 private protocol CoordinatorInput {
     func createNavigationController(rootViewController: UIViewController) -> NavigationController
-    func createLandpageController() -> LandpageViewController
-    func createSignInController() -> SignInViewController
-    func createSignUpController() -> SignUpViewController
     
     func deploy(_ sender: Any)
 }
@@ -23,6 +20,10 @@ private protocol CoordinatorOutput {
     var landpageController: LandpageViewController { get }
     var signInController: SignInViewController { get }
     var signUpController: SignUpViewController { get }
+    
+    func createLandpageController() -> LandpageViewController
+    func createSignInController() -> SignInViewController
+    func createSignUpController() -> SignUpViewController
 }
 
 private typealias CoordinatorProtocol = CoordinatorInput & CoordinatorOutput
@@ -34,7 +35,7 @@ final class AuthCoordinator {
     
     fileprivate lazy var navigationController: NavigationController = createNavigationController(rootViewController: landpageController)
     fileprivate lazy var landpageController: LandpageViewController = createLandpageController()
-    fileprivate lazy var signInController: SignInViewController = createSignInController()
+    fileprivate(set) lazy var signInController: SignInViewController = createSignInController()
     fileprivate lazy var signUpController: SignUpViewController = createSignUpController()
 }
 

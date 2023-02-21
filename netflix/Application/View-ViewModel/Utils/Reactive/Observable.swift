@@ -7,25 +7,52 @@
 
 import Foundation
 
+// MARK: - ObserverProtocol Type
+
+private protocol ObserverInput {
+    associatedtype Value
+    
+    func observe(on observer: AnyObject, block: @escaping (Value) -> Void)
+    func remove(observer: AnyObject)
+}
+
+private protocol ObserverOutput {
+    associatedtype Value
+    associatedtype T
+    
+    var observers: T { get }
+    var value: Value { get }
+    
+    func notifyObservers()
+}
+
+private typealias ObserverProtocol = ObserverInput & ObserverOutput
+
 // MARK: - Observable Type
 
 final class Observable<Value> {
-    private struct Observer<Value> {
-        private(set) weak var observer: AnyObject?
-        let block: (Value) -> Void
-    }
-    
-    private var observers = [Observer<Value>]()
+    fileprivate var observers = [Observer<Value>]()
     var value: Value { didSet { notifyObservers() } }
     
     init(_ value: Value) { self.value = value }
 }
 
-// MARK: - Methods
+// MARK: - Observer Type
 
 extension Observable {
-    private func notifyObservers() {
-        for observer in observers { mainQueueDispatch { observer.block(self.value) } }
+    fileprivate struct Observer<Value> {
+        private(set) weak var observer: AnyObject?
+        let block: (Value) -> Void
+    }
+}
+
+// MARK: - ObserverProtocol Implementation
+
+extension Observable: ObserverProtocol {
+    fileprivate func notifyObservers() {
+        for observer in observers {
+            mainQueueDispatch { observer.block(self.value) }
+        }
     }
     
     func observe(on observer: AnyObject, block: @escaping (Value) -> Void) {

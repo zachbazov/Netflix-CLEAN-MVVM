@@ -10,6 +10,16 @@ import Foundation
 // MARK: - Localization Type
 
 struct Localization {
+    struct Configuration {
+        struct API {
+            let scheme = NSLocalizedString("Configuration.API.Scheme", comment: "API Scheme URL Protocol")
+            let host = NSLocalizedString("Configuration.API.Host", comment: "API Host URL")
+            
+            let schemeError = NSLocalizedString("Configuration.API.Scheme.Message", comment: "API Scheme invalidation message.")
+            let hostError = NSLocalizedString("Configuration.API.Host.Message", comment: "API Host invalidation message.")
+        }
+    }
+    
     struct Auth {
         struct Landpage {
             let signInBarButton = NSLocalizedString("LandpageViewController.BarButton.Title",

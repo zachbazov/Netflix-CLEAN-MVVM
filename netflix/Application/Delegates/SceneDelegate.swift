@@ -48,13 +48,13 @@ extension SceneDelegate: UIWindowSceneDelegate {
     func sceneDidEnterBackground(_ scene: UIScene) {}
 }
 
-// MARK: - TabBarObserverUnbinding Implementation
+// MARK: - SceneObserverUnbinding Implementation
 
 extension SceneDelegate: SceneObserverUnbinding {
     /// Remove all tar-bar related observers.
     /// The observers of `DetailViewController` will be removed automatically once home's instance is deallocated.
     func sceneObserversDidUnbind() {
-        guard let tabCoordinator = Application.app.coordinator.tabCoordinator else { return }
+        guard let tabCoordinator = Application.app.coordinator.tabCoordinator as TabBarCoordinator? else { return }
         // Remove any home-related observers.
         if let homeController = tabCoordinator.home.viewControllers.first! as? HomeViewController {
             // Remove panel view observers.
@@ -70,10 +70,10 @@ extension SceneDelegate: SceneObserverUnbinding {
             }
             // Remove my-list observers.
             if let myList = homeController.viewModel.myList as MyList? {
-                myList.removeObservers()
+                myList.viewDidUnbindObservers()
             }
             
-            homeController.viewObserversDidUnbind()
+            homeController.viewDidUnbindObservers()
         }
         // In-case of a valid news controller instance, remove it's observers.
         if let newsController = tabCoordinator.news.viewControllers.first! as? NewsViewController {

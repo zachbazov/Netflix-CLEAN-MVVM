@@ -26,7 +26,23 @@ final class SignUpViewController: Controller<SignUpViewModel> {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupSubviews()
+        viewDidConfigure()
+    }
+    
+    override func viewDidConfigure() {
+        setAttributes(for: [nameTextField, emailTextField,
+                            passwordTextField, passwordConfirmTextField])
+        signUpButton.setLayerBorder(.black, width: 1.5)
+        viewDidTargetSubviews()
+        didConfigureTitleView()
+    }
+    
+    override func viewDidTargetSubviews() {
+        signUpButton.addTarget(viewModel, action: #selector(viewModel?.signUpButtonDidTap), for: .touchUpInside)
+        nameTextField.addTarget(self, action: #selector(textFieldValueDidChange), for: .editingChanged)
+        emailTextField.addTarget(self, action: #selector(textFieldValueDidChange), for: .editingChanged)
+        passwordTextField.addTarget(self, action: #selector(textFieldValueDidChange), for: .editingChanged)
+        passwordConfirmTextField.addTarget(self, action: #selector(textFieldValueDidChange), for: .editingChanged)
     }
 }
 
@@ -42,25 +58,5 @@ extension SignUpViewController: ViewControllerProtocol {
         case passwordConfirmTextField: viewModel?.passwordConfirm = textField.text
         default: return
         }
-    }
-}
-
-// MARK: - Private UI Implementation
-
-extension SignUpViewController {
-    private func setupSubviews() {
-        setAttributes(for: [nameTextField, emailTextField,
-                            passwordTextField, passwordConfirmTextField])
-        signUpButton.setLayerBorder(.black, width: 1.5)
-        setupTargets()
-        viewDidBrandNavigationItemTitleView()
-    }
-    
-    private func setupTargets() {
-        signUpButton.addTarget(viewModel, action: #selector(viewModel?.signUpButtonDidTap), for: .touchUpInside)
-        nameTextField.addTarget(self, action: #selector(textFieldValueDidChange), for: .editingChanged)
-        emailTextField.addTarget(self, action: #selector(textFieldValueDidChange), for: .editingChanged)
-        passwordTextField.addTarget(self, action: #selector(textFieldValueDidChange), for: .editingChanged)
-        passwordConfirmTextField.addTarget(self, action: #selector(textFieldValueDidChange), for: .editingChanged)
     }
 }
