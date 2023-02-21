@@ -7,12 +7,26 @@
 
 import Foundation
 
+// MARK: - ViewModelProtocol Type
+
+private protocol ViewModelOutput {
+    var useCase: MediaUseCase { get }
+    
+    var items: Observable<[NewsTableViewCellViewModel]> { get }
+    var isEmpty: Bool { get }
+    
+    func viewDidLoad()
+    func fetchUpcomingMedia()
+}
+
+private typealias ViewModelProtocol = ViewModelOutput
+
 // MARK: - NewsViewModel Type
 
 final class NewsViewModel {
     var coordinator: NewsViewCoordinator?
     
-    private let useCase = MediaUseCase()
+    fileprivate let useCase = MediaUseCase()
     
     let items: Observable<[NewsTableViewCellViewModel]> = Observable([])
     var isEmpty: Bool { return items.value.isEmpty }
@@ -20,22 +34,16 @@ final class NewsViewModel {
 
 // MARK: - ViewModel Implementaiton
 
-extension NewsViewModel: ViewModel {
-    func transform(input: Void) {}
-}
+extension NewsViewModel: ViewModel {}
 
-// MARK: - UI Setup
+// MARK: - ViewModelProtocol Implementation
 
-extension NewsViewModel {
+extension NewsViewModel: ViewModelProtocol {
     func viewDidLoad() {
         fetchUpcomingMedia()
     }
-}
-
-// MARK: - NewsUseCase Implementation
-
-extension NewsViewModel {
-    private func fetchUpcomingMedia() {
+    
+    fileprivate func fetchUpcomingMedia() {
         useCase.repository.task = useCase.request(for: NewsHTTPDTO.Response.self, request: Any.self, cached: nil, completion: { [weak self] result in
             if case let .success(responseDTO) = result {
                 self?.items.value = responseDTO.toCellViewModels()

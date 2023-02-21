@@ -9,7 +9,7 @@ import UIKit
 
 // MARK: - NewsNavigationView Type
 
-final class NewsNavigationView: UIView, ViewInstantiable {
+final class NewsNavigationView: UIView {
     @IBOutlet private weak var titleLabel: UILabel!
     @IBOutlet private weak var airPlayButton: UIButton!
     @IBOutlet private weak var accountButton: UIButton!
@@ -24,3 +24,7 @@ final class NewsNavigationView: UIView, ViewInstantiable {
     
     required init?(coder: NSCoder) { fatalError() }
 }
+
+// MARK: - ViewInstantiable Implementation
+
+extension NewsNavigationView: ViewInstantiable {}

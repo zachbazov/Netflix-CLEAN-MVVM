@@ -7,38 +7,79 @@
 
 import Foundation
 
+// MARK: - ViewModelProtocol Type
+
+private protocol ViewModelInput {
+    func set(media: [Media])
+    func load(requestDTO: SearchHTTPDTO.Request, loading: SearchLoading)
+    func update(requestDTO: SearchHTTPDTO.Request)
+    
+    func didLoadNextPage(requestDTO: SearchHTTPDTO.Request)
+    func didSearch(query: String)
+}
+
+private protocol ViewModelOutput {
+    var useCase: MediaUseCase { get }
+    
+    var items: Observable<[SearchCollectionViewCellViewModel]> { get }
+    var loading: Observable<SearchLoading?> { get }
+    var query: Observable<String> { get }
+    var error: Observable<String> { get }
+    var isEmpty: Bool { get }
+    
+    func reset()
+    
+    func didCancelSearch()
+}
+
+private typealias ViewModelProtocol = ViewModelInput & ViewModelOutput
+
 // MARK: - SearchViewModel Type
 
 final class SearchViewModel {
     var coordinator: SearchViewCoordinator?
     
-    private let useCase = MediaUseCase()
+    fileprivate let useCase = MediaUseCase()
     
     let items: Observable<[SearchCollectionViewCellViewModel]> = Observable([])
     let loading: Observable<SearchLoading?> = Observable(.none)
     let query: Observable<String> = Observable("")
-    private let error: Observable<String> = Observable("")
-    private var isEmpty: Bool { return items.value.isEmpty }
+    fileprivate let error: Observable<String> = Observable("")
+    fileprivate var isEmpty: Bool { return items.value.isEmpty }
 }
 
 // MARK: - ViewModel Implementation
 
-extension SearchViewModel: ViewModel {
-    func transform(input: Void) {}
-}
+extension SearchViewModel: ViewModel {}
 
-// MARK: - Methods
+// MARK: - ViewModelProtocol Implementation
 
-extension SearchViewModel {
-    private func set(media: [Media]) {
+extension SearchViewModel: ViewModelProtocol {
+    func viewDidLoad() {}
+    
+    func didLoadNextPage(requestDTO: SearchHTTPDTO.Request) {
+        load(requestDTO: requestDTO, loading: .nextPage)
+    }
+    
+    func didSearch(query: String) {
+        guard !query.isEmpty else { return }
+        let requestDTO = SearchHTTPDTO.Request(regex: query)
+        update(requestDTO: requestDTO)
+    }
+    
+    func didCancelSearch() {
+        useCase.repository.task?.cancel()
+    }
+    
+    fileprivate func set(media: [Media]) {
         items.value = media.map(SearchCollectionViewCellViewModel.init)
     }
     
-    private func reset() {
+    fileprivate func reset() {
         items.value.removeAll()
     }
     
-    private func load(requestDTO: SearchHTTPDTO.Request, loading: SearchLoading) {
+    fileprivate func load(requestDTO: SearchHTTPDTO.Request, loading: SearchLoading) {
         self.loading.value = loading
         query.value = requestDTO.regex
         
@@ -58,29 +99,9 @@ extension SearchViewModel {
             })
     }
     
-    private func update(requestDTO: SearchHTTPDTO.Request) {
+    fileprivate func update(requestDTO: SearchHTTPDTO.Request) {
         reset()
         load(requestDTO: requestDTO, loading: .fullscreen)
-    }
-}
-
-// MARK: - UI Setup
-
-extension SearchViewModel {
-    func viewDidLoad() {}
-    
-    func didLoadNextPage(requestDTO: SearchHTTPDTO.Request) {
-        load(requestDTO: requestDTO, loading: .nextPage)
-    }
-    
-    func didSearch(query: String) {
-        guard !query.isEmpty else { return }
-        let requestDTO = SearchHTTPDTO.Request(regex: query)
-        update(requestDTO: requestDTO)
-    }
-    
-    func didCancelSearch() {
-        useCase.repository.task?.cancel()
     }
 }
 

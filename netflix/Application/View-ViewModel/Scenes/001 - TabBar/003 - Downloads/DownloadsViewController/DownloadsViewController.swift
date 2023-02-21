@@ -7,30 +7,42 @@
 
 import UIKit
 
+// MARK: - ControllerProtocol Type
+
+private protocol ControllerOutput {
+    var navigationView: DownloadsNavigationView! { get }
+    var downloadsView: DownloadsView! { get }
+}
+
+private typealias ControllerProtocol = ControllerOutput
+
 // MARK: - DownloadsViewController Type
 
-final class DownloadsViewController: UIViewController {
+final class DownloadsViewController: Controller<DownloadsViewModel> {
     @IBOutlet private var navigationViewContainer: UIView!
     @IBOutlet private var downloadsViewContainer: UIView!
     
-    var viewModel: DownloadsViewModel!
-    private var navigationView: DownloadsNavigationView!
-    private var downloadsView: DownloadsView!
+    fileprivate var navigationView: DownloadsNavigationView!
+    fileprivate var downloadsView: DownloadsView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupSubviews()
+        viewDidDeploySubviews()
     }
-}
-
-// MARK: - UI Setup
-
-extension DownloadsViewController {
-    private func setupSubviews() {
+    
+    override func viewDidDeploySubviews() {
         setupDownloadsNavigationView()
         setupDownloadsView()
     }
-    
+}
+
+// MARK: - ControllerProtocol Implementation
+
+extension DownloadsViewController: ControllerProtocol {}
+
+// MARK: - Private UI Implementation
+
+extension DownloadsViewController {
     private func setupDownloadsNavigationView() {
         navigationView = DownloadsNavigationView(on: navigationViewContainer)
     }

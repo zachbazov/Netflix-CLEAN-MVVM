@@ -7,42 +7,49 @@
 
 import UIKit
 
-// MARK: - NewsCoordinable Protocol
+// MARK: - CoordinatorProtocol Type
 
-private protocol NewsCoordinable {
-    func allocateDetailController()
+private protocol CoordinatorOutput {
+    var section: Section? { get }
+    var media: Media? { get }
+    var shouldScreenRotate: Bool { get }
+    
+    func createDetailController()
 }
+
+private typealias CoordinatorProtocol = CoordinatorOutput
 
 // MARK: - NewsViewCoordinator Type
 
 final class NewsViewCoordinator {
     var viewController: NewsViewController?
+    
     var section: Section?
     var media: Media?
     var shouldScreenRotate: Bool = false
 }
 
-// MARK: - NewsCoordinable Implementation
+// MARK: - CoordinatorProtocol Implementation
 
-extension NewsViewCoordinator: NewsCoordinable {
-    fileprivate func allocateDetailController() {
+extension NewsViewCoordinator: CoordinatorProtocol {
+    fileprivate func createDetailController() {
         guard let section = section, let media = media else { return }
-        /// An `HomeViewModel` reference is needed to gain access to the sections data.
+        // An `HomeViewModel` reference is needed to gain access to the sections data.
         let homeNavigation = Application.app.coordinator.tabCoordinator.home!
-        /// Extract home's view model reference.
+        // Extract home's view model reference.
         let homeController = homeNavigation.viewControllers.first! as! HomeViewController
         let homeViewModel = homeController.viewModel!
-        /// Allocate the detail controller and it's dependencies.
+        // Allocate the detail controller and it's dependencies.
         let controller = DetailViewController()
         let viewModel = DetailViewModel(section: section, media: media, with: homeViewModel)
         controller.viewModel = viewModel
         controller.viewModel.coordinator = DetailViewCoordinator()
         controller.viewModel.coordinator?.viewController = controller
         controller.viewModel.isRotated = shouldScreenRotate
-        /// Wrap the controller with a navigation controller.
+        // Wrap the controller with a navigation controller.
         let navigation = UINavigationController(rootViewController: controller)
         navigation.setNavigationBarHidden(true, animated: false)
-        /// Present the navigation controller.
+        // Present the navigation controller.
         viewController?.present(navigation, animated: true)
     }
 }
@@ -57,6 +64,8 @@ extension NewsViewCoordinator: Coordinate {
     /// Screen presentation control.
     /// - Parameter screen: The screen to be allocated and presented.
     func coordinate(to screen: Screen) {
-        if case .detail = screen { allocateDetailController() }
+        switch screen {
+        case .detail: createDetailController()
+        }
     }
 }

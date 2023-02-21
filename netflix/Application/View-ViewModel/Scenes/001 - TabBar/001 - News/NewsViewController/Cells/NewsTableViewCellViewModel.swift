@@ -7,6 +7,22 @@
 
 import Foundation
 
+// MARK: - ViewModelProtocol Type
+
+private protocol ViewModelOutput {
+    var media: Media { get }
+    var previewPosterImagePath: String { get }
+    var previewPosterImageIdentifier: NSString { get }
+    var previewPosterImageURL: URL! { get }
+    var displayLogoImagePath: String { get }
+    var displayLogoImageIdentifier: NSString { get }
+    var displayLogoImageURL: URL! { get }
+    var eta: String { get }
+    var mediaType: String { get }
+}
+
+private typealias ViewModelProtocol = ViewModelOutput
+
 // MARK: - NewsTableViewCellViewModel Type
 
 struct NewsTableViewCellViewModel {
@@ -33,6 +49,10 @@ struct NewsTableViewCellViewModel {
         self.mediaType = media.type == "series" ? "S E R I E" : "F I L M"
     }
 }
+
+// MARK: - ViewModelProtocol Implementation
+
+extension NewsTableViewCellViewModel: ViewModelProtocol {}
 
 // MARK: - Equatable Implementation
 

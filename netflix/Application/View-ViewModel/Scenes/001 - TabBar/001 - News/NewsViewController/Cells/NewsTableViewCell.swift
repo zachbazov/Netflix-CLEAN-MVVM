@@ -7,6 +7,16 @@
 
 import UIKit
 
+// MARK: - ViewProtocol Type
+
+private protocol ViewOutput {
+    var representedIdentifier: String? { get }
+    
+    func viewDidConfigure(with viewModel: NewsTableViewCellViewModel)
+}
+
+private typealias ViewProtocol = ViewOutput
+
 // MARK: - NewsTableViewCell Type
 
 final class NewsTableViewCell: UITableViewCell {
@@ -25,8 +35,8 @@ final class NewsTableViewCell: UITableViewCell {
     @IBOutlet private weak var descriptionTextView: UITextView!
     @IBOutlet private weak var genresLabel: UILabel!
     
-    private var viewModel: NewsTableViewCellViewModel!
-    private var representedIdentifier: String?
+    fileprivate var viewModel: NewsTableViewCellViewModel!
+    fileprivate var representedIdentifier: String?
     /// Create a news table view cell object.
     /// - Parameters:
     ///   - tableView: Corresponding table view.
@@ -44,22 +54,26 @@ final class NewsTableViewCell: UITableViewCell {
         let cellViewModel = viewModel.items.value[indexPath.row]
         view.representedIdentifier = cellViewModel.media.slug
         view.viewModel = NewsTableViewCellViewModel(with: cellViewModel.media)
-        view.setupSubviews()
+        view.viewDidConfigure()
         view.viewDidConfigure(with: view.viewModel)
         return view
     }
 }
 
-// MARK: - UI Setup
+// MARK: - ViewLifecycleBehavior Implementation
 
-extension NewsTableViewCell {
-    private func setupSubviews() {
+extension NewsTableViewCell: ViewLifecycleBehavior {
+    func viewDidConfigure() {
         selectionStyle = .none
         backgroundColor = .black
         previewPosterImageView.layer.cornerRadius = 10.0
     }
-    
-    private func viewDidConfigure(with viewModel: NewsTableViewCellViewModel) {
+}
+
+// MARK: - ViewProtocol Implementation
+
+extension NewsTableViewCell: ViewProtocol {
+    fileprivate func viewDidConfigure(with viewModel: NewsTableViewCellViewModel) {
         guard representedIdentifier == viewModel.media.slug else { return }
         
         AsyncImageService.shared.load(

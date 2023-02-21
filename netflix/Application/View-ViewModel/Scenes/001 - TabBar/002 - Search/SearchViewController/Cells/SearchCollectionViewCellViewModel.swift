@@ -7,6 +7,25 @@
 
 import Foundation
 
+// MARK: - ViewModelProtocol Type
+
+private protocol ViewModelOutput {
+    var media: Media? { get }
+    var title: String { get }
+    var slug: String { get }
+    var posters: [String] { get }
+    var logos: [String] { get }
+    var posterImagePath: String { get }
+    var posterImageIdentifier: NSString { get }
+    var posterImageURL: URL! { get }
+    var logoImagePath: String { get }
+    var logoImageIdentifier: NSString { get }
+    var logoImageURL: URL! { get }
+    var presentedLogoAlignment: PresentedLogoAlignment { get }
+}
+
+private typealias ViewModelProtocol = ViewModelOutput
+
 // MARK: - SearchCollectionViewCellViewModel Type
 
 struct SearchCollectionViewCellViewModel {
@@ -41,3 +60,7 @@ struct SearchCollectionViewCellViewModel {
         self.logoImageURL = URL(string: self.logoImagePath)
     }
 }
+
+// MARK: - ViewModelProtocol Implementation
+
+extension SearchCollectionViewCellViewModel: ViewModelProtocol {}

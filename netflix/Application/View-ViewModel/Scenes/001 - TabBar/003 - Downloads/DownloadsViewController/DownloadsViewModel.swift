@@ -15,6 +15,4 @@ final class DownloadsViewModel {
 
 // MARK: - ViewModel Implementation
 
-extension DownloadsViewModel: ViewModel {
-    func transform(input: Void) {}
-}
+extension DownloadsViewModel: ViewModel {}
