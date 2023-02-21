@@ -7,6 +7,17 @@
 
 import UIKit
 
+// MARK: - ViewProtocol Type
+
+private protocol ViewInput {
+    func dataDidDownload(with viewModel: TrailerCollectionViewCellViewModel,
+                         completion: (() -> Void)?)
+    func viewDidConfigure(with viewModel: TrailerCollectionViewCellViewModel)
+    func viewDidLoad(with viewModel: TrailerCollectionViewCellViewModel)
+}
+
+private typealias ViewProtocol = ViewInput
+
 // MARK: - TrailerCollectionViewCell Type
 
 final class TrailerCollectionViewCell: UICollectionViewCell {
@@ -31,33 +42,37 @@ final class TrailerCollectionViewCell: UICollectionViewCell {
     }
 }
 
-// MARK: - UI Setup
+// MARK: - ViewLifecycleBehavior Implementation
 
-extension TrailerCollectionViewCell {
-    private func setupSubviews() {
+extension TrailerCollectionViewCell: ViewLifecycleBehavior {
+    func viewDidConfigure() {
         playButton.layer.borderColor = UIColor.white.cgColor
         playButton.layer.borderWidth = 2.0
         playButton.layer.cornerRadius = playButton.bounds.size.height / 2
         
         posterImageView.layer.cornerRadius = 4.0
     }
-    
-    private func dataDidDownload(with viewModel: TrailerCollectionViewCellViewModel,
+}
+
+// MARK: - ViewProtocol Implementation
+
+extension TrailerCollectionViewCell: ViewProtocol {
+    fileprivate func dataDidDownload(with viewModel: TrailerCollectionViewCellViewModel,
                                  completion: (() -> Void)?) {
         AsyncImageService.shared.load(
             url: viewModel.posterImageURL,
             identifier: viewModel.posterImageIdentifier) { _ in completion?() }
     }
     
-    private func viewDidLoad(with viewModel: TrailerCollectionViewCellViewModel) {
+    fileprivate func viewDidLoad(with viewModel: TrailerCollectionViewCellViewModel) {
         dataDidDownload(with: viewModel) { [weak self] in
             DispatchQueue.main.async { self?.viewDidConfigure(with: viewModel) }
         }
         
-        setupSubviews()
+        viewDidConfigure()
     }
     
-    private func viewDidConfigure(with viewModel: TrailerCollectionViewCellViewModel) {
+    fileprivate func viewDidConfigure(with viewModel: TrailerCollectionViewCellViewModel) {
         let image = AsyncImageService.shared.object(for: viewModel.posterImageIdentifier)
         posterImageView.image = image
         titleLabel.text = viewModel.title

@@ -7,22 +7,51 @@
 
 import Foundation
 
+// MARK: - ViewModelProtocol Type
+
+private protocol ViewModelInput {
+    func getSeason(with request: SeasonHTTPDTO.Request, completion: @escaping () -> Void)
+}
+
+private protocol ViewModelOutput {
+    var useCase: SeasonUseCase { get }
+    var orientation: DeviceOrientation { get }
+    
+    var homeDataSourceState: HomeTableViewDataSource.State! { get }
+    
+    var section: Section { get }
+    var media: Media { get }
+    var isRotated: Bool? { get }
+    
+    var navigationViewState: Observable<DetailNavigationView.State>! { get }
+    var season: Observable<Season?>! { get }
+    var myList: MyList! { get }
+    var myListSection: Section! { get }
+    
+    func shouldScreenRotate()
+    func resetOrientation()
+}
+
+private typealias ViewModelProtocol = ViewModelInput & ViewModelOutput
+
 // MARK: - DetailViewModel Type
 
 final class DetailViewModel {
     var coordinator: DetailViewCoordinator?
     
-    private let useCase = SeasonUseCase()
+    fileprivate let useCase = SeasonUseCase()
+    fileprivate let orientation = DeviceOrientation.shared
+    
+    fileprivate(set) var homeDataSourceState: HomeTableViewDataSource.State!
     
     let section: Section
     var media: Media
-    private let orientation = DeviceOrientation.shared
     var isRotated: Bool? { didSet { shouldScreenRotate() } }
-    private(set) var homeDataSourceState: HomeTableViewDataSource.State!
-    private(set) var navigationViewState: Observable<DetailNavigationView.State>! = Observable(.episodes)
-    private(set) var season: Observable<Season?>! = Observable(nil)
-    private(set) var myList: MyList!
-    private(set) var myListSection: Section!
+    
+    fileprivate(set) var navigationViewState: Observable<DetailNavigationView.State>! = Observable(.episodes)
+    fileprivate(set) var season: Observable<Season?>! = Observable(nil)
+    fileprivate(set) var myList: MyList!
+    fileprivate(set) var myListSection: Section!
     /// Create a detail view model object.
     /// - Parameters:
     ///   - section: The section that corresponds to the media object.
@@ -48,14 +77,12 @@ final class DetailViewModel {
 
 // MARK: - ViewModel Implementation
 
-extension DetailViewModel: ViewModel {
-    func transform(input: Void) {}
-}
+extension DetailViewModel: ViewModel {}
 
-// MARK: - Methods
+// MARK: - ViewModelProtocol Implementation
 
-extension DetailViewModel {
-    private func shouldScreenRotate() {
+extension DetailViewModel: ViewModelProtocol {
+    fileprivate func shouldScreenRotate() {
         orientation.setLock(orientation: .all)
         
         if isRotated ?? false {
@@ -68,11 +95,7 @@ extension DetailViewModel {
     func resetOrientation() {
         orientation.setLock(orientation: .portrait)
     }
-}
-
-// MARK: - DetailUseCase Implementation
-
-extension DetailViewModel {
+    
     func getSeason(with request: SeasonHTTPDTO.Request, completion: @escaping () -> Void) {
         useCase.repository.task = useCase.request(for: SeasonHTTPDTO.Response.self,
                                                   request: request,

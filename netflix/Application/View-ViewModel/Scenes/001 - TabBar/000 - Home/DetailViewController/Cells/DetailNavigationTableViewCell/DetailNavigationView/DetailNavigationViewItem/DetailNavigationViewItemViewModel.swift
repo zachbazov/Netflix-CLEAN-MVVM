@@ -7,11 +7,21 @@
 
 import Foundation
 
+// MARK: - ViewModelProtocol Type
+
+private protocol ViewModelOutput {
+    var tag: Int { get }
+    var isSelected: Bool { get }
+    var title: String { get }
+}
+
+private typealias ViewModelProtocol = ViewModelOutput
+
 // MARK: - DetailNavigationViewItemViewModel Type
 
 final class DetailNavigationViewItemViewModel {
-    private let tag: Int
-    private var isSelected: Bool
+    fileprivate let tag: Int
+    fileprivate var isSelected: Bool
     
     var title: String {
         guard let tag = DetailNavigationView.State(rawValue: tag) else { fatalError() }
@@ -28,3 +38,11 @@ final class DetailNavigationViewItemViewModel {
         self.isSelected = item.isSelected
     }
 }
+
+// MARK: - ViewModel Implementation
+
+extension DetailNavigationViewItemViewModel: ViewModel {}
+
+// MARK: - ViewModelProtocol Implementation
+
+extension DetailNavigationViewItemViewModel: ViewModelProtocol {}

@@ -7,6 +7,16 @@
 
 import Foundation
 
+// MARK: - ViewModelProtocol Type
+
+private protocol ViewModelOutput {
+    var description: String { get }
+    var cast: String { get }
+    var writers: String { get }
+}
+
+private typealias ViewModelProtocol = ViewModelOutput
+
 // MARK: - DetailDescriptionViewViewModel Type
 
 struct DetailDescriptionViewViewModel {
@@ -21,3 +31,11 @@ struct DetailDescriptionViewViewModel {
         self.writers = media.writers
     }
 }
+
+// MARK: - ViewModel Implementation
+
+extension DetailDescriptionViewViewModel: ViewModel {}
+
+// MARK: - ViewModelProtocol Implementation
+
+extension DetailDescriptionViewViewModel: ViewModelProtocol {}

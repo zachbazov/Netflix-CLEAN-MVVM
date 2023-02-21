@@ -51,14 +51,14 @@ final class HomeViewController: Controller<HomeViewModel>, ViewControllerProtoco
     
     override func viewDidBindObservers() {
         viewModel.dataSourceState.observe(on: self) { [weak self] state in
-            /// Release data source changes.
+            // Release data source changes.
             self?.dataSource.dataSourceDidChange()
         }
         
         viewModel.showcase.observe(on: self) { [weak self] media in
             guard let media = media else { return }
-            /// Release `opaqueView` view model changes based on the display media object.
-            self?.navigationView.navigationOverlayView.opaqueView.viewModelDidUpdate(with: media)
+            // Release `opaqueView` view model changes based on the display media object.
+            self?.navigationView.navigationOverlayView.opaqueView.viewDidUpdate(with: media)
         }
     }
     

@@ -7,18 +7,32 @@
 
 import UIKit
 
+// MARK: - ViewProtocol Type
+
+private protocol ViewOutput {
+    var infoView: DetailInfoView! { get }
+    
+    func viewDidConfigure()
+}
+
+private typealias ViewProtocol = ViewOutput
+
 // MARK: - DetailInfoTableViewCell Type
 
 final class DetailInfoTableViewCell: UITableViewCell {
-    private var infoView: DetailInfoView!
+    fileprivate var infoView: DetailInfoView!
     /// Create a detail info table view cell object.
     /// - Parameters:
     ///   - tableView: Corresponding table view.
     ///   - indexPath: The index path of the cel on the data source.
     ///   - viewModel: Coordinating view model.
     /// - Returns: A detail info table view cell.
-    static func create(on tableView: UITableView, for indexPath: IndexPath, with viewModel: DetailViewModel) -> DetailInfoTableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: DetailInfoTableViewCell.reuseIdentifier, for: indexPath) as? DetailInfoTableViewCell else {
+    static func create(on tableView: UITableView,
+                       for indexPath: IndexPath,
+                       with viewModel: DetailViewModel) -> DetailInfoTableViewCell {
+        guard let cell = tableView.dequeueReusableCell(
+            withIdentifier: DetailInfoTableViewCell.reuseIdentifier,
+            for: indexPath) as? DetailInfoTableViewCell else {
             fatalError()
         }
         let viewModel = DetailInfoViewViewModel(with: viewModel)
@@ -36,10 +50,10 @@ final class DetailInfoTableViewCell: UITableViewCell {
     required init?(coder: NSCoder) { fatalError() }
 }
 
-// MARK: - UI Setup
+// MARK: - ViewProtocol Implementation
 
-extension DetailInfoTableViewCell {
-    private func viewDidConfigure() {
+extension DetailInfoTableViewCell: ViewProtocol {
+    fileprivate func viewDidConfigure() {
         backgroundColor = .black
         selectionStyle = .none
     }

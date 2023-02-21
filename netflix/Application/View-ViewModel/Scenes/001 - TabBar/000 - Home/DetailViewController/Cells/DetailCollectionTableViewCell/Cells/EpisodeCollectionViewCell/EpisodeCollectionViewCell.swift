@@ -7,6 +7,19 @@
 
 import UIKit
 
+// MARK: - ViewProtocol Type
+
+private protocol ViewInput {
+    func dataDidDownload(with viewModel: EpisodeCollectionViewCellViewModel,
+                         completion: (() -> Void)?)
+    func viewDidLoad(at indexPath: IndexPath,
+                     with viewModel: EpisodeCollectionViewCellViewModel)
+    func viewDidConfigure(at indexPath: IndexPath,
+                          with viewModel: EpisodeCollectionViewCellViewModel)
+}
+
+private typealias ViewProtocol = ViewInput
+
 // MARK: - EpisodeCollectionViewCell Type
 
 final class EpisodeCollectionViewCell: UICollectionViewCell {
@@ -29,25 +42,28 @@ final class EpisodeCollectionViewCell: UICollectionViewCell {
             withReuseIdentifier: EpisodeCollectionViewCell.reuseIdentifier,
             for: indexPath) as? EpisodeCollectionViewCell else { fatalError() }
         let cellViewModel = EpisodeCollectionViewCellViewModel(with: viewModel)
-        view.setupSubviews()
         view.viewDidLoad(at: indexPath, with: cellViewModel)
         return view
     }
 }
 
-// MARK: - UI Setup
+// MARK: - ViewLifecycleBehavior Implementation
 
-extension EpisodeCollectionViewCell {
-    private func setupSubviews() {
+extension EpisodeCollectionViewCell: ViewLifecycleBehavior {
+    func viewDidConfigure() {
         playButton.layer.borderColor = UIColor.white.cgColor
         playButton.layer.borderWidth = 2.0
         playButton.layer.cornerRadius = playButton.bounds.size.height / 2
         
         imageView.layer.cornerRadius = 4.0
     }
-    
-    private func dataDidDownload(with viewModel: EpisodeCollectionViewCellViewModel,
-                                 completion: (() -> Void)?) {
+}
+
+// MARK: - ViewProtocol Implementation
+
+extension EpisodeCollectionViewCell: ViewProtocol {
+    fileprivate func dataDidDownload(with viewModel: EpisodeCollectionViewCellViewModel,
+                                     completion: (() -> Void)?) {
         AsyncImageService.shared.load(
             url: viewModel.posterImageURL,
             identifier: viewModel.posterImageIdentifier) { _ in
@@ -55,16 +71,16 @@ extension EpisodeCollectionViewCell {
             }
     }
     
-    private func viewDidLoad(at indexPath: IndexPath,
-                             with viewModel: EpisodeCollectionViewCellViewModel) {
+    fileprivate func viewDidLoad(at indexPath: IndexPath,
+                                 with viewModel: EpisodeCollectionViewCellViewModel) {
         dataDidDownload(with: viewModel) { [weak self] in
             self?.viewDidConfigure(at: indexPath, with: viewModel)
         }
         
-        setupSubviews()
+        viewDidConfigure()
     }
     
-    private func viewDidConfigure(at indexPath: IndexPath,
+    fileprivate func viewDidConfigure(at indexPath: IndexPath,
                                       with viewModel: EpisodeCollectionViewCellViewModel) {
         guard let season = viewModel.season else { return }
         let episode = season.episodes[indexPath.row]

@@ -18,7 +18,7 @@ private typealias ViewProtocol = ViewOutput
 
 // MARK: - ShowcaseTableViewCell Type
 
-final class ShowcaseTableViewCell: UITableViewCell, ViewProtocol {
+final class ShowcaseTableViewCell: UITableViewCell {
     private(set) var showcaseView: ShowcaseView!
     private(set) var viewModel: ShowcaseTableViewCellViewModel!
     /// Create a display table view cell object.
@@ -54,3 +54,7 @@ final class ShowcaseTableViewCell: UITableViewCell, ViewProtocol {
         showcaseView.removeFromSuperview()
     }
 }
+
+// MARK: - ViewProtocol Implementation
+
+extension ShowcaseTableViewCell: ViewProtocol {}

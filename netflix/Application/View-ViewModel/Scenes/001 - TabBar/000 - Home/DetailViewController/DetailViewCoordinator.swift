@@ -7,25 +7,30 @@
 
 import UIKit
 
-// MARK: - DetailCoordinable Protocol
+// MARK: - CoordinatorProtocol Type
 
-private protocol DetailCoordinable {
-    func allocateDetailController()
+private protocol CoordinatorOutput {
+    var media: Media? { get }
+    
+    func createDetailController()
 }
+
+private typealias CoordinatorProtocol = CoordinatorOutput
 
 // MARK: - DetailViewCoordinator Type
 
 final class DetailViewCoordinator {
     weak var viewController: DetailViewController?
+    
     var media: Media?
 }
 
-// MARK: - DetailCoordinable Implementation
+// MARK: - CoordinatorProtocol Implementation
 
-extension DetailViewCoordinator: DetailCoordinable {
+extension DetailViewCoordinator: CoordinatorProtocol {
     /// Create a new detail controller upon existed detail controller.
     /// - Parameter media: Corresponding media object.
-    func allocateDetailController() {
+    func createDetailController() {
         let navigation = viewController?.navigationController
         let controller = DetailViewController()
         let viewModel = viewController?.viewModel
@@ -55,6 +60,8 @@ extension DetailViewCoordinator: Coordinate {
     /// Screen representation control.
     /// - Parameter screen: The screen to be allocated and presented.
     func coordinate(to screen: Screen) {
-        if case .detail = screen { allocateDetailController() }
+        switch screen {
+        case .detail: createDetailController()
+        }
     }
 }

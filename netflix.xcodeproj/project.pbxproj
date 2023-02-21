@@ -119,7 +119,6 @@
 		A18D852029403D5D00840045 /* BrowseOverlayViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A18D851F29403D5D00840045 /* BrowseOverlayViewModel.swift */; };
 		A18D85222940DA7000840045 /* BrowseOverlayCollectionViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = A18D85212940DA7000840045 /* BrowseOverlayCollectionViewDataSource.swift */; };
 		A18D852429423F6F00840045 /* MyListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A18D852329423F6F00840045 /* MyListViewModel.swift */; };
-		A18D85272946750F00840045 /* DetailCollectionViewViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A18D85262946750F00840045 /* DetailCollectionViewViewModel.swift */; };
 		A196AE0928C140A300C5D733 /* ValueTransformer.swift in Sources */ = {isa = PBXBuildFile; fileRef = A196AE0828C140A300C5D733 /* ValueTransformer.swift */; };
 		A19956DD29019A3900B7D655 /* List.swift in Sources */ = {isa = PBXBuildFile; fileRef = A19956DC29019A3900B7D655 /* List.swift */; };
 		A19956DF29019A7700B7D655 /* ListDTO+Mapping.swift in Sources */ = {isa = PBXBuildFile; fileRef = A19956DE29019A7700B7D655 /* ListDTO+Mapping.swift */; };
@@ -405,7 +404,6 @@
 		A18D851F29403D5D00840045 /* BrowseOverlayViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowseOverlayViewModel.swift; sourceTree = "<group>"; };
 		A18D85212940DA7000840045 /* BrowseOverlayCollectionViewDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowseOverlayCollectionViewDataSource.swift; sourceTree = "<group>"; };
 		A18D852329423F6F00840045 /* MyListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyListViewModel.swift; sourceTree = "<group>"; };
-		A18D85262946750F00840045 /* DetailCollectionViewViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailCollectionViewViewModel.swift; sourceTree = "<group>"; };
 		A196AE0828C140A300C5D733 /* ValueTransformer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ValueTransformer.swift; sourceTree = "<group>"; };
 		A19956DC29019A3900B7D655 /* List.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = List.swift; sourceTree = "<group>"; };
 		A19956DE29019A7700B7D655 /* ListDTO+Mapping.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ListDTO+Mapping.swift"; sourceTree = "<group>"; };
@@ -806,7 +804,6 @@
 			isa = PBXGroup;
 			children = (
 				A1741D2928E6864600F3C46B /* DetailCollectionView.swift */,
-				A18D85262946750F00840045 /* DetailCollectionViewViewModel.swift */,
 			);
 			path = DetailCollectionView;
 			sourceTree = "<group>";
@@ -1985,7 +1982,6 @@
 				A18B995528BFF1D10077A5A6 /* UserDTO+Mapping.swift in Sources */,
 				A1A71AC92991FF3B001C6AB1 /* ImageDTO+Mapping.swift in Sources */,
 				A130BCBD29510CA10070EA5E /* DownloadsViewController.swift in Sources */,
-				A18D85272946750F00840045 /* DetailCollectionViewViewModel.swift in Sources */,
 				A130BCA4294FAA210070EA5E /* SearchCollectionViewDataSource.swift in Sources */,
 				A1B70A7F293D80C000C718C6 /* DetailViewCoordinator.swift in Sources */,
 				A1A71AAC298B86D7001C6AB1 /* AuthRepositoryEndpoints.swift in Sources */,

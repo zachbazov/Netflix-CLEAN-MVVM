@@ -7,18 +7,43 @@
 
 import Foundation
 
+// MARK: - ViewModelProtocol Type
+
+private protocol ViewModelInput {
+    func navigationViewStateDidChange(_ state: NavigationView.State)
+    func didSelectRow(at indexPath: IndexPath)
+}
+
+private protocol ViewModelOutput {
+    var isPresented: Observable<Bool> { get }
+    var items: Observable<[Valuable]> { get }
+    var state: NavigationOverlayTableViewDataSource.State { get }
+    var numberOfSections: Int { get }
+    var latestState: NavigationView.State { get }
+    var hasHomeExpanded: Bool { get }
+    var hasTvExpanded: Bool { get }
+    var hasMoviesExpanded: Bool { get }
+    
+    func isPresentedDidChange()
+    func dataSourceDidChange()
+    func itemsDidChange()
+    func animatePresentation()
+}
+
+private typealias ViewModelProtocol = ViewModelInput & ViewModelOutput
+
 // MARK: - NavigationOverlayViewModel Type
 
 final class NavigationOverlayViewModel {
-    private let coordinator: HomeViewCoordinator
+    fileprivate let coordinator: HomeViewCoordinator
     let isPresented: Observable<Bool> = Observable(false)
     let items: Observable<[Valuable]> = Observable([])
-    private var state: NavigationOverlayTableViewDataSource.State = .main
+    fileprivate var state: NavigationOverlayTableViewDataSource.State = .main
     let numberOfSections: Int = 1
-    private var latestState: NavigationView.State = .home
-    private var hasHomeExpanded = false
-    private var hasTvExpanded = false
-    private var hasMoviesExpanded = false
+    fileprivate var latestState: NavigationView.State = .home
+    fileprivate var hasHomeExpanded = false
+    fileprivate var hasTvExpanded = false
+    fileprivate var hasMoviesExpanded = false
     /// Create a navigation overlay view view model object.
     /// - Parameter viewModel: Coordinating view model.
     init(with viewModel: HomeViewModel) {
@@ -26,9 +51,13 @@ final class NavigationOverlayViewModel {
     }
 }
 
-// MARK: - Methods
+// MARK: - ViewModel Implementation
 
-extension NavigationOverlayViewModel {
+extension NavigationOverlayViewModel: ViewModel {}
+
+// MARK: - ViewModelProtocol Implementation
+
+extension NavigationOverlayViewModel: ViewModelProtocol {
     /// Presentation of the view.
     func isPresentedDidChange() {
         if case true = isPresented.value { itemsDidChange() }
@@ -53,13 +82,13 @@ extension NavigationOverlayViewModel {
         tableView.centerVertically(on: navigationOverlayView)
     }
     /// Change `items` value based on the data source `state` value.
-    private func itemsDidChange() {
+    fileprivate func itemsDidChange() {
         if case .main = state { items.value = NavigationView.State.allCases[3...5].toArray() }
         else if case .genres = state { items.value = NavigationOverlayView.Category.allCases }
         else { items.value = [] }
     }
     /// Animate the presentation of the view.
-    private func animatePresentation() {
+    fileprivate func animatePresentation() {
         guard let navigationOverlayView = coordinator.viewController?.navigationView?.navigationOverlayView else {
             return
         }

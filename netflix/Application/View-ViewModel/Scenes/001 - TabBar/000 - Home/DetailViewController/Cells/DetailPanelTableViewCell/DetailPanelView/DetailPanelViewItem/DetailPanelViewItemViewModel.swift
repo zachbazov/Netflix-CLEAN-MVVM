@@ -7,6 +7,19 @@
 
 import Foundation
 
+// MARK: - ViewModelProtocol Type
+
+private protocol ViewModelOutput {
+    var tag: Int { get }
+    var isSelected: Observable<Bool> { get }
+    var media: Media! { get }
+    
+    var systemImage: String { get }
+    var title: String { get }
+}
+
+private typealias ViewModelProtocol = ViewModelOutput
+
 // MARK: - DetailPanelViewItemViewModel Type
 
 final class DetailPanelViewItemViewModel {
@@ -39,23 +52,11 @@ final class DetailPanelViewItemViewModel {
         self.tag = item.tag
         self.isSelected = Observable(item.isSelected)
         self.media = viewModel.media
-        self.setupObservers(on: item)
     }
     
-    deinit {
-        removeObservers()
-        media = nil
-    }
+    deinit { media = nil }
 }
 
-// MARK: - Observers
+// MARK: - ViewModel Implementation
 
-extension DetailPanelViewItemViewModel {
-    private func setupObservers(on item: DetailPanelViewItem) {
-        isSelected.observe(on: self) { _ in item.configuration?.viewDidConfigure() }
-    }
-    
-    func removeObservers() {
-        isSelected.remove(observer: self)
-    }
-}
+extension DetailPanelViewItemViewModel: ViewModel {}

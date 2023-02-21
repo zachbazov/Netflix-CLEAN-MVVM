@@ -7,6 +7,18 @@
 
 import Foundation
 
+// MARK: - ViewModelProtocol Type
+
+private protocol ViewModelOutput {
+    var media: Media { get }
+    var posterImagePath: String { get }
+    var posterImageIdentifier: NSString { get }
+    var posterImageURL: URL! { get }
+    var season: Season! { get }
+}
+
+private typealias ViewModelProtocol = ViewModelOutput
+
 // MARK: - EpisodeCollectionViewCellViewModel Type
 
 struct EpisodeCollectionViewCellViewModel {
@@ -22,8 +34,13 @@ struct EpisodeCollectionViewCellViewModel {
         self.posterImagePath = self.media.resources.previewPoster
         self.posterImageIdentifier = .init(string: "detail-poster_\(self.media.slug)")
         self.posterImageURL = .init(string: self.posterImagePath)
+        
         if let season = viewModel.season.value as Season? {
             self.season = season
         }
     }
 }
+
+// MARK: - ViewModelProtocol Implementation
+
+extension EpisodeCollectionViewCellViewModel: ViewModelProtocol {}

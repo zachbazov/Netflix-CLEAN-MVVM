@@ -7,18 +7,26 @@
 
 import UIKit
 
-// MARK: - OpaqueView Type
+// MARK: - ViewProtocol Type
 
-final class OpaqueView: UIView {
-    private var imageView: UIImageView!
-    private var blurView: UIVisualEffectView!
-    private(set) var viewModel: OpaqueViewViewModel!
+private protocol ViewInput {
+    func viewDidUpdate(with media: Media)
 }
 
-// MARK: - UI Setup
+private protocol ViewOutput {
+    var imageView: UIImageView! { get }
+    var blurView: UIVisualEffectView! { get }
+}
 
-extension OpaqueView {
-    private func viewDidConfigure() {
+private typealias ViewProtocol = ViewOutput
+
+// MARK: - OpaqueView Type
+
+final class OpaqueView: View<OpaqueViewViewModel> {
+    fileprivate var imageView: UIImageView!
+    fileprivate var blurView: UIVisualEffectView!
+    
+    override func viewDidConfigure() {
         imageView?.removeFromSuperview()
         blurView?.removeFromSuperview()
         
@@ -31,20 +39,25 @@ extension OpaqueView {
         
         insertSubview(imageView, at: 0)
         insertSubview(blurView, at: 1)
-        /// Download media resource.
+        
         AsyncImageService.shared.load(
             url: viewModel.imageURL,
             identifier: viewModel.identifier) { [weak self] image in
                 mainQueueDispatch { self?.imageView.image = image }
             }
     }
+}
+
+// MARK: - ViewProtocol Implementation
+
+extension OpaqueView: ViewProtocol {
     /// Release changes for the view by the view model.
     /// - Parameter media: Corresponding media object.
-    func viewModelDidUpdate(with media: Media) {
-        /// Extract the presented media object on `DisplayView`.
+    func viewDidUpdate(with media: Media) {
+        // Extract the presented media object on `DisplayView`.
         guard let presentedMedia = media as Media? else { return }
         viewModel = OpaqueViewViewModel(with: presentedMedia)
-        /// Release changes.
+        // Release changes.
         viewDidConfigure()
     }
 }

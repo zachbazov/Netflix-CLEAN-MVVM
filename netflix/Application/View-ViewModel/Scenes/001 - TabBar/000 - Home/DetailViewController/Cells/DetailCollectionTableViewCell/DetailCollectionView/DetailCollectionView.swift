@@ -7,24 +7,36 @@
 
 import UIKit
 
+// MARK: - ViewProtocol Type
+
+private protocol ViewOutput {
+    var collectionView: UICollectionView { get }
+    var dataSource: DetailCollectionViewDataSource<Mediable>! { get }
+    var layout: CollectionViewLayout! { get }
+    
+    func createCollectionView() -> UICollectionView
+    func dataSourceDidChange()
+}
+
+private typealias ViewProtocol = ViewOutput
+
 // MARK: - DetailCollectionView Type
 
-final class DetailCollectionView: UIView {
-    private let viewModel: DetailViewModel
-    private lazy var collectionView = createCollectionView()
-    private var dataSource: DetailCollectionViewDataSource<Mediable>!
-    private var layout: CollectionViewLayout!
+final class DetailCollectionView: View<DetailViewModel> {
+    fileprivate lazy var collectionView: UICollectionView = createCollectionView()
+    fileprivate var dataSource: DetailCollectionViewDataSource<Mediable>!
+    fileprivate var layout: CollectionViewLayout!
     /// Create a detail collection view object.
     /// - Parameters:
     ///   - parent: Instantiating view.
     ///   - viewModel: Coordinating view model.
     init(on parent: UIView, with viewModel: DetailViewModel) {
-        self.viewModel = viewModel
         super.init(frame: .zero)
         parent.addSubview(self)
+        self.viewModel = viewModel
         self.constraintToSuperview(parent)
         self.collectionView.constraintToSuperview(self)
-        self.viewDidLoad()
+        self.dataDidDownload()
     }
     
     required init?(coder: NSCoder) { fatalError() }
@@ -33,12 +45,22 @@ final class DetailCollectionView: UIView {
         layout = nil
         dataSource = nil
     }
+    
+    override func dataDidDownload() {
+        if viewModel.navigationViewState.value == .episodes {
+            let cellViewModel = EpisodeCollectionViewCellViewModel(with: viewModel)
+            let requestDTO = SeasonHTTPDTO.Request(slug: cellViewModel.media.slug, season: 1)
+            viewModel.getSeason(with: requestDTO) { [weak self] in
+                self?.dataSourceDidChange()
+            }
+        }
+    }
 }
 
-// MARK: - UI Setup
+// MARK: - ViewProtocol Implementation
 
-extension DetailCollectionView {
-    private func createCollectionView() -> UICollectionView {
+extension DetailCollectionView: ViewProtocol {
+    fileprivate func createCollectionView() -> UICollectionView {
         let collectionView = UICollectionView(frame: bounds, collectionViewLayout: .init())
         collectionView.backgroundColor = .black
         collectionView.registerNib(StandardCollectionViewCell.self,
@@ -52,25 +74,6 @@ extension DetailCollectionView {
         return collectionView
     }
     
-    private func dataDidLoad() {
-        if viewModel.navigationViewState.value == .episodes {
-            let cellViewModel = EpisodeCollectionViewCellViewModel(with: viewModel)
-            let requestDTO = SeasonHTTPDTO.Request(slug: cellViewModel.media.slug, season: 1)
-            viewModel.getSeason(with: requestDTO) { [weak self] in
-                self?.dataSourceDidChange()
-            }
-        }
-    }
-    
-    private func viewDidLoad() {
-        dataDidLoad()
-        
-    }
-}
-
-// MARK: - Methods
-
-extension DetailCollectionView {
     func dataSourceDidChange() {
         layout = nil
         collectionView.delegate = nil

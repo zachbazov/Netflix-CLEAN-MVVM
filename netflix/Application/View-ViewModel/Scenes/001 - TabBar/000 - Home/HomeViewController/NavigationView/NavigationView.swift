@@ -7,9 +7,23 @@
 
 import UIKit
 
+// MARK: - ViewProtocol Type
+
+private protocol ViewOutput {
+    var navigationOverlayView: NavigationOverlayView! { get }
+    var homeItemView: NavigationViewItem! { get }
+    var airPlayItemView: NavigationViewItem! { get }
+    var accountItemView: NavigationViewItem! { get }
+    var tvShowsItemView: NavigationViewItem! { get }
+    var moviesItemView: NavigationViewItem! { get }
+    var categoriesItemView: NavigationViewItem! { get }
+}
+
+private typealias ViewProtocol = ViewOutput
+
 // MARK: - NavigationView Type
 
-final class NavigationView: UIView, ViewInstantiable {
+final class NavigationView: View<NavigationViewViewModel> {
     @IBOutlet private weak var gradientView: UIView!
     @IBOutlet private weak var homeItemViewContainer: UIView!
     @IBOutlet private weak var airPlayItemViewContainer: UIView!
@@ -19,15 +33,14 @@ final class NavigationView: UIView, ViewInstantiable {
     @IBOutlet private(set) weak var categoriesItemViewContainer: UIView!
     @IBOutlet private(set) weak var itemsCenterXConstraint: NSLayoutConstraint!
     
-    private(set) var viewModel: NavigationViewViewModel!
     var navigationOverlayView: NavigationOverlayView!
     
-    private(set) var homeItemView: NavigationViewItem!
-    private var airPlayItemView: NavigationViewItem!
-    private var accountItemView: NavigationViewItem!
-    private(set) var tvShowsItemView: NavigationViewItem!
-    private(set) var moviesItemView: NavigationViewItem!
-    private(set) var categoriesItemView: NavigationViewItem!
+    fileprivate(set) var homeItemView: NavigationViewItem!
+    fileprivate var airPlayItemView: NavigationViewItem!
+    fileprivate var accountItemView: NavigationViewItem!
+    fileprivate(set) var tvShowsItemView: NavigationViewItem!
+    fileprivate(set) var moviesItemView: NavigationViewItem!
+    fileprivate(set) var categoriesItemView: NavigationViewItem!
     /// Create a navigation view object.
     /// - Parameters:
     ///   - parent: Instantiating view.
@@ -59,17 +72,46 @@ final class NavigationView: UIView, ViewInstantiable {
     required init?(coder: NSCoder) { fatalError() }
     
     deinit {
-        removeObservers()
+        viewDidUnbindObservers()
         navigationOverlayView?.removeFromSuperview()
         navigationOverlayView = nil
         viewModel = nil
     }
+    
+    override func viewDidLoad() {
+        viewDidDeploySubviews()
+        viewDidBindObservers()
+    }
+    
+    override func viewDidDeploySubviews() {
+        setupGradients()
+    }
+    
+    override func viewDidBindObservers() {
+        viewModel.state.observe(on: self) { [weak self] state in
+            self?.viewModel.stateDidChange(state)
+            self?.navigationOverlayView.viewModel.navigationViewStateDidChange(state)
+        }
+    }
+    
+    override func viewDidUnbindObservers() {
+        printIfDebug(.success, "Removed `NavigationView` observers.")
+        viewModel.state.remove(observer: self)
+    }
 }
 
-// MARK: - UI Setup
+// MARK: - ViewInstantiable Implementation
+
+extension NavigationView: ViewInstantiable {}
+
+// MARK: - ViewProtocol Implementation
+
+extension NavigationView: ViewProtocol {}
+
+// MARK: - Private UI Implementation
 
 extension NavigationView {
-    private func setupGradientView() {
+    private func setupGradients() {
         let rect = CGRect(x: 0.0, y: 0.0, width: UIScreen.main.bounds.width, height: bounds.height)
         gradientView.addGradientLayer(
             colors: [.black.withAlphaComponent(0.9),
@@ -77,31 +119,6 @@ extension NavigationView {
                      .clear],
             locations: [0.0, 0.3, 1.0])
         gradientView.frame = rect
-    }
-    
-    private func viewDidLoad() {
-        setupObservers()
-        viewDidConfigure()
-    }
-    
-    private func viewDidConfigure() {
-        setupGradientView()
-    }
-}
-
-// MARK: - Observers
-
-extension NavigationView {
-    private func setupObservers() {
-        viewModel.state.observe(on: self) { [weak self] state in
-            self?.viewModel.stateDidChange(state)
-            self?.navigationOverlayView.viewModel.navigationViewStateDidChange(state)
-        }
-    }
-    
-    func removeObservers() {
-        printIfDebug(.success, "Removed `NavigationView` observers.")
-        viewModel.state.remove(observer: self)
     }
 }
 

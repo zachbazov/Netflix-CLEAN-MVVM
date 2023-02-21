@@ -7,15 +7,29 @@
 
 import UIKit
 
+// MARK: - ConfigurationProtocol Type
+
+private protocol ConfigurationInput {
+    func viewDidConfigure(item: NavigationViewItem)
+}
+
+private protocol ConfigurationOutput {
+    var item: NavigationViewItem! { get }
+    
+    func viewDidTap()
+}
+
+private typealias ConfigurationProtocol = ConfigurationInput & ConfigurationOutput
+
 // MARK: - NavigationViewItemConfiguration Type
 
 final class NavigationViewItemConfiguration {
-    private weak var item: NavigationViewItem!
+    fileprivate weak var item: NavigationViewItem!
     /// Create a configuration object for the item.
     /// - Parameter item: Corresponding view.
     init(with item: NavigationViewItem) {
         self.item = item
-        self.viewDidLoad()
+        self.viewDidConfigure(item: item)
     }
     
     deinit {
@@ -24,15 +38,11 @@ final class NavigationViewItemConfiguration {
     }
 }
 
-// MARK: - UI Setup
+// MARK: - ConfigurationProtocol Implementation
 
-extension NavigationViewItemConfiguration {
-    private func viewDidLoad() {
-        viewDidConfigure(item: item)
-    }
-    
-    private func viewDidConfigure(item: NavigationViewItem) {
-        self.item = item
+extension NavigationViewItemConfiguration: ConfigurationProtocol {
+    fileprivate func viewDidConfigure(item: NavigationViewItem) {
+        guard let item = item as NavigationViewItem? else { return }
         
         guard let state = NavigationView.State(rawValue: item.tag) else { return }
         
@@ -66,7 +76,7 @@ extension NavigationViewItemConfiguration {
     }
     
     @objc
-    private func viewDidTap() {
+    fileprivate func viewDidTap() {
         guard let navigation = item.viewModel.coordinator.viewController?.navigationView,
               let state = NavigationView.State(rawValue: item.tag) else {
             return
@@ -75,12 +85,24 @@ extension NavigationViewItemConfiguration {
     }
 }
 
+// MARK: - ViewProtocol Type
+
+private protocol ViewInput {
+    func viewDidConfigure(for state: NavigationView.State)
+}
+
+private protocol ViewOutput {
+    var button: UIButton { get }
+    var configuration: NavigationViewItemConfiguration! { get }
+}
+
+private typealias ViewProtocol = ViewInput & ViewOutput
+
 // MARK: - NavigationViewItem Type
 
-final class NavigationViewItem: UIView {
+final class NavigationViewItem: View<NavigationViewItemViewModel> {
     fileprivate lazy var button = UIButton(type: .system)
     fileprivate var configuration: NavigationViewItemConfiguration!
-    var viewModel: NavigationViewItemViewModel!
     /// Create a navigation view item object.
     /// - Parameters:
     ///   - parent: Instantiating view.
@@ -102,9 +124,9 @@ final class NavigationViewItem: UIView {
     }
 }
 
-// MARK: - UI Setup
+// MARK: - ViewProtocol Implementation
 
-extension NavigationViewItem {
+extension NavigationViewItem: ViewProtocol {
     /// Configure the `categories` button item and change it according to the navigation state.
     /// - Parameter state: Corresponding navigation state.
     func viewDidConfigure(for state: NavigationView.State) {

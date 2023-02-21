@@ -7,47 +7,72 @@
 
 import UIKit
 
+// MARK: - ViewProtocol Type
+
+private protocol ViewOutput {
+    var dataSource: NavigationOverlayTableViewDataSource! { get }
+    var opaqueView: OpaqueView { get }
+    var footerView: NavigationOverlayFooterView! { get }
+    var tabBar: UITabBar! { get }
+    var tableView: UITableView { get }
+    
+    func createTableView() -> UITableView
+}
+
+private typealias ViewProtocol = ViewOutput
+
 // MARK: - NavigationOverlayView Type
 
-final class NavigationOverlayView: UIView {
-    let viewModel: NavigationOverlayViewModel
-    let dataSource: NavigationOverlayTableViewDataSource
+final class NavigationOverlayView: View<NavigationOverlayViewModel> {
+    var dataSource: NavigationOverlayTableViewDataSource!
     let opaqueView = OpaqueView(frame: UIScreen.main.bounds)
-    let footerView: NavigationOverlayFooterView
-    let tabBar: UITabBar
+    var footerView: NavigationOverlayFooterView!
+    var tabBar: UITabBar!
     private(set) lazy var tableView: UITableView = createTableView()
     /// Create a navigation overlay view object.
     /// - Parameter viewModel: Coordinating view model.
     init(with viewModel: HomeViewModel) {
+        super.init(frame: UIScreen.main.bounds)
+        
         self.tabBar = viewModel.coordinator!.viewController!.tabBarController!.tabBar
         self.viewModel = NavigationOverlayViewModel(with: viewModel)
         self.dataSource = NavigationOverlayTableViewDataSource(with: self.viewModel)
         let parent = viewModel.coordinator!.viewController!.view!
         self.footerView = NavigationOverlayFooterView(parent: parent, viewModel: self.viewModel)
         
-        super.init(frame: UIScreen.main.bounds)
         parent.addSubview(self)
         parent.addSubview(self.footerView)
         self.addSubview(self.tableView)
         /// Updates root coordinator's `categoriesOverlayView` property.
         viewModel.coordinator?.viewController?.navigationView?.navigationOverlayView = self
         
-        self.setupObservers()
+        self.viewDidBindObservers()
     }
     
     required init?(coder: NSCoder) { fatalError() }
     
     deinit {
-        removeObservers()
+        viewDidUnbindObservers()
         tableView.removeFromSuperview()
         footerView.removeFromSuperview()
     }
+    
+    override func viewDidBindObservers() {
+        viewModel.isPresented.observe(on: self) { [weak self] _ in self?.viewModel.isPresentedDidChange() }
+        viewModel.items.observe(on: self) { [weak self] _ in self?.viewModel.dataSourceDidChange() }
+    }
+    
+    override func viewDidUnbindObservers() {
+        printIfDebug(.success, "Removed `NavigationOverlayView` observers.")
+        viewModel.isPresented.remove(observer: self)
+        viewModel.items.remove(observer: self)
+    }
 }
 
-// MARK: - UI Setup
+// MARK: - ViewProtocol Implementation
 
-extension NavigationOverlayView {
-    private func createTableView() -> UITableView {
+extension NavigationOverlayView: ViewProtocol {
+    fileprivate func createTableView() -> UITableView {
         let tableView = UITableView(frame: UIScreen.main.bounds, style: .plain)
         tableView.showsVerticalScrollIndicator = false
         tableView.showsHorizontalScrollIndicator = false
@@ -55,21 +80,6 @@ extension NavigationOverlayView {
         tableView.register(class: NavigationOverlayTableViewCell.self)
         tableView.backgroundView = opaqueView
         return tableView
-    }
-}
-
-// MARK: - Observers
-
-extension NavigationOverlayView {
-    private func setupObservers() {
-        viewModel.isPresented.observe(on: self) { [weak self] _ in self?.viewModel.isPresentedDidChange() }
-        viewModel.items.observe(on: self) { [weak self] _ in self?.viewModel.dataSourceDidChange() }
-    }
-    
-    func removeObservers() {
-        printIfDebug(.success, "Removed `NavigationOverlayView` observers.")
-        viewModel.isPresented.remove(observer: self)
-        viewModel.items.remove(observer: self)
     }
 }
 
@@ -116,7 +126,7 @@ extension NavigationOverlayView.Category: Valuable {
     }
 }
 
-// MARK: - Methods
+// MARK: - NavigationOverlayView.Category - Section Conversion
 
 extension NavigationOverlayView.Category {
     func toSection(with viewModel: HomeViewModel) -> Section {

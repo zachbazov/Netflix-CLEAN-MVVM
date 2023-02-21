@@ -7,11 +7,23 @@
 
 import UIKit
 
+// MARK: - ConfigurationProtocol Type
+
+private protocol ConfigurationOutput {
+    var view: DetailNavigationViewItem! { get }
+    var navigationView: DetailNavigationView! { get }
+    
+    func viewDidRegisterRecognizers()
+    func viewDidTap()
+}
+
+private typealias ConfigurationProtocol = ConfigurationOutput
+
 // MARK: - DetailNavigationViewItemConfiguration Type
 
 final class DetailNavigationViewItemConfiguration {
-    private weak var view: DetailNavigationViewItem!
-    private weak var navigationView: DetailNavigationView!
+    fileprivate weak var view: DetailNavigationViewItem!
+    fileprivate weak var navigationView: DetailNavigationView!
     /// Create a navigation view item configuration object.
     /// - Parameters:
     ///   - view: Corresponding view.
@@ -28,10 +40,10 @@ final class DetailNavigationViewItemConfiguration {
     }
 }
 
-// MARK: - UI Setup
+// MARK: - ConfigurationProtocol Implementation
 
-extension DetailNavigationViewItemConfiguration {
-    private func viewDidRegisterRecognizers() {
+extension DetailNavigationViewItemConfiguration: ConfigurationProtocol {
+    fileprivate func viewDidRegisterRecognizers() {
         view.button.addTarget(self, action: #selector(viewDidTap), for: .touchUpInside)
     }
     
@@ -43,21 +55,37 @@ extension DetailNavigationViewItemConfiguration {
     }
 }
 
+// MARK: - ViewProtocol Type
+
+private protocol ViewOutput {
+    var configuration: DetailNavigationViewItemConfiguration! { get }
+    var indicatorView: UIView { get }
+    var button: UIButton { get }
+    var isSelected: Bool { get }
+    var widthConstraint: NSLayoutConstraint! { get }
+    
+    func createIndicatorView() -> UIView
+    func createButton() -> UIButton
+}
+
+private typealias ViewProtocol = ViewOutput
+
 // MARK: - DetailNavigationViewItem Type
 
-final class DetailNavigationViewItem: UIView {
-    private var configuration: DetailNavigationViewItemConfiguration!
-    private var viewModel: DetailNavigationViewItemViewModel!
-    private lazy var indicatorView = createIndicatorView()
+final class DetailNavigationViewItem: View<DetailNavigationViewItemViewModel> {
+    fileprivate var configuration: DetailNavigationViewItemConfiguration!
+    fileprivate lazy var indicatorView: UIView = createIndicatorView()
     fileprivate lazy var button = createButton()
     var isSelected = false
-    private(set) var widthConstraint: NSLayoutConstraint!
+    fileprivate(set) var widthConstraint: NSLayoutConstraint!
     /// Create a navigation view item object.
     /// - Parameters:
     ///   - navigationView: Root navigation view object.
     ///   - parent: Instantiating view.
     ///   - viewModel: Coordinating view model.
-    init(navigationView: DetailNavigationView, on parent: UIView, with viewModel: DetailViewModel) {
+    init(navigationView: DetailNavigationView,
+         on parent: UIView,
+         with viewModel: DetailViewModel) {
         super.init(frame: parent.bounds)
         self.tag = parent.tag
         parent.addSubview(self)
@@ -74,29 +102,29 @@ final class DetailNavigationViewItem: UIView {
         configuration = nil
         viewModel = nil
     }
+    
+    override func viewDidConfigure() {
+        widthConstraint = indicatorView.widthAnchor.constraint(equalToConstant: bounds.width)
+        chainConstraintToSuperview(linking: indicatorView, to: button, withWidthAnchor: widthConstraint)
+    }
 }
 
-// MARK: - UI Setup
+// MARK: - ViewProtocol Implementation
 
-extension DetailNavigationViewItem {
-    private func createIndicatorView() -> UIView {
+extension DetailNavigationViewItem: ViewProtocol {
+    fileprivate func createIndicatorView() -> UIView {
         let view = UIView()
         view.backgroundColor = .systemRed
         addSubview(view)
         return view
     }
     
-    private func createButton() -> UIButton {
+    fileprivate func createButton() -> UIButton {
         let view = UIButton(type: .system)
         view.setTitle(viewModel.title, for: .normal)
         view.setTitleColor(.white, for: .normal)
         view.titleLabel?.font = UIFont.systemFont(ofSize: 15.0, weight: .bold)
         addSubview(view)
         return view
-    }
-    
-    private func viewDidConfigure() {
-        widthConstraint = indicatorView.widthAnchor.constraint(equalToConstant: bounds.width)
-        chainConstraintToSuperview(linking: indicatorView, to: button, withWidthAnchor: widthConstraint)
     }
 }

@@ -7,19 +7,27 @@
 
 import UIKit
 
+// MARK: - ControllerProtocol Type
+
+private protocol ControllerOutput {
+    var previewView: PreviewView! { get }
+    var dataSource: DetailTableViewDataSource! { get }
+}
+
+private typealias ControllerProtocol = ControllerOutput
+
 // MARK: - DetailViewController Type
 
-final class DetailViewController: UIViewController {
+final class DetailViewController: Controller<DetailViewModel> {
     @IBOutlet private(set) weak var tableView: UITableView!
     @IBOutlet private(set) weak var previewContainer: UIView!
     
-    var viewModel: DetailViewModel!
     private(set) var previewView: PreviewView!
     private(set) var dataSource: DetailTableViewDataSource!
     
     deinit {
         viewModel.resetOrientation()
-        removeObservers()
+        viewDidUnbindObservers()
         previewView = nil
         dataSource = nil
         viewModel = nil
@@ -27,32 +35,16 @@ final class DetailViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupSubviews()
-        setupObservers()
+        viewDidDeploySubviews()
+        viewDidBindObservers()
     }
-}
-
-// MARK: - UI Setup
-
-extension DetailViewController {
-    private func setupSubviews() {
+    
+    override func viewDidDeploySubviews() {
         setupPreviewView()
         setupDataSource()
     }
     
-    private func setupPreviewView() {
-        previewView = PreviewView(on: previewContainer, with: viewModel)
-    }
-    
-    private func setupDataSource() {
-        dataSource = DetailTableViewDataSource(on: tableView, with: viewModel)
-    }
-}
-
-// MARK: - Observers
-
-extension DetailViewController {
-    private func setupObservers() {
+    override func viewDidBindObservers() {
         viewModel.navigationViewState.observe(on: self) { [weak self] state in
             self?.dataSource.reloadData(at: .collection)
         }
@@ -61,11 +53,27 @@ extension DetailViewController {
         }
     }
     
-    func removeObservers() {
+    override func viewDidUnbindObservers() {
         if let viewModel = viewModel {
             printIfDebug(.success, "Removed `DetailViewModel` observers.")
             viewModel.navigationViewState.remove(observer: self)
             viewModel.season.remove(observer: self)
         }
+    }
+}
+
+// MARK: - ControllerProtocol Implementation
+
+extension DetailViewController: ControllerProtocol {}
+
+// MARK: - Private UI Implementation
+
+extension DetailViewController {
+    private func setupPreviewView() {
+        previewView = PreviewView(on: previewContainer, with: viewModel)
+    }
+    
+    private func setupDataSource() {
+        dataSource = DetailTableViewDataSource(on: tableView, with: viewModel)
     }
 }

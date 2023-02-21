@@ -7,12 +7,27 @@
 
 import UIKit
 
+// MARK: - ConfigurationProtocol Type
+
+private protocol ConfigurationOutput {
+    var view: DetailPanelViewItem! { get }
+    var myList: MyList { get }
+    var section: Section { get }
+    
+    func viewDidRegisterRecognizers()
+    func viewDidConfigure()
+    func selectIfNeeded()
+    func viewDidTap()
+}
+
+private typealias ConfigurationProtocol = ConfigurationOutput
+
 // MARK: - DetailPanelViewItemConfiguration Type
 
 final class DetailPanelViewItemConfiguration {
-    private weak var view: DetailPanelViewItem!
-    private let myList: MyList
-    private let section: Section
+    fileprivate weak var view: DetailPanelViewItem!
+    fileprivate let myList: MyList
+    fileprivate let section: Section
     /// Create a panel view item configuration object.
     /// - Parameters:
     ///   - view: Corresponding view.
@@ -28,22 +43,20 @@ final class DetailPanelViewItemConfiguration {
     deinit { view = nil }
 }
 
-// MARK: - UI Setup
+// MARK: - ConfigurationProtocol Implementation
 
-extension DetailPanelViewItemConfiguration {
-    private func viewDidRegisterRecognizers() {
+extension DetailPanelViewItemConfiguration: ConfigurationProtocol {
+    fileprivate func viewDidRegisterRecognizers() {
         let tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(viewDidTap))
         view.addGestureRecognizer(tapRecognizer)
     }
     /// Change the view to `selected` state.
     /// Occurs while the `DisplayView` presenting media is contained in the user's list.
-    private func selectIfNeeded() {
+    fileprivate func selectIfNeeded() {
         guard let tag = Item(rawValue: view.tag) else { return }
         guard let viewModel = view.viewModel else { return }
         if case .myList = tag {
-            viewModel.isSelected.value = myList.viewModel.contains(
-                viewModel.media,
-                in: section.media)
+            viewModel.isSelected.value = myList.viewModel.contains(viewModel.media, in: section.media)
         }
     }
     
@@ -75,7 +88,7 @@ extension DetailPanelViewItemConfiguration {
     }
 }
 
-// MARK: - Item Type
+// MARK: - DetailPanelViewItemConfiguration.Item Type
 
 extension DetailPanelViewItemConfiguration {
     /// Item representation type.
@@ -86,11 +99,26 @@ extension DetailPanelViewItemConfiguration {
     }
 }
 
+// MARK: - ViewProtocol Type
+
+private protocol ViewOutput {
+    var configuration: DetailPanelViewItemConfiguration! { get }
+    
+    var imageView: UIImageView { get }
+    var label: UILabel { get }
+    
+    var isSelected: Bool { get }
+    
+    func createLabel() -> UILabel
+    func createImageView() -> UIImageView
+}
+
+private typealias ViewProtocol = ViewOutput
+
 // MARK: - DetailPanelViewItem Type
 
-final class DetailPanelViewItem: UIView {
-    private(set) var configuration: DetailPanelViewItemConfiguration!
-    var viewModel: DetailPanelViewItemViewModel!
+final class DetailPanelViewItem: View<DetailPanelViewItemViewModel> {
+    fileprivate(set) var configuration: DetailPanelViewItemConfiguration!
     
     fileprivate lazy var imageView = createImageView()
     fileprivate lazy var label = createLabel()
@@ -107,20 +135,35 @@ final class DetailPanelViewItem: UIView {
         self.chainConstraintToCenter(linking: self.imageView, to: self.label)
         self.viewModel = DetailPanelViewItemViewModel(item: self, with: viewModel)
         self.configuration = DetailPanelViewItemConfiguration(view: self, with: viewModel)
+        self.viewDidBindObservers()
     }
     
     required init?(coder: NSCoder) { fatalError() }
     
     deinit {
+        viewDidUnbindObservers()
         configuration = nil
         viewModel = nil
     }
+    
+    override func viewDidBindObservers() {
+        viewModel.isSelected.observe(on: self) { [weak self] _ in
+            guard let self = self else { return }
+            self.configuration?.viewDidConfigure()
+        }
+    }
+    
+    override func viewDidUnbindObservers() {
+        if let viewModel = viewModel {
+            viewModel.isSelected.remove(observer: self)
+        }
+    }
 }
 
-// MARK: - UI Setup
+// MARK: - ViewProtocol Implementation
 
-extension DetailPanelViewItem {
-    private func createLabel() -> UILabel {
+extension DetailPanelViewItem: ViewProtocol {
+    fileprivate func createLabel() -> UILabel {
         let label = UILabel()
         label.textColor = .white
         label.font = UIFont.systemFont(ofSize: 12.0, weight: .semibold)
@@ -129,7 +172,7 @@ extension DetailPanelViewItem {
         return label
     }
     
-    private func createImageView() -> UIImageView {
+    fileprivate func createImageView() -> UIImageView {
         let image = UIImage()
         let imageView = UIImageView(image: image)
         imageView.image = image.whiteRendering()

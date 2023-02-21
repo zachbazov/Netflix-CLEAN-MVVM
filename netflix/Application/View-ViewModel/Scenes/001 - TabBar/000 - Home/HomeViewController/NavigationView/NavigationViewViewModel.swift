@@ -7,11 +7,27 @@
 
 import Foundation
 
+// MARK: - ViewModelProtocol Type
+
+private protocol ViewModelInput {
+    func stateDidChange(_ state: NavigationView.State)
+}
+
+private protocol ViewModelOutput {
+    var items: [NavigationViewItem] { get }
+    var state: Observable<NavigationView.State> { get }
+    
+    func navigationViewDidAppear()
+}
+
+private typealias ViewModelProtocol = ViewModelInput & ViewModelOutput
+
 // MARK: - NavigationViewViewModel Type
 
 final class NavigationViewViewModel {
     private let coordinator: HomeViewCoordinator
-    private let items: [NavigationViewItem]
+    
+    fileprivate let items: [NavigationViewItem]
     let state: Observable<NavigationView.State> = Observable(.home)
     /// Create a navigation view view model object.
     /// - Parameters:
@@ -23,9 +39,13 @@ final class NavigationViewViewModel {
     }
 }
 
-// MARK: - Methods
+// MARK: - ViewModel Implementation
 
-extension NavigationViewViewModel {
+extension NavigationViewViewModel: ViewModel {}
+
+// MARK: - ViewModelProtocol Implementation
+
+extension NavigationViewViewModel: ViewModelProtocol {
     /// Animate the first appearance of the navigation view.
     func navigationViewDidAppear() {
         let homeViewController = coordinator.viewController!

@@ -7,10 +7,26 @@
 
 import UIKit
 
+// MARK: - ViewProtocol Type
+
+private protocol ViewInput {
+    func createMediaPlayer(on parent: UIView,
+                           view: PreviewView,
+                           with viewModel: DetailViewModel) -> MediaPlayerView
+}
+
+private protocol ViewOutput {
+    var mediaPlayerView: MediaPlayerView! { get }
+    var imageView: UIImageView { get }
+    
+    func createImageView() -> UIImageView
+}
+
+private typealias ViewProtocol = ViewOutput
+
 // MARK: - PreviewView Type
 
-final class PreviewView: UIView {
-    private var viewModel: PreviewViewViewModel!
+final class PreviewView: View<PreviewViewViewModel> {
     private(set) var mediaPlayerView: MediaPlayerView!
     private(set) lazy var imageView = createImageView()
     /// Create a preview view object.
@@ -18,10 +34,10 @@ final class PreviewView: UIView {
     ///   - parent: Instantiating view.
     ///   - viewModel: Coordinating view model.
     init(on parent: UIView, with viewModel: DetailViewModel) {
-        self.viewModel = .init(with: viewModel.media)
         super.init(frame: .zero)
         parent.addSubview(self)
         self.constraintToSuperview(parent)
+        self.viewModel = .init(with: viewModel.media)
         self.viewDidConfigure()
         self.mediaPlayerView = createMediaPlayer(on: parent, view: self, with: viewModel)
     }
@@ -33,21 +49,29 @@ final class PreviewView: UIView {
         viewModel = nil
         mediaPlayerView = nil
     }
+    
+    override func viewDidConfigure() {
+        AsyncImageService.shared.load(
+            url: viewModel.url,
+            identifier: viewModel.identifier) { [weak self] image in
+                mainQueueDispatch { self?.imageView.image = image }
+            }
+    }
 }
 
-// MARK: - UI Setup
+// MARK: - ViewProtocol Implementation
 
-extension PreviewView {
-    private func createImageView() -> UIImageView {
+extension PreviewView: ViewProtocol {
+    fileprivate func createImageView() -> UIImageView {
         let imageView = UIImageView(frame: bounds)
         imageView.contentMode = .scaleAspectFit
         addSubview(imageView)
         return imageView
     }
     
-    private func createMediaPlayer(on parent: UIView,
-                                   view: PreviewView,
-                                   with viewModel: DetailViewModel) -> MediaPlayerView {
+    fileprivate func createMediaPlayer(on parent: UIView,
+                                       view: PreviewView,
+                                       with viewModel: DetailViewModel) -> MediaPlayerView {
         let mediaPlayerView = MediaPlayerView(on: view, with: viewModel)
         
         mediaPlayerView.prepareToPlay = { [weak self] isPlaying in
@@ -62,13 +86,5 @@ extension PreviewView {
         mediaPlayerView.constraintToSuperview(parent)
         
         return mediaPlayerView
-    }
-    
-    private func viewDidConfigure() {
-        AsyncImageService.shared.load(
-            url: viewModel.url,
-            identifier: viewModel.identifier) { [weak self] image in
-                mainQueueDispatch { self?.imageView.image = image }
-            }
     }
 }

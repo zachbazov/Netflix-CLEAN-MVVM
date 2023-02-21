@@ -7,32 +7,47 @@
 
 import UIKit
 
+// MARK: - ViewProtocol Type
+
+private protocol ViewOutput {
+    var button: UIButton { get }
+    
+    func createButton() -> UIButton
+    func viewDidTap()
+}
+
+private typealias ViewProtocol = ViewOutput
+
 // MARK: - NavigationOverlayFooterView Type
 
-final class NavigationOverlayFooterView: UIView {
-    private let viewModel: NavigationOverlayViewModel
-    private lazy var button = createButton()
+final class NavigationOverlayFooterView: View<NavigationOverlayViewModel> {
+    fileprivate lazy var button = createButton()
     /// Create a navigation overlay footer view object.
     /// - Parameters:
     ///   - parent: Instantiating view.
     ///   - viewModel: Coordinating view model.
     init(parent: UIView, viewModel: NavigationOverlayViewModel) {
-        self.viewModel = viewModel
         super.init(frame: .zero)
         self.addSubview(button)
         self.constraintToCenter(button)
         parent.addSubview(self)
         self.constraintBottom(toParent: parent, withHeightAnchor: 60.0)
+        self.viewModel = viewModel
         self.viewDidConfigure()
     }
     
     required init?(coder: NSCoder) { fatalError() }
+    
+    override func viewDidConfigure() {
+        backgroundColor = .clear
+        alpha = .zero
+    }
 }
 
-// MARK: - UI Setup
+// MARK: - ViewProtocol Implementation
 
-extension NavigationOverlayFooterView {
-    private func createButton() -> UIButton {
+extension NavigationOverlayFooterView: ViewProtocol {
+    fileprivate func createButton() -> UIButton {
         let button = UIButton(type: .system)
         let systemName = "xmark.circle.fill"
         let symbolConfiguration = UIImage.SymbolConfiguration(pointSize: 24, weight: .bold)
@@ -42,13 +57,8 @@ extension NavigationOverlayFooterView {
         return button
     }
     
-    private func viewDidConfigure() {
-        backgroundColor = .clear
-        alpha = .zero
-    }
-    
     @objc
-    private func viewDidTap() {
+    fileprivate func viewDidTap() {
         viewModel.isPresented.value = false
     }
 }

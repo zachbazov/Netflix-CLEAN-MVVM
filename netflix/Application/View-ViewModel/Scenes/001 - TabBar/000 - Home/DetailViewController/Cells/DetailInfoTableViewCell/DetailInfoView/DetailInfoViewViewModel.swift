@@ -7,6 +7,20 @@
 
 import Foundation
 
+// MARK: - ViewModelProtocol Type
+
+private protocol ViewModelOutput {
+    var state: HomeTableViewDataSource.State { get }
+    var mediaType: String { get }
+    var title: String { get }
+    var downloadButtonTitle: String { get }
+    var duration: String { get }
+    var length: String { get }
+    var isHD: Bool { get }
+}
+
+private typealias ViewModelProtocol = ViewModelOutput
+
 // MARK: - DetailInfoViewViewModel Type
 
 struct DetailInfoViewViewModel {
@@ -44,3 +58,11 @@ struct DetailInfoViewViewModel {
         self.isHD = media.isHD
     }
 }
+
+// MARK: - ViewModel Implementation
+
+extension DetailInfoViewViewModel: ViewModel {}
+
+// MARK: - ViewModelProtocol Implementation
+
+extension DetailInfoViewViewModel: ViewModelProtocol {}

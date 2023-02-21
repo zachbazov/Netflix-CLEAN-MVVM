@@ -7,10 +7,21 @@
 
 import UIKit
 
+// MARK: - ViewProtocol Type
+
+private protocol ViewOutput {
+    var label: UILabel { get }
+    
+    func createLabel() -> UILabel
+    func viewDidConfigure()
+}
+
+private typealias ViewProtocol = ViewOutput
+
 // MARK: - HDView Type
 
 final class HDView: UIView {
-    private lazy var label = createLabel()
+    fileprivate lazy var label = createLabel()
     /// Create an HD view object.
     /// - Parameter parent: Instantiating view.
     init(on parent: UIView) {
@@ -23,15 +34,15 @@ final class HDView: UIView {
     required init?(coder: NSCoder) { fatalError() }
 }
 
-// MARK: - UI Setup
+// MARK: - ViewProtocol Implementation
 
-extension HDView {
-    private func viewDidConfigure() {
+extension HDView: ViewProtocol {
+    fileprivate func viewDidConfigure() {
         layer.cornerRadius = 2.0
         backgroundColor = .hexColor("#414141")
     }
     
-    private func createLabel() -> UILabel {
+    fileprivate func createLabel() -> UILabel {
         let label = UILabel(frame: bounds)
         label.font = UIFont.systemFont(ofSize: 11.0, weight: .heavy)
         label.textColor = .white

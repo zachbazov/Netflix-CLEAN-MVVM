@@ -7,6 +7,16 @@
 
 import UIKit
 
+// MARK: - ViewProtocol Type
+
+private protocol ViewOutput {
+    var detailCollectionView: DetailCollectionView! { get }
+    
+    func viewDidConfigure()
+}
+
+private typealias ViewProtocol = ViewOutput
+
 // MARK: - DetailCollectionTableViewCell Type
 
 final class DetailCollectionTableViewCell: UITableViewCell {
@@ -17,8 +27,12 @@ final class DetailCollectionTableViewCell: UITableViewCell {
     ///   - indexPath: The index path of the cell on the data source.
     ///   - viewModel: Coordinating view model.
     /// - Returns: A detail collection table view cell.
-    static func create(on tableView: UITableView, for indexPath: IndexPath, with viewModel: DetailViewModel) -> DetailCollectionTableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: DetailCollectionTableViewCell.reuseIdentifier, for: indexPath) as? DetailCollectionTableViewCell else {
+    static func create(on tableView: UITableView,
+                       for indexPath: IndexPath,
+                       with viewModel: DetailViewModel) -> DetailCollectionTableViewCell {
+        guard let cell = tableView.dequeueReusableCell(
+            withIdentifier: DetailCollectionTableViewCell.reuseIdentifier,
+            for: indexPath) as? DetailCollectionTableViewCell else {
             fatalError()
         }
         cell.detailCollectionView = DetailCollectionView(on: cell.contentView, with: viewModel)
@@ -33,10 +47,10 @@ final class DetailCollectionTableViewCell: UITableViewCell {
     required init?(coder: NSCoder) { fatalError() }
 }
 
-// MARK: - UI Setup
+// MARK: - ViewProtocol Implementation
 
-extension DetailCollectionTableViewCell {
-    private func viewDidConfigure() {
+extension DetailCollectionTableViewCell: ViewProtocol {
+    fileprivate func viewDidConfigure() {
         backgroundColor = .black
         selectionStyle = .none
     }

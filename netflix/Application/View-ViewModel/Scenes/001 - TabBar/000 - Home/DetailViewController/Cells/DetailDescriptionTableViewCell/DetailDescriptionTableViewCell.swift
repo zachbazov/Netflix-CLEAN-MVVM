@@ -7,18 +7,32 @@
 
 import UIKit
 
+// MARK: - ViewProtocol Type
+
+private protocol ViewOutput {
+    var descriptionView: DetailDescriptionView! { get }
+    
+    func viewDidConfigure()
+}
+
+private typealias ViewProtocol = ViewOutput
+
 // MARK: - DetailDescriptionTableViewCell Type
 
 final class DetailDescriptionTableViewCell: UITableViewCell {
-    private var descriptionView: DetailDescriptionView!
+    fileprivate var descriptionView: DetailDescriptionView!
     /// Create a detail description table view cell object.
     /// - Parameters:
     ///   - tableView: Corresponding table view.
     ///   - indexPath: The index path of the cell on the data source.
     ///   - viewModel: Coordinating view model.
     /// - Returns: A detail description table view cell.
-    static func create(on tableView: UITableView, for indexPath: IndexPath, with viewModel: DetailViewModel) -> DetailDescriptionTableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: DetailDescriptionTableViewCell.reuseIdentifier, for: indexPath) as? DetailDescriptionTableViewCell else {
+    static func create(on tableView: UITableView,
+                       for indexPath: IndexPath,
+                       with viewModel: DetailViewModel) -> DetailDescriptionTableViewCell {
+        guard let cell = tableView.dequeueReusableCell(
+            withIdentifier: DetailDescriptionTableViewCell.reuseIdentifier,
+            for: indexPath) as? DetailDescriptionTableViewCell else {
             fatalError()
         }
         let viewModel = DetailDescriptionViewViewModel(with: viewModel.media)
@@ -36,10 +50,10 @@ final class DetailDescriptionTableViewCell: UITableViewCell {
     required init?(coder: NSCoder) { fatalError() }
 }
 
-// MARK: - UI Setup
+// MARK: - ViewProtocol Implementation
 
-extension DetailDescriptionTableViewCell {
-    private func viewDidConfigure() {
+extension DetailDescriptionTableViewCell: ViewProtocol {
+    fileprivate func viewDidConfigure() {
         backgroundColor = .black
         selectionStyle = .none
     }

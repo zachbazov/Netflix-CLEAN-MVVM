@@ -7,10 +7,21 @@
 
 import Foundation
 
+// MARK: - ViewModelProtocol Type
+
+private protocol ViewModelOutput {
+    var isPresented: Bool { get }
+    
+    func shouldDisplayOrHide()
+}
+
+private typealias ViewModelProtocol = ViewModelOutput
+
 // MARK: - BrowseOverlayViewModel Type
 
-final class BrowseOverlayViewModel {
+struct BrowseOverlayViewModel {
     private let coordinator: HomeViewCoordinator
+    
     var isPresented = false {
         didSet { shouldDisplayOrHide() }
     }
@@ -20,10 +31,14 @@ final class BrowseOverlayViewModel {
     }
 }
 
-// MARK: - Methods
+// MARK: - ViewModel Implementation
 
-extension BrowseOverlayViewModel {
-    private func shouldDisplayOrHide() {
+extension BrowseOverlayViewModel: ViewModel {}
+
+// MARK: - ViewModelProtocol Implementation
+
+extension BrowseOverlayViewModel: ViewModelProtocol {
+    fileprivate func shouldDisplayOrHide() {
         guard let homeViewController = coordinator.viewController else { return }
         
         if isPresented {

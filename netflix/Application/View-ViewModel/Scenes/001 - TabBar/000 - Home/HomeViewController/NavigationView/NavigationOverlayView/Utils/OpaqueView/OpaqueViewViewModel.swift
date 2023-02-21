@@ -7,6 +7,16 @@
 
 import Foundation
 
+// MARK: - ViewModelProtocol Type
+
+private protocol ViewModelOutput {
+    var imagePath: String { get }
+    var identifier: NSString { get }
+    var imageURL: URL { get }
+}
+
+private typealias ViewModelProtocol = ViewModelOutput
+
 // MARK: - OpaqueViewViewModel Type
 
 struct OpaqueViewViewModel {
@@ -17,7 +27,15 @@ struct OpaqueViewViewModel {
     /// - Parameter media: Corresponding media object.
     init(with media: Media) {
         self.imagePath = media.resources.displayPoster
-        self.identifier = "displayPoster_\(media.slug)" as NSString
+        self.identifier = "display-poster_\(media.slug)" as NSString
         self.imageURL = URL(string: self.imagePath)!
     }
 }
+
+// MARK: - ViewModel Implementation
+
+extension OpaqueViewViewModel: ViewModel {}
+
+// MARK: - ViewModelProtocol Implementation
+
+extension OpaqueViewViewModel: ViewModelProtocol {}

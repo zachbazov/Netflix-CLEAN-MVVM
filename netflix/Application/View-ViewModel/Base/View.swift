@@ -26,6 +26,8 @@ protocol ViewModeling {
 class View<T>: UIView where T: ViewModel {
     var viewModel: T!
     
+    func dataDidDownload() {}
+    
     func viewDidLoad() {}
     func viewDidDeploySubviews() {}
     func viewDidConfigure() {}

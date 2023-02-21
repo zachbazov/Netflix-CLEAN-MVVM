@@ -7,6 +7,17 @@
 
 import Foundation
 
+// MARK: - ViewModelProtocol Type
+
+private protocol ViewModelOutput {
+    var title: String { get }
+    var posterImagePath: String { get }
+    var posterImageIdentifier: NSString { get }
+    var posterImageURL: URL! { get }
+}
+
+private typealias ViewModelProtocol = ViewModelOutput
+
 // MARK: - TrailerCollectionViewCellViewModel Type
 
 struct TrailerCollectionViewCellViewModel {
@@ -23,3 +34,7 @@ struct TrailerCollectionViewCellViewModel {
         self.posterImageURL = .init(string: self.posterImagePath)
     }
 }
+
+// MARK: - ViewModelProtocol Implementation
+
+extension TrailerCollectionViewCellViewModel: ViewModelProtocol {}

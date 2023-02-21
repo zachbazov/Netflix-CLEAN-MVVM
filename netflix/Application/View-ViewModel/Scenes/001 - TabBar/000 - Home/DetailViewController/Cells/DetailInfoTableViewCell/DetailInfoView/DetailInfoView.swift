@@ -7,9 +7,18 @@
 
 import UIKit
 
+// MARK: - ViewProtocol Type
+
+private protocol ViewOutput {
+    var ageRestrictionView: AgeRestrictionView! { get }
+    var hdView: HDView! { get }
+}
+
+private typealias ViewProtocol = ViewOutput
+
 // MARK: - DetailInfoView Type
 
-final class DetailInfoView: UIView, ViewInstantiable {
+final class DetailInfoView: View<DetailInfoViewViewModel> {
     @IBOutlet private weak var mediaTypeLabel: UILabel!
     @IBOutlet private weak var gradientView: UIView!
     @IBOutlet private weak var titlelabel: UILabel!
@@ -20,35 +29,34 @@ final class DetailInfoView: UIView, ViewInstantiable {
     @IBOutlet private weak var playButton: UIButton!
     @IBOutlet private weak var downloadButton: UIButton!
     
-    private let viewModel: DetailInfoViewViewModel
-    private var ageRestrictionView: AgeRestrictionView!
-    private var hdView: HDView!
+    fileprivate var ageRestrictionView: AgeRestrictionView!
+    fileprivate var hdView: HDView!
     
     /// Create a detail info object.
     /// - Parameters:
     ///   - parent: Instantiating view.
     ///   - viewModel: Coordinating view model.
     init(on parent: UIView, with viewModel: DetailInfoViewViewModel) {
-        self.viewModel = viewModel
         super.init(frame: parent.bounds)
         self.nibDidLoad()
+        self.viewModel = viewModel
         self.ageRestrictionView = AgeRestrictionView(on: ageRestrictionViewContainer)
         self.hdView = HDView(on: hdViewContainer)
         self.viewDidLoad()
     }
     
     required init?(coder: NSCoder) { fatalError() }
-}
-
-// MARK: - UI Setup
-
-extension DetailInfoView {
-    private func viewDidLoad() {
-        setupSubviews()
+    
+    override func viewDidLoad() {
+        viewDidDeploySubviews()
         viewDidConfigure()
     }
     
-    private func viewDidConfigure() {
+    override func viewDidDeploySubviews() {
+        setupGradients()
+    }
+    
+    override func viewDidConfigure() {
         backgroundColor = .black
         
         mediaTypeLabel.text = viewModel.mediaType
@@ -58,12 +66,20 @@ extension DetailInfoView {
         yearLabel.text = viewModel.duration
         hdViewContainer.isHidden(!viewModel.isHD)
     }
-    
-    private func setupSubviews() {
-        setupGradientView()
-    }
-    
-    private func setupGradientView() {
+}
+
+// MARK: - ViewInstantiable Implementation
+
+extension DetailInfoView: ViewInstantiable {}
+
+// MARK: - ViewProtocol Implementation
+
+extension DetailInfoView: ViewProtocol {}
+
+// MARK: - Private UI Implementation
+
+extension DetailInfoView {
+    private func setupGradients() {
         gradientView.addGradientLayer(
             colors: [UIColor(red: 25.0/255,
                              green: 25.0/255,

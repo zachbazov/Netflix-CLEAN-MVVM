@@ -7,16 +7,29 @@
 
 import UIKit
 
+// MARK: - ViewProtocol Type
+
+private protocol ViewOutput {
+    var leadingItem: DetailPanelViewItem! { get }
+    var centerItem: DetailPanelViewItem! { get }
+    var trailingItem: DetailPanelViewItem! { get }
+    
+    func viewDidConfigure()
+    func viewDidUnbindObservers()
+}
+
+private typealias ViewProtocol = ViewOutput
+
 // MARK: - DetailPanelView Type
 
-final class DetailPanelView: UIView, ViewInstantiable {
+final class DetailPanelView: UIView {
     @IBOutlet private weak var leadingViewContainer: UIView!
     @IBOutlet private weak var centerViewContainer: UIView!
     @IBOutlet private weak var trailingViewContainer: UIView!
     
-    private(set) var leadingItem: DetailPanelViewItem!
-    private(set) var centerItem: DetailPanelViewItem!
-    private(set) var trailingItem: DetailPanelViewItem!
+    fileprivate(set) var leadingItem: DetailPanelViewItem!
+    fileprivate(set) var centerItem: DetailPanelViewItem!
+    fileprivate(set) var trailingItem: DetailPanelViewItem!
     /// Create a panel view object.
     /// - Parameters:
     ///   - parent: Instantiating view.
@@ -33,10 +46,7 @@ final class DetailPanelView: UIView, ViewInstantiable {
     required init?(coder: NSCoder) { fatalError() }
     
     deinit {
-        removeObservers()
-        leadingItem.viewModel.removeObservers()
-        centerItem.viewModel.removeObservers()
-        trailingItem.viewModel.removeObservers()
+        viewDidUnbindObservers()
         leadingItem.viewModel = nil
         centerItem.viewModel = nil
         trailingItem.viewModel = nil
@@ -46,21 +56,21 @@ final class DetailPanelView: UIView, ViewInstantiable {
     }
 }
 
-// MARK: - UI Setup
+// MARK: - ViewInstantiable Implementation
 
-extension DetailPanelView {
-    private func viewDidConfigure() {
+extension DetailPanelView: ViewInstantiable {}
+
+// MARK: - ViewProtocol Implementation
+
+extension DetailPanelView: ViewProtocol {
+    fileprivate func viewDidConfigure() {
         backgroundColor = .black
     }
-}
-
-// MARK: - Observers
-
-extension DetailPanelView {
-    private func removeObservers() {
+    
+    fileprivate func viewDidUnbindObservers() {
         printIfDebug(.success, "Removed `DetailPanelView` observers.")
-        leadingItem?.viewModel?.removeObservers()
-        centerItem?.viewModel?.removeObservers()
-        trailingItem?.viewModel?.removeObservers()
+        leadingItem.viewDidUnbindObservers()
+        centerItem.viewDidUnbindObservers()
+        trailingItem.viewDidUnbindObservers()
     }
 }

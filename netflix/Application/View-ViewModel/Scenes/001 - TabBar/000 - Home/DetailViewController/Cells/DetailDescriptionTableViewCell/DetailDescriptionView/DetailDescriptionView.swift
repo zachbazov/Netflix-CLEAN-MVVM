@@ -9,30 +9,24 @@ import UIKit
 
 // MARK: - DetailDescriptionView Type
 
-final class DetailDescriptionView: UIView, ViewInstantiable {
+final class DetailDescriptionView: View<DetailDescriptionViewViewModel> {
     @IBOutlet private weak var descriptionTextView: UITextView!
     @IBOutlet private weak var castLabel: UILabel!
     @IBOutlet private weak var writersLabel: UILabel!
-    
-    private let viewModel: DetailDescriptionViewViewModel
     /// Create a description view object.
     /// - Parameters:
     ///   - parent: Instantiating view.
     ///   - viewModel: Coordinating view model.
     init(on parent: UIView, with viewModel: DetailDescriptionViewViewModel) {
-        self.viewModel = viewModel
         super.init(frame: parent.bounds)
         self.nibDidLoad()
+        self.viewModel = viewModel
         self.viewDidConfigure()
     }
     
     required init?(coder: NSCoder) { fatalError() }
-}
-
-// MARK: - UI Setup
-
-extension DetailDescriptionView {
-    private func viewDidConfigure() {
+    
+    override func viewDidConfigure() {
         backgroundColor = .black
         
         descriptionTextView.text = viewModel.description
@@ -40,3 +34,7 @@ extension DetailDescriptionView {
         writersLabel.text = viewModel.writers
     }
 }
+
+// MARK: - ViewInstantiable Implementation
+
+extension DetailDescriptionView: ViewInstantiable {}

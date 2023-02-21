@@ -7,6 +7,16 @@
 
 import UIKit
 
+// MARK: - ViewProtocol Type
+
+private protocol ViewOutput {
+    var panelView: DetailPanelView! { get }
+    
+    func viewDidConfigure()
+}
+
+private typealias ViewProtocol = ViewOutput
+
 // MARK: - DetailPanelTableViewCell Type
 
 final class DetailPanelTableViewCell: UITableViewCell {
@@ -17,8 +27,12 @@ final class DetailPanelTableViewCell: UITableViewCell {
     ///   - indexPath: The index path of the cell on the data source.
     ///   - viewModel: Coordinating view model.
     /// - Returns: A detail panel table view cell.
-    static func create(on tableView: UITableView, for indexPath: IndexPath, with viewModel: DetailViewModel) -> DetailPanelTableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: DetailPanelTableViewCell.reuseIdentifier, for: indexPath) as? DetailPanelTableViewCell else {
+    static func create(on tableView: UITableView,
+                       for indexPath: IndexPath,
+                       with viewModel: DetailViewModel) -> DetailPanelTableViewCell {
+        guard let cell = tableView.dequeueReusableCell(
+            withIdentifier: DetailPanelTableViewCell.reuseIdentifier,
+            for: indexPath) as? DetailPanelTableViewCell else {
             fatalError()
         }
         cell.panelView = DetailPanelView(on: cell.contentView, with: viewModel)
@@ -34,10 +48,10 @@ final class DetailPanelTableViewCell: UITableViewCell {
     required init?(coder: NSCoder) { fatalError() }
 }
 
-// MARK: - UI Setup
+// MARK: - ViewProtocol Implementation
 
-extension DetailPanelTableViewCell {
-    private func viewDidConfigure() {
+extension DetailPanelTableViewCell: ViewProtocol {
+    fileprivate func viewDidConfigure() {
         backgroundColor = .black
         selectionStyle = .none
     }

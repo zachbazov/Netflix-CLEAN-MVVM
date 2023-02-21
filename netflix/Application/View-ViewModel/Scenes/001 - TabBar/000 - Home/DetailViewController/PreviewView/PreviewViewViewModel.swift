@@ -7,6 +7,18 @@
 
 import Foundation
 
+// MARK: - ViewModelProtocol Type
+
+private protocol ViewModelOutput {
+    var title: String { get }
+    var slug: String { get }
+    var posterImagePath: String { get }
+    var identifier: NSString { get }
+    var url: URL { get }
+}
+
+private typealias ViewModelProtocol = ViewModelOutput
+
 // MARK: - PreviewViewViewModel Type
 
 struct PreviewViewViewModel {
@@ -25,3 +37,11 @@ struct PreviewViewViewModel {
         self.url = URL(string: self.posterImagePath)!
     }
 }
+
+// MARK: - ViewModel Implementation
+
+extension PreviewViewViewModel: ViewModel {}
+
+// MARK: - ViewModelProtocol Implementation
+
+extension PreviewViewViewModel: ViewModelProtocol {}
