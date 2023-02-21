@@ -7,6 +7,8 @@
 
 import Foundation
 
+// MARK: - UseCase Type
+
 protocol UseCase {
     associatedtype T: Repository
     var repository: T { get }

@@ -7,7 +7,7 @@
 
 import Foundation
 
-// MARK: - SectionsRepositoryEndpoints Protocol
+// MARK: - SectionsRepositoryEndpoints Type
 
 protocol SectionsRepositoryEndpoints {
     static func getAllSections() -> Endpoint<SectionHTTPDTO.Response>

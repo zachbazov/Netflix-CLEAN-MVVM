@@ -7,7 +7,7 @@
 
 import Foundation
 
-// MARK: - SeasonRepositoryEndpoints Protocol
+// MARK: - SeasonRepositoryEndpoints Type
 
 protocol SeasonRepositoryEndpoints {
     static func getSeason(with request: SeasonHTTPDTO.Request) -> Endpoint<SeasonHTTPDTO.Response>

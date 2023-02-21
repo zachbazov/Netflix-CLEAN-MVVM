@@ -7,7 +7,7 @@
 
 import Foundation
 
-// MARK: - Sectionable Protocol
+// MARK: - Sectionable Type
 
 protocol Sectionable {
     var id: Int { get }

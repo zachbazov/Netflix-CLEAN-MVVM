@@ -7,6 +7,8 @@
 
 import Foundation
 
+// MARK: - Repository Type
+
 protocol Repository {
     var dataTransferService: DataTransferService { get }
     var task: Cancellable? { get set }

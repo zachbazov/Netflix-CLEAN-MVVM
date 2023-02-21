@@ -7,15 +7,28 @@
 
 import UIKit
 
+// MARK: - DataSourceProtocol Type
+
+private protocol DataSourceOutput {
+    var coordinator: HomeViewCoordinator! { get }
+    var collectionView: UICollectionView! { get }
+    var section: Section { get }
+    
+    func viewDidLoad()
+    func dataSourceDidChange()
+}
+
+private typealias DataSourceProtocol = DataSourceOutput
+
 // MARK: - HomeCollectionViewDataSource Type
 
 final class HomeCollectionViewDataSource<Cell>: NSObject,
                                                 UICollectionViewDelegate,
                                                 UICollectionViewDataSource,
                                                 UICollectionViewDataSourcePrefetching where Cell: UICollectionViewCell {
-    private weak var coordinator: HomeViewCoordinator!
-    private weak var collectionView: UICollectionView!
-    private let section: Section
+    fileprivate weak var coordinator: HomeViewCoordinator!
+    fileprivate weak var collectionView: UICollectionView!
+    fileprivate let section: Section
     /// Create home's collection view data source object.
     /// - Parameters:
     ///   - collectionView: Corresponding collection view.
@@ -62,14 +75,14 @@ final class HomeCollectionViewDataSource<Cell>: NSObject,
     func collectionView(_ collectionView: UICollectionView, cancelPrefetchingForItemsAt indexPaths: [IndexPath]) {}
 }
 
-// MARK: - UI Setup
+// MARK: - DataSourceProtocol Implementation
 
-extension HomeCollectionViewDataSource {
-    private func viewDidLoad() {
+extension HomeCollectionViewDataSource: DataSourceProtocol {
+    fileprivate func viewDidLoad() {
         dataSourceDidChange()
     }
     
-    private func dataSourceDidChange() {
+    fileprivate func dataSourceDidChange() {
         collectionView.delegate = self
         collectionView.dataSource = self
         collectionView.prefetchDataSource = self

@@ -141,9 +141,6 @@
 		A1A71ABD298D8460001C6AB1 /* ListRepositoryProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1A71ABC298D8460001C6AB1 /* ListRepositoryProtocol.swift */; };
 		A1A71AC12991FD00001C6AB1 /* Image.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1A71AC02991FD00001C6AB1 /* Image.swift */; };
 		A1A71AC32991FD67001C6AB1 /* ImageHTTP.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1A71AC22991FD67001C6AB1 /* ImageHTTP.swift */; };
-		A1A71AC92991FF3B001C6AB1 /* ImageDTO+Mapping.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1A71AC82991FF3B001C6AB1 /* ImageDTO+Mapping.swift */; };
-		A1A71ACB2991FF49001C6AB1 /* ImageHTTPDTO+Mapping.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1A71ACA2991FF49001C6AB1 /* ImageHTTPDTO+Mapping.swift */; };
-		A1A71B5D29967E29001C6AB1 /* Data+UIImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1A71B5C29967E29001C6AB1 /* Data+UIImage.swift */; };
 		A1AA28C628F487290011EE9D /* MediaPlayerOverlayViewViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1AA28C528F487290011EE9D /* MediaPlayerOverlayViewViewModel.swift */; };
 		A1AA28C828F487E70011EE9D /* MediaPlayerObservers.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1AA28C728F487E70011EE9D /* MediaPlayerObservers.swift */; };
 		A1AA28CC28F4C3710011EE9D /* MediaPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1AA28CB28F4C3710011EE9D /* MediaPlayer.swift */; };
@@ -426,9 +423,6 @@
 		A1A71ABC298D8460001C6AB1 /* ListRepositoryProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListRepositoryProtocol.swift; sourceTree = "<group>"; };
 		A1A71AC02991FD00001C6AB1 /* Image.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Image.swift; sourceTree = "<group>"; };
 		A1A71AC22991FD67001C6AB1 /* ImageHTTP.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageHTTP.swift; sourceTree = "<group>"; };
-		A1A71AC82991FF3B001C6AB1 /* ImageDTO+Mapping.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ImageDTO+Mapping.swift"; sourceTree = "<group>"; };
-		A1A71ACA2991FF49001C6AB1 /* ImageHTTPDTO+Mapping.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ImageHTTPDTO+Mapping.swift"; sourceTree = "<group>"; };
-		A1A71B5C29967E29001C6AB1 /* Data+UIImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Data+UIImage.swift"; sourceTree = "<group>"; };
 		A1AA28C528F487290011EE9D /* MediaPlayerOverlayViewViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaPlayerOverlayViewViewModel.swift; sourceTree = "<group>"; };
 		A1AA28C728F487E70011EE9D /* MediaPlayerObservers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaPlayerObservers.swift; sourceTree = "<group>"; };
 		A1AA28CB28F4C3710011EE9D /* MediaPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaPlayer.swift; sourceTree = "<group>"; };
@@ -1028,7 +1022,6 @@
 				A1B93C7128FF329800AF2C7F /* Array+Extension.swift */,
 				A19956F3290F7F9900B7D655 /* ArraySlice+Extension.swift */,
 				A1BA1DA428D818C400730EA8 /* CALayer+Shadow.swift */,
-				A1A71B5C29967E29001C6AB1 /* Data+UIImage.swift */,
 				A130BCB42950F4F50070EA5E /* Media+Extension.swift */,
 				A1F56A6828C68FB10089BD4F /* NSAttributedString+Extension.swift */,
 				A1B68F2D2923DF2300FF5F18 /* Set+Extension.swift */,
@@ -1171,7 +1164,6 @@
 				A18B995428BFF1D10077A5A6 /* UserDTO+Mapping.swift */,
 				A18B995628BFF66C0077A5A6 /* SectionDTO+Mapping.swift */,
 				A18B995828BFF6A20077A5A6 /* MediaDTO+Mapping.swift */,
-				A1A71AC82991FF3B001C6AB1 /* ImageDTO+Mapping.swift */,
 				A18B995A28BFFB500077A5A6 /* SeasonDTO+Mapping.swift */,
 				A18B995C28BFFBF30077A5A6 /* EpisodeDTO+Mapping.swift */,
 				A19956DE29019A7700B7D655 /* ListDTO+Mapping.swift */,
@@ -1690,7 +1682,6 @@
 				A1B98BA6298A419A001B7B62 /* UserHTTPDTO+Mapping.swift */,
 				A1B98BB2298A497F001B7B62 /* SectionHTTPDTO+Mapping.swift */,
 				A1B98BA8298A4373001B7B62 /* MediaHTTPDTO+Mapping.swift */,
-				A1A71ACA2991FF49001C6AB1 /* ImageHTTPDTO+Mapping.swift */,
 				A1B98BAA298A44EF001B7B62 /* SeasonHTTPDTO+Mapping.swift */,
 				A1B98BB8298B1F3E001B7B62 /* ListHTTPDTO+Mapping.swift */,
 				A1B98BAE298A48B2001B7B62 /* SearchHTTPDTO.swift */,
@@ -1980,7 +1971,6 @@
 				A130BCB32950D76C0070EA5E /* SearchCollectionViewCellViewModel.swift in Sources */,
 				A1AD25C028D3FC9600F793B3 /* UITableView+Register.swift in Sources */,
 				A18B995528BFF1D10077A5A6 /* UserDTO+Mapping.swift in Sources */,
-				A1A71AC92991FF3B001C6AB1 /* ImageDTO+Mapping.swift in Sources */,
 				A130BCBD29510CA10070EA5E /* DownloadsViewController.swift in Sources */,
 				A130BCA4294FAA210070EA5E /* SearchCollectionViewDataSource.swift in Sources */,
 				A1B70A7F293D80C000C718C6 /* DetailViewCoordinator.swift in Sources */,
@@ -2087,7 +2077,6 @@
 				A1BA1DBF28DCB6F300730EA8 /* NavigationOverlayCollectionViewCellViewModel.swift in Sources */,
 				A18B996028BFFCA80077A5A6 /* Sectionable.swift in Sources */,
 				A1BA1DB928DA20CA00730EA8 /* NavigationOverlayViewModel.swift in Sources */,
-				A1A71ACB2991FF49001C6AB1 /* ImageHTTPDTO+Mapping.swift in Sources */,
 				A18D85222940DA7000840045 /* BrowseOverlayCollectionViewDataSource.swift in Sources */,
 				A18B98FC28BEB62C0077A5A6 /* AppDelegate.swift in Sources */,
 				A18B998D28C0426E0077A5A6 /* RepositoryTask.swift in Sources */,
@@ -2124,7 +2113,6 @@
 				A1AA28E228F60ABE0011EE9D /* TrailerCollectionViewCellViewModel.swift in Sources */,
 				A1B70A7D293D800300C718C6 /* AuthCoordinator.swift in Sources */,
 				A18B98FE28BEB62C0077A5A6 /* SceneDelegate.swift in Sources */,
-				A1A71B5D29967E29001C6AB1 /* Data+UIImage.swift in Sources */,
 				A1B1B0AA299AEDE20070AD29 /* Stores.swift in Sources */,
 				A1AD25BC28D3FBDC00F793B3 /* UICollectionViewCell+ViewInstantiable.swift in Sources */,
 				A1A71AAE298B86DD001C6AB1 /* SectionRepositoryEndpoints.swift in Sources */,

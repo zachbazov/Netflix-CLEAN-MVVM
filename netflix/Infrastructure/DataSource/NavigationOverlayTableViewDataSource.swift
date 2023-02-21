@@ -7,16 +7,28 @@
 
 import UIKit
 
+// MARK: - DataSourceProtocol Type
+
+private protocol DataSourceOutput {
+    var viewModel: NavigationOverlayViewModel { get }
+}
+
+private typealias DataSourceProtocol = DataSourceOutput
+
 // MARK: - NavigationOverlayTableViewDataSource Type
 
 final class NavigationOverlayTableViewDataSource: NSObject {
-    private let viewModel: NavigationOverlayViewModel
+    fileprivate let viewModel: NavigationOverlayViewModel
     /// Create a navigation overlay table view data source object.
     /// - Parameter viewModel: Coordinating view model.
     init(with viewModel: NavigationOverlayViewModel) {
         self.viewModel = viewModel
     }
 }
+
+// MARK: - DataSourceProtocol Implementation
+
+extension NavigationOverlayTableViewDataSource: DataSourceProtocol {}
 
 // MARK: - UITableViewDelegate & UITableViewDataSource Implementation
 

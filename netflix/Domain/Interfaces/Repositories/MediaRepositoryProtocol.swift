@@ -7,7 +7,7 @@
 
 import Foundation
 
-// MARK: - MediaRepositoryProtocol Protocol
+// MARK: - MediaRepositoryProtocol Type
 
 protocol MediaRepositoryProtocol {
     func getAll(cached: @escaping (MediaHTTPDTO.Response?) -> Void,

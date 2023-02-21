@@ -7,13 +7,28 @@
 
 import UIKit
 
+// MARK: - DataSourceProtocol Type
+
+private protocol DataSourceOutput {
+    var tableView: UITableView! { get }
+    var viewModel: HomeViewModel! { get }
+    var numberOfRows: Int { get }
+    var showcaseCell: ShowcaseTableViewCell! { get }
+    
+    func viewDidLoad()
+    func viewsDidRegister()
+    func dataSourceDidChange()
+}
+
+private typealias DataSourceProtocol = DataSourceOutput
+
 // MARK: - HomeTableViewDataSource Type
 
 final class HomeTableViewDataSource: NSObject {
-    private weak var tableView: UITableView!
-    private weak var viewModel: HomeViewModel!
-    private let numberOfRows = 1
-    private(set) var showcaseCell: ShowcaseTableViewCell!
+    fileprivate weak var tableView: UITableView!
+    fileprivate weak var viewModel: HomeViewModel!
+    fileprivate let numberOfRows = 1
+    fileprivate(set) var showcaseCell: ShowcaseTableViewCell!
     /// Create an home's table view data source object.
     /// - Parameters:
     ///   - tableView: Corresponding table view.
@@ -26,15 +41,15 @@ final class HomeTableViewDataSource: NSObject {
     }
 }
 
-// MARK: - UI Setup
+// MARK: - DataSourceProtocol Implementation
 
-extension HomeTableViewDataSource {
-    private func viewDidLoad() {
+extension HomeTableViewDataSource: DataSourceProtocol {
+    fileprivate func viewDidLoad() {
         viewsDidRegister()
         dataSourceDidChange()
     }
     
-    private func viewsDidRegister() {
+    fileprivate func viewsDidRegister() {
         tableView.register(headerFooter: TableViewHeaderFooterView.self)
         tableView.register(class: ShowcaseTableViewCell.self)
         tableView.register(class: RatedTableViewCell.self)
@@ -43,7 +58,7 @@ extension HomeTableViewDataSource {
     }
     
     func dataSourceDidChange() {
-        /// Filters the sections based on the data source state.
+        // Filters the sections based on the data source state.
         viewModel.filter(sections: viewModel.sections)
         
         tableView.delegate = self

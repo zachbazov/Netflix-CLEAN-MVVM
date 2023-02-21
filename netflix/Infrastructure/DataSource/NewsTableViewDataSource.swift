@@ -5,13 +5,24 @@
 //  Created by Zach Bazov on 20/12/2022.
 //
 
-import UIKit.UITableView
+import UIKit
+
+// MARK: - DataSourceProtocol Type
+
+private protocol DataSourceOutput {
+    var viewModel: NewsViewModel { get }
+    var numberOfSections: Int { get }
+    
+    func dataSourceDidChange()
+}
+
+private typealias DataSourceProtocol = DataSourceOutput
 
 // MARK: - NewsTableViewDataSource Type
 
 final class NewsTableViewDataSource: NSObject {
-    private let viewModel: NewsViewModel
-    private let numberOfSections: Int = 1
+    fileprivate let viewModel: NewsViewModel
+    fileprivate let numberOfSections: Int = 1
     /// Create a news table view data source object.
     /// - Parameter viewModel: Coordinating view model.
     init(with viewModel: NewsViewModel) {
@@ -19,9 +30,9 @@ final class NewsTableViewDataSource: NSObject {
     }
 }
 
-// MARK: - UI Setup
+// MARK: - DataSourceProtocol Implementation
 
-extension NewsTableViewDataSource {
+extension NewsTableViewDataSource: DataSourceProtocol {
     func dataSourceDidChange() {
         guard let tableView = viewModel.coordinator!.viewController!.tableView else { return }
         tableView.delegate = self

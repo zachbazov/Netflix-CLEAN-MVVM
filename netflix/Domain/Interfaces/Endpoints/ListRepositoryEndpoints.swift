@@ -7,7 +7,7 @@
 
 import Foundation
 
-// MARK: - ListRepositoryEndpoints Protocol
+// MARK: - ListRepositoryEndpoints Type
 
 protocol ListRepositoryEndpoints {
     static func getMyList(with request: ListHTTPDTO.GET.Request) -> Endpoint<ListHTTPDTO.GET.Response>

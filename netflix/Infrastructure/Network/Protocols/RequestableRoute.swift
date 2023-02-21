@@ -7,6 +7,8 @@
 
 import Foundation
 
+// MARK: - RequestableRoute Type
+
 protocol RequestableRoute {
     func request<T, U>(for response: T.Type,
                        request: U?,
@@ -17,6 +19,8 @@ protocol RequestableRoute {
                        cached: ((T?) -> Void)?,
                        completion: ((Result<T, Error>) -> Void)?) -> Cancellable?
 }
+
+// MARK: - Default Implementation
 
 extension RequestableRoute {
     func request<T, U>(for response: T.Type,

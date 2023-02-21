@@ -25,7 +25,7 @@ enum BodyEncoding {
     case stringEncodingAscii
 }
 
-// MARK: - Endpoint type
+// MARK: - Endpoint Type
 
 struct Endpoint<R>: ResponseRequestable {
     typealias Response = R
@@ -42,7 +42,7 @@ struct Endpoint<R>: ResponseRequestable {
     var responseDecoder: ResponseDecoder = JSONResponseDecoder()
 }
 
-// MARK: - Requestable Protocol
+// MARK: - Requestable Type
 
 protocol Requestable {
     var path: String { get }
@@ -112,7 +112,7 @@ extension Requestable {
     }
 }
 
-// MARK: - ResponseRequestable Protocol
+// MARK: - ResponseRequestable Type
 
 protocol ResponseRequestable: Requestable {
     associatedtype Response

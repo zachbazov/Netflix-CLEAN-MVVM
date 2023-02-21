@@ -17,17 +17,17 @@ enum NetworkError: Error {
     case urlGeneration
 }
 
-// MARK: - NetworkCancellable Protocol
+// MARK: - NetworkCancellable Type
 
 protocol NetworkCancellable {
     func cancel()
 }
 
-// MARK: - URLSessionTask Extension
+// MARK: - NetworkCancellable Implementation
 
 extension URLSessionTask: NetworkCancellable {}
 
-// MARK: - NetworkServiceInput Protocol
+// MARK: - NetworkServiceInput Type
 
 protocol NetworkServiceInput {
     typealias CompletionHandler = (Result<Data?, NetworkError>) -> Void
@@ -36,7 +36,7 @@ protocol NetworkServiceInput {
                  completion: @escaping CompletionHandler) -> NetworkCancellable?
 }
 
-// MARK: - NetworkSessionManagerInput Protocol
+// MARK: - NetworkSessionManagerInput Type
 
 protocol NetworkSessionManagerInput {
     typealias CompletionHandler = (Data?, URLResponse?, Error?) -> Void
@@ -45,7 +45,7 @@ protocol NetworkSessionManagerInput {
                  completion: @escaping CompletionHandler) -> NetworkCancellable
 }
 
-// MARK: - NetworkErrorLoggerInput Protocol
+// MARK: - NetworkErrorLoggerInput Type
 
 private protocol NetworkErrorLoggerInput {
     func log(request: URLRequest)

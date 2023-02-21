@@ -7,7 +7,7 @@
 
 import Foundation
 
-// MARK: - Mediable Protocol
+// MARK: - Mediable Type
 
 protocol Mediable {
     var id: String? { get }

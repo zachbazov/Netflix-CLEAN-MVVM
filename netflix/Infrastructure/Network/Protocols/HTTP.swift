@@ -7,7 +7,7 @@
 
 import Foundation
 
-// MARK: - HTTP Protocol
+// MARK: - HTTP Type
 
 protocol HTTP {
     associatedtype Request

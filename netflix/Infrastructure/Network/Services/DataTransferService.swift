@@ -16,7 +16,7 @@ enum DataTransferError: Error {
     case resolvedNetworlFailure(Error)
 }
 
-// MARK: - DataTransferServiceInput Protocol
+// MARK: - DataTransferServiceInput Type
 
 protocol DataTransferServiceInput {
     typealias CompletionHandler<T> = (Result<T, DataTransferError>) -> Void
@@ -32,19 +32,19 @@ protocol DataTransferServiceInput {
         completion: @escaping CompletionHandler<Void>) -> NetworkCancellable? where E.Response == Void
 }
 
-// MARK: - DataTransferErrorResolverInput Protocol
+// MARK: - DataTransferErrorResolverInput Type
 
 protocol DataTransferErrorResolverInput {
     func resolve(error: NetworkError) -> Error
 }
 
-// MARK: - ResponseDecoder Protocol
+// MARK: - ResponseDecoder Type
 
 protocol ResponseDecoder {
     func decode<T: Decodable>(_ data: Data) throws -> T
 }
 
-// MARK: - DataTransferErrorLoggerInput Protocol
+// MARK: - DataTransferErrorLoggerInput Type
 
 protocol DataTransferErrorLoggerInput {
     func log(error: Error)

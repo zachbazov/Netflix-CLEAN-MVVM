@@ -5,18 +5,30 @@
 //  Created by Zach Bazov on 18/12/2022.
 //
 
-import UIKit.UICollectionView
+import UIKit
+
+// MARK: - DataSourceProtocol Type
+
+private protocol DataSourceOutput {
+    var viewModel: SearchViewModel { get }
+}
+
+private typealias DataSourceProtocol = DataSourceOutput
 
 // MARK: - SearchCollectionViewDataSource Type
 
 final class SearchCollectionViewDataSource: NSObject {
-    private let viewModel: SearchViewModel
+    fileprivate let viewModel: SearchViewModel
     /// Create a search collection view data source object.
     /// - Parameter viewModel: Coordinating view model.
     init(with viewModel: SearchViewModel) {
         self.viewModel = viewModel
     }
 }
+
+// MARK: - DataSourceProtocol Implementation
+
+extension SearchCollectionViewDataSource: DataSourceProtocol {}
 
 // MARK: - UICollectionViewDelegate & UICollectionViewDataSource Implementation
 

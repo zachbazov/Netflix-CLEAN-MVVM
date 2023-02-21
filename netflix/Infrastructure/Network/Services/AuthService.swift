@@ -7,7 +7,7 @@
 
 import Foundation
 
-// MARK: - AuthServiceProtocol Protocol
+// MARK: - AuthServiceProtocol Type
 
 private protocol AuthServiceInput {
     func setResponse(request: UserHTTPDTO.Request?, response: UserHTTPDTO.Response)

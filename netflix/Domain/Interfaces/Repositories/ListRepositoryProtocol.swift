@@ -7,7 +7,7 @@
 
 import Foundation
 
-// MARK: - ListRepositoryProtocol Protocol
+// MARK: - ListRepositoryProtocol Type
 
 protocol ListRepositoryProtocol {
     func getOne(request: ListHTTPDTO.GET.Request,

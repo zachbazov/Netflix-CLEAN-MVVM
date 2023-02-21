@@ -7,7 +7,7 @@
 
 import Foundation
 
-// MARK: - NetworkConfigurable Protocol
+// MARK: - NetworkConfigurable Type
 
 protocol NetworkConfigurable {
     var baseURL: URL { get }

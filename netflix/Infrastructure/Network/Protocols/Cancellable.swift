@@ -7,7 +7,7 @@
 
 import Foundation
 
-// MARK: - Cancellable Protocol
+// MARK: - Cancellable Type
 
 protocol Cancellable {
     func cancel()

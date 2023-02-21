@@ -23,8 +23,6 @@ extension AuthRequestEntity {
     }
 }
 
-// MARK: - Mapping
-
 extension UserHTTPDTO.Request {
     func toEntity(in context: NSManagedObjectContext) -> AuthRequestEntity {
         let entity: AuthRequestEntity = .init(context: context)

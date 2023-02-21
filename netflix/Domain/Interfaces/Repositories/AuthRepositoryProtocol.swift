@@ -7,7 +7,7 @@
 
 import Foundation
 
-// MARK: - AuthRepositoryProtocol Protocol
+// MARK: - AuthRepositoryProtocol Type
 
 protocol AuthRepositoryProtocol {
     func signUp(request: UserHTTPDTO.Request,

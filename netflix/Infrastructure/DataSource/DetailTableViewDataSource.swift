@@ -5,16 +5,38 @@
 //  Created by Zach Bazov on 30/09/2022.
 //
 
-import UIKit.UITableView
+import UIKit
+
+// MARK: - DataSourceProtocol Type
+
+private protocol DataSourceInput {
+    func contentSize(with state: DetailNavigationView.State) -> Float
+    func reloadRow(at index: DetailTableViewDataSource.Index)
+    func heightForRow(at index: DetailTableViewDataSource.Index)
+    func reloadData(at index: DetailTableViewDataSource.Index)
+}
+
+private protocol DataSourceOutput {
+    var viewModel: DetailViewModel { get }
+    var tableView: UITableView { get }
+    var numberOfRows: Int { get }
+    var numberOfSections: Int { get }
+    var collectionCell: DetailCollectionTableViewCell! { get }
+    
+    func viewsDidRegister()
+    func dataSourceDidChange()
+}
+
+private typealias DataSourceProtocol = DataSourceInput & DataSourceOutput
 
 // MARK: - DetailTableViewDataSource Type
 
 final class DetailTableViewDataSource: NSObject {
-    private let viewModel: DetailViewModel
-    private let tableView: UITableView
-    private let numberOfRows: Int = 1
-    private let numberOfSections = Index.allCases.count
-    private(set) var collectionCell: DetailCollectionTableViewCell!
+    fileprivate let viewModel: DetailViewModel
+    fileprivate let tableView: UITableView
+    fileprivate let numberOfRows: Int = 1
+    fileprivate let numberOfSections = Index.allCases.count
+    fileprivate(set) var collectionCell: DetailCollectionTableViewCell!
     /// Create a detail table view data source object.
     /// - Parameters:
     ///   - tableView: Corresponding table view.
@@ -28,10 +50,10 @@ final class DetailTableViewDataSource: NSObject {
     }
 }
 
-// MARK: - UI Setup
+// MARK: - DataSourceProtocol Implementation
 
-extension DetailTableViewDataSource {
-    private func viewsDidRegister() {
+extension DetailTableViewDataSource: DataSourceProtocol {
+    fileprivate func viewsDidRegister() {
         tableView.register(class: DetailInfoTableViewCell.self)
         tableView.register(class: DetailDescriptionTableViewCell.self)
         tableView.register(class: DetailPanelTableViewCell.self)
@@ -39,16 +61,12 @@ extension DetailTableViewDataSource {
         tableView.register(class: DetailCollectionTableViewCell.self)
     }
     
-    private func dataSourceDidChange() {
+    fileprivate func dataSourceDidChange() {
         tableView.delegate = self
         tableView.dataSource = self
         tableView.reloadData()
     }
-}
-
-// MARK: - Methods
-
-extension DetailTableViewDataSource {
+    
     func contentSize(with state: DetailNavigationView.State) -> Float {
         switch state {
         case .episodes:
@@ -80,12 +98,12 @@ extension DetailTableViewDataSource {
         }
     }
     
-    private func reloadRow(at index: DetailTableViewDataSource.Index) {
+    fileprivate func reloadRow(at index: DetailTableViewDataSource.Index) {
         let indexPath = IndexPath(row: index.rawValue, section: .zero)
         tableView.reloadRows(at: [indexPath], with: .fade)
     }
     
-    private func heightForRow(at index: DetailTableViewDataSource.Index) {
+    fileprivate func heightForRow(at index: DetailTableViewDataSource.Index) {
         let indexPath = IndexPath(row: index.rawValue, section: .zero)
         tableView(tableView, heightForRowAt: indexPath)
     }

@@ -7,10 +7,23 @@
 
 import UIKit
 
+// MARK: - DataSourceProtocol Type
+
+private protocol DataSourceOutput {
+    associatedtype T
+    
+    var viewModel: DetailViewModel { get }
+    var numberOfSections: Int { get }
+    var collectionView: UICollectionView { get }
+    var items: [T] { get }
+}
+
+private typealias DataSourceProtocol = DataSourceOutput
+
 // MARK: - DetailCollectionViewDataSource Type
 
 final class DetailCollectionViewDataSource<T>: NSObject, UICollectionViewDelegate, UICollectionViewDataSource {
-    private let viewModel: DetailViewModel
+    fileprivate let viewModel: DetailViewModel
     fileprivate let numberOfSections = 1
     fileprivate let collectionView: UICollectionView
     let items: [T]
@@ -62,3 +75,7 @@ final class DetailCollectionViewDataSource<T>: NSObject, UICollectionViewDelegat
         }
     }
 }
+
+// MARK: - DataSourceProtocol Implementation
+
+extension DetailCollectionViewDataSource: DataSourceProtocol {}

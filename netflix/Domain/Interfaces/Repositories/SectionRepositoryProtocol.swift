@@ -7,7 +7,7 @@
 
 import Foundation
 
-// MARK: - SectionRepositoryProtocol Protocol
+// MARK: - SectionRepositoryProtocol Type
 
 protocol SectionRepositoryProtocol {
     func getAll(completion: @escaping (Result<SectionHTTPDTO.Response, Error>) -> Void) -> Cancellable?

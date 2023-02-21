@@ -7,20 +7,20 @@
 
 import Foundation
 
-// MARK: - MediaRepositoryEndpoints Protocol
+// MARK: - MediaRepositoryEndpoints Type
 
 protocol MediaRepositoryEndpoints: SearchRepositoryEndpoints, NewsRepositoryEndpoints {
     static func getAllMedia() -> Endpoint<MediaHTTPDTO.Response>
     static func getMedia(with request: MediaHTTPDTO.Request) -> Endpoint<MediaHTTPDTO.Response>
 }
 
-// MARK: - SearchRepositoryEndpoints Protocol
+// MARK: - SearchRepositoryEndpoints Type
 
 protocol SearchRepositoryEndpoints {
     static func searchMedia(with request: SearchHTTPDTO.Request) -> Endpoint<SearchHTTPDTO.Response>
 }
 
-// MARK: - NewsRepositoryEndpoints Protocol
+// MARK: - NewsRepositoryEndpoints Type
 
 protocol NewsRepositoryEndpoints {
     static func getUpcomingMedia(with request: NewsHTTPDTO.Request) -> Endpoint<NewsHTTPDTO.Response>

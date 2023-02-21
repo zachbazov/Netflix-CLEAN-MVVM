@@ -7,7 +7,7 @@
 
 import Foundation
 
-// MARK: - AuthRepositoryEndpoints Protocol
+// MARK: - AuthRepositoryEndpoints Type
 
 protocol AuthRepositoryEndpoints {
     static func signUp(with requestDTO: UserHTTPDTO.Request) -> Endpoint<UserHTTPDTO.Response>

@@ -19,8 +19,6 @@ extension AuthResponseEntity {
     }
 }
 
-// MARK: - Mapping
-
 extension UserHTTPDTO.Response {
     func toEntity(in context: NSManagedObjectContext) -> AuthResponseEntity {
         let entity: AuthResponseEntity = .init(context: context)

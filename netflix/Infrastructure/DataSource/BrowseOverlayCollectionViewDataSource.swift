@@ -5,14 +5,24 @@
 //  Created by Zach Bazov on 07/12/2022.
 //
 
-import UIKit.UICollectionView
+import UIKit
+
+// MARK: - DataSourceProtocol Type
+
+private protocol DataSourceOutput {
+    var coordinator: HomeViewCoordinator { get }
+    var section: Section { get }
+    var items: [Media] { get }
+}
+
+private typealias DataSourceProtocol = DataSourceOutput
 
 // MARK: - BrowseOverlayCollectionViewDataSource Type
 
 final class BrowseOverlayCollectionViewDataSource: NSObject {
-    private let coordinator: HomeViewCoordinator
-    private let section: Section
-    private let items: [Media]
+    fileprivate let coordinator: HomeViewCoordinator
+    fileprivate let section: Section
+    fileprivate let items: [Media]
     /// Create a browse overlay collection view data source object.
     /// - Parameters:
     ///   - section: Corresponding media's section object.
@@ -23,6 +33,10 @@ final class BrowseOverlayCollectionViewDataSource: NSObject {
         self.items = section.media
     }
 }
+
+// MARK: - DataSourceProtocol Implementation
+
+extension BrowseOverlayCollectionViewDataSource: DataSourceProtocol {}
 
 // MARK: - UICollectionViewDelegate & UICollectionViewDataSource Implementation
 

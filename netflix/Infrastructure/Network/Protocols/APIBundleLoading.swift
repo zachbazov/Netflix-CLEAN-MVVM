@@ -7,6 +7,8 @@
 
 import Foundation
 
+// MARK: - APIBundleLoading Type
+
 protocol APIBundleLoading {
     var apiScheme: String { get }
     var apiHost: String { get }
