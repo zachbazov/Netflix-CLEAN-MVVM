@@ -7,34 +7,23 @@
 
 import UIKit
 
-// MARK: - PanelViewObserving Type
-
-private protocol PanelViewObserving {
-    
-}
-
 // MARK: - ViewProtocol Type
-
-private protocol ViewInput {
-    func viewDidConfigure()
-    func playDidTap()
-}
 
 private protocol ViewOutput {
     var leadingItem: PanelViewItem! { get }
     var trailingItem: PanelViewItem! { get }
+    
+    func playDidTap()
 }
 
-private typealias ViewProtocol = ViewInput
+private typealias ViewProtocol = ViewOutput
 
 // MARK: - PanelView Type
 
-final class PanelView: UIView, ViewInstantiable {
+final class PanelView: View<ShowcaseTableViewCellViewModel> {
     @IBOutlet private weak var playButton: UIButton!
     @IBOutlet private(set) weak var leadingItemContainer: UIView!
     @IBOutlet private(set) weak var trailingItemContainer: UIView!
-    
-    var viewModel: ShowcaseTableViewCellViewModel!
     
     var leadingItem: PanelViewItem!
     var trailingItem: PanelViewItem!
@@ -43,10 +32,10 @@ final class PanelView: UIView, ViewInstantiable {
     ///   - parent: Instantiating view.
     ///   - viewModel: Coordinating view model.
     init(on parent: UIView, with viewModel: ShowcaseTableViewCellViewModel) {
-        self.viewModel = viewModel
         super.init(frame: parent.bounds)
         self.nibDidLoad()
         parent.addSubview(self)
+        self.viewModel = viewModel
         self.constraintToSuperview(parent)
         self.leadingItem = PanelViewItem(on: self.leadingItemContainer, with: viewModel)
         self.trailingItem = PanelViewItem(on: self.trailingItemContainer, with: viewModel)
@@ -56,23 +45,33 @@ final class PanelView: UIView, ViewInstantiable {
     required init?(coder: NSCoder) { fatalError() }
     
     deinit {
-        removeObservers()
+        viewDidUnbindObservers()
         leadingItem?.removeFromSuperview()
         trailingItem?.removeFromSuperview()
         leadingItem = nil
         trailingItem = nil
         viewModel = nil
     }
-}
-
-// MARK: - ViewProtocol Implementation
-
-extension PanelView: ViewProtocol {
-    fileprivate func viewDidConfigure() {
+    
+    override func viewDidConfigure() {
         playButton.layer.cornerRadius = 6.0
         playButton.addTarget(self, action: #selector(playDidTap), for: .touchUpInside)
     }
     
+    override func viewDidUnbindObservers() {
+        printIfDebug(.success, "Removed `PanelView` observers.")
+        leadingItem?.viewDidUnbindObservers()
+        trailingItem?.viewDidUnbindObservers()
+    }
+}
+
+// MARK: - ViewInstantiable Implementation
+
+extension PanelView: ViewInstantiable {}
+
+// MARK: - ViewProtocol Implementation
+
+extension PanelView: ViewProtocol {
     @objc
     fileprivate func playDidTap() {
         /// Allocate a new detail controller.
@@ -84,15 +83,5 @@ extension PanelView: ViewProtocol {
         coordinator.media = media
         coordinator.shouldScreenRotate = rotated
         coordinator.coordinate(to: .detail)
-    }
-}
-
-// MARK: - Observers
-
-extension PanelView {
-    func removeObservers() {
-        printIfDebug(.success, "Removed `PanelView` observers.")
-        leadingItem?.viewModel?.removeObservers()
-        trailingItem?.viewModel.removeObservers()
     }
 }

@@ -13,8 +13,10 @@ final class TabBarViewModel {
     var coordinator: TabBarCoordinator?
 }
 
-// MARK: - ViewControllerViewModel Implementation
+// MARK: - ViewModel Implementation
 
-extension TabBarViewModel: ViewModel, Coordinable {
-    func transform(input: Void) {}
-}
+extension TabBarViewModel: ViewModel {}
+
+// MARK: - Coordinable Implementation
+
+extension TabBarViewModel: Coordinable {}

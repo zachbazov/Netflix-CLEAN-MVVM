@@ -7,18 +7,29 @@
 
 import UIKit
 
+// MARK: - ViewModelProtocol Type
+
+private protocol ViewModelOutput {
+    var titleLabel: UILabel { get }
+    
+    func createLabel() -> UILabel
+}
+
+private typealias ViewModelProtocol = ViewModelOutput
+
 // MARK: - TableViewHeaderFooterView Type
 
-final class TableViewHeaderFooterView: UITableViewHeaderFooterView {
-    private var viewModel: TableViewHeaderFooterViewViewModel!
-    private lazy var titleLabel = createLabel()
+final class TableViewHeaderFooterView: TableViewHeaderView<TableViewHeaderFooterViewViewModel> {
+    fileprivate lazy var titleLabel = createLabel()
     /// Create a table view header view object.
     /// - Parameters:
     ///   - tableView: Corresponding table view.
     ///   - section: The represented section for the header.
     ///   - viewModel: Coordinating view model.
     /// - Returns: A table view header footer view.
-    static func create(on tableView: UITableView, for section: Int, with viewModel: HomeViewModel) -> TableViewHeaderFooterView {
+    static func create(on tableView: UITableView,
+                       for section: Int,
+                       with viewModel: HomeViewModel) -> TableViewHeaderFooterView {
         guard let cell = tableView.dequeueReusableHeaderFooterView(withIdentifier: reuseIdentifier) as? TableViewHeaderFooterView else {
             fatalError()
         }
@@ -32,12 +43,19 @@ final class TableViewHeaderFooterView: UITableViewHeaderFooterView {
     }
     
     required init?(coder: NSCoder) { fatalError() }
+    
+    override func viewDidConfigure(at index: Int, with homeViewModel: HomeViewModel) {
+        backgroundView = .init()
+        backgroundView?.backgroundColor = .black
+        
+        titleLabel.text = viewModel.title(homeViewModel.sections, forHeaderAt: index)
+    }
 }
 
-// MARK: - UI Setup
+// MARK: - ViewModelProtocol Implementation
 
-extension TableViewHeaderFooterView {
-    private func createLabel() -> UILabel {
+extension TableViewHeaderFooterView: ViewModelProtocol {
+    fileprivate func createLabel() -> UILabel {
         let label = UILabel()
         let font = UIFont.systemFont(ofSize: 17.0, weight: .heavy)
         label.font = font
@@ -45,12 +63,5 @@ extension TableViewHeaderFooterView {
         contentView.addSubview(label)
         label.constraintBottom(toParent: self, withLeadingAnchor: 8.0)
         return label
-    }
-    
-    private func viewDidConfigure(at index: Int, with homeViewModel: HomeViewModel) {
-        backgroundView = .init()
-        backgroundView?.backgroundColor = .black
-        
-        titleLabel.text = viewModel.title(homeViewModel.sections, forHeaderAt: index)
     }
 }

@@ -9,12 +9,6 @@ import UIKit
 
 // MARK: - ViewProtocol Type
 
-private protocol ViewInput {
-    static func create(on tableView: UITableView,
-                       for indexPath: IndexPath,
-                       with viewModel: HomeViewModel) -> ShowcaseTableViewCell
-}
-
 private protocol ViewOutput {
     var showcaseView: ShowcaseView! { get }
     var viewModel: ShowcaseTableViewCellViewModel! { get }

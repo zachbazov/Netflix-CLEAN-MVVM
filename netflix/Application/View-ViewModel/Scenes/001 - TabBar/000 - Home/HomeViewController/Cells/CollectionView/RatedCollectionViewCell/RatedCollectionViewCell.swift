@@ -7,21 +7,21 @@
 
 import UIKit
 
+// MARK: - ViewProtocol Type
+
+private protocol ViewOutput {
+    associatedtype T
+    var layerView: UIView { get }
+    var textLayer: T { get }
+}
+
+private typealias ViewProtocol = ViewOutput
+
 // MARK: - RatedCollectionViewCell Type
 
 final class RatedCollectionViewCell: CollectionViewCell {
-    /// A text layer representation for the cell.
-    private final class TextLayer: CATextLayer {
-        override func draw(in ctx: CGContext) {
-            ctx.saveGState()
-            ctx.translateBy(x: .zero, y: .zero)
-            super.draw(in: ctx)
-            ctx.restoreGState()
-        }
-    }
-    
-    private let layerView = UIView()
-    private let textLayer = TextLayer()
+    fileprivate let layerView = UIView()
+    fileprivate let textLayer = TextLayer()
     
     deinit {
         textLayer.removeFromSuperlayer()
@@ -30,7 +30,7 @@ final class RatedCollectionViewCell: CollectionViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        self.viewDidLoad()
+        viewDidLoad()
     }
     
     override func prepareForReuse() {
@@ -38,12 +38,18 @@ final class RatedCollectionViewCell: CollectionViewCell {
         textLayer.string = nil
     }
     
+    override func viewDidLoad() {
+        // Add the view to the hierarchy.
+        contentView.addSubview(layerView)
+        // Constraint the view.
+        layerView.constraintBottom(toParent: self.contentView, withHeightAnchor: bounds.height / 2)
+    }
+    
     override func viewDidConfigure(with viewModel: CollectionViewCellViewModel) {
-        /// Apply base configuartion.
         super.viewDidConfigure(with: viewModel)
         
         guard let indexPath = viewModel.indexPath as IndexPath? else { return }
-        /// In-case of first cell index, do nothing.
+        // In-case of first cell index, do nothing.
         if indexPath.row == .zero {
             textLayer.frame = CGRect(x: 0.0, y: -8.0, width: bounds.width, height: 144.0)
         } else {
@@ -51,7 +57,7 @@ final class RatedCollectionViewCell: CollectionViewCell {
             /// to make the effect that the text layers collide with other cells.
             textLayer.frame = CGRect(x: -8.0, y: -8.0, width: bounds.width, height: 144.0)
         }
-        /// Increase the index path by one, start indexing from 1.
+        // Increase the index path by one, start indexing from 1.
         let index = String(describing: indexPath.row + 1)
         let attributedString = NSAttributedString(
             string: index,
@@ -59,18 +65,27 @@ final class RatedCollectionViewCell: CollectionViewCell {
                          .strokeColor: UIColor.white,
                          .strokeWidth: -2.5,
                          .foregroundColor: UIColor.black.cgColor])
-        /// Add the layer to the view hierarchy.
+        // Add the layer to the view hierarchy.
         layerView.layer.insertSublayer(textLayer, at: 1)
-        /// Set the text value.
+        // Set the text value.
         textLayer.string = attributedString
     }
 }
 
-// MARK: - UI Setup
+// MARK: - ViewProtocol Implementation
+
+extension RatedCollectionViewCell: ViewProtocol {}
+
+// MARK: - TextLayer Type
 
 extension RatedCollectionViewCell {
-    private func viewDidLoad() {
-        contentView.addSubview(layerView)
-        layerView.constraintBottom(toParent: self.contentView, withHeightAnchor: bounds.height / 2)
+    /// A text layer representation for the cell.
+    fileprivate final class TextLayer: CATextLayer {
+        override func draw(in ctx: CGContext) {
+            ctx.saveGState()
+            ctx.translateBy(x: .zero, y: .zero)
+            super.draw(in: ctx)
+            ctx.restoreGState()
+        }
     }
 }

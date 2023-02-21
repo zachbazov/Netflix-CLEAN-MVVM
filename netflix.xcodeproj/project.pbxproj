@@ -167,6 +167,7 @@
 		A1AC9F9C299FA80B00DAD66D /* AuthServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1AC9F9B299FA80B00DAD66D /* AuthServiceTests.swift */; };
 		A1AC9FA529A24D1600DAD66D /* APIBundleLoading.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1AC9FA429A24D1600DAD66D /* APIBundleLoading.swift */; };
 		A1AC9FA729A3617400DAD66D /* ViewLifecycleBehavior.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1AC9FA629A3617400DAD66D /* ViewLifecycleBehavior.swift */; };
+		A1AC9FAC29A4D1A300DAD66D /* TableViewHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1AC9FAB29A4D1A300DAD66D /* TableViewHeaderView.swift */; };
 		A1AD25A028D2987B00F793B3 /* ShowcaseTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1AD259F28D2987B00F793B3 /* ShowcaseTableViewCell.swift */; };
 		A1AD25A228D29A1000F793B3 /* ShowcaseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1AD25A128D29A1000F793B3 /* ShowcaseView.swift */; };
 		A1AD25A428D29A7800F793B3 /* ShowcaseView.xib in Resources */ = {isa = PBXBuildFile; fileRef = A1AD25A328D29A7800F793B3 /* ShowcaseView.xib */; };
@@ -453,6 +454,7 @@
 		A1AC9F9B299FA80B00DAD66D /* AuthServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthServiceTests.swift; sourceTree = "<group>"; };
 		A1AC9FA429A24D1600DAD66D /* APIBundleLoading.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIBundleLoading.swift; sourceTree = "<group>"; };
 		A1AC9FA629A3617400DAD66D /* ViewLifecycleBehavior.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewLifecycleBehavior.swift; sourceTree = "<group>"; };
+		A1AC9FAB29A4D1A300DAD66D /* TableViewHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableViewHeaderView.swift; sourceTree = "<group>"; };
 		A1AD259F28D2987B00F793B3 /* ShowcaseTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowcaseTableViewCell.swift; sourceTree = "<group>"; };
 		A1AD25A128D29A1000F793B3 /* ShowcaseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowcaseView.swift; sourceTree = "<group>"; };
 		A1AD25A328D29A7800F793B3 /* ShowcaseView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ShowcaseView.xib; sourceTree = "<group>"; };
@@ -1441,6 +1443,9 @@
 				A1B70A6E293D578200C718C6 /* View.swift */,
 				A1B70A70293D578600C718C6 /* ViewModel.swift */,
 				A1B70A89293E5E0400C718C6 /* Coordinate.swift */,
+				A1E81D1528CFE2D800D044EA /* TableViewCell.swift */,
+				A1AC9FAB29A4D1A300DAD66D /* TableViewHeaderView.swift */,
+				A1B480BD293686570041418D /* CollectionViewCell */,
 			);
 			path = Base;
 			sourceTree = "<group>";
@@ -1614,13 +1619,13 @@
 			path = SignInViewController;
 			sourceTree = "<group>";
 		};
-		A1B480BD293686570041418D /* Utils */ = {
+		A1B480BD293686570041418D /* CollectionViewCell */ = {
 			isa = PBXGroup;
 			children = (
 				A1E81D1328CFE2C900D044EA /* CollectionViewCell.swift */,
 				A186921B28CA2ED20087DE3B /* CollectionViewCellViewModel.swift */,
 			);
-			path = Utils;
+			path = CollectionViewCell;
 			sourceTree = "<group>";
 		};
 		A1B70A86293E5BB900C718C6 /* TableViewHeaderFooterView */ = {
@@ -1630,14 +1635,6 @@
 				A1B68F2B2923CB5300FF5F18 /* TableViewHeaderFooterViewViewModel.swift */,
 			);
 			path = TableViewHeaderFooterView;
-			sourceTree = "<group>";
-		};
-		A1B70A87293E5BFD00C718C6 /* Utils */ = {
-			isa = PBXGroup;
-			children = (
-				A1E81D1528CFE2D800D044EA /* TableViewCell.swift */,
-			);
-			path = Utils;
 			sourceTree = "<group>";
 		};
 		A1B70A97293EC2CA00C718C6 /* Protocols */ = {
@@ -1759,7 +1756,6 @@
 		A1E81D1128CFE2B900D044EA /* CollectionView */ = {
 			isa = PBXGroup;
 			children = (
-				A1B480BD293686570041418D /* Utils */,
 				A1E81D3528D011F100D044EA /* RatedCollectionViewCell */,
 				A1E81D3628D0120000D044EA /* ResumableCollectionViewCell */,
 				A1E81D3728D0120600D044EA /* StandardCollectionViewCell */,
@@ -1770,7 +1766,6 @@
 		A1E81D1228CFE2BD00D044EA /* TableView */ = {
 			isa = PBXGroup;
 			children = (
-				A1B70A87293E5BFD00C718C6 /* Utils */,
 				A1AD25AB28D2A6C200F793B3 /* ShowcaseTableViewCell */,
 				A1B70A86293E5BB900C718C6 /* TableViewHeaderFooterView */,
 			);
@@ -1975,6 +1970,7 @@
 				A1B70A94293E9FA400C718C6 /* NavigationController.swift in Sources */,
 				A18B994228BFD9C70077A5A6 /* Section.swift in Sources */,
 				A1C7E7A9292A784A004690B9 /* AuthService.swift in Sources */,
+				A1AC9FAC29A4D1A300DAD66D /* TableViewHeaderView.swift in Sources */,
 				A1B0DE562954590E00307866 /* UITableView+ContentInset.swift in Sources */,
 				A1B70AA729400B0E00C718C6 /* SignUpViewModel.swift in Sources */,
 				A1BA1DAC28D9D42A00730EA8 /* NavigationOverlayView.swift in Sources */,

@@ -9,23 +9,21 @@ import Foundation
 
 // MARK: - ViewModelProtocol Type
 
-private protocol ViewModelInput {
-    func signUpButtonDidTap()
-    func signUpRequest()
-}
-
 private protocol ViewModelOutput {
     var name: String? { get }
     var email: String? { get }
     var password: String? { get }
     var passwordConfirm: String? { get }
+    
+    func signUpButtonDidTap()
+    func signUpRequest()
 }
 
-private typealias ViewModelProtocol = ViewModelInput & ViewModelOutput
+private typealias ViewModelProtocol = ViewModelOutput
 
 // MARK: - SignUpViewModel Type
 
-final class SignUpViewModel: ViewModel {
+final class SignUpViewModel {
     var coordinator: AuthCoordinator?
     private let viewModel: AuthViewModel
     
@@ -39,13 +37,17 @@ final class SignUpViewModel: ViewModel {
     }
 }
 
-extension SignUpViewModel: Coordinable {
-    func transform(input: Void) {}
-}
+// MARK: - ViewModel Implementation
 
-// MARK: - Methods
+extension SignUpViewModel: ViewModel {}
 
-extension SignUpViewModel {
+// MARK: - Coordinable Implementation
+
+extension SignUpViewModel: Coordinable {}
+
+// MARK: - ViewModelProtocol Implementation
+
+extension SignUpViewModel: ViewModelProtocol {
     /// Occurs once the sign up button has been tapped.
     @objc
     func signUpButtonDidTap() {
@@ -54,7 +56,7 @@ extension SignUpViewModel {
         signUpRequest()
     }
     /// Invokes a sign up request by the user credentials.
-    private func signUpRequest() {
+    fileprivate func signUpRequest() {
         let authService = Application.app.services.authentication
         let coordinator = Application.app.coordinator
         // Create a new user.

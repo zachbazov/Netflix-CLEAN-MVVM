@@ -7,9 +7,28 @@
 
 import Foundation
 
+// MARK: - ViewModelProtocol Type
+
+private protocol ViewModelOutput {
+    var indexPath: IndexPath { get }
+    var title: String { get }
+    var slug: String { get }
+    var posters: [String] { get }
+    var logos: [String] { get }
+    var posterImagePath: String { get }
+    var posterImageIdentifier: NSString { get }
+    var posterImageURL: URL! { get }
+    var logoImagePath: String { get }
+    var logoImageIdentifier: NSString { get }
+    var logoImageURL: URL! { get }
+    var presentedLogoAlignment: PresentedLogoAlignment { get }
+}
+
+private typealias ViewModelProtocol = ViewModelOutput
+
 // MARK: - CollectionViewCellViewModel Type
 
-struct CollectionViewCellViewModel: Equatable {
+struct CollectionViewCellViewModel {
     let indexPath: IndexPath
     let title: String
     let slug: String
@@ -43,3 +62,15 @@ struct CollectionViewCellViewModel: Equatable {
         self.logoImageURL = URL(string: self.logoImagePath)
     }
 }
+
+// MARK: - ViewModel Implementation
+
+extension CollectionViewCellViewModel: ViewModel {}
+
+// MARK: - ViewModelProtocol Implementation
+
+extension CollectionViewCellViewModel: ViewModelProtocol {}
+
+// MARK: - Equatable Implementation
+
+extension CollectionViewCellViewModel: Equatable {}

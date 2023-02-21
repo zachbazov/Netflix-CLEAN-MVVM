@@ -9,21 +9,19 @@ import Foundation
 
 // MARK: - ViewModelProtocol Type
 
-private protocol ViewModelInput {
+private protocol ViewModelOutput {
+    var email: String? { get }
+    var password: String? { get }
+    
     func signInButtonDidTap()
     func signInRequest()
 }
 
-private protocol ViewModelOutput {
-    var email: String? { get }
-    var password: String? { get }
-}
-
-private typealias ViewModelProtocol = ViewModelInput & ViewModelOutput
+private typealias ViewModelProtocol = ViewModelOutput
 
 // MARK: - SignInViewModel Type
 
-final class SignInViewModel: ViewModel {
+final class SignInViewModel {
     var coordinator: AuthCoordinator?
     private let viewModel: AuthViewModel
     
@@ -33,9 +31,13 @@ final class SignInViewModel: ViewModel {
     init(with viewModel: AuthViewModel) {
         self.viewModel = viewModel
     }
-    
-    func transform(input: Void) {}
 }
+
+// MARK: - ViewModel Implementation
+
+extension SignInViewModel: ViewModel {}
+
+// MARK: - Coordinable Implementation
 
 extension SignInViewModel: Coordinable {}
 

@@ -7,9 +7,17 @@
 
 import UIKit
 
+// MARK: - ViewProtocol Type
+
+private protocol ViewOutput {
+    var panelView: PanelView! { get }
+}
+
+private typealias ViewProtocol = ViewOutput
+
 // MARK: - ShowcaseView Type
 
-final class ShowcaseView: View<ShowcaseViewViewModel>, ViewInstantiable {
+final class ShowcaseView: View<ShowcaseViewViewModel> {
     @IBOutlet private(set) weak var posterImageView: UIImageView!
     @IBOutlet private(set) weak var logoImageView: UIImageView!
     @IBOutlet private weak var bottomGradientView: UIView!
@@ -58,6 +66,14 @@ final class ShowcaseView: View<ShowcaseViewViewModel>, ViewInstantiable {
         genresLabel.attributedText = viewModel.attributedGenres
     }
 }
+
+// MARK: - ViewInstantiable Implementation
+
+extension ShowcaseView: ViewInstantiable {}
+
+// MARK: - ViewProtocol Implementation
+
+extension ShowcaseView: ViewProtocol {}
 
 // MARK: - Private UI Implementation
 

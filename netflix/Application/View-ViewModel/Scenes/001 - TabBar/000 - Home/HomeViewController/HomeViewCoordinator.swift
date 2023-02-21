@@ -10,8 +10,6 @@ import UIKit
 // MARK: - CoordinatorProtocol Type
 
 private protocol CoordinatorInput {
-    func createNavigationController() -> UINavigationController?
-    
     func deploy(_ screen: HomeViewCoordinator.Screen)
 }
 
@@ -20,6 +18,8 @@ private protocol CoordinatorOutput {
     var section: Section? { get }
     var media: Media? { get }
     var shouldScreenRotate: Bool { get }
+    
+    func createNavigationController() -> UINavigationController?
 }
 
 private typealias CoordinatorProtocol = CoordinatorInput & CoordinatorOutput

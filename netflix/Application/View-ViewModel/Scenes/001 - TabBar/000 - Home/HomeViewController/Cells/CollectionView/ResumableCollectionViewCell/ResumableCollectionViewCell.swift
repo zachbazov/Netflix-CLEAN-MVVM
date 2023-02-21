@@ -20,23 +20,19 @@ final class ResumableCollectionViewCell: CollectionViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        self.viewDidLoad()
+        viewDidDeploySubviews()
+    }
+    
+    override func viewDidDeploySubviews() {
+        setupPlayButton()
+        setupProgressView()
+        setupGradients()
     }
 }
 
-// MARK: - UI Setup
+// MARK: - Private UI Implementation
 
 extension ResumableCollectionViewCell {
-    private func viewDidLoad() {
-        setupSubviews()
-    }
-    
-    private func setupSubviews() {
-        setupPlayButton()
-        setupProgressView()
-        setupGradientView()
-    }
-    
     private func setupPlayButton() {
         playButton.layer.borderWidth = 2.0
         playButton.layer.borderColor = UIColor.white.cgColor
@@ -48,7 +44,7 @@ extension ResumableCollectionViewCell {
         progressView.clipsToBounds = true
     }
     
-    private func setupGradientView() {
+    private func setupGradients() {
         gradientView.addGradientLayer(colors: [.clear, .black.withAlphaComponent(0.75)],
                                       locations: [0.0, 1.0])
     }

@@ -10,32 +10,21 @@ import UIKit
 // MARK: - TabBarConfiguration Type
 
 private struct TabBarConfiguration {
-    private struct TabBarItem {
-        let title: String
-        let image: UIImage
-        let tag: Int
-        var navigationBarHidden: Bool?
-        /// Apply configuration a tab bar item.
-        /// - Parameter controller: Receiver view controller.
-        func applyConfig<T: UIViewController>(for controller: T) {
-            let attributes = NSAttributedString.tabBarItemAttributes
-            controller.tabBarItem = UITabBarItem(title: title, image: image, tag: tag)
-            controller.tabBarItem.setTitleTextAttributes(attributes, for: .normal)
-            /// In-case the receiver view controller wrapper is a navigation controller type.
-            if let controller = controller as? UINavigationController {
-                controller.setNavigationBarHidden(navigationBarHidden ?? true, animated: false)
-            }
-        }
-    }
     /// Provide a tab bar item based on the screen type for a controller.
     /// - Parameters:
     ///   - screen: The screen type.
     ///   - controller: The controller to be applied on.
     func tabBarItem(for screen: TabBarCoordinator.Screen, with controller: UIViewController) {
-        if case .home = screen { homeTabItem(for: controller as! UINavigationController) }
-        else if case .news = screen { newsTabItem(for: controller as! UINavigationController) }
-        else if case .search = screen { searchTabItem(for: controller as! UINavigationController) }
-        else { downloadsTabItem(for: controller as! UINavigationController) }
+        switch screen {
+        case .home:
+            homeTabItem(for: controller as! UINavigationController)
+        case .news:
+            newsTabItem(for: controller as! UINavigationController)
+        case .search:
+            searchTabItem(for: controller as! UINavigationController)
+        case .downloads:
+            downloadsTabItem(for: controller as! UINavigationController)
+        }
     }
     /// Create an Home tab bar item.
     /// - Parameter controller: Tab's root controller.
@@ -80,16 +69,30 @@ private struct TabBarConfiguration {
     }
 }
 
-// MARK: - CoordinatorProtocol Type
+// MARK: - Configuration Item Type
 
-private protocol CoordinatorInput {
-    func createHomeController() -> UINavigationController
-    func createNewsController() -> UINavigationController
-    func createSearchController() -> UINavigationController
-    func createDownloadsController() -> UINavigationController
-    
-    func deploy()
+extension TabBarConfiguration {
+    /// Item representation type.
+    private struct TabBarItem {
+        let title: String
+        let image: UIImage
+        let tag: Int
+        var navigationBarHidden: Bool?
+        /// Apply configuration a tab bar item.
+        /// - Parameter controller: Receiver view controller.
+        func applyConfig<T: UIViewController>(for controller: T) {
+            let attributes = NSAttributedString.tabBarItemAttributes
+            controller.tabBarItem = UITabBarItem(title: title, image: image, tag: tag)
+            controller.tabBarItem.setTitleTextAttributes(attributes, for: .normal)
+            /// In-case the receiver view controller wrapper is a navigation controller type.
+            if let controller = controller as? UINavigationController {
+                controller.setNavigationBarHidden(navigationBarHidden ?? true, animated: false)
+            }
+        }
+    }
 }
+
+// MARK: - CoordinatorProtocol Type
 
 private protocol CoordinatorOutput {
     var configuration: TabBarConfiguration { get }
@@ -98,9 +101,16 @@ private protocol CoordinatorOutput {
     var news: UINavigationController! { get }
     var search: UINavigationController! { get }
     var downloads: UIViewController! { get }
+    
+    func createHomeController() -> UINavigationController
+    func createNewsController() -> UINavigationController
+    func createSearchController() -> UINavigationController
+    func createDownloadsController() -> UINavigationController
+    
+    func deploy()
 }
 
-private typealias CoordinatorProtocol = CoordinatorInput & CoordinatorOutput
+private typealias CoordinatorProtocol = CoordinatorOutput
 
 // MARK: - TabBarCoordinator Type
 

@@ -7,6 +7,26 @@
 
 import UIKit
 
+// MARK: - ViewProtocol Type
+
+private protocol ViewInput {
+    associatedtype T: ViewModel
+    
+    func dataDidDownload(with viewModel: CollectionViewCellViewModel, completion: (() -> Void)?)
+    func viewDidLoad(media: Media, with viewModel: CollectionViewCellViewModel)
+    func viewDidConfigure(with viewModel: T)
+    func logoDidAlign(_ constraint: NSLayoutConstraint, with viewModel: CollectionViewCellViewModel)
+}
+
+private protocol ViewOutput {
+    associatedtype T: ViewModel
+    
+    var viewModel: T! { get }
+    var representedIdentifier: NSString? { get }
+}
+
+private typealias ViewProtocol = ViewInput & ViewOutput
+
 // MARK: - CollectionViewCell Type
 
 class CollectionViewCell: UICollectionViewCell {
@@ -15,8 +35,8 @@ class CollectionViewCell: UICollectionViewCell {
     @IBOutlet private weak var placeholderLabel: UILabel!
     @IBOutlet private weak var logoBottomConstraint: NSLayoutConstraint!
     
-    private var viewModel: CollectionViewCellViewModel!
-    private var representedIdentifier: NSString?
+    var viewModel: CollectionViewCellViewModel!
+    fileprivate var representedIdentifier: NSString?
     /// Create a collection view cell object.
     /// - Parameters:
     ///   - collectionView: The referenced collection view.
@@ -56,7 +76,7 @@ class CollectionViewCell: UICollectionViewCell {
     /// Overridable configuration operation.
     /// Configure the view based on the view model.
     /// - Parameter viewModel: Coordinating view model.
-    public func viewDidConfigure(with viewModel: CollectionViewCellViewModel) {
+    func viewDidConfigure(with viewModel: CollectionViewCellViewModel) {
         guard representedIdentifier == viewModel.slug as NSString? else { return }
         
         let posterImage = AsyncImageService.shared.object(for: viewModel.posterImageIdentifier)
@@ -68,17 +88,12 @@ class CollectionViewCell: UICollectionViewCell {
         
         logoDidAlign(logoBottomConstraint, with: viewModel)
     }
-}
-
-// MARK: - UI Setup
-
-extension CollectionViewCell {
     /// Asynchronous download/load object resources.
     /// - Parameters:
     ///   - viewModel: Coordinating view model.
     ///   - completion: Completion handler.
-    private func dataDidDownload(with viewModel: CollectionViewCellViewModel,
-                                 completion: (() -> Void)?) {
+    func dataDidDownload(with viewModel: CollectionViewCellViewModel,
+                                  completion: (() -> Void)?) {
         AsyncImageService.shared.load(
             url: viewModel.posterImageURL,
             identifier: viewModel.posterImageIdentifier) { _ in
@@ -94,7 +109,7 @@ extension CollectionViewCell {
     /// - Parameters:
     ///   - media: Corresponding media object.
     ///   - viewModel: Coordinating view model.
-    private func viewDidLoad(media: Media, with viewModel: CollectionViewCellViewModel) {
+    func viewDidLoad(media: Media, with viewModel: CollectionViewCellViewModel) {
         backgroundColor = .black
         
         placeholderLabel.alpha = 1.0
@@ -113,8 +128,8 @@ extension CollectionViewCell {
     /// - Parameters:
     ///   - constraint: The value of the bottom constraint.
     ///   - viewModel: Coordinating view model.
-    private func logoDidAlign(_ constraint: NSLayoutConstraint,
-                              with viewModel: CollectionViewCellViewModel) {
+    func logoDidAlign(_ constraint: NSLayoutConstraint,
+                               with viewModel: CollectionViewCellViewModel) {
         switch viewModel.presentedLogoAlignment {
         case .top: constraint.constant = bounds.maxY - logoImageView.bounds.height - 8.0
         case .midTop: constraint.constant = 64.0
@@ -123,4 +138,16 @@ extension CollectionViewCell {
         case .bottom: constraint.constant = 8.0
         }
     }
+    
+    func viewDidLoad() {}
+    func viewDidDeploySubviews() {}
+    func viewDidConfigure() {}
 }
+
+// MARK: - ViewProtocol Implementation
+
+extension CollectionViewCell: ViewProtocol {}
+
+// MARK: - ViewLifecycleBehavior Implementation
+
+extension CollectionViewCell: ViewLifecycleBehavior {}

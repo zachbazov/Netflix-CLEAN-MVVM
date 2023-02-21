@@ -14,3 +14,7 @@ struct TableViewHeaderFooterViewViewModel {
         return String(describing: sections[index].title)
     }
 }
+
+// MARK: - ViewModel Implementation
+
+extension TableViewHeaderFooterViewViewModel: ViewModel {}

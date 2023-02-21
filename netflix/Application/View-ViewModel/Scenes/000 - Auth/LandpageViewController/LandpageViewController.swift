@@ -25,28 +25,32 @@ final class LandpageViewController: Controller<AuthViewModel> {
     
     private var hasGradient = false
     
-    // MARK: UIViewController Lifecycle
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         super.viewDidLoadBehaviors()
-        setupSubviews()
+        viewDidDeploySubviews()
+        viewDidTargetSubviews()
     }
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         setupGradients()
     }
+    
+    override func viewDidDeploySubviews() {
+        setupNavigationBarButtonItem()
+    }
+    
+    override func viewDidTargetSubviews() {
+        signUpButton.addTarget(viewModel.coordinator,
+                               action: #selector(viewModel.coordinator!.deploy(_:)),
+                               for: .touchUpInside)
+    }
 }
 
 // MARK: - Private UI Implementation
 
 extension LandpageViewController {
-    private func setupSubviews() {
-        setupNavigationBarButtonItem()
-        setupTargets()
-    }
-    
     private func setupNavigationBarButtonItem() {
         let string = Localization.Auth.Landpage().signInBarButton
         let button = UIBarButtonItem(title: string,
@@ -54,12 +58,6 @@ extension LandpageViewController {
                                      target: viewModel.coordinator,
                                      action: #selector(viewModel.coordinator!.deploy(_:)))
         navigationItem.rightBarButtonItem = button
-    }
-    
-    private func setupTargets() {
-        signUpButton.addTarget(viewModel.coordinator,
-                               action: #selector(viewModel.coordinator!.deploy(_:)),
-                               for: .touchUpInside)
     }
     
     private func setupGradients() {

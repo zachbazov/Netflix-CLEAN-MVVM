@@ -20,7 +20,6 @@ private protocol ViewInput {
     static func create(on tableView: UITableView,
                        for indexPath: IndexPath,
                        with viewModel: HomeViewModel) -> TableViewCell<T>
-    func viewDidLoad()
     func collectionViewDidLayout(for section: Section, with viewModel: HomeViewModel)
 }
 
@@ -29,6 +28,9 @@ private protocol ViewOutput {
     var collectionView: UICollectionView { get }
     var dataSource: HomeCollectionViewDataSource<T>! { get }
     var layout: CollectionViewLayout! { get }
+    
+    func createCollectionView() -> UICollectionView
+    func viewDidLoad()
 }
 
 private typealias ViewProtocol = ViewInput & ViewOutput
@@ -92,12 +94,8 @@ extension TableViewCell: ViewProtocol {
             collectionView.setCollectionViewLayout(layout, animated: false)
         }
     }
-}
-
-// MARK: - Private UI Implementation
-
-extension TableViewCell {
-    private func createCollectionView() -> UICollectionView {
+    
+    fileprivate func createCollectionView() -> UICollectionView {
         let collectionView = UICollectionView(frame: bounds, collectionViewLayout: .init())
         collectionView.backgroundColor = .black
         collectionView.showsVerticalScrollIndicator = false

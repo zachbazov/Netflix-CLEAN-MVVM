@@ -7,14 +7,32 @@
 
 import UIKit
 
+// MARK: - ConfigurationProtocol Type
+
+private protocol ConfigurationOutput {
+    var view: PanelViewItem? { get }
+    var viewModel: ShowcaseTableViewCellViewModel { get }
+    var gestureRecognizers: [PanelViewItemConfiguration.GestureGecognizer] { get }
+    var tapRecognizer: UITapGestureRecognizer! { get }
+    var longPressRecognizer: UILongPressGestureRecognizer! { get }
+    
+    func viewDidRegisterRecognizers()
+    func selectIfNeeded()
+    func viewDidUpdate()
+    func viewDidTap()
+    func viewDidLongPress()
+}
+
+private typealias ConfigurationProtocol = ConfigurationOutput
+
 // MARK: - PanelViewItemConfiguration Type
 
 final class PanelViewItemConfiguration {
     fileprivate weak var view: PanelViewItem?
-    private var viewModel: ShowcaseTableViewCellViewModel
-    private var gestureRecognizers: [GestureGecognizer]
-    private var tapRecognizer: UITapGestureRecognizer!
-    private var longPressRecognizer: UILongPressGestureRecognizer!
+    fileprivate var viewModel: ShowcaseTableViewCellViewModel
+    fileprivate var gestureRecognizers: [GestureGecognizer]
+    fileprivate var tapRecognizer: UITapGestureRecognizer!
+    fileprivate var longPressRecognizer: UILongPressGestureRecognizer!
     /// Create a new panel view object.
     /// - Parameters:
     ///   - view: Instantiating view.
@@ -27,7 +45,7 @@ final class PanelViewItemConfiguration {
         self.view = view
         self.gestureRecognizers = gestureRecognizers
         self.viewDidRegisterRecognizers()
-        self.viewDidConfigure()
+        self.viewDidUpdate()
     }
     
     deinit {
@@ -38,7 +56,7 @@ final class PanelViewItemConfiguration {
     }
 }
 
-// MARK: - UI Setup
+// MARK: - GestureRecognizer Type
 
 extension PanelViewItemConfiguration {
     /// Gesture representation type.
@@ -46,13 +64,22 @@ extension PanelViewItemConfiguration {
         case tap
         case longPress
     }
+}
+
+// MARK: - Item Type
+
+extension PanelViewItemConfiguration {
     /// View representation type.
     enum Item: Int {
         case myList
         case info
     }
-    
-    private func viewDidRegisterRecognizers() {
+}
+
+// MARK: - ConfigurationProtocol Implementation
+
+extension PanelViewItemConfiguration: ConfigurationProtocol {
+    fileprivate func viewDidRegisterRecognizers() {
         if gestureRecognizers.contains(.tap) {
             tapRecognizer = .init(target: self, action: #selector(viewDidTap))
             view?.addGestureRecognizer(tapRecognizer)
@@ -63,7 +90,7 @@ extension PanelViewItemConfiguration {
         }
     }
     
-    private func selectIfNeeded() {
+    fileprivate func selectIfNeeded() {
         guard let view = view,
               let item = Item(rawValue: view.tag) else {
             return
@@ -74,7 +101,7 @@ extension PanelViewItemConfiguration {
         }
     }
     
-    func viewDidConfigure() {
+    func viewDidUpdate() {
         guard let view = view, let viewModel = view.viewModel else { return }
         view.imageView.image = .init(systemName: viewModel.systemImage)
         view.titleLabel.text = viewModel.title
@@ -117,23 +144,24 @@ extension PanelViewItemConfiguration {
     func viewDidLongPress() {}
 }
 
+// MARK: - ViewProtocol Type
+
+private protocol ViewOutput {
+    var configuration: PanelViewItemConfiguration! { get }
+    
+    var isSelected: Bool { get }
+}
+
+private typealias ViewProtocol = ViewOutput
+
 // MARK: - PanelViewItem Type
 
-final class PanelViewItem: UIView, ViewInstantiable {
-    
-    // MARK: Outlet Properties
-    
+final class PanelViewItem: View<PanelViewItemViewModel> {
     @IBOutlet private(set) weak var titleLabel: UILabel!
     @IBOutlet private(set) weak var imageView: UIImageView!
     
-    // MARK: Type's Properties
-    
     private(set) var configuration: PanelViewItemConfiguration!
-    private(set) var viewModel: PanelViewItemViewModel!
     private(set) var isSelected = false
-    
-    // MARK: Initializer
-    
     /// Create a panel view item object.
     /// - Parameters:
     ///   - parent: Instantiating view.
@@ -146,15 +174,33 @@ final class PanelViewItem: UIView, ViewInstantiable {
         self.constraintToSuperview(parent)
         self.viewModel = PanelViewItemViewModel(item: self, with: viewModel.presentedMedia.value!)
         self.configuration = PanelViewItemConfiguration(view: self, gestureRecognizers: [.tap], with: viewModel)
+        self.viewDidBindObservers()
     }
     
     required init?(coder: NSCoder) { fatalError() }
-    
-    // MARK: Deinitializer
     
     deinit {
         configuration.view = nil
         configuration = nil
         viewModel = nil
     }
+    
+    override func viewDidBindObservers() {
+        viewModel.isSelected.observe(on: self) { [weak self] _ in
+            guard let self = self else { return }
+            self.configuration?.viewDidUpdate()
+        }
+    }
+    
+    override func viewDidUnbindObservers() {
+        viewModel.isSelected.remove(observer: self)
+    }
 }
+
+// MARK: - ViewInstantiable Implementation
+
+extension PanelViewItem: ViewInstantiable {}
+
+// MARK: - ViewProtocol Implementation
+
+extension PanelViewItem: ViewProtocol {}

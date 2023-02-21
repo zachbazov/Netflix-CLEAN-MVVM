@@ -26,14 +26,16 @@ final class SignUpViewController: Controller<SignUpViewModel> {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        viewDidConfigure()
+        viewDidDeploySubviews()
+        viewDidTargetSubviews()
     }
     
-    override func viewDidConfigure() {
+    override func viewDidDeploySubviews() {
         setAttributes(for: [nameTextField, emailTextField,
                             passwordTextField, passwordConfirmTextField])
+        
         signUpButton.setLayerBorder(.black, width: 1.5)
-        viewDidTargetSubviews()
+        
         didConfigureTitleView()
     }
     

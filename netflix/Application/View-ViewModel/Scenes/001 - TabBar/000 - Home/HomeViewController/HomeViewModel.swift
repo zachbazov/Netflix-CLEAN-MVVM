@@ -7,13 +7,6 @@
 
 import Foundation
 
-// MARK: - ViewModelNetworking Type
-
-private protocol ViewModelNetworking {
-    func loadSections()
-    func loadMedia()
-}
-
 // MARK: - ViewModelProtocol Type
 
 private protocol ViewModelInput {
@@ -69,80 +62,28 @@ final class HomeViewModel {
     }
 }
 
-// MARK: - Private UI Implementation
+// MARK: - ViewModel Implementation
 
-extension HomeViewModel {
+extension HomeViewModel: ViewModel {
     func viewDidLoad() {
+        ActivityIndicatorView.viewDidShow()
+        
         loadSections()
     }
     
-    private func dataDidDownload() {
+    func dataDidDownload() {
         let navigationViewModel = coordinator?.viewController?.navigationView.viewModel
         navigationViewModel?.navigationViewDidAppear()
         
         updateDataSource()
-    }
-    
-    private func updateDataSource() {
-        dataSourceState.value = .all
+        
+        ActivityIndicatorView.viewDidHide()
     }
 }
 
-// MARK: - ViewModel Implementation
+// MARK: - Coordinable Implementation
 
-extension HomeViewModel: ViewModel, Coordinable {
-    func transform(input: Void) {}
-}
-
-// MARK: - ViewModelNetworking Implementation
-
-extension HomeViewModel: ViewModelNetworking {
-    fileprivate func loadSections() {
-        sectionUseCase.repository.task = sectionUseCase.request(
-            for: SectionHTTPDTO.Response.self,
-            request: Any.self,
-            cached: { _ in },
-            completion: { [weak self] result in
-                guard let self = self else { return }
-                if case let .success(response) = result {
-                    /// Allocate sections with the response data.
-                    self.sections = response.data.toDomain()
-                    /// Execute media fetching operation.
-                    self.loadMedia()
-                }
-                if case let .failure(error) = result {
-                    printIfDebug(.error, "\(error)")
-                    // Perform a sign out operation, and send the user to the auth screen.
-                    let authService = Application.app.services.authentication
-                    authService.signOut()
-                }
-            })
-    }
-    
-    fileprivate func loadMedia() {
-        mediaUseCase.repository.task = mediaUseCase.request(
-            for: MediaHTTPDTO.Response.self,
-            request: Any.self,
-            cached: { [weak self] responseDTO in
-                guard let self = self, let response = responseDTO else { return }
-                mainQueueDispatch {
-                    self.media = response.data.toDomain()
-                    
-                    self.dataDidDownload()
-                }
-            }, completion: { [weak self] result in
-                guard let self = self else { return }
-                switch result {
-                case .success(let response):
-                    self.media = response.data.toDomain()
-                    
-                    self.dataDidDownload()
-                case .failure(let error):
-                    printIfDebug(.error, "\(error)")
-                }
-            })
-    }
-}
+extension HomeViewModel: Coordinable {}
 
 // MARK: - ViewModelProtocol Implementation
 
@@ -234,5 +175,59 @@ extension HomeViewModel: ViewModelProtocol {
                     .filter { $0.genres.contains(sections[index.rawValue].title) }
             }
         }
+    }
+}
+
+// MARK: - Private UI Implementation
+
+extension HomeViewModel {
+    private func updateDataSource() {
+        dataSourceState.value = .all
+    }
+    
+    private func loadSections() {
+        sectionUseCase.repository.task = sectionUseCase.request(
+            for: SectionHTTPDTO.Response.self,
+            request: Any.self,
+            cached: { _ in },
+            completion: { [weak self] result in
+                guard let self = self else { return }
+                if case let .success(response) = result {
+                    // Allocate sections with the response data.
+                    self.sections = response.data.toDomain()
+                    // Execute media fetching operation.
+                    self.loadMedia()
+                }
+                if case let .failure(error) = result {
+                    printIfDebug(.error, "\(error)")
+                    // Perform a sign out operation, and send the user to the auth screen.
+                    let authService = Application.app.services.authentication
+                    authService.signOut()
+                }
+            })
+    }
+    
+    private func loadMedia() {
+        mediaUseCase.repository.task = mediaUseCase.request(
+            for: MediaHTTPDTO.Response.self,
+            request: Any.self,
+            cached: { [weak self] responseDTO in
+                guard let self = self, let response = responseDTO else { return }
+                mainQueueDispatch {
+                    self.media = response.data.toDomain()
+                    
+                    self.dataDidDownload()
+                }
+            }, completion: { [weak self] result in
+                guard let self = self else { return }
+                switch result {
+                case .success(let response):
+                    self.media = response.data.toDomain()
+                    
+                    self.dataDidDownload()
+                case .failure(let error):
+                    printIfDebug(.error, "\(error)")
+                }
+            })
     }
 }

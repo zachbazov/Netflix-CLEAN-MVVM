@@ -25,7 +25,7 @@ private typealias ViewModelProtocol = ViewModelOutput
 
 // MARK: - ShowcaseViewViewModel Type
 
-struct ShowcaseViewViewModel: ViewModelProtocol {
+struct ShowcaseViewViewModel {
     let slug: String
     let genres: [String]
     let posterImagePath: String
@@ -52,6 +52,10 @@ struct ShowcaseViewViewModel: ViewModelProtocol {
     }
 }
 
-extension ShowcaseViewViewModel: ViewModel {
-    func transform(input: Void) {}
-}
+// MARK: - ViewModel Implementation
+
+extension ShowcaseViewViewModel: ViewModel {}
+
+// MARK: - ViewModelProtocol Implementation
+
+extension ShowcaseViewViewModel: ViewModelProtocol {}

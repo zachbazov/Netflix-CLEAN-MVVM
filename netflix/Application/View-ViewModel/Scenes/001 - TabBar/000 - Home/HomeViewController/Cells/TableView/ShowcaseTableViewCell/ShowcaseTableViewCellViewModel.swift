@@ -9,18 +9,15 @@ import Foundation
 
 // MARK: - ViewModelProtocol Type
 
-private protocol ViewModelInput {
-    func viewDidLoad()
-    func viewMediaDidGenerate()
-}
-
 private protocol ViewModelOutput {
     var presentedMedia: Observable<Media?> { get }
     var myList: MyList { get }
     var sectionAt: (HomeTableViewDataSource.Index) -> Section { get }
+    
+    func viewMediaDidGenerate()
 }
 
-private typealias ViewModelProtocol = ViewModelInput & ViewModelOutput
+private typealias ViewModelProtocol = ViewModelOutput
 
 // MARK: - ShowcaseTableViewCellViewModel Type
 
@@ -44,9 +41,6 @@ struct ShowcaseTableViewCellViewModel {
 // MARK: - ViewModelProtocol Implementation
 
 extension ShowcaseTableViewCellViewModel: ViewModelProtocol {
-    fileprivate func viewDidLoad() {
-        viewMediaDidGenerate()
-    }
     /// Generate a media object for each (home) data source state and fixed it.
     fileprivate func viewMediaDidGenerate() {
         let homeViewModel = coordinator!.viewController!.viewModel!
@@ -72,5 +66,13 @@ extension ShowcaseTableViewCellViewModel: ViewModelProtocol {
         case .movies:
             presentedMedia.value = homeViewModel.showcases[.movies]
         }
+    }
+}
+
+// MARK: - ViewModel Implementation
+
+extension ShowcaseTableViewCellViewModel: ViewModel {
+    func viewDidLoad() {
+        viewMediaDidGenerate()
     }
 }

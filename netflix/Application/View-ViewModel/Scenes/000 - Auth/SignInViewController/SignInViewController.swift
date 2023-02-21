@@ -24,13 +24,15 @@ final class SignInViewController: Controller<SignInViewModel> {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        viewDidConfigure()
+        viewDidDeploySubviews()
+        viewDidTargetSubviews()
     }
     
-    override func viewDidConfigure() {
+    override func viewDidDeploySubviews() {
         setAttributes(for: [emailTextField, passwordTextField])
+        
         signInButton.setLayerBorder(.black, width: 1.5)
-        viewDidTargetSubviews()
+        
         didConfigureTitleView()
     }
     

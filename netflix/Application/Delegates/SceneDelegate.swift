@@ -60,7 +60,7 @@ extension SceneDelegate: SceneObserverUnbinding {
             // Remove panel view observers.
             if let showcaseCell = homeController.dataSource.showcaseCell,
                let panelView = showcaseCell.showcaseView.panelView as PanelView? {
-                panelView.removeObservers()
+                panelView.viewDidUnbindObservers()
             }
             // Remove navigation & navigation overlay views observers.
             if let navigationView = homeController.navigationView,
