@@ -41,3 +41,15 @@ extension UIView {
         alpha = 1.0
     }
 }
+
+// MARK: - Blurness
+
+extension UIView {
+    func addBlurness() {
+        let blurEffect = UIBlurEffect(style: .dark)
+        let blurView = UIVisualEffectView(effect: blurEffect)
+        insertSubview(blurView, at: 0)
+        
+        blurView.constraintToSuperview(self)
+    }
+}

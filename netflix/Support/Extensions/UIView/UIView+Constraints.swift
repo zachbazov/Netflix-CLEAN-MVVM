@@ -49,6 +49,26 @@ extension UIView {
         ])
     }
     
+    func constraintTop(toParent view: UIView, constant: CGFloat, withHeightAnchor anchorValue: CGFloat, horizontalMargin: CGFloat) {
+        translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            topAnchor.constraint(equalTo: view.topAnchor, constant: constant),
+            leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: horizontalMargin),
+            trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -horizontalMargin),
+            heightAnchor.constraint(equalToConstant: anchorValue)
+        ])
+    }
+    
+    func constraintTop(toParent view: UIView, constant: CGFloat, width: CGFloat, height: CGFloat) {
+        translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            topAnchor.constraint(equalTo: view.topAnchor, constant: constant),
+            leadingAnchor.constraint(equalTo: view.trailingAnchor, constant: 0),
+            widthAnchor.constraint(equalToConstant: width),
+            heightAnchor.constraint(equalToConstant: height)
+        ])
+    }
+    
     func chainConstraintToCenter(linking aView: UIView,
                                  to bView: UIView,
                                  withTopAnchor topAnchorValue: CGFloat? = 8.0,
@@ -86,6 +106,17 @@ extension UIView {
             bView.leadingAnchor.constraint(equalTo: leadingAnchor),
             bView.trailingAnchor.constraint(equalTo: trailingAnchor),
             bView.bottomAnchor.constraint(equalTo: bottomAnchor)
+        ])
+    }
+    
+    func constraintAlertViewToWindow(withHorizontalMargin value: CGFloat, height: CGFloat) {
+        guard let window = Application.app.coordinator.window else { return }
+        translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            topAnchor.constraint(equalTo: window.topAnchor, constant: value),
+            leadingAnchor.constraint(equalTo: window.leadingAnchor, constant: value),
+            widthAnchor.constraint(equalToConstant: window.bounds.width - (value * 2)),
+            heightAnchor.constraint(equalToConstant: height)
         ])
     }
 }

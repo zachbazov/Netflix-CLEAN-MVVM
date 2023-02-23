@@ -11,7 +11,10 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="LandpageViewController" customModule="netflix" customModuleProvider="target">
             <connections>
+                <outlet property="backgroundImageView" destination="ljo-Ym-7yw" id="XaA-hk-TFr"/>
                 <outlet property="bottomGradientView" destination="jH4-qh-zaO" id="r3d-z3-NTq"/>
+                <outlet property="descriptionTextView" destination="Cia-jA-2Wf" id="4Jk-Ho-Hhz"/>
+                <outlet property="headlineTextView" destination="xYO-IO-tMv" id="Rfu-rl-bsg"/>
                 <outlet property="signUpButton" destination="V4O-zc-QVg" id="9lu-nU-Fup"/>
                 <outlet property="statusBarGradientView" destination="gGS-wt-u6j" id="Fxg-yS-Vch"/>
                 <outlet property="topGradientView" destination="TIx-6l-aJy" id="6Sw-le-u4p"/>

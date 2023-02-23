@@ -51,14 +51,29 @@ extension SignUpViewModel: ViewModelProtocol {
     /// Occurs once the sign up button has been tapped.
     @objc
     func signUpButtonDidTap() {
-        ActivityIndicatorView.viewDidShow()
-        
         signUpRequest()
     }
     /// Invokes a sign up request by the user credentials.
     fileprivate func signUpRequest() {
         let authService = Application.app.services.authentication
         let coordinator = Application.app.coordinator
+        
+        let nameTextField = coordinator.authCoordinator.signUpController.nameTextField
+        let emailTextField = coordinator.authCoordinator.signUpController.emailTextField
+        let passTextField = coordinator.authCoordinator.signUpController.passwordTextField
+        let passConfirmTextField = coordinator.authCoordinator.signUpController.passwordConfirmTextField
+        emailTextField?.resignFirstResponder()
+        passTextField?.resignFirstResponder()
+        
+        guard !(nameTextField?.text?.isEmpty ?? false),
+              !(emailTextField?.text?.isEmpty ?? false),
+              !(passTextField?.text?.isEmpty ?? false),
+              !(passConfirmTextField?.text?.isEmpty ?? false) else {
+            printIfDebug(.debug, "bad credentials")
+            return
+        }
+        // Present indicator.
+        ActivityIndicatorView.viewDidShow()
         // Create a new user.
         let userDTO = UserDTO(name: name,
                               email: email,
@@ -67,9 +82,18 @@ extension SignUpViewModel: ViewModelProtocol {
         // Create a new sign up request user-based.
         let requestDTO = UserHTTPDTO.Request(user: userDTO)
         // Invoke the request.
-        authService.signUp(for: requestDTO) {
+        authService.signUp(for: requestDTO) { success in
             // Hide indicator.
             ActivityIndicatorView.viewDidHide()
+            // In case of success response.
+            guard success else {
+                // Else, reset fields text.
+                nameTextField?.text = ""
+                emailTextField?.text = ""
+                passTextField?.text = ""
+                passConfirmTextField?.text = ""
+                return
+            }
             // Present the TabBar screen.
             mainQueueDispatch {
                 coordinator.coordinate(to: .tabBar)

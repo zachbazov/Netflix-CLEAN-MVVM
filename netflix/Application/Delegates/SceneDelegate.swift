@@ -56,7 +56,7 @@ extension SceneDelegate: SceneObserverUnbinding {
     func sceneObserversDidUnbind() {
         guard let tabCoordinator = Application.app.coordinator.tabCoordinator as TabBarCoordinator? else { return }
         // Remove any home-related observers.
-        if let homeController = tabCoordinator.home.viewControllers.first! as? HomeViewController {
+        if let homeController = tabCoordinator.home?.viewControllers.first as? HomeViewController {
             // Remove panel view observers.
             if let showcaseCell = homeController.dataSource.showcaseCell,
                let panelView = showcaseCell.showcaseView.panelView as PanelView? {
@@ -76,11 +76,11 @@ extension SceneDelegate: SceneObserverUnbinding {
             homeController.viewDidUnbindObservers()
         }
         // In-case of a valid news controller instance, remove it's observers.
-        if let newsController = tabCoordinator.news.viewControllers.first! as? NewsViewController {
+        if let newsController = tabCoordinator.news?.viewControllers.first as? NewsViewController {
             newsController.viewDidUnbindObservers()
         }
         // In-case of a valid search controller instance, remove it's observers.
-        if let searchController = tabCoordinator.search.viewControllers.first! as? SearchViewController {
+        if let searchController = tabCoordinator.search?.viewControllers.first as? SearchViewController {
             searchController.viewDidUnbindObservers()
         }
     }

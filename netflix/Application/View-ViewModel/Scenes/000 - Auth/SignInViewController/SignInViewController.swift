@@ -18,14 +18,15 @@ private typealias ViewControllerProtocol = ViewControllerInput
 // MARK: - SignInViewController Type
 
 final class SignInViewController: Controller<SignInViewModel> {
-    @IBOutlet weak var emailTextField: UITextField!
-    @IBOutlet weak var passwordTextField: UITextField!
+    @IBOutlet private(set) weak var emailTextField: UITextField!
+    @IBOutlet private(set) weak var passwordTextField: UITextField!
     @IBOutlet weak var signInButton: UIButton!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         viewDidDeploySubviews()
         viewDidTargetSubviews()
+        viewDidConfigure()
     }
     
     override func viewDidDeploySubviews() {
@@ -41,6 +42,11 @@ final class SignInViewController: Controller<SignInViewModel> {
         emailTextField.addTarget(self, action: #selector(textFieldValueDidChange), for: .editingChanged)
         passwordTextField.addTarget(self, action: #selector(textFieldValueDidChange), for: .editingChanged)
     }
+    
+    override func viewDidConfigure() {
+        emailTextField.delegate = self
+        passwordTextField.delegate = self
+    }
 }
 
 // MARK: - ViewControllerProtocol Implementation
@@ -53,5 +59,14 @@ extension SignInViewController: ViewControllerProtocol {
         case passwordTextField: viewModel?.password = textField.text
         default: return
         }
+    }
+}
+
+// MARK: - UITextFieldDelegate Implementation
+
+extension SignInViewController: UITextFieldDelegate {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
     }
 }

@@ -18,16 +18,17 @@ private typealias ViewControllerProtocol = ViewControllerInput
 // MARK: - SignUpViewController Type
 
 final class SignUpViewController: Controller<SignUpViewModel> {
-    @IBOutlet private weak var nameTextField: UITextField!
-    @IBOutlet private weak var emailTextField: UITextField!
-    @IBOutlet private weak var passwordTextField: UITextField!
-    @IBOutlet private weak var passwordConfirmTextField: UITextField!
+    @IBOutlet private(set) weak var nameTextField: UITextField!
+    @IBOutlet private(set) weak var emailTextField: UITextField!
+    @IBOutlet private(set) weak var passwordTextField: UITextField!
+    @IBOutlet private(set) weak var passwordConfirmTextField: UITextField!
     @IBOutlet private weak var signUpButton: UIButton!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         viewDidDeploySubviews()
         viewDidTargetSubviews()
+        viewDidConfigure()
     }
     
     override func viewDidDeploySubviews() {
@@ -46,6 +47,13 @@ final class SignUpViewController: Controller<SignUpViewModel> {
         passwordTextField.addTarget(self, action: #selector(textFieldValueDidChange), for: .editingChanged)
         passwordConfirmTextField.addTarget(self, action: #selector(textFieldValueDidChange), for: .editingChanged)
     }
+    
+    override func viewDidConfigure() {
+        nameTextField.delegate = self
+        emailTextField.delegate = self
+        passwordTextField.delegate = self
+        passwordConfirmTextField.delegate = self
+    }
 }
 
 // MARK: - ViewControllerProtocol Implementation
@@ -60,5 +68,14 @@ extension SignUpViewController: ViewControllerProtocol {
         case passwordConfirmTextField: viewModel?.passwordConfirm = textField.text
         default: return
         }
+    }
+}
+
+// MARK: - UITextFieldDelegate Implementation
+
+extension SignUpViewController: UITextFieldDelegate {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
     }
 }

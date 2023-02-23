@@ -65,8 +65,9 @@ extension Coordinator: CoordinatorProtocol {
         case .tabBar:
             let authService = Application.app.services.authentication
             let requestDTO = UserHTTPDTO.Request(user: authService.user!)
-            authService.signIn(for: requestDTO) { [weak self] in
+            authService.signIn(for: requestDTO) { [weak self] success in
                 guard let self = self else { return }
+                guard success else { return }
                 mainQueueDispatch {
                     self.tabCoordinator.coordinate(to: .home)
                 }

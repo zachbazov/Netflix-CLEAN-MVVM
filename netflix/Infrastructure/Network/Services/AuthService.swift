@@ -14,8 +14,8 @@ private protocol AuthServiceInput {
     func setUser(request: UserHTTPDTO.Request?, response: UserHTTPDTO.Response)
     
     func resign(completion: @escaping (UserDTO?) -> Void)
-    func signIn(for requestDTO: UserHTTPDTO.Request, completion: @escaping () -> Void)
-    func signUp(for requestDTO: UserHTTPDTO.Request, completion: @escaping () -> Void)
+    func signIn(for requestDTO: UserHTTPDTO.Request, completion: @escaping (Bool) -> Void)
+    func signUp(for requestDTO: UserHTTPDTO.Request, completion: @escaping (Bool) -> Void)
     func signOut()
 }
 
@@ -35,7 +35,6 @@ class AuthService {
     private(set) var request: UserHTTPDTO.Request?
     private(set) var response: UserHTTPDTO.Response?
     fileprivate var responses: AuthResponseStorage { return Application.app.stores.authResponses }
-    
     /// Check for the latest authentication response signed by user.
     /// In case there is a valid response, pass the user data with the completion.
     /// In case there isn't a valid response, pass nil with the completion.
@@ -66,23 +65,33 @@ class AuthService {
     /// - Parameters:
     ///   - request: Auth request object.
     ///   - completion: Completion handler.
-    func signIn(for requestDTO: UserHTTPDTO.Request, completion: @escaping () -> Void) {
+    func signIn(for requestDTO: UserHTTPDTO.Request, completion: @escaping (Bool) -> Void) {
         let viewModel = AuthViewModel()
         viewModel.signIn(
             requestDTO: requestDTO,
             cached: { [weak self] responseDTO in
                 guard let self = self, let responseDTO = responseDTO else { return }
                 self.setResponse(request: requestDTO, response: responseDTO)
-                completion()
+                
+                completion(true)
             },
             completion: { [weak self] result in
-                if case let .success(responseDTO) = result {
+                switch result {
+                case .success(let responseDTO):
                     guard let self = self else { return }
                     self.setResponse(request: requestDTO, response: responseDTO)
-                    completion()
-                }
-                if case let .failure(error) = result {
+                    
+                    AlertView.shared.removeFromSuperview()
+                    
+                    completion(true)
+                case .failure(let error):
                     printIfDebug(.error, "Unresolved error \(error)")
+                    
+                    AlertView.shared.present(state: .failure,
+                                             title: "AUTHORIZATION",
+                                             message: "Incorrect credentials.")
+                    
+                    completion(false)
                 }
             })
     }
@@ -117,16 +126,17 @@ extension AuthService: AuthServiceProtocol {
     /// - Parameters:
     ///   - request: Auth request object.
     ///   - completion: Completion handler.
-    func signUp(for requestDTO: UserHTTPDTO.Request, completion: @escaping () -> Void) {
+    func signUp(for requestDTO: UserHTTPDTO.Request, completion: @escaping (Bool) -> Void) {
         let viewModel = AuthViewModel()
         viewModel.signUp(requestDTO: requestDTO) { [weak self] result in
             guard let self = self else { return }
             if case let .success(responseDTO) = result {
                 self.setResponse(request: responseDTO.request, response: responseDTO)
-                completion()
+                completion(true)
             }
             if case let .failure(error) = result {
                 printIfDebug(.error, "\(error)")
+                completion(false)
             }
         }
     }
@@ -150,8 +160,8 @@ extension AuthService: AuthServiceProtocol {
                         self.user = nil
                         // Present the authentication screen.
                         mainQueueDispatch {
-                            let sceneCoordinator = Application.app.coordinator
-                            sceneCoordinator.coordinate(to: .auth)
+                            let coordinator = Application.app.coordinator
+                            coordinator.coordinate(to: .auth)
                         }
                     case .failure(let error):
                         printIfDebug(.error, "\(error)")

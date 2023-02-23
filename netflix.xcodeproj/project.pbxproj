@@ -164,6 +164,8 @@
 		A1AC9FA529A24D1600DAD66D /* APIBundleLoading.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1AC9FA429A24D1600DAD66D /* APIBundleLoading.swift */; };
 		A1AC9FA729A3617400DAD66D /* ViewLifecycleBehavior.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1AC9FA629A3617400DAD66D /* ViewLifecycleBehavior.swift */; };
 		A1AC9FAC29A4D1A300DAD66D /* TableViewHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1AC9FAB29A4D1A300DAD66D /* TableViewHeaderView.swift */; };
+		A1AC9FB629A65E4D00DAD66D /* AlertView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1AC9FB529A65E4D00DAD66D /* AlertView.swift */; };
+		A1AC9FB829A65E5300DAD66D /* AlertView.xib in Resources */ = {isa = PBXBuildFile; fileRef = A1AC9FB729A65E5300DAD66D /* AlertView.xib */; };
 		A1AD25A028D2987B00F793B3 /* ShowcaseTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1AD259F28D2987B00F793B3 /* ShowcaseTableViewCell.swift */; };
 		A1AD25A228D29A1000F793B3 /* ShowcaseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1AD25A128D29A1000F793B3 /* ShowcaseView.swift */; };
 		A1AD25A428D29A7800F793B3 /* ShowcaseView.xib in Resources */ = {isa = PBXBuildFile; fileRef = A1AD25A328D29A7800F793B3 /* ShowcaseView.xib */; };
@@ -447,6 +449,8 @@
 		A1AC9FA429A24D1600DAD66D /* APIBundleLoading.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIBundleLoading.swift; sourceTree = "<group>"; };
 		A1AC9FA629A3617400DAD66D /* ViewLifecycleBehavior.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewLifecycleBehavior.swift; sourceTree = "<group>"; };
 		A1AC9FAB29A4D1A300DAD66D /* TableViewHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableViewHeaderView.swift; sourceTree = "<group>"; };
+		A1AC9FB529A65E4D00DAD66D /* AlertView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertView.swift; sourceTree = "<group>"; };
+		A1AC9FB729A65E5300DAD66D /* AlertView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = AlertView.xib; sourceTree = "<group>"; };
 		A1AD259F28D2987B00F793B3 /* ShowcaseTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowcaseTableViewCell.swift; sourceTree = "<group>"; };
 		A1AD25A128D29A1000F793B3 /* ShowcaseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowcaseView.swift; sourceTree = "<group>"; };
 		A1AD25A328D29A7800F793B3 /* ShowcaseView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ShowcaseView.xib; sourceTree = "<group>"; };
@@ -1003,6 +1007,7 @@
 		A18B993228BFC6FC0077A5A6 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
+				A1AC9FB429A65E0A00DAD66D /* AlertView */,
 				A130BCA1294FA48E0070EA5E /* ActivityIndicatorView.swift */,
 				A1E81D0E28CFE21300D044EA /* CollectionViewLayout.swift */,
 				A1AE02D0293BA29A00AF0BD6 /* DeviceOrientation.swift */,
@@ -1360,6 +1365,33 @@
 			path = Services;
 			sourceTree = "<group>";
 		};
+		A1AC9FAF29A6475B00DAD66D /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				A1E81D1328CFE2C900D044EA /* CollectionViewCell.swift */,
+				A186921B28CA2ED20087DE3B /* CollectionViewCellViewModel.swift */,
+			);
+			path = Utils;
+			sourceTree = "<group>";
+		};
+		A1AC9FB029A6476100DAD66D /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				A1E81D1528CFE2D800D044EA /* TableViewCell.swift */,
+				A1AC9FAB29A4D1A300DAD66D /* TableViewHeaderView.swift */,
+			);
+			path = Utils;
+			sourceTree = "<group>";
+		};
+		A1AC9FB429A65E0A00DAD66D /* AlertView */ = {
+			isa = PBXGroup;
+			children = (
+				A1AC9FB529A65E4D00DAD66D /* AlertView.swift */,
+				A1AC9FB729A65E5300DAD66D /* AlertView.xib */,
+			);
+			path = AlertView;
+			sourceTree = "<group>";
+		};
 		A1AD25A928D2A6AE00F793B3 /* ShowcaseView */ = {
 			isa = PBXGroup;
 			children = (
@@ -1432,9 +1464,6 @@
 				A1B70A6E293D578200C718C6 /* View.swift */,
 				A1B70A70293D578600C718C6 /* ViewModel.swift */,
 				A1B70A89293E5E0400C718C6 /* Coordinate.swift */,
-				A1E81D1528CFE2D800D044EA /* TableViewCell.swift */,
-				A1AC9FAB29A4D1A300DAD66D /* TableViewHeaderView.swift */,
-				A1B480BD293686570041418D /* CollectionViewCell */,
 			);
 			path = Base;
 			sourceTree = "<group>";
@@ -1608,15 +1637,6 @@
 			path = SignInViewController;
 			sourceTree = "<group>";
 		};
-		A1B480BD293686570041418D /* CollectionViewCell */ = {
-			isa = PBXGroup;
-			children = (
-				A1E81D1328CFE2C900D044EA /* CollectionViewCell.swift */,
-				A186921B28CA2ED20087DE3B /* CollectionViewCellViewModel.swift */,
-			);
-			path = CollectionViewCell;
-			sourceTree = "<group>";
-		};
 		A1B70A86293E5BB900C718C6 /* TableViewHeaderFooterView */ = {
 			isa = PBXGroup;
 			children = (
@@ -1744,6 +1764,7 @@
 		A1E81D1128CFE2B900D044EA /* CollectionView */ = {
 			isa = PBXGroup;
 			children = (
+				A1AC9FAF29A6475B00DAD66D /* Utils */,
 				A1E81D3528D011F100D044EA /* RatedCollectionViewCell */,
 				A1E81D3628D0120000D044EA /* ResumableCollectionViewCell */,
 				A1E81D3728D0120600D044EA /* StandardCollectionViewCell */,
@@ -1754,6 +1775,7 @@
 		A1E81D1228CFE2BD00D044EA /* TableView */ = {
 			isa = PBXGroup;
 			children = (
+				A1AC9FB029A6476100DAD66D /* Utils */,
 				A1AD25AB28D2A6C200F793B3 /* ShowcaseTableViewCell */,
 				A1B70A86293E5BB900C718C6 /* TableViewHeaderFooterView */,
 			);
@@ -1896,6 +1918,7 @@
 				A1AA28EF28F71F410011EE9D /* TrailerCollectionViewCell.xib in Resources */,
 				A1AD25AF28D3C47500F793B3 /* PanelViewItem.xib in Resources */,
 				A130BC9A294CE0B80070EA5E /* SearchViewController.xib in Resources */,
+				A1AC9FB829A65E5300DAD66D /* AlertView.xib in Resources */,
 				A130BCBF29510CA80070EA5E /* DownloadsViewController.xib in Resources */,
 				A1E81D3428CFF95300D044EA /* StandardCollectionViewCell.xib in Resources */,
 				A1741D3028E6968000F3C46B /* DetailDescriptionView.xib in Resources */,
@@ -2139,6 +2162,7 @@
 				A1E81D2A28CFE4A400D044EA /* HomeTableViewDataSource.swift in Sources */,
 				A1B3F99428C575A30042DE9F /* AuthViewModel.swift in Sources */,
 				A1E81D0928CFE16900D044EA /* Mutable.swift in Sources */,
+				A1AC9FB629A65E4D00DAD66D /* AlertView.swift in Sources */,
 				A1AD25AD28D3C29600F793B3 /* PanelViewItem.swift in Sources */,
 				A1741D0D28E679AE00F3C46B /* DetailPanelTableViewCell.swift in Sources */,
 				A130BCC2295115540070EA5E /* DownloadsView.swift in Sources */,

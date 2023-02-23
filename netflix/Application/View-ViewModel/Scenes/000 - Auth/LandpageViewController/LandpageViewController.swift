@@ -10,7 +10,9 @@ import UIKit
 // MARK: - ViewControllerProtocol Type
 
 private protocol ViewControllerOutput {
+    var signInBarButton: UIView! { get }
     var hasGradient: Bool { get }
+    var hasAnimate: Bool { get }
 }
 
 private typealias ViewControllerProtocol = ViewControllerOutput
@@ -18,18 +20,35 @@ private typealias ViewControllerProtocol = ViewControllerOutput
 // MARK: - LandpageViewController Type
 
 final class LandpageViewController: Controller<AuthViewModel> {
+    @IBOutlet private weak var backgroundImageView: UIImageView!
     @IBOutlet private weak var statusBarGradientView: UIView!
     @IBOutlet private weak var topGradientView: UIView!
     @IBOutlet private weak var bottomGradientView: UIView!
     @IBOutlet private weak var signUpButton: UIButton!
+    @IBOutlet private weak var headlineTextView: UITextView!
+    @IBOutlet private weak var descriptionTextView: UITextView!
+    
+    private weak var signInBarButton: UIView! {
+        guard let rightBarButtonItemView = navigationItem.rightBarButtonItem?.value(forKey: "view") as? UIView else {
+            return nil
+        }
+        return rightBarButtonItemView
+    }
     
     private var hasGradient = false
+    private var hasAnimate = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
         super.viewDidLoadBehaviors()
         viewDidDeploySubviews()
         viewDidTargetSubviews()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        super.didLockDeviceOrientation(.portrait)
+        animateView()
     }
     
     override func viewDidLayoutSubviews() {
@@ -61,27 +80,76 @@ extension LandpageViewController {
     }
     
     private func setupGradients() {
-        if !hasGradient {
-            let locations: [NSNumber] = [0.0, 0.5, 1.0]
-            statusBarGradientView.addGradientLayer(
-                colors: [.black.withAlphaComponent(0.75),
-                         .black.withAlphaComponent(0.5),
-                         .clear],
-                locations: locations)
+        guard !hasGradient else { return }
+        hasGradient = true
+        
+        let locations: [NSNumber] = [0.0, 0.5, 1.0]
+        statusBarGradientView.addGradientLayer(
+            colors: [.black.withAlphaComponent(0.75),
+                     .black.withAlphaComponent(0.5),
+                     .clear],
+            locations: locations)
+        
+        topGradientView.addGradientLayer(
+            colors: [.clear,
+                     .black.withAlphaComponent(0.5),
+                     .black.withAlphaComponent(0.75)],
+            locations: locations)
+        
+        bottomGradientView.addGradientLayer(
+            colors: [.black.withAlphaComponent(0.75),
+                     .black.withAlphaComponent(0.5),
+                     .clear],
+            locations: locations)
+    }
+    
+    private func animateView() {
+        guard !hasAnimate else { return }
+        hasAnimate = true
+        
+        let offsetY: CGFloat = 64.0
+        let scale: CGFloat = 1.2
+        
+        headlineTextView.alpha = .zero
+        descriptionTextView.alpha = .zero
+        statusBarGradientView.alpha = .zero
+        topGradientView.alpha = .zero
+        bottomGradientView.alpha = .zero
+        signInBarButton.alpha = .zero
+        backgroundImageView.transform = CGAffineTransform(scaleX: scale, y: scale)
+        signUpButton.transform = CGAffineTransform(translationX: .zero, y: offsetY)
+        headlineTextView.transform = CGAffineTransform(scaleX: scale, y: scale)
+        navigationController?.navigationBar.transform = CGAffineTransform(translationX: .zero, y: -offsetY)
+        
+        UIView.animate(withDuration: 1.5, delay: 0.25, options: [.curveEaseInOut], animations: {
+            self.backgroundImageView.transform = .identity
+        }, completion: nil)
+        
+        UIView.animate(withDuration: 0.5, delay: 0.5, options: [.curveEaseInOut], animations: {
+            self.headlineTextView.alpha = 1.0
             
-            topGradientView.addGradientLayer(
-                colors: [.clear,
-                         .black.withAlphaComponent(0.5),
-                         .black.withAlphaComponent(0.75)],
-                locations: locations)
+            self.topGradientView.alpha = 1.0
+            self.bottomGradientView.alpha = 1.0
             
-            bottomGradientView.addGradientLayer(
-                colors: [.black.withAlphaComponent(0.75),
-                         .black.withAlphaComponent(0.5),
-                         .clear],
-                locations: locations)
+            self.signUpButton.transform = .identity
             
-            hasGradient = true
-        }
+            self.navigationController?.navigationBar.transform = .identity
+        }, completion: { _ in
+            UIView.animate(withDuration: 0.5, delay: 0.0, options: [.curveEaseInOut], animations: {
+                self.headlineTextView.transform = .identity
+            }, completion: { _ in
+                UIView.animate(withDuration: 0.5, delay: 0.0, options: [.curveEaseInOut], animations: {
+                    self.descriptionTextView.alpha = 1.0
+                }, completion: nil)
+                
+                UIView.animate(withDuration: 0.5, delay: 0.5, options: [.curveEaseInOut], animations: {
+                    self.signInBarButton.alpha = 1.0
+                }, completion: nil)
+            })
+        })
+        
+        UIView.animate(withDuration: 0.5, delay: 0.75, options: [.curveEaseInOut], animations: {
+            self.statusBarGradientView.alpha = 1.0
+        }, completion: nil)
     }
 }

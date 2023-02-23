@@ -47,26 +47,46 @@ extension SignInViewModel: ViewModelProtocol {
     /// Occurs once the sign in button has been tapped.
     @objc
     func signInButtonDidTap() {
-        ActivityIndicatorView.viewDidShow()
-        
         signInRequest()
     }
     /// Invokes a sign in request for the user credentials.
     fileprivate func signInRequest() {
         let authService = Application.app.services.authentication
         let coordinator = Application.app.coordinator
+        
+        let emailTextField = coordinator.authCoordinator.signInController.emailTextField
+        let passTextField = coordinator.authCoordinator.signInController.passwordTextField
+        emailTextField?.resignFirstResponder()
+        passTextField?.resignFirstResponder()
+        
+        guard !(emailTextField?.text?.isEmpty ?? false),
+              !(passTextField?.text?.isEmpty ?? false) else {
+            AlertView.shared.present(state: .failure, title: "AUTHORIZATION", message: "Incorrect credentials.")
+            return
+        }
         // Ensure the properties aren't nil.
         guard let email = email, let password = password else { return }
+        // Present indicator.
+        ActivityIndicatorView.viewDidShow()
         // Create a new user.
         let userDTO = UserDTO(email: email, password: password)
         // Create a new sign in request user-based.
         let requestDTO = UserHTTPDTO.Request(user: userDTO)
         // Invoke the request.
-        authService.signIn(for: requestDTO) {
+        authService.signIn(for: requestDTO) { success in
             // Hide indicator.
             ActivityIndicatorView.viewDidHide()
+            // In case of success response.
+            guard success else {
+                // Else, reset fields text.
+                emailTextField?.text = ""
+                passTextField?.text = ""
+                return
+            }
+            AlertView.shared.present(state: .success, title: "AUTHORIZATION", message: "Access Granted.")
             // Present the TabBar screen.
-            mainQueueDispatch {
+            mainQueueDispatch(delayInSeconds: 4) {
+                AlertView.shared.removeFromSuperview()
                 coordinator.coordinate(to: .tabBar)
             }
         }
