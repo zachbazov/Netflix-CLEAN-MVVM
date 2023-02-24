@@ -80,24 +80,28 @@ extension HomeTableViewDataSource: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let index = Index(rawValue: indexPath.section) else { fatalError() }
-        if case .display = index {
+        switch index {
+        case .display:
             showcaseCell = ShowcaseTableViewCell.create(on: tableView, for: indexPath, with: viewModel)
             return showcaseCell
-        } else if case .rated = index {
+        case .rated:
             return RatedTableViewCell.create(on: tableView, for: indexPath, with: viewModel)
-        } else if case .resumable = index {
+        case .resumable:
             return ResumableTableViewCell.create(on: tableView, for: indexPath, with: viewModel)
-        } else {
+        default:
             return StandardTableViewCell.create(on: tableView, for: indexPath, with: viewModel)
         }
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        let view = viewModel.coordinator!.viewController!.view!
-        if case .display = HomeTableViewDataSource.Index(rawValue: indexPath.section) {
-            return view.bounds.height * 0.76
+        guard let index = HomeTableViewDataSource.Index(rawValue: indexPath.section),
+              let view = viewModel.coordinator?.viewController?.view else {
+            return .zero
         }
-        return view.bounds.height * 0.19
+        switch index {
+        case .display: return view.bounds.height * 0.76
+        default: return view.bounds.height * 0.19
+        }
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
@@ -106,9 +110,15 @@ extension HomeTableViewDataSource: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         guard let index = Index(rawValue: section) else { return .zero }
-        if case .display = index { return 0.0 }
-        else if case .rated = index { return 28.0 }
-        else { return 24.0 }
+        switch index {
+        case .display: return 0.0
+        case .rated: return 28.0
+        default: return 24.0
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        cell.opacityAnimation()
     }
 }
 
@@ -135,12 +145,10 @@ extension HomeTableViewDataSource {
     }
 }
 
-// MARK: - Types
+// MARK: - Index Type
 
 extension HomeTableViewDataSource {
-    
-    // MARK: Index Type
-    
+    /// Section index representation type.
     enum Index: Int, CaseIterable {
         case display
         case rated
@@ -159,9 +167,12 @@ extension HomeTableViewDataSource {
         case familyNchildren
         case documentary
     }
-    
-    // MARK: State Type
-    
+}
+
+// MARK: - State Type
+
+extension HomeTableViewDataSource {
+    /// Section state representation type.
     enum State: Int, CaseIterable {
         case all
         case tvShows

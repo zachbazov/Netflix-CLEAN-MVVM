@@ -131,11 +131,17 @@ extension AuthService: AuthServiceProtocol {
         viewModel.signUp(requestDTO: requestDTO) { [weak self] result in
             guard let self = self else { return }
             if case let .success(responseDTO) = result {
-                self.setResponse(request: responseDTO.request, response: responseDTO)
+                self.setResponse(request: requestDTO, response: responseDTO)
+                
                 completion(true)
             }
             if case let .failure(error) = result {
                 printIfDebug(.error, "\(error)")
+                
+                AlertView.shared.present(state: .failure,
+                                         title: "AUTHORIZATION",
+                                         message: "Incorrect credentials.")
+                
                 completion(false)
             }
         }
@@ -149,6 +155,9 @@ extension AuthService: AuthServiceProtocol {
             guard let self = self else { return }
             // Delete the request and the response objects cached for the user.
             self.responses.deleteResponse(for: requestDTO, in: context) {
+                // Present indicator.
+                ActivityIndicatorView.viewDidShow()
+                
                 let viewModel = AuthViewModel()
                 // Invoke a sign out request.
                 viewModel.signOut() { result in
@@ -158,13 +167,26 @@ extension AuthService: AuthServiceProtocol {
                         self.request = nil
                         self.response = nil
                         self.user = nil
+                        
+                        AlertView.shared.present(state: .success,
+                                                 title: "AUTHORIZATION",
+                                                 message: "Signed out successfully.")
+                        // Hide indicator.
+                        mainQueueDispatch(delayInSeconds: 3) {
+                            ActivityIndicatorView.viewDidHide()
+                        }
                         // Present the authentication screen.
-                        mainQueueDispatch {
+                        mainQueueDispatch(delayInSeconds: 4) {
+                            AlertView.shared.removeFromSuperview()
                             let coordinator = Application.app.coordinator
                             coordinator.coordinate(to: .auth)
                         }
                     case .failure(let error):
                         printIfDebug(.error, "\(error)")
+                        
+                        AlertView.shared.present(state: .failure,
+                                                 title: "AUTHORIZATION",
+                                                 message: "Unable to sign out.")
                     }
                 }
             }

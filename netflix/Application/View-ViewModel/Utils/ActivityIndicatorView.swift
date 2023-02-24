@@ -39,7 +39,7 @@ extension ActivityIndicatorView: IndicatorProtocol {
                 let frame = UIScreen.main.bounds
                 let spinner = UIActivityIndicatorView(frame: frame)
                 spinner.backgroundColor = UIColor.black.withAlphaComponent(0.25)
-                spinner.style = UIActivityIndicatorView.Style.medium
+                spinner.style = UIActivityIndicatorView.Style.large
                 window.addSubview(spinner)
 
                 spinner.startAnimating()

@@ -69,7 +69,7 @@ extension SignUpViewModel: ViewModelProtocol {
               !(emailTextField?.text?.isEmpty ?? false),
               !(passTextField?.text?.isEmpty ?? false),
               !(passConfirmTextField?.text?.isEmpty ?? false) else {
-            printIfDebug(.debug, "bad credentials")
+            AlertView.shared.present(state: .failure, title: "AUTHORIZATION", message: "Incorrect credentials.")
             return
         }
         // Present indicator.
@@ -94,8 +94,10 @@ extension SignUpViewModel: ViewModelProtocol {
                 passConfirmTextField?.text = ""
                 return
             }
+            AlertView.shared.present(state: .success, title: "AUTHORIZATION", message: "Access Granted.")
             // Present the TabBar screen.
-            mainQueueDispatch {
+            mainQueueDispatch(delayInSeconds: 4) {
+                AlertView.shared.removeFromSuperview()
                 coordinator.coordinate(to: .tabBar)
             }
         }

@@ -30,7 +30,6 @@ private protocol ViewOutput {
     var layout: CollectionViewLayout! { get }
     
     func createCollectionView() -> UICollectionView
-    func viewDidLoad()
 }
 
 private typealias ViewProtocol = ViewInput & ViewOutput
@@ -69,14 +68,15 @@ class TableViewCell<T>: UITableViewCell where T: UICollectionViewCell {
     }
     
     required init?(coder: NSCoder) { fatalError() }
+    
+    func viewDidLoad() {
+        backgroundColor = .black
+    }
 }
 
 // MARK: - ViewProtocol Implementation
 
 extension TableViewCell: ViewProtocol {
-    fileprivate func viewDidLoad() {
-        backgroundColor = .black
-    }
     /// Setting a layout for the collection view.
     /// - Parameters:
     ///   - section: A section object that represent the cell.
@@ -106,6 +106,10 @@ extension TableViewCell: ViewProtocol {
         return collectionView
     }
 }
+
+// MARK: - ViewLifecycleBehavior Implementation
+
+extension TableViewCell: ViewLifecycleBehavior {}
 
 // MARK: - SortOptions Type
 
