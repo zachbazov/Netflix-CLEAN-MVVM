@@ -126,22 +126,7 @@ extension HomeTableViewDataSource: UITableViewDelegate, UITableViewDataSource {
 
 extension HomeTableViewDataSource {
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        guard let homeViewController = viewModel.coordinator?.viewController,
-              let translation = scrollView.panGestureRecognizer.translation(in: homeViewController.view) as CGPoint? else {
-            return
-        }
-        homeViewController.view.animateUsingSpring(withDuration: 0.66,
-                                                   withDamping: 1.0,
-                                                   initialSpringVelocity: 1.0) {
-            guard translation.y < 0 else {
-                homeViewController.navigationViewTopConstraint.constant = 0.0
-                homeViewController.navigationView.alpha = 1.0
-                return homeViewController.view.layoutIfNeeded()
-            }
-            homeViewController.navigationViewTopConstraint.constant = -homeViewController.navigationView.bounds.size.height
-            homeViewController.navigationView.alpha = 0.0
-            homeViewController.view.layoutIfNeeded()
-        }
+        navigationViewAnimation(with: scrollView)
     }
 }
 
@@ -200,5 +185,28 @@ extension HomeTableViewDataSource.Index: Valuable {
         case .familyNchildren: return "Family & Children"
         case .documentary: return "Documentary"
         }
+    }
+}
+
+// MARK: - Private UI Implementation
+
+extension HomeTableViewDataSource {
+    private func navigationViewAnimation(with scrollView: UIScrollView) {
+        guard let homeViewController = viewModel.coordinator?.viewController,
+              let translation = scrollView.panGestureRecognizer.translation(in: homeViewController.view) as CGPoint? else {
+            return
+        }
+        let isScrollingUp = translation.y < 0
+        let targetConstant: CGFloat = isScrollingUp
+            ? -homeViewController.navigationView.bounds.size.height
+            : 0.0
+        let targetAlpha: CGFloat = isScrollingUp ? 0.0 : 1.0
+        
+        let animator = UIViewPropertyAnimator(duration: 0.66, dampingRatio: 1.0) {
+            homeViewController.navigationViewTopConstraint.constant = targetConstant
+            homeViewController.navigationView.alpha = targetAlpha
+            homeViewController.view.layoutIfNeeded()
+        }
+        animator.startAnimation()
     }
 }

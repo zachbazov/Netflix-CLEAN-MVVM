@@ -40,7 +40,7 @@ final class DetailViewModel {
     var coordinator: DetailViewCoordinator?
     
     fileprivate let useCase = SeasonUseCase()
-    fileprivate let orientation = DeviceOrientation.shared
+    let orientation = DeviceOrientation.shared
     
     fileprivate(set) var homeDataSourceState: HomeTableViewDataSource.State!
     
@@ -105,6 +105,7 @@ extension DetailViewModel: ViewModelProtocol {
                 var season = responseDTO.data.first!
                 season.episodes = season.episodes.sorted { $0.episode < $1.episode }
                 self?.season.value = season.toDomain()
+                
                 completion()
             }
             if case let .failure(error) = result {

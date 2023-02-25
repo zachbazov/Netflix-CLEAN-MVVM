@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="20037" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="21507" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="20020"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21505"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -20,19 +20,19 @@
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <subviews>
                 <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="32" translatesAutoresizingMaskIntoConstraints="NO" id="ffm-B0-gfR">
-                    <rect key="frame" x="32" y="8" width="350" height="56"/>
+                    <rect key="frame" x="32" y="8" width="350" height="48"/>
                     <subviews>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Zne-jQ-ckA" userLabel="Leading Container">
-                            <rect key="frame" x="0.0" y="0.0" width="63.5" height="56"/>
+                            <rect key="frame" x="0.0" y="0.0" width="63.5" height="48"/>
                         </view>
                         <view tag="1" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="pul-Vr-3TV" userLabel="Center Container">
-                            <rect key="frame" x="95.5" y="0.0" width="63.5" height="56"/>
+                            <rect key="frame" x="95.5" y="0.0" width="63.5" height="48"/>
                         </view>
                         <view tag="2" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="JhR-ZR-UyQ" userLabel="Trailing Container">
-                            <rect key="frame" x="191" y="0.0" width="63.5" height="56"/>
+                            <rect key="frame" x="191" y="0.0" width="63.5" height="48"/>
                         </view>
                         <view tag="-1" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Bzl-jr-45n" userLabel="Dummy Container">
-                            <rect key="frame" x="286.5" y="0.0" width="63.5" height="56"/>
+                            <rect key="frame" x="286.5" y="0.0" width="63.5" height="48"/>
                         </view>
                     </subviews>
                 </stackView>
@@ -40,7 +40,7 @@
             <constraints>
                 <constraint firstItem="ffm-B0-gfR" firstAttribute="leading" secondItem="h5y-pn-1vZ" secondAttribute="leading" constant="32" id="M5A-IP-P3o"/>
                 <constraint firstAttribute="trailing" secondItem="ffm-B0-gfR" secondAttribute="trailing" constant="32" id="TFu-LV-dw5"/>
-                <constraint firstAttribute="bottom" secondItem="ffm-B0-gfR" secondAttribute="bottom" id="VY7-hp-agE"/>
+                <constraint firstAttribute="bottom" secondItem="ffm-B0-gfR" secondAttribute="bottom" constant="8" id="VY7-hp-agE"/>
                 <constraint firstItem="ffm-B0-gfR" firstAttribute="top" secondItem="h5y-pn-1vZ" secondAttribute="top" constant="8" id="gms-Ko-WIQ"/>
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>

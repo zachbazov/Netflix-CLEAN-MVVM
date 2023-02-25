@@ -121,11 +121,13 @@ extension LandpageViewController {
         headlineTextView.transform = CGAffineTransform(scaleX: scale, y: scale)
         navigationController?.navigationBar.transform = CGAffineTransform(translationX: .zero, y: -offsetY)
         
-        UIView.animate(withDuration: 1.5, delay: 0.25, options: [.curveEaseInOut], animations: {
+        UIView.animate(withDuration: 1.5, delay: 0.25, options: [.curveEaseInOut], animations: { [weak self] in
+            guard let self = self else { return }
             self.backgroundImageView.transform = .identity
         }, completion: nil)
         
-        UIView.animate(withDuration: 0.5, delay: 0.5, options: [.curveEaseInOut], animations: {
+        UIView.animate(withDuration: 0.5, delay: 0.5, options: [.curveEaseInOut], animations: { [weak self] in
+            guard let self = self else { return }
             self.headlineTextView.alpha = 1.0
             
             self.topGradientView.alpha = 1.0
@@ -135,20 +137,24 @@ extension LandpageViewController {
             
             self.navigationController?.navigationBar.transform = .identity
         }, completion: { _ in
-            UIView.animate(withDuration: 0.5, delay: 0.0, options: [.curveEaseInOut], animations: {
+            UIView.animate(withDuration: 0.5, delay: 0.0, options: [.curveEaseInOut], animations: { [weak self] in
+                guard let self = self else { return }
                 self.headlineTextView.transform = .identity
             }, completion: { _ in
-                UIView.animate(withDuration: 0.5, delay: 0.0, options: [.curveEaseInOut], animations: {
+                UIView.animate(withDuration: 0.5, delay: 0.0, options: [.curveEaseInOut], animations: { [weak self] in
+                    guard let self = self else { return }
                     self.descriptionTextView.alpha = 1.0
                 }, completion: nil)
                 
-                UIView.animate(withDuration: 0.5, delay: 0.5, options: [.curveEaseInOut], animations: {
+                UIView.animate(withDuration: 0.5, delay: 0.5, options: [.curveEaseInOut], animations: { [weak self] in
+                    guard let self = self else { return }
                     self.signInBarButton.alpha = 1.0
                 }, completion: nil)
             })
         })
         
-        UIView.animate(withDuration: 0.5, delay: 0.75, options: [.curveEaseInOut], animations: {
+        UIView.animate(withDuration: 0.5, delay: 0.75, options: [.curveEaseInOut], animations: { [weak self] in
+            guard let self = self else { return }
             self.statusBarGradientView.alpha = 1.0
         }, completion: nil)
     }

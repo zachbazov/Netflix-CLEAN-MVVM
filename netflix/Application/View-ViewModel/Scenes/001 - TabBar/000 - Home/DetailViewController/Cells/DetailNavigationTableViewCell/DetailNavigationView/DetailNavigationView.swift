@@ -94,9 +94,9 @@ extension DetailNavigationView: ViewProtocol {
     
     func didSelectItem(view: DetailNavigationViewItem) {
         guard let state = State(rawValue: view.tag) else { return }
-        /// Release changes for the navigation red marker indicator view.
+        // Release changes for the navigation red marker indicator view.
         redMarkerConstraintValueDidChange(for: state)
-        /// Animate the view changes.
+        // Animate the view changes.
         animateUsingSpring(withDuration: 0.5, withDamping: 1.0, initialSpringVelocity: 1.0)
     }
     

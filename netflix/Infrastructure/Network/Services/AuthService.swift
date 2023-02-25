@@ -131,13 +131,14 @@ extension AuthService: AuthServiceProtocol {
         viewModel.signUp(requestDTO: requestDTO) { [weak self] result in
             guard let self = self else { return }
             if case let .success(responseDTO) = result {
+                // Update auth service's properties.
                 self.setResponse(request: requestDTO, response: responseDTO)
-                
+                // Invoke completion handler.
                 completion(true)
             }
             if case let .failure(error) = result {
                 printIfDebug(.error, "\(error)")
-                
+                // Alert the user.
                 AlertView.shared.present(state: .failure,
                                          title: "AUTHORIZATION",
                                          message: "Incorrect credentials.")
@@ -157,7 +158,7 @@ extension AuthService: AuthServiceProtocol {
             self.responses.deleteResponse(for: requestDTO, in: context) {
                 // Present indicator.
                 ActivityIndicatorView.viewDidShow()
-                
+                // Create a auth view model instance.
                 let viewModel = AuthViewModel()
                 // Invoke a sign out request.
                 viewModel.signOut() { result in
@@ -167,7 +168,7 @@ extension AuthService: AuthServiceProtocol {
                         self.request = nil
                         self.response = nil
                         self.user = nil
-                        
+                        // Alert the user.
                         AlertView.shared.present(state: .success,
                                                  title: "AUTHORIZATION",
                                                  message: "Signed out successfully.")
@@ -183,7 +184,7 @@ extension AuthService: AuthServiceProtocol {
                         }
                     case .failure(let error):
                         printIfDebug(.error, "\(error)")
-                        
+                        // Alert the user.
                         AlertView.shared.present(state: .failure,
                                                  title: "AUTHORIZATION",
                                                  message: "Unable to sign out.")

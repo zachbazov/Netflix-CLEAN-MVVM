@@ -50,9 +50,11 @@ extension HomeViewCoordinator: CoordinatorProtocol {
         controller.viewModel.coordinator = DetailViewCoordinator()
         controller.viewModel.coordinator?.viewController = controller
         controller.viewModel.isRotated = shouldScreenRotate
+        controller.viewModel.orientation.orientation = shouldScreenRotate ? .landscapeLeft : .portrait
         // Wrap the controller with a navigation controller.
         let navigation = UINavigationController(rootViewController: controller)
         navigation.setNavigationBarHidden(true, animated: false)
+        navigation.view.backgroundColor = .black
         return navigation
     }
     

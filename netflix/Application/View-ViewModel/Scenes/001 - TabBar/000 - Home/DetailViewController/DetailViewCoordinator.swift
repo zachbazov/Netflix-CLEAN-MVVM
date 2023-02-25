@@ -40,13 +40,16 @@ extension DetailViewCoordinator: CoordinatorProtocol {
         }
         // Deallocate the current controller.
         viewController = nil
+        navigation?.viewControllers.removeAll()
         // Allocate the new controller.
         controller.viewModel = viewModel
+        controller.viewModel.isRotated = false
+        controller.viewModel.orientation.orientation = false ? .landscapeLeft : .portrait
         // Depend on the new media object.
         controller.viewModel.media = media!
         viewController = controller
         // Reallocate the navigation stack.
-        navigation?.setViewControllers([controller], animated: true)
+        navigation?.pushViewController(controller, animated: true)
     }
 }
 

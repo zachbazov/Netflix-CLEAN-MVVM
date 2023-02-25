@@ -26,15 +26,17 @@ final class DetailViewController: Controller<DetailViewModel> {
     private(set) var dataSource: DetailTableViewDataSource!
     
     deinit {
-        viewModel.resetOrientation()
+        viewModel?.resetOrientation()
         viewDidUnbindObservers()
         previewView = nil
         dataSource = nil
         viewModel = nil
+        tableView = nil
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        didLockDeviceOrientation(.all)
         viewDidDeploySubviews()
         viewDidBindObservers()
     }

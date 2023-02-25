@@ -38,7 +38,7 @@ final class DeviceOrientation {
     
     private let orientationKey = "orientation"
     private(set) var orientationLock: UIInterfaceOrientationMask = .all
-    fileprivate var orientation: UIInterfaceOrientationMask = .portrait {
+    var orientation: UIInterfaceOrientationMask = .portrait {
         didSet { set(orientation: orientation) }
     }
     fileprivate var windowScene: UIWindowScene? {
@@ -63,9 +63,49 @@ extension DeviceOrientation: OrientationProtocol {
     }
     
     func rotate() {
-        if orientationLock == .portrait { orientationLock = .all }
-        
-        if orientation == .landscapeLeft { orientation = .portrait }
-        else { orientation = .landscapeLeft }
+        if orientation == .landscapeLeft {
+            orientation = .portrait
+            return
+        }
+        if orientation == .portrait {
+            orientation = .landscapeLeft
+        }
     }
 }
+
+//class RotationManager: NSObject {
+//    override init() {
+//        super.init()
+//        UIDevice.current.beginGeneratingDeviceOrientationNotifications()
+//        NotificationCenter.default.addObserver(self, selector: #selector(deviceOrientationDidChange), name: UIDevice.orientationDidChangeNotification, object: nil)
+//    }
+//
+//    @objc func deviceOrientationDidChange() {
+//        switch UIDevice.current.orientation {
+//        case .portrait:
+//            // Set interface to portrait mode
+//            printIfDebug(.debug, "port")
+//            break
+//        case .portraitUpsideDown:
+//            // Set interface to upside down portrait mode
+//            printIfDebug(.debug, "portUpsideDown")
+//            break
+//        case .landscapeLeft:
+//            // Set interface to landscape left mode
+//            printIfDebug(.debug, "landLeft")
+//            break
+//        case .landscapeRight:
+//            // Set interface to landscape right mode
+//            printIfDebug(.debug, "landRight")
+//            break
+//        default:
+//            printIfDebug(.debug, "def")
+//            break
+//        }
+//    }
+//
+//    deinit {
+//        UIDevice.current.endGeneratingDeviceOrientationNotifications()
+//        NotificationCenter.default.removeObserver(self)
+//    }
+//}
