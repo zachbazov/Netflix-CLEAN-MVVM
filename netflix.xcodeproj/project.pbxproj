@@ -2355,6 +2355,7 @@
 				DEVELOPMENT_TEAM = 622LJ3NW2R;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = netflix/Resources/Info.plist;
+				INFOPLIST_KEY_NSLocalNetworkUsageDescription = asdasd;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait";
@@ -2386,6 +2387,7 @@
 				DEVELOPMENT_TEAM = 622LJ3NW2R;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = netflix/Resources/Info.plist;
+				INFOPLIST_KEY_NSLocalNetworkUsageDescription = asdasd;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait";

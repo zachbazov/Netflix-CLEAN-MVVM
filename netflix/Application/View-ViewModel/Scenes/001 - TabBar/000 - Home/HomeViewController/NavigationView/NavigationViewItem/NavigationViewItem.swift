@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import AVKit
 
 // MARK: - ConfigurationProtocol Type
 
@@ -62,7 +63,11 @@ extension NavigationViewItemConfiguration: ConfigurationProtocol {
             symbolConfiguration = UIImage.SymbolConfiguration(pointSize: 16.0)
             image = UIImage(systemName: item.viewModel.image)?
                 .whiteRendering(with: symbolConfiguration)
-            item.button.setImage(image, for: .normal)
+//            item.button.setImage(image, for: .normal)
+            
+            let airPlay = AVRoutePickerView(frame: item.button.bounds)
+            airPlay.tintColor = .white
+            item.button.addSubview(airPlay)
         case .account:
             symbolConfiguration = UIImage.SymbolConfiguration(pointSize: 17.0)
             image = UIImage(systemName: item.viewModel.image)?

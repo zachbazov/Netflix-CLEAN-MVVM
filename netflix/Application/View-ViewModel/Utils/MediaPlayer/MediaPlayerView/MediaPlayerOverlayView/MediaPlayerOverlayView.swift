@@ -120,7 +120,9 @@ extension MediaPlayerOverlayViewConfiguration: ConfigurationProtocol {
         guard let item = MediaPlayerOverlayView.Item(rawValue: view.tag) else { return }
         switch item {
         case .airPlay:
-            printIfDebug(.debug, "\(item.rawValue)")
+            if let player = mediaPlayerView.mediaPlayer.player as AVPlayer? {
+                player.allowsExternalPlayback = true
+            }
         case .rotate:
             let orientation = DeviceOrientation.shared
             orientation.rotate()
@@ -255,7 +257,7 @@ private typealias ViewProtocol = ViewInput & ViewOutput
 // MARK: - MediaPlayerOverlayView Type
 
 final class MediaPlayerOverlayView: View<MediaPlayerOverlayViewViewModel>, ViewInstantiable {
-    @IBOutlet private weak var airPlayButton: UIButton!
+    @IBOutlet private(set) weak var airPlayButton: UIButton!
     @IBOutlet private weak var rotateButton: UIButton!
     @IBOutlet private(set) weak var backwardButton: UIButton!
     @IBOutlet private(set) weak var playButton: UIButton!
@@ -284,6 +286,10 @@ final class MediaPlayerOverlayView: View<MediaPlayerOverlayViewViewModel>, ViewI
         self.configuration.mediaPlayerView = parent
         self.configuration.viewDidBindObservers()
         self.viewDidLoad()
+        
+        
+        let airPlay = AVRoutePickerView(frame: airPlayButton.bounds)
+        airPlayButton.addSubview(airPlay)
     }
     
     required init?(coder: NSCoder) { fatalError() }

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="20037" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="21507" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="20020"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21505"/>
         <capability name="Image references" minToolsVersion="12.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
@@ -36,7 +36,7 @@
                     <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                 </view>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="zGN-LO-lvD" userLabel="First Container">
-                    <rect key="frame" x="0.0" y="44" width="414" height="64"/>
+                    <rect key="frame" x="0.0" y="48" width="414" height="64"/>
                     <subviews>
                         <button opaque="NO" tag="1" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="VLl-F2-aC4" userLabel="Rotate">
                             <rect key="frame" x="350" y="8" width="48" height="48"/>
@@ -74,16 +74,13 @@
                             <nil key="highlightedColor"/>
                         </label>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="POJ-Nt-BgD" userLabel="AirPlay">
-                            <rect key="frame" x="16" y="20.5" width="48" height="23.5"/>
+                            <rect key="frame" x="16" y="15" width="48" height="34"/>
                             <constraints>
                                 <constraint firstAttribute="width" constant="48" id="WyF-Od-VLi"/>
                                 <constraint firstAttribute="width" constant="48" id="bEe-4x-C0Z"/>
                             </constraints>
                             <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
-                            <state key="normal" image="airplayvideo" catalog="system">
-                                <preferredSymbolConfiguration key="preferredSymbolConfiguration" configurationType="pointSize" pointSize="20" weight="bold"/>
-                            </state>
                             <variation key="default">
                                 <mask key="constraints">
                                     <exclude reference="WyF-Od-VLi"/>
@@ -466,12 +463,11 @@
         </view>
     </objects>
     <resources>
-        <image name="airplayvideo" catalog="system" width="128" height="98"/>
-        <image name="gobackward.15" catalog="system" width="121" height="128"/>
-        <image name="goforward.15" catalog="system" width="121" height="128"/>
-        <image name="play.fill" catalog="system" width="116" height="128"/>
-        <image name="rotate.right" catalog="system" width="118" height="128"/>
-        <image name="speaker.slash.fill" catalog="system" width="124" height="128"/>
+        <image name="gobackward.15" catalog="system" width="119" height="128"/>
+        <image name="goforward.15" catalog="system" width="119" height="128"/>
+        <image name="play.fill" catalog="system" width="117" height="128"/>
+        <image name="rotate.right" catalog="system" width="115" height="128"/>
+        <image name="speaker.slash.fill" catalog="system" width="118" height="128"/>
         <systemColor name="systemRedColor">
             <color red="1" green="0.23137254901960785" blue="0.18823529411764706" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>

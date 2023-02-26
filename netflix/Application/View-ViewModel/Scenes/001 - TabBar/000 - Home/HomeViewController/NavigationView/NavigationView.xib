@@ -44,10 +44,10 @@
                                     </constraints>
                                 </view>
                                 <view tag="1" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="jyM-Yo-6ZJ" userLabel="AirPlay Button Container">
-                                    <rect key="frame" x="318" y="11" width="32" height="32"/>
+                                    <rect key="frame" x="310" y="7" width="40" height="40"/>
                                     <constraints>
-                                        <constraint firstAttribute="width" constant="32" id="b9r-xf-N2n"/>
-                                        <constraint firstAttribute="height" constant="32" id="qTv-RB-h82"/>
+                                        <constraint firstAttribute="width" constant="40" id="b9r-xf-N2n"/>
+                                        <constraint firstAttribute="height" constant="40" id="qTv-RB-h82"/>
                                     </constraints>
                                 </view>
                                 <view tag="2" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="bzF-Ir-7K2" userLabel="Account Button Container">
