@@ -126,24 +126,24 @@
                                 <color key="textColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="RVV-XP-07e">
-                                <rect key="frame" x="0.0" y="57.000000000000021" width="38.333333333333336" height="23.666666666666664"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="RVV-XP-07e">
+                                <rect key="frame" x="0.0" y="57.000000000000028" width="366" height="37.333333333333343"/>
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="18"/>
                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fnZ-xw-Qq0">
-                                <rect key="frame" x="-4" y="84.666666666666657" width="330" height="61.666666666666657"/>
+                                <rect key="frame" x="-4" y="98.333333333333343" width="362" height="62"/>
                                 <string key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation.</string>
                                 <color key="textColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" keyboardAppearance="alert" returnKeyType="done" enablesReturnKeyAutomatically="YES" smartDashesType="no" smartInsertDeleteType="no" smartQuotesType="no"/>
                             </textView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="5lO-Lv-9H1">
-                                <rect key="frame" x="0.0" y="146.33333333333334" width="374" height="41"/>
+                                <rect key="frame" x="0.0" y="160.33333333333334" width="374" height="27"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalCompressionResistancePriority="749" text="Genres" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Llp-xM-e7g">
-                                        <rect key="frame" x="0.0" y="0.0" width="374" height="33"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="374" height="23"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="10"/>
                                         <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <nil key="highlightedColor"/>
@@ -151,7 +151,7 @@
                                 </subviews>
                                 <constraints>
                                     <constraint firstAttribute="trailing" secondItem="Llp-xM-e7g" secondAttribute="trailing" id="DAf-Xe-o3H"/>
-                                    <constraint firstAttribute="bottom" secondItem="Llp-xM-e7g" secondAttribute="bottom" constant="8" id="Uxr-oA-tlA"/>
+                                    <constraint firstAttribute="bottom" secondItem="Llp-xM-e7g" secondAttribute="bottom" constant="4" id="Uxr-oA-tlA"/>
                                     <constraint firstItem="Llp-xM-e7g" firstAttribute="leading" secondItem="5lO-Lv-9H1" secondAttribute="leading" id="ZK6-Cp-53y"/>
                                     <constraint firstItem="Llp-xM-e7g" firstAttribute="top" secondItem="5lO-Lv-9H1" secondAttribute="top" id="e1d-Ep-Mda"/>
                                 </constraints>
@@ -160,16 +160,17 @@
                         <constraints>
                             <constraint firstItem="RVV-XP-07e" firstAttribute="top" secondItem="Fsk-Ex-eal" secondAttribute="bottom" constant="4" id="2eG-Kc-Tfg"/>
                             <constraint firstItem="vaT-DT-xVf" firstAttribute="top" secondItem="03i-oX-e2H" secondAttribute="top" constant="4" id="4fT-fn-3kj"/>
+                            <constraint firstAttribute="trailing" secondItem="RVV-XP-07e" secondAttribute="trailing" constant="8" id="8j1-aG-NTm"/>
                             <constraint firstItem="Fsk-Ex-eal" firstAttribute="leading" secondItem="03i-oX-e2H" secondAttribute="leading" constant="-4" id="9MN-f2-fVt"/>
                             <constraint firstItem="5lO-Lv-9H1" firstAttribute="top" secondItem="fnZ-xw-Qq0" secondAttribute="bottom" id="Mbv-AU-1R1"/>
                             <constraint firstItem="vaT-DT-xVf" firstAttribute="leading" secondItem="03i-oX-e2H" secondAttribute="leading" id="NaP-RK-CkD"/>
                             <constraint firstItem="fnZ-xw-Qq0" firstAttribute="height" secondItem="03i-oX-e2H" secondAttribute="height" multiplier="0.33" id="PQZ-MD-o0n"/>
                             <constraint firstItem="fnZ-xw-Qq0" firstAttribute="leading" secondItem="03i-oX-e2H" secondAttribute="leading" constant="-4" id="Qqu-3k-2a6"/>
-                            <constraint firstAttribute="trailing" secondItem="fnZ-xw-Qq0" secondAttribute="trailing" constant="48" id="Uyr-e5-beJ"/>
+                            <constraint firstAttribute="trailing" secondItem="fnZ-xw-Qq0" secondAttribute="trailing" constant="16" id="Uyr-e5-beJ"/>
                             <constraint firstItem="Fsk-Ex-eal" firstAttribute="top" secondItem="vaT-DT-xVf" secondAttribute="bottom" constant="8" id="cKV-h1-3ea"/>
                             <constraint firstItem="t6A-TS-GQd" firstAttribute="centerY" secondItem="Fsk-Ex-eal" secondAttribute="centerY" id="cKk-Yd-Eta"/>
                             <constraint firstItem="t6A-TS-GQd" firstAttribute="leading" secondItem="Fsk-Ex-eal" secondAttribute="trailing" id="eDw-5l-j8w"/>
-                            <constraint firstItem="RVV-XP-07e" firstAttribute="height" secondItem="03i-oX-e2H" secondAttribute="height" multiplier="0.126459" id="eqU-68-fso"/>
+                            <constraint firstItem="RVV-XP-07e" firstAttribute="height" secondItem="03i-oX-e2H" secondAttribute="height" multiplier="0.2" id="eqU-68-fso"/>
                             <constraint firstItem="5lO-Lv-9H1" firstAttribute="top" secondItem="fnZ-xw-Qq0" secondAttribute="bottom" id="f3L-iD-648"/>
                             <constraint firstItem="fnZ-xw-Qq0" firstAttribute="top" secondItem="RVV-XP-07e" secondAttribute="bottom" constant="4" id="itO-mn-I00"/>
                             <constraint firstAttribute="bottom" secondItem="5lO-Lv-9H1" secondAttribute="bottom" id="veh-Kg-ivc"/>

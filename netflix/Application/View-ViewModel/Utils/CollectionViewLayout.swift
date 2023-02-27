@@ -91,16 +91,6 @@ final class CollectionViewLayout: UICollectionViewFlowLayout, LayoutProtocol {
             break
         case .trailer:
             break
-        case .news:
-            minimumLineSpacing = 0 // set the line spacing to 0
-            minimumInteritemSpacing = 0 // set the interitem spacing to 0
-            sectionInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0) // set the section inset to 0
-            itemSize = CGSize(width: super.collectionView!.frame.width, height: super.collectionView!.frame.height) // set the size of the cell to the size of the collection view
-            sectionInsetReference = .fromSafeArea // set the section inset reference to safe area
-            sectionHeadersPinToVisibleBounds = false // set headers pin to visible bounds
-            sectionFootersPinToVisibleBounds = false // set footers pin to visible bounds
-            estimatedItemSize = .zero // set estimated size to zero
-            super.collectionView!.isPagingEnabled = true // enable paging
         case .search:
             break
         default: break
