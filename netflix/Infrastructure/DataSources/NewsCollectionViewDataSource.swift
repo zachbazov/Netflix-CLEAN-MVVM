@@ -1,5 +1,5 @@
 //
-//  NewsTableViewDataSource.swift
+//  NewsCollectionViewDataSource.swift
 //  netflix
 //
 //  Created by Zach Bazov on 20/12/2022.
@@ -18,9 +18,9 @@ private protocol DataSourceOutput {
 
 private typealias DataSourceProtocol = DataSourceOutput
 
-// MARK: - NewsTableViewDataSource Type
+// MARK: - NewsCollectionViewDataSource Type
 
-final class NewsTableViewDataSource: NSObject {
+final class NewsCollectionViewDataSource: NSObject {
     fileprivate let viewModel: NewsViewModel
     fileprivate let numberOfSections: Int = 1
     /// Create a news table view data source object.
@@ -32,35 +32,31 @@ final class NewsTableViewDataSource: NSObject {
 
 // MARK: - DataSourceProtocol Implementation
 
-extension NewsTableViewDataSource: DataSourceProtocol {
+extension NewsCollectionViewDataSource: DataSourceProtocol {
     func dataSourceDidChange() {
-        guard let tableView = viewModel.coordinator!.viewController!.tableView else { return }
-        tableView.delegate = self
-        tableView.dataSource = self
-        tableView.reloadData()
+        guard let collectionView = viewModel.coordinator!.viewController!.collectionView else { return }
+        collectionView.delegate = self
+        collectionView.dataSource = self
+        collectionView.reloadData()
     }
 }
 
-// MARK: - UITableViewDelegate & UITableViewDataSource Implementation
+// MARK: - UICollectionViewDelegate & UICollectionViewDataSource Implementation
 
-extension NewsTableViewDataSource: UITableViewDelegate, UITableViewDataSource {
-    func numberOfSections(in tableView: UITableView) -> Int {
+extension NewsCollectionViewDataSource: UICollectionViewDelegate, UICollectionViewDataSource {
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
         return numberOfSections
     }
     
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return viewModel.items.value.count
     }
     
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        return NewsTableViewCell.create(in: tableView, for: indexPath, with: viewModel)
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        return NewsCollectionViewCell.create(in: collectionView, at: indexPath, with: viewModel)
     }
     
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return UITableView.automaticDimension
-    }
-    
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         guard let row = indexPath.row as Int?, row >= 0, row <= viewModel.items.value.count - 1 else { return }
         let homeNavigation = Application.app.coordinator.tabCoordinator.home!
         let newsNavigation = Application.app.coordinator.tabCoordinator.news!

@@ -1,5 +1,5 @@
 //
-//  NewsTableViewCellViewModel.swift
+//  NewsCollectionViewCellViewModel.swift
 //  netflix
 //
 //  Created by Zach Bazov on 20/12/2022.
@@ -23,9 +23,9 @@ private protocol ViewModelOutput {
 
 private typealias ViewModelProtocol = ViewModelOutput
 
-// MARK: - NewsTableViewCellViewModel Type
+// MARK: - NewsCollectionViewCellViewModel Type
 
-struct NewsTableViewCellViewModel {
+struct NewsCollectionViewCellViewModel {
     let media: Media
     let previewPosterImagePath: String
     let previewPosterImageIdentifier: NSString
@@ -52,12 +52,12 @@ struct NewsTableViewCellViewModel {
 
 // MARK: - ViewModelProtocol Implementation
 
-extension NewsTableViewCellViewModel: ViewModelProtocol {}
+extension NewsCollectionViewCellViewModel: ViewModelProtocol {}
 
 // MARK: - Equatable Implementation
 
-extension NewsTableViewCellViewModel: Equatable {
-    static func ==(lhs: NewsTableViewCellViewModel, rhs: NewsTableViewCellViewModel) -> Bool {
+extension NewsCollectionViewCellViewModel: Equatable {
+    static func ==(lhs: NewsCollectionViewCellViewModel, rhs: NewsCollectionViewCellViewModel) -> Bool {
         return lhs.media.slug == rhs.media.slug
     }
 }

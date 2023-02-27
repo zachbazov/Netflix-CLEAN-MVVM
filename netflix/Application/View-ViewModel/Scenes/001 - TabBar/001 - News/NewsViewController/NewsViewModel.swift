@@ -12,7 +12,7 @@ import Foundation
 private protocol ViewModelOutput {
     var useCase: MediaUseCase { get }
     
-    var items: Observable<[NewsTableViewCellViewModel]> { get }
+    var items: Observable<[NewsCollectionViewCellViewModel]> { get }
     var isEmpty: Bool { get }
     
     func viewDidLoad()
@@ -28,7 +28,7 @@ final class NewsViewModel {
     
     fileprivate let useCase = MediaUseCase()
     
-    let items: Observable<[NewsTableViewCellViewModel]> = Observable([])
+    let items: Observable<[NewsCollectionViewCellViewModel]> = Observable([])
     var isEmpty: Bool { return items.value.isEmpty }
 }
 

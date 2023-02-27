@@ -11,8 +11,8 @@ import UIKit
 
 private protocol ControllerOutput {
     var navigationView: NewsNavigationView! { get }
-    var tableView: UITableView! { get }
-    var dataSource: NewsTableViewDataSource! { get }
+    var collectionView: UICollectionView! { get }
+    var dataSource: NewsCollectionViewDataSource! { get }
 }
 
 private typealias ControllerProtocol = ControllerOutput
@@ -24,8 +24,8 @@ final class NewsViewController: Controller<NewsViewModel> {
     @IBOutlet private(set) var tableViewContainer: UIView!
     
     fileprivate var navigationView: NewsNavigationView!
-    fileprivate(set) var tableView: UITableView!
-    fileprivate var dataSource: NewsTableViewDataSource!
+    fileprivate(set) var collectionView: UICollectionView!
+    fileprivate var dataSource: NewsCollectionViewDataSource!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -36,7 +36,7 @@ final class NewsViewController: Controller<NewsViewModel> {
     
     override func viewDidDeploySubviews() {
         setupNavigationView()
-        setupTableView()
+        setupCollectionView()
         setupDataSource()
     }
     
@@ -66,17 +66,18 @@ extension NewsViewController {
         navigationView = NewsNavigationView(on: navigationViewContainer)
     }
     
-    private func setupTableView() {
-        tableView = UITableView(frame: tableViewContainer.bounds, style: .plain)
-        tableView.showsVerticalScrollIndicator = false
-        tableView.showsHorizontalScrollIndicator = false
-        tableView.register(nib: NewsTableViewCell.self)
-        tableView.backgroundColor = .black
+    private func setupCollectionView() {
+        let layout = CollectionViewLayout(layout: .news, scrollDirection: .vertical)
+        collectionView = UICollectionView(frame: tableViewContainer.bounds, collectionViewLayout: layout)
+        collectionView.showsVerticalScrollIndicator = false
+        collectionView.showsHorizontalScrollIndicator = false
+        collectionView.registerNib(NewsCollectionViewCell.self)
+        collectionView.backgroundColor = .black
         
-        tableViewContainer.addSubview(tableView)
+        tableViewContainer.addSubview(collectionView)
     }
     
     private func setupDataSource() {
-        dataSource = NewsTableViewDataSource(with: viewModel)
+        dataSource = NewsCollectionViewDataSource(with: viewModel)
     }
 }

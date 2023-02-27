@@ -24,7 +24,7 @@ struct NewsHTTPDTO: HTTP {
 // MARK: - Mapping
 
 extension NewsHTTPDTO.Response {
-    func toCellViewModels() -> [NewsTableViewCellViewModel] {
-        return data.map { NewsTableViewCellViewModel(with: $0.toDomain()) }
+    func toCellViewModels() -> [NewsCollectionViewCellViewModel] {
+        return data.map { NewsCollectionViewCellViewModel(with: $0.toDomain()) }
     }
 }

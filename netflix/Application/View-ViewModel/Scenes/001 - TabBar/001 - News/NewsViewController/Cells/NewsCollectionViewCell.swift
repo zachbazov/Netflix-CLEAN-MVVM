@@ -1,8 +1,8 @@
 //
-//  NewsTableViewCell.swift
+//  NewsCollectionViewCell.swift
 //  netflix
 //
-//  Created by Zach Bazov on 20/12/2022.
+//  Created by Zach Bazov on 27/02/2023.
 //
 
 import UIKit
@@ -12,14 +12,14 @@ import UIKit
 private protocol ViewOutput {
     var representedIdentifier: String? { get }
     
-    func viewDidConfigure(with viewModel: NewsTableViewCellViewModel)
+    func viewDidConfigure(with viewModel: NewsCollectionViewCellViewModel)
 }
 
 private typealias ViewProtocol = ViewOutput
 
-// MARK: - NewsTableViewCell Type
+// MARK: - NewsCollectionViewCell Type
 
-final class NewsTableViewCell: UITableViewCell {
+final class NewsCollectionViewCell: UICollectionViewCell {
     @IBOutlet private weak var previewPosterImageView: UIImageView!
     @IBOutlet private weak var ageRestrictionView: AgeRestrictionView!
     @IBOutlet private weak var monthLabel: UILabel!
@@ -35,25 +35,18 @@ final class NewsTableViewCell: UITableViewCell {
     @IBOutlet private weak var descriptionTextView: UITextView!
     @IBOutlet private weak var genresLabel: UILabel!
     
-    fileprivate var viewModel: NewsTableViewCellViewModel!
+    fileprivate var viewModel: NewsCollectionViewCellViewModel!
     fileprivate var representedIdentifier: String?
-    /// Create a news table view cell object.
-    /// - Parameters:
-    ///   - tableView: Corresponding table view.
-    ///   - indexPath: The index path of the cell on the data source.
-    ///   - viewModel: Coordinating view model.
-    /// - Returns: A news table view cell.
-    static func create(in tableView: UITableView,
-                       for indexPath: IndexPath,
-                       with viewModel: NewsViewModel) -> NewsTableViewCell {
-        guard let view = tableView.dequeueReusableCell(
-            withIdentifier: NewsTableViewCell.reuseIdentifier,
-            for: indexPath) as? NewsTableViewCell else {
+    
+    static func create(in collectionView: UICollectionView,
+                       at indexPath: IndexPath,
+                       with viewModel: NewsViewModel) -> NewsCollectionViewCell {
+        guard let view = collectionView.dequeueReusableCell(withReuseIdentifier: NewsCollectionViewCell.reuseIdentifier, for: indexPath) as? NewsCollectionViewCell else {
             fatalError()
         }
         let cellViewModel = viewModel.items.value[indexPath.row]
         view.representedIdentifier = cellViewModel.media.slug
-        view.viewModel = NewsTableViewCellViewModel(with: cellViewModel.media)
+        view.viewModel = NewsCollectionViewCellViewModel(with: cellViewModel.media)
         view.viewDidConfigure()
         view.viewDidConfigure(with: view.viewModel)
         return view
@@ -62,9 +55,8 @@ final class NewsTableViewCell: UITableViewCell {
 
 // MARK: - ViewLifecycleBehavior Implementation
 
-extension NewsTableViewCell: ViewLifecycleBehavior {
+extension NewsCollectionViewCell: ViewLifecycleBehavior {
     func viewDidConfigure() {
-        selectionStyle = .none
         backgroundColor = .black
         previewPosterImageView.layer.cornerRadius = 10.0
     }
@@ -72,8 +64,8 @@ extension NewsTableViewCell: ViewLifecycleBehavior {
 
 // MARK: - ViewProtocol Implementation
 
-extension NewsTableViewCell: ViewProtocol {
-    fileprivate func viewDidConfigure(with viewModel: NewsTableViewCellViewModel) {
+extension NewsCollectionViewCell: ViewProtocol {
+    fileprivate func viewDidConfigure(with viewModel: NewsCollectionViewCellViewModel) {
         guard representedIdentifier == viewModel.media.slug else { return }
         
         AsyncImageService.shared.load(
