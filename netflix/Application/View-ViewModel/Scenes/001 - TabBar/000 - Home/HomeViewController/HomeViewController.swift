@@ -29,6 +29,7 @@ final class HomeViewController: Controller<HomeViewModel>, ViewControllerProtoco
     
     var navigationView: NavigationView!
     var browseOverlayView: BrowseOverlayView!
+    var searchNavigationController: UINavigationController!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -51,23 +52,19 @@ final class HomeViewController: Controller<HomeViewModel>, ViewControllerProtoco
     
     override func viewDidBindObservers() {
         viewModel.dataSourceState.observe(on: self) { [weak self] state in
-            // Release data source changes.
             self?.dataSource.dataSourceDidChange()
         }
-        
-        viewModel.showcase.observe(on: self) { [weak self] media in
-            guard let media = media else { return }
-            // Release `opaqueView` view model changes based on the display media object.
+        viewModel.showcase.observe(on: self) { [weak self] in
+            guard let media = $0 else { return }
             self?.navigationView.navigationOverlayView.opaqueView.viewDidUpdate(with: media)
         }
     }
     
     override func viewDidUnbindObservers() {
-        if let viewModel = viewModel {
-            printIfDebug(.success, "Removed `HomeViewModel` observers.")
-            viewModel.dataSourceState.remove(observer: self)
-            viewModel.showcase.remove(observer: self)
-        }
+        guard let viewModel = viewModel else { return }
+        viewModel.dataSourceState.remove(observer: self)
+        viewModel.showcase.remove(observer: self)
+        printIfDebug(.success, "Removed `HomeViewModel` observers.")
     }
 }
 

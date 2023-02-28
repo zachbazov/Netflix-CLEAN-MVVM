@@ -10,9 +10,11 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="SearchViewController" customModule="netflix" customModuleProvider="target">
             <connections>
-                <outlet property="contentContainer" destination="WsN-hZ-h6l" id="jtz-34-beg"/>
+                <outlet property="backButton" destination="yTf-Ic-zxX" id="xwJ-Z4-iIa"/>
+                <outlet property="contentContainer" destination="Qav-6r-NUw" id="Lfv-0b-x5j"/>
                 <outlet property="contentView" destination="Eug-U7-55W" id="d2g-l1-Ubv"/>
-                <outlet property="searchBarContainer" destination="Pe2-eV-mfP" id="9xy-nM-w0q"/>
+                <outlet property="searchBar" destination="T3U-kb-GFc" id="kvV-vX-9Em"/>
+                <outlet property="searchBarContainer" destination="Xde-QO-qf2" id="vex-tf-VKU"/>
                 <outlet property="view" destination="oLm-og-pdd" id="7Ul-cW-2Cs"/>
             </connections>
         </placeholder>
@@ -22,37 +24,92 @@
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <subviews>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Eug-U7-55W" userLabel="Content View">
-                    <rect key="frame" x="0.0" y="59" width="393" height="759"/>
+                    <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                     <subviews>
-                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Pe2-eV-mfP" userLabel="Search Bar Container">
-                            <rect key="frame" x="0.0" y="0.0" width="393" height="56"/>
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="evQ-J7-ESg" userLabel="Bar Container">
+                            <rect key="frame" x="0.0" y="59" width="393" height="40"/>
+                            <subviews>
+                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cBt-nc-NNt" userLabel="Button Container">
+                                    <rect key="frame" x="0.0" y="0.0" width="32" height="40"/>
+                                    <subviews>
+                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yTf-Ic-zxX">
+                                            <rect key="frame" x="0.0" y="0.0" width="32" height="40"/>
+                                            <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                            <state key="normal" image="chevron.left" catalog="system">
+                                                <preferredSymbolConfiguration key="preferredSymbolConfiguration" scale="default"/>
+                                            </state>
+                                        </button>
+                                    </subviews>
+                                    <constraints>
+                                        <constraint firstItem="yTf-Ic-zxX" firstAttribute="top" secondItem="cBt-nc-NNt" secondAttribute="top" id="G4F-a4-Kbp"/>
+                                        <constraint firstAttribute="bottom" secondItem="yTf-Ic-zxX" secondAttribute="bottom" id="PaT-PZ-e3C"/>
+                                        <constraint firstAttribute="trailing" secondItem="yTf-Ic-zxX" secondAttribute="trailing" id="TrG-Ys-5F5"/>
+                                        <constraint firstItem="yTf-Ic-zxX" firstAttribute="leading" secondItem="cBt-nc-NNt" secondAttribute="leading" id="eSf-cC-ASw"/>
+                                        <constraint firstAttribute="width" constant="32" id="wdn-cx-GUL"/>
+                                    </constraints>
+                                </view>
+                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Xde-QO-qf2" userLabel="Search Bar Container">
+                                    <rect key="frame" x="32" y="0.0" width="361" height="40"/>
+                                    <subviews>
+                                        <searchBar contentMode="redraw" barStyle="black" translatesAutoresizingMaskIntoConstraints="NO" id="T3U-kb-GFc">
+                                            <rect key="frame" x="0.0" y="0.0" width="377" height="40"/>
+                                            <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            <textInputTraits key="textInputTraits"/>
+                                            <scopeButtonTitles>
+                                                <string>Title</string>
+                                                <string>Title</string>
+                                            </scopeButtonTitles>
+                                        </searchBar>
+                                    </subviews>
+                                    <constraints>
+                                        <constraint firstAttribute="trailing" secondItem="T3U-kb-GFc" secondAttribute="trailing" id="2fK-Yl-PDz"/>
+                                        <constraint firstItem="T3U-kb-GFc" firstAttribute="top" secondItem="Xde-QO-qf2" secondAttribute="top" id="Ciy-P5-3Oz"/>
+                                        <constraint firstItem="T3U-kb-GFc" firstAttribute="leading" secondItem="Xde-QO-qf2" secondAttribute="leading" id="Tbb-so-DWM"/>
+                                        <constraint firstAttribute="bottom" secondItem="T3U-kb-GFc" secondAttribute="bottom" id="dtG-Dy-dyh"/>
+                                    </constraints>
+                                </view>
+                            </subviews>
                             <constraints>
-                                <constraint firstAttribute="height" constant="56" id="0v9-lz-u2G"/>
+                                <constraint firstAttribute="height" constant="40" id="2of-lW-Dbs"/>
+                                <constraint firstAttribute="bottom" secondItem="Xde-QO-qf2" secondAttribute="bottom" id="6fP-1t-Hll"/>
+                                <constraint firstAttribute="trailing" secondItem="Xde-QO-qf2" secondAttribute="trailing" id="9Ue-Af-P4M"/>
+                                <constraint firstItem="cBt-nc-NNt" firstAttribute="top" secondItem="evQ-J7-ESg" secondAttribute="top" id="B5b-E4-XfI"/>
+                                <constraint firstAttribute="bottom" secondItem="cBt-nc-NNt" secondAttribute="bottom" id="FE0-ZL-F3c"/>
+                                <constraint firstItem="cBt-nc-NNt" firstAttribute="leading" secondItem="evQ-J7-ESg" secondAttribute="leading" id="Z7x-6L-VUk"/>
+                                <constraint firstItem="Xde-QO-qf2" firstAttribute="leading" secondItem="cBt-nc-NNt" secondAttribute="trailing" id="gQK-d2-OIX"/>
+                                <constraint firstItem="Xde-QO-qf2" firstAttribute="top" secondItem="evQ-J7-ESg" secondAttribute="top" id="jHz-gh-sbb"/>
                             </constraints>
                         </view>
-                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="WsN-hZ-h6l" userLabel="Content Container">
-                            <rect key="frame" x="0.0" y="56" width="393" height="703"/>
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Qav-6r-NUw" userLabel="Content Container">
+                            <rect key="frame" x="0.0" y="115" width="393" height="737"/>
                         </view>
                     </subviews>
+                    <viewLayoutGuide key="safeArea" id="Bh6-Sc-lGW"/>
+                    <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <constraints>
-                        <constraint firstAttribute="bottom" secondItem="WsN-hZ-h6l" secondAttribute="bottom" id="K0e-Vu-Gio"/>
-                        <constraint firstAttribute="trailing" secondItem="WsN-hZ-h6l" secondAttribute="trailing" id="P3i-iP-Rv2"/>
-                        <constraint firstAttribute="trailing" secondItem="Pe2-eV-mfP" secondAttribute="trailing" id="USN-eF-7Y2"/>
-                        <constraint firstItem="Pe2-eV-mfP" firstAttribute="leading" secondItem="Eug-U7-55W" secondAttribute="leading" id="Xig-hW-aQV"/>
-                        <constraint firstItem="Pe2-eV-mfP" firstAttribute="top" secondItem="Eug-U7-55W" secondAttribute="top" id="dh1-op-xbb"/>
-                        <constraint firstItem="WsN-hZ-h6l" firstAttribute="top" secondItem="Pe2-eV-mfP" secondAttribute="bottom" id="feb-ff-gec"/>
-                        <constraint firstItem="WsN-hZ-h6l" firstAttribute="leading" secondItem="Eug-U7-55W" secondAttribute="leading" id="oOI-n0-MjA"/>
+                        <constraint firstItem="evQ-J7-ESg" firstAttribute="leading" secondItem="Eug-U7-55W" secondAttribute="leading" id="C4M-SH-iSV"/>
+                        <constraint firstItem="evQ-J7-ESg" firstAttribute="top" secondItem="Bh6-Sc-lGW" secondAttribute="top" id="GQ2-c6-5cs"/>
+                        <constraint firstAttribute="bottom" secondItem="Qav-6r-NUw" secondAttribute="bottom" id="KrD-ss-jXR"/>
+                        <constraint firstItem="Qav-6r-NUw" firstAttribute="leading" secondItem="Eug-U7-55W" secondAttribute="leading" id="KvW-dC-fMa"/>
+                        <constraint firstItem="Qav-6r-NUw" firstAttribute="top" secondItem="evQ-J7-ESg" secondAttribute="bottom" constant="16" id="oEe-nr-lEg"/>
+                        <constraint firstAttribute="trailing" secondItem="Qav-6r-NUw" secondAttribute="trailing" id="osd-lT-0lA"/>
+                        <constraint firstAttribute="trailing" secondItem="evQ-J7-ESg" secondAttribute="trailing" id="xIH-nh-rfB"/>
                     </constraints>
                 </view>
             </subviews>
-            <viewLayoutGuide key="safeArea" id="qUX-wD-p8S"/>
+            <viewLayoutGuide key="safeArea" id="OrS-2c-WRq"/>
             <constraints>
-                <constraint firstItem="Eug-U7-55W" firstAttribute="leading" secondItem="qUX-wD-p8S" secondAttribute="leading" id="3nj-Rr-LQa"/>
-                <constraint firstItem="Eug-U7-55W" firstAttribute="top" secondItem="qUX-wD-p8S" secondAttribute="top" id="46M-lr-7zO"/>
-                <constraint firstItem="qUX-wD-p8S" firstAttribute="trailing" secondItem="Eug-U7-55W" secondAttribute="trailing" id="cP9-On-33M"/>
-                <constraint firstItem="qUX-wD-p8S" firstAttribute="bottom" secondItem="Eug-U7-55W" secondAttribute="bottom" id="twP-nD-jFE"/>
+                <constraint firstItem="Eug-U7-55W" firstAttribute="leading" secondItem="oLm-og-pdd" secondAttribute="leading" id="3nj-Rr-LQa"/>
+                <constraint firstItem="Eug-U7-55W" firstAttribute="top" secondItem="oLm-og-pdd" secondAttribute="top" id="46M-lr-7zO"/>
+                <constraint firstAttribute="trailing" secondItem="Eug-U7-55W" secondAttribute="trailing" id="cP9-On-33M"/>
+                <constraint firstAttribute="bottom" secondItem="Eug-U7-55W" secondAttribute="bottom" id="twP-nD-jFE"/>
             </constraints>
             <point key="canvasLocation" x="225" y="46"/>
         </view>
     </objects>
+    <resources>
+        <image name="chevron.left" catalog="system" width="97" height="128"/>
+    </resources>
 </document>

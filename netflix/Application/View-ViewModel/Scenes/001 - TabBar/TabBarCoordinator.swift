@@ -163,7 +163,7 @@ extension TabBarCoordinator: CoordinatorProtocol {
         return navigation
     }
     
-    fileprivate func createSearchController() -> UINavigationController {
+    func createSearchController() -> UINavigationController {
         let coordinator = SearchViewCoordinator()
         let viewModel = SearchViewModel()
         let controller = SearchViewController()

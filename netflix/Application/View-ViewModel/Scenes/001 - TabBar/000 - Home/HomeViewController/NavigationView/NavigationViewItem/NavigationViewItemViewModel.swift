@@ -67,6 +67,7 @@ extension NavigationViewItemViewModel: ViewModelProtocol {
         switch state {
         case .home: return "netflix-logo-sm"
         case .airPlay: return "airplayvideo"
+        case .search: return "magnifyingglass"
         case .account: return "person.circle"
         default: return nil
         }

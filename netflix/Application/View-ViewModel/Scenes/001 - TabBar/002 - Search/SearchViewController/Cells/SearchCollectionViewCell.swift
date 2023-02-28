@@ -15,7 +15,6 @@ private protocol ViewInput {
 
 private protocol ViewOutput {
     var representedIdentifier: NSString? { get }
-    var hasGradient: Bool { get }
 }
 
 private typealias ViewProtocol = ViewInput & ViewOutput
@@ -25,10 +24,8 @@ private typealias ViewProtocol = ViewInput & ViewOutput
 class SearchCollectionViewCell: UICollectionViewCell {
     @IBOutlet private var posterImageView: UIImageView!
     @IBOutlet private var logoImageView: UIImageView!
-    @IBOutlet private var gradientView: UIView!
     
     fileprivate var representedIdentifier: NSString?
-    fileprivate var hasGradient = false
     /// Create a search collection view cell object.
     /// - Parameters:
     ///   - collectionView: Corresponding collection view.
@@ -46,7 +43,6 @@ class SearchCollectionViewCell: UICollectionViewCell {
         let media = viewModel.items.value[indexPath.row].media!
         let cellViewModel = SearchCollectionViewCellViewModel(media: media)
         view.representedIdentifier = cellViewModel.slug as NSString
-        view.viewDidDeploySubviews()
         view.viewDidConfigure()
         view.viewDidConfigure(with: cellViewModel)
         return view
@@ -62,12 +58,8 @@ class SearchCollectionViewCell: UICollectionViewCell {
 // MARK: - ViewLifecycleBehavior Implementation
 
 extension SearchCollectionViewCell: ViewLifecycleBehavior {
-    func viewDidDeploySubviews() {
-        setupGradients()
-    }
-    
     func viewDidConfigure() {
-        posterImageView.layer.cornerRadius = 10.0
+        posterImageView.layer.cornerRadius = 4.0
     }
 }
 
@@ -88,22 +80,5 @@ extension SearchCollectionViewCell: ViewProtocol {
             identifier: viewModel.logoImageIdentifier) { [weak self] image in
                 mainQueueDispatch { self?.logoImageView.image = image }
             }
-    }
-}
-
-// MARK: - Private UI Implementation
-
-extension SearchCollectionViewCell {
-    private func setupGradients() {
-        if !hasGradient {
-            gradientView.addGradientLayer(
-                colors: [.black.withAlphaComponent(1.0),
-                         .black.withAlphaComponent(0.5),
-                         .clear],
-                locations: [0.2, 0.6, 1.0],
-                points: [CGPoint(x: 1.0, y: 0.5), CGPoint(x: 0.0, y: 0.5)])
-            
-            hasGradient = true
-        }
     }
 }

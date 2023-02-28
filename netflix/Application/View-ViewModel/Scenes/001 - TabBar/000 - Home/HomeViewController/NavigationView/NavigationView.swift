@@ -27,6 +27,7 @@ final class NavigationView: View<NavigationViewViewModel> {
     @IBOutlet private weak var gradientView: UIView!
     @IBOutlet private weak var homeItemViewContainer: UIView!
     @IBOutlet private weak var airPlayItemViewContainer: UIView!
+    @IBOutlet private weak var searchItemViewContainer: UIView!
     @IBOutlet private weak var accountItemViewContainer: UIView!
     @IBOutlet private(set) weak var tvShowsItemViewContainer: UIView!
     @IBOutlet private(set) weak var moviesItemViewContainer: UIView!
@@ -37,6 +38,7 @@ final class NavigationView: View<NavigationViewViewModel> {
     
     fileprivate(set) var homeItemView: NavigationViewItem!
     fileprivate var airPlayItemView: NavigationViewItem!
+    fileprivate var searchItemView: NavigationViewItem!
     fileprivate var accountItemView: NavigationViewItem!
     fileprivate(set) var tvShowsItemView: NavigationViewItem!
     fileprivate(set) var moviesItemView: NavigationViewItem!
@@ -53,13 +55,15 @@ final class NavigationView: View<NavigationViewViewModel> {
         
         self.homeItemView = NavigationViewItem(on: self.homeItemViewContainer, with: viewModel)
         self.airPlayItemView = NavigationViewItem(on: self.airPlayItemViewContainer, with: viewModel)
+        self.searchItemView = NavigationViewItem(on: self.searchItemViewContainer, with: viewModel)
         self.accountItemView = NavigationViewItem(on: self.accountItemViewContainer, with: viewModel)
         self.tvShowsItemView = NavigationViewItem(on: self.tvShowsItemViewContainer, with: viewModel)
         self.moviesItemView = NavigationViewItem(on: self.moviesItemViewContainer, with: viewModel)
         self.categoriesItemView = NavigationViewItem(on: self.categoriesItemViewContainer, with: viewModel)
         let items: [NavigationViewItem] = [self.homeItemView, self.airPlayItemView,
                                            self.accountItemView, self.tvShowsItemView,
-                                           self.moviesItemView, self.categoriesItemView]
+                                           self.moviesItemView, self.categoriesItemView,
+                                           self.searchItemView]
         self.viewModel = NavigationViewViewModel(items: items, with: viewModel)
         /// Updates root coordinator's `navigationView` property.
         viewModel.coordinator?.viewController?.navigationView = self
@@ -95,8 +99,9 @@ final class NavigationView: View<NavigationViewViewModel> {
     }
     
     override func viewDidUnbindObservers() {
-        printIfDebug(.success, "Removed `NavigationView` observers.")
+        guard let viewModel = viewModel else { return }
         viewModel.state.remove(observer: self)
+        printIfDebug(.success, "Removed `NavigationView` observers.")
     }
 }
 
@@ -133,7 +138,7 @@ extension NavigationView {
         case tvShows
         case movies
         case categories
-        case allCategories
+        case search
     }
 }
 
@@ -147,8 +152,8 @@ extension NavigationView.State: Valuable {
         case .movies: return Localization.TabBar.Home.Navigation().movies
         case .categories: return Localization.TabBar.Home.Navigation().categories
         case .airPlay: return Localization.TabBar.Home.Navigation().airPlay
+        case .search: return ""
         case .account: return Localization.TabBar.Home.Navigation().account
-        case .allCategories: return Localization.TabBar.Home.Navigation().allCategories
         }
     }
 }

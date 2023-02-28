@@ -11,48 +11,57 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
         <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="SearchCollectionViewCell" id="m7e-sJ-aUW" customClass="SearchCollectionViewCell" customModule="netflix" customModuleProvider="target">
-            <rect key="frame" x="0.0" y="0.0" width="358" height="128"/>
+            <rect key="frame" x="0.0" y="0.0" width="414" height="80"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="Xyx-GD-Hqz">
-                <rect key="frame" x="0.0" y="0.0" width="358" height="128"/>
+                <rect key="frame" x="0.0" y="0.0" width="414" height="80"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="EeS-PU-uTb" userLabel="Poster Image View">
-                        <rect key="frame" x="0.0" y="0.0" width="204.66666666666666" height="128"/>
+                        <rect key="frame" x="0.0" y="0.0" width="142.33333333333334" height="80"/>
                         <constraints>
-                            <constraint firstAttribute="width" secondItem="EeS-PU-uTb" secondAttribute="height" multiplier="16:10" id="NOX-8l-YGG"/>
+                            <constraint firstAttribute="width" secondItem="EeS-PU-uTb" secondAttribute="height" multiplier="16:9" id="NOX-8l-YGG"/>
                         </constraints>
                     </imageView>
-                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="6cb-wN-m2N">
-                        <rect key="frame" x="149.33333333333334" y="0.0" width="71.333333333333343" height="128"/>
-                    </view>
                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="KM4-vz-JS4" userLabel="Logo Image View">
-                        <rect key="frame" x="150" y="36" width="192" height="56"/>
+                        <rect key="frame" x="170.33333333333334" y="12" width="112.00000000000003" height="56"/>
                         <constraints>
-                            <constraint firstAttribute="width" secondItem="KM4-vz-JS4" secondAttribute="height" multiplier="12:3.5" id="ZIp-ke-qyb"/>
+                            <constraint firstAttribute="width" secondItem="KM4-vz-JS4" secondAttribute="height" multiplier="8:4" id="ZIp-ke-qyb"/>
                             <constraint firstAttribute="height" constant="56" id="rbx-1R-k9C"/>
                         </constraints>
                     </imageView>
+                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6za-2t-Nda">
+                        <rect key="frame" x="358" y="20" width="40" height="40"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="40" id="RED-Ge-Pa3"/>
+                            <constraint firstAttribute="height" constant="40" id="vHc-ir-jlA"/>
+                        </constraints>
+                        <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                        <state key="normal" image="play.circle" catalog="system">
+                            <preferredSymbolConfiguration key="preferredSymbolConfiguration" scale="large"/>
+                        </state>
+                    </button>
                 </subviews>
                 <constraints>
-                    <constraint firstAttribute="trailing" secondItem="KM4-vz-JS4" secondAttribute="trailing" constant="16" id="BrD-fa-VhW"/>
+                    <constraint firstItem="KM4-vz-JS4" firstAttribute="leading" secondItem="EeS-PU-uTb" secondAttribute="trailing" constant="28" id="BvS-SO-zLy"/>
                     <constraint firstItem="KM4-vz-JS4" firstAttribute="centerY" secondItem="Xyx-GD-Hqz" secondAttribute="centerY" id="CvV-ll-6WY"/>
                     <constraint firstItem="EeS-PU-uTb" firstAttribute="leading" secondItem="Xyx-GD-Hqz" secondAttribute="leading" id="IKM-2C-LmE"/>
-                    <constraint firstItem="6cb-wN-m2N" firstAttribute="width" secondItem="Xyx-GD-Hqz" secondAttribute="width" multiplier="0.2" id="X2M-DM-a3O"/>
-                    <constraint firstItem="6cb-wN-m2N" firstAttribute="trailing" secondItem="EeS-PU-uTb" secondAttribute="trailing" constant="16" id="acV-OY-zGA"/>
                     <constraint firstAttribute="bottom" secondItem="EeS-PU-uTb" secondAttribute="bottom" id="bZi-U3-eFq"/>
-                    <constraint firstAttribute="bottom" secondItem="6cb-wN-m2N" secondAttribute="bottom" id="hk9-8w-eHL"/>
-                    <constraint firstItem="6cb-wN-m2N" firstAttribute="top" secondItem="Xyx-GD-Hqz" secondAttribute="top" id="nAE-t7-ZV7"/>
+                    <constraint firstAttribute="trailing" secondItem="6za-2t-Nda" secondAttribute="trailing" constant="16" id="dhp-Ga-9uP"/>
+                    <constraint firstItem="6za-2t-Nda" firstAttribute="centerY" secondItem="Xyx-GD-Hqz" secondAttribute="centerY" id="iG7-Hy-i6L"/>
                     <constraint firstItem="EeS-PU-uTb" firstAttribute="top" secondItem="Xyx-GD-Hqz" secondAttribute="top" id="uIz-8r-y57"/>
                 </constraints>
             </collectionViewCellContentView>
-            <size key="customSize" width="358" height="166"/>
+            <size key="customSize" width="345" height="118"/>
             <connections>
-                <outlet property="gradientView" destination="6cb-wN-m2N" id="g5J-si-RZh"/>
                 <outlet property="logoImageView" destination="KM4-vz-JS4" id="j24-k5-OIl"/>
                 <outlet property="posterImageView" destination="EeS-PU-uTb" id="fYW-Nx-wui"/>
             </connections>
-            <point key="canvasLocation" x="161.83206106870227" y="81.690140845070431"/>
+            <point key="canvasLocation" x="151.90839694656489" y="64.788732394366207"/>
         </collectionViewCell>
     </objects>
+    <resources>
+        <image name="play.circle" catalog="system" width="128" height="123"/>
+    </resources>
 </document>

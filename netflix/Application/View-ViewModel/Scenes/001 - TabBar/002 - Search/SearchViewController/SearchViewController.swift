@@ -21,6 +21,8 @@ private protocol ControllerOutput {
     
     func updateItems()
     func removeDataSource()
+    func present()
+    func backButtonDidTap()
 }
 
 private typealias ControllerProtocol = ControllerInput & ControllerOutput
@@ -28,18 +30,25 @@ private typealias ControllerProtocol = ControllerInput & ControllerOutput
 // MARK: - SearchViewController Type
 
 final class SearchViewController: Controller<SearchViewModel> {
-    @IBOutlet private var contentView: UIView!
-    @IBOutlet private var searchBarContainer: UIView!
-    @IBOutlet private var contentContainer: UIView!
+    @IBOutlet private weak var contentView: UIView!
+    @IBOutlet private weak var searchBarContainer: UIView!
+    @IBOutlet private weak var contentContainer: UIView!
+    @IBOutlet private weak var backButton: UIButton!
+    @IBOutlet private weak var searchBar: UISearchBar!
     
     fileprivate lazy var collectionView: UICollectionView = createCollectionView()
     fileprivate var dataSource: SearchCollectionViewDataSource!
     fileprivate var searchController = UISearchController(searchResultsController: nil)
     
+    deinit {
+        viewDidUnbindObservers()
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         super.viewDidLoadBehaviors()
         viewDidDeploySubviews()
+        viewDidTargetSubviews()
         viewDidBindObservers()
         viewModel.viewDidLoad()
     }
@@ -54,6 +63,10 @@ final class SearchViewController: Controller<SearchViewModel> {
         setupDataSource()
     }
     
+    override func viewDidTargetSubviews() {
+        backButton.addTarget(self, action: #selector(backButtonDidTap), for: .touchUpInside)
+    }
+    
     override func viewDidBindObservers() {
         viewModel.items.observe(on: self) { [weak self] _ in self?.updateItems() }
         viewModel.loading.observe(on: self) { [weak self] in self?.updateLoading($0) }
@@ -61,10 +74,11 @@ final class SearchViewController: Controller<SearchViewModel> {
     }
     
     override func viewDidUnbindObservers() {
-        printIfDebug(.success, "Removed `SearchViewModel` observers.")
+        guard let viewModel = viewModel else { return }
         viewModel.items.remove(observer: self)
         viewModel.loading.remove(observer: self)
         viewModel.query.remove(observer: self)
+        printIfDebug(.success, "Removed `SearchViewModel` observers.")
     }
 }
 
@@ -80,6 +94,7 @@ extension SearchViewController: ControllerProtocol {
     
     fileprivate func updateLoading(_ loading: SearchLoading?) {
         contentContainer.isHidden(true)
+        
         ActivityIndicatorView.viewDidHide()
         
         switch loading {
@@ -103,9 +118,49 @@ extension SearchViewController: ControllerProtocol {
         collectionView.reloadData()
         collectionView.contentSize = .zero
         
-        viewModel.items.value = []
+        viewModel?.items.value = []
         
         AsyncImageService.shared.cache.removeAllObjects()
+    }
+    
+    @objc
+    fileprivate func backButtonDidTap() {
+        let homeViewController = Application.app.coordinator.tabCoordinator.home.viewControllers.first! as! HomeViewController
+        let searchViewController = homeViewController.searchNavigationController.viewControllers.first! as! SearchViewController
+        
+        UIView.animate(
+            withDuration: 0.25,
+            delay: 0,
+            options: .curveEaseInOut,
+            animations: {
+                homeViewController.searchNavigationController.view.transform = CGAffineTransform(translationX: homeViewController.searchNavigationController.view.bounds.width, y: .zero)
+                homeViewController.searchNavigationController.view.alpha = .zero
+            },
+            completion: { _ in
+                homeViewController.searchNavigationController.remove()
+                searchViewController.viewModel = nil
+                searchViewController.dataSource = nil
+                homeViewController.searchNavigationController = nil
+            }
+        )
+    }
+    
+    func present() {
+        let homeViewController = Application.app.coordinator.tabCoordinator.home.viewControllers.first! as! HomeViewController
+        let searchNavigationController = homeViewController.searchNavigationController!
+        
+        searchNavigationController.view.alpha = .zero
+        searchNavigationController.view.transform = CGAffineTransform(translationX: searchNavigationController.view.bounds.width, y: .zero)
+        
+        UIView.animate(
+            withDuration: 0.25,
+            delay: 0,
+            options: .curveEaseInOut,
+            animations: {
+                searchNavigationController.view.transform = .identity
+                searchNavigationController.view.alpha = 1.0
+            }
+        )
     }
 }
 
@@ -150,21 +205,20 @@ extension SearchViewController {
     
     private func setupSearchController() {
         searchController.delegate = self
-        searchController.searchBar.delegate = self
-        searchController.searchBar.placeholder = "Search..."
         searchController.obscuresBackgroundDuringPresentation = false
-        searchController.searchBar.barStyle = .black
         searchController.hidesNavigationBarDuringPresentation = false
-        searchController.searchBar.frame = searchBarContainer.bounds
-        searchController.searchBar.autoresizingMask = [.flexibleWidth,  .flexibleHeight]
-        searchController.searchBar.searchTextField.backgroundColor = .hexColor("#2B2B2B")
-        searchController.searchBar.searchTextField.superview?.backgroundColor = .black
-        searchController.searchBar.searchTextField.keyboardAppearance = .dark
-        searchController.searchBar.searchTextField.autocapitalizationType = .none
-        searchBarContainer.addSubview(searchController.searchBar)
+        searchBar.delegate = self
+        searchBar.frame = searchBarContainer.bounds
+        searchBar.barStyle = .black
+        searchBar.placeholder = "Search..."
+        searchBar.searchTextField.backgroundColor = .hexColor("#2B2B2B")
+        searchBar.searchTextField.superview?.backgroundColor = .black
+        searchBar.searchTextField.keyboardAppearance = .dark
+        searchBar.searchTextField.autocapitalizationType = .none
         definesPresentationContext = true
+        
         if #available(iOS 13.0, *) {
-            searchController.searchBar.searchTextField.accessibilityIdentifier = "Search Field"
+            searchBar.searchTextField.accessibilityIdentifier = "Search Field"
         }
     }
     

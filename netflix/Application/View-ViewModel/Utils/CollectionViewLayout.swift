@@ -52,7 +52,7 @@ final class CollectionViewLayout: UICollectionViewFlowLayout, LayoutProtocol {
             case .descriptive: return 156.0
             case .trailer: return 224.0
             case .news: return 426.0
-            case .search: return 128.0
+            case .search: return 80.0
             default: return .zero
             }
         }

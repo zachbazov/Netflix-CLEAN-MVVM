@@ -70,6 +70,13 @@ extension NavigationViewViewModel: ViewModelProtocol {
             navigationView.itemsCenterXConstraint.constant = .zero
         case .airPlay:
             break
+        case .search:
+            coordinator.viewController!.searchNavigationController = Application.app.coordinator.tabCoordinator.createSearchController()
+            
+            coordinator.viewController!.add(child: coordinator.viewController!.searchNavigationController, container: coordinator.viewController!.view)
+            
+            let searchViewController = coordinator.viewController!.searchNavigationController.viewControllers.first! as! SearchViewController
+            searchViewController.present()
         case .account:
             let authService = Application.app.services.authentication
             authService.signOut()
@@ -85,7 +92,6 @@ extension NavigationViewViewModel: ViewModelProtocol {
             navigationView.itemsCenterXConstraint.constant = -32.0
         case .categories:
             break
-        default: break
         }
         
         navigationView.animateUsingSpring(withDuration: 0.33,
