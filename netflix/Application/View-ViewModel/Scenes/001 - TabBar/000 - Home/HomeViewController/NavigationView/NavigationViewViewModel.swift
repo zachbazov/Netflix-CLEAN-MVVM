@@ -71,12 +71,7 @@ extension NavigationViewViewModel: ViewModelProtocol {
         case .airPlay:
             break
         case .search:
-            coordinator.viewController!.searchNavigationController = Application.app.coordinator.tabCoordinator.createSearchController()
-            
-            coordinator.viewController!.add(child: coordinator.viewController!.searchNavigationController, container: coordinator.viewController!.view)
-            
-            let searchViewController = coordinator.viewController!.searchNavigationController.viewControllers.first! as! SearchViewController
-            searchViewController.present()
+            coordinator.coordinate(to: .search)
         case .account:
             let authService = Application.app.services.authentication
             authService.signOut()

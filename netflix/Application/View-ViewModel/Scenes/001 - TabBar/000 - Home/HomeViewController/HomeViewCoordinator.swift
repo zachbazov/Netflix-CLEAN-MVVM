@@ -14,12 +14,13 @@ private protocol CoordinatorInput {
 }
 
 private protocol CoordinatorOutput {
-    var navigationController: UINavigationController? { get }
+    var detail: UINavigationController? { get }
     var section: Section? { get }
     var media: Media? { get }
     var shouldScreenRotate: Bool { get }
     
-    func createNavigationController() -> UINavigationController?
+    func createDetailNavigationController() -> UINavigationController?
+    func createSearchNavigationController() -> UINavigationController
 }
 
 private typealias CoordinatorProtocol = CoordinatorInput & CoordinatorOutput
@@ -29,7 +30,8 @@ private typealias CoordinatorProtocol = CoordinatorInput & CoordinatorOutput
 final class HomeViewCoordinator {
     var viewController: HomeViewController?
     
-    fileprivate weak var navigationController: UINavigationController?
+    fileprivate weak var detail: UINavigationController?
+    weak var search: UINavigationController!
     
     var section: Section?
     var media: Media?
@@ -39,7 +41,7 @@ final class HomeViewCoordinator {
 // MARK: - CoordinatorProtocol Implementation
 
 extension HomeViewCoordinator: CoordinatorProtocol {
-    func createNavigationController() -> UINavigationController? {
+    fileprivate func createDetailNavigationController() -> UINavigationController? {
         guard let section = section, let media = media else { return nil }
         // Allocate the controller and it's dependencies.
         let controller = DetailViewController()
@@ -58,11 +60,31 @@ extension HomeViewCoordinator: CoordinatorProtocol {
         return navigation
     }
     
+    fileprivate func createSearchNavigationController() -> UINavigationController {
+        let coordinator = SearchViewCoordinator()
+        let viewModel = SearchViewModel()
+        let controller = SearchViewController()
+        
+        controller.viewModel = viewModel
+        controller.viewModel?.coordinator = coordinator
+        coordinator.viewController = controller
+        
+        let navigation = UINavigationController(rootViewController: controller)
+        navigation.setNavigationBarHidden(true, animated: false)
+        navigation.navigationBar.tag = Screen.search.rawValue
+        return navigation
+    }
+    
     fileprivate func deploy(_ screen: Screen) {
         switch screen {
         case .detail:
-            guard let navigationController = navigationController else { return }
+            guard let navigationController = detail else { return }
             viewController?.present(navigationController, animated: true)
+        case .search:
+            viewController!.add(child: search, container: viewController!.view)
+            
+            let searchViewController = search.viewControllers.first! as! SearchViewController
+            searchViewController.present()
         }
     }
 }
@@ -71,14 +93,16 @@ extension HomeViewCoordinator: CoordinatorProtocol {
 
 extension HomeViewCoordinator: Coordinate {
     /// View representation type.
-    enum Screen {
+    enum Screen: Int {
         case detail
+        case search
     }
     /// Screen representation control.
     /// - Parameter screen: The screen to be allocated and presented.
     func coordinate(to screen: Screen) {
         switch screen {
-        case .detail: navigationController = createNavigationController()
+        case .detail: detail = createDetailNavigationController()
+        case .search: search = createSearchNavigationController()
         }
         
         deploy(screen)

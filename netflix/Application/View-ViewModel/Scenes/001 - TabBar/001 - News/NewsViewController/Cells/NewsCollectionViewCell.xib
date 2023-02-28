@@ -127,23 +127,23 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="RVV-XP-07e">
-                                <rect key="frame" x="0.0" y="57.000000000000028" width="366" height="37.333333333333343"/>
+                                <rect key="frame" x="0.0" y="57.000000000000028" width="366" height="43"/>
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="18"/>
                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fnZ-xw-Qq0">
-                                <rect key="frame" x="-4" y="98.333333333333343" width="362" height="62"/>
+                                <rect key="frame" x="-4" y="104.00000000000003" width="362" height="62"/>
                                 <string key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation.</string>
                                 <color key="textColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" keyboardAppearance="alert" returnKeyType="done" enablesReturnKeyAutomatically="YES" smartDashesType="no" smartInsertDeleteType="no" smartQuotesType="no"/>
                             </textView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="5lO-Lv-9H1">
-                                <rect key="frame" x="0.0" y="160.33333333333334" width="374" height="27"/>
+                                <rect key="frame" x="0.0" y="166.00000000000003" width="374" height="21.333333333333343"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalCompressionResistancePriority="749" text="Genres" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Llp-xM-e7g">
-                                        <rect key="frame" x="0.0" y="0.0" width="374" height="23"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="374" height="17.333333333333332"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="10"/>
                                         <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <nil key="highlightedColor"/>
@@ -170,7 +170,7 @@
                             <constraint firstItem="Fsk-Ex-eal" firstAttribute="top" secondItem="vaT-DT-xVf" secondAttribute="bottom" constant="8" id="cKV-h1-3ea"/>
                             <constraint firstItem="t6A-TS-GQd" firstAttribute="centerY" secondItem="Fsk-Ex-eal" secondAttribute="centerY" id="cKk-Yd-Eta"/>
                             <constraint firstItem="t6A-TS-GQd" firstAttribute="leading" secondItem="Fsk-Ex-eal" secondAttribute="trailing" id="eDw-5l-j8w"/>
-                            <constraint firstItem="RVV-XP-07e" firstAttribute="height" secondItem="03i-oX-e2H" secondAttribute="height" multiplier="0.2" id="eqU-68-fso"/>
+                            <constraint firstItem="RVV-XP-07e" firstAttribute="height" secondItem="03i-oX-e2H" secondAttribute="height" multiplier="0.23" id="eqU-68-fso"/>
                             <constraint firstItem="5lO-Lv-9H1" firstAttribute="top" secondItem="fnZ-xw-Qq0" secondAttribute="bottom" id="f3L-iD-648"/>
                             <constraint firstItem="fnZ-xw-Qq0" firstAttribute="top" secondItem="RVV-XP-07e" secondAttribute="bottom" constant="4" id="itO-mn-I00"/>
                             <constraint firstAttribute="bottom" secondItem="5lO-Lv-9H1" secondAttribute="bottom" id="veh-Kg-ivc"/>

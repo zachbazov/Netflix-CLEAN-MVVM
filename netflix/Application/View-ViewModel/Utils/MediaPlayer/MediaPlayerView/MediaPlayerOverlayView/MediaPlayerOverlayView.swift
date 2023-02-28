@@ -286,10 +286,6 @@ final class MediaPlayerOverlayView: View<MediaPlayerOverlayViewViewModel>, ViewI
         self.configuration.mediaPlayerView = parent
         self.configuration.viewDidBindObservers()
         self.viewDidLoad()
-        
-        
-        let airPlay = AVRoutePickerView(frame: airPlayButton.bounds)
-        airPlayButton.addSubview(airPlay)
     }
     
     required init?(coder: NSCoder) { fatalError() }
@@ -304,11 +300,12 @@ final class MediaPlayerOverlayView: View<MediaPlayerOverlayViewViewModel>, ViewI
     override func viewDidLoad() {
         viewDidConfigure()
         viewDidDeploySubviews()
+        viewDidTargetSubviews()
         viewWillAppear()
     }
     
     override func viewDidDeploySubviews() {
-        viewDidTargetSubviews()
+        airPlayButton.asRoutePickerView()
     }
     
     override func viewDidConfigure() {

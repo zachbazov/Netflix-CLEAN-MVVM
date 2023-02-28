@@ -20,8 +20,8 @@ private struct TabBarConfiguration {
             homeTabItem(for: controller as! UINavigationController)
         case .news:
             newsTabItem(for: controller as! UINavigationController)
-        case .search:
-            searchTabItem(for: controller as! UINavigationController)
+        case .fastLaughs:
+            fastLaughsTabItem(for: controller as! UINavigationController)
         case .downloads:
             downloadsTabItem(for: controller as! UINavigationController)
         }
@@ -48,12 +48,12 @@ private struct TabBarConfiguration {
         item.applyConfig(for: controller)
     }
     
-    private func searchTabItem(for controller: UINavigationController) {
-        let title = Localization.TabBar.Coordinator().searchButton
-        let systemImage = "magnifyingglass"
+    private func fastLaughsTabItem(for controller: UINavigationController) {
+        let title = "Fast Laughs"
+        let systemImage = "face.smiling"
         let symbolConfiguration = UIImage.SymbolConfiguration(pointSize: 15.0)
         let image = UIImage(systemName: systemImage)?.whiteRendering(with: symbolConfiguration)
-        let tag = TabBarCoordinator.Screen.search.rawValue
+        let tag = TabBarCoordinator.Screen.fastLaughs.rawValue
         let item = TabBarItem(title: title, image: image!, tag: tag, navigationBarHidden: true)
         item.applyConfig(for: controller)
     }
@@ -99,12 +99,12 @@ private protocol CoordinatorOutput {
     
     var home: UINavigationController! { get }
     var news: UINavigationController! { get }
-    var search: UINavigationController! { get }
+    var fastLaughs: UINavigationController! { get }
     var downloads: UIViewController! { get }
     
     func createHomeController() -> UINavigationController
     func createNewsController() -> UINavigationController
-    func createSearchController() -> UINavigationController
+    func createFastLaughsController() -> UINavigationController
     func createDownloadsController() -> UINavigationController
     
     func deploy()
@@ -121,7 +121,7 @@ final class TabBarCoordinator {
     
     private(set) var home: UINavigationController!
     private(set) var news: UINavigationController!
-    private(set) var search: UINavigationController!
+    fileprivate(set) var fastLaughs: UINavigationController!
     fileprivate var downloads: UIViewController!
 }
 
@@ -163,18 +163,18 @@ extension TabBarCoordinator: CoordinatorProtocol {
         return navigation
     }
     
-    func createSearchController() -> UINavigationController {
-        let coordinator = SearchViewCoordinator()
-        let viewModel = SearchViewModel()
-        let controller = SearchViewController()
-        
+    fileprivate func createFastLaughsController() -> UINavigationController {
+        let coordinator = FastLaughsViewCoordinator()
+        let viewModel = FastLaughsViewModel()
+        let controller = FastLaughsViewController()
+
         controller.viewModel = viewModel
-        controller.viewModel?.coordinator = coordinator
+        controller.viewModel.coordinator = coordinator
         coordinator.viewController = controller
         
-        let navigation = UINavigationController(rootViewController: controller)
-        navigation.navigationBar.tag = Screen.search.rawValue
-        configuration.tabBarItem(for: .search, with: navigation)
+        let navigation = UINavigationController(rootViewController: UIViewController())
+        navigation.navigationBar.tag = Screen.fastLaughs.rawValue
+        configuration.tabBarItem(for: .fastLaughs, with: navigation)
         return navigation
     }
     
@@ -199,10 +199,10 @@ extension TabBarCoordinator: CoordinatorProtocol {
         home = createHomeController()
         /// One-time initialization is needed for the other scenes.
         if news == nil { news = createNewsController() }
-        if search == nil { search = createSearchController() }
+        if fastLaughs == nil { fastLaughs = createFastLaughsController() }
         if downloads == nil { downloads = createDownloadsController() }
         /// Arranged view controllers for the tab controller.
-        viewController?.viewControllers = [home, news, search, downloads]
+        viewController?.viewControllers = [home, news, fastLaughs, downloads]
     }
 }
 
@@ -211,10 +211,10 @@ extension TabBarCoordinator: CoordinatorProtocol {
 extension TabBarCoordinator: Coordinate {
     /// View representation type.
     enum Screen: Int {
-        case home       = 0
-        case news       = 1
-        case search     = 2
-        case downloads  = 3
+        case home
+        case news
+        case fastLaughs
+        case downloads
     }
     /// Screen presentation control.
     /// - Parameter screen: The screen to be allocated and presented.

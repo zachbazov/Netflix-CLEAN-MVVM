@@ -60,14 +60,7 @@ extension NavigationViewItemConfiguration: ConfigurationProtocol {
                 .withRenderingMode(.alwaysOriginal)
             item.button.setImage(image, for: .normal)
         case .airPlay:
-            symbolConfiguration = UIImage.SymbolConfiguration(pointSize: 16.0)
-            image = UIImage(systemName: item.viewModel.image)?
-                .whiteRendering(with: symbolConfiguration)
-            
-            let airPlay = AVRoutePickerView(frame: item.button.bounds)
-            airPlay.tintColor = .white
-            airPlay.prioritizesVideoDevices = true
-            item.button.addSubview(airPlay)
+            item.button.asRoutePickerView()
         case .search:
             symbolConfiguration = UIImage.SymbolConfiguration(pointSize: 16.0)
             image = UIImage(systemName: item.viewModel.image)?

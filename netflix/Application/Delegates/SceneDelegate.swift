@@ -79,9 +79,5 @@ extension SceneDelegate: SceneObserverUnbinding {
         if let newsController = tabCoordinator.news?.viewControllers.first as? NewsViewController {
             newsController.viewDidUnbindObservers()
         }
-        // In-case of a valid search controller instance, remove it's observers.
-        if let searchController = tabCoordinator.search?.viewControllers.first as? SearchViewController {
-            searchController.viewDidUnbindObservers()
-        }
     }
 }

@@ -41,7 +41,9 @@ final class NewsCollectionViewCell: UICollectionViewCell {
     static func create(in collectionView: UICollectionView,
                        at indexPath: IndexPath,
                        with viewModel: NewsViewModel) -> NewsCollectionViewCell {
-        guard let view = collectionView.dequeueReusableCell(withReuseIdentifier: NewsCollectionViewCell.reuseIdentifier, for: indexPath) as? NewsCollectionViewCell else {
+        guard let view = collectionView.dequeueReusableCell(
+            withReuseIdentifier: NewsCollectionViewCell.reuseIdentifier,
+            for: indexPath) as? NewsCollectionViewCell else {
             fatalError()
         }
         let cellViewModel = viewModel.items.value[indexPath.row]
@@ -66,18 +68,22 @@ extension NewsCollectionViewCell: ViewLifecycleBehavior {
 
 extension NewsCollectionViewCell: ViewProtocol {
     fileprivate func viewDidConfigure(with viewModel: NewsCollectionViewCellViewModel) {
-        guard representedIdentifier == viewModel.media.slug else { return }
-        
         AsyncImageService.shared.load(
             url: viewModel.previewPosterImageURL,
             identifier: viewModel.previewPosterImageIdentifier) { [weak self] image in
-                mainQueueDispatch { self?.previewPosterImageView.image = image }
+                guard self!.representedIdentifier == viewModel.media.slug else { return }
+                mainQueueDispatch {
+                    self?.previewPosterImageView.image = image
+                }
             }
         
         AsyncImageService.shared.load(
             url: viewModel.displayLogoImageURL,
             identifier: viewModel.displayLogoImageIdentifier) { [weak self] image in
-                mainQueueDispatch { self?.logoImageView.image = image }
+                guard self!.representedIdentifier == viewModel.media.slug else { return }
+                mainQueueDispatch {
+                    self?.logoImageView.image = image
+                }
             }
         
         etaTillOnAir.text = viewModel.eta

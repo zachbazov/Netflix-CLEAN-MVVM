@@ -5,7 +5,7 @@
 //  Created by Zach Bazov on 05/09/2022.
 //
 
-import UIKit
+import AVKit
 
 // MARK: - UIView + Gradients
 
@@ -51,5 +51,16 @@ extension UIView {
         insertSubview(blurView, at: 0)
         
         blurView.constraintToSuperview(self)
+    }
+}
+
+// MARK: - AVRoutePickerView
+
+extension UIView {
+    func asRoutePickerView() {
+        let airPlay = AVRoutePickerView(frame: bounds)
+        airPlay.tintColor = .white
+        airPlay.prioritizesVideoDevices = true
+        addSubview(airPlay)
     }
 }

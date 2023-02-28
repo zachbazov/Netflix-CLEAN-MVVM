@@ -126,28 +126,28 @@ extension SearchViewController: ControllerProtocol {
     @objc
     fileprivate func backButtonDidTap() {
         let homeViewController = Application.app.coordinator.tabCoordinator.home.viewControllers.first! as! HomeViewController
-        let searchViewController = homeViewController.searchNavigationController.viewControllers.first! as! SearchViewController
+        let searchViewController = homeViewController.viewModel.coordinator!.search!.viewControllers.first! as! SearchViewController
         
         UIView.animate(
             withDuration: 0.25,
             delay: 0,
             options: .curveEaseInOut,
             animations: {
-                homeViewController.searchNavigationController.view.transform = CGAffineTransform(translationX: homeViewController.searchNavigationController.view.bounds.width, y: .zero)
-                homeViewController.searchNavigationController.view.alpha = .zero
+                homeViewController.viewModel.coordinator!.search.view.transform = CGAffineTransform(translationX: homeViewController.viewModel.coordinator!.search.view.bounds.width, y: .zero)
+                homeViewController.viewModel.coordinator!.search.view.alpha = .zero
             },
             completion: { _ in
-                homeViewController.searchNavigationController.remove()
+                homeViewController.viewModel.coordinator!.search.remove()
                 searchViewController.viewModel = nil
                 searchViewController.dataSource = nil
-                homeViewController.searchNavigationController = nil
+                homeViewController.viewModel.coordinator!.search = nil
             }
         )
     }
     
     func present() {
         let homeViewController = Application.app.coordinator.tabCoordinator.home.viewControllers.first! as! HomeViewController
-        let searchNavigationController = homeViewController.searchNavigationController!
+        let searchNavigationController = homeViewController.viewModel.coordinator!.search!
         
         searchNavigationController.view.alpha = .zero
         searchNavigationController.view.transform = CGAffineTransform(translationX: searchNavigationController.view.bounds.width, y: .zero)
