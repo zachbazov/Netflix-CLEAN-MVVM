@@ -30,7 +30,7 @@ private typealias ViewProtocol = ViewInput & ViewOutput
 // MARK: - CollectionViewCell Type
 
 class CollectionViewCell: UICollectionViewCell {
-    @IBOutlet private weak var coverImageView: UIImageView!
+    @IBOutlet private weak var posterImageView: UIImageView!
     @IBOutlet private weak var logoImageView: UIImageView!
     @IBOutlet private weak var placeholderLabel: UILabel!
     @IBOutlet private weak var logoBottomConstraint: NSLayoutConstraint!
@@ -66,7 +66,7 @@ class CollectionViewCell: UICollectionViewCell {
     
     override func prepareForReuse() {
         super.prepareForReuse()
-        coverImageView.image = nil
+        posterImageView.image = nil
         logoImageView.image = nil
         placeholderLabel.text = nil
         logoBottomConstraint.constant = .zero
@@ -81,7 +81,7 @@ class CollectionViewCell: UICollectionViewCell {
         
         let posterImage = AsyncImageService.shared.object(for: viewModel.posterImageIdentifier)
         let logoImage = AsyncImageService.shared.object(for: viewModel.logoImageIdentifier)
-        coverImageView.image = posterImage
+        posterImageView.image = posterImage
         logoImageView.image = logoImage
 
         placeholderLabel.alpha = 0.0
@@ -113,8 +113,9 @@ class CollectionViewCell: UICollectionViewCell {
         backgroundColor = .black
         
         placeholderLabel.alpha = 1.0
-        coverImageView.layer.cornerRadius = 6.0
-        coverImageView.contentMode = .scaleAspectFill
+        posterImageView.clipsToBounds = true
+        posterImageView.layer.cornerRadius = 4.0
+        posterImageView.contentMode = .scaleAspectFill
         
         dataDidDownload(with: viewModel) { [weak self] in
             self?.viewDidConfigure(with: viewModel)

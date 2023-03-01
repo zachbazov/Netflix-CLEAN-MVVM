@@ -57,9 +57,10 @@ final class TableViewHeaderFooterView: TableViewHeaderView<TableViewHeaderFooter
 extension TableViewHeaderFooterView: ViewModelProtocol {
     fileprivate func createLabel() -> UILabel {
         let label = UILabel()
-        let font = UIFont.systemFont(ofSize: 17.0, weight: .heavy)
+        let font = UIFont.systemFont(ofSize: 17.0, weight: .bold)
         label.font = font
         label.textColor = .white
+        label.numberOfLines = 0
         contentView.addSubview(label)
         label.constraintBottom(toParent: self, withLeadingAnchor: 8.0)
         return label

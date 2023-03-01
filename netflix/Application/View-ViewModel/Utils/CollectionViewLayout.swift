@@ -30,13 +30,13 @@ final class CollectionViewLayout: UICollectionViewFlowLayout, LayoutProtocol {
         get {
             guard let width = super.collectionView!.bounds.width as CGFloat? else { return .zero }
             switch layout {
-            case .rated: return width / itemsPerLine - lineSpacing
+            case .rated: return width / itemsPerLine + lineSpacing
             case .detail, .navigationOverlay: return width / itemsPerLine - (lineSpacing * itemsPerLine)
             case .descriptive: return width
             case .trailer: return width
             case .news: return width
             case .search: return width
-            default: return width / itemsPerLine - (lineSpacing * itemsPerLine)
+            default: return width / itemsPerLine - (lineSpacing * itemsPerLine + 1)
             }
         }
         set {}
@@ -78,7 +78,7 @@ final class CollectionViewLayout: UICollectionViewFlowLayout, LayoutProtocol {
         switch layout {
         case .rated:
             minimumLineSpacing = .zero
-            sectionInset = .init(top: 0.0, left: 24.0, bottom: 0.0, right: 0.0)
+            sectionInset = .init(top: 0.0, left: 8.0, bottom: 0.0, right: 0.0)
         case .resumable:
             sectionInset = .init(top: 0.0, left: 8.0, bottom: 0.0, right: 0.0)
         case .standard:

@@ -51,11 +51,12 @@ final class RatedCollectionViewCell: CollectionViewCell {
         guard let indexPath = viewModel.indexPath as IndexPath? else { return }
         // In-case of first cell index, do nothing.
         if indexPath.row == .zero {
-            textLayer.frame = CGRect(x: 0.0, y: -8.0, width: bounds.width, height: 144.0)
+            textLayer.frame = CGRect(x: 8.0, y: -8.0, width: bounds.width, height: 144.0)
         } else {
             /// Else, change the frame horizontal parameter
             /// to make the effect that the text layers collide with other cells.
             textLayer.frame = CGRect(x: -8.0, y: -8.0, width: bounds.width, height: 144.0)
+            layerView.transform = CGAffineTransform(translationX: -8.0, y: .zero)
         }
         // Increase the index path by one, start indexing from 1.
         let index = String(describing: indexPath.row + 1)

@@ -17,17 +17,14 @@
                 <rect key="frame" x="0.0" y="0.0" width="146" height="174"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="LkF-ev-s4P" userLabel="Cover Image View">
-                        <rect key="frame" x="20" y="0.0" width="126" height="174"/>
+                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="LkF-ev-s4P" userLabel="Poster Image View">
+                        <rect key="frame" x="32" y="0.0" width="114" height="174"/>
                     </imageView>
-                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="tlf-he-CND">
-                        <rect key="frame" x="20" y="0.0" width="126" height="174"/>
-                    </view>
                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="oPl-Sy-fxt">
-                        <rect key="frame" x="28" y="84.5" width="110" height="57.5"/>
+                        <rect key="frame" x="40" y="84.5" width="98" height="57.5"/>
                     </imageView>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Placeholder" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1Q9-HV-esY">
-                        <rect key="frame" x="28" y="79" width="106" height="16"/>
+                        <rect key="frame" x="40" y="79" width="94" height="16"/>
                         <fontDescription key="fontDescription" type="boldSystem" pointSize="13"/>
                         <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <nil key="highlightedColor"/>
@@ -38,25 +35,21 @@
                     <constraint firstAttribute="trailing" secondItem="1Q9-HV-esY" secondAttribute="trailing" constant="12" id="1GY-J8-pNc"/>
                     <constraint firstItem="oPl-Sy-fxt" firstAttribute="trailing" secondItem="LkF-ev-s4P" secondAttribute="trailing" constant="-8" id="1Hp-mB-meH"/>
                     <constraint firstItem="1Q9-HV-esY" firstAttribute="leading" secondItem="LkF-ev-s4P" secondAttribute="leading" constant="8" id="A6Q-cW-2il"/>
-                    <constraint firstItem="tlf-he-CND" firstAttribute="top" secondItem="1vH-Bf-2t8" secondAttribute="top" id="EDt-Wm-TCl"/>
                     <constraint firstItem="LkF-ev-s4P" firstAttribute="top" secondItem="1vH-Bf-2t8" secondAttribute="top" id="NIz-kR-b22"/>
                     <constraint firstItem="oPl-Sy-fxt" firstAttribute="leading" secondItem="LkF-ev-s4P" secondAttribute="leading" constant="8" id="OQy-WA-tyA"/>
                     <constraint firstAttribute="bottom" secondItem="LkF-ev-s4P" secondAttribute="bottom" id="OsE-zO-Tch"/>
-                    <constraint firstAttribute="bottom" secondItem="tlf-he-CND" secondAttribute="bottom" id="afd-gL-CoQ"/>
                     <constraint firstItem="oPl-Sy-fxt" firstAttribute="height" secondItem="LkF-ev-s4P" secondAttribute="height" multiplier="0.33" id="dRk-rW-yXl"/>
                     <constraint firstItem="1Q9-HV-esY" firstAttribute="centerY" secondItem="LkF-ev-s4P" secondAttribute="centerY" id="dff-hE-QQb"/>
-                    <constraint firstItem="LkF-ev-s4P" firstAttribute="leading" secondItem="1vH-Bf-2t8" secondAttribute="leading" constant="20" id="elK-vP-koP"/>
-                    <constraint firstAttribute="trailing" secondItem="tlf-he-CND" secondAttribute="trailing" id="mkf-Fr-MKf"/>
-                    <constraint firstItem="tlf-he-CND" firstAttribute="leading" secondItem="LkF-ev-s4P" secondAttribute="leading" id="qQG-PH-bGp"/>
+                    <constraint firstItem="LkF-ev-s4P" firstAttribute="leading" secondItem="1vH-Bf-2t8" secondAttribute="leading" constant="32" id="elK-vP-koP"/>
                     <constraint firstAttribute="bottom" secondItem="oPl-Sy-fxt" secondAttribute="bottom" constant="32" id="tDh-yP-4Us"/>
                 </constraints>
             </collectionViewCellContentView>
             <size key="customSize" width="146" height="174"/>
             <connections>
-                <outlet property="coverImageView" destination="LkF-ev-s4P" id="qBK-8b-t1O"/>
                 <outlet property="logoBottomConstraint" destination="tDh-yP-4Us" id="gzV-BJ-pzK"/>
                 <outlet property="logoImageView" destination="oPl-Sy-fxt" id="fBN-tv-1Uh"/>
                 <outlet property="placeholderLabel" destination="1Q9-HV-esY" id="p0o-5A-3Xs"/>
+                <outlet property="posterImageView" destination="LkF-ev-s4P" id="NcJ-Ft-gq2"/>
             </connections>
             <point key="canvasLocation" x="24.637681159420293" y="61.607142857142854"/>
         </collectionViewCell>

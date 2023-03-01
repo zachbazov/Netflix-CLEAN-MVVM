@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="20037" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="21507" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="20020"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21505"/>
         <capability name="Image references" minToolsVersion="12.0"/>
         <capability name="collection view cell content view" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -124,19 +124,19 @@
             </collectionViewCellContentView>
             <size key="customSize" width="140" height="201"/>
             <connections>
-                <outlet property="coverImageView" destination="jKo-Xk-418" id="nm9-dI-hAx"/>
                 <outlet property="gradientView" destination="c9S-Il-J7A" id="Caa-Hx-2oV"/>
                 <outlet property="lengthLabel" destination="RRZ-xI-PFB" id="ATS-3l-4fj"/>
                 <outlet property="logoBottomConstraint" destination="6hH-Ua-Q9p" id="mUB-0o-O5C"/>
                 <outlet property="logoImageView" destination="WMA-D1-9cD" id="b48-C1-w4E"/>
                 <outlet property="placeholderLabel" destination="5Rz-xs-vlL" id="tO1-bZ-66j"/>
                 <outlet property="playButton" destination="IQb-X0-Wac" id="2E1-M0-0Zc"/>
+                <outlet property="posterImageView" destination="jKo-Xk-418" id="yqD-yD-6rD"/>
                 <outlet property="progressView" destination="DFV-z6-B4a" id="jbv-DA-rl5"/>
             </connections>
             <point key="canvasLocation" x="269.56521739130437" y="32.8125"/>
         </collectionViewCell>
     </objects>
     <resources>
-        <image name="play.fill" catalog="system" width="116" height="128"/>
+        <image name="play.fill" catalog="system" width="117" height="128"/>
     </resources>
 </document>

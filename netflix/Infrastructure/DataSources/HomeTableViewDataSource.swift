@@ -99,8 +99,9 @@ extension HomeTableViewDataSource: UITableViewDelegate, UITableViewDataSource {
             return .zero
         }
         switch index {
-        case .display: return view.bounds.height * 0.76
-        default: return view.bounds.height * 0.19
+        case .display: return view.bounds.height * 0.735
+        case .rated: return view.bounds.height * 0.215
+        default: return view.bounds.height * 0.215
         }
     }
     
@@ -112,8 +113,8 @@ extension HomeTableViewDataSource: UITableViewDelegate, UITableViewDataSource {
         guard let index = Index(rawValue: section) else { return .zero }
         switch index {
         case .display: return 0.0
-        case .rated: return 28.0
-        default: return 24.0
+        case .rated: return 32.0
+        default: return 44.0
         }
     }
     

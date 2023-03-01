@@ -23,33 +23,55 @@
                             <constraint firstAttribute="width" secondItem="EeS-PU-uTb" secondAttribute="height" multiplier="16:9" id="NOX-8l-YGG"/>
                         </constraints>
                     </imageView>
-                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="KM4-vz-JS4" userLabel="Logo Image View">
-                        <rect key="frame" x="170.33333333333334" y="12" width="112.00000000000003" height="56"/>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="gKs-tB-Pyl" userLabel="Logo Container">
+                        <rect key="frame" x="142.33333333333337" y="0.0" width="215.66666666666663" height="80"/>
+                        <subviews>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="KM4-vz-JS4" userLabel="Logo Image View">
+                                <rect key="frame" x="51.666666666666657" y="12" width="112" height="56"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="KM4-vz-JS4" secondAttribute="height" multiplier="8:4" id="ZIp-ke-qyb"/>
+                                    <constraint firstAttribute="height" constant="56" id="rbx-1R-k9C"/>
+                                </constraints>
+                            </imageView>
+                        </subviews>
                         <constraints>
-                            <constraint firstAttribute="width" secondItem="KM4-vz-JS4" secondAttribute="height" multiplier="8:4" id="ZIp-ke-qyb"/>
-                            <constraint firstAttribute="height" constant="56" id="rbx-1R-k9C"/>
+                            <constraint firstItem="KM4-vz-JS4" firstAttribute="centerX" secondItem="gKs-tB-Pyl" secondAttribute="centerX" id="N7K-5s-mRE"/>
+                            <constraint firstItem="KM4-vz-JS4" firstAttribute="centerY" secondItem="gKs-tB-Pyl" secondAttribute="centerY" id="W6u-5U-fUl"/>
                         </constraints>
-                    </imageView>
-                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6za-2t-Nda">
-                        <rect key="frame" x="358" y="20" width="40" height="40"/>
+                    </view>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="2t2-sW-Ypd" userLabel="Button Container">
+                        <rect key="frame" x="358" y="0.0" width="56" height="80"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6za-2t-Nda">
+                                <rect key="frame" x="8" y="20" width="40" height="40"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="40" id="RED-Ge-Pa3"/>
+                                    <constraint firstAttribute="height" constant="40" id="vHc-ir-jlA"/>
+                                </constraints>
+                                <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                <state key="normal" image="play.circle" catalog="system">
+                                    <preferredSymbolConfiguration key="preferredSymbolConfiguration" scale="large"/>
+                                </state>
+                            </button>
+                        </subviews>
                         <constraints>
-                            <constraint firstAttribute="width" constant="40" id="RED-Ge-Pa3"/>
-                            <constraint firstAttribute="height" constant="40" id="vHc-ir-jlA"/>
+                            <constraint firstAttribute="trailing" secondItem="6za-2t-Nda" secondAttribute="trailing" constant="8" id="IOB-LJ-yCL"/>
+                            <constraint firstItem="6za-2t-Nda" firstAttribute="centerY" secondItem="2t2-sW-Ypd" secondAttribute="centerY" id="NBt-NR-nCN"/>
+                            <constraint firstItem="6za-2t-Nda" firstAttribute="centerX" secondItem="2t2-sW-Ypd" secondAttribute="centerX" id="U9A-do-Ck6"/>
                         </constraints>
-                        <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                        <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
-                        <state key="normal" image="play.circle" catalog="system">
-                            <preferredSymbolConfiguration key="preferredSymbolConfiguration" scale="large"/>
-                        </state>
-                    </button>
+                    </view>
                 </subviews>
                 <constraints>
-                    <constraint firstItem="KM4-vz-JS4" firstAttribute="leading" secondItem="EeS-PU-uTb" secondAttribute="trailing" constant="28" id="BvS-SO-zLy"/>
-                    <constraint firstItem="KM4-vz-JS4" firstAttribute="centerY" secondItem="Xyx-GD-Hqz" secondAttribute="centerY" id="CvV-ll-6WY"/>
+                    <constraint firstItem="gKs-tB-Pyl" firstAttribute="top" secondItem="Xyx-GD-Hqz" secondAttribute="top" id="Ei7-Od-pEL"/>
                     <constraint firstItem="EeS-PU-uTb" firstAttribute="leading" secondItem="Xyx-GD-Hqz" secondAttribute="leading" id="IKM-2C-LmE"/>
+                    <constraint firstItem="2t2-sW-Ypd" firstAttribute="leading" secondItem="gKs-tB-Pyl" secondAttribute="trailing" id="Iid-or-fsj"/>
+                    <constraint firstItem="gKs-tB-Pyl" firstAttribute="leading" secondItem="EeS-PU-uTb" secondAttribute="trailing" id="SNy-TT-r3Q"/>
+                    <constraint firstItem="2t2-sW-Ypd" firstAttribute="top" secondItem="Xyx-GD-Hqz" secondAttribute="top" id="Syq-BJ-uEf"/>
                     <constraint firstAttribute="bottom" secondItem="EeS-PU-uTb" secondAttribute="bottom" id="bZi-U3-eFq"/>
-                    <constraint firstAttribute="trailing" secondItem="6za-2t-Nda" secondAttribute="trailing" constant="16" id="dhp-Ga-9uP"/>
-                    <constraint firstItem="6za-2t-Nda" firstAttribute="centerY" secondItem="Xyx-GD-Hqz" secondAttribute="centerY" id="iG7-Hy-i6L"/>
+                    <constraint firstAttribute="bottom" secondItem="gKs-tB-Pyl" secondAttribute="bottom" id="gFo-sv-1p7"/>
+                    <constraint firstAttribute="trailing" secondItem="2t2-sW-Ypd" secondAttribute="trailing" id="mpl-lT-s9R"/>
+                    <constraint firstAttribute="bottom" secondItem="2t2-sW-Ypd" secondAttribute="bottom" id="ocf-K1-uBE"/>
                     <constraint firstItem="EeS-PU-uTb" firstAttribute="top" secondItem="Xyx-GD-Hqz" secondAttribute="top" id="uIz-8r-y57"/>
                 </constraints>
             </collectionViewCellContentView>
@@ -58,7 +80,7 @@
                 <outlet property="logoImageView" destination="KM4-vz-JS4" id="j24-k5-OIl"/>
                 <outlet property="posterImageView" destination="EeS-PU-uTb" id="fYW-Nx-wui"/>
             </connections>
-            <point key="canvasLocation" x="151.90839694656489" y="64.788732394366207"/>
+            <point key="canvasLocation" x="151.14503816793894" y="64.788732394366207"/>
         </collectionViewCell>
     </objects>
     <resources>
