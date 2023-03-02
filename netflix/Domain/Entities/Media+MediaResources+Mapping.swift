@@ -14,13 +14,14 @@ struct MediaResources {
     let logos: [String]
     let trailers: [String]
     let displayPoster: String
-    let displayLogos: [String]
     let previewPoster: String
     let previewUrl: String
     let presentedPoster: String
     let presentedLogo: String
     let presentedDisplayLogo: String
     let presentedLogoAlignment: String
+    let presentedSearchLogo: String
+    let presentedSearchLogoAlignment: String
 }
 
 // MARK: - Media Type
@@ -95,13 +96,14 @@ extension MediaResources {
                      logos: logos,
                      trailers: trailers,
                      displayPoster: displayPoster,
-                     displayLogos: displayLogos,
                      previewPoster: previewPoster,
                      previewUrl: previewUrl,
                      presentedPoster: presentedPoster,
                      presentedLogo: presentedLogo,
                      presentedDisplayLogo: presentedDisplayLogo,
-                     presentedLogoAlignment: presentedLogoAlignment)
+                     presentedLogoAlignment: presentedLogoAlignment,
+                     presentedSearchLogo: presentedSearchLogo,
+                     presentedSearchLogoAlignment: presentedSearchLogoAlignment)
     }
 }
 

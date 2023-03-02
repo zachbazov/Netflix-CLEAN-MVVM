@@ -137,8 +137,6 @@
 		A1A71AB9298D840E001C6AB1 /* MediaRepositoryProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1A71AB8298D840E001C6AB1 /* MediaRepositoryProtocol.swift */; };
 		A1A71ABB298D8449001C6AB1 /* SeasonRepositoryProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1A71ABA298D8449001C6AB1 /* SeasonRepositoryProtocol.swift */; };
 		A1A71ABD298D8460001C6AB1 /* ListRepositoryProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1A71ABC298D8460001C6AB1 /* ListRepositoryProtocol.swift */; };
-		A1A71AC12991FD00001C6AB1 /* Image.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1A71AC02991FD00001C6AB1 /* Image.swift */; };
-		A1A71AC32991FD67001C6AB1 /* ImageHTTP.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1A71AC22991FD67001C6AB1 /* ImageHTTP.swift */; };
 		A1AA28C628F487290011EE9D /* MediaPlayerOverlayViewViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1AA28C528F487290011EE9D /* MediaPlayerOverlayViewViewModel.swift */; };
 		A1AA28C828F487E70011EE9D /* MediaPlayerObservers.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1AA28C728F487E70011EE9D /* MediaPlayerObservers.swift */; };
 		A1AA28CC28F4C3710011EE9D /* MediaPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1AA28CB28F4C3710011EE9D /* MediaPlayer.swift */; };
@@ -425,8 +423,6 @@
 		A1A71AB8298D840E001C6AB1 /* MediaRepositoryProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaRepositoryProtocol.swift; sourceTree = "<group>"; };
 		A1A71ABA298D8449001C6AB1 /* SeasonRepositoryProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeasonRepositoryProtocol.swift; sourceTree = "<group>"; };
 		A1A71ABC298D8460001C6AB1 /* ListRepositoryProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListRepositoryProtocol.swift; sourceTree = "<group>"; };
-		A1A71AC02991FD00001C6AB1 /* Image.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Image.swift; sourceTree = "<group>"; };
-		A1A71AC22991FD67001C6AB1 /* ImageHTTP.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageHTTP.swift; sourceTree = "<group>"; };
 		A1AA28C528F487290011EE9D /* MediaPlayerOverlayViewViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaPlayerOverlayViewViewModel.swift; sourceTree = "<group>"; };
 		A1AA28C728F487E70011EE9D /* MediaPlayerObservers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaPlayerObservers.swift; sourceTree = "<group>"; };
 		A1AA28CB28F4C3710011EE9D /* MediaPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaPlayer.swift; sourceTree = "<group>"; };
@@ -1087,7 +1083,6 @@
 				A18B994928BFD9DD0077A5A6 /* User+Mapping.swift */,
 				A18B994128BFD9C70077A5A6 /* Section.swift */,
 				A18B994328BFD9CC0077A5A6 /* Media+MediaResources+Mapping.swift */,
-				A1A71AC02991FD00001C6AB1 /* Image.swift */,
 				A18B994528BFD9D50077A5A6 /* Season.swift */,
 				A18B994728BFD9DA0077A5A6 /* Episode.swift */,
 				A1AA28E728F6909B0011EE9D /* Trailer+Mapping.swift */,
@@ -1736,7 +1731,6 @@
 				A1A71A9E298B2A58001C6AB1 /* UserHTTP.swift */,
 				A1A71AA4298B2A67001C6AB1 /* SectionHTTP.swift */,
 				A1A71AA0298B2A5E001C6AB1 /* MediaHTTP.swift */,
-				A1A71AC22991FD67001C6AB1 /* ImageHTTP.swift */,
 				A1A71AA2298B2A63001C6AB1 /* SeasonHTTP.swift */,
 				A1A71AA6298B2A6C001C6AB1 /* ListHTTP.swift */,
 			);
@@ -2087,7 +2081,6 @@
 				A1A71AA1298B2A5E001C6AB1 /* MediaHTTP.swift in Sources */,
 				A18691E028C8D4640087DE3B /* SectionRepository.swift in Sources */,
 				A1741D3F28EBD33200F3C46B /* AgeRestrictionView.swift in Sources */,
-				A1A71AC32991FD67001C6AB1 /* ImageHTTP.swift in Sources */,
 				A130BC96294CE0AF0070EA5E /* SearchViewModel.swift in Sources */,
 				A1AA28CC28F4C3710011EE9D /* MediaPlayer.swift in Sources */,
 				A1B70A71293D578600C718C6 /* ViewModel.swift in Sources */,
@@ -2171,7 +2164,6 @@
 				A1741D2A28E6864600F3C46B /* DetailCollectionView.swift in Sources */,
 				A1BA1DBB28DBE02C00730EA8 /* UIView+Constraints.swift in Sources */,
 				A18B994A28BFD9DD0077A5A6 /* User+Mapping.swift in Sources */,
-				A1A71AC12991FD00001C6AB1 /* Image.swift in Sources */,
 				A18B995728BFF66C0077A5A6 /* SectionDTO+Mapping.swift in Sources */,
 				A18D851C29403CE900840045 /* BrowseOverlayView.swift in Sources */,
 				A130BCD929511E860070EA5E /* NewsViewModel.swift in Sources */,

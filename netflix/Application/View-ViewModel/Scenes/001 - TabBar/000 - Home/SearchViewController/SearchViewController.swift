@@ -10,7 +10,6 @@ import UIKit
 // MARK: - ControllerProtocol Type
 
 private protocol ControllerInput {
-    func updateLoading(_ loading: SearchLoading?)
     func updateSearchQuery(_ query: String)
 }
 
@@ -39,6 +38,36 @@ final class SearchViewController: Controller<SearchViewModel> {
     fileprivate lazy var collectionView: UICollectionView = createCollectionView()
     fileprivate var dataSource: SearchCollectionViewDataSource!
     fileprivate var searchController = UISearchController(searchResultsController: nil)
+    
+    var activityIndicator: UIActivityIndicatorView? {
+        return searchBar.searchTextField.leftView?.subviews.compactMap { $0 as? UIActivityIndicatorView }.first
+    }
+    
+    var isLoading: Bool {
+        get {
+            return activityIndicator != nil
+        }
+        set {
+            if newValue {
+                if activityIndicator == nil {
+                    let newActivityIndicator = UIActivityIndicatorView(style: UIActivityIndicatorView.Style.medium)
+                    newActivityIndicator.color = UIColor.gray
+                    newActivityIndicator.startAnimating()
+                    newActivityIndicator.backgroundColor = searchBar.searchTextField.backgroundColor ?? UIColor.black
+                    searchBar.searchTextField.leftView?.addSubview(newActivityIndicator)
+                    let leftViewSize = searchBar.searchTextField.leftView?.frame.size ?? .zero
+                    newActivityIndicator.center = CGPoint(x: leftViewSize.width / 2, y: leftViewSize.height / 2)
+                }
+            } else {
+                activityIndicator?.removeFromSuperview()
+            }
+        }
+    }
+    
+    var initialData: [Media] {
+        let vc = Application.app.coordinator.tabCoordinator.home.viewControllers.first as! HomeViewController
+        return vc.viewModel.media
+    }
     
     deinit {
         viewDidUnbindObservers()
@@ -69,14 +98,12 @@ final class SearchViewController: Controller<SearchViewModel> {
     
     override func viewDidBindObservers() {
         viewModel.items.observe(on: self) { [weak self] _ in self?.updateItems() }
-        viewModel.loading.observe(on: self) { [weak self] in self?.updateLoading($0) }
         viewModel.query.observe(on: self) { [weak self] in self?.updateSearchQuery($0) }
     }
     
     override func viewDidUnbindObservers() {
         guard let viewModel = viewModel else { return }
         viewModel.items.remove(observer: self)
-        viewModel.loading.remove(observer: self)
         viewModel.query.remove(observer: self)
         printIfDebug(.success, "Removed `SearchViewModel` observers.")
     }
@@ -90,21 +117,6 @@ extension SearchViewController: ControllerProtocol {
         collectionView.delegate = dataSource
         collectionView.dataSource = dataSource
         collectionView.reloadData()
-    }
-    
-    fileprivate func updateLoading(_ loading: SearchLoading?) {
-        contentContainer.isHidden(true)
-        
-        ActivityIndicatorView.viewDidHide()
-        
-        switch loading {
-        case .fullscreen:
-            ActivityIndicatorView.viewDidShow()
-        case .nextPage:
-            contentContainer.isHidden(false)
-        case .none:
-            contentContainer.isHidden(false)
-        }
     }
     
     fileprivate func updateSearchQuery(_ query: String) {
@@ -170,11 +182,19 @@ extension SearchViewController: UISearchBarDelegate {
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         guard let text = searchBar.text, !text.isEmpty else { return }
         searchController.isActive = false
-        viewModel?.didSearch(query: text)
+        viewModel.didSearch(query: text)
     }
     
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
-        viewModel?.didCancelSearch()
+        viewModel.didCancelSearch()
+        
+        viewModel.set(media: initialData)
+    }
+    
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        if searchText.count == 0 {
+            searchBarCancelButtonClicked(searchBar)
+        }
     }
 }
 
@@ -205,16 +225,21 @@ extension SearchViewController {
     
     private func setupSearchController() {
         searchController.delegate = self
+        searchController.searchResultsUpdater = self
         searchController.obscuresBackgroundDuringPresentation = false
         searchController.hidesNavigationBarDuringPresentation = false
         searchBar.delegate = self
         searchBar.frame = searchBarContainer.bounds
         searchBar.barStyle = .black
-        searchBar.placeholder = "Search..."
+        let attributes: [NSAttributedString.Key: Any] = [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 15)]
+        let attributedString = NSAttributedString(string: "Search", attributes: attributes)
+        searchBar.searchTextField.attributedPlaceholder = attributedString
+        searchBar.searchTextPositionAdjustment = UIOffset(horizontal: 6.0, vertical: .zero)
         searchBar.searchTextField.backgroundColor = .hexColor("#2B2B2B")
         searchBar.searchTextField.superview?.backgroundColor = .black
         searchBar.searchTextField.keyboardAppearance = .dark
         searchBar.searchTextField.autocapitalizationType = .none
+        
         definesPresentationContext = true
         
         if #available(iOS 13.0, *) {
@@ -231,5 +256,15 @@ extension SearchViewController {
         contentContainer.addSubview(collectionView)
         collectionView.constraintToSuperview(contentContainer)
         return collectionView
+    }
+}
+
+extension SearchViewController: UISearchResultsUpdating {
+    func updateSearchResults(for searchController: UISearchController) {
+        if let searchText = searchController.searchBar.searchTextField.text, !searchText.isEmpty {
+            return
+        }
+        
+        viewModel.set(media: initialData)
     }
 }

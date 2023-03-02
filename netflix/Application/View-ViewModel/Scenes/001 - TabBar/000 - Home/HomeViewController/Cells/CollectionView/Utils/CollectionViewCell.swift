@@ -129,8 +129,7 @@ class CollectionViewCell: UICollectionViewCell {
     /// - Parameters:
     ///   - constraint: The value of the bottom constraint.
     ///   - viewModel: Coordinating view model.
-    func logoDidAlign(_ constraint: NSLayoutConstraint,
-                               with viewModel: CollectionViewCellViewModel) {
+    func logoDidAlign(_ constraint: NSLayoutConstraint, with viewModel: CollectionViewCellViewModel) {
         switch viewModel.presentedLogoAlignment {
         case .top: constraint.constant = bounds.maxY - logoImageView.bounds.height - 8.0
         case .midTop: constraint.constant = 64.0

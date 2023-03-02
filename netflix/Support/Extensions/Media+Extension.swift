@@ -17,6 +17,14 @@ enum PresentedLogoAlignment: String {
     case bottom
 }
 
+// MARK: - PresentedSearchLogoAlignment Type
+
+enum PresentedSearchLogoAlignment: String {
+    case minXminY, minXmidY, minXmaxY
+    case midXminY, midXmidY, midXmaxY
+    case maxXminY, maxXmidY, maxXmaxY
+}
+
 // MARK: - PresentedPoster Type
 
 enum PresentedPoster: String {
@@ -43,6 +51,18 @@ enum PresentedLogo: String {
 // MARK: - PresentedDisplayLogo Type
 
 enum PresentedDisplayLogo: String {
+    case first = "0"
+    case second = "1"
+    case third = "2"
+    case fourth = "3"
+    case fifth = "4"
+    case sixth = "5"
+    case seventh = "6"
+}
+
+// MARK: - PresentedSearchLogo Type
+
+enum PresentedSearchLogo: String {
     case first = "0"
     case second = "1"
     case third = "2"
@@ -80,13 +100,24 @@ extension Media {
             }
         case is PresentedDisplayLogo.Type:
             switch PresentedDisplayLogo(rawValue: resources.presentedDisplayLogo) {
-            case .first: return resources.displayLogos[0]
-            case .second: return resources.displayLogos[1]
-            case .third: return resources.displayLogos[2]
-            case .fourth: return resources.displayLogos[3]
-            case .fifth: return resources.displayLogos[4]
-            case .sixth: return resources.displayLogos[5]
-            case .seventh: return resources.displayLogos[6]
+            case .first: return resources.logos[0]
+            case .second: return resources.logos[1]
+            case .third: return resources.logos[2]
+            case .fourth: return resources.logos[3]
+            case .fifth: return resources.logos[4]
+            case .sixth: return resources.logos[5]
+            case .seventh: return resources.logos[6]
+            default: return nil
+            }
+        case is PresentedSearchLogo.Type:
+            switch PresentedDisplayLogo(rawValue: resources.presentedSearchLogo) {
+            case .first: return resources.logos[0]
+            case .second: return resources.logos[1]
+            case .third: return resources.logos[2]
+            case .fourth: return resources.logos[3]
+            case .fifth: return resources.logos[4]
+            case .sixth: return resources.logos[5]
+            case .seventh: return resources.logos[6]
             default: return nil
             }
         default: return nil

@@ -102,7 +102,7 @@ extension DetailViewModel: ViewModelProtocol {
                                                   cached: nil,
                                                   completion: { [weak self] result in
             if case let .success(responseDTO) = result {
-                var season = responseDTO.data.first!
+                guard var season = responseDTO.data.first else { return }
                 season.episodes = season.episodes.sorted { $0.episode < $1.episode }
                 self?.season.value = season.toDomain()
                 

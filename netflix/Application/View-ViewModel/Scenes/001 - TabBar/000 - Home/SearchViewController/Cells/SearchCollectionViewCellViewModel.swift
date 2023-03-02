@@ -22,6 +22,7 @@ private protocol ViewModelOutput {
     var logoImageIdentifier: NSString { get }
     var logoImageURL: URL! { get }
     var presentedLogoAlignment: PresentedLogoAlignment { get }
+    var presentedSearchLogoAlignment: PresentedSearchLogoAlignment { get }
 }
 
 private typealias ViewModelProtocol = ViewModelOutput
@@ -41,6 +42,7 @@ struct SearchCollectionViewCellViewModel {
     var logoImageIdentifier: NSString
     var logoImageURL: URL!
     let presentedLogoAlignment: PresentedLogoAlignment
+    var presentedSearchLogoAlignment: PresentedSearchLogoAlignment
     /// Create a search collection view cell view model object.
     /// - Parameter media: Corresponding media object.
     init(media: Media) {
@@ -51,11 +53,12 @@ struct SearchCollectionViewCellViewModel {
         self.logos = media.resources.logos
         self.posterImagePath = .init()
         self.logoImagePath = .init()
-        self.presentedLogoAlignment = .init(rawValue: media.resources.presentedLogoAlignment)!
+        self.presentedLogoAlignment = .init(rawValue: media.resources.presentedLogoAlignment) ?? .init(rawValue: "bottom")!
+        self.presentedSearchLogoAlignment = .init(rawValue: media.resources.presentedSearchLogoAlignment) ?? .init(rawValue: "minXminY")!
         self.posterImageIdentifier = .init(string: "preview-poster_\(media.slug)")
         self.logoImageIdentifier = .init(string: "display-logo_\(media.slug)")
         self.posterImagePath = media.resources.previewPoster
-        self.logoImagePath = media.path(forResourceOfType: PresentedDisplayLogo.self)!
+        self.logoImagePath = media.path(forResourceOfType: PresentedSearchLogo.self)!
         self.posterImageURL = URL(string: self.posterImagePath)
         self.logoImageURL = URL(string: self.logoImagePath)
     }

@@ -11,7 +11,7 @@ import Foundation
 
 private protocol ViewModelInput {
     func set(media: [Media])
-    func load(requestDTO: SearchHTTPDTO.Request, loading: SearchLoading)
+    func load(requestDTO: SearchHTTPDTO.Request)
     func update(requestDTO: SearchHTTPDTO.Request)
     
     func didLoadNextPage(requestDTO: SearchHTTPDTO.Request)
@@ -22,7 +22,6 @@ private protocol ViewModelOutput {
     var useCase: MediaUseCase { get }
     
     var items: Observable<[SearchCollectionViewCellViewModel]> { get }
-    var loading: Observable<SearchLoading?> { get }
     var query: Observable<String> { get }
     var error: Observable<String> { get }
     var isEmpty: Bool { get }
@@ -42,7 +41,6 @@ final class SearchViewModel {
     fileprivate let useCase = MediaUseCase()
     
     let items: Observable<[SearchCollectionViewCellViewModel]> = Observable([])
-    let loading: Observable<SearchLoading?> = Observable(.none)
     let query: Observable<String> = Observable("")
     fileprivate let error: Observable<String> = Observable("")
     fileprivate var isEmpty: Bool { return items.value.isEmpty }
@@ -58,7 +56,7 @@ extension SearchViewModel: ViewModelProtocol {
     func viewDidLoad() {}
     
     func didLoadNextPage(requestDTO: SearchHTTPDTO.Request) {
-        load(requestDTO: requestDTO, loading: .nextPage)
+        load(requestDTO: requestDTO)
     }
     
     func didSearch(query: String) {
@@ -71,7 +69,7 @@ extension SearchViewModel: ViewModelProtocol {
         useCase.repository.task?.cancel()
     }
     
-    fileprivate func set(media: [Media]) {
+    func set(media: [Media]) {
         items.value = media.map(SearchCollectionViewCellViewModel.init)
     }
     
@@ -79,9 +77,10 @@ extension SearchViewModel: ViewModelProtocol {
         items.value.removeAll()
     }
     
-    fileprivate func load(requestDTO: SearchHTTPDTO.Request, loading: SearchLoading) {
-        self.loading.value = loading
+    fileprivate func load(requestDTO: SearchHTTPDTO.Request) {
         query.value = requestDTO.regex
+        
+        coordinator?.viewController?.isLoading = true
         
         useCase.repository.task = useCase.request(
             for: [Media].self,
@@ -89,25 +88,18 @@ extension SearchViewModel: ViewModelProtocol {
             cached: { media in
                 // TBI
             },
-            completion: { result in
+            completion: { [weak self] result in
                 if case let .success(media) = result {
-                    self.set(media: media)
+                    self?.set(media: media)
                 } else if case let .failure(error) = result {
                     printIfDebug(.error, "\(error)")
                 }
-                self.loading.value = .none
+                self?.coordinator?.viewController?.isLoading = false
             })
     }
     
     fileprivate func update(requestDTO: SearchHTTPDTO.Request) {
         reset()
-        load(requestDTO: requestDTO, loading: .fullscreen)
+        load(requestDTO: requestDTO)
     }
-}
-
-// MARK: - SearchLoading Type
-
-enum SearchLoading {
-    case fullscreen
-    case nextPage
 }
