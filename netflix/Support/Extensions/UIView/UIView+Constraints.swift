@@ -49,6 +49,16 @@ extension UIView {
         ])
     }
     
+    func constraintBottom(toParent view: UIView,
+                          withBottomAnchor value: CGFloat) {
+        translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: value)
+        ])
+    }
+    
     func constraintTop(toParent view: UIView, constant: CGFloat, withHeightAnchor anchorValue: CGFloat, horizontalMargin: CGFloat) {
         translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([

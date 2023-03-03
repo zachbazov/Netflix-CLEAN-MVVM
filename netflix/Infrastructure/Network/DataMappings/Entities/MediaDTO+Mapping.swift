@@ -109,6 +109,7 @@ public final class MediaDTO: NSObject, Codable, NSSecureCoding {
         case isSecret
         case resources
         case seasons
+        case timesSearched
     }
     
     let id: String?
@@ -130,6 +131,7 @@ public final class MediaDTO: NSObject, Codable, NSSecureCoding {
     let isSecret: Bool
     let resources: MediaResourcesDTO
     let seasons: [String]?
+    let timesSearched: Int
     
     init(id: String?,
          type: String,
@@ -149,7 +151,8 @@ public final class MediaDTO: NSObject, Codable, NSSecureCoding {
          isNewRelease: Bool,
          isSecret: Bool,
          resources: MediaResourcesDTO,
-         seasons: [String]?) {
+         seasons: [String]?,
+         timesSearched: Int) {
         self.id = id
         self.type = type
         self.title = title
@@ -169,6 +172,7 @@ public final class MediaDTO: NSObject, Codable, NSSecureCoding {
         self.isSecret = isSecret
         self.resources = resources
         self.seasons = seasons
+        self.timesSearched = timesSearched
     }
     
     // MARK: NSSecureCoding Implementation
@@ -195,6 +199,7 @@ public final class MediaDTO: NSObject, Codable, NSSecureCoding {
         coder.encode(isSecret, forKey: "isSecret")
         coder.encode(resources, forKey: "resources")
         coder.encode(seasons, forKey: "seasons")
+        coder.encode(timesSearched, forKey: "timesSearched")
     }
     
     public init?(coder: NSCoder) {
@@ -217,6 +222,7 @@ public final class MediaDTO: NSObject, Codable, NSSecureCoding {
         self.isSecret = coder.decodeBool(forKey: "isSecret")
         self.resources = coder.decodeObject(of: MediaResourcesDTO.self, forKey: "resources")!
         self.seasons = coder.decodeObject(of: [NSArray.self, NSString.self], forKey: "seasons") as? [String] ?? []
+        self.timesSearched = coder.decodeInteger(forKey: "timesSearched")
     }
 }
 
@@ -259,7 +265,8 @@ extension MediaDTO {
                      isNewRelease: isNewRelease,
                      isSecret: isSecret,
                      resources: resources.toDomain(),
-                     seasons: seasons)
+                     seasons: seasons,
+                     timesSearched: timesSearched)
     }
 }
 

@@ -46,6 +46,7 @@ struct Media {
     let isSecret: Bool
     let resources: MediaResources
     let seasons: [String]?
+    let timesSearched: Int
 }
 
 // MARK: - Mediable Implementation
@@ -86,7 +87,8 @@ extension Media {
                      isNewRelease: isNewRelease,
                      isSecret: isSecret,
                      resources: resources.toDTO(),
-                     seasons: seasons)
+                     seasons: seasons,
+                     timesSearched: timesSearched)
     }
 }
 

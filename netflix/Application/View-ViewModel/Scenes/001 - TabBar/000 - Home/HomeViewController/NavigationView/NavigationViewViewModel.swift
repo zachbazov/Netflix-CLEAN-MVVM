@@ -49,11 +49,13 @@ extension NavigationViewViewModel: ViewModelProtocol {
     /// Animate the first appearance of the navigation view.
     func navigationViewDidAppear() {
         let homeViewController = coordinator.viewController!
-        homeViewController.navigationViewTopConstraint.constant = 0.0
-        homeViewController.navigationView.alpha = 1.0
-        homeViewController.view.animateUsingSpring(withDuration: 0.66,
-                                                   withDamping: 1.0,
-                                                   initialSpringVelocity: 1.0)
+        mainQueueDispatch {
+            homeViewController.navigationViewTopConstraint.constant = 0.0
+            homeViewController.navigationView.alpha = 1.0
+            homeViewController.view.animateUsingSpring(withDuration: 0.66,
+                                                       withDamping: 1.0,
+                                                       initialSpringVelocity: 1.0)
+        }
     }
     /// Controls the navigation presentation of items.
     /// - Parameter state: Corresponding state.

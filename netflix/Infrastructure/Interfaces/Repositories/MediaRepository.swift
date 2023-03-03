@@ -107,4 +107,23 @@ extension MediaRepository: MediaRepositoryProtocol {
         
         return task
     }
+    
+    func getTopSearches(completion: @escaping (Result<MediaHTTPDTO.Response, Error>) -> Void) -> Cancellable? {
+        let requestDTO = MediaHTTPDTO.Request(id: nil, slug: nil)
+        let task = RepositoryTask()
+        let dataTransferService = Application.app.services.dataTransfer
+        
+        guard !task.isCancelled else { return nil }
+        
+        let endpoint = APIEndpoint.getTopSearchedMedia(with: requestDTO)
+        task.networkTask = dataTransferService.request(with: endpoint, completion: { result in
+            if case let .success(responseDTO) = result {
+                completion(.success(responseDTO))
+            } else if case let .failure(error) = result {
+                completion(.failure(error))
+            }
+        })
+        
+        return task
+    }
 }

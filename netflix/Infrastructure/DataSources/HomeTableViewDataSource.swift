@@ -99,7 +99,7 @@ extension HomeTableViewDataSource: UITableViewDelegate, UITableViewDataSource {
             return .zero
         }
         switch index {
-        case .display: return view.bounds.height * 0.735
+        case .display: return view.bounds.height * 0.736
         case .rated: return view.bounds.height * 0.215
         default: return view.bounds.height * 0.215
         }

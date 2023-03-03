@@ -76,7 +76,7 @@ extension PanelView: ViewProtocol {
     fileprivate func playDidTap() {
         /// Allocate a new detail controller.
         let coordinator = viewModel.coordinator!
-        let section = viewModel.sectionAt(.display)
+        let section = viewModel.sectionAt(.resumable)
         let media = viewModel.presentedMedia.value!
         let rotated = true
         coordinator.section = section

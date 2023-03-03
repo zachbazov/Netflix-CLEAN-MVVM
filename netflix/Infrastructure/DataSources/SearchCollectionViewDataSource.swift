@@ -53,4 +53,35 @@ extension SearchCollectionViewDataSource: UICollectionViewDelegate, UICollection
         coordinator.shouldScreenRotate = false
         coordinator.coordinate(to: .detail)
     }
+    
+    func collectionView(_ collectionView: UICollectionView,
+                        viewForSupplementaryElementOfKind kind: String,
+                        at indexPath: IndexPath) -> UICollectionReusableView {
+        switch kind {
+        case UICollectionView.elementKindSectionHeader:
+            return CollectionViewHeaderView.create(in: collectionView, at: indexPath)
+        default: return .init()
+        }
+    }
+}
+
+// MARK: - UIScrollViewDelegate Implementation
+
+extension SearchCollectionViewDataSource {
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        guard let searchViewController = viewModel.coordinator?.viewController,
+              let textField = searchViewController.searchBar.searchTextField as UITextField?,
+              textField.isFirstResponder else { return }
+        textField.resignFirstResponder()
+    }
+}
+
+// MARK: - UICollectionViewDelegateFlowLayout Implementation
+
+extension SearchCollectionViewDataSource: UICollectionViewDelegateFlowLayout {
+    func collectionView(_ collectionView: UICollectionView,
+                        layout collectionViewLayout: UICollectionViewLayout,
+                        referenceSizeForHeaderInSection section: Int) -> CGSize {
+        return CGSize(width: collectionView.bounds.width, height: 32.0)
+    }
 }

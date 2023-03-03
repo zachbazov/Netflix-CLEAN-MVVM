@@ -84,7 +84,7 @@ extension TabBarConfiguration {
             let attributes = NSAttributedString.tabBarItemAttributes
             controller.tabBarItem = UITabBarItem(title: title, image: image, tag: tag)
             controller.tabBarItem.setTitleTextAttributes(attributes, for: .normal)
-            /// In-case the receiver view controller wrapper is a navigation controller type.
+            // In-case the receiver view controller wrapper is a navigation controller type.
             if let controller = controller as? UINavigationController {
                 controller.setNavigationBarHidden(navigationBarHidden ?? true, animated: false)
             }
@@ -135,15 +135,15 @@ extension TabBarCoordinator: CoordinatorProtocol {
         let coordinator = HomeViewCoordinator()
         let viewModel = HomeViewModel()
         let controller = HomeViewController()
-        /// Allocate root's referencens.
+        // Allocate root's referencens.
         controller.viewModel = viewModel
         controller.viewModel.coordinator = coordinator
         coordinator.viewController = controller
-        /// Embed the view controller in a navigation controller.
+        // Embed the view controller in a navigation controller.
         let navigation = UINavigationController(rootViewController: controller)
-        /// Update the tag representor property.
+        // Update the tag representor property.
         navigation.navigationBar.tag = Screen.home.rawValue
-        /// Configure the tab bar item.
+        // Configure the tab bar item.
         configuration.tabBarItem(for: .home, with: navigation)
         return navigation
     }

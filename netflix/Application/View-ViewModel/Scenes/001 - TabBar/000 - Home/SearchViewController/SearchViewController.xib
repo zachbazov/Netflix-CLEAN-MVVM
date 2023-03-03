@@ -83,7 +83,7 @@
                             </constraints>
                         </view>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Qav-6r-NUw" userLabel="Content Container">
-                            <rect key="frame" x="0.0" y="115" width="393" height="737"/>
+                            <rect key="frame" x="0.0" y="107" width="393" height="745"/>
                         </view>
                     </subviews>
                     <viewLayoutGuide key="safeArea" id="Bh6-Sc-lGW"/>
@@ -93,7 +93,7 @@
                         <constraint firstItem="evQ-J7-ESg" firstAttribute="top" secondItem="Bh6-Sc-lGW" secondAttribute="top" id="GQ2-c6-5cs"/>
                         <constraint firstAttribute="bottom" secondItem="Qav-6r-NUw" secondAttribute="bottom" id="KrD-ss-jXR"/>
                         <constraint firstItem="Qav-6r-NUw" firstAttribute="leading" secondItem="Eug-U7-55W" secondAttribute="leading" id="KvW-dC-fMa"/>
-                        <constraint firstItem="Qav-6r-NUw" firstAttribute="top" secondItem="evQ-J7-ESg" secondAttribute="bottom" constant="16" id="oEe-nr-lEg"/>
+                        <constraint firstItem="Qav-6r-NUw" firstAttribute="top" secondItem="evQ-J7-ESg" secondAttribute="bottom" constant="8" id="oEe-nr-lEg"/>
                         <constraint firstAttribute="trailing" secondItem="Qav-6r-NUw" secondAttribute="trailing" id="osd-lT-0lA"/>
                         <constraint firstAttribute="trailing" secondItem="evQ-J7-ESg" secondAttribute="trailing" id="xIH-nh-rfB"/>
                     </constraints>

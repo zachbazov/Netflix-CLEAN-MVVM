@@ -56,6 +56,8 @@ final class HomeViewModel {
     
     lazy var myList = MyList(with: self)
     
+    var topSearches: [Media] = []
+    
     deinit {
         myList.viewDidUnbindObservers()
         coordinator = nil
@@ -72,12 +74,14 @@ extension HomeViewModel: ViewModel {
     }
     
     func dataDidDownload() {
+        ActivityIndicatorView.viewDidHide()
+        
         let navigationViewModel = coordinator?.viewController?.navigationView.viewModel
         navigationViewModel?.navigationViewDidAppear()
         
         updateDataSource()
         
-        ActivityIndicatorView.viewDidHide()
+        loadTopSearches()
     }
 }
 
@@ -213,11 +217,9 @@ extension HomeViewModel {
             request: Any.self,
             cached: { [weak self] responseDTO in
                 guard let self = self, let response = responseDTO else { return }
-                mainQueueDispatch {
-                    self.media = response.data.toDomain()
-                    
-                    self.dataDidDownload()
-                }
+                self.media = response.data.toDomain()
+                
+                self.dataDidDownload()
             }, completion: { [weak self] result in
                 guard let self = self else { return }
                 switch result {
@@ -225,6 +227,22 @@ extension HomeViewModel {
                     self.media = response.data.toDomain()
                     
                     self.dataDidDownload()
+                case .failure(let error):
+                    printIfDebug(.error, "\(error)")
+                }
+            })
+    }
+    
+    private func loadTopSearches() {
+        mediaUseCase.repository.task = mediaUseCase.request(
+            for: MediaHTTPDTO.Response.self,
+            request: [String: Any](),
+            cached: { _ in },
+            completion: { [weak self] result in
+                guard let self = self else { return }
+                switch result {
+                case .success(let response):
+                    self.topSearches = response.data.toDomain()
                 case .failure(let error):
                     printIfDebug(.error, "\(error)")
                 }

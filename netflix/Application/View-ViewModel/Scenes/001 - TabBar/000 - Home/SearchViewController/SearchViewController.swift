@@ -33,7 +33,7 @@ final class SearchViewController: Controller<SearchViewModel> {
     @IBOutlet private weak var searchBarContainer: UIView!
     @IBOutlet private weak var contentContainer: UIView!
     @IBOutlet private weak var backButton: UIButton!
-    @IBOutlet private weak var searchBar: UISearchBar!
+    @IBOutlet private(set) weak var searchBar: UISearchBar!
     
     fileprivate lazy var collectionView: UICollectionView = createCollectionView()
     fileprivate var dataSource: SearchCollectionViewDataSource!
@@ -65,8 +65,8 @@ final class SearchViewController: Controller<SearchViewModel> {
     }
     
     var initialData: [Media] {
-        let vc = Application.app.coordinator.tabCoordinator.home.viewControllers.first as! HomeViewController
-        return vc.viewModel.media
+        let homeViewController = Application.app.coordinator.tabCoordinator.home.viewControllers.first as! HomeViewController
+        return homeViewController.viewModel.topSearches
     }
     
     deinit {
@@ -97,8 +97,8 @@ final class SearchViewController: Controller<SearchViewModel> {
     }
     
     override func viewDidBindObservers() {
-        viewModel.items.observe(on: self) { [weak self] _ in self?.updateItems() }
-        viewModel.query.observe(on: self) { [weak self] in self?.updateSearchQuery($0) }
+        viewModel?.items.observe(on: self) { [weak self] _ in self?.updateItems() }
+        viewModel?.query.observe(on: self) { [weak self] in self?.updateSearchQuery($0) }
     }
     
     override func viewDidUnbindObservers() {
@@ -182,13 +182,15 @@ extension SearchViewController: UISearchBarDelegate {
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         guard let text = searchBar.text, !text.isEmpty else { return }
         searchController.isActive = false
-        viewModel.didSearch(query: text)
+        viewModel?.didSearch(query: text)
+        
+        searchBar.searchTextField.resignFirstResponder()
     }
     
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
-        viewModel.didCancelSearch()
+        viewModel?.didCancelSearch()
         
-        viewModel.set(media: initialData)
+        viewModel?.set(media: initialData)
     }
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
@@ -250,6 +252,9 @@ extension SearchViewController {
     private func createCollectionView() -> UICollectionView {
         let layout = CollectionViewLayout(layout: .search, scrollDirection: .vertical)
         let collectionView = UICollectionView(frame: contentContainer.bounds, collectionViewLayout: layout)
+        collectionView.register(CollectionViewHeaderView.self,
+                                forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
+                                withReuseIdentifier: CollectionViewHeaderView.reuseIdentifier)
         collectionView.register(SearchCollectionViewCell.nib,
                                 forCellWithReuseIdentifier: SearchCollectionViewCell.reuseIdentifier)
         collectionView.backgroundColor = .black
@@ -259,12 +264,15 @@ extension SearchViewController {
     }
 }
 
+// MARK: - UISearchResultsUpdating Implementation
+
 extension SearchViewController: UISearchResultsUpdating {
     func updateSearchResults(for searchController: UISearchController) {
         if let searchText = searchController.searchBar.searchTextField.text, !searchText.isEmpty {
             return
+        } else {
+            print("settingData")
+            viewModel?.set(media: initialData)
         }
-        
-        viewModel.set(media: initialData)
     }
 }
