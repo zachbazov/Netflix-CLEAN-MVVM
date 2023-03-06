@@ -70,7 +70,7 @@ extension HomeViewModel: ViewModel {
     func viewDidLoad() {
         ActivityIndicatorView.viewDidShow()
         
-        loadSections()
+        loadData()
     }
     
     func dataDidDownload() {
@@ -80,8 +80,6 @@ extension HomeViewModel: ViewModel {
         navigationViewModel?.navigationViewDidAppear()
         
         updateDataSource()
-        
-        loadTopSearches()
     }
 }
 
@@ -185,11 +183,22 @@ extension HomeViewModel: ViewModelProtocol {
 // MARK: - Private UI Implementation
 
 extension HomeViewModel {
+    private func loadData() {
+        let group = DispatchGroup()
+        group.enter()
+        loadSections { group.leave() }
+        group.enter()
+        loadMedia { group.leave() }
+        group.enter()
+        loadTopSearches { group.leave() }
+        group.notify(queue: .main) { [weak self] in self?.dataDidDownload() }
+    }
+    
     private func updateDataSource() {
         dataSourceState.value = .all
     }
     
-    private func loadSections() {
+    private func loadSections(_ completion: @escaping () -> Void) {
         sectionUseCase.repository.task = sectionUseCase.request(
             for: SectionHTTPDTO.Response.self,
             request: Any.self,
@@ -199,8 +208,8 @@ extension HomeViewModel {
                 if case let .success(response) = result {
                     // Allocate sections with the response data.
                     self.sections = response.data.toDomain()
-                    // Execute media fetching operation.
-                    self.loadMedia()
+                    
+                    completion()
                 }
                 if case let .failure(error) = result {
                     printIfDebug(.error, "\(error)")
@@ -211,7 +220,7 @@ extension HomeViewModel {
             })
     }
     
-    private func loadMedia() {
+    private func loadMedia(_ completion: @escaping () -> Void) {
         mediaUseCase.repository.task = mediaUseCase.request(
             for: MediaHTTPDTO.Response.self,
             request: Any.self,
@@ -219,21 +228,21 @@ extension HomeViewModel {
                 guard let self = self, let response = responseDTO else { return }
                 self.media = response.data.toDomain()
                 
-                self.dataDidDownload()
+                completion()
             }, completion: { [weak self] result in
                 guard let self = self else { return }
                 switch result {
                 case .success(let response):
                     self.media = response.data.toDomain()
                     
-                    self.dataDidDownload()
+                    completion()
                 case .failure(let error):
                     printIfDebug(.error, "\(error)")
                 }
             })
     }
     
-    private func loadTopSearches() {
+    private func loadTopSearches(_ completion: @escaping () -> Void) {
         mediaUseCase.repository.task = mediaUseCase.request(
             for: MediaHTTPDTO.Response.self,
             request: [String: Any](),
@@ -243,6 +252,8 @@ extension HomeViewModel {
                 switch result {
                 case .success(let response):
                     self.topSearches = response.data.toDomain()
+                    
+                    completion()
                 case .failure(let error):
                     printIfDebug(.error, "\(error)")
                 }
