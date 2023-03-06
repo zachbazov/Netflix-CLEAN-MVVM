@@ -14,10 +14,10 @@ class URLImageProtocol: URLProtocol {
     var block: DispatchWorkItem!
     
     private static let queue = DispatchQueue(label: "com.netflix.URLImageProtocol",
-                                             qos: .background,
+                                             qos: .userInitiated,
                                              attributes: .concurrent,
                                              autoreleaseFrequency: .workItem,
-                                             target: .global(qos: .background))
+                                             target: .global(qos: .userInitiated))
     
     static func urlSession() -> URLSession {
         let config = URLSessionConfiguration.ephemeral

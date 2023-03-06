@@ -19,7 +19,7 @@ private typealias ViewProtocol = ViewOutput
 
 final class CollectionViewHeaderView: UICollectionReusableView {
     
-    fileprivate lazy var titleLabel: UILabel = createTitleLabel()
+    fileprivate(set) var titleLabel = UILabel(frame: .zero)
     
     static func create(in collectionView: UICollectionView, at indexPath: IndexPath) -> CollectionViewHeaderView {
         guard let cell = collectionView.dequeueReusableSupplementaryView(
@@ -31,7 +31,7 @@ final class CollectionViewHeaderView: UICollectionReusableView {
     }
     
     func viewDidConfigure() {
-        _ = titleLabel
+        createTitleLabel()
     }
 }
 
@@ -50,13 +50,11 @@ extension CollectionViewHeaderView: ViewProtocol {}
 // MARK: - Private UI Implementation
 
 extension CollectionViewHeaderView {
-    private func createTitleLabel() -> UILabel {
-        let titleLabel = UILabel(frame: .zero)
-        titleLabel.text = "Top Searches"
+    private func createTitleLabel() {
+        titleLabel.text = "Searches"
         titleLabel.font = .systemFont(ofSize: 18.0, weight: .bold)
         titleLabel.textColor = .white
         addSubview(titleLabel)
         titleLabel.constraintBottom(toParent: self, withBottomAnchor: -8.0)
-        return titleLabel
     }
 }

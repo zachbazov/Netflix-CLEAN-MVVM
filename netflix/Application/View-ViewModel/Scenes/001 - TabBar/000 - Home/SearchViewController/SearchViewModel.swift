@@ -25,9 +25,9 @@ private protocol ViewModelOutput {
     var query: Observable<String> { get }
     var error: Observable<String> { get }
     var isEmpty: Bool { get }
+    var topSearches: [Media] { get }
     
     func reset()
-    
     func didCancelSearch()
 }
 
@@ -44,6 +44,10 @@ final class SearchViewModel {
     let query: Observable<String> = Observable("")
     fileprivate let error: Observable<String> = Observable("")
     fileprivate var isEmpty: Bool { return items.value.isEmpty }
+    var topSearches: [Media] {
+        let homeViewController = Application.app.coordinator.tabCoordinator.home.viewControllers.first as! HomeViewController
+        return homeViewController.viewModel.topSearches
+    }
 }
 
 // MARK: - ViewModel Implementation
@@ -62,6 +66,7 @@ extension SearchViewModel: ViewModelProtocol {
     func didSearch(query: String) {
         guard !query.isEmpty else { return }
         let requestDTO = SearchHTTPDTO.Request(regex: query)
+        self.query.value = query
         update(requestDTO: requestDTO)
     }
     
@@ -80,7 +85,7 @@ extension SearchViewModel: ViewModelProtocol {
     fileprivate func load(requestDTO: SearchHTTPDTO.Request) {
         query.value = requestDTO.regex
         
-        coordinator?.viewController?.isLoading = true
+        coordinator?.viewController?.textFieldIndicatorView?.isLoading = true
         
         useCase.repository.task = useCase.request(
             for: [Media].self,
@@ -94,7 +99,7 @@ extension SearchViewModel: ViewModelProtocol {
                 } else if case let .failure(error) = result {
                     printIfDebug(.error, "\(error)")
                 }
-                self?.coordinator?.viewController?.isLoading = false
+                self?.coordinator?.viewController?.textFieldIndicatorView?.isLoading = false
             })
     }
     

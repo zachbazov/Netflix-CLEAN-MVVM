@@ -17,6 +17,7 @@ private protocol ControllerOutput {
     var collectionView: UICollectionView { get }
     var dataSource: SearchCollectionViewDataSource! { get }
     var searchController: UISearchController { get }
+    var textFieldIndicatorView: TextFieldActivityIndicatorView? { get }
     
     func updateItems()
     func removeDataSource()
@@ -36,38 +37,9 @@ final class SearchViewController: Controller<SearchViewModel> {
     @IBOutlet private(set) weak var searchBar: UISearchBar!
     
     fileprivate lazy var collectionView: UICollectionView = createCollectionView()
-    fileprivate var dataSource: SearchCollectionViewDataSource!
+    fileprivate(set) var dataSource: SearchCollectionViewDataSource!
     fileprivate var searchController = UISearchController(searchResultsController: nil)
-    
-    var activityIndicator: UIActivityIndicatorView? {
-        return searchBar.searchTextField.leftView?.subviews.compactMap { $0 as? UIActivityIndicatorView }.first
-    }
-    
-    var isLoading: Bool {
-        get {
-            return activityIndicator != nil
-        }
-        set {
-            if newValue {
-                if activityIndicator == nil {
-                    let newActivityIndicator = UIActivityIndicatorView(style: UIActivityIndicatorView.Style.medium)
-                    newActivityIndicator.color = UIColor.gray
-                    newActivityIndicator.startAnimating()
-                    newActivityIndicator.backgroundColor = searchBar.searchTextField.backgroundColor ?? UIColor.black
-                    searchBar.searchTextField.leftView?.addSubview(newActivityIndicator)
-                    let leftViewSize = searchBar.searchTextField.leftView?.frame.size ?? .zero
-                    newActivityIndicator.center = CGPoint(x: leftViewSize.width / 2, y: leftViewSize.height / 2)
-                }
-            } else {
-                activityIndicator?.removeFromSuperview()
-            }
-        }
-    }
-    
-    var initialData: [Media] {
-        let homeViewController = Application.app.coordinator.tabCoordinator.home.viewControllers.first as! HomeViewController
-        return homeViewController.viewModel.topSearches
-    }
+    fileprivate(set) lazy var textFieldIndicatorView: TextFieldActivityIndicatorView? = createTextFieldIndicatorView()
     
     deinit {
         viewDidUnbindObservers()
@@ -190,7 +162,9 @@ extension SearchViewController: UISearchBarDelegate {
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
         viewModel?.didCancelSearch()
         
-        viewModel?.set(media: initialData)
+        viewModel?.set(media: viewModel?.topSearches ?? [])
+        
+        dataSource.headerView.titleLabel.text = "Searches"
     }
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
@@ -215,6 +189,19 @@ extension SearchViewController: UISearchControllerDelegate {
     
     func didDismissSearchController(_ searchController: UISearchController) {
         removeDataSource()
+    }
+}
+
+// MARK: - UISearchResultsUpdating Implementation
+
+extension SearchViewController: UISearchResultsUpdating {
+    func updateSearchResults(for searchController: UISearchController) {
+        if let searchText = searchController.searchBar.searchTextField.text, !searchText.isEmpty {
+            dataSource.headerView.titleLabel.text = searchText
+            return
+        } else {
+            viewModel?.set(media: viewModel?.topSearches ?? [])
+        }
     }
 }
 
@@ -262,17 +249,9 @@ extension SearchViewController {
         collectionView.constraintToSuperview(contentContainer)
         return collectionView
     }
-}
-
-// MARK: - UISearchResultsUpdating Implementation
-
-extension SearchViewController: UISearchResultsUpdating {
-    func updateSearchResults(for searchController: UISearchController) {
-        if let searchText = searchController.searchBar.searchTextField.text, !searchText.isEmpty {
-            return
-        } else {
-            print("settingData")
-            viewModel?.set(media: initialData)
-        }
+    
+    private func createTextFieldIndicatorView() -> TextFieldActivityIndicatorView? {
+        guard let searchBar = searchBar else { return nil }
+        return TextFieldActivityIndicatorView(textField: searchBar.searchTextField)
     }
 }

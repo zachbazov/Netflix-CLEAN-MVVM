@@ -11,6 +11,7 @@ import UIKit
 
 private protocol DataSourceOutput {
     var viewModel: SearchViewModel { get }
+    var headerView: CollectionViewHeaderView! { get }
 }
 
 private typealias DataSourceProtocol = DataSourceOutput
@@ -19,6 +20,7 @@ private typealias DataSourceProtocol = DataSourceOutput
 
 final class SearchCollectionViewDataSource: NSObject {
     fileprivate let viewModel: SearchViewModel
+    fileprivate(set) var headerView: CollectionViewHeaderView!
     /// Create a search collection view data source object.
     /// - Parameter viewModel: Coordinating view model.
     init(with viewModel: SearchViewModel) {
@@ -59,7 +61,8 @@ extension SearchCollectionViewDataSource: UICollectionViewDelegate, UICollection
                         at indexPath: IndexPath) -> UICollectionReusableView {
         switch kind {
         case UICollectionView.elementKindSectionHeader:
-            return CollectionViewHeaderView.create(in: collectionView, at: indexPath)
+            headerView = CollectionViewHeaderView.create(in: collectionView, at: indexPath)
+            return headerView
         default: return .init()
         }
     }
