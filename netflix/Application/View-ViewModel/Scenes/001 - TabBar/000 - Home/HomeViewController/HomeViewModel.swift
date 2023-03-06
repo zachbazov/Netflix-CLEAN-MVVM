@@ -206,14 +206,13 @@ extension HomeViewModel {
             completion: { [weak self] result in
                 guard let self = self else { return }
                 if case let .success(response) = result {
-                    // Allocate sections with the response data.
                     self.sections = response.data.toDomain()
                     
                     completion()
                 }
                 if case let .failure(error) = result {
                     printIfDebug(.error, "\(error)")
-                    // Perform a sign out operation, and send the user to the auth screen.
+                    
                     let authService = Application.app.services.authentication
                     authService.signOut()
                 }

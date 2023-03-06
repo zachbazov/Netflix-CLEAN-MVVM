@@ -106,7 +106,9 @@ extension MediaPlayerOverlayViewConfiguration: ConfigurationProtocol {
         }
         
         guard let image = systemImage as UIImage? else { return }
-        overlayView.playButton.setImage(image, for: .normal)
+        mainQueueDispatch { [weak self] in
+            self?.overlayView.playButton.setImage(image, for: .normal)
+        }
     }
     
     func startTimer(target: Any, selector: Selector) {

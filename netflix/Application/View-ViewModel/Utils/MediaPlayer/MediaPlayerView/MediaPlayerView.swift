@@ -79,7 +79,9 @@ extension MediaPlayerView: MediaPlayerDelegate {
     func playerDidPlay(_ mediaPlayer: MediaPlayer) {
         viewModel.isPlaying = true
         prepareToPlay?(viewModel.isPlaying)
-        mediaPlayer.player.play()
+        DispatchQueue.global(qos: .userInteractive).async {
+            mediaPlayer.player.play()
+        }
     }
     
     func playerDidStop(_ mediaPlayer: MediaPlayer) {
