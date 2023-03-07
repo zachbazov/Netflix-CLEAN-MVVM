@@ -55,7 +55,7 @@ protocol Requestable {
     var bodyParameters: [String: Any] { get }
     var bodyEncoding: BodyEncoding { get }
     
-    func urlRequest(with config: NetworkConfigurable) throws -> URLRequest
+    func urlRequest(with config: NetworkConfigurable) async throws -> URLRequest
 }
 
 // MARK: - Requestable Implementation

@@ -81,6 +81,16 @@ extension DataTransferService: DataTransferServiceInput {
             }
         }
     }
+    func asyncRequest<T, E>(with endpoint: E) async throws -> Result<T, DataTransferError>? where T: Decodable, T == E.Response, E: ResponseRequestable {
+        let data = try await networkService.asyncRequest(endpoint: endpoint)
+        guard let data = data else { return nil }
+        let result: Result<T, DataTransferError> = self.decode(data: data, decoder: endpoint.responseDecoder)
+        if case .failure(let error) = result {
+            self.errorLogger.log(error: error)
+            return nil
+        }
+        return result
+    }
     
     func request<E>(with endpoint: E,
                     completion: @escaping (Result<Void, DataTransferError>) -> Void) -> NetworkCancellable?
@@ -99,6 +109,16 @@ extension DataTransferService: DataTransferServiceInput {
                 }
             }
         }
+    }
+    func asyncRequest<E>(with endpoint: E) async throws -> Result<VoidResponse, DataTransferError>? where E: ResponseRequestable {
+        let data = try await self.networkService.asyncRequest(endpoint: endpoint)
+        guard let data = data else { return nil }
+        let result: Result<VoidResponse, DataTransferError> = self.decode(data: data, decoder: endpoint.responseDecoder)
+        if case .failure(let error) = result {
+            self.errorLogger.log(error: error)
+            return nil
+        }
+        return result
     }
     
     private func decode<T: Decodable>(data: Data?,
@@ -163,4 +183,13 @@ public class RawDataResponseDecoder: ResponseDecoder {
             throw Swift.DecodingError.typeMismatch(T.self, context)
         }
     }
+}
+
+
+
+
+
+
+struct VoidResponse: Decodable {
+    let status: String
 }

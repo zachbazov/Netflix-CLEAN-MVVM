@@ -34,6 +34,8 @@ protocol NetworkServiceInput {
     
     func request(endpoint: Requestable,
                  completion: @escaping CompletionHandler) -> NetworkCancellable?
+    
+    func asyncRequest(endpoint: Requestable) async throws -> Data?
 }
 
 // MARK: - NetworkSessionManagerInput Type
@@ -43,6 +45,8 @@ protocol NetworkSessionManagerInput {
     
     func request(_ request: URLRequest,
                  completion: @escaping CompletionHandler) -> NetworkCancellable
+    
+    func asyncRequest(_ request: URLRequest) async throws -> Data?
 }
 
 // MARK: - NetworkErrorLoggerInput Type
@@ -88,6 +92,10 @@ extension NetworkService {
         
         return sessionDataTask
     }
+    private func asyncRequest(request: URLRequest) async throws -> Data? {
+        let data = try await sessionManager.asyncRequest(request)
+        return data
+    }
     
     private func resolve(error: Error) -> NetworkError {
         let code = URLError.Code(rawValue: (error as NSError).code)
@@ -113,6 +121,13 @@ extension NetworkService: NetworkServiceInput {
             return nil
         }
     }
+    
+    func asyncRequest(endpoint: Requestable) async throws -> Data? {
+        let urlRequest = try await endpoint.urlRequest(with: config)
+        let data = try await asyncRequest(request: urlRequest)
+        guard let data = data else { return nil }
+        return data
+    }
 }
 
 // MARK: - NetworkSessionManager Type
@@ -123,6 +138,11 @@ struct NetworkSessionManager: NetworkSessionManagerInput {
         let task = URLSession.shared.dataTask(with: request, completionHandler: completion)
         task.resume()
         return task
+    }
+    
+    func asyncRequest(_ request: URLRequest) async throws -> Data? {
+        let (data, _) = try await URLSession.shared.data(for: request)
+        return data
     }
 }
 

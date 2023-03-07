@@ -192,6 +192,17 @@ extension HomeViewModel {
         group.enter()
         loadTopSearches { group.leave() }
         group.notify(queue: .main) { [weak self] in self?.dataDidDownload() }
+        
+        Task {
+            try await loadMedia2()
+        }
+    }
+    private func loadSections() async {
+//        let response = await sectionUseCase.request
+    }
+    private func loadMedia2() async throws {
+        let response = try await mediaUseCase.asyncRequest(for: MediaHTTPDTO.Response.self, request: Any.self)
+        self.media = response!.data.toDomain()
     }
     
     private func updateDataSource() {

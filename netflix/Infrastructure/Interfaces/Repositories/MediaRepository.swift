@@ -18,6 +18,18 @@ final class MediaRepository: Repository {
 // MARK: - MediaRepositoryProtocol Implementation
 
 extension MediaRepository: MediaRepositoryProtocol {
+    func getAll() async throws -> MediaHTTPDTO.Response? {
+        let endpoint = APIEndpoint.getAllMedia()
+        let result = try await self.dataTransferService.asyncRequest(with: endpoint)
+        switch result {
+        case .success(let response):
+            return response
+        case .failure(let error):
+            self.dataTransferService.errorLogger.log(error: error)
+            return nil
+        default: return nil
+        }
+    }
     func getAll(cached: @escaping (MediaHTTPDTO.Response?) -> Void,
                 completion: @escaping (Result<MediaHTTPDTO.Response, Error>) -> Void) -> Cancellable? {
         let task = RepositoryTask()
