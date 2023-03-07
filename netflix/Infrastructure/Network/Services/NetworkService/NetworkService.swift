@@ -32,10 +32,9 @@ extension URLSessionTask: NetworkCancellable {}
 protocol NetworkServiceInput {
     typealias CompletionHandler = (Result<Data?, NetworkError>) -> Void
     
-    func request(endpoint: Requestable,
-                 completion: @escaping CompletionHandler) -> NetworkCancellable?
+    func request(endpoint: Requestable, completion: @escaping CompletionHandler) -> NetworkCancellable?
     
-    func asyncRequest(endpoint: Requestable) async throws -> Data?
+    func request(endpoint: Requestable) async throws -> (Data, URLResponse)?
 }
 
 // MARK: - NetworkSessionManagerInput Type
@@ -43,10 +42,9 @@ protocol NetworkServiceInput {
 protocol NetworkSessionManagerInput {
     typealias CompletionHandler = (Data?, URLResponse?, Error?) -> Void
     
-    func request(_ request: URLRequest,
-                 completion: @escaping CompletionHandler) -> NetworkCancellable
+    func request(_ request: URLRequest, completion: @escaping CompletionHandler) -> NetworkCancellable
     
-    func asyncRequest(_ request: URLRequest) async throws -> Data?
+    func request(_ request: URLRequest) async throws -> (Data, URLResponse)?
 }
 
 // MARK: - NetworkErrorLoggerInput Type
@@ -68,8 +66,7 @@ struct NetworkService {
 // MARK: - Methods
 
 extension NetworkService {
-    private func request(request: URLRequest,
-                         completion: @escaping CompletionHandler) -> NetworkCancellable {
+    private func request(request: URLRequest, completion: @escaping CompletionHandler) -> NetworkCancellable {
         let sessionDataTask = sessionManager.request(request) { data, response, requestError in
             if let requestError = requestError {
                 var error: NetworkError
@@ -92,14 +89,16 @@ extension NetworkService {
         
         return sessionDataTask
     }
-    private func asyncRequest(request: URLRequest) async throws -> Data? {
-        let data = try await sessionManager.asyncRequest(request)
-        return data
+    
+    private func request(request: URLRequest) async throws -> (Data, URLResponse)? {
+        self.logger.log(request: request)
+        guard let (data, response) = try await sessionManager.request(request) else { return nil }
+        self.logger.log(responseData: data, response: response)
+        return (data, response)
     }
     
     private func resolve(error: Error) -> NetworkError {
         let code = URLError.Code(rawValue: (error as NSError).code)
-        
         switch code {
         case .notConnectedToInternet: return .notConnected
         case .cancelled: return .cancelled
@@ -111,8 +110,7 @@ extension NetworkService {
 // MARK: - NetworkServiceInput Implementation
 
 extension NetworkService: NetworkServiceInput {
-    func request(endpoint: Requestable,
-                 completion: @escaping CompletionHandler) -> NetworkCancellable? {
+    func request(endpoint: Requestable, completion: @escaping CompletionHandler) -> NetworkCancellable? {
         do {
             let urlRequest = try endpoint.urlRequest(with: config)
             return request(request: urlRequest, completion: completion)
@@ -122,27 +120,24 @@ extension NetworkService: NetworkServiceInput {
         }
     }
     
-    func asyncRequest(endpoint: Requestable) async throws -> Data? {
+    func request(endpoint: Requestable) async throws -> (Data, URLResponse)? {
         let urlRequest = try await endpoint.urlRequest(with: config)
-        let data = try await asyncRequest(request: urlRequest)
-        guard let data = data else { return nil }
-        return data
+        guard let (data, response) = try await self.request(request: urlRequest) else { return nil }
+        return (data, response)
     }
 }
 
 // MARK: - NetworkSessionManager Type
 
 struct NetworkSessionManager: NetworkSessionManagerInput {
-    func request(_ request: URLRequest,
-                 completion: @escaping CompletionHandler) -> NetworkCancellable {
+    func request(_ request: URLRequest, completion: @escaping CompletionHandler) -> NetworkCancellable {
         let task = URLSession.shared.dataTask(with: request, completionHandler: completion)
         task.resume()
         return task
     }
     
-    func asyncRequest(_ request: URLRequest) async throws -> Data? {
-        let (data, _) = try await URLSession.shared.data(for: request)
-        return data
+    func request(_ request: URLRequest) async throws -> (Data, URLResponse)? {
+        return try await URLSession.shared.data(for: request)
     }
 }
 

@@ -20,15 +20,11 @@ final class MediaRepository: Repository {
 extension MediaRepository: MediaRepositoryProtocol {
     func getAll() async throws -> MediaHTTPDTO.Response? {
         let endpoint = APIEndpoint.getAllMedia()
-        let result = try await self.dataTransferService.asyncRequest(with: endpoint)
-        switch result {
-        case .success(let response):
+        let result = try await self.dataTransferService.request(with: endpoint)
+        if case let .success(response) = result {
             return response
-        case .failure(let error):
-            self.dataTransferService.errorLogger.log(error: error)
-            return nil
-        default: return nil
         }
+        return nil
     }
     func getAll(cached: @escaping (MediaHTTPDTO.Response?) -> Void,
                 completion: @escaping (Result<MediaHTTPDTO.Response, Error>) -> Void) -> Cancellable? {
@@ -137,5 +133,14 @@ extension MediaRepository: MediaRepositoryProtocol {
         })
         
         return task
+    }
+    func getTopSeaches() async throws -> MediaHTTPDTO.Response? {
+        let requestDTO = MediaHTTPDTO.Request(id: nil, slug: nil)
+        let endpoint = APIEndpoint.getTopSearchedMedia(with: requestDTO)
+        let result = try await self.dataTransferService.request(with: endpoint)
+        if case let .success(response) = result {
+            return response
+        }
+        return nil
     }
 }

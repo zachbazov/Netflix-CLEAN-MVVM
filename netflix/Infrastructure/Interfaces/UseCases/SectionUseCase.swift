@@ -24,4 +24,12 @@ extension SectionUseCase: RequestableRoute {
         let completion = completion as? ((Result<SectionHTTPDTO.Response, Error>) -> Void) ?? { _ in }
         return repository.getAll(completion: completion)
     }
+    
+    func request<T, U>(for response: T.Type, request: U) async throws -> T? {
+        switch response {
+        case is SectionHTTPDTO.Response.Type:
+            return try await repository.getAll() as? T
+        default: return nil
+        }
+    }
 }

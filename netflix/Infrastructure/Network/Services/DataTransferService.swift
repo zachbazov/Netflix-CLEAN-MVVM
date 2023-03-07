@@ -63,8 +63,7 @@ struct DataTransferService {
 extension DataTransferService: DataTransferServiceInput {
     func request<T, E>(
         with endpoint: E,
-        completion: @escaping CompletionHandler<T>) -> NetworkCancellable?
-    where T: Decodable, T == E.Response, E: ResponseRequestable {
+        completion: @escaping CompletionHandler<T>) -> NetworkCancellable? where T: Decodable, E: ResponseRequestable, T == E.Response {
         return self.networkService.request(endpoint: endpoint) { result in
             switch result {
             case .success(let data):
@@ -81,20 +80,9 @@ extension DataTransferService: DataTransferServiceInput {
             }
         }
     }
-    func asyncRequest<T, E>(with endpoint: E) async throws -> Result<T, DataTransferError>? where T: Decodable, T == E.Response, E: ResponseRequestable {
-        let data = try await networkService.asyncRequest(endpoint: endpoint)
-        guard let data = data else { return nil }
-        let result: Result<T, DataTransferError> = self.decode(data: data, decoder: endpoint.responseDecoder)
-        if case .failure(let error) = result {
-            self.errorLogger.log(error: error)
-            return nil
-        }
-        return result
-    }
     
     func request<E>(with endpoint: E,
-                    completion: @escaping (Result<Void, DataTransferError>) -> Void) -> NetworkCancellable?
-    where E: ResponseRequestable, E.Response == Void { 
+                    completion: @escaping (Result<Void, DataTransferError>) -> Void) -> NetworkCancellable? where E: ResponseRequestable, E.Response == Void {
         return self.networkService.request(endpoint: endpoint) { result in
             switch result {
             case .success:
@@ -110,10 +98,10 @@ extension DataTransferService: DataTransferServiceInput {
             }
         }
     }
-    func asyncRequest<E>(with endpoint: E) async throws -> Result<VoidResponse, DataTransferError>? where E: ResponseRequestable {
-        let data = try await self.networkService.asyncRequest(endpoint: endpoint)
-        guard let data = data else { return nil }
-        let result: Result<VoidResponse, DataTransferError> = self.decode(data: data, decoder: endpoint.responseDecoder)
+    
+    func request<T, E>(with endpoint: E) async throws -> Result<T, DataTransferError>? where T: Decodable, E: ResponseRequestable, T == E.Response {
+        guard let (data, _) = try await networkService.request(endpoint: endpoint) else { return nil }
+        let result: Result<T, DataTransferError> = self.decode(data: data, decoder: endpoint.responseDecoder)
         if case .failure(let error) = result {
             self.errorLogger.log(error: error)
             return nil
@@ -121,11 +109,19 @@ extension DataTransferService: DataTransferServiceInput {
         return result
     }
     
-    private func decode<T: Decodable>(data: Data?,
-                                      decoder: ResponseDecoder) -> Result<T, DataTransferError> {
+    func request<E>(with endpoint: E) async throws -> Result<VoidHTTP.Response, DataTransferError>? where E: ResponseRequestable {
+        guard let (data, _) = try await self.networkService.request(endpoint: endpoint) else { return nil }
+        let result: Result<VoidHTTP.Response, DataTransferError> = self.decode(data: data, decoder: endpoint.responseDecoder)
+        if case .failure(let error) = result {
+            self.errorLogger.log(error: error)
+            return nil
+        }
+        return result
+    }
+    
+    private func decode<T: Decodable>(data: Data?, decoder: ResponseDecoder) -> Result<T, DataTransferError> {
         do {
             guard let data = data else { return .failure(.noResponse) }
-            
             let result: T = try decoder.decode(data)
             return .success(result)
         } catch {
@@ -183,13 +179,4 @@ public class RawDataResponseDecoder: ResponseDecoder {
             throw Swift.DecodingError.typeMismatch(T.self, context)
         }
     }
-}
-
-
-
-
-
-
-struct VoidResponse: Decodable {
-    let status: String
 }
