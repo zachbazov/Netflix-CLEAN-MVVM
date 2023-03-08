@@ -16,9 +16,19 @@ final class ListRepository: Repository {
 
 // MARK: - ListRepositoryProtocol Implementation
 
-extension ListRepository: ListRepositoryProtocol {
-    func getOne(request: ListHTTPDTO.GET.Request,
-                completion: @escaping (Result<ListHTTPDTO.GET.Response, Error>) -> Void) -> Cancellable? {
+extension ListRepository {
+    func getAll<T>(cached: @escaping (T?) -> Void, completion: @escaping (Result<T, Error>) -> Void) -> Cancellable? where T: Decodable {
+        return nil
+    }
+    
+    func getAll<T>() async -> T? where T: Decodable {
+        return nil
+    }
+    
+    func getOne<T, U>(request: U,
+                      cached: @escaping (T?) -> Void,
+                      completion: @escaping (Result<T, Error>) -> Void) -> Cancellable? where T: Decodable, U: Decodable {
+        guard let request = request as? ListHTTPDTO.GET.Request else { return nil }
         let requestDTO = ListHTTPDTO.GET.Request(user: request.user)
         let task = RepositoryTask()
         
@@ -28,7 +38,7 @@ extension ListRepository: ListRepositoryProtocol {
         task.networkTask = dataTransferService.request(with: endpoint) { result in
             switch result {
             case .success(let response):
-                completion(.success(response))
+                completion(.success(response as! T))
             case .failure(let error):
                 completion(.failure(error))
             }

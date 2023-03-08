@@ -9,14 +9,14 @@ import Foundation
 
 // MARK: - ListUseCase Type
 
-final class ListUseCase: UseCase {
+final class ListUseCase {
     typealias T = ListRepository
     let repository = ListRepository()
 }
 
-// MARK: - RouteRequestable Implementation
+// MARK: - UseCase Implementation
 
-extension ListUseCase: RequestableRoute {
+extension ListUseCase: UseCase {
     func request<T, U>(for response: T.Type,
                        request: U? = nil,
                        cached: ((T?) -> Void)?,
@@ -25,7 +25,7 @@ extension ListUseCase: RequestableRoute {
         case is ListHTTPDTO.GET.Response.Type:
             guard let request = request as? ListHTTPDTO.GET.Request else { return nil }
             let completion = completion as? ((Result<ListHTTPDTO.GET.Response, Error>) -> Void) ?? { _ in }
-            return repository.getOne(request: request, completion: completion)
+            return repository.getOne(request: request, cached: { _ in }, completion: completion)
         case is ListHTTPDTO.PATCH.Response.Type:
             guard let request = request as? ListHTTPDTO.PATCH.Request else { return nil }
             let completion = completion as? ((Result<ListHTTPDTO.PATCH.Response, Error>) -> Void) ?? { _ in }

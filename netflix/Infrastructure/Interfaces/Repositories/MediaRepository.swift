@@ -17,15 +17,16 @@ final class MediaRepository: Repository {
 
 // MARK: - MediaRepositoryProtocol Implementation
 
-extension MediaRepository: MediaRepositoryProtocol {
-    func getAll(cached: @escaping (MediaHTTPDTO.Response?) -> Void,
-                completion: @escaping (Result<MediaHTTPDTO.Response, Error>) -> Void) -> Cancellable? {
+extension MediaRepository {
+    func getAll<T>(cached: @escaping (T?) -> Void,
+                   completion: @escaping (Result<T, Error>) -> Void) -> Cancellable? where T: Decodable {
         let task = RepositoryTask()
         
         responseStorage.getResponse { [weak self] result in
             guard let self = self else { return }
+            
             if case let .success(responseDTO?) = result {
-                return cached(responseDTO)
+                return cached(responseDTO as? T)
             }
             
             guard !task.isCancelled else { return }
@@ -35,7 +36,7 @@ extension MediaRepository: MediaRepositoryProtocol {
                 switch result {
                 case .success(let response):
                     self.responseStorage.save(response: response)
-                    completion(.success(response))
+                    completion(.success(response as! T))
                 case .failure(let error):
                     completion(.failure(error))
                 }
@@ -45,23 +46,26 @@ extension MediaRepository: MediaRepositoryProtocol {
         return task
     }
     
-    func getAll() async -> MediaHTTPDTO.Response? {
+    func getAll<T>() async -> T? where T: Decodable {
         guard let cached = await responseStorage.getResponse() else {
             let endpoint = APIEndpoint.getAllMedia()
             let result = await dataTransferService.request(with: endpoint)
+            
             if case let .success(response) = result {
                 responseStorage.save(response: response)
-                return response
+                return response as? T
             }
+            
             return nil
         }
         
-        return cached
+        return cached as? T
     }
     
-    func getOne(request: MediaHTTPDTO.Request,
-                cached: @escaping (MediaHTTPDTO.Response?) -> Void,
-                completion: @escaping (Result<MediaHTTPDTO.Response, Error>) -> Void) -> Cancellable? {
+    func getOne<T, U>(request: U,
+                      cached: @escaping (T?) -> Void,
+                      completion: @escaping (Result<T, Error>) -> Void) -> Cancellable? where T: Decodable, U: Decodable {
+        guard let request = request as? MediaHTTPDTO.Request else { return nil }
         let requestDTO = MediaHTTPDTO.Request(id: request.id, slug: request.slug)
         let task = RepositoryTask()
         
@@ -71,7 +75,7 @@ extension MediaRepository: MediaRepositoryProtocol {
         task.networkTask = dataTransferService.request(with: endpoint) { result in
             switch result {
             case .success(let response):
-                completion(.success(response))
+                completion(.success(response as! T))
             case .failure(let error):
                 completion(.failure(error))
             }
@@ -140,9 +144,11 @@ extension MediaRepository: MediaRepositoryProtocol {
     func getTopSeaches() async -> SearchHTTPDTO.Response? {
         let endpoint = APIEndpoint.getTopSearchedMedia()
         let result = await dataTransferService.request(with: endpoint)
+        
         if case let .success(response) = result {
             return response
         }
+        
         return nil
     }
 }

@@ -132,11 +132,6 @@
 		A1A71AAE298B86DD001C6AB1 /* SectionRepositoryEndpoints.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1A71AAD298B86DD001C6AB1 /* SectionRepositoryEndpoints.swift */; };
 		A1A71AB0298B86E3001C6AB1 /* SeasonRepositoryEndpoints.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1A71AAF298B86E3001C6AB1 /* SeasonRepositoryEndpoints.swift */; };
 		A1A71AB2298B86E7001C6AB1 /* ListRepositoryEndpoints.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1A71AB1298B86E7001C6AB1 /* ListRepositoryEndpoints.swift */; };
-		A1A71AB5298D81A6001C6AB1 /* AuthRepositoryProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1A71AB4298D81A6001C6AB1 /* AuthRepositoryProtocol.swift */; };
-		A1A71AB7298D83B6001C6AB1 /* SectionRepositoryProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1A71AB6298D83B6001C6AB1 /* SectionRepositoryProtocol.swift */; };
-		A1A71AB9298D840E001C6AB1 /* MediaRepositoryProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1A71AB8298D840E001C6AB1 /* MediaRepositoryProtocol.swift */; };
-		A1A71ABB298D8449001C6AB1 /* SeasonRepositoryProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1A71ABA298D8449001C6AB1 /* SeasonRepositoryProtocol.swift */; };
-		A1A71ABD298D8460001C6AB1 /* ListRepositoryProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1A71ABC298D8460001C6AB1 /* ListRepositoryProtocol.swift */; };
 		A1AA28C628F487290011EE9D /* MediaPlayerOverlayViewViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1AA28C528F487290011EE9D /* MediaPlayerOverlayViewViewModel.swift */; };
 		A1AA28C828F487E70011EE9D /* MediaPlayerObservers.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1AA28C728F487E70011EE9D /* MediaPlayerObservers.swift */; };
 		A1AA28CC28F4C3710011EE9D /* MediaPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1AA28CB28F4C3710011EE9D /* MediaPlayer.swift */; };
@@ -157,7 +152,7 @@
 		A1AC9F96299F8C5700DAD66D /* ConfigurationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1AC9F95299F8C5700DAD66D /* ConfigurationTests.swift */; };
 		A1AC9F98299F8E1000DAD66D /* CoordinatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1AC9F97299F8E1000DAD66D /* CoordinatorTests.swift */; };
 		A1AC9F9C299FA80B00DAD66D /* AuthServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1AC9F9B299FA80B00DAD66D /* AuthServiceTests.swift */; };
-		A1AC9FA529A24D1600DAD66D /* APIBundleLoading.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1AC9FA429A24D1600DAD66D /* APIBundleLoading.swift */; };
+		A1AC9FA529A24D1600DAD66D /* NetworkHosting.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1AC9FA429A24D1600DAD66D /* NetworkHosting.swift */; };
 		A1AC9FA729A3617400DAD66D /* ViewLifecycleBehavior.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1AC9FA629A3617400DAD66D /* ViewLifecycleBehavior.swift */; };
 		A1AC9FAC29A4D1A300DAD66D /* TableViewHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1AC9FAB29A4D1A300DAD66D /* TableViewHeaderView.swift */; };
 		A1AC9FB629A65E4D00DAD66D /* AlertView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1AC9FB529A65E4D00DAD66D /* AlertView.swift */; };
@@ -195,7 +190,6 @@
 		A1B1B0A8299AEDDE0070AD29 /* Services.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B1B0A7299AEDDE0070AD29 /* Services.swift */; };
 		A1B1B0AA299AEDE20070AD29 /* Stores.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B1B0A9299AEDE20070AD29 /* Stores.swift */; };
 		A1B1B0AC299B12010070AD29 /* Repository.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B1B0AB299B12010070AD29 /* Repository.swift */; };
-		A1B1B0B0299B2B130070AD29 /* RequestableRoute.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B1B0AF299B2B130070AD29 /* RequestableRoute.swift */; };
 		A1B1B0C4299B89F10070AD29 /* UseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B1B0C3299B89F10070AD29 /* UseCase.swift */; };
 		A1B1B0C7299B8C1D0070AD29 /* UserUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B1B0C6299B8C1D0070AD29 /* UserUseCase.swift */; };
 		A1B1B0D2299B9F820070AD29 /* MediaUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B1B0D1299B9F820070AD29 /* MediaUseCase.swift */; };
@@ -421,11 +415,6 @@
 		A1A71AAD298B86DD001C6AB1 /* SectionRepositoryEndpoints.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SectionRepositoryEndpoints.swift; sourceTree = "<group>"; };
 		A1A71AAF298B86E3001C6AB1 /* SeasonRepositoryEndpoints.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeasonRepositoryEndpoints.swift; sourceTree = "<group>"; };
 		A1A71AB1298B86E7001C6AB1 /* ListRepositoryEndpoints.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListRepositoryEndpoints.swift; sourceTree = "<group>"; };
-		A1A71AB4298D81A6001C6AB1 /* AuthRepositoryProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthRepositoryProtocol.swift; sourceTree = "<group>"; };
-		A1A71AB6298D83B6001C6AB1 /* SectionRepositoryProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SectionRepositoryProtocol.swift; sourceTree = "<group>"; };
-		A1A71AB8298D840E001C6AB1 /* MediaRepositoryProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaRepositoryProtocol.swift; sourceTree = "<group>"; };
-		A1A71ABA298D8449001C6AB1 /* SeasonRepositoryProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeasonRepositoryProtocol.swift; sourceTree = "<group>"; };
-		A1A71ABC298D8460001C6AB1 /* ListRepositoryProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListRepositoryProtocol.swift; sourceTree = "<group>"; };
 		A1AA28C528F487290011EE9D /* MediaPlayerOverlayViewViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaPlayerOverlayViewViewModel.swift; sourceTree = "<group>"; };
 		A1AA28C728F487E70011EE9D /* MediaPlayerObservers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaPlayerObservers.swift; sourceTree = "<group>"; };
 		A1AA28CB28F4C3710011EE9D /* MediaPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaPlayer.swift; sourceTree = "<group>"; };
@@ -447,7 +436,7 @@
 		A1AC9F95299F8C5700DAD66D /* ConfigurationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigurationTests.swift; sourceTree = "<group>"; };
 		A1AC9F97299F8E1000DAD66D /* CoordinatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoordinatorTests.swift; sourceTree = "<group>"; };
 		A1AC9F9B299FA80B00DAD66D /* AuthServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthServiceTests.swift; sourceTree = "<group>"; };
-		A1AC9FA429A24D1600DAD66D /* APIBundleLoading.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIBundleLoading.swift; sourceTree = "<group>"; };
+		A1AC9FA429A24D1600DAD66D /* NetworkHosting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkHosting.swift; sourceTree = "<group>"; };
 		A1AC9FA629A3617400DAD66D /* ViewLifecycleBehavior.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewLifecycleBehavior.swift; sourceTree = "<group>"; };
 		A1AC9FAB29A4D1A300DAD66D /* TableViewHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableViewHeaderView.swift; sourceTree = "<group>"; };
 		A1AC9FB529A65E4D00DAD66D /* AlertView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertView.swift; sourceTree = "<group>"; };
@@ -485,7 +474,6 @@
 		A1B1B0A7299AEDDE0070AD29 /* Services.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Services.swift; sourceTree = "<group>"; };
 		A1B1B0A9299AEDE20070AD29 /* Stores.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Stores.swift; sourceTree = "<group>"; };
 		A1B1B0AB299B12010070AD29 /* Repository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Repository.swift; sourceTree = "<group>"; };
-		A1B1B0AF299B2B130070AD29 /* RequestableRoute.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestableRoute.swift; sourceTree = "<group>"; };
 		A1B1B0C3299B89F10070AD29 /* UseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UseCase.swift; sourceTree = "<group>"; };
 		A1B1B0C6299B8C1D0070AD29 /* UserUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserUseCase.swift; sourceTree = "<group>"; };
 		A1B1B0D1299B9F820070AD29 /* MediaUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaUseCase.swift; sourceTree = "<group>"; };
@@ -1250,8 +1238,8 @@
 		A1A71AB3298D8196001C6AB1 /* Interfaces */ = {
 			isa = PBXGroup;
 			children = (
-				A1B1B0BF299B87700070AD29 /* Repositories */,
-				A1B1B0C2299B883D0070AD29 /* UseCases */,
+				A1B1B0AB299B12010070AD29 /* Repository.swift */,
+				A1B1B0C3299B89F10070AD29 /* UseCase.swift */,
 				A1B1B0CA299B96B80070AD29 /* Endpoints */,
 			);
 			path = Interfaces;
@@ -1561,27 +1549,6 @@
 			path = Delegates;
 			sourceTree = "<group>";
 		};
-		A1B1B0BF299B87700070AD29 /* Repositories */ = {
-			isa = PBXGroup;
-			children = (
-				A1B1B0C9299B95780070AD29 /* Protocols */,
-				A1A71AB4298D81A6001C6AB1 /* AuthRepositoryProtocol.swift */,
-				A1A71AB6298D83B6001C6AB1 /* SectionRepositoryProtocol.swift */,
-				A1A71AB8298D840E001C6AB1 /* MediaRepositoryProtocol.swift */,
-				A1A71ABA298D8449001C6AB1 /* SeasonRepositoryProtocol.swift */,
-				A1A71ABC298D8460001C6AB1 /* ListRepositoryProtocol.swift */,
-			);
-			path = Repositories;
-			sourceTree = "<group>";
-		};
-		A1B1B0C2299B883D0070AD29 /* UseCases */ = {
-			isa = PBXGroup;
-			children = (
-				A1B1B0C3299B89F10070AD29 /* UseCase.swift */,
-			);
-			path = UseCases;
-			sourceTree = "<group>";
-		};
 		A1B1B0C5299B8C130070AD29 /* UseCases */ = {
 			isa = PBXGroup;
 			children = (
@@ -1601,14 +1568,6 @@
 				A1B1B0C5299B8C130070AD29 /* UseCases */,
 			);
 			path = Interfaces;
-			sourceTree = "<group>";
-		};
-		A1B1B0C9299B95780070AD29 /* Protocols */ = {
-			isa = PBXGroup;
-			children = (
-				A1B1B0AB299B12010070AD29 /* Repository.swift */,
-			);
-			path = Protocols;
 			sourceTree = "<group>";
 		};
 		A1B1B0CA299B96B80070AD29 /* Endpoints */ = {
@@ -1688,10 +1647,9 @@
 		A1B70A97293EC2CA00C718C6 /* Protocols */ = {
 			isa = PBXGroup;
 			children = (
-				A1AC9FA429A24D1600DAD66D /* APIBundleLoading.swift */,
+				A1AC9FA429A24D1600DAD66D /* NetworkHosting.swift */,
 				A18B998928C040A70077A5A6 /* Cancellable.swift */,
 				A1B98BA3298A414E001B7B62 /* HTTP.swift */,
-				A1B1B0AF299B2B130070AD29 /* RequestableRoute.swift */,
 			);
 			path = Protocols;
 			sourceTree = "<group>";
@@ -2032,7 +1990,6 @@
 				A1B1B0D2299B9F820070AD29 /* MediaUseCase.swift in Sources */,
 				A1741D5028EC774700F3C46B /* DetailNavigationViewItemViewModel.swift in Sources */,
 				A1B68F2A2921BAE600FF5F18 /* MyList.swift in Sources */,
-				A1A71AB9298D840E001C6AB1 /* MediaRepositoryProtocol.swift in Sources */,
 				A1AA28C828F487E70011EE9D /* MediaPlayerObservers.swift in Sources */,
 				A130BCB32950D76C0070EA5E /* SearchCollectionViewCellViewModel.swift in Sources */,
 				A1AD25C028D3FC9600F793B3 /* UITableView+Register.swift in Sources */,
@@ -2071,7 +2028,7 @@
 				A1B93C812900CF2900AF2C7F /* AuthRequestEntity+Mapping.swift in Sources */,
 				A1A71AB0298B86E3001C6AB1 /* SeasonRepositoryEndpoints.swift in Sources */,
 				A1BA1DB728DA209700730EA8 /* OpaqueViewViewModel.swift in Sources */,
-				A1AC9FA529A24D1600DAD66D /* APIBundleLoading.swift in Sources */,
+				A1AC9FA529A24D1600DAD66D /* NetworkHosting.swift in Sources */,
 				A1741D2228E67CE200F3C46B /* DetailInfoView.swift in Sources */,
 				A1AD25A228D29A1000F793B3 /* ShowcaseView.swift in Sources */,
 				A1AD25C228D4C61300F793B3 /* ShowcaseViewViewModel.swift in Sources */,
@@ -2100,7 +2057,6 @@
 				A1B93C7A28FF921000AF2C7F /* MediaResponseStorage.swift in Sources */,
 				A1AC9FA729A3617400DAD66D /* ViewLifecycleBehavior.swift in Sources */,
 				A18B993B28BFC9700077A5A6 /* BackButtonEmptyTitleNavigationBarBehavior.swift in Sources */,
-				A1A71AB5298D81A6001C6AB1 /* AuthRepositoryProtocol.swift in Sources */,
 				A1741D4B28EC5B1B00F3C46B /* DetailNavigationViewItem.swift in Sources */,
 				A1741D3A28EBA16E00F3C46B /* DetailCollectionViewDataSource.swift in Sources */,
 				A1A71AA1298B2A5E001C6AB1 /* MediaHTTP.swift in Sources */,
@@ -2149,17 +2105,14 @@
 				A1A71A9F298B2A58001C6AB1 /* UserHTTP.swift in Sources */,
 				A1741D5828EE5CB400F3C46B /* MediaPlayerViewViewModel.swift in Sources */,
 				A1B3F98C28C55B500042DE9F /* HomeViewModel.swift in Sources */,
-				A1A71AB7298D83B6001C6AB1 /* SectionRepositoryProtocol.swift in Sources */,
 				A1E81D2C28CFE4A900D044EA /* HomeCollectionViewDataSource.swift in Sources */,
 				A1F56A6F28C695FC0089BD4F /* UITextField+Extension.swift in Sources */,
 				A1B93C7228FF329800AF2C7F /* Array+Extension.swift in Sources */,
 				A18B998028C03CA20077A5A6 /* JWT.swift in Sources */,
 				A1AD25C928D56BB100F793B3 /* NavigationViewItem.swift in Sources */,
-				A1B1B0B0299B2B130070AD29 /* RequestableRoute.swift in Sources */,
 				A18D852429423F6F00840045 /* MyListViewModel.swift in Sources */,
 				A1AD25B428D3F37000F793B3 /* PanelViewItemViewModel.swift in Sources */,
 				A1E81D2E28CFE79400D044EA /* TableViewHeaderFooterView.swift in Sources */,
-				A1A71ABD298D8460001C6AB1 /* ListRepositoryProtocol.swift in Sources */,
 				A1BA1DC228DCB7D700730EA8 /* NavigationOverlayTableViewDataSource.swift in Sources */,
 				A130BCB929510C900070EA5E /* DownloadsViewCoordinator.swift in Sources */,
 				A1B93C832900D2A800AF2C7F /* QoS.swift in Sources */,
@@ -2169,7 +2122,6 @@
 				A18B995928BFF6A20077A5A6 /* MediaDTO+Mapping.swift in Sources */,
 				A1E81D1E28CFE47700D044EA /* RatedCollectionViewCell.swift in Sources */,
 				A1741D6228EF716000F3C46B /* ScheduledTimer.swift in Sources */,
-				A1A71ABB298D8449001C6AB1 /* SeasonRepositoryProtocol.swift in Sources */,
 				A1741D5528EE5A7000F3C46B /* MediaPlayerLayer.swift in Sources */,
 				A18B992D28BEE7990077A5A6 /* LandpageViewController.swift in Sources */,
 				A1F56A5C28C668100089BD4F /* Theme.swift in Sources */,

@@ -9,14 +9,14 @@ import Foundation
 
 // MARK: - MediaUseCase Type
 
-final class MediaUseCase: UseCase {
+final class MediaUseCase {
     typealias T = MediaRepository
     let repository = MediaRepository()
 }
 
-// MARK: - RouteRequestable Implementation
+// MARK: - UseCase Implementation
 
-extension MediaUseCase: RequestableRoute {
+extension MediaUseCase: UseCase {
     func request<T, U>(for response: T.Type,
                        request: U? = nil,
                        cached: ((T?) -> Void)?,
@@ -41,10 +41,10 @@ extension MediaUseCase: RequestableRoute {
         }
     }
     
-    func request<T>(for response: T.Type) async -> T? {
+    func request<T>(for response: T.Type) async -> T? where T: Decodable {
         switch response {
         case is MediaHTTPDTO.Response.Type:
-            return await repository.getAll() as? T
+            return await repository.getAll()
         case is SearchHTTPDTO.Response.Type:
             return await repository.getTopSeaches() as? T
         default: return nil

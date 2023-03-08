@@ -16,8 +16,8 @@ final class SectionRepository: Repository {
 
 // MARK: - SectionRepositoryProtocol Implementation
 
-extension SectionRepository: SectionRepositoryProtocol {
-    func getAll(completion: @escaping (Result<SectionHTTPDTO.Response, Error>) -> Void) -> Cancellable? {
+extension SectionRepository {
+    func getAll<T>(cached: @escaping (T?) -> Void, completion: @escaping (Result<T, Error>) -> Void) -> Cancellable? where T : Decodable {
         let task = RepositoryTask()
         
         guard !task.isCancelled else { return nil }
@@ -26,7 +26,7 @@ extension SectionRepository: SectionRepositoryProtocol {
         task.networkTask = dataTransferService.request(with: endpoint) { result in
             switch result {
             case .success(let response):
-                completion(.success(response))
+                completion(.success(response as! T))
             case .failure(let error):
                 completion(.failure(error))
             }
@@ -35,12 +35,18 @@ extension SectionRepository: SectionRepositoryProtocol {
         return task
     }
     
-    func getAll() async -> SectionHTTPDTO.Response? {
+    func getAll<T>() async -> T? where T : Decodable {
         let endpoint = APIEndpoint.getAllSections()
         let result = await self.dataTransferService.request(with: endpoint)
         if case let .success(response) = result {
-            return response
+            return response as? T
         }
+        return nil
+    }
+    
+    func getOne<T, U>(request: U,
+                      cached: @escaping (T?) -> Void,
+                      completion: @escaping (Result<T, Error>) -> Void) -> Cancellable? where T: Decodable, U: Decodable {
         return nil
     }
 }

@@ -7,17 +7,42 @@
 
 import Foundation
 
+// MARK: - UserRepositoryProtocol Type
+
+private protocol UserRepositoryInput {
+    func signUp(request: UserHTTPDTO.Request,
+                completion: @escaping (Result<UserHTTPDTO.Response, DataTransferError>) -> Void) -> Cancellable?
+    func signIn(request: UserHTTPDTO.Request,
+                cached: @escaping (UserHTTPDTO.Response?) -> Void,
+                completion: @escaping (Result<UserHTTPDTO.Response, DataTransferError>) -> Void) -> Cancellable?
+    func signOut(completion: @escaping (Result<Void, DataTransferError>) -> Void) -> Cancellable?
+}
+
+private typealias UserRepositoryProtocol = UserRepositoryInput
+
 // MARK: - UserRepository Type
 
 final class UserRepository: Repository {
+    func getAll<T>(cached: @escaping (T?) -> Void, completion: @escaping (Result<T, Error>) -> Void) -> Cancellable? where T: Decodable {
+        return nil
+    }
+    
+    func getOne<T, U>(request: U, cached: @escaping (T?) -> Void, completion: @escaping (Result<T, Error>) -> Void) -> Cancellable? where T: Decodable, U: Decodable {
+        return nil
+    }
+    
+    func getAll<T>() async -> T? where T: Decodable {
+        return nil
+    }
+    
     let dataTransferService: DataTransferService = Application.app.services.dataTransfer
     let responseStorage: AuthResponseStorage = Application.app.stores.authResponses
     var task: Cancellable? { willSet { task?.cancel() } }
 }
 
-// MARK: - AuthRepositoryProtocol Implementation
+// MARK: - UserRepositoryProtocol Implementation
 
-extension UserRepository: AuthRepositoryProtocol {
+extension UserRepository: UserRepositoryProtocol {
     func signUp(request: UserHTTPDTO.Request,
                 completion: @escaping (Result<UserHTTPDTO.Response, DataTransferError>) -> Void) -> Cancellable? {
         let requestDTO = UserHTTPDTO.Request(user: request.user)

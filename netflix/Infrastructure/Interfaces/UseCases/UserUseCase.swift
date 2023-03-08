@@ -9,14 +9,14 @@ import Foundation
 
 // MARK: - UserUseCase Type
 
-final class UserUseCase: UseCase {
+final class UserUseCase {
     typealias T = UserRepository
     let repository = UserRepository()
 }
 
-// MARK: - RequestableRoute Implementation
+// MARK: - UseCase Implementation
 
-extension UserUseCase: RequestableRoute {
+extension UserUseCase: UseCase {
     /// Send a task operation according to the parameters.
     /// In case data exists, exit the scope and execute the cached operation.
     /// In case data doesn't exist, exit the scope and execute the completion handler.

@@ -9,7 +9,7 @@ import Foundation
 
 // MARK: - Configuration Type
 
-final class Configuration: APIBundleLoading {
+final class Configuration: NetworkHosting {
     
     // MARK: APIBundleLoading Properties
     
