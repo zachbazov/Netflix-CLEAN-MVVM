@@ -66,6 +66,9 @@ extension AuthViewModel: ViewModelProtocol {
                                                   cached: cached,
                                                   completion: completion)
     }
+    func signIn(with request: UserHTTPDTO.Request) async -> UserHTTPDTO.Response? {
+        return await useCase.request(for: UserHTTPDTO.Response.self, request: request)
+    }
     /// Sign out a user.
     /// - Parameter completion: Completion handler with a result object.
     func signOut(completion: @escaping (Result<Void, DataTransferError>) -> Void) {

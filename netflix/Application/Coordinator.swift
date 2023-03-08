@@ -65,6 +65,19 @@ extension Coordinator: CoordinatorProtocol {
         case .tabBar:
             let authService = Application.app.services.authentication
             let requestDTO = UserHTTPDTO.Request(user: authService.user!)
+            
+            if #available(iOS 13.0, *) {
+                Task {
+                    let success = await authService.signIn(with: requestDTO)
+                    guard success else { return }
+                    mainQueueDispatch {
+                        self.tabCoordinator.coordinate(to: .home)
+                    }
+                }
+                
+                return
+            }
+            
             authService.signIn(for: requestDTO) { [weak self] success in
                 guard let self = self else { return }
                 guard success else { return }

@@ -9,6 +9,10 @@ import Foundation
 
 // MARK: - ViewModelProtocol Type
 
+private protocol ViewModelInput {
+    func didFinish(with status: Bool)
+}
+
 private protocol ViewModelOutput {
     var email: String? { get }
     var password: String? { get }
@@ -17,7 +21,7 @@ private protocol ViewModelOutput {
     func signInRequest()
 }
 
-private typealias ViewModelProtocol = ViewModelOutput
+private typealias ViewModelProtocol = ViewModelInput & ViewModelOutput
 
 // MARK: - SignInViewModel Type
 
@@ -61,34 +65,45 @@ extension SignInViewModel: ViewModelProtocol {
         
         guard !(emailTextField?.text?.isEmpty ?? false),
               !(passTextField?.text?.isEmpty ?? false) else {
-            AlertView.shared.present(state: .failure, title: "AUTHORIZATION", message: "Incorrect credentials.")
             return
         }
-        // Ensure the properties aren't nil.
+        
         guard let email = email, let password = password else { return }
-        // Present indicator.
+        
         ActivityIndicatorView.viewDidShow()
-        // Create a new user.
+        
         let userDTO = UserDTO(email: email, password: password)
-        // Create a new sign in request user-based.
         let requestDTO = UserHTTPDTO.Request(user: userDTO)
-        // Invoke the request.
-        authService.signIn(for: requestDTO) { success in
-            // Hide indicator.
-            ActivityIndicatorView.viewDidHide()
-            // In case of success response.
-            guard success else {
-                // Else, reset fields text.
-                emailTextField?.text = ""
-                passTextField?.text = ""
-                return
+        
+        if #available(iOS 13.0, *) {
+            Task {
+                let status = await authService.signIn(with: requestDTO)
+                
+                didFinish(with: status)
             }
-            AlertView.shared.present(state: .success, title: "AUTHORIZATION", message: "Access Granted.")
-            // Present the TabBar screen.
-            mainQueueDispatch(delayInSeconds: 4) {
-                AlertView.shared.removeFromSuperview()
-                coordinator.coordinate(to: .tabBar)
-            }
+            
+            return
+        }
+        
+        authService.signIn(for: requestDTO) { [weak self] status in
+            self?.didFinish(with: status)
+        }
+    }
+    
+    fileprivate func didFinish(with status: Bool) {
+        let coordinator = Application.app.coordinator
+        
+        let emailTextField = coordinator.authCoordinator.signInController.emailTextField
+        let passTextField = coordinator.authCoordinator.signInController.passwordTextField
+        
+        guard status else {
+            emailTextField?.text = ""
+            passTextField?.text = ""
+            return
+        }
+        
+        mainQueueDispatch {
+            coordinator.coordinate(to: .tabBar)
         }
     }
 }

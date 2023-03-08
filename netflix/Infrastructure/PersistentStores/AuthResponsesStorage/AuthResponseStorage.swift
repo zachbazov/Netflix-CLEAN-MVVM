@@ -56,6 +56,13 @@ extension AuthResponseStorage {
             }
         }
     }
+    func getResponse(for request: UserHTTPDTO.Request) async -> UserHTTPDTO.Response? {
+        let context = coreDataStorage.context()
+        let fetchRequest = fetchRequest(for: request)
+        guard let requestEntity = try? context.fetch(fetchRequest).first else { return nil }
+        let response = requestEntity.response?.toDTO()
+        return response
+    }
     
     func save(response: UserHTTPDTO.Response, for request: UserHTTPDTO.Request) {
         coreDataStorage.performBackgroundTask { [weak self] context in

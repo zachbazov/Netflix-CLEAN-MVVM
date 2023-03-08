@@ -47,4 +47,13 @@ extension UserUseCase: UseCase {
         default: return nil
         }
     }
+    
+    func request<T, U>(for response: T.Type, request: U) async -> T? where T: Decodable {
+        switch response {
+        case is UserHTTPDTO.Response.Type:
+            guard let request = request as? UserHTTPDTO.Request else { return nil }
+            return await repository.signIn(request: request) as? T
+        default: return nil
+        }
+    }
 }

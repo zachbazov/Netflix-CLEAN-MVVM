@@ -69,35 +69,30 @@ extension SignUpViewModel: ViewModelProtocol {
               !(emailTextField?.text?.isEmpty ?? false),
               !(passTextField?.text?.isEmpty ?? false),
               !(passConfirmTextField?.text?.isEmpty ?? false) else {
-            AlertView.shared.present(state: .failure, title: "AUTHORIZATION", message: "Incorrect credentials.")
             return
         }
-        // Present indicator.
+        
         ActivityIndicatorView.viewDidShow()
-        // Create a new user.
+        
         let userDTO = UserDTO(name: name,
                               email: email,
                               password: password,
                               passwordConfirm: passwordConfirm)
-        // Create a new sign up request user-based.
+        
         let requestDTO = UserHTTPDTO.Request(user: userDTO)
-        // Invoke the request.
+        
         authService.signUp(for: requestDTO) { success in
-            // Hide indicator.
             ActivityIndicatorView.viewDidHide()
-            // In case of success response.
+            
             guard success else {
-                // Else, reset fields text.
                 nameTextField?.text = ""
                 emailTextField?.text = ""
                 passTextField?.text = ""
                 passConfirmTextField?.text = ""
                 return
             }
-            AlertView.shared.present(state: .success, title: "AUTHORIZATION", message: "Access Granted.")
-            // Present the TabBar screen.
-            mainQueueDispatch(delayInSeconds: 4) {
-                AlertView.shared.removeFromSuperview()
+            
+            mainQueueDispatch {
                 coordinator.coordinate(to: .tabBar)
             }
         }

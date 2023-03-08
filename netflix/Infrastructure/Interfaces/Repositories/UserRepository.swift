@@ -92,6 +92,23 @@ extension UserRepository: UserRepositoryProtocol {
         return task
     }
     
+    func signIn(request: UserHTTPDTO.Request) async -> UserHTTPDTO.Response? {
+        guard let cached = await responseStorage.getResponse(for: request) else {
+            let endpoint = APIEndpoint.signIn(with: request)
+            let result = await dataTransferService.request(with: endpoint)
+            
+            if case let .success(response) = result {
+                responseStorage.save(response: response, for: request)
+                print("new")
+                return response
+            }
+            
+            return nil
+        }
+        print("cached")
+        return cached
+    }
+    
     func signOut(completion: @escaping (Result<Void, DataTransferError>) -> Void) -> Cancellable? {
         let task = RepositoryTask()
         
@@ -100,6 +117,11 @@ extension UserRepository: UserRepositoryProtocol {
         let endpoint = APIEndpoint.signOut()
         task.networkTask = dataTransferService.request(with: endpoint, completion: completion)
         
+        let authService = Application.app.services.authentication
+        let request = UserHTTPDTO.Request(user: authService.user!)
+        let context = responseStorage.coreDataStorage.context()
+        responseStorage.deleteResponse(for: request, in: context)
+        print("delete", request.user.toDomain())
         return task
     }
 }
