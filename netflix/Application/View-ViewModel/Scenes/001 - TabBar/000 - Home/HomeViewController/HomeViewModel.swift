@@ -208,9 +208,9 @@ extension HomeViewModel {
     
     private func asyncLoading() {
         Task {
-            try await sectionsDidLoadAsync()
-            try await mediaDidLoadAsync()
-            try await topSearchesDidLoadAsync()
+            await sectionsDidLoadAsync()
+            await mediaDidLoadAsync()
+            await topSearchesDidLoadAsync()
             dataDidDownload()
         }
     }
@@ -276,20 +276,20 @@ extension HomeViewModel {
             })
     }
     
-    private func sectionsDidLoadAsync() async throws {
-        let response = try await sectionUseCase.request(for: SectionHTTPDTO.Response.self, request: Any.self)
+    private func sectionsDidLoadAsync() async {
+        let response = await sectionUseCase.request(for: SectionHTTPDTO.Response.self, request: Any.self)
         guard let sections = response?.data.toDomain() else { return }
         self.sections = sections
     }
     
-    private func mediaDidLoadAsync() async throws {
-        let response = try await mediaUseCase.request(for: MediaHTTPDTO.Response.self, request: Any.self)
+    private func mediaDidLoadAsync() async {
+        let response = await mediaUseCase.request(for: MediaHTTPDTO.Response.self, request: Any.self)
         guard let media = response?.data.toDomain() else { return }
         self.media = media
     }
     
-    private func topSearchesDidLoadAsync() async throws {
-        let response = try await mediaUseCase.request(for: MediaHTTPDTO.Response.self, request: MediaHTTPDTO.Request.self)
+    private func topSearchesDidLoadAsync() async {
+        let response = await mediaUseCase.request(for: MediaHTTPDTO.Response.self, request: MediaHTTPDTO.Request.self)
         guard let media = response?.data.toDomain() else { return }
         self.topSearches = media
     }

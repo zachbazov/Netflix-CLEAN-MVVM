@@ -35,9 +35,9 @@ extension SectionRepository: SectionRepositoryProtocol {
         return task
     }
     
-    func getAll() async throws -> SectionHTTPDTO.Response? {
+    func getAll() async -> SectionHTTPDTO.Response? {
         let endpoint = APIEndpoint.getAllSections()
-        let result = try await self.dataTransferService.request(with: endpoint)
+        let result = await self.dataTransferService.request(with: endpoint)
         if case let .success(response) = result {
             return response
         }
