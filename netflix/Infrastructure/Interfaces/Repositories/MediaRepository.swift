@@ -18,14 +18,6 @@ final class MediaRepository: Repository {
 // MARK: - MediaRepositoryProtocol Implementation
 
 extension MediaRepository: MediaRepositoryProtocol {
-    func getAll() async throws -> MediaHTTPDTO.Response? {
-        let endpoint = APIEndpoint.getAllMedia()
-        let result = try await self.dataTransferService.request(with: endpoint)
-        if case let .success(response) = result {
-            return response
-        }
-        return nil
-    }
     func getAll(cached: @escaping (MediaHTTPDTO.Response?) -> Void,
                 completion: @escaping (Result<MediaHTTPDTO.Response, Error>) -> Void) -> Cancellable? {
         let task = RepositoryTask()
@@ -52,6 +44,21 @@ extension MediaRepository: MediaRepositoryProtocol {
         
         return task
     }
+    
+    func getAll() async -> MediaHTTPDTO.Response? {
+        guard let cached = await responseStorage.getResponse() else {
+            let endpoint = APIEndpoint.getAllMedia()
+            let result = await self.dataTransferService.request(with: endpoint)
+            if case let .success(response) = result {
+                responseStorage.save(response: response)
+                return response
+            }
+            return nil
+        }
+        
+        return cached
+    }
+    
     
     func getOne(request: MediaHTTPDTO.Request,
                 cached: @escaping (MediaHTTPDTO.Response?) -> Void,
@@ -134,10 +141,10 @@ extension MediaRepository: MediaRepositoryProtocol {
         
         return task
     }
-    func getTopSeaches() async throws -> MediaHTTPDTO.Response? {
+    func getTopSeaches() async -> MediaHTTPDTO.Response? {
         let requestDTO = MediaHTTPDTO.Request(id: nil, slug: nil)
         let endpoint = APIEndpoint.getTopSearchedMedia(with: requestDTO)
-        let result = try await self.dataTransferService.request(with: endpoint)
+        let result = await self.dataTransferService.request(with: endpoint)
         if case let .success(response) = result {
             return response
         }

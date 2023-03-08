@@ -222,12 +222,12 @@ extension HomeViewModel {
             cached: { _ in },
             completion: { [weak self] result in
                 guard let self = self else { return }
-                if case let .success(response) = result {
+                switch result {
+                case .success(let response):
                     self.sections = response.data.toDomain()
                     
                     completion()
-                }
-                if case let .failure(error) = result {
+                case .failure(let error):
                     printIfDebug(.error, "\(error)")
                     
                     let authService = Application.app.services.authentication

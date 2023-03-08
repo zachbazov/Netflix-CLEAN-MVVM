@@ -90,9 +90,9 @@ extension NetworkService {
         return sessionDataTask
     }
     
-    private func request(request: URLRequest) async throws -> (Data, URLResponse)? {
+    private func request(request: URLRequest) async -> (Data, URLResponse)? {
         self.logger.log(request: request)
-        guard let (data, response) = try await sessionManager.request(request) else { return nil }
+        guard let (data, response) = await sessionManager.request(request) else { return nil }
         self.logger.log(responseData: data, response: response)
         return (data, response)
     }
@@ -120,10 +120,14 @@ extension NetworkService: NetworkServiceInput {
         }
     }
     
-    func request(endpoint: Requestable) async throws -> (Data, URLResponse)? {
-        let urlRequest = try await endpoint.urlRequest(with: config)
-        guard let (data, response) = try await self.request(request: urlRequest) else { return nil }
-        return (data, response)
+    func request(endpoint: Requestable) async -> (Data, URLResponse)? {
+        do {
+            let urlRequest = try await endpoint.urlRequest(with: config)
+            guard let (data, response) = await self.request(request: urlRequest) else { return nil }
+            return (data, response)
+        } catch {
+            return nil
+        }
     }
 }
 
@@ -136,8 +140,8 @@ struct NetworkSessionManager: NetworkSessionManagerInput {
         return task
     }
     
-    func request(_ request: URLRequest) async throws -> (Data, URLResponse)? {
-        return try await URLSession.shared.data(for: request)
+    func request(_ request: URLRequest) async -> (Data, URLResponse)? {
+        return try? await URLSession.shared.data(for: request)
     }
 }
 

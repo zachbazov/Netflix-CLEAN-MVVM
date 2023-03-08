@@ -99,8 +99,8 @@ extension DataTransferService: DataTransferServiceInput {
         }
     }
     
-    func request<T, E>(with endpoint: E) async throws -> Result<T, DataTransferError>? where T: Decodable, E: ResponseRequestable, T == E.Response {
-        guard let (data, _) = try await networkService.request(endpoint: endpoint) else { return nil }
+    func request<T, E>(with endpoint: E) async -> Result<T, DataTransferError>? where T: Decodable, E: ResponseRequestable, T == E.Response {
+        guard let (data, _) = await networkService.request(endpoint: endpoint) else { return nil }
         let result: Result<T, DataTransferError> = self.decode(data: data, decoder: endpoint.responseDecoder)
         if case .failure(let error) = result {
             self.errorLogger.log(error: error)
@@ -109,8 +109,8 @@ extension DataTransferService: DataTransferServiceInput {
         return result
     }
     
-    func request<E>(with endpoint: E) async throws -> Result<VoidHTTP.Response, DataTransferError>? where E: ResponseRequestable {
-        guard let (data, _) = try await self.networkService.request(endpoint: endpoint) else { return nil }
+    func request<E>(with endpoint: E) async -> Result<VoidHTTP.Response, DataTransferError>? where E: ResponseRequestable {
+        guard let (data, _) = await self.networkService.request(endpoint: endpoint) else { return nil }
         let result: Result<VoidHTTP.Response, DataTransferError> = self.decode(data: data, decoder: endpoint.responseDecoder)
         if case .failure(let error) = result {
             self.errorLogger.log(error: error)

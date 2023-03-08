@@ -37,25 +37,37 @@ extension MediaResponseStorage {
         }
     }
     
+    func getResponse() async -> MediaHTTPDTO.Response? {
+        let context = coreDataStorage.context()
+        do {
+            let fetchRequest = self.fetchRequest()
+            let responseEntity = try context.fetch(fetchRequest).first
+            let response = responseEntity?.toDTO()
+            return response
+        } catch {
+            printIfDebug(.error, "CoreDataMediaResponseStorage unresolved error \(CoreDataStorageError.readError(error)) occured trying to fetch a response.")
+        }
+        return nil
+    }
+    
     func save(response: MediaHTTPDTO.Response) {
-        coreDataStorage.performBackgroundTask { [weak self] context in
-            do {
-                self?.deleteResponse(in: context)
-                
-                let responseEntity: MediaResponseEntity = response.toEntity(in: context)
-                responseEntity.status = response.status
-                responseEntity.results = Int32(response.results)
-                responseEntity.data = response.data
-                
-                try context.save()
-            } catch {
-                printIfDebug(.error, "CoreDataMediaResponseStorage unresolved error \(error), \((error as NSError).userInfo)")
-            }
+        let context = coreDataStorage.context()
+        do {
+            self.deleteResponse(in: context)
+            
+            let responseEntity: MediaResponseEntity = response.toEntity(in: context)
+            responseEntity.status = response.status
+            responseEntity.results = Int32(response.results)
+            responseEntity.data = response.data
+            
+            try context.save()
+        } catch {
+            printIfDebug(.error, "CoreDataMediaResponseStorage unresolved error \(error), \((error as NSError).userInfo) occured trying to save a response.")
         }
     }
     
     func deleteResponse(in context: NSManagedObjectContext) {
-        let fetchRequest = MediaResponseEntity.fetchRequest()
+        let fetchRequest = self.fetchRequest()
         do {
             if let result = try context.fetch(fetchRequest).first {
                 context.delete(result)
@@ -63,7 +75,7 @@ extension MediaResponseStorage {
                 try context.save()
             }
         } catch {
-            printIfDebug(.error, "Unresolved error \((error as NSError).userInfo) occured as trying to delete object.")
+            printIfDebug(.error, "CoreDataMediaResponseStorage Unresolved error \((error as NSError).userInfo) occured trying to delete a response.")
         }
     }
 }

@@ -45,14 +45,14 @@ extension MediaUseCase: RequestableRoute {
         }
     }
     
-    func request<T, U>(for response: T.Type, request: U.Type) async throws -> T? {
+    func request<T, U>(for response: T.Type, request: U.Type) async -> T? {
         switch response {
         case is MediaHTTPDTO.Response.Type:
             switch request {
             case is MediaHTTPDTO.Request.Type:
-                return try await repository.getTopSeaches() as? T
+                return await repository.getTopSeaches() as? T
             default:
-                return try await repository.getAll() as? T
+                return await repository.getAll() as? T
             }
         default: return nil
         }
