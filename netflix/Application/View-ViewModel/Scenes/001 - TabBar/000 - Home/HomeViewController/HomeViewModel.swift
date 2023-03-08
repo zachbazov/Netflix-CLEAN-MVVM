@@ -218,7 +218,7 @@ extension HomeViewModel {
     private func sectionsDidLoad(_ completion: @escaping () -> Void) {
         sectionUseCase.repository.task = sectionUseCase.request(
             for: SectionHTTPDTO.Response.self,
-            request: Any.self,
+            request: SectionHTTPDTO.Request.self,
             cached: { _ in },
             completion: { [weak self] result in
                 guard let self = self else { return }
@@ -239,7 +239,7 @@ extension HomeViewModel {
     private func mediaDidLoad(_ completion: @escaping () -> Void) {
         mediaUseCase.repository.task = mediaUseCase.request(
             for: MediaHTTPDTO.Response.self,
-            request: Any.self,
+            request: MediaHTTPDTO.Request.self,
             cached: { [weak self] responseDTO in
                 guard let self = self, let response = responseDTO else { return }
                 self.media = response.data.toDomain()
@@ -260,8 +260,8 @@ extension HomeViewModel {
     
     private func topSearchesDidLoad(_ completion: @escaping () -> Void) {
         mediaUseCase.repository.task = mediaUseCase.request(
-            for: MediaHTTPDTO.Response.self,
-            request: [String: Any](),
+            for: SearchHTTPDTO.Response.self,
+            request: SearchHTTPDTO.Request.self,
             cached: { _ in },
             completion: { [weak self] result in
                 guard let self = self else { return }
@@ -277,19 +277,19 @@ extension HomeViewModel {
     }
     
     private func sectionsDidLoadAsync() async {
-        let response = await sectionUseCase.request(for: SectionHTTPDTO.Response.self, request: Any.self)
+        let response = await sectionUseCase.request(for: SectionHTTPDTO.Response.self)
         guard let sections = response?.data.toDomain() else { return }
         self.sections = sections
     }
     
     private func mediaDidLoadAsync() async {
-        let response = await mediaUseCase.request(for: MediaHTTPDTO.Response.self, request: Any.self)
+        let response = await mediaUseCase.request(for: MediaHTTPDTO.Response.self)
         guard let media = response?.data.toDomain() else { return }
         self.media = media
     }
     
     private func topSearchesDidLoadAsync() async {
-        let response = await mediaUseCase.request(for: MediaHTTPDTO.Response.self, request: MediaHTTPDTO.Request.self)
+        let response = await mediaUseCase.request(for: SearchHTTPDTO.Response.self)
         guard let media = response?.data.toDomain() else { return }
         self.topSearches = media
     }

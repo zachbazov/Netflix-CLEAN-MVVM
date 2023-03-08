@@ -16,5 +16,5 @@ protocol MediaRepositoryProtocol {
                 cached: @escaping (MediaHTTPDTO.Response?) -> Void,
                 completion: @escaping (Result<MediaHTTPDTO.Response, Error>) -> Void) -> Cancellable?
     
-    func getAll() async throws -> MediaHTTPDTO.Response?
+    func getAll() async -> MediaHTTPDTO.Response?
 }

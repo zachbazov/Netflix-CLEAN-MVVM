@@ -83,18 +83,15 @@ extension SearchViewModel: ViewModelProtocol {
     }
     
     fileprivate func load(requestDTO: SearchHTTPDTO.Request) {
-        query.value = requestDTO.regex
-        
         coordinator?.viewController?.textFieldIndicatorView?.isLoading = true
         
         useCase.repository.task = useCase.request(
-            for: [Media].self,
+            for: SearchHTTPDTO.Response.self,
             request: requestDTO,
-            cached: { media in
-                // TBI
-            },
+            cached: { _ in },
             completion: { [weak self] result in
-                if case let .success(media) = result {
+                if case let .success(responseDTO) = result {
+                    let media = responseDTO.data.toDomain()
                     self?.set(media: media)
                 } else if case let .failure(error) = result {
                     printIfDebug(.error, "\(error)")

@@ -75,7 +75,7 @@ extension APIEndpoint: MediaRepositoryEndpoints {
                         queryParameters: request.queryParams)
     }
     
-    static func getTopSearchedMedia(with request: MediaHTTPDTO.Request) -> Endpoint<MediaHTTPDTO.Response> {
+    static func getTopSearchedMedia() -> Endpoint<SearchHTTPDTO.Response> {
         return Endpoint(path: "api/v1/media",
                         method: .get,
                         headerParameters: ["content-type": "application/json"],
