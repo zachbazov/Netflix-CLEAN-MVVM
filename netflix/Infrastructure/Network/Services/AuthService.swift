@@ -232,10 +232,14 @@ extension AuthService: AuthServiceProtocol {
     func signOut(with request: UserHTTPDTO.Request) async -> Bool {
         let viewModel = AuthViewModel()
         
+        ActivityIndicatorView.viewDidShow()
+        
         guard let response = await viewModel.signOut(with: request),
               response.status == "success" else { return false }
         
         deleteResponse(for: request)
+        
+        ActivityIndicatorView.viewDidHide()
         
         return true
     }

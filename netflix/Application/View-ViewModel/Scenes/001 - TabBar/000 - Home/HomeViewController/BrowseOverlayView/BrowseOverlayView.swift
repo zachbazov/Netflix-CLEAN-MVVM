@@ -36,6 +36,8 @@ final class BrowseOverlayView: View<BrowseOverlayViewModel> {
         
         parent.addSubview(self)
         self.constraintToSuperview(parent)
+        
+        parent.isHidden(true)
     }
     
     required init?(coder: NSCoder) { fatalError() }
