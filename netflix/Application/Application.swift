@@ -41,6 +41,26 @@ extension Application: ApplicationProtocol {
     /// In case there is a valid response present the TabBar screen.
     /// In case there isn't a valid response present the Auth screen.
     fileprivate func resign() {
+        if #available(iOS 13.0, *) {
+            Task {
+                let user = await services.authentication.resign()
+                
+                guard user != nil else {
+                    mainQueueDispatch { [weak self] in
+                        self?.coordinator.coordinate(to: .auth)
+                    }
+                    
+                    return
+                }
+                
+                mainQueueDispatch { [weak self] in
+                    self?.coordinator.coordinate(to: .tabBar)
+                }
+            }
+            
+            return
+        }
+        
         services.authentication.resign { [weak self] userDTO in
             guard let self = self else { return }
             guard userDTO != nil else {

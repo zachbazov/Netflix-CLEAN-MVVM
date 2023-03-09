@@ -57,14 +57,6 @@ extension AuthResponseStorage {
         }
     }
     
-    func getResponse(for request: UserHTTPDTO.Request) async -> UserHTTPDTO.Response? {
-        let context = coreDataStorage.context()
-        let fetchRequest = fetchRequest(for: request)
-        guard let requestEntity = try? context.fetch(fetchRequest).first else { return nil }
-        let response = requestEntity.response?.toDTO()
-        return response
-    }
-    
     func save(response: UserHTTPDTO.Response, for request: UserHTTPDTO.Request) {
         let context = coreDataStorage.context()
         
@@ -108,5 +100,21 @@ extension AuthResponseStorage {
         } catch {
             printIfDebug(.error, "Unresolved error \(error) occured as trying to delete object.")
         }
+    }
+    
+    func getResponse() async -> UserHTTPDTO.Response? {
+        let context = coreDataStorage.context()
+        let fetchRequest = AuthResponseEntity.fetchRequest()
+        guard let responseEntity = try? context.fetch(fetchRequest).first else { return nil }
+        let response = responseEntity.toDTO()
+        return response
+    }
+    
+    func getResponse(for request: UserHTTPDTO.Request) async -> UserHTTPDTO.Response? {
+        let context = coreDataStorage.context()
+        let fetchRequest = fetchRequest(for: request)
+        guard let requestEntity = try? context.fetch(fetchRequest).first else { return nil }
+        let response = requestEntity.response?.toDTO()
+        return response
     }
 }

@@ -15,10 +15,10 @@ private protocol AuthServiceInput {
     func deleteResponse(for request: UserHTTPDTO.Request)
     
     func resign(completion: @escaping (UserDTO?) -> Void)
-    
     func signIn(for requestDTO: UserHTTPDTO.Request, completion: @escaping (Bool) -> Void)
     func signUp(for requestDTO: UserHTTPDTO.Request, completion: @escaping (Bool) -> Void)
     
+    func resign() async -> UserDTO?
     func signIn(with request: UserHTTPDTO.Request) async -> Bool
     func signUp(with request: UserHTTPDTO.Request) async -> Bool
     func signOut(with request: UserHTTPDTO.Request) async -> Bool
@@ -106,6 +106,20 @@ extension AuthService: AuthServiceProtocol {
                 printIfDebug(.error, "\(error)")
             }
         }
+    }
+    /// Check for the latest authentication response signed by user.
+    /// In case there is a valid response, return user object.
+    /// In case there isn't a valid response, return nil.
+    /// - Returns: A user object.
+    func resign() async -> UserDTO? {
+        guard let response = await responses.getResponse() else { return nil }
+        
+        let request = response.request
+        let user = response.data
+        
+        setResponse(request: request, response: response)
+        
+        return user
     }
     /// Invoke a sign in request.
     /// - Parameters:
