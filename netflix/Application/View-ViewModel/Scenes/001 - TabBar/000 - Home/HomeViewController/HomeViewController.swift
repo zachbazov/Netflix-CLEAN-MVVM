@@ -51,12 +51,13 @@ final class HomeViewController: Controller<HomeViewModel>, ViewControllerProtoco
     }
     
     override func viewDidBindObservers() {
-        viewModel.dataSourceState.observe(on: self) { [weak self] state in
-            self?.dataSource.dataSourceDidChange()
+        viewModel.dataSourceState.observe(on: self) { [weak self] _ in
+            guard let self = self else { return }
+            self.dataSource.dataSourceDidChange()
         }
         viewModel.showcase.observe(on: self) { [weak self] in
-            guard let media = $0 else { return }
-            self?.navigationView.navigationOverlayView.opaqueView.viewDidUpdate(with: media)
+            guard let self = self, let media = $0 else { return }
+            self.navigationView.navigationOverlayView.opaqueView.viewDidUpdate(with: media)
         }
     }
     
@@ -81,6 +82,5 @@ extension HomeViewController {
     
     private func setupBrowseOverlayView() {
         browseOverlayView = BrowseOverlayView(on: browseOverlayViewContainer, with: viewModel)
-        browseOverlayViewContainer.isHidden(true)
     }
 }

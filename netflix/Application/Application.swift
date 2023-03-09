@@ -10,6 +10,7 @@ import UIKit
 // MARK: - ApplicationProtocol Type
 
 private protocol ApplicationInput {
+    func didFinishResigning(with user: UserDTO?)
     func deployScene(in window: UIWindow?)
 }
 
@@ -45,28 +46,33 @@ extension Application: ApplicationProtocol {
             Task {
                 let user = await services.authentication.resign()
                 
-                guard user != nil else {
-                    mainQueueDispatch { [weak self] in
-                        self?.coordinator.coordinate(to: .auth)
-                    }
-                    
-                    return
-                }
-                
-                mainQueueDispatch { [weak self] in
-                    self?.coordinator.coordinate(to: .tabBar)
-                }
+                didFinishResigning(with: user)
             }
             
             return
         }
         
-        services.authentication.resign { [weak self] userDTO in
+        services.authentication.resign { [weak self] user in
             guard let self = self else { return }
-            guard userDTO != nil else {
-                return self.coordinator.coordinate(to: .auth)
+            
+            self.didFinishResigning(with: user)
+        }
+    }
+    /// Based on the corresponding user, navigate to a screen.
+    /// In case there is a valid user, navigate to the tab bat screen.
+    /// In case there isn't, navigate to the auth screen.
+    /// - Parameter user: Corresponding user object.
+    fileprivate func didFinishResigning(with user: UserDTO?) {
+        guard user != nil else {
+            mainQueueDispatch { [weak self] in
+                self?.coordinator.coordinate(to: .auth)
             }
-            self.coordinator.coordinate(to: .tabBar)
+            
+            return
+        }
+        
+        mainQueueDispatch { [weak self] in
+            self?.coordinator.coordinate(to: .tabBar)
         }
     }
     /// Allocate a root view controller for the window.

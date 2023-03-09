@@ -46,7 +46,7 @@ extension AuthViewModel: Coordinable {}
 // MARK: - ViewModelProtocol Implementation
 
 extension AuthViewModel: ViewModelProtocol {
-    /// Sign up a user.
+    /// Sign up request.
     /// - Parameters:
     ///   - request: Representation of the candidate user for the operation.
     ///   - completion: Completion handler with a response.
@@ -57,7 +57,7 @@ extension AuthViewModel: ViewModelProtocol {
                                                   cached: nil,
                                                   completion: completion)
     }
-    /// Sign in a user.
+    /// Sign in request.
     /// - Parameters:
     ///   - request: Representation of the candidate user for the operation.
     ///   - cached: Cached authorization handler.
@@ -70,7 +70,7 @@ extension AuthViewModel: ViewModelProtocol {
                                                   cached: cached,
                                                   completion: completion)
     }
-    /// Sign out a user.
+    /// Sign out request.
     /// - Parameter completion: Completion handler with a result object.
     func signOut(completion: @escaping (Result<Void, DataTransferError>) -> Void) {
         useCase.repository.task = useCase.request(for: Void.self,

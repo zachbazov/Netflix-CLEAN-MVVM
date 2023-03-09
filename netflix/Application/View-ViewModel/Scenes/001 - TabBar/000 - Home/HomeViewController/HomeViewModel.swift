@@ -21,12 +21,11 @@ private protocol ViewModelOutput {
     
     var orientation: DeviceOrientation { get }
     
-    var dataSourceState: Observable<HomeTableViewDataSource.State> { get }
-    
     var sections: [Section] { get }
     var media: [Media] { get }
     var topSearches: [Media] { get }
     
+    var dataSourceState: Observable<HomeTableViewDataSource.State> { get }
     var showcase: Observable<Media?> { get }
     var showcases: [HomeTableViewDataSource.State: Media] { get }
     
@@ -47,12 +46,11 @@ final class HomeViewModel {
     
     fileprivate let orientation = DeviceOrientation.shared
     
-    let dataSourceState: Observable<HomeTableViewDataSource.State> = Observable(.all)
-    
     fileprivate(set) lazy var sections = [Section]()
     fileprivate(set) lazy var media = [Media]()
     fileprivate(set) lazy var topSearches = [Media]()
     
+    let dataSourceState: Observable<HomeTableViewDataSource.State> = Observable(.all)
     let showcase: Observable<Media?> = Observable(.none)
     lazy var showcases = [HomeTableViewDataSource.State: Media]()
     
@@ -81,7 +79,7 @@ extension HomeViewModel: ViewModel {
         let navigationViewModel = coordinator?.viewController?.navigationView.viewModel
         navigationViewModel?.navigationViewDidAppear()
         
-        updateDataSource()
+        notifyObservers()
     }
 }
 
@@ -185,37 +183,66 @@ extension HomeViewModel: ViewModelProtocol {
 // MARK: - Private UI Implementation
 
 extension HomeViewModel {
-    private func loadData() {
+    private func notifyObservers() {
+        dataSourceState.value = .all
+    }
+}
+
+// MARK: - DataProviderProtocol Type
+
+private protocol DataProviderInput {
+    func sectionsDidLoad(_ completion: @escaping () -> Void)
+    func mediaDidLoad(_ completion: @escaping () -> Void)
+    func topSearchesDidLoad(_ completion: @escaping () -> Void)
+    
+    func sectionsDidLoad() async
+    func mediaDidLoad() async
+    func topSearchesDidLoad() async
+}
+
+private protocol DataProviderOutput {
+    func loadData()
+    func awaitLoading()
+    func dispatchGroupLoading()
+}
+
+private typealias DataProviderProtocol = DataProviderInput & DataProviderOutput
+
+// MARK: - DataProviderProtocol Implementation
+
+extension HomeViewModel: DataProviderProtocol {
+    func loadData() {
         if #available(iOS 13.0, *) {
-            return asyncLoading()
+            return awaitLoading()
         }
         
-        groupLoading()
+        dispatchGroupLoading()
     }
     
-    private func groupLoading() {
+    fileprivate func dispatchGroupLoading() {
         let group = DispatchGroup()
+        
         group.enter()
         sectionsDidLoad { group.leave() }
         group.enter()
         mediaDidLoad { group.leave() }
         group.enter()
         topSearchesDidLoad { group.leave() }
-        group.notify(queue: .main) { [weak self] in
-            self?.dataDidDownload()
-        }
+        
+        group.notify(queue: .main) { [weak self] in self?.dataDidDownload() }
     }
     
-    private func asyncLoading() {
+    fileprivate func awaitLoading() {
         Task {
-            await sectionsDidLoadAsync()
-            await mediaDidLoadAsync()
-            await topSearchesDidLoadAsync()
+            await sectionsDidLoad()
+            await mediaDidLoad()
+            await topSearchesDidLoad()
+            
             dataDidDownload()
         }
     }
     
-    private func sectionsDidLoad(_ completion: @escaping () -> Void) {
+    fileprivate func sectionsDidLoad(_ completion: @escaping () -> Void) {
         sectionUseCase.repository.task = sectionUseCase.request(
             for: SectionHTTPDTO.Response.self,
             request: SectionHTTPDTO.Request.self,
@@ -236,12 +263,13 @@ extension HomeViewModel {
             })
     }
     
-    private func mediaDidLoad(_ completion: @escaping () -> Void) {
+    fileprivate func mediaDidLoad(_ completion: @escaping () -> Void) {
         mediaUseCase.repository.task = mediaUseCase.request(
             for: MediaHTTPDTO.Response.self,
             request: MediaHTTPDTO.Request.self,
             cached: { [weak self] responseDTO in
                 guard let self = self, let response = responseDTO else { return }
+                
                 self.media = response.data.toDomain()
                 
                 completion()
@@ -258,7 +286,7 @@ extension HomeViewModel {
             })
     }
     
-    private func topSearchesDidLoad(_ completion: @escaping () -> Void) {
+    fileprivate func topSearchesDidLoad(_ completion: @escaping () -> Void) {
         mediaUseCase.repository.task = mediaUseCase.request(
             for: SearchHTTPDTO.Response.self,
             request: SearchHTTPDTO.Request.self,
@@ -276,25 +304,21 @@ extension HomeViewModel {
             })
     }
     
-    private func sectionsDidLoadAsync() async {
+    fileprivate func sectionsDidLoad() async {
         let response = await sectionUseCase.request(for: SectionHTTPDTO.Response.self)
         guard let sections = response?.data.toDomain() else { return }
         self.sections = sections
     }
     
-    private func mediaDidLoadAsync() async {
+    fileprivate func mediaDidLoad() async {
         let response = await mediaUseCase.request(for: MediaHTTPDTO.Response.self)
         guard let media = response?.data.toDomain() else { return }
         self.media = media
     }
     
-    private func topSearchesDidLoadAsync() async {
+    fileprivate func topSearchesDidLoad() async {
         let response = await mediaUseCase.request(for: SearchHTTPDTO.Response.self)
         guard let media = response?.data.toDomain() else { return }
         self.topSearches = media
-    }
-    
-    private func updateDataSource() {
-        dataSourceState.value = .all
     }
 }

@@ -73,7 +73,7 @@ extension AuthService: AuthServiceProtocol {
     /// - Parameter request: Request object via invocation.
     fileprivate func deleteResponse(for request: UserHTTPDTO.Request) {
         let mediaResponses = Application.app.stores.mediaResponses
-        let context = responses.coreDataStorage.context()
+        let context = Application.app.stores.authResponses.coreDataStorage.context()
         responses.deleteResponse(for: request, in: context)
         mediaResponses.deleteResponse(in: context)
         
