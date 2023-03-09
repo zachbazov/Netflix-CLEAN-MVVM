@@ -62,8 +62,10 @@ extension SignUpViewModel: ViewModelProtocol {
         let emailTextField = coordinator.authCoordinator.signUpController.emailTextField
         let passTextField = coordinator.authCoordinator.signUpController.passwordTextField
         let passConfirmTextField = coordinator.authCoordinator.signUpController.passwordConfirmTextField
+        nameTextField?.resignFirstResponder()
         emailTextField?.resignFirstResponder()
         passTextField?.resignFirstResponder()
+        passConfirmTextField?.resignFirstResponder()
         
         guard !(nameTextField?.text?.isEmpty ?? false),
               !(emailTextField?.text?.isEmpty ?? false),
@@ -81,20 +83,42 @@ extension SignUpViewModel: ViewModelProtocol {
         
         let requestDTO = UserHTTPDTO.Request(user: userDTO)
         
-        authService.signUp(for: requestDTO) { success in
-            ActivityIndicatorView.viewDidHide()
-            
-            guard success else {
-                nameTextField?.text = ""
-                emailTextField?.text = ""
-                passTextField?.text = ""
-                passConfirmTextField?.text = ""
-                return
+        if #available(iOS 13.0, *) {
+            Task {
+                let status = await authService.signUp(with: requestDTO)
+                
+                mainQueueDispatch { [weak self] in
+                    self?.didFinish(with: status)
+                }
             }
             
-            mainQueueDispatch {
-                coordinator.coordinate(to: .tabBar)
+            return
+        }
+        
+        authService.signUp(for: requestDTO) { status in
+            mainQueueDispatch { [weak self] in
+                self?.didFinish(with: status)
             }
         }
+    }
+    
+    private func didFinish(with status: Bool) {
+        let nameTextField = coordinator?.signUpController.nameTextField
+        let emailTextField = coordinator?.signUpController.emailTextField
+        let passTextField = coordinator?.signUpController.passwordTextField
+        let passConfirmTextField = coordinator?.signUpController.passwordConfirmTextField
+        
+        guard status else {
+            nameTextField?.text = ""
+            emailTextField?.text = ""
+            passTextField?.text = ""
+            passConfirmTextField?.text = ""
+            return
+        }
+        
+        ActivityIndicatorView.viewDidHide()
+        
+        let coordinator = Application.app.coordinator
+        coordinator.coordinate(to: .tabBar)
     }
 }

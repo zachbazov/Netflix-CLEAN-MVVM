@@ -56,6 +56,7 @@ extension AuthResponseStorage {
             }
         }
     }
+    
     func getResponse(for request: UserHTTPDTO.Request) async -> UserHTTPDTO.Response? {
         let context = coreDataStorage.context()
         let fetchRequest = fetchRequest(for: request)
@@ -65,42 +66,38 @@ extension AuthResponseStorage {
     }
     
     func save(response: UserHTTPDTO.Response, for request: UserHTTPDTO.Request) {
-        coreDataStorage.performBackgroundTask { [weak self] context in
-            guard let self = self else { return }
-            do {
-                self.deleteResponse(for: request, in: context)
-                
-                let requestEntity: AuthRequestEntity = request.toEntity(in: context)
-                let responseEntity: AuthResponseEntity = response.toEntity(in: context)
-                
-                request.user._id = response.data?._id
-                request.user.name = response.data?.name
-                request.user.role = response.data?.role
-                request.user.active = response.data?.active
-                request.user.mylist = response.data?.mylist
-                request.user.token = response.token
-                
-                requestEntity.response = responseEntity
-                requestEntity.user = request.user
-                
-                response.data?.token = response.token
-                response.data?.password = request.user.password
-                
-                responseEntity.request = requestEntity
-                responseEntity.token = response.token
-                responseEntity.data = response.data
-                
-                try context.save()
-            } catch {
-                printIfDebug(.error, "CoreDataAuthResponseStorage unresolved error \(error), \((error as NSError).userInfo)")
-            }
-        }
+        let context = coreDataStorage.context()
+        
+        deleteResponse(for: request, in: context)
+        
+        let requestEntity: AuthRequestEntity = request.toEntity(in: context)
+        let responseEntity: AuthResponseEntity = response.toEntity(in: context)
+        
+        request.user._id = response.data?._id
+        request.user.name = response.data?.name
+        request.user.role = response.data?.role
+        request.user.active = response.data?.active
+        request.user.mylist = response.data?.mylist
+        request.user.token = response.token
+        
+        requestEntity.response = responseEntity
+        requestEntity.user = request.user
+        
+        response.data?.token = response.token
+        response.data?.password = request.user.password
+        
+        responseEntity.request = requestEntity
+        responseEntity.token = response.token
+        responseEntity.data = response.data
+        
+        do { try context.save() }
+        catch { printIfDebug(.error, "CoreDataAuthResponseStorage unresolved error \(error), \((error as NSError).userInfo)") }
     }
     
     func deleteResponse(for request: UserHTTPDTO.Request,
                         in context: NSManagedObjectContext,
                         completion: (() -> Void)? = nil) {
-        let fetchRequest = AuthRequestEntity.fetchRequest()
+        let fetchRequest = self.fetchRequest(for: request)
         do {
             if let result = try context.fetch(fetchRequest).first {
                 context.delete(result)

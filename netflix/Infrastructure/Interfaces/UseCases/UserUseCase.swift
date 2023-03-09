@@ -49,10 +49,15 @@ extension UserUseCase: UseCase {
     }
     
     func request<T, U>(for response: T.Type, request: U) async -> T? where T: Decodable {
+        guard let request = request as? UserHTTPDTO.Request else { return nil }
         switch response {
         case is UserHTTPDTO.Response.Type:
-            guard let request = request as? UserHTTPDTO.Request else { return nil }
-            return await repository.signIn(request: request) as? T
+            guard request.user.passwordConfirm != nil else {
+                return await repository.signIn(request: request) as? T
+            }
+            return await repository.signUp(request: request) as? T
+        case is VoidHTTP.Response.Type:
+            return await repository.signOut(request: request) as? T
         default: return nil
         }
     }

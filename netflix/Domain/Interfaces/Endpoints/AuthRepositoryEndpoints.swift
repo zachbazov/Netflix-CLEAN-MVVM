@@ -12,5 +12,5 @@ import Foundation
 protocol AuthRepositoryEndpoints {
     static func signUp(with requestDTO: UserHTTPDTO.Request) -> Endpoint<UserHTTPDTO.Response>
     static func signIn(with requestDTO: UserHTTPDTO.Request) -> Endpoint<UserHTTPDTO.Response>
-    static func signOut() -> Endpoint<Void>
+    static func signOut(with request: UserHTTPDTO.Request) -> Endpoint<Void>?
 }

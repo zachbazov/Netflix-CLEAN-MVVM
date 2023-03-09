@@ -14,27 +14,29 @@ struct APIEndpoint {}
 // MARK: - AuthRepositoryEndpoints Implementation
 
 extension APIEndpoint: AuthRepositoryEndpoints {
-    static func signUp(with authRequestDTO: UserHTTPDTO.Request) -> Endpoint<UserHTTPDTO.Response> {
+    static func signUp(with request: UserHTTPDTO.Request) -> Endpoint<UserHTTPDTO.Response> {
         return Endpoint(path: "api/v1/users/signup",
                         method: .post,
                         headerParameters: ["content-type": "application/json"],
-                        bodyParameters: ["name": authRequestDTO.user.name ?? "Undefined",
-                                         "email": authRequestDTO.user.email!,
-                                         "password": authRequestDTO.user.password!,
-                                         "passwordConfirm": authRequestDTO.user.passwordConfirm!],
+                        bodyParameters: ["name": request.user.name ?? "Undefined",
+                                         "email": request.user.email!,
+                                         "password": request.user.password!,
+                                         "passwordConfirm": request.user.passwordConfirm!],
                         bodyEncoding: .jsonSerializationData)
     }
     
-    static func signIn(with authRequestDTO: UserHTTPDTO.Request) -> Endpoint<UserHTTPDTO.Response> {
+    static func signIn(with request: UserHTTPDTO.Request) -> Endpoint<UserHTTPDTO.Response> {
         return Endpoint(path: "api/v1/users/signin",
                         method: .post,
                         headerParameters: ["content-type": "application/json"],
-                        bodyParameters: ["email": authRequestDTO.user.email!,
-                                         "password": authRequestDTO.user.password!],
+                        bodyParameters: ["email": request.user.email!,
+                                         "password": request.user.password!],
                         bodyEncoding: .jsonSerializationData)
     }
     
-    static func signOut() -> Endpoint<Void> {
+    static func signOut(with request: UserHTTPDTO.Request) -> Endpoint<Void>? {
+        let authService = Application.app.services.authentication
+        guard authService.user?._id == request.user._id else { return nil }
         return Endpoint(path: "api/v1/users/signout",
                         method: .get,
                         headerParameters: ["content-type": "application/json"])

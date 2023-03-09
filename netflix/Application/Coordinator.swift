@@ -66,11 +66,15 @@ extension Coordinator: CoordinatorProtocol {
             let authService = Application.app.services.authentication
             let requestDTO = UserHTTPDTO.Request(user: authService.user!)
             
+            ActivityIndicatorView.viewDidShow()
+            
             if #available(iOS 13.0, *) {
                 Task {
                     let success = await authService.signIn(with: requestDTO)
                     guard success else { return }
                     mainQueueDispatch {
+                        ActivityIndicatorView.viewDidHide()
+                        
                         self.tabCoordinator.coordinate(to: .home)
                     }
                 }
@@ -82,6 +86,8 @@ extension Coordinator: CoordinatorProtocol {
                 guard let self = self else { return }
                 guard success else { return }
                 mainQueueDispatch {
+                    ActivityIndicatorView.viewDidHide()
+                    
                     self.tabCoordinator.coordinate(to: .home)
                 }
             }

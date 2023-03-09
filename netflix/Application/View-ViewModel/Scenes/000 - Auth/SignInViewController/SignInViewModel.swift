@@ -79,22 +79,24 @@ extension SignInViewModel: ViewModelProtocol {
             Task {
                 let status = await authService.signIn(with: requestDTO)
                 
-                didFinish(with: status)
+                mainQueueDispatch { [weak self] in
+                    self?.didFinish(with: status)
+                }
             }
             
             return
         }
         
         authService.signIn(for: requestDTO) { [weak self] status in
-            self?.didFinish(with: status)
+            mainQueueDispatch { [weak self] in
+                self?.didFinish(with: status)
+            }
         }
     }
     
     fileprivate func didFinish(with status: Bool) {
-        let coordinator = Application.app.coordinator
-        
-        let emailTextField = coordinator.authCoordinator.signInController.emailTextField
-        let passTextField = coordinator.authCoordinator.signInController.passwordTextField
+        let emailTextField = coordinator?.signInController.emailTextField
+        let passTextField = coordinator?.signInController.passwordTextField
         
         guard status else {
             emailTextField?.text = ""
@@ -102,8 +104,9 @@ extension SignInViewModel: ViewModelProtocol {
             return
         }
         
-        mainQueueDispatch {
-            coordinator.coordinate(to: .tabBar)
-        }
+        ActivityIndicatorView.viewDidHide()
+        
+        let coordinator = Application.app.coordinator
+        coordinator.coordinate(to: .tabBar)
     }
 }

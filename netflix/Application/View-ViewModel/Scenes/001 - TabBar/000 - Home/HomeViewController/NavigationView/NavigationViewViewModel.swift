@@ -75,8 +75,31 @@ extension NavigationViewViewModel: ViewModelProtocol {
         case .search:
             coordinator.coordinate(to: .search)
         case .account:
+            if #available(iOS 13, *) {
+                Task {
+                    let authService = Application.app.services.authentication
+                    guard let user = authService.user else { return }
+                    let request = UserHTTPDTO.Request(user: user)
+                    let status = await authService.signOut(with: request)
+                    
+                    guard status else { return }
+                    
+                    mainQueueDispatch {
+                        let coordinator = Application.app.coordinator
+                        coordinator.coordinate(to: .auth)
+                    }
+                }
+                
+                return
+            }
+            
             let authService = Application.app.services.authentication
             authService.signOut()
+            
+            mainQueueDispatch {
+                let coordinator = Application.app.coordinator
+                coordinator.coordinate(to: .auth)
+            }
         case .tvShows:
             navigationView.tvShowsItemViewContainer.isHidden(false)
             navigationView.moviesItemViewContainer.isHidden(true)

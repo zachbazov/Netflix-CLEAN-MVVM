@@ -12,12 +12,16 @@ import Foundation
 private protocol AuthServiceInput {
     func setResponse(request: UserHTTPDTO.Request?, response: UserHTTPDTO.Response)
     func setUser(request: UserHTTPDTO.Request?, response: UserHTTPDTO.Response)
+    func deleteResponse(for request: UserHTTPDTO.Request)
     
     func resign(completion: @escaping (UserDTO?) -> Void)
+    
     func signIn(for requestDTO: UserHTTPDTO.Request, completion: @escaping (Bool) -> Void)
     func signUp(for requestDTO: UserHTTPDTO.Request, completion: @escaping (Bool) -> Void)
     
     func signIn(with request: UserHTTPDTO.Request) async -> Bool
+    func signUp(with request: UserHTTPDTO.Request) async -> Bool
+    func signOut(with request: UserHTTPDTO.Request) async -> Bool
 }
 
 private protocol AuthServiceOutput {
@@ -65,6 +69,18 @@ extension AuthService: AuthServiceProtocol {
             user?.password = request.user.password
         }
     }
+    /// Delete all `user`'s related data and clean up service's attributes.
+    /// - Parameter request: Request object via invocation.
+    fileprivate func deleteResponse(for request: UserHTTPDTO.Request) {
+        let mediaResponses = Application.app.stores.mediaResponses
+        let context = responses.coreDataStorage.context()
+        responses.deleteResponse(for: request, in: context)
+        mediaResponses.deleteResponse(in: context)
+        
+        self.request = nil
+        self.response = nil
+        self.user = nil
+    }
     /// Check for the latest authentication response signed by user.
     /// In case there is a valid response, pass the user data with the completion.
     /// In case there isn't a valid response, pass nil with the completion.
@@ -72,6 +88,7 @@ extension AuthService: AuthServiceProtocol {
     func resign(completion: @escaping (UserDTO?) -> Void) {
         responses.getResponse { [weak self] result in
             guard let self = self else { return }
+            
             switch result {
             case .success(let response):
                 mainQueueDispatch {
@@ -171,13 +188,40 @@ extension AuthService: AuthServiceProtocol {
             }
         }
     }
-    
+    /// Invoke an asynchronous sign in request.
+    /// - Parameter request: User's request object.
+    /// - Returns: A boolean that indicates of the response status.
     func signIn(with request: UserHTTPDTO.Request) async -> Bool {
         let viewModel = AuthViewModel()
         
         guard let response = await viewModel.signIn(with: request) else { return false }
         
         setResponse(request: request, response: response)
+        
+        return true
+    }
+    /// Invoke an asynchronous sign up request.
+    /// - Parameter request: User's request object.
+    /// - Returns: A boolean that indicates of the response status.
+    func signUp(with request: UserHTTPDTO.Request) async -> Bool {
+        let viewModel = AuthViewModel()
+        
+        guard let response = await viewModel.signUp(with: request) else { return false }
+        
+        setResponse(request: request, response: response)
+        
+        return true
+    }
+    /// Invoke an asynchronous sign out request.
+    /// - Parameter request: User's request object.
+    /// - Returns: A boolean that indicates of the response status.
+    func signOut(with request: UserHTTPDTO.Request) async -> Bool {
+        let viewModel = AuthViewModel()
+        
+        guard let response = await viewModel.signOut(with: request),
+              response.status == "success" else { return false }
+        
+        deleteResponse(for: request)
         
         return true
     }

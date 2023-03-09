@@ -16,6 +16,10 @@ private protocol ViewModelInput {
                 cached: @escaping (UserHTTPDTO.Response?) -> Void,
                 completion: @escaping (Result<UserHTTPDTO.Response, DataTransferError>) -> Void)
     func signOut(completion: @escaping (Result<Void, DataTransferError>) -> Void)
+    
+    func signUp(with request: UserHTTPDTO.Request) async -> UserHTTPDTO.Response?
+    func signIn(with request: UserHTTPDTO.Request) async -> UserHTTPDTO.Response?
+    func signOut(with request: UserHTTPDTO.Request) async -> VoidHTTP.Response?
 }
 
 private protocol ViewModelOutput {
@@ -66,9 +70,6 @@ extension AuthViewModel: ViewModelProtocol {
                                                   cached: cached,
                                                   completion: completion)
     }
-    func signIn(with request: UserHTTPDTO.Request) async -> UserHTTPDTO.Response? {
-        return await useCase.request(for: UserHTTPDTO.Response.self, request: request)
-    }
     /// Sign out a user.
     /// - Parameter completion: Completion handler with a result object.
     func signOut(completion: @escaping (Result<Void, DataTransferError>) -> Void) {
@@ -76,5 +77,23 @@ extension AuthViewModel: ViewModelProtocol {
                                                   request: Void.self,
                                                   cached: nil,
                                                   completion: completion)
+    }
+    /// Asynchronous sign up request.
+    /// - Parameter request: User's request object.
+    /// - Returns: User's response object.
+    func signUp(with request: UserHTTPDTO.Request) async -> UserHTTPDTO.Response? {
+        return await useCase.request(for: UserHTTPDTO.Response.self, request: request)
+    }
+    /// Asynchronous sign in request.
+    /// - Parameter request: User's request object.
+    /// - Returns: User's response object.
+    func signIn(with request: UserHTTPDTO.Request) async -> UserHTTPDTO.Response? {
+        return await useCase.request(for: UserHTTPDTO.Response.self, request: request)
+    }
+    /// Asynchronous sign out request.
+    /// - Parameter request: User's request object.
+    /// - Returns: User's response object.
+    func signOut(with request: UserHTTPDTO.Request) async -> VoidHTTP.Response? {
+        return await useCase.request(for: VoidHTTP.Response.self, request: request)
     }
 }
