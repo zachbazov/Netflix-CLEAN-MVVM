@@ -37,6 +37,13 @@
 		A130BCE4295135820070EA5E /* NewsCollectionViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = A130BCE3295135820070EA5E /* NewsCollectionViewDataSource.swift */; };
 		A130BCEB295136EA0070EA5E /* NewsCollectionViewCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A130BCEA295136EA0070EA5E /* NewsCollectionViewCellViewModel.swift */; };
 		A14E0CB329BB285F00F55500 /* AccountViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = A14E0CB229BB285F00F55500 /* AccountViewController.xib */; };
+		A14E0CB729BB979000F55500 /* ProfileCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A14E0CB629BB979000F55500 /* ProfileCollectionViewCell.swift */; };
+		A14E0CB929BB979900F55500 /* ProfileCollectionViewCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A14E0CB829BB979900F55500 /* ProfileCollectionViewCellViewModel.swift */; };
+		A14E0CBB29BB979F00F55500 /* ProfileCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = A14E0CBA29BB979F00F55500 /* ProfileCollectionViewCell.xib */; };
+		A14E0CBE29BB97E500F55500 /* AccountOptionTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A14E0CBD29BB97E500F55500 /* AccountOptionTableViewCell.swift */; };
+		A14E0CC329BB983300F55500 /* NotificationCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A14E0CC229BB983300F55500 /* NotificationCollectionViewCell.swift */; };
+		A14E0CC529BB983700F55500 /* NotificationCollectionViewCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A14E0CC429BB983700F55500 /* NotificationCollectionViewCellViewModel.swift */; };
+		A14E0CC729BB983C00F55500 /* NotificationCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = A14E0CC629BB983C00F55500 /* NotificationCollectionViewCell.xib */; };
 		A1741D0928E679A400F3C46B /* DetailInfoTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1741D0828E679A400F3C46B /* DetailInfoTableViewCell.swift */; };
 		A1741D0B28E679A900F3C46B /* DetailDescriptionTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1741D0A28E679A800F3C46B /* DetailDescriptionTableViewCell.swift */; };
 		A1741D0D28E679AE00F3C46B /* DetailPanelTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1741D0C28E679AE00F3C46B /* DetailPanelTableViewCell.swift */; };
@@ -322,6 +329,13 @@
 		A130BCE3295135820070EA5E /* NewsCollectionViewDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsCollectionViewDataSource.swift; sourceTree = "<group>"; };
 		A130BCEA295136EA0070EA5E /* NewsCollectionViewCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsCollectionViewCellViewModel.swift; sourceTree = "<group>"; };
 		A14E0CB229BB285F00F55500 /* AccountViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = AccountViewController.xib; sourceTree = "<group>"; };
+		A14E0CB629BB979000F55500 /* ProfileCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileCollectionViewCell.swift; sourceTree = "<group>"; };
+		A14E0CB829BB979900F55500 /* ProfileCollectionViewCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileCollectionViewCellViewModel.swift; sourceTree = "<group>"; };
+		A14E0CBA29BB979F00F55500 /* ProfileCollectionViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ProfileCollectionViewCell.xib; sourceTree = "<group>"; };
+		A14E0CBD29BB97E500F55500 /* AccountOptionTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountOptionTableViewCell.swift; sourceTree = "<group>"; };
+		A14E0CC229BB983300F55500 /* NotificationCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationCollectionViewCell.swift; sourceTree = "<group>"; };
+		A14E0CC429BB983700F55500 /* NotificationCollectionViewCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationCollectionViewCellViewModel.swift; sourceTree = "<group>"; };
+		A14E0CC629BB983C00F55500 /* NotificationCollectionViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = NotificationCollectionViewCell.xib; sourceTree = "<group>"; };
 		A1741D0828E679A400F3C46B /* DetailInfoTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailInfoTableViewCell.swift; sourceTree = "<group>"; };
 		A1741D0A28E679A800F3C46B /* DetailDescriptionTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailDescriptionTableViewCell.swift; sourceTree = "<group>"; };
 		A1741D0C28E679AE00F3C46B /* DetailPanelTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailPanelTableViewCell.swift; sourceTree = "<group>"; };
@@ -704,6 +718,60 @@
 				A1AD767429AC85AE00669667 /* NewsCollectionViewCell.xib */,
 			);
 			path = Cells;
+			sourceTree = "<group>";
+		};
+		A14E0CB429BB977600F55500 /* Cells */ = {
+			isa = PBXGroup;
+			children = (
+				A14E0CBF29BB97FE00F55500 /* TableView */,
+				A14E0CC029BB980300F55500 /* CollectionView */,
+			);
+			path = Cells;
+			sourceTree = "<group>";
+		};
+		A14E0CB529BB977E00F55500 /* ProfileCollectionViewCell */ = {
+			isa = PBXGroup;
+			children = (
+				A14E0CB629BB979000F55500 /* ProfileCollectionViewCell.swift */,
+				A14E0CB829BB979900F55500 /* ProfileCollectionViewCellViewModel.swift */,
+				A14E0CBA29BB979F00F55500 /* ProfileCollectionViewCell.xib */,
+			);
+			path = ProfileCollectionViewCell;
+			sourceTree = "<group>";
+		};
+		A14E0CBC29BB97AD00F55500 /* AccountOptionTableViewCell */ = {
+			isa = PBXGroup;
+			children = (
+				A14E0CBD29BB97E500F55500 /* AccountOptionTableViewCell.swift */,
+			);
+			path = AccountOptionTableViewCell;
+			sourceTree = "<group>";
+		};
+		A14E0CBF29BB97FE00F55500 /* TableView */ = {
+			isa = PBXGroup;
+			children = (
+				A14E0CBC29BB97AD00F55500 /* AccountOptionTableViewCell */,
+			);
+			path = TableView;
+			sourceTree = "<group>";
+		};
+		A14E0CC029BB980300F55500 /* CollectionView */ = {
+			isa = PBXGroup;
+			children = (
+				A14E0CB529BB977E00F55500 /* ProfileCollectionViewCell */,
+				A14E0CC129BB980A00F55500 /* NotificationCollectionViewCell */,
+			);
+			path = CollectionView;
+			sourceTree = "<group>";
+		};
+		A14E0CC129BB980A00F55500 /* NotificationCollectionViewCell */ = {
+			isa = PBXGroup;
+			children = (
+				A14E0CC229BB983300F55500 /* NotificationCollectionViewCell.swift */,
+				A14E0CC429BB983700F55500 /* NotificationCollectionViewCellViewModel.swift */,
+				A14E0CC629BB983C00F55500 /* NotificationCollectionViewCell.xib */,
+			);
+			path = NotificationCollectionViewCell;
 			sourceTree = "<group>";
 		};
 		A1741CFE28E6793700F3C46B /* Cells */ = {
@@ -1765,6 +1833,7 @@
 				A1E3706929BB1E8600CFEE9C /* AccountViewModel.swift */,
 				A1E3706B29BB1E8A00CFEE9C /* AccountViewController.swift */,
 				A14E0CB229BB285F00F55500 /* AccountViewController.xib */,
+				A14E0CB429BB977600F55500 /* Cells */,
 			);
 			path = AccountViewController;
 			sourceTree = "<group>";
@@ -1935,6 +2004,7 @@
 				A130BCB129509CC70070EA5E /* SearchCollectionViewCell.xib in Resources */,
 				A1AA28EF28F71F410011EE9D /* TrailerCollectionViewCell.xib in Resources */,
 				A1AD25AF28D3C47500F793B3 /* PanelViewItem.xib in Resources */,
+				A14E0CC729BB983C00F55500 /* NotificationCollectionViewCell.xib in Resources */,
 				A130BC9A294CE0B80070EA5E /* SearchViewController.xib in Resources */,
 				A1AC9FB829A65E5300DAD66D /* AlertView.xib in Resources */,
 				A130BCBF29510CA80070EA5E /* DownloadsViewController.xib in Resources */,
@@ -1942,6 +2012,7 @@
 				A1741D3028E6968000F3C46B /* DetailDescriptionView.xib in Resources */,
 				A130BCE2295134520070EA5E /* NewsNavigationView.xib in Resources */,
 				A130BCC4295115590070EA5E /* DownloadsView.xib in Resources */,
+				A14E0CBB29BB979F00F55500 /* ProfileCollectionViewCell.xib in Resources */,
 				A1B70A8E293E72D700C718C6 /* SignUpViewController.xib in Resources */,
 				A1E81D3328CFF95300D044EA /* ResumableCollectionViewCell.xib in Resources */,
 				A130BCC9295115B40070EA5E /* DownloadsNavigationView.xib in Resources */,
@@ -1996,6 +2067,7 @@
 				A1B70A73293D6DC500C718C6 /* Coordinator.swift in Sources */,
 				A1AA28D428F590B30011EE9D /* EpisodeCollectionViewCell.swift in Sources */,
 				A18B997828C020FC0077A5A6 /* NetworkService.swift in Sources */,
+				A14E0CBE29BB97E500F55500 /* AccountOptionTableViewCell.swift in Sources */,
 				A127C1E228DD00F100CEE34F /* NavigationOverlayFooterView.swift in Sources */,
 				A1AD25D028D6D31000F793B3 /* NavigationViewViewModel.swift in Sources */,
 				A1AD767729AC85B200669667 /* NewsCollectionViewCell.swift in Sources */,
@@ -2080,6 +2152,7 @@
 				A18B993B28BFC9700077A5A6 /* BackButtonEmptyTitleNavigationBarBehavior.swift in Sources */,
 				A1741D4B28EC5B1B00F3C46B /* DetailNavigationViewItem.swift in Sources */,
 				A1741D3A28EBA16E00F3C46B /* DetailCollectionViewDataSource.swift in Sources */,
+				A14E0CB929BB979900F55500 /* ProfileCollectionViewCellViewModel.swift in Sources */,
 				A1A71AA1298B2A5E001C6AB1 /* MediaHTTP.swift in Sources */,
 				A18691E028C8D4640087DE3B /* SectionRepository.swift in Sources */,
 				A1741D3F28EBD33200F3C46B /* AgeRestrictionView.swift in Sources */,
@@ -2164,10 +2237,13 @@
 				A18B994628BFD9D50077A5A6 /* Season.swift in Sources */,
 				A1A71AA7298B2A6C001C6AB1 /* ListHTTP.swift in Sources */,
 				A1E3706C29BB1E8A00CFEE9C /* AccountViewController.swift in Sources */,
+				A14E0CC529BB983700F55500 /* NotificationCollectionViewCellViewModel.swift in Sources */,
 				A1B98BB9298B1F3E001B7B62 /* ListHTTPDTO+Mapping.swift in Sources */,
 				A1741D2A28E6864600F3C46B /* DetailCollectionView.swift in Sources */,
 				A1BA1DBB28DBE02C00730EA8 /* UIView+Constraints.swift in Sources */,
 				A18B994A28BFD9DD0077A5A6 /* User+Mapping.swift in Sources */,
+				A14E0CC329BB983300F55500 /* NotificationCollectionViewCell.swift in Sources */,
+				A14E0CB729BB979000F55500 /* ProfileCollectionViewCell.swift in Sources */,
 				A18B995728BFF66C0077A5A6 /* SectionDTO+Mapping.swift in Sources */,
 				A18D851C29403CE900840045 /* BrowseOverlayView.swift in Sources */,
 				A130BCD929511E860070EA5E /* NewsViewModel.swift in Sources */,
