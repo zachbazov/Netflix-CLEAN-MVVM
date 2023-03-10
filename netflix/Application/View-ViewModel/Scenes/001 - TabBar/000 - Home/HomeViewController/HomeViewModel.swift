@@ -76,8 +76,10 @@ extension HomeViewModel: ViewModel {
     func dataDidDownload() {
         ActivityIndicatorView.viewDidHide()
         
-        let navigationViewModel = coordinator?.viewController?.navigationView.viewModel
-        navigationViewModel?.navigationViewDidAppear()
+        mainQueueDispatch { [weak self] in
+            let navigationViewModel = self?.coordinator?.viewController?.navigationView.viewModel
+            navigationViewModel?.navigationViewDidAppear()
+        }
         
         notifyObservers()
     }

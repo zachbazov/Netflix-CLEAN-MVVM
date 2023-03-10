@@ -79,9 +79,7 @@ extension MediaPlayerView: MediaPlayerDelegate {
     func playerDidPlay(_ mediaPlayer: MediaPlayer) {
         viewModel.isPlaying = true
         prepareToPlay?(viewModel.isPlaying)
-        DispatchQueue.global(qos: .userInteractive).async {
-            mediaPlayer.player.play()
-        }
+        mediaPlayer.player.play()
     }
     
     func playerDidStop(_ mediaPlayer: MediaPlayer) {
@@ -89,11 +87,11 @@ extension MediaPlayerView: MediaPlayerDelegate {
         mediaPlayer.player.replaceCurrentItem(with: nil)
     }
     
-    func player(_ mediaPlayer: MediaPlayer,
-                willReplaceItem item: AVPlayerItem? = nil) {
+    func player(_ mediaPlayer: MediaPlayer, willReplaceItem item: AVPlayerItem? = nil) {
         mediaPlayer.player.replaceCurrentItem(with: item == nil ? viewModel.item : item!)
     }
     
-    func player(_ mediaPlayer: MediaPlayer,
-                canOpenURL url: URL) -> Bool { UIApplication.shared.canOpenURL(url) }
+    func player(_ mediaPlayer: MediaPlayer, canOpenURL url: URL) -> Bool {
+        return UIApplication.shared.canOpenURL(url)
+    }
 }

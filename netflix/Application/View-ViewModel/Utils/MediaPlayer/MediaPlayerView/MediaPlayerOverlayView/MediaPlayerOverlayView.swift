@@ -183,6 +183,7 @@ extension MediaPlayerOverlayViewConfiguration: ConfigurationProtocol {
         }
         
         observers.cancelBag = []
+        
         observers.playerItemDidEndPlayingObserver = NotificationCenter.default
             .publisher(for: .AVPlayerItemDidPlayToEndTime)
             .sink { _ in player.seek(to: CMTime.zero)
@@ -218,7 +219,9 @@ extension MediaPlayerOverlayViewConfiguration: ConfigurationProtocol {
         observers.playerItemStatusObserver = player.observe(
             \AVPlayer.currentItem?.status,
              options: [.initial, .new],
-             changeHandler: { [weak self] _, _ in self?.viewDidConfigure() })
+             changeHandler: { [weak self] _, _ in
+                 self?.viewDidConfigure()
+             })
     }
     
     func viewDidUnbindObservers() {

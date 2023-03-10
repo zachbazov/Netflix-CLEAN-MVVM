@@ -109,22 +109,24 @@ extension SearchViewController: ControllerProtocol {
     
     @objc
     fileprivate func backButtonDidTap() {
-        let homeViewController = Application.app.coordinator.tabCoordinator.home.viewControllers.first! as! HomeViewController
-        let searchViewController = homeViewController.viewModel.coordinator!.search!.viewControllers.first! as! SearchViewController
+        guard let homeViewController = Application.app.coordinator.tabCoordinator.home.viewControllers.first as? HomeViewController,
+            let searchNavigationController = homeViewController.viewModel.coordinator?.search as? UINavigationController,
+            let searchViewController = homeViewController.viewModel.coordinator?.search?.viewControllers.first as? SearchViewController
+        else { return }
         
         UIView.animate(
             withDuration: 0.25,
             delay: 0,
             options: .curveEaseInOut,
             animations: {
-                homeViewController.viewModel.coordinator!.search.view.transform = CGAffineTransform(translationX: homeViewController.viewModel.coordinator!.search.view.bounds.width, y: .zero)
-                homeViewController.viewModel.coordinator!.search.view.alpha = .zero
+                searchNavigationController.view.transform = CGAffineTransform(translationX: searchNavigationController.view.bounds.width, y: .zero)
+                searchNavigationController.view.alpha = .zero
             },
             completion: { _ in
-                homeViewController.viewModel.coordinator!.search.remove()
+                homeViewController.viewModel.coordinator?.search?.remove()
                 searchViewController.viewModel = nil
                 searchViewController.dataSource = nil
-                homeViewController.viewModel.coordinator!.search = nil
+                homeViewController.viewModel.coordinator?.search = nil
             }
         )
     }

@@ -29,7 +29,6 @@ final class HomeViewController: Controller<HomeViewModel>, ViewControllerProtoco
     
     var navigationView: NavigationView!
     var browseOverlayView: BrowseOverlayView!
-    var searchNavigationController: UINavigationController!
     
     override func viewDidLoad() {
         super.viewDidLoad()
