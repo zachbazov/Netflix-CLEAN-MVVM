@@ -12,6 +12,11 @@ import UIKit
 final class AccountViewController: Controller<AccountViewModel> {
     @IBOutlet private weak var backButton: UIButton!
     @IBOutlet private weak var profileLabel: UILabel!
+    @IBOutlet private weak var collectionView: UICollectionView!
+    @IBOutlet private weak var manageProfilesButton: UIButton!
+    @IBOutlet private weak var tableView: UITableView!
+    @IBOutlet private weak var signOutButton: UIButton!
+    @IBOutlet private weak var versionLabel: UILabel!
     
     override func viewDidLoad() {
         super.viewDidLoad()
