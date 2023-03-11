@@ -16,7 +16,10 @@ private protocol ThemingBehavior {
 
 // MARK: - Theme Type
 
-final class Theme {}
+final class Theme {
+    // #b3b3b3 - Light Gray
+    // #121212 - Dark gray bg
+}
 
 // MARK: - ThemingBehavior Implementation
 

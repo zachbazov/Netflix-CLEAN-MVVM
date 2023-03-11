@@ -23,6 +23,8 @@ private typealias ViewModelProtocol = ViewModelInput & ViewModelOutput
 
 final class AccountViewModel {
     var coordinator: AccountViewCoordinator?
+    
+    var accounts = [AccountMenuItem]()
 }
 
 // MARK: - ViewModel Implementation

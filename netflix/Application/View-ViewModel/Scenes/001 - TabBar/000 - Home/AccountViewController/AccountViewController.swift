@@ -18,6 +18,12 @@ final class AccountViewController: Controller<AccountViewModel> {
     @IBOutlet private weak var signOutButton: UIButton!
     @IBOutlet private weak var versionLabel: UILabel!
     
+    private var accountMenuDataSource: AccountMenuTableViewDataSource?
+    
+    deinit {
+        accountMenuDataSource = nil
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         super.viewDidLoadBehaviors()
@@ -26,11 +32,26 @@ final class AccountViewController: Controller<AccountViewModel> {
     }
     
     override func viewDidDeploySubviews() {
+        let notifications = AccountMenuItem(image: "bell", title: "Notifications")
+        let myList = AccountMenuItem(image: "checkmark", title: "My List")
+        let appSettings = AccountMenuItem(image: "gearshape", title: "App Settings")
+        let account = AccountMenuItem(image: "person", title: "Account")
+        let help = AccountMenuItem(image: "questionmark.circle", title: "Help")
+        let accounts = [notifications, myList, appSettings, account, help]
+        viewModel.accounts = accounts
         
+        tableView.register(class: AccountMenuTableViewCell.self)
+        
+        accountMenuDataSource = AccountMenuTableViewDataSource(with: viewModel)
+        
+        tableView.delegate = accountMenuDataSource
+        tableView.dataSource = accountMenuDataSource
+        tableView.reloadData()
     }
     
     override func viewDidTargetSubviews() {
         backButton.addTarget(self, action: #selector(backButtonDidTap), for: .touchUpInside)
+        signOutButton.addTarget(self, action: #selector(signOutDidTap), for: .touchUpInside)
     }
     
     func present() {
@@ -61,31 +82,35 @@ final class AccountViewController: Controller<AccountViewModel> {
             },
             completion: { [weak self] _ in
                 homeViewController.viewModel.coordinator?.account?.remove()
+                self?.accountMenuDataSource = nil
+                self?.tableView?.removeFromSuperview()
+                self?.tableView = nil
                 self?.viewModel = nil
                 homeViewController.viewModel.coordinator?.account = nil
             })
     }
     
-    func signOut() {
-//            let authService = Application.app.services.authentication
-//            let coordinator = Application.app.coordinator
-//
-//            if #available(iOS 13, *) {
-//                Task {
-//                    guard let user = authService.user else { return }
-//                    let request = UserHTTPDTO.Request(user: user)
-//                    let status = await authService.signOut(with: request)
-//
-//                    guard status else { return }
-//
-//                    mainQueueDispatch { coordinator.coordinate(to: .auth) }
-//                }
-//
-//                return
-//            }
-//
-//            authService.signOut()
-//
-//            mainQueueDispatch { coordinator.coordinate(to: .auth) }
+    @objc
+    func signOutDidTap() {
+        let authService = Application.app.services.authentication
+        let coordinator = Application.app.coordinator
+        
+        if #available(iOS 13, *) {
+            Task {
+                guard let user = authService.user else { return }
+                let request = UserHTTPDTO.Request(user: user)
+                let status = await authService.signOut(with: request)
+                
+                guard status else { return }
+                
+                mainQueueDispatch { coordinator.coordinate(to: .auth) }
+            }
+            
+            return
+        }
+        
+        authService.signOut()
+        
+        mainQueueDispatch { coordinator.coordinate(to: .auth) }
     }
 }
