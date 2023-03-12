@@ -24,12 +24,12 @@ private typealias ViewModelProtocol = ViewModelInput & ViewModelOutput
 final class AccountViewModel {
     var coordinator: AccountViewCoordinator?
     
-    private(set) lazy var menuItems: [AccountMenuItem] = createMenuItems()
+    lazy var menuItems: [AccountMenuItem] = createMenuItems()
     private(set) lazy var profileItems: [ProfileItem] = createProfileItems()
     private(set) lazy var addProfileItem: ProfileItem = createAddProfileItem()
     
     private func createMenuItems() -> [AccountMenuItem] {
-        let notifications = AccountMenuItem(image: "bell", title: "Notifications")
+        let notifications = AccountMenuItem(image: "bell", title: "Notifications", options: ["1", "2", "3"], isExpanded: false)
         let myList = AccountMenuItem(image: "checkmark", title: "My List")
         let appSettings = AccountMenuItem(image: "gearshape", title: "App Settings")
         let account = AccountMenuItem(image: "person", title: "Account")

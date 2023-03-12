@@ -38,19 +38,18 @@ final class ProfileCollectionViewCell: UICollectionViewCell {
             let symbolConfiguration = UIImage.SymbolConfiguration(pointSize: 28.0, weight: .bold)
             let image = UIImage(systemName: imageName)?
                 .withRenderingMode(.alwaysOriginal)
-                .withTintColor(.hexColor("#b3b3b3")).withConfiguration(symbolConfiguration)
+                .withTintColor(.hexColor("#b3b3b3"))
+                .withConfiguration(symbolConfiguration)
             button.setImage(image, for: .normal)
             
             layerContainer.layer.cornerRadius = 4.0
             layerContainer.layer.borderColor = UIColor.hexColor("#232323").cgColor
             layerContainer.layer.borderWidth = 2.0
-            
-            return
+        } else {
+            let imageName = viewModel.image
+            let image = UIImage(named: imageName)
+            button.setImage(image, for: .normal)
         }
-        
-        let imageName = viewModel.image
-        let image = UIImage(named: imageName)
-        button.setImage(image, for: .normal)
         
         titleLabel.text = viewModel.name
     }

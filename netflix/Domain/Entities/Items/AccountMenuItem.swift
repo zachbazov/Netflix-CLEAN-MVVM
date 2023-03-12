@@ -10,4 +10,6 @@ import Foundation
 struct AccountMenuItem {
     let image: String
     let title: String
+    var options: [String]?
+    var isExpanded: Bool?
 }

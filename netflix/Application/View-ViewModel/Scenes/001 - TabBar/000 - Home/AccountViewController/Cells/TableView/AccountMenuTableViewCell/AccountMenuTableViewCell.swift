@@ -8,8 +8,8 @@
 import UIKit
 
 final class AccountMenuTableViewCell: UITableViewCell {
-    private lazy var label: UILabel? = createTitleLabel()
-    private lazy var image: UIImageView? = createImageView()
+    lazy var label: UILabel? = createTitleLabel()
+    lazy var image: UIImageView? = createImageView()
     
     private var viewModel: AccountViewModel?
     
@@ -31,7 +31,6 @@ final class AccountMenuTableViewCell: UITableViewCell {
         guard let image = image, let label = label else { return }
         
         backgroundColor = .hexColor("#121212")
-        accessoryType = .disclosureIndicator
         
         image.translatesAutoresizingMaskIntoConstraints = false
         label.translatesAutoresizingMaskIntoConstraints = false
