@@ -37,7 +37,5 @@ final class ProfileCollectionViewDataSource: NSObject, UICollectionViewDelegate,
         return ProfileCollectionViewCell.create(in: collectionView, at: indexPath, with: viewModel)
     }
     
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        
-    }
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {}
 }

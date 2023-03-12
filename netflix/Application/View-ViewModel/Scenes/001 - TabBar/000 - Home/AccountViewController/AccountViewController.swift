@@ -77,7 +77,6 @@ final class AccountViewController: Controller<AccountViewModel> {
                 self?.collectionView.removeFromSuperview()
                 self?.accountMenuDataSource = nil
                 self?.tableView?.removeFromSuperview()
-//                self?.collectionView = nil
                 self?.tableView = nil
                 self?.viewModel = nil
                 homeViewController.viewModel.coordinator?.account = nil

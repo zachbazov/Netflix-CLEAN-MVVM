@@ -70,7 +70,7 @@
                     <rect key="frame" x="0.0" y="107.00000000000001" width="393" height="170.33333333333337"/>
                     <subviews>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="aul-r1-GsO">
-                            <rect key="frame" x="8" y="137.33333333333334" width="377" height="17"/>
+                            <rect key="frame" x="8" y="145.33333333333334" width="377" height="17"/>
                             <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="14"/>
                             <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="8" maxY="0.0"/>
                             <state key="normal" title="Manage Profiles">
@@ -85,14 +85,14 @@
                             </state>
                         </button>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="wEg-8N-pDo" userLabel="Collection View Container">
-                            <rect key="frame" x="0.0" y="0.0" width="393" height="105.33333333333333"/>
+                            <rect key="frame" x="0.0" y="8" width="393" height="105.33333333333333"/>
                         </view>
                     </subviews>
                     <constraints>
-                        <constraint firstAttribute="bottom" secondItem="aul-r1-GsO" secondAttribute="bottom" constant="16" id="3Ag-J3-o3z"/>
+                        <constraint firstAttribute="bottom" secondItem="aul-r1-GsO" secondAttribute="bottom" constant="8" id="3Ag-J3-o3z"/>
                         <constraint firstAttribute="trailing" secondItem="aul-r1-GsO" secondAttribute="trailing" constant="8" id="S5D-5M-1DB"/>
                         <constraint firstItem="aul-r1-GsO" firstAttribute="leading" secondItem="BUF-HH-0am" secondAttribute="leading" constant="8" id="anP-IJ-dqA"/>
-                        <constraint firstItem="wEg-8N-pDo" firstAttribute="top" secondItem="BUF-HH-0am" secondAttribute="top" id="hXs-J1-oey"/>
+                        <constraint firstItem="wEg-8N-pDo" firstAttribute="top" secondItem="BUF-HH-0am" secondAttribute="top" constant="8" id="hXs-J1-oey"/>
                         <constraint firstAttribute="trailing" secondItem="wEg-8N-pDo" secondAttribute="trailing" id="l8K-Gc-oPp"/>
                         <constraint firstItem="aul-r1-GsO" firstAttribute="top" secondItem="wEg-8N-pDo" secondAttribute="bottom" constant="32" id="mKz-1Q-0wB"/>
                         <constraint firstItem="wEg-8N-pDo" firstAttribute="leading" secondItem="BUF-HH-0am" secondAttribute="leading" id="mwm-2v-ggl"/>

@@ -40,9 +40,9 @@ final class AccountViewModel {
     
     private func createProfileItems() -> [ProfileItem] {
         let profile1 = ProfileItem(image: "av-light-yellow", name: "Zach")
-        let profile2 = ProfileItem(image: "av-dark-green", name: "LeBron")
-        let profile3 = ProfileItem(image: "av-dark-red", name: "John")
-        let items = [profile1, profile2, profile3, addProfileItem]
+//        let profile2 = ProfileItem(image: "av-dark-green", name: "LeBron")
+//        let profile3 = ProfileItem(image: "av-dark-red", name: "John")
+        let items = [profile1, addProfileItem]
         return items
     }
     

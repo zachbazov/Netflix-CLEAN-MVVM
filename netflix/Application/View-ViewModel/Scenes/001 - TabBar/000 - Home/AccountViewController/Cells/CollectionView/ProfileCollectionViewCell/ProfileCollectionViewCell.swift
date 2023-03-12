@@ -8,7 +8,9 @@
 import UIKit
 
 final class ProfileCollectionViewCell: UICollectionViewCell {
-    @IBOutlet private var imageView: UIImageView!
+    @IBOutlet private weak var imageContainer: UIView!
+    @IBOutlet private weak var layerContainer: UIView!
+    @IBOutlet private weak var button: UIButton!
     @IBOutlet private weak var titleLabel: UILabel!
     
     static func create(in collectionView: UICollectionView,
@@ -25,16 +27,7 @@ final class ProfileCollectionViewCell: UICollectionViewCell {
     }
     
     func viewDidConfigure() {
-        imageView.layer.cornerRadius = 4.0
-//        layerContainer.translatesAutoresizingMaskIntoConstraints = false
-        
-//        imageView.translatesAutoresizingMaskIntoConstraints = false
-//        NSLayoutConstraint.activate([
-//            imageView.topAnchor.constraint(equalTo: layerContainer.topAnchor, constant: 32),
-//            imageView.leadingAnchor.constraint(equalTo: layerContainer.leadingAnchor, constant: 32),
-//            imageView.trailingAnchor.constraint(equalTo: layerContainer.trailingAnchor, constant: 32),
-//            imageView.bottomAnchor.constraint(equalTo: layerContainer.bottomAnchor, constant: 32)
-//        ])
+        button.layer.cornerRadius = 4.0
     }
     
     func viewDidConfigure(with viewModel: ProfileCollectionViewCellViewModel,
@@ -42,22 +35,22 @@ final class ProfileCollectionViewCell: UICollectionViewCell {
                           count: Int) {
         if indexPath.row == count - 1 {
             let imageName = viewModel.image
-            imageView.contentMode = .scaleAspectFit
-//            imageView.translatesAutoresizingMaskIntoConstraints = false
-            let symbolConfiguration = UIImage.SymbolConfiguration(pointSize: 16.0)
-            imageView.image = UIImage(systemName: imageName)?.whiteRendering(with: symbolConfiguration)
-//                .withRenderingMode(.alwaysOriginal)
-//                .withTintColor(.hexColor("#b3b3b3"))
-            imageView.frame = .zero
+            let symbolConfiguration = UIImage.SymbolConfiguration(pointSize: 28.0, weight: .bold)
+            let image = UIImage(systemName: imageName)?
+                .withRenderingMode(.alwaysOriginal)
+                .withTintColor(.hexColor("#b3b3b3")).withConfiguration(symbolConfiguration)
+            button.setImage(image, for: .normal)
             
-//            layerContainer.layer.cornerRadius = 4.0
-//            layerContainer.layer.borderColor = UIColor.hexColor("#121212").cgColor
-//            layerContainer.layer.borderWidth = 2.0
-        } else {
-            let imageName = viewModel.image
-            let image = UIImage(named: imageName)
-            imageView.image = image
+            layerContainer.layer.cornerRadius = 4.0
+            layerContainer.layer.borderColor = UIColor.hexColor("#232323").cgColor
+            layerContainer.layer.borderWidth = 2.0
+            
+            return
         }
+        
+        let imageName = viewModel.image
+        let image = UIImage(named: imageName)
+        button.setImage(image, for: .normal)
         
         titleLabel.text = viewModel.name
     }
