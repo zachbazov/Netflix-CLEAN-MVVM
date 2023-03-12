@@ -12,15 +12,19 @@ import UIKit
 final class AccountViewController: Controller<AccountViewModel> {
     @IBOutlet private weak var backButton: UIButton!
     @IBOutlet private weak var profileLabel: UILabel!
-    @IBOutlet private weak var collectionView: UICollectionView!
+    @IBOutlet private weak var collectionContainer: UIView!
     @IBOutlet private weak var manageProfilesButton: UIButton!
-    @IBOutlet private weak var tableView: UITableView!
+    @IBOutlet private(set) weak var tableView: UITableView!
     @IBOutlet private weak var signOutButton: UIButton!
     @IBOutlet private weak var versionLabel: UILabel!
     
+    private(set) lazy var collectionView: UICollectionView = createCollectionView()
+    
+    private var profileDataSource: ProfileCollectionViewDataSource?
     private var accountMenuDataSource: AccountMenuTableViewDataSource?
     
     deinit {
+        profileDataSource = nil
         accountMenuDataSource = nil
     }
     
@@ -32,21 +36,8 @@ final class AccountViewController: Controller<AccountViewModel> {
     }
     
     override func viewDidDeploySubviews() {
-        let notifications = AccountMenuItem(image: "bell", title: "Notifications")
-        let myList = AccountMenuItem(image: "checkmark", title: "My List")
-        let appSettings = AccountMenuItem(image: "gearshape", title: "App Settings")
-        let account = AccountMenuItem(image: "person", title: "Account")
-        let help = AccountMenuItem(image: "questionmark.circle", title: "Help")
-        let accounts = [notifications, myList, appSettings, account, help]
-        viewModel.accounts = accounts
-        
-        tableView.register(class: AccountMenuTableViewCell.self)
-        
-        accountMenuDataSource = AccountMenuTableViewDataSource(with: viewModel)
-        
-        tableView.delegate = accountMenuDataSource
-        tableView.dataSource = accountMenuDataSource
-        tableView.reloadData()
+        setupCollectionView()
+        setupTableView()
     }
     
     override func viewDidTargetSubviews() {
@@ -82,8 +73,11 @@ final class AccountViewController: Controller<AccountViewModel> {
             },
             completion: { [weak self] _ in
                 homeViewController.viewModel.coordinator?.account?.remove()
+                self?.profileDataSource = nil
+                self?.collectionView.removeFromSuperview()
                 self?.accountMenuDataSource = nil
                 self?.tableView?.removeFromSuperview()
+//                self?.collectionView = nil
                 self?.tableView = nil
                 self?.viewModel = nil
                 homeViewController.viewModel.coordinator?.account = nil
@@ -112,5 +106,26 @@ final class AccountViewController: Controller<AccountViewModel> {
         authService.signOut()
         
         mainQueueDispatch { coordinator.coordinate(to: .auth) }
+    }
+    
+    private func setupCollectionView() {
+        collectionContainer.addSubview(collectionView)
+        collectionView.constraintToSuperview(collectionContainer)
+        
+        profileDataSource = ProfileCollectionViewDataSource(with: viewModel)
+    }
+    
+    private func setupTableView() {
+        tableView.register(class: AccountMenuTableViewCell.self)
+        
+        accountMenuDataSource = AccountMenuTableViewDataSource(with: viewModel)
+    }
+    
+    private func createCollectionView() -> UICollectionView {
+        let layout = CollectionViewLayout(layout: .profile, scrollDirection: .horizontal)
+        let collectionView = UICollectionView(frame: collectionContainer.bounds, collectionViewLayout: layout)
+        collectionView.register(ProfileCollectionViewCell.nib, forCellWithReuseIdentifier: ProfileCollectionViewCell.reuseIdentifier)
+        collectionView.contentInset = UIEdgeInsets(top: .zero, left: 16.0, bottom: .zero, right: 16.0)
+        return collectionView
     }
 }

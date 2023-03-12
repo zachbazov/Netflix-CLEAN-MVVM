@@ -21,8 +21,8 @@ final class AccountMenuTableViewCell: UITableViewCell {
             for: indexPath) as? AccountMenuTableViewCell else { fatalError() }
         cell.viewModel = viewModel
         cell.viewDidLoad()
-        let model = viewModel.accounts[indexPath.section]
-        let cellViewModel = AccountOptionTableViewCellViewModel(with: model)
+        let model = viewModel.menuItems[indexPath.section]
+        let cellViewModel = AccountMenuTableViewCellViewModel(with: model)
         cell.viewDidConfigure(with: cellViewModel)
         return cell
     }
@@ -50,7 +50,7 @@ final class AccountMenuTableViewCell: UITableViewCell {
         ])
     }
     
-    func viewDidConfigure(with viewModel: AccountOptionTableViewCellViewModel) {
+    func viewDidConfigure(with viewModel: AccountMenuTableViewCellViewModel) {
         image?.image = .init(systemName: viewModel.image)?
             .withRenderingMode(.alwaysOriginal)
             .withTintColor(.hexColor("#b3b3b3"))
@@ -58,16 +58,13 @@ final class AccountMenuTableViewCell: UITableViewCell {
     }
     
     private func createImageView() -> UIImageView? {
-        guard let imageName = viewModel?.accounts.map({ $0.image }).first else { return nil }
-        let image = UIImage(systemName: imageName)
+        let image = UIImage()
         let imageView = UIImageView(image: image)
         return imageView
     }
     
     private func createTitleLabel() -> UILabel? {
-        guard let title = viewModel?.accounts.map({ $0.title }).first else { return nil }
         let label = UILabel()
-        label.text = title
         label.textColor = .hexColor("#b3b3b3")
         return label
     }

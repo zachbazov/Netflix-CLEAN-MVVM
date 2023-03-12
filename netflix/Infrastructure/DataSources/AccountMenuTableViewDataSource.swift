@@ -15,10 +15,18 @@ final class AccountMenuTableViewDataSource: NSObject, UITableViewDelegate, UITab
     init(with viewModel: AccountViewModel) {
         self.viewModel = viewModel
         super.init()
+        self.dataSourceDidChange()
+    }
+    
+    func dataSourceDidChange() {
+        guard let tableView = viewModel.coordinator?.viewController?.tableView else { return }
+        tableView.delegate = self
+        tableView.dataSource = self
+        tableView.reloadData()
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        return viewModel.accounts.count
+        return viewModel.menuItems.count
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
