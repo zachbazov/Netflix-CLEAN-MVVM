@@ -7,16 +7,42 @@
 
 import UIKit
 
+// MARK: - ViewProtocol Type
+
+private protocol ViewInput {
+    func viewDidConfigure(with viewModel: AccountMenuTableViewCellViewModel)
+    func viewDidConfigure(at indexPath: IndexPath)
+}
+
+private protocol ViewOutput {
+    var collectionView: UICollectionView { get }
+    var dataSource: NotificationCollectionViewDataSource! { get }
+    var layout: CollectionViewLayout! { get }
+    
+    var label: UILabel? { get }
+    var image: UIImageView? { get }
+    var notificationIndicator: UIView? { get }
+    
+    func createCollectionView() -> UICollectionView
+    func createImageView() -> UIImageView
+    func createTitleLabel() -> UILabel
+    func createNotificationIndicatorView() -> UIView
+}
+
+private typealias ViewProtocol = ViewInput & ViewOutput
+
+// MARK: - AccountMenuTableViewCell Type
+
 final class AccountMenuTableViewCell: UITableViewCell {
+    private var viewModel: AccountViewModel?
+    
+    fileprivate lazy var collectionView: UICollectionView = createCollectionView()
+    fileprivate var dataSource: NotificationCollectionViewDataSource!
+    fileprivate var layout: CollectionViewLayout!
+    
     lazy var label: UILabel? = createTitleLabel()
     lazy var image: UIImageView? = createImageView()
     lazy var notificationIndicator: UIView? = createNotificationIndicatorView()
-    
-    private var viewModel: AccountViewModel?
-    
-    private lazy var collectionView: UICollectionView = createCollectionView()
-    private var dataSource: NotificationCollectionViewDataSource!
-    private var layout: CollectionViewLayout!
     
     static func create(in tableView: UITableView,
                        at indexPath: IndexPath,
@@ -44,97 +70,69 @@ final class AccountMenuTableViewCell: UITableViewCell {
         
         backgroundColor = .hexColor("#121212")
         
-        image.translatesAutoresizingMaskIntoConstraints = false
-        label.translatesAutoresizingMaskIntoConstraints = false
-        
         contentView.addSubview(image)
         contentView.addSubview(label)
         
-        NSLayoutConstraint.activate([
-            image.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 24.0),
-            image.widthAnchor.constraint(equalToConstant: 28.0),
-            image.heightAnchor.constraint(equalToConstant: 28.0),
-            image.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
-            
-            label.leadingAnchor.constraint(equalTo: image.trailingAnchor, constant: 8.0),
-            label.centerYAnchor.constraint(equalTo: contentView.centerYAnchor)
-        ])
+        contentView.chainConstraintToSuperview(
+            linking: image,
+            to: label,
+            withLeadingAnchorValue: 24.0,
+            sizeInPoints: 28.0)
     }
-    
-    func viewDidConfigure(at indexPath: IndexPath) {
-        if indexPath.section == 0 {
-            if indexPath.row == 0 {
-                label?.text = viewModel?.menuItems[indexPath.section].title ?? ""
-                
-                if viewModel?.menuItems[indexPath.section].isExpanded ?? false {
-                    let image = UIImage(systemName: "chevron.down")?.withRenderingMode(.alwaysOriginal).withTintColor(.hexColor("b3b3b3"))
-                    accessoryView = UIImageView(image: image)
-                } else {
-                    let image = UIImage(systemName: "chevron.right")?.withRenderingMode(.alwaysOriginal).withTintColor(.hexColor("b3b3b3"))
-                    accessoryView = UIImageView(image: image)
-                }
-                
-                collectionView.isHidden(true)
-                
-                contentView.addSubview(notificationIndicator!)
-                
-                notificationIndicator?.translatesAutoresizingMaskIntoConstraints = false
-                NSLayoutConstraint.activate([
-                    notificationIndicator!.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 6.0),
-                    notificationIndicator!.widthAnchor.constraint(equalToConstant: 8.0),
-                    notificationIndicator!.heightAnchor.constraint(equalToConstant: 8.0),
-                    notificationIndicator!.centerYAnchor.constraint(equalTo: contentView.centerYAnchor)
-                ])
-            } else {
-                label?.text = nil
-                accessoryView = nil
-                image?.image = nil
-                notificationIndicator?.removeFromSuperview()
-                
-                collectionView.isHidden(false)
-                
-                dataSource = NotificationCollectionViewDataSource(collectionView: collectionView, with: viewModel!)
-                
-                collectionView.delegate = dataSource
-                collectionView.dataSource = dataSource
-                collectionView.reloadItems(at: [indexPath])
-            }
-        } else {
+}
+
+// MARK: - ViewLifecycleBehavior Implementation
+
+extension AccountMenuTableViewCell: ViewLifecycleBehavior {}
+
+// MARK: - ViewProtocol Implementation
+
+extension AccountMenuTableViewCell: ViewProtocol {
+    fileprivate func viewDidConfigure(at indexPath: IndexPath) {
+        guard let item = viewModel?.menuItems[indexPath.section] else { return }
+        guard let section = AccountMenuTableViewDataSource.Section(rawValue: indexPath.section) else { return }
+        
+        guard section == .notifications else {
             accessoryView = nil
             notificationIndicator?.removeFromSuperview()
+            return
         }
+        
+        guard indexPath.row == .zero else {
+            label?.text = nil
+            image?.image = nil
+            accessoryView = nil
+            notificationIndicator?.removeFromSuperview()
+            
+            contentView.addSubview(collectionView)
+            collectionView.constraintToSuperview(contentView)
+            
+            setupDataSource()
+            
+            dataSource.dataSourceDidChange(at: [indexPath])
+            return
+        }
+        
+        collectionView.removeFromSuperview()
+        
+        label?.text = item.title
+        
+        let image = UIImage(
+            systemName: item.isExpanded ?? false ? "chevron.down" : "chevron.right")?
+            .withRenderingMode(.alwaysOriginal)
+            .withTintColor(.hexColor("b3b3b3"))
+        accessoryView = UIImageView(image: image)
+        
+        addNotificationIndicatorView()
     }
     
-    func viewDidConfigure(with viewModel: AccountMenuTableViewCellViewModel) {
-        image?.image = .init(systemName: viewModel.image)?
+    fileprivate func viewDidConfigure(with viewModel: AccountMenuTableViewCellViewModel) {
+        image?.image = UIImage(systemName: viewModel.image)?
             .withRenderingMode(.alwaysOriginal)
             .withTintColor(.hexColor("#b3b3b3"))
         label?.text = viewModel.title
     }
     
-    private func createImageView() -> UIImageView? {
-        let image = UIImage()
-        let imageView = UIImageView(image: image)
-        return imageView
-    }
-    
-    private func createTitleLabel() -> UILabel? {
-        let label = UILabel()
-        label.textColor = .hexColor("#b3b3b3")
-        return label
-    }
-    
-    private func createNotificationIndicatorView() -> UIView? {
-        let indicator = UIView(frame: .zero)
-        indicator.backgroundColor = .red
-        indicator.layer.cornerRadius = 4.0
-        return indicator
-    }
-}
-
-extension AccountMenuTableViewCell: ViewLifecycleBehavior {}
-
-extension AccountMenuTableViewCell {
     fileprivate func createCollectionView() -> UICollectionView {
         layout = CollectionViewLayout(layout: .notification, scrollDirection: .vertical)
         let collectionView = UICollectionView(frame: bounds, collectionViewLayout: layout)
@@ -145,5 +143,37 @@ extension AccountMenuTableViewCell {
         contentView.addSubview(collectionView)
         collectionView.constraintToSuperview(contentView)
         return collectionView
+    }
+    
+    fileprivate func createImageView() -> UIImageView {
+        let image = UIImage()
+        let imageView = UIImageView(image: image)
+        return imageView
+    }
+    
+    fileprivate func createTitleLabel() -> UILabel {
+        let label = UILabel()
+        label.textColor = .hexColor("#b3b3b3")
+        return label
+    }
+    
+    fileprivate func createNotificationIndicatorView() -> UIView {
+        let indicator = UIView(frame: .zero)
+        indicator.backgroundColor = .red
+        indicator.layer.cornerRadius = 4.0
+        return indicator
+    }
+}
+
+// MARK: - Private UI Implementation
+
+extension AccountMenuTableViewCell {
+    private func setupDataSource() {
+        dataSource = NotificationCollectionViewDataSource(collectionView: collectionView, with: viewModel!)
+    }
+    
+    private func addNotificationIndicatorView() {
+        contentView.addSubview(notificationIndicator!)
+        contentView.constraintToCenter(notificationIndicator!, withLeadingAnchorValue: 6.0, sizeInPoints: 8.0)
     }
 }

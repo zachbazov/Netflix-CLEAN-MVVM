@@ -7,28 +7,29 @@
 
 import UIKit
 
+// MARK: - DataSourceProtocol Type
+
+private protocol DataSourceOutput {
+    var reusableViewPointSize: CGFloat { get }
+    
+    func createDummyView() -> UIView
+    
+    func dataSourceDidChange()
+}
+
+private typealias DataSourceProtocol = DataSourceOutput
+
 // MARK: - AccountMenuTableViewDataSource Type
 
 final class AccountMenuTableViewDataSource: NSObject, UITableViewDelegate, UITableViewDataSource {
     private let viewModel: AccountViewModel
     
-    private var notificationCell: AccountMenuTableViewCell?
-    private var myListCell: AccountMenuTableViewCell?
-    private var appSettingsCell: AccountMenuTableViewCell?
-    private var accountCell: AccountMenuTableViewCell?
-    private var helpCell: AccountMenuTableViewCell?
+    fileprivate let reusableViewPointSize: CGFloat = 1.0
     
     init(with viewModel: AccountViewModel) {
         self.viewModel = viewModel
         super.init()
         self.dataSourceDidChange()
-    }
-    
-    func dataSourceDidChange() {
-        guard let tableView = viewModel.coordinator?.viewController?.tableView else { return }
-        tableView.delegate = self
-        tableView.dataSource = self
-        tableView.reloadData()
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -40,34 +41,47 @@ final class AccountMenuTableViewDataSource: NSObject, UITableViewDelegate, UITab
         switch section {
         case .notifications:
             let menuItem = viewModel.menuItems[section.rawValue]
-            if menuItem.isExpanded ?? false {
-                return 2
-            } else {
-                return 1
-            }
-        default: return 1
+            return menuItem.isExpanded ?? false ? 2 : 1
+        default:
+            return 1
         }
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let section = AccountMenuTableViewDataSource.Section(rawValue: indexPath.section) else { return .init() }
-        switch section {
-        case .notifications:
-            notificationCell = AccountMenuTableViewCell.create(in: tableView, at: indexPath, with: viewModel)
-            return notificationCell!
-        case .myList:
-            myListCell = AccountMenuTableViewCell.create(in: tableView, at: indexPath, with: viewModel)
-            return myListCell!
-        case .appSettings:
-            appSettingsCell = AccountMenuTableViewCell.create(in: tableView, at: indexPath, with: viewModel)
-            return appSettingsCell!
-        case .account:
-            accountCell = AccountMenuTableViewCell.create(in: tableView, at: indexPath, with: viewModel)
-            return accountCell!
-        case .help:
-            helpCell = AccountMenuTableViewCell.create(in: tableView, at: indexPath, with: viewModel)
-            return helpCell!
+        return AccountMenuTableViewCell.create(in: tableView, at: indexPath, with: viewModel)
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        guard let section = AccountMenuTableViewDataSource.Section(rawValue: indexPath.section) else { return .zero }
+        
+        let pointSize: CGFloat = 56.0
+        
+        guard section == .notifications else { return pointSize }
+        
+        guard indexPath.row == .zero else {
+            let count = CGFloat(viewModel.menuItems[indexPath.section].options?.count ?? 0)
+            let cellHeight: CGFloat = 80.0
+            let lineSpacing: CGFloat = 8.0
+            return (count * cellHeight) + (count * lineSpacing)
         }
+        
+        return pointSize
+    }
+    
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return reusableViewPointSize
+    }
+    
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        return createDummyView()
+    }
+    
+    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+        return reusableViewPointSize
+    }
+    
+    func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+        return createDummyView()
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -77,62 +91,38 @@ final class AccountMenuTableViewDataSource: NSObject, UITableViewDelegate, UITab
         
         switch section {
         case .notifications:
-            if indexPath.row == 0 {
-                viewModel.menuItems[section.rawValue].isExpanded = !(viewModel.menuItems[section.rawValue].isExpanded ?? false)
-                
-                tableView.reloadSections([section.rawValue], with: .automatic)
-                
-                if viewModel.menuItems[section.rawValue].isExpanded ?? false {
-                    tableView.isScrollEnabled = true
-                } else {
-                    tableView.isScrollEnabled = false
-                }
-            } else {
-                print("tapped \(indexPath.row)")
-            }
+            guard indexPath.row == .zero else { return }
+            
+            viewModel.menuItems[section.rawValue].isExpanded = !(viewModel.menuItems[section.rawValue].isExpanded ?? false)
+            
+            tableView.reloadSections([section.rawValue], with: .automatic)
+            tableView.isScrollEnabled = viewModel.menuItems[section.rawValue].isExpanded ?? false ? true : false
         case .myList:
-            print("tapped \(indexPath.section)")
+            break
         case .appSettings:
-            print("tapped \(indexPath.section)")
+            break
         case .account:
-            print("tapped \(indexPath.section)")
+            break
         case .help:
-            print("tapped \(indexPath.section)")
+            break
         }
     }
-    
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        if indexPath.section == 0 {
-            if indexPath.row == 0 {
-                return 56.0
-            } else {
-                let count = CGFloat(viewModel.menuItems[indexPath.section].options?.count ?? 0)
-                let cellHeight: CGFloat = 80.0
-                let lineSpacing: CGFloat = 8.0
-                return (count * cellHeight) + (count + 3 * lineSpacing)
-            }
-        }
-        return 56.0
-    }
-    
-    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 1.0
-    }
-    
-    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+}
+
+// MARK: - DataSourceProtocol Implementation
+
+extension AccountMenuTableViewDataSource: DataSourceProtocol {
+    fileprivate func createDummyView() -> UIView {
         let view = UIView()
         view.backgroundColor = .black
         return view
     }
     
-    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-        return 1.0
-    }
-    
-    func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
-        let view = UIView()
-        view.backgroundColor = .black
-        return view
+    func dataSourceDidChange() {
+        guard let tableView = viewModel.coordinator?.viewController?.tableView else { return }
+        tableView.delegate = self
+        tableView.dataSource = self
+        tableView.reloadData()
     }
 }
 

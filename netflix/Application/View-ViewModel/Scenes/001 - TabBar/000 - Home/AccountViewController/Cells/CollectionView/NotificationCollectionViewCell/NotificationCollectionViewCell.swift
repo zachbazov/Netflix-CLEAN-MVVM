@@ -7,6 +7,20 @@
 
 import UIKit
 
+// MARK: - ViewProtocol Type
+
+private protocol ViewInput {
+    func logoDidAlign(with viewModel: SearchCollectionViewCellViewModel)
+}
+
+private protocol ViewOutput {
+    var representedIdentifier: NSString? { get }
+}
+
+private typealias ViewProtocol = ViewInput & ViewOutput
+
+// MARK: - NotificationCollectionViewCell Type
+
 final class NotificationCollectionViewCell: UICollectionViewCell {
     @IBOutlet private weak var previewImageView: UIImageView!
     @IBOutlet private weak var logoImageView: UIImageView!
@@ -17,7 +31,7 @@ final class NotificationCollectionViewCell: UICollectionViewCell {
     @IBOutlet private weak var logoYConstraint: NSLayoutConstraint!
     @IBOutlet private weak var notificationIndicator: UIView!
     
-    var representedIdentifier: NSString?
+    fileprivate var representedIdentifier: NSString?
     
     static func create(in collectionView: UICollectionView,
                        at indexPath: IndexPath,
@@ -41,8 +55,16 @@ final class NotificationCollectionViewCell: UICollectionViewCell {
         previewImageView.layer.cornerRadius = 4.0
         notificationIndicator.layer.cornerRadius = notificationIndicator.bounds.height / 2
     }
-    
-    func viewDidConfigure(with viewModel: SearchCollectionViewCellViewModel) {
+}
+
+// MARK: - ViewLifecycleBehavior Implementation
+
+extension NotificationCollectionViewCell: ViewLifecycleBehavior {}
+
+// MARK: - ViewProtocol Implementation
+
+extension NotificationCollectionViewCell: ViewProtocol {
+    fileprivate func viewDidConfigure(with viewModel: SearchCollectionViewCellViewModel) {
         guard representedIdentifier == viewModel.slug as NSString? else { return }
         
         subjectLabel.text = viewModel.title
@@ -67,12 +89,13 @@ final class NotificationCollectionViewCell: UICollectionViewCell {
         
         logoDidAlign(with: viewModel)
     }
+    
     /// Align the logo constraint based on `resources.presentedLogoHorizontalAlignment`
     /// property of the media object.
     /// - Parameters:
     ///   - constraint: The value of the leading constraint.
     ///   - viewModel: Coordinating view model.
-    func logoDidAlign(with viewModel: SearchCollectionViewCellViewModel) {
+    fileprivate func logoDidAlign(with viewModel: SearchCollectionViewCellViewModel) {
         let initial: CGFloat = 4.0
         let minX = initial
         let minY = initial
@@ -112,5 +135,3 @@ final class NotificationCollectionViewCell: UICollectionViewCell {
         }
     }
 }
-
-extension NotificationCollectionViewCell: ViewLifecycleBehavior {}

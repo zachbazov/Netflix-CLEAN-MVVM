@@ -7,9 +7,27 @@
 
 import UIKit
 
+// MARK: - DataSourceProtocol Type
+
+private protocol DataSourceInput {
+    func dataSourceDidChange(at indexPaths: [IndexPath])
+}
+
+private protocol DataSourceOutput {
+    var collectionView: UICollectionView? { get }
+    var numberOfSections: Int { get }
+}
+
+private typealias DataSourceProtocol = DataSourceInput
+
+// MARK: - NotificationCollectionViewDataSource Type
+
 final class NotificationCollectionViewDataSource: NSObject, UICollectionViewDelegate, UICollectionViewDataSource {
-    private weak var collectionView: UICollectionView?
     private let viewModel: AccountViewModel
+    
+    fileprivate weak var collectionView: UICollectionView?
+    
+    fileprivate let numberOfSections: Int = 1
     
     init(collectionView: UICollectionView, with viewModel: AccountViewModel) {
         self.collectionView = collectionView
@@ -17,7 +35,7 @@ final class NotificationCollectionViewDataSource: NSObject, UICollectionViewDele
     }
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return 1
+        return numberOfSections
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -25,12 +43,21 @@ final class NotificationCollectionViewDataSource: NSObject, UICollectionViewDele
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = NotificationCollectionViewCell.create(in: collectionView, at: indexPath, with: viewModel)
-        print(cell.bounds)
-        return cell
+        return NotificationCollectionViewCell.create(in: collectionView, at: indexPath, with: viewModel)
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        print(viewModel.menuItems[indexPath.section].options?[indexPath.row].title)
+        
+    }
+}
+
+// MARK: - DataSourceProtocol Implementation
+
+extension NotificationCollectionViewDataSource: DataSourceProtocol {
+    func dataSourceDidChange(at indexPaths: [IndexPath]) {
+        guard let collectionView = collectionView else { return }
+        collectionView.delegate = self
+        collectionView.dataSource = self
+        collectionView.reloadItems(at: indexPaths)
     }
 }

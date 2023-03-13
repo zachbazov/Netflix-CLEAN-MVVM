@@ -100,7 +100,7 @@ final class CollectionViewLayout: UICollectionViewFlowLayout, LayoutProtocol {
         case .profile:
             itemSize = CGSize(width: width - (lineSpacing * 2), height: height)
         case .notification:
-            sectionInset = .init(top: 8.0, left: 8.0, bottom: 8.0, right: 8.0)
+            sectionInset = .init(top: 4.0, left: .zero, bottom: 4.0, right: .zero)
         default: break
         }
     }

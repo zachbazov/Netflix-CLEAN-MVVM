@@ -28,6 +28,18 @@ extension UIView {
         ])
     }
     
+    func constraintToCenter(_ view: UIView,
+                            withLeadingAnchorValue value: CGFloat,
+                            sizeInPoints size: CGFloat) {
+        view.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            view.leadingAnchor.constraint(equalTo: leadingAnchor, constant: value),
+            view.widthAnchor.constraint(equalToConstant: size),
+            view.heightAnchor.constraint(equalToConstant: size),
+            view.centerYAnchor.constraint(equalTo: centerYAnchor)
+        ])
+    }
+    
     func constraintBottom(toParent view: UIView,
                           withHeightAnchor anchorValue: CGFloat) {
         translatesAutoresizingMaskIntoConstraints = false
@@ -116,6 +128,23 @@ extension UIView {
             bView.leadingAnchor.constraint(equalTo: leadingAnchor),
             bView.trailingAnchor.constraint(equalTo: trailingAnchor),
             bView.bottomAnchor.constraint(equalTo: bottomAnchor)
+        ])
+    }
+    
+    func chainConstraintToSuperview(linking aView: UIView,
+                                    to bView: UIView,
+                                    withLeadingAnchorValue value: CGFloat,
+                                    sizeInPoints size: CGFloat) {
+        aView.translatesAutoresizingMaskIntoConstraints = false
+        bView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            aView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: value),
+            aView.widthAnchor.constraint(equalToConstant: size),
+            aView.heightAnchor.constraint(equalToConstant: size),
+            aView.centerYAnchor.constraint(equalTo: centerYAnchor),
+            
+            bView.leadingAnchor.constraint(equalTo: aView.trailingAnchor, constant: 8.0),
+            bView.centerYAnchor.constraint(equalTo: centerYAnchor)
         ])
     }
     
