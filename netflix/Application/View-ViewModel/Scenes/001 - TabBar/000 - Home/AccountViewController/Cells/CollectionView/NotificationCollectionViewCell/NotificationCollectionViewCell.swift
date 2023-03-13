@@ -10,7 +10,8 @@ import UIKit
 // MARK: - ViewProtocol Type
 
 private protocol ViewInput {
-    func logoDidAlign(with viewModel: SearchCollectionViewCellViewModel)
+    func viewDidConfigure(with viewModel: NotificationCollectionViewCellViewModel)
+    func logoDidAlign(with viewModel: NotificationCollectionViewCellViewModel)
 }
 
 private protocol ViewOutput {
@@ -42,7 +43,7 @@ final class NotificationCollectionViewCell: UICollectionViewCell {
         guard let homeViewController = Application.app.coordinator.tabCoordinator.home.viewControllers.first as? HomeViewController else { fatalError() }
         let myList = homeViewController.viewModel.myList.viewModel.list.value.toArray()
         let model = myList[indexPath.row]
-        let cellViewModel = SearchCollectionViewCellViewModel(media: model)
+        let cellViewModel = NotificationCollectionViewCellViewModel(media: model)
         view.representedIdentifier = cellViewModel.slug as NSString
         view.viewDidConfigure()
         view.viewDidConfigure(with: cellViewModel)
@@ -64,7 +65,7 @@ extension NotificationCollectionViewCell: ViewLifecycleBehavior {}
 // MARK: - ViewProtocol Implementation
 
 extension NotificationCollectionViewCell: ViewProtocol {
-    fileprivate func viewDidConfigure(with viewModel: SearchCollectionViewCellViewModel) {
+    fileprivate func viewDidConfigure(with viewModel: NotificationCollectionViewCellViewModel) {
         guard representedIdentifier == viewModel.slug as NSString? else { return }
         
         subjectLabel.text = viewModel.title
@@ -95,7 +96,7 @@ extension NotificationCollectionViewCell: ViewProtocol {
     /// - Parameters:
     ///   - constraint: The value of the leading constraint.
     ///   - viewModel: Coordinating view model.
-    fileprivate func logoDidAlign(with viewModel: SearchCollectionViewCellViewModel) {
+    fileprivate func logoDidAlign(with viewModel: NotificationCollectionViewCellViewModel) {
         let initial: CGFloat = 4.0
         let minX = initial
         let minY = initial

@@ -6,3 +6,7 @@
 //
 
 import Foundation
+
+// MARK: - NotificationCollectionViewCellViewModel Type
+
+typealias NotificationCollectionViewCellViewModel = SearchCollectionViewCellViewModel

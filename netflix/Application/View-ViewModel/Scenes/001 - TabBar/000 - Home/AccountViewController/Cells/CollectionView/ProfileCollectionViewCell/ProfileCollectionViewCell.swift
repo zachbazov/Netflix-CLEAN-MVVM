@@ -7,6 +7,18 @@
 
 import UIKit
 
+// MARK: - ViewProtocol Type
+
+private protocol ViewInput {
+    func viewDidConfigure(with viewModel: ProfileCollectionViewCellViewModel,
+                          at indexPath: IndexPath,
+                          count: Int)
+}
+
+private typealias ViewProtocol = ViewInput
+
+// MARK: - ProfileCollectionViewCell Type
+
 final class ProfileCollectionViewCell: UICollectionViewCell {
     @IBOutlet private weak var imageContainer: UIView!
     @IBOutlet private weak var layerContainer: UIView!
@@ -29,30 +41,38 @@ final class ProfileCollectionViewCell: UICollectionViewCell {
     func viewDidConfigure() {
         button.layer.cornerRadius = 4.0
     }
-    
-    func viewDidConfigure(with viewModel: ProfileCollectionViewCellViewModel,
-                          at indexPath: IndexPath,
-                          count: Int) {
-        if indexPath.row == count - 1 {
-            let imageName = viewModel.image
-            let symbolConfiguration = UIImage.SymbolConfiguration(pointSize: 28.0, weight: .bold)
-            let image = UIImage(systemName: imageName)?
-                .withRenderingMode(.alwaysOriginal)
-                .withTintColor(.hexColor("#b3b3b3"))
-                .withConfiguration(symbolConfiguration)
-            button.setImage(image, for: .normal)
-            
-            layerContainer.layer.cornerRadius = 4.0
-            layerContainer.layer.borderColor = UIColor.hexColor("#232323").cgColor
-            layerContainer.layer.borderWidth = 2.0
-        } else {
+}
+
+// MARK: - ViewLifecycleBehavior Implementation
+
+extension ProfileCollectionViewCell: ViewLifecycleBehavior {}
+
+// MARK: - ViewProtocol Implementation
+
+extension ProfileCollectionViewCell: ViewProtocol {
+    fileprivate func viewDidConfigure(with viewModel: ProfileCollectionViewCellViewModel,
+                                      at indexPath: IndexPath,
+                                      count: Int) {
+        guard indexPath.row == count - 1 else {
             let imageName = viewModel.image
             let image = UIImage(named: imageName)
             button.setImage(image, for: .normal)
+            titleLabel.text = viewModel.name
+            return
         }
         
+        let imageName = viewModel.image
+        let imageSize: CGFloat = 28.0
+        let symbolConfiguration = UIImage.SymbolConfiguration(pointSize: imageSize, weight: .bold)
+        let image = UIImage(systemName: imageName)?
+            .withRenderingMode(.alwaysOriginal)
+            .withTintColor(.hexColor("#b3b3b3"))
+            .withConfiguration(symbolConfiguration)
+        button.setImage(image, for: .normal)
         titleLabel.text = viewModel.name
+        
+        layerContainer.layer.cornerRadius = 4.0
+        layerContainer.layer.borderColor = UIColor.hexColor("#232323").cgColor
+        layerContainer.layer.borderWidth = 2.0
     }
 }
-
-extension ProfileCollectionViewCell: ViewLifecycleBehavior {}
