@@ -41,7 +41,7 @@ final class AccountMenuTableViewDataSource: NSObject, UITableViewDelegate, UITab
         case .notifications:
             let menuItem = viewModel.menuItems[section.rawValue]
             if menuItem.isExpanded ?? false {
-                return menuItem.options!.count + 1
+                return 2
             } else {
                 return 1
             }
@@ -54,19 +54,6 @@ final class AccountMenuTableViewDataSource: NSObject, UITableViewDelegate, UITab
         switch section {
         case .notifications:
             notificationCell = AccountMenuTableViewCell.create(in: tableView, at: indexPath, with: viewModel)
-            if indexPath.row == 0 {
-                notificationCell?.label?.text = viewModel.menuItems[indexPath.section].title
-                if viewModel.menuItems[section.rawValue].isExpanded ?? false {
-                    let image = UIImage(systemName: "chevron.down")?.withRenderingMode(.alwaysOriginal).withTintColor(.hexColor("b3b3b3"))
-                    notificationCell?.accessoryView = UIImageView(image: image)
-                } else {
-                    let image = UIImage(systemName: "chevron.right")?.withRenderingMode(.alwaysOriginal).withTintColor(.hexColor("b3b3b3"))
-                    notificationCell?.accessoryView = UIImageView(image: image)
-                }
-            } else {
-                notificationCell?.label?.text = viewModel.menuItems[indexPath.section].options?[indexPath.row - 1]
-                notificationCell?.accessoryView = nil
-            }
             return notificationCell!
         case .myList:
             myListCell = AccountMenuTableViewCell.create(in: tableView, at: indexPath, with: viewModel)
@@ -93,32 +80,38 @@ final class AccountMenuTableViewDataSource: NSObject, UITableViewDelegate, UITab
             if indexPath.row == 0 {
                 viewModel.menuItems[section.rawValue].isExpanded = !(viewModel.menuItems[section.rawValue].isExpanded ?? false)
                 
-                tableView.reloadSections([section.rawValue], with: .none)
+                tableView.reloadSections([section.rawValue], with: .automatic)
                 
                 if viewModel.menuItems[section.rawValue].isExpanded ?? false {
-//                    let image = UIImage(systemName: "chevron.down")?.withRenderingMode(.alwaysOriginal).withTintColor(.hexColor("b3b3b3"))
-//                    notificationCell?.accessoryView = UIImageView(image: image)
                     tableView.isScrollEnabled = true
                 } else {
-//                    let image = UIImage(systemName: "chevron.right")?.withRenderingMode(.alwaysOriginal).withTintColor(.hexColor("b3b3b3"))
-//                    notificationCell?.accessoryView = UIImageView(image: image)
                     tableView.isScrollEnabled = false
                 }
             } else {
                 print("tapped \(indexPath.row)")
             }
         case .myList:
-            break
+            print("tapped \(indexPath.section)")
         case .appSettings:
-            break
+            print("tapped \(indexPath.section)")
         case .account:
-            break
+            print("tapped \(indexPath.section)")
         case .help:
-            break
+            print("tapped \(indexPath.section)")
         }
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        if indexPath.section == 0 {
+            if indexPath.row == 0 {
+                return 56.0
+            } else {
+                let count = CGFloat(viewModel.menuItems[indexPath.section].options?.count ?? 0)
+                let cellHeight: CGFloat = 80.0
+                let lineSpacing: CGFloat = 8.0
+                return (count * cellHeight) + (count + 3 * lineSpacing)
+            }
+        }
         return 56.0
     }
     

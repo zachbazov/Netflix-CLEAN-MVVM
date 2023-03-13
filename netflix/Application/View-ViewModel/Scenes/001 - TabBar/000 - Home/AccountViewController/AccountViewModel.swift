@@ -29,7 +29,10 @@ final class AccountViewModel {
     private(set) lazy var addProfileItem: ProfileItem = createAddProfileItem()
     
     private func createMenuItems() -> [AccountMenuItem] {
-        let notifications = AccountMenuItem(image: "bell", title: "Notifications", options: ["1", "2", "3"], isExpanded: false)
+        let homeViewController = Application.app.coordinator.tabCoordinator.home.viewControllers.first as? HomeViewController
+        let media = homeViewController!.viewModel.myList.viewModel.list.value.toArray()
+        
+        let notifications = AccountMenuItem(image: "bell", title: "Notifications", options: media, isExpanded: false)
         let myList = AccountMenuItem(image: "checkmark", title: "My List")
         let appSettings = AccountMenuItem(image: "gearshape", title: "App Settings")
         let account = AccountMenuItem(image: "person", title: "Account")

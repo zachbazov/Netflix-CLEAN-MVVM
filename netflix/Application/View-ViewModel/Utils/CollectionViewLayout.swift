@@ -37,6 +37,7 @@ final class CollectionViewLayout: UICollectionViewFlowLayout, LayoutProtocol {
             case .news: return width
             case .search: return width
             case .profile: return width / (itemsPerLine + 1)
+            case .notification: return width
             default: return width / itemsPerLine - (lineSpacing * itemsPerLine + 1)
             }
         }
@@ -55,6 +56,7 @@ final class CollectionViewLayout: UICollectionViewFlowLayout, LayoutProtocol {
             case .news: return 426.0
             case .search: return 80.0
             case .profile: return super.collectionView!.bounds.height
+            case .notification: return 80.0
             default: return .zero
             }
         }
@@ -97,6 +99,8 @@ final class CollectionViewLayout: UICollectionViewFlowLayout, LayoutProtocol {
             break
         case .profile:
             itemSize = CGSize(width: width - (lineSpacing * 2), height: height)
+        case .notification:
+            sectionInset = .init(top: 8.0, left: 8.0, bottom: 8.0, right: 8.0)
         default: break
         }
     }
@@ -125,5 +129,6 @@ extension CollectionViewLayout {
         case news
         case search
         case profile
+        case notification
     }
 }

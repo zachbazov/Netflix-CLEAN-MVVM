@@ -125,6 +125,7 @@ final class AccountViewController: Controller<AccountViewModel> {
         let collectionView = UICollectionView(frame: collectionContainer.bounds, collectionViewLayout: layout)
         collectionView.register(ProfileCollectionViewCell.nib, forCellWithReuseIdentifier: ProfileCollectionViewCell.reuseIdentifier)
         collectionView.contentInset = UIEdgeInsets(top: .zero, left: 16.0, bottom: .zero, right: 16.0)
+        collectionView.backgroundColor = .black
         return collectionView
     }
 }
