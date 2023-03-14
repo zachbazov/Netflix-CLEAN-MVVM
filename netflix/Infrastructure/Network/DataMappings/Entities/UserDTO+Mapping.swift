@@ -20,6 +20,7 @@ public final class UserDTO: NSObject, Codable, NSSecureCoding {
     var active: Bool?
     var token: String?
     var mylist: [String]?
+    var profiles: [String]?
     
     init(_id: String? = nil,
          name: String? = nil,
@@ -29,7 +30,8 @@ public final class UserDTO: NSObject, Codable, NSSecureCoding {
          role: String? = nil,
          active: Bool? = nil,
          token: String? = nil,
-         mylist: [String]? = []) {
+         mylist: [String]? = [],
+         profiles: [String]? = []) {
         self._id = _id
         self.name = name
         self.email = email
@@ -39,6 +41,7 @@ public final class UserDTO: NSObject, Codable, NSSecureCoding {
         self.active = active
         self.token = token
         self.mylist = mylist
+        self.profiles = profiles
     }
     
     // MARK: NSSecureCoding Implementation
@@ -55,6 +58,7 @@ public final class UserDTO: NSObject, Codable, NSSecureCoding {
         coder.encode(active, forKey: "active")
         coder.encode(token, forKey: "token")
         coder.encode(mylist, forKey: "mylist")
+        coder.encode(profiles, forKey: "profiles")
     }
     
     public required init?(coder: NSCoder) {
@@ -67,6 +71,7 @@ public final class UserDTO: NSObject, Codable, NSSecureCoding {
         self.active = coder.decodeObject(of: [UserDTO.self, NSNumber.self], forKey: "active") as? Bool
         self.token = coder.decodeObject(of: [UserDTO.self, NSString.self], forKey: "token") as? String
         self.mylist = coder.decodeObject(of: [UserDTO.self, NSArray.self, NSString.self], forKey: "mylist") as? [String]
+        self.profiles = coder.decodeObject(of: [UserDTO.self, NSArray.self, NSString.self], forKey: "profiles") as? [String]
     }
 }
 
@@ -82,6 +87,7 @@ extension UserDTO {
                      role: role,
                      active: active,
                      token: token,
-                     mylist: mylist)
+                     mylist: mylist,
+                     profiles: profiles)
     }
 }

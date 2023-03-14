@@ -41,6 +41,17 @@ extension APIEndpoint: AuthRepositoryEndpoints {
                         method: .get,
                         headerParameters: ["content-type": "application/json"])
     }
+    
+    
+    
+    
+    
+    static func getMyUserProfiles(with request: UserProfileHTTPDTO.Request) -> Endpoint<UserProfileHTTPDTO.Response> {
+        return Endpoint(path: "api/v1/users/profiles",
+                        method: .get,
+                        headerParameters: ["content-type": "application/json"],
+                        queryParameters: ["user": request.user._id ?? ""])
+    }
 }
 
 // MARK: - SectionsRepositoryEndpoints Implementation

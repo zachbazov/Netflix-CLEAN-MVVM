@@ -72,7 +72,8 @@ extension Application: ApplicationProtocol {
         }
         
         mainQueueDispatch { [weak self] in
-            self?.coordinator.coordinate(to: .tabBar)
+//            self?.coordinator.coordinate(to: .tabBar)
+            self?.coordinator.coordinate(to: .userProfile)
         }
     }
     /// Allocate a root view controller for the window.

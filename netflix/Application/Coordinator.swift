@@ -30,6 +30,7 @@ final class Coordinator {
     weak var window: UIWindow? { didSet { viewController = window?.rootViewController } }
     
     lazy var authCoordinator = AuthCoordinator()
+    lazy var userProfileCoordinator = UserProfileCoordinator()
     lazy var tabCoordinator = TabBarCoordinator()
 }
 
@@ -38,7 +39,7 @@ final class Coordinator {
 extension Coordinator: CoordinatorProtocol {
     /// Allocating and presenting the authorization screen.
     func createAuthController() {
-        authCoordinator = AuthCoordinator()
+//        authCoordinator = AuthCoordinator()
         let viewModel = AuthViewModel()
         let controller = AuthController()
         authCoordinator.viewController = controller
@@ -47,9 +48,10 @@ extension Coordinator: CoordinatorProtocol {
         window?.rootViewController = controller
         
     }
+    
     /// Allocating and presenting the tab bar screen.
     func createTabBarController() {
-        tabCoordinator = TabBarCoordinator()
+//        tabCoordinator = TabBarCoordinator()
         let controller = TabBarController()
         let viewModel = TabBarViewModel()
         tabCoordinator.viewController = controller
@@ -58,10 +60,22 @@ extension Coordinator: CoordinatorProtocol {
         window?.rootViewController = controller
     }
     
+    func createUserProfileController() {
+//        let controller = UserProfileViewController()
+//        let viewModel = UserProfileViewModel()
+//        userProfileCoordinator.viewController = controller
+//        viewModel.coordinator = userProfileCoordinator
+//        controller.viewModel = viewModel
+        window?.rootViewController = userProfileCoordinator.userProfile
+//        userProfileCoordinator.coordinate(to: .userProfile)
+    }
+    
     func deploy(_ screen: Screen) {
         switch screen {
         case .auth:
             authCoordinator.coordinate(to: .landpage)
+        case .userProfile:
+            userProfileCoordinator.coordinate(to: .userProfile)
         case .tabBar:
             let authService = Application.app.services.authentication
             let requestDTO = UserHTTPDTO.Request(user: authService.user!)
@@ -101,6 +115,7 @@ extension Coordinator: Coordinate {
     /// View representation type.
     enum Screen {
         case auth
+        case userProfile
         case tabBar
     }
     /// Screen presentation control.
@@ -108,6 +123,7 @@ extension Coordinator: Coordinate {
     func coordinate(to screen: Screen) {
         switch screen {
         case .auth: createAuthController()
+        case .userProfile: createUserProfileController()
         case .tabBar: createTabBarController()
         }
         
