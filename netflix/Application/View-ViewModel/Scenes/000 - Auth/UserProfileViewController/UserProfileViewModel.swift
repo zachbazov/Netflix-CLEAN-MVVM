@@ -53,8 +53,12 @@ extension UserProfileViewModel {
     }
     
     private func awaitLoading() {
+        let vc = coordinator?.viewController
+        
         Task {
             await myUserProfilesDidLoad()
+            
+            await vc?.dataSourceDidChange()
         }
     }
     
@@ -91,5 +95,11 @@ extension UserProfileViewModel {
         guard let profiles = response?.data.toDomain() else { return }
         
         self.profiles = profiles
+        
+        print(user.name, profiles)
+        
+        let addProfile = UserProfile(_id: "", name: "Add Profile", image: "plus", active: false, user: user._id!)
+        
+        self.profiles.append(addProfile)
     }
 }

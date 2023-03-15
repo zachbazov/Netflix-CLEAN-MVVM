@@ -51,7 +51,7 @@ extension Coordinator: CoordinatorProtocol {
     
     /// Allocating and presenting the tab bar screen.
     func createTabBarController() {
-//        tabCoordinator = TabBarCoordinator()
+        tabCoordinator = TabBarCoordinator()
         let controller = TabBarController()
         let viewModel = TabBarViewModel()
         tabCoordinator.viewController = controller
@@ -77,34 +77,7 @@ extension Coordinator: CoordinatorProtocol {
         case .userProfile:
             userProfileCoordinator.coordinate(to: .userProfile)
         case .tabBar:
-            let authService = Application.app.services.authentication
-            let requestDTO = UserHTTPDTO.Request(user: authService.user!)
-            
-            ActivityIndicatorView.viewDidShow()
-            
-            if #available(iOS 13.0, *) {
-                Task {
-                    let success = await authService.signIn(with: requestDTO)
-                    guard success else { return }
-                    mainQueueDispatch {
-                        ActivityIndicatorView.viewDidHide()
-                        
-                        self.tabCoordinator.coordinate(to: .home)
-                    }
-                }
-                
-                return
-            }
-            
-            authService.signIn(for: requestDTO) { [weak self] success in
-                guard let self = self else { return }
-                guard success else { return }
-                mainQueueDispatch {
-                    ActivityIndicatorView.viewDidHide()
-                    
-                    self.tabCoordinator.coordinate(to: .home)
-                }
-            }
+            tabCoordinator.coordinate(to: .home)
         }
     }
 }

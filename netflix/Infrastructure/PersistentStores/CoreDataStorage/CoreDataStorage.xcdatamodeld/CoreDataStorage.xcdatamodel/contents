@@ -2,6 +2,7 @@
 <model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="21512" systemVersion="22A400" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
     <entity name="AuthRequestEntity" representedClassName="AuthRequestEntity" syncable="YES" codeGenerationType="class">
         <attribute name="user" optional="YES" attributeType="Transformable" valueTransformerName="UserTransformer" customClassName="UserDTO"/>
+        <attribute name="userId" optional="YES" attributeType="String"/>
         <relationship name="response" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="AuthResponseEntity" inverseName="request" inverseEntity="AuthResponseEntity"/>
     </entity>
     <entity name="AuthResponseEntity" representedClassName="AuthResponseEntity" syncable="YES" codeGenerationType="class">

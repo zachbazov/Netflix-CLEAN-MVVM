@@ -30,6 +30,11 @@ struct ProfileCollectionViewCellViewModel {
         self.image = profile.image
         self.name = profile.name
     }
+    
+    init(with profile: UserProfile) {
+        self.image = profile.image
+        self.name = profile.name
+    }
 }
 
 // MARK: - ModelProtocol Implementation

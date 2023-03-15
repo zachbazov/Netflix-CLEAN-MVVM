@@ -120,5 +120,7 @@ extension SignUpViewModel: ViewModelProtocol {
         
         let coordinator = Application.app.coordinator
         coordinator.coordinate(to: .tabBar)
+//        let coordinator = Application.app.coordinator.userProfileCoordinator
+//        coordinator.coordinate(to: .userProfile)
     }
 }
