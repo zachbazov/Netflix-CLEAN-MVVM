@@ -1,8 +1,8 @@
 //
-//  ProfileCollectionViewCellViewModel.swift
+//  UserProfileCollectionViewCellViewModel.swift
 //  netflix
 //
-//  Created by Zach Bazov on 10/03/2023.
+//  Created by Zach Bazov on 16/03/2023.
 //
 
 import Foundation
@@ -10,7 +10,7 @@ import Foundation
 // MARK: - ModelProtocol Type
 
 private protocol ModelInput {
-    init(with profile: ProfileItem)
+    init(with profile: UserProfile)
 }
 
 private protocol ModelOutput {
@@ -20,13 +20,13 @@ private protocol ModelOutput {
 
 private typealias ModelProtocol = ModelInput & ModelOutput
 
-// MARK: - ProfileCollectionViewCellViewModel Type
+// MARK: - UserProfileCollectionViewCellViewModel Type
 
-struct ProfileCollectionViewCellViewModel {
+struct UserProfileCollectionViewCellViewModel {
     let image: String
     let name: String
     
-    init(with profile: ProfileItem) {
+    init(with profile: UserProfile) {
         self.image = profile.image
         self.name = profile.name
     }
@@ -34,4 +34,4 @@ struct ProfileCollectionViewCellViewModel {
 
 // MARK: - ModelProtocol Implementation
 
-extension ProfileCollectionViewCellViewModel: ModelProtocol {}
+extension UserProfileCollectionViewCellViewModel: ModelProtocol {}

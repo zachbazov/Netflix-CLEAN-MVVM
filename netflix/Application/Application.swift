@@ -64,15 +64,12 @@ extension Application: ApplicationProtocol {
     /// - Parameter user: Corresponding user object.
     fileprivate func didFinishResigning(with user: UserDTO?) {
         guard user != nil else {
-            mainQueueDispatch { [weak self] in
+            return mainQueueDispatch { [weak self] in
                 self?.coordinator.coordinate(to: .auth)
             }
-            
-            return
         }
         
         mainQueueDispatch { [weak self] in
-//            self?.coordinator.coordinate(to: .tabBar)
             self?.coordinator.coordinate(to: .userProfile)
         }
     }

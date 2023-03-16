@@ -17,8 +17,13 @@ private protocol CoordinatorOutput {
     var viewController: UIViewController? { get }
     var window: UIWindow? { get }
     
-    func createAuthController()
-    func createTabBarController()
+    var authCoordinator: AuthCoordinator { get }
+    var profileCoordinator: UserProfileCoordinator { get }
+    var tabCoordinator: TabBarCoordinator { get }
+    
+    func createAuthController() -> AuthController
+    func createUserProfileController() -> UINavigationController
+    func createTabBarController() -> TabBarController
 }
 
 private typealias CoordinatorProtocol = CoordinatorInput & CoordinatorOutput
@@ -29,53 +34,53 @@ final class Coordinator {
     weak var viewController: UIViewController?
     weak var window: UIWindow? { didSet { viewController = window?.rootViewController } }
     
-    lazy var authCoordinator = AuthCoordinator()
-    lazy var userProfileCoordinator = UserProfileCoordinator()
-    lazy var tabCoordinator = TabBarCoordinator()
+    fileprivate(set) lazy var authCoordinator = AuthCoordinator()
+    fileprivate(set) lazy var profileCoordinator = UserProfileCoordinator()
+    fileprivate(set) lazy var tabCoordinator = TabBarCoordinator()
 }
 
 // MARK: - CoordinatorProtocol Implementation
 
 extension Coordinator: CoordinatorProtocol {
     /// Allocating and presenting the authorization screen.
-    func createAuthController() {
-//        authCoordinator = AuthCoordinator()
+    fileprivate func createAuthController() -> AuthController {
         let viewModel = AuthViewModel()
         let controller = AuthController()
         authCoordinator.viewController = controller
         viewModel.coordinator = authCoordinator
         controller.viewModel = viewModel
-        window?.rootViewController = controller
+        return controller
+    }
+    
+    /// Allocating and presenting the user profile selection screen.
+    fileprivate func createUserProfileController() -> UINavigationController {
+        let controller = UserProfileViewController()
+        let viewModel = UserProfileViewModel()
+        profileCoordinator.viewController = controller
+        viewModel.coordinator = profileCoordinator
+        controller.viewModel = viewModel
         
+        let navigation = UINavigationController(rootViewController: controller)
+        navigation.setNavigationBarHidden(false, animated: false)
+        return navigation
     }
     
     /// Allocating and presenting the tab bar screen.
-    func createTabBarController() {
-        tabCoordinator = TabBarCoordinator()
+    fileprivate func createTabBarController() -> TabBarController {
         let controller = TabBarController()
         let viewModel = TabBarViewModel()
         tabCoordinator.viewController = controller
         viewModel.coordinator = tabCoordinator
         controller.viewModel = viewModel
-        window?.rootViewController = controller
+        return controller
     }
     
-    func createUserProfileController() {
-//        let controller = UserProfileViewController()
-//        let viewModel = UserProfileViewModel()
-//        userProfileCoordinator.viewController = controller
-//        viewModel.coordinator = userProfileCoordinator
-//        controller.viewModel = viewModel
-        window?.rootViewController = userProfileCoordinator.userProfile
-//        userProfileCoordinator.coordinate(to: .userProfile)
-    }
-    
-    func deploy(_ screen: Screen) {
+    fileprivate func deploy(_ screen: Screen) {
         switch screen {
         case .auth:
             authCoordinator.coordinate(to: .landpage)
         case .userProfile:
-            userProfileCoordinator.coordinate(to: .userProfile)
+            break
         case .tabBar:
             tabCoordinator.coordinate(to: .home)
         }
@@ -91,14 +96,22 @@ extension Coordinator: Coordinate {
         case userProfile
         case tabBar
     }
+    
     /// Screen presentation control.
     /// - Parameter screen: The screen to be allocated and presented.
     func coordinate(to screen: Screen) {
+        var controller: UIViewController
+        
         switch screen {
-        case .auth: createAuthController()
-        case .userProfile: createUserProfileController()
-        case .tabBar: createTabBarController()
+        case .auth:
+            controller = createAuthController()
+        case .userProfile:
+            controller = createUserProfileController()
+        case .tabBar:
+            controller = createTabBarController()
         }
+        
+        window?.rootViewController = controller
         
         deploy(screen)
     }

@@ -53,22 +53,20 @@ extension SignInViewModel: ViewModelProtocol {
     func signInButtonDidTap() {
         signInRequest()
     }
+    
     /// Invokes a sign in request for the user credentials.
     fileprivate func signInRequest() {
         let authService = Application.app.services.authentication
-        let coordinator = Application.app.coordinator
         
-        let emailTextField = coordinator.authCoordinator.signInController.emailTextField
-        let passTextField = coordinator.authCoordinator.signInController.passwordTextField
-        emailTextField?.resignFirstResponder()
-        passTextField?.resignFirstResponder()
+        guard let emailTextField = coordinator?.signInController.emailTextField,
+              let passTextField = coordinator?.signInController.passwordTextField else { return }
         
-        guard !(emailTextField?.text?.isEmpty ?? false),
-              !(passTextField?.text?.isEmpty ?? false) else {
-            return
-        }
+        emailTextField.resignFirstResponder()
+        passTextField.resignFirstResponder()
         
         guard let email = email, let password = password else { return }
+        
+        guard email.isNotEmpty, password.isNotEmpty else { return }
         
         ActivityIndicatorView.viewDidShow()
         
@@ -79,34 +77,34 @@ extension SignInViewModel: ViewModelProtocol {
             Task {
                 let status = await authService.signIn(with: requestDTO)
                 
-                mainQueueDispatch { [weak self] in
-                    self?.didFinish(with: status)
-                }
+                didFinish(with: status)
             }
             
             return
         }
         
         authService.signIn(for: requestDTO) { [weak self] status in
-            mainQueueDispatch { [weak self] in
-                self?.didFinish(with: status)
-            }
+            self?.didFinish(with: status)
         }
     }
     
     fileprivate func didFinish(with status: Bool) {
-        let emailTextField = coordinator?.signInController.emailTextField
-        let passTextField = coordinator?.signInController.passwordTextField
-        
-        guard status else {
-            emailTextField?.text = ""
-            passTextField?.text = ""
-            return
-        }
-        
         ActivityIndicatorView.viewDidHide()
         
-        let coordinator = Application.app.coordinator
-        coordinator.coordinate(to: .tabBar)
+        mainQueueDispatch { [weak self] in
+            guard let self = self else { return }
+            
+            let emailTextField = self.coordinator?.signInController.emailTextField
+            let passTextField = self.coordinator?.signInController.passwordTextField
+            
+            guard status else {
+                emailTextField?.text?.toBlankValue()
+                passTextField?.text?.toBlankValue()
+                return
+            }
+            
+            let coordinator = Application.app.coordinator
+            coordinator.coordinate(to: .userProfile)
+        }
     }
 }

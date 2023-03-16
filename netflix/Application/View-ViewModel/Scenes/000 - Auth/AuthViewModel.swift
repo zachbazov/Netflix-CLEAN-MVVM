@@ -32,6 +32,7 @@ private typealias ViewModelProtocol = ViewModelInput
 
 final class AuthViewModel {
     var coordinator: AuthCoordinator?
+    
     private let useCase = UserUseCase()
 }
 

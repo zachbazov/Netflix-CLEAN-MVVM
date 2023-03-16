@@ -61,9 +61,7 @@ final class LandpageViewController: Controller<AuthViewModel> {
     }
     
     override func viewDidTargetSubviews() {
-        signUpButton.addTarget(viewModel.coordinator,
-                               action: #selector(viewModel.coordinator!.deploy(_:)),
-                               for: .touchUpInside)
+        signUpButton.addTarget(self, action: #selector(coordinateToSignUp), for: .touchUpInside)
     }
 }
 
@@ -74,8 +72,8 @@ extension LandpageViewController {
         let string = Localization.Auth.Landpage().signInBarButton
         let button = UIBarButtonItem(title: string,
                                      style: .plain,
-                                     target: viewModel.coordinator,
-                                     action: #selector(viewModel.coordinator!.deploy(_:)))
+                                     target: self,
+                                     action: #selector(coordinateToSignIn))
         navigationItem.rightBarButtonItem = button
     }
     
@@ -101,6 +99,16 @@ extension LandpageViewController {
                      .black.withAlphaComponent(0.5),
                      .clear],
             locations: locations)
+    }
+    
+    @objc
+    private func coordinateToSignUp() {
+        viewModel?.coordinator?.coordinate(to: .signUp)
+    }
+    
+    @objc
+    private func coordinateToSignIn() {
+        viewModel?.coordinator?.coordinate(to: .signIn)
     }
     
     private func animateView() {

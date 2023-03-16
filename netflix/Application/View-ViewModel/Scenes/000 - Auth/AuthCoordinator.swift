@@ -10,9 +10,7 @@ import UIKit
 // MARK: - CoordinatorProtocol Type
 
 private protocol CoordinatorInput {
-    func createNavigationController(rootViewController: UIViewController) -> NavigationController
-    
-    func deploy(_ sender: Any)
+    func deploy(_ screen: AuthCoordinator.Screen)
 }
 
 private protocol CoordinatorOutput {
@@ -20,12 +18,11 @@ private protocol CoordinatorOutput {
     var landpageController: LandpageViewController { get }
     var signInController: SignInViewController { get }
     var signUpController: SignUpViewController { get }
-//    var userProfileController: UserProfileViewController { get }
     
+    func createNavigationController() -> NavigationController
     func createLandpageController() -> LandpageViewController
     func createSignInController() -> SignInViewController
     func createSignUpController() -> SignUpViewController
-//    func createUserProfileController() -> UserProfileViewController
 }
 
 private typealias CoordinatorProtocol = CoordinatorInput & CoordinatorOutput
@@ -35,18 +32,17 @@ private typealias CoordinatorProtocol = CoordinatorInput & CoordinatorOutput
 final class AuthCoordinator {
     var viewController: AuthController?
     
-    fileprivate lazy var navigationController: NavigationController = createNavigationController(rootViewController: landpageController)
+    fileprivate(set) lazy var navigationController: NavigationController = createNavigationController()
     fileprivate lazy var landpageController: LandpageViewController = createLandpageController()
     fileprivate(set) lazy var signInController: SignInViewController = createSignInController()
     fileprivate(set) lazy var signUpController: SignUpViewController = createSignUpController()
-//    fileprivate(set) lazy var userProfileController: UserProfileViewController = createUserProfileController()
 }
 
 // MARK: - CoordinatorProtocol Implementation
 
 extension AuthCoordinator: CoordinatorProtocol {
-    fileprivate func createNavigationController(rootViewController: UIViewController) -> NavigationController {
-        return NavigationController(rootViewController: rootViewController)
+    fileprivate func createNavigationController() -> NavigationController {
+        return NavigationController(rootViewController: landpageController)
     }
     
     fileprivate func createLandpageController() -> LandpageViewController {
@@ -59,6 +55,7 @@ extension AuthCoordinator: CoordinatorProtocol {
         let controller = SignInViewController()
         let viewModel = SignInViewModel(with: viewController!.viewModel)
         controller.viewModel = viewModel
+        controller.viewModel.coordinator = self
         return controller
     }
     
@@ -66,59 +63,44 @@ extension AuthCoordinator: CoordinatorProtocol {
         let controller = SignUpViewController()
         let viewModel = SignUpViewModel(with: viewController!.viewModel)
         controller.viewModel = viewModel
+        controller.viewModel.coordinator = self
         return controller
     }
     
-//    fileprivate func createUserProfileController() -> UserProfileViewController {
-//        let coordinator = UserProfileCoordinator()
-//        let viewModel = UserProfileViewModel()
-//        let controller = UserProfileViewController()
-//        controller.viewModel = viewModel
-//        controller.viewModel.coordinator = coordinator
-//        coordinator.viewController = controller
-//        return controller
-//    }
-    
     /// Push or present a new controller to the navigation stack.
     /// - Parameter sender: The object that's been interacted with.
-    @objc
-    func deploy(_ sender: Any) {
-        switch sender {
-        case is LandpageViewController:
+    fileprivate func deploy(_ screen: Screen) {
+        switch screen {
+        case .landpage:
             viewController?.present(navigationController, animated: true)
-        case is UIBarButtonItem:
+        case .signIn:
             navigationController.pushViewController(signInController, animated: true)
-        case is UIButton:
+        case .signUp:
             navigationController.pushViewController(signUpController, animated: true)
-//        case is UserProfileViewController:
-//            print("depl")
-//            viewController?.present(userProfileController, animated: true)
         default: break
         }
     }
 }
 
+
 // MARK: - Coordinate Implementation
 
 extension AuthCoordinator: Coordinate {
     /// View representation type.
-    enum Screen {
-        case landpage
+    @objc
+    enum Screen: Int {
+        case landpage = 0
         case signIn
         case signUp
-//        case userProfile
     }
+    
     /// Screen presentation control.
     /// - Parameter screen: The screen to be allocated and presented.
+    @objc
     func coordinate(to screen: Screen) {
         mainQueueDispatch { [weak self] in
             guard let self = self else { return }
-            switch screen {
-            case .landpage: self.deploy(self.landpageController)
-            case .signIn: self.deploy(self.signInController)
-            case .signUp: self.deploy(self.signUpController)
-//            case .userProfile: self.deploy(self.userProfileController)
-            }
+            self.deploy(screen)
         }
     }
 }

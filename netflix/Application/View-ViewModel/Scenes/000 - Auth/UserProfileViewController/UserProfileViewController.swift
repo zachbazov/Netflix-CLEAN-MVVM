@@ -52,7 +52,6 @@ final class UserProfileViewController: Controller<UserProfileViewModel> {
     @objc
     func editDidTap() {
         let authService = Application.app.services.authentication
-        let coordinator = Application.app.coordinator
         
         if #available(iOS 13, *) {
             Task {
@@ -62,7 +61,7 @@ final class UserProfileViewController: Controller<UserProfileViewModel> {
                 
                 guard status else { return }
                 
-                mainQueueDispatch { coordinator.coordinate(to: .auth) }
+                didFinish()
             }
             
             return
@@ -70,29 +69,29 @@ final class UserProfileViewController: Controller<UserProfileViewModel> {
         
         authService.signOut()
         
-        mainQueueDispatch { coordinator.coordinate(to: .auth) }
+        didFinish()
     }
 }
 
 // MARK: - ViewControllerProtocol Implementation
 
 extension UserProfileViewController: ViewControllerProtocol {
-//    func present() {
-//        guard let navigationController = navigationController else { return }
-//
-//        navigationController.view.alpha = .zero
-//        navigationController.view.transform = CGAffineTransform(translationX: navigationController.view.bounds.width, y: .zero)
-//
-//        UIView.animate(
-//            withDuration: 0.25,
-//            delay: 0,
-//            options: .curveEaseInOut,
-//            animations: {
-//                navigationController.view.transform = .identity
-//                navigationController.view.alpha = 1.0
-//            }
-//        )
-//    }
+    func present() {
+        guard let navigationController = navigationController else { return }
+
+        navigationController.view.alpha = .zero
+        navigationController.view.transform = CGAffineTransform(translationX: navigationController.view.bounds.width, y: .zero)
+
+        UIView.animate(
+            withDuration: 0.25,
+            delay: 0,
+            options: .curveEaseInOut,
+            animations: {
+                navigationController.view.transform = .identity
+                navigationController.view.alpha = 1.0
+            }
+        )
+    }
 //
 //    func didSelect() {
 //        guard let navigationController = navigationController else { return }
@@ -142,6 +141,13 @@ extension UserProfileViewController: ViewControllerProtocol {
         collectionView.delegate = self
         collectionView.dataSource = self
         collectionView.reloadData()
+    }
+    
+    fileprivate func didFinish() {
+        mainQueueDispatch {
+            let coordinator = Application.app.coordinator
+            coordinator.coordinate(to: .auth)
+        }
     }
 }
 

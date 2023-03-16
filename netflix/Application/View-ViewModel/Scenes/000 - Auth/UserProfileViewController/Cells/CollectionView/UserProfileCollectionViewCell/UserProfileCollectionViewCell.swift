@@ -10,7 +10,7 @@ import UIKit
 // MARK: - ViewProtocol Type
 
 private protocol ViewInput {
-    func viewDidConfigure(with viewModel: ProfileCollectionViewCellViewModel,
+    func viewDidConfigure(with viewModel: UserProfileCollectionViewCellViewModel,
                           at indexPath: IndexPath,
                           count: Int)
 }
@@ -32,7 +32,7 @@ final class UserProfileCollectionViewCell: UICollectionViewCell {
             withReuseIdentifier: UserProfileCollectionViewCell.reuseIdentifier,
             for: indexPath) as? UserProfileCollectionViewCell else { fatalError() }
         let model = viewModel.profiles[indexPath.row]
-        let cellViewModel = ProfileCollectionViewCellViewModel(with: model)
+        let cellViewModel = UserProfileCollectionViewCellViewModel(with: model)
         cell.viewDidConfigure()
         cell.viewDidConfigure(with: cellViewModel, at: indexPath, count: viewModel.profiles.count)
         return cell
@@ -50,7 +50,7 @@ extension UserProfileCollectionViewCell: ViewLifecycleBehavior {}
 // MARK: - ViewProtocol Implementation
 
 extension UserProfileCollectionViewCell: ViewProtocol {
-    fileprivate func viewDidConfigure(with viewModel: ProfileCollectionViewCellViewModel,
+    fileprivate func viewDidConfigure(with viewModel: UserProfileCollectionViewCellViewModel,
                                       at indexPath: IndexPath,
                                       count: Int) {
         guard indexPath.row == count - 1 else {

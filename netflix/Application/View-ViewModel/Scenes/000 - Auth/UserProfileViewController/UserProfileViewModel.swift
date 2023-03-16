@@ -96,8 +96,6 @@ extension UserProfileViewModel {
         
         self.profiles = profiles
         
-        print(user.name, profiles)
-        
         let addProfile = UserProfile(_id: "", name: "Add Profile", image: "plus", active: false, user: user._id!)
         
         self.profiles.append(addProfile)
