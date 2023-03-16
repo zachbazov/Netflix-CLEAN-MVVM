@@ -11,13 +11,13 @@ import Foundation
 
 @objc
 public final class UserProfileDTO: NSObject, Codable, NSSecureCoding {
-    let _id: String
+    var _id: String? = nil
     let name: String
     let image: String
     var active: Bool
     let user: String
     
-    init(_id: String, name: String, image: String, active: Bool, user: String) {
+    init(_id: String? = nil, name: String, image: String, active: Bool, user: String) {
         self._id = _id
         self.name = name
         self.image = image
@@ -50,7 +50,10 @@ public final class UserProfileDTO: NSObject, Codable, NSSecureCoding {
 
 extension UserProfileDTO {
     func toDomain() -> UserProfile {
-        return .init(_id: _id, name: name, image: image, active: active, user: user)
+        guard let id = _id else {
+            return .init(name: name, image: image, active: active, user: user)
+        }
+        return .init(_id: id, name: name, image: image, active: active, user: user)
     }
 }
 

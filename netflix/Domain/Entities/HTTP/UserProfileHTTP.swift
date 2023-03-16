@@ -10,13 +10,27 @@ import Foundation
 // MARK: - UserProfileHTTP Type
 
 struct UserProfileHTTP {
-    struct Request {
-        let user: User
+    struct GET: HTTP {
+        struct Request {
+            let user: User
+        }
+        
+        struct Response {
+            let status: String
+            let results: Int
+            let data: [UserProfile]
+        }
     }
     
-    struct Response {
-        let status: String
-        let results: Int
-        let data: [UserProfile]
+    struct POST: HTTP {
+        struct Request {
+            let user: User
+            let profile: UserProfile
+        }
+        
+        struct Response {
+            let status: String
+            let data: UserProfile
+        }
     }
 }

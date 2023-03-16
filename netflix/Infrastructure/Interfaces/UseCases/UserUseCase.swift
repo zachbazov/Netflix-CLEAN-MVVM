@@ -44,10 +44,14 @@ extension UserUseCase: UseCase {
             // Perform a sign-out task.
             let completion = completion as? ((Result<Void, DataTransferError>) -> Void) ?? { _ in }
             return repository.signOut(completion: completion)
-        case is UserProfileHTTPDTO.Response.Type:
-            guard let request = request as? UserProfileHTTPDTO.Request else { return nil }
-            let completion = completion as? ((Result<UserProfileHTTPDTO.Response, DataTransferError>) -> Void) ?? { _ in }
+        case is UserProfileHTTPDTO.GET.Response.Type:
+            guard let request = request as? UserProfileHTTPDTO.GET.Request else { return nil }
+            let completion = completion as? ((Result<UserProfileHTTPDTO.GET.Response, DataTransferError>) -> Void) ?? { _ in }
             return repository.getUserProfiles(request: request, completion: completion)
+        case is UserProfileHTTPDTO.POST.Response.Type:
+            guard let request = request as? UserProfileHTTPDTO.POST.Request else { return nil }
+            let completion = completion as? ((Result<UserProfileHTTPDTO.POST.Response, DataTransferError>) -> Void) ?? { _ in }
+            return repository.createUserProfile(request: request, completion: completion)
         default: return nil
         }
     }
@@ -63,9 +67,12 @@ extension UserUseCase: UseCase {
         case is VoidHTTP.Response.Type:
             guard let request = request as? UserHTTPDTO.Request else { return nil }
             return await repository.signOut(request: request) as? T
-        case is UserProfileHTTPDTO.Response.Type:
-            guard let request = request as? UserProfileHTTPDTO.Request else { return nil }
+        case is UserProfileHTTPDTO.GET.Response.Type:
+            guard let request = request as? UserProfileHTTPDTO.GET.Request else { return nil }
             return await repository.getUserProfiles(request: request) as? T
+        case is UserProfileHTTPDTO.POST.Response.Type:
+            guard let request = request as? UserProfileHTTPDTO.POST.Request else { return nil }
+            return await repository.createUserProfile(request: request) as? T
         default: return nil
         }
     }

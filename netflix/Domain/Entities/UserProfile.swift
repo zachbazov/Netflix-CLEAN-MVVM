@@ -10,7 +10,7 @@ import Foundation
 // MARK: - UserProfile Type
 
 struct UserProfile {
-    let _id: String
+    var _id: String? = nil
     let name: String
     let image: String
     var active: Bool

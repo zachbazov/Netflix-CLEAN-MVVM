@@ -46,11 +46,19 @@ extension APIEndpoint: AuthRepositoryEndpoints {
     
     
     
-    static func getMyUserProfiles(with request: UserProfileHTTPDTO.Request) -> Endpoint<UserProfileHTTPDTO.Response> {
+    static func getMyUserProfiles(with request: UserProfileHTTPDTO.GET.Request) -> Endpoint<UserProfileHTTPDTO.GET.Response> {
         return Endpoint(path: "api/v1/users/profiles",
                         method: .get,
                         headerParameters: ["content-type": "application/json"],
                         queryParameters: ["user": request.user._id ?? ""])
+    }
+    
+    static func createUserProfile(with request: UserProfileHTTPDTO.POST.Request) -> Endpoint<UserProfileHTTPDTO.POST.Response> {
+        return Endpoint(path: "api/v1/users/profiles",
+                        method: .post,
+                        headerParameters: ["content-type": "application/json"],
+                        queryParameters: ["user": request.user._id ?? ""],
+                        bodyParameters: ["name": request.profile.name])
     }
 }
 

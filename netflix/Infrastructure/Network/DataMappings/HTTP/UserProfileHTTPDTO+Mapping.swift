@@ -9,28 +9,54 @@ import Foundation
 
 // MARK: - UserProfileHTTPDTO Type
 
-struct UserProfileHTTPDTO: HTTP {
-    struct Request: Decodable {
-        let user: UserDTO
+struct UserProfileHTTPDTO {
+    struct GET: HTTP {
+        struct Request: Decodable {
+            let user: UserDTO
+        }
+        
+        struct Response: Decodable {
+            let status: String
+            let results: Int
+            let data: [UserProfileDTO]
+        }
     }
     
-    struct Response: Decodable {
-        let status: String
-        let results: Int
-        let data: [UserProfileDTO]
+    struct POST: HTTP {
+        struct Request: Decodable {
+            let user: UserDTO
+            let profile: UserProfileDTO
+        }
+        
+        struct Response: Decodable {
+            let status: String
+            let data: UserProfileDTO
+        }
     }
 }
 
 // MARK: - Mappings
 
-extension UserProfileHTTPDTO.Request {
-    func toDomain() -> UserProfileHTTP.Request {
+extension UserProfileHTTPDTO.GET.Request {
+    func toDomain() -> UserProfileHTTP.GET.Request {
         return .init(user: user.toDomain())
     }
 }
 
-extension UserProfileHTTPDTO.Response {
-    func toDomain() -> UserProfileHTTP.Response {
+extension UserProfileHTTPDTO.GET.Response {
+    func toDomain() -> UserProfileHTTP.GET.Response {
         return .init(status: status, results: results, data: data.toDomain())
+    }
+}
+
+extension UserProfileHTTPDTO.POST.Request {
+    func toDomain() -> UserProfileHTTP.POST.Request {
+        return .init(user: user.toDomain(), profile: profile.toDomain())
+    }
+}
+
+extension UserProfileHTTPDTO.POST.Response {
+    func toDomain() -> UserProfileHTTP.POST.Response {
+        return .init(status: status, data: data.toDomain())
     }
 }

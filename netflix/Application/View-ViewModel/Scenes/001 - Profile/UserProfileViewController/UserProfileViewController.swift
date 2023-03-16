@@ -11,6 +11,7 @@ import UIKit
 
 private protocol ViewControllerOutput {
     var collectionView: UICollectionView { get }
+    var dataSource: UserProfileCollectionViewDataSource { get }
     
     func present()
     
@@ -66,8 +67,7 @@ extension UserProfileViewController: ViewControllerProtocol {
             animations: {
                 navigationController.view.transform = .identity
                 navigationController.view.alpha = 1.0
-            }
-        )
+            })
     }
     
     fileprivate func createCollectionView() -> UICollectionView {
@@ -108,13 +108,6 @@ extension UserProfileViewController: ViewControllerProtocol {
         guard let coordinator = viewModel?.coordinator else { return }
         coordinator.coordinate(to: .editProfile)
     }
-    
-    fileprivate func didFinish() {
-        mainQueueDispatch {
-            let coordinator = Application.app.coordinator
-            coordinator.coordinate(to: .auth)
-        }
-    }
 }
 
 // MARK: - Private UI Implementation
@@ -133,27 +126,3 @@ extension UserProfileViewController {
         ])
     }
 }
-
-
-
-/*
- let authService = Application.app.services.authentication
- 
- if #available(iOS 13, *) {
-     Task {
-         guard let user = authService.user else { return }
-         let request = UserHTTPDTO.Request(user: user)
-         let status = await authService.signOut(with: request)
-         
-         guard status else { return }
-         
-         didFinish()
-     }
-     
-     return
- }
- 
- authService.signOut()
- 
- didFinish()
- */
