@@ -31,6 +31,7 @@ final class UserProfileViewController: Controller<ProfileViewModel> {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        super.viewDidLoadBehaviors()
         viewDidDeploySubviews()
         viewModel.viewDidLoad()
     }
@@ -42,8 +43,9 @@ final class UserProfileViewController: Controller<ProfileViewModel> {
     
     override func viewDidDeploySubviews() {
         title = "Who's Watching?"
-        navigationItem.rightBarButtonItem = .init(barButtonSystemItem: .edit, target: self, action: #selector(editDidTap))
-        
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .edit,
+                                                            target: self,
+                                                            action: #selector(editDidTap))
         setupCollectionView()
     }
 }
@@ -72,6 +74,7 @@ extension UserProfileViewController: ViewControllerProtocol {
         let collectionView = UICollectionView(frame: view.bounds, collectionViewLayout: createLayout())
         collectionView.showsVerticalScrollIndicator = false
         collectionView.showsHorizontalScrollIndicator = false
+        collectionView.isScrollEnabled = false
         collectionView.register(UserProfileCollectionViewCell.nib,
                                 forCellWithReuseIdentifier: UserProfileCollectionViewCell.reuseIdentifier)
         return collectionView
@@ -84,10 +87,12 @@ extension UserProfileViewController: ViewControllerProtocol {
     fileprivate func createLayout() -> UICollectionViewCompositionalLayout {
         let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(0.49),
                                               heightDimension: .fractionalHeight(1.0))
+        
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
         
         let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
                                                heightDimension: .fractionalWidth(0.53))
+        
         let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
         
         let section = NSCollectionLayoutSection(group: group)
@@ -100,25 +105,8 @@ extension UserProfileViewController: ViewControllerProtocol {
     
     @objc
     fileprivate func editDidTap() {
-        let authService = Application.app.services.authentication
-        
-        if #available(iOS 13, *) {
-            Task {
-                guard let user = authService.user else { return }
-                let request = UserHTTPDTO.Request(user: user)
-                let status = await authService.signOut(with: request)
-                
-                guard status else { return }
-                
-                didFinish()
-            }
-            
-            return
-        }
-        
-        authService.signOut()
-        
-        didFinish()
+        guard let coordinator = viewModel?.coordinator else { return }
+        coordinator.coordinate(to: .editProfile)
     }
     
     fileprivate func didFinish() {
@@ -145,3 +133,27 @@ extension UserProfileViewController {
         ])
     }
 }
+
+
+
+/*
+ let authService = Application.app.services.authentication
+ 
+ if #available(iOS 13, *) {
+     Task {
+         guard let user = authService.user else { return }
+         let request = UserHTTPDTO.Request(user: user)
+         let status = await authService.signOut(with: request)
+         
+         guard status else { return }
+         
+         didFinish()
+     }
+     
+     return
+ }
+ 
+ authService.signOut()
+ 
+ didFinish()
+ */

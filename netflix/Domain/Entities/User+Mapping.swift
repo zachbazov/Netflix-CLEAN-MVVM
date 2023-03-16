@@ -20,6 +20,7 @@ struct User {
     var token: String?
     var mylist: [String]?
     var profiles: [String]?
+    var selectedProfile: String?
 }
 
 // MARK: - Mapping
@@ -35,6 +36,7 @@ extension User {
                      active: active,
                      token: token,
                      mylist: mylist,
-                     profiles: profiles)
+                     profiles: profiles,
+                     selectedProfile: selectedProfile)
     }
 }

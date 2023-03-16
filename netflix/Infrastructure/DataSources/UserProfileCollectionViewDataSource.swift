@@ -13,6 +13,8 @@ final class UserProfileCollectionViewDataSource: NSObject, UICollectionViewDeleg
     private weak var collectionView: UICollectionView?
     private let viewModel: ProfileViewModel
     
+    private let numOfSections: Int = 1
+    
     init(for collectionView: UICollectionView, with viewModel: ProfileViewModel) {
         self.collectionView = collectionView
         self.viewModel = viewModel
@@ -26,7 +28,7 @@ final class UserProfileCollectionViewDataSource: NSObject, UICollectionViewDeleg
     }
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return 1
+        return numOfSections
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -35,5 +37,14 @@ final class UserProfileCollectionViewDataSource: NSObject, UICollectionViewDeleg
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         return UserProfileCollectionViewCell.create(in: collectionView, at: indexPath, with: viewModel)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        cell.opacityAnimation()
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        guard let cell = collectionView.cellForItem(at: indexPath) as? UserProfileCollectionViewCell else { return }
+        cell.didSelect()
     }
 }

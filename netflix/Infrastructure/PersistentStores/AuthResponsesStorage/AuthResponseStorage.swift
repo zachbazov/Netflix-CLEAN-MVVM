@@ -71,6 +71,8 @@ extension AuthResponseStorage {
         request.user.active = response.data?.active
         request.user.mylist = response.data?.mylist
         request.user.token = response.token
+        request.user.profiles = response.data?.profiles
+        request.user.selectedProfile = response.data?.selectedProfile
         
         requestEntity.response = responseEntity
         requestEntity.user = request.user

@@ -21,6 +21,7 @@ public final class UserDTO: NSObject, Codable, NSSecureCoding {
     var token: String?
     var mylist: [String]?
     var profiles: [String]?
+    var selectedProfile: String?
     
     init(_id: String? = nil,
          name: String? = nil,
@@ -31,7 +32,8 @@ public final class UserDTO: NSObject, Codable, NSSecureCoding {
          active: Bool? = nil,
          token: String? = nil,
          mylist: [String]? = [],
-         profiles: [String]? = []) {
+         profiles: [String]? = [],
+         selectedProfile: String? = nil) {
         self._id = _id
         self.name = name
         self.email = email
@@ -42,6 +44,7 @@ public final class UserDTO: NSObject, Codable, NSSecureCoding {
         self.token = token
         self.mylist = mylist
         self.profiles = profiles
+        self.selectedProfile = selectedProfile
     }
     
     // MARK: NSSecureCoding Implementation
@@ -59,6 +62,7 @@ public final class UserDTO: NSObject, Codable, NSSecureCoding {
         coder.encode(token, forKey: "token")
         coder.encode(mylist, forKey: "mylist")
         coder.encode(profiles, forKey: "profiles")
+        coder.encode(selectedProfile, forKey: "selectedProfile")
     }
     
     public required init?(coder: NSCoder) {
@@ -72,6 +76,7 @@ public final class UserDTO: NSObject, Codable, NSSecureCoding {
         self.token = coder.decodeObject(of: [UserDTO.self, NSString.self], forKey: "token") as? String
         self.mylist = coder.decodeObject(of: [UserDTO.self, NSArray.self, NSString.self], forKey: "mylist") as? [String]
         self.profiles = coder.decodeObject(of: [UserDTO.self, NSArray.self, NSString.self], forKey: "profiles") as? [String]
+        self.selectedProfile = coder.decodeObject(of: [UserDTO.self, NSString.self], forKey: "selectedProfile") as? String
     }
 }
 
@@ -88,6 +93,7 @@ extension UserDTO {
                      active: active,
                      token: token,
                      mylist: mylist,
-                     profiles: profiles)
+                     profiles: profiles,
+                     selectedProfile: selectedProfile)
     }
 }

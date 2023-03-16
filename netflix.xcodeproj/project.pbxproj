@@ -65,6 +65,10 @@
 		A14E0CF429C330A100F55500 /* UserProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A14E0CF329C330A100F55500 /* UserProfileViewController.swift */; };
 		A14E0CF629C337A800F55500 /* UserProfileCollectionViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = A14E0CF529C337A800F55500 /* UserProfileCollectionViewDataSource.swift */; };
 		A14E0CF829C3387D00F55500 /* NSDirectionalEdgeInsets+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A14E0CF729C3387D00F55500 /* NSDirectionalEdgeInsets+Extension.swift */; };
+		A14E0CFB29C34F4A00F55500 /* AddUserProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A14E0CFA29C34F4A00F55500 /* AddUserProfileViewController.swift */; };
+		A14E0CFD29C34F5900F55500 /* AddUserProfileViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = A14E0CFC29C34F5900F55500 /* AddUserProfileViewController.xib */; };
+		A14E0D0029C35E2A00F55500 /* EditUserProfileViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = A14E0CFF29C35E2A00F55500 /* EditUserProfileViewController.xib */; };
+		A14E0D0229C35E3000F55500 /* EditUserProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A14E0D0129C35E3000F55500 /* EditUserProfileViewController.swift */; };
 		A1741D0928E679A400F3C46B /* DetailInfoTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1741D0828E679A400F3C46B /* DetailInfoTableViewCell.swift */; };
 		A1741D0B28E679A900F3C46B /* DetailDescriptionTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1741D0A28E679A800F3C46B /* DetailDescriptionTableViewCell.swift */; };
 		A1741D0D28E679AE00F3C46B /* DetailPanelTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1741D0C28E679AE00F3C46B /* DetailPanelTableViewCell.swift */; };
@@ -378,6 +382,10 @@
 		A14E0CF329C330A100F55500 /* UserProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileViewController.swift; sourceTree = "<group>"; };
 		A14E0CF529C337A800F55500 /* UserProfileCollectionViewDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileCollectionViewDataSource.swift; sourceTree = "<group>"; };
 		A14E0CF729C3387D00F55500 /* NSDirectionalEdgeInsets+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSDirectionalEdgeInsets+Extension.swift"; sourceTree = "<group>"; };
+		A14E0CFA29C34F4A00F55500 /* AddUserProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddUserProfileViewController.swift; sourceTree = "<group>"; };
+		A14E0CFC29C34F5900F55500 /* AddUserProfileViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = AddUserProfileViewController.xib; sourceTree = "<group>"; };
+		A14E0CFF29C35E2A00F55500 /* EditUserProfileViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = EditUserProfileViewController.xib; sourceTree = "<group>"; };
+		A14E0D0129C35E3000F55500 /* EditUserProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditUserProfileViewController.swift; sourceTree = "<group>"; };
 		A1741D0828E679A400F3C46B /* DetailInfoTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailInfoTableViewCell.swift; sourceTree = "<group>"; };
 		A1741D0A28E679A800F3C46B /* DetailDescriptionTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailDescriptionTableViewCell.swift; sourceTree = "<group>"; };
 		A1741D0C28E679AE00F3C46B /* DetailPanelTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailPanelTableViewCell.swift; sourceTree = "<group>"; };
@@ -833,6 +841,8 @@
 				A14E0CD829C08DCD00F55500 /* ProfileViewModel.swift */,
 				A14E0CDA29C08DD000F55500 /* ProfileViewController.swift */,
 				A14E0CF229C3306400F55500 /* UserProfileViewController */,
+				A14E0CF929C34F2700F55500 /* AddUserProfileViewController */,
+				A14E0CFE29C35DF300F55500 /* EditUserProfileViewController */,
 			);
 			path = "001 - Profile";
 			sourceTree = "<group>";
@@ -871,6 +881,24 @@
 				A14E0CE629C1297500F55500 /* Cells */,
 			);
 			path = UserProfileViewController;
+			sourceTree = "<group>";
+		};
+		A14E0CF929C34F2700F55500 /* AddUserProfileViewController */ = {
+			isa = PBXGroup;
+			children = (
+				A14E0CFA29C34F4A00F55500 /* AddUserProfileViewController.swift */,
+				A14E0CFC29C34F5900F55500 /* AddUserProfileViewController.xib */,
+			);
+			path = AddUserProfileViewController;
+			sourceTree = "<group>";
+		};
+		A14E0CFE29C35DF300F55500 /* EditUserProfileViewController */ = {
+			isa = PBXGroup;
+			children = (
+				A14E0D0129C35E3000F55500 /* EditUserProfileViewController.swift */,
+				A14E0CFF29C35E2A00F55500 /* EditUserProfileViewController.xib */,
+			);
+			path = EditUserProfileViewController;
 			sourceTree = "<group>";
 		};
 		A1741CFE28E6793700F3C46B /* Cells */ = {
@@ -2111,6 +2139,7 @@
 				A18B990828BEB62E0077A5A6 /* LaunchScreen.storyboard in Resources */,
 				A1B70A81293D8E7300C718C6 /* HomeViewController.xib in Resources */,
 				A1AD25A828D2A4E900F793B3 /* PanelView.xib in Resources */,
+				A14E0D0029C35E2A00F55500 /* EditUserProfileViewController.xib in Resources */,
 				A14E0CEC29C12A1D00F55500 /* UserProfileCollectionViewCell.xib in Resources */,
 				A1741D3428E6981B00F3C46B /* DetailNavigationView.xib in Resources */,
 				A130BCB129509CC70070EA5E /* SearchCollectionViewCell.xib in Resources */,
@@ -2127,6 +2156,7 @@
 				A130BCC4295115590070EA5E /* DownloadsView.xib in Resources */,
 				A14E0CBB29BB979F00F55500 /* ProfileCollectionViewCell.xib in Resources */,
 				A1B70A8E293E72D700C718C6 /* SignUpViewController.xib in Resources */,
+				A14E0CFD29C34F5900F55500 /* AddUserProfileViewController.xib in Resources */,
 				A1E81D3328CFF95300D044EA /* ResumableCollectionViewCell.xib in Resources */,
 				A130BCC9295115B40070EA5E /* DownloadsNavigationView.xib in Resources */,
 				A1B70A90293E762000C718C6 /* LandpageViewController.xib in Resources */,
@@ -2260,6 +2290,7 @@
 				A19956F4290F7F9900B7D655 /* ArraySlice+Extension.swift in Sources */,
 				A1AEB444299E15D20016DE2B /* TabController.swift in Sources */,
 				A1BA1DA728D8BA9F00730EA8 /* UIView+Animations.swift in Sources */,
+				A14E0D0229C35E3000F55500 /* EditUserProfileViewController.swift in Sources */,
 				A1A71AB2298B86E7001C6AB1 /* ListRepositoryEndpoints.swift in Sources */,
 				A1741D2428E67CEB00F3C46B /* DetailDescriptionView.swift in Sources */,
 				A1B70A96293E9FF600C718C6 /* Controller.swift in Sources */,
@@ -2268,6 +2299,7 @@
 				A1BA1DBD28DCB69100730EA8 /* NavigationOverlayTableViewCell.swift in Sources */,
 				A18691E628C936DE0087DE3B /* Valuable.swift in Sources */,
 				A1B93C7A28FF921000AF2C7F /* MediaResponseStorage.swift in Sources */,
+				A14E0CFB29C34F4A00F55500 /* AddUserProfileViewController.swift in Sources */,
 				A1AC9FA729A3617400DAD66D /* ViewLifecycleBehavior.swift in Sources */,
 				A18B993B28BFC9700077A5A6 /* BackButtonEmptyTitleNavigationBarBehavior.swift in Sources */,
 				A1741D4B28EC5B1B00F3C46B /* DetailNavigationViewItem.swift in Sources */,

@@ -16,9 +16,13 @@ private protocol CoordinatorInput {
 private protocol CoordinatorOutput {
     var navigationController: UINavigationController { get }
     var userProfileController: UserProfileViewController { get }
+    var addUserProfileController: AddUserProfileViewController { get }
+    var editUserProfileController: EditUserProfileViewController { get }
     
     func createNavigationController() -> UINavigationController
     func createUserProfileViewController() -> UserProfileViewController
+    func createAddUserProfileViewController() -> AddUserProfileViewController
+    func createEditUserProfileViewController() -> EditUserProfileViewController
 }
 
 private typealias CoordinatorProtocol = CoordinatorInput & CoordinatorOutput
@@ -30,6 +34,8 @@ final class ProfileCoordinator {
     
     fileprivate lazy var navigationController: UINavigationController = createNavigationController()
     fileprivate(set) lazy var userProfileController: UserProfileViewController = createUserProfileViewController()
+    fileprivate lazy var addUserProfileController: AddUserProfileViewController = createAddUserProfileViewController()
+    fileprivate lazy var editUserProfileController: EditUserProfileViewController = createEditUserProfileViewController()
 }
 
 // MARK: - CoordinatorProtocol Implementation
@@ -47,6 +53,18 @@ extension ProfileCoordinator: CoordinatorProtocol {
         return controller
     }
     
+    fileprivate func createAddUserProfileViewController() -> AddUserProfileViewController {
+        let controller = AddUserProfileViewController()
+        controller.viewModel = viewController?.viewModel
+        return controller
+    }
+    
+    fileprivate func createEditUserProfileViewController() -> EditUserProfileViewController {
+        let controller = EditUserProfileViewController()
+        controller.viewModel = viewController?.viewModel
+        return controller
+    }
+    
     fileprivate func deploy(_ screen: Screen) {
         switch screen {
         case .userProfile:
@@ -56,9 +74,9 @@ extension ProfileCoordinator: CoordinatorProtocol {
             
             userProfileController.present()
         case .addProfile:
-            break
+            navigationController.present(addUserProfileController, animated: true)
         case .editProfile:
-            break
+            navigationController.pushViewController(editUserProfileController, animated: true)
         }
     }
 }
