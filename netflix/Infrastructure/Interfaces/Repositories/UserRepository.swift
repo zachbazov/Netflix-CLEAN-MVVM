@@ -21,8 +21,10 @@ private protocol UserRepositoryInput {
     func signIn(request: UserHTTPDTO.Request) async -> UserHTTPDTO.Response?
     func signOut(request: UserHTTPDTO.Request) async -> VoidHTTP.Response?
     
-    func getMyUserProfiles(request: UserProfileHTTPDTO.Request,
-                           completion: @escaping (Result<UserProfileHTTPDTO.Response, DataTransferError>) -> Void) -> Cancellable?
+    func getUserProfiles(request: UserProfileHTTPDTO.Request,
+                         completion: @escaping (Result<UserProfileHTTPDTO.Response, DataTransferError>) -> Void) -> Cancellable?
+    
+    func getUserProfiles(request: UserProfileHTTPDTO.Request) async -> UserProfileHTTPDTO.Response?
 }
 
 private typealias UserRepositoryProtocol = UserRepositoryInput
@@ -106,8 +108,8 @@ extension UserRepository: UserRepositoryProtocol {
         return task
     }
     
-    func getMyUserProfiles(request: UserProfileHTTPDTO.Request,
-                           completion: @escaping (Result<UserProfileHTTPDTO.Response, DataTransferError>) -> Void) -> Cancellable? {
+    func getUserProfiles(request: UserProfileHTTPDTO.Request,
+                         completion: @escaping (Result<UserProfileHTTPDTO.Response, DataTransferError>) -> Void) -> Cancellable? {
         let task = RepositoryTask()
         
         guard !task.isCancelled else { return nil }
@@ -123,17 +125,6 @@ extension UserRepository: UserRepositoryProtocol {
         }
         
         return task
-    }
-    
-    func getMyUserProfiles(request: UserProfileHTTPDTO.Request) async -> UserProfileHTTPDTO.Response? {
-        let endpoint = APIEndpoint.getMyUserProfiles(with: request)
-        let result = await dataTransferService.request(with: endpoint)
-        
-        if case let .success(response) = result {
-            return response
-        }
-        
-        return nil
     }
     
     func signUp(request: UserHTTPDTO.Request) async -> UserHTTPDTO.Response? {
@@ -166,6 +157,17 @@ extension UserRepository: UserRepositoryProtocol {
     
     func signOut(request: UserHTTPDTO.Request) async -> VoidHTTP.Response? {
         guard let endpoint = APIEndpoint.signOut(with: request) else { return nil }
+        let result = await dataTransferService.request(with: endpoint)
+        
+        if case let .success(response) = result {
+            return response
+        }
+        
+        return nil
+    }
+    
+    func getUserProfiles(request: UserProfileHTTPDTO.Request) async -> UserProfileHTTPDTO.Response? {
+        let endpoint = APIEndpoint.getMyUserProfiles(with: request)
         let result = await dataTransferService.request(with: endpoint)
         
         if case let .success(response) = result {

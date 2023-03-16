@@ -1,5 +1,5 @@
 //
-//  UserProfileViewModel.swift
+//  ProfileViewModel.swift
 //  netflix
 //
 //  Created by Zach Bazov on 14/03/2023.
@@ -9,60 +9,42 @@ import Foundation
 
 // MARK: - ViewModelProtocol Type
 
-private protocol ViewModelInput {
-    
-}
-
 private protocol ViewModelOutput {
+    var userUseCase: UserUseCase { get }
     
+    var profiles: [UserProfile] { get }
+    
+    func getUserProfiles()
+    
+    func userProfilesDidLoad() async
+    
+    func didFinish()
 }
 
-private typealias ViewModelProtocol = ViewModelInput & ViewModelOutput
+private typealias ViewModelProtocol = ViewModelOutput
 
-// MARK: - UserProfileViewModel Type
+// MARK: - ProfileViewModel Type
 
-final class UserProfileViewModel {
-    var coordinator: UserProfileCoordinator?
+final class ProfileViewModel {
+    var coordinator: ProfileCoordinator?
     
     fileprivate lazy var userUseCase = UserUseCase()
     
     var profiles = [UserProfile]()
-    
+}
+
+// MARK: - ViewModel Implementation
+
+extension ProfileViewModel: ViewModel {
     func viewDidLoad() {
         loadData()
     }
 }
 
-// MARK: - ViewModel Implementation
-
-extension UserProfileViewModel: ViewModel {}
-
 // MARK: - ViewModelProtocol Implementation
 
-extension UserProfileViewModel: ViewModelProtocol {}
-
-// MARK: - Private UI Implementation
-
-extension UserProfileViewModel {
-    private func loadData() {
-        if #available(iOS 13.0, *) {
-            return awaitLoading()
-        }
-        
-        getMyUserProfiles()
-    }
-    
-    private func awaitLoading() {
-        let vc = coordinator?.viewController
-        
-        Task {
-            await myUserProfilesDidLoad()
-            
-            await vc?.dataSourceDidChange()
-        }
-    }
-    
-    private func getMyUserProfiles() {
+extension ProfileViewModel: ViewModelProtocol {
+    fileprivate func getUserProfiles() {
         let authService = Application.app.services.authentication
         
         guard let user = authService.user else { return }
@@ -84,7 +66,7 @@ extension UserProfileViewModel {
             })
     }
     
-    private func myUserProfilesDidLoad() async {
+    fileprivate func userProfilesDidLoad() async {
         let authService = Application.app.services.authentication
         
         guard let user = authService.user else { return }
@@ -99,5 +81,35 @@ extension UserProfileViewModel {
         let addProfile = UserProfile(_id: "", name: "Add Profile", image: "plus", active: false, user: user._id!)
         
         self.profiles.append(addProfile)
+    }
+    
+    fileprivate func didFinish() {
+        mainQueueDispatch { [weak self] in
+            guard let self = self else { return }
+            guard let dataSource = self.coordinator?.userProfileController.dataSource else { return }
+            dataSource.dataSourceDidChange()
+        }
+    }
+}
+
+// MARK: - Private UI Implementation
+
+extension ProfileViewModel {
+    private func loadData() {
+        if #available(iOS 13.0, *) {
+            return awaitLoading()
+        }
+        
+        getUserProfiles()
+        
+        didFinish()
+    }
+    
+    private func awaitLoading() {
+        Task {
+            await userProfilesDidLoad()
+            
+            didFinish()
+        }
     }
 }

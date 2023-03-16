@@ -47,7 +47,7 @@ extension UserUseCase: UseCase {
         case is UserProfileHTTPDTO.Response.Type:
             guard let request = request as? UserProfileHTTPDTO.Request else { return nil }
             let completion = completion as? ((Result<UserProfileHTTPDTO.Response, DataTransferError>) -> Void) ?? { _ in }
-            return repository.getMyUserProfiles(request: request, completion: completion)
+            return repository.getUserProfiles(request: request, completion: completion)
         default: return nil
         }
     }
@@ -65,7 +65,7 @@ extension UserUseCase: UseCase {
             return await repository.signOut(request: request) as? T
         case is UserProfileHTTPDTO.Response.Type:
             guard let request = request as? UserProfileHTTPDTO.Request else { return nil }
-            return await repository.getMyUserProfiles(request: request) as? T
+            return await repository.getUserProfiles(request: request) as? T
         default: return nil
         }
     }

@@ -104,7 +104,7 @@ extension SignInViewModel: ViewModelProtocol {
             }
             
             let coordinator = Application.app.coordinator
-            coordinator.coordinate(to: .userProfile)
+            coordinator.coordinate(to: .profile)
         }
     }
 }

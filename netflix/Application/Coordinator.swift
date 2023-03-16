@@ -18,11 +18,11 @@ private protocol CoordinatorOutput {
     var window: UIWindow? { get }
     
     var authCoordinator: AuthCoordinator { get }
-    var profileCoordinator: UserProfileCoordinator { get }
+    var profileCoordinator: ProfileCoordinator { get }
     var tabCoordinator: TabBarCoordinator { get }
     
     func createAuthController() -> AuthController
-    func createUserProfileController() -> UINavigationController
+    func createProfileController() -> ProfileViewController
     func createTabBarController() -> TabBarController
 }
 
@@ -35,7 +35,7 @@ final class Coordinator {
     weak var window: UIWindow? { didSet { viewController = window?.rootViewController } }
     
     fileprivate(set) lazy var authCoordinator = AuthCoordinator()
-    fileprivate(set) lazy var profileCoordinator = UserProfileCoordinator()
+    fileprivate(set) lazy var profileCoordinator = ProfileCoordinator()
     fileprivate(set) lazy var tabCoordinator = TabBarCoordinator()
 }
 
@@ -53,16 +53,13 @@ extension Coordinator: CoordinatorProtocol {
     }
     
     /// Allocating and presenting the user profile selection screen.
-    fileprivate func createUserProfileController() -> UINavigationController {
-        let controller = UserProfileViewController()
-        let viewModel = UserProfileViewModel()
+    fileprivate func createProfileController() -> ProfileViewController {
+        let controller = ProfileViewController()
+        let viewModel = ProfileViewModel()
         profileCoordinator.viewController = controller
         viewModel.coordinator = profileCoordinator
         controller.viewModel = viewModel
-        
-        let navigation = UINavigationController(rootViewController: controller)
-        navigation.setNavigationBarHidden(false, animated: false)
-        return navigation
+        return controller
     }
     
     /// Allocating and presenting the tab bar screen.
@@ -79,8 +76,8 @@ extension Coordinator: CoordinatorProtocol {
         switch screen {
         case .auth:
             authCoordinator.coordinate(to: .landpage)
-        case .userProfile:
-            break
+        case .profile:
+            profileCoordinator.coordinate(to: .userProfile)
         case .tabBar:
             tabCoordinator.coordinate(to: .home)
         }
@@ -93,7 +90,7 @@ extension Coordinator: Coordinate {
     /// View representation type.
     enum Screen {
         case auth
-        case userProfile
+        case profile
         case tabBar
     }
     
@@ -105,8 +102,8 @@ extension Coordinator: Coordinate {
         switch screen {
         case .auth:
             controller = createAuthController()
-        case .userProfile:
-            controller = createUserProfileController()
+        case .profile:
+            controller = createProfileController()
         case .tabBar:
             controller = createTabBarController()
         }

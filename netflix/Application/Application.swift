@@ -70,7 +70,7 @@ extension Application: ApplicationProtocol {
         }
         
         mainQueueDispatch { [weak self] in
-            self?.coordinator.coordinate(to: .userProfile)
+            self?.coordinator.coordinate(to: .profile)
         }
     }
     /// Allocate a root view controller for the window.

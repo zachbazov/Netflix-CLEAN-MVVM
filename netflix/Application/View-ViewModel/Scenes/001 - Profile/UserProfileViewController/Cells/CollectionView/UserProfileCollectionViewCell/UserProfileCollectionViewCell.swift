@@ -27,7 +27,7 @@ final class UserProfileCollectionViewCell: UICollectionViewCell {
     
     static func create(in collectionView: UICollectionView,
                        at indexPath: IndexPath,
-                       with viewModel: UserProfileViewModel) -> UserProfileCollectionViewCell {
+                       with viewModel: ProfileViewModel) -> UserProfileCollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(
             withReuseIdentifier: UserProfileCollectionViewCell.reuseIdentifier,
             for: indexPath) as? UserProfileCollectionViewCell else { fatalError() }
