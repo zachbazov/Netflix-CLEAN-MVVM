@@ -12,5 +12,6 @@ import Foundation
 struct VoidHTTP {
     struct Response: Decodable {
         let status: String
+        let message: String?
     }
 }

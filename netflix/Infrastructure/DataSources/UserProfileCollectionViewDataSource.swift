@@ -15,6 +15,10 @@ final class UserProfileCollectionViewDataSource: NSObject, UICollectionViewDeleg
     
     private let numOfSections: Int = 1
     
+    deinit {
+        print("deinit \(String(describing: Self.self))")
+    }
+    
     init(for collectionView: UICollectionView, with viewModel: ProfileViewModel) {
         self.collectionView = collectionView
         self.viewModel = viewModel

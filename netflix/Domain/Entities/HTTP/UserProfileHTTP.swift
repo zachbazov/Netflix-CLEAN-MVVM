@@ -33,4 +33,15 @@ struct UserProfileHTTP {
             let data: UserProfile
         }
     }
+    
+    struct PATCH: HTTP {
+        struct Request {
+            let user: User
+        }
+        
+        struct Response {
+            let status: String
+            let data: UserProfile
+        }
+    }
 }

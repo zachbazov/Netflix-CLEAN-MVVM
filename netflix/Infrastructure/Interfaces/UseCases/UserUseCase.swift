@@ -31,19 +31,23 @@ extension UserUseCase: UseCase {
                        cached: ((T?) -> Void)?,
                        completion: ((Result<T, DataTransferError>) -> Void)?) -> Cancellable? {
         switch response {
-        case is UserHTTPDTO.Response.Type:
-            guard let request = request as? UserHTTPDTO.Request else { return nil }
-            let completion = completion as? ((Result<UserHTTPDTO.Response, DataTransferError>) -> Void) ?? { _ in }
+        case is UserHTTPDTO.POST.Response.Type:
+            guard let request = request as? UserHTTPDTO.POST.Request else { return nil }
+            let completion = completion as? ((Result<UserHTTPDTO.POST.Response, DataTransferError>) -> Void) ?? { _ in }
             // In case there is data in the storage, perform a sign-in task.
-            if let cached = cached as? ((UserHTTPDTO.Response?) -> Void) {
+            if let cached = cached as? ((UserHTTPDTO.POST.Response?) -> Void) {
                 return repository.signIn(request: request, cached: cached, completion: completion)
             }
             // In case there isn't, perform a sign-up task.
             return repository.signUp(request: request, completion: completion)
-        case is Void.Type:
+        case is VoidHTTP.Response.Type:
             // Perform a sign-out task.
-            let completion = completion as? ((Result<Void, DataTransferError>) -> Void) ?? { _ in }
+            let completion = completion as? ((Result<VoidHTTP.Response, DataTransferError>) -> Void) ?? { _ in }
             return repository.signOut(completion: completion)
+        case is UserHTTPDTO.PATCH.Response.Type:
+            guard let request = request as? UserHTTPDTO.PATCH.Request else { return nil }
+            let completion = completion as? ((Result<UserHTTPDTO.PATCH.Response, DataTransferError>) -> Void) ?? { _ in }
+            return repository.updateUserProfile(request: request, completion: completion)
         case is UserProfileHTTPDTO.GET.Response.Type:
             guard let request = request as? UserProfileHTTPDTO.GET.Request else { return nil }
             let completion = completion as? ((Result<UserProfileHTTPDTO.GET.Response, DataTransferError>) -> Void) ?? { _ in }
@@ -58,15 +62,18 @@ extension UserUseCase: UseCase {
     
     func request<T, U>(for response: T.Type, request: U) async -> T? where T: Decodable {
         switch response {
-        case is UserHTTPDTO.Response.Type:
-            guard let request = request as? UserHTTPDTO.Request else { return nil }
+        case is UserHTTPDTO.POST.Response.Type:
+            guard let request = request as? UserHTTPDTO.POST.Request else { return nil }
             guard request.user.passwordConfirm != nil else {
                 return await repository.signIn(request: request) as? T
             }
             return await repository.signUp(request: request) as? T
         case is VoidHTTP.Response.Type:
-            guard let request = request as? UserHTTPDTO.Request else { return nil }
+            guard let request = request as? UserHTTPDTO.GET.Request else { return nil }
             return await repository.signOut(request: request) as? T
+        case is UserHTTPDTO.PATCH.Response.Type:
+            guard let request = request as? UserHTTPDTO.PATCH.Request else { return nil }
+            return await repository.updateUserData(request: request) as? T
         case is UserProfileHTTPDTO.GET.Response.Type:
             guard let request = request as? UserProfileHTTPDTO.GET.Request else { return nil }
             return await repository.getUserProfiles(request: request) as? T

@@ -16,8 +16,12 @@ private protocol ViewModelOutput {
     var selectedProfile: UserProfile? { get }
     
     func getUserProfiles()
+    func createUserProfile()
+    func updateUserProfile(with profileId: String)
     
     func userProfilesDidLoad() async
+    func userProfileDidCreate() async
+    func userProfileDidUpdate(with profileId: String) async
     
     func didFinish()
 }
@@ -33,6 +37,10 @@ final class ProfileViewModel {
     
     var profiles = [UserProfile]()
     var selectedProfile: UserProfile?
+    
+    deinit {
+        print("deinit \(String(describing: Self.self))")
+    }
 }
 
 // MARK: - ViewModel Implementation
@@ -42,8 +50,8 @@ extension ProfileViewModel: ViewModel {
         loadData()
         
 //        Task {
-//            print("creating")
-//            await createUserProfile()
+//            print("updating")
+//            await userProfileDidUpdate()
 //        }
     }
 }
@@ -73,7 +81,7 @@ extension ProfileViewModel: ViewModelProtocol {
             })
     }
     
-    fileprivate func userProfilesDidLoad() async {
+    func userProfilesDidLoad() async {
         let authService = Application.app.services.authentication
         
         guard let user = authService.user else { return }
@@ -113,21 +121,101 @@ extension ProfileViewModel: ViewModelProtocol {
             })
     }
     
-    fileprivate func createUserProfile() async -> UserProfileHTTPDTO.POST.Response? {
+    fileprivate func userProfileDidCreate() async {
         let authService = Application.app.services.authentication
         
-        guard let user = authService.user else { return nil }
+        guard let user = authService.user else { return }
         
         let profile = UserProfileDTO(name: "test", image: "av-dark-green", active: false, user: user._id ?? "")
         let request = UserProfileHTTPDTO.POST.Request(user: user, profile: profile)
         
         let response = await userUseCase.request(for: UserProfileHTTPDTO.POST.Response.self, request: request)
         
-        guard let response = response else { return nil }
+        guard let response = response else { return }
         
         self.selectedProfile = response.data.toDomain()
+    }
+    
+    func updateUserProfile(with profileId: String) {
+        let authService = Application.app.services.authentication
         
-        return response
+        guard let user = authService.user else { return }
+        
+        let request = UserHTTPDTO.PATCH.Request(user: user, selectedProfile: profileId)
+        
+        userUseCase.repository.task = userUseCase.request(
+            for: UserHTTPDTO.PATCH.Response.self,
+            request: request,
+            cached: { _ in },
+            completion: { result in
+                switch result {
+                case .success:
+                    mainQueueDispatch {
+                        let coordinator = Application.app.coordinator
+                        coordinator.coordinate(to: .tabBar)
+                    }
+                case .failure(let error):
+                    printIfDebug(.error, "\(error)")
+                }
+            })
+    }
+    
+    func updateUserProfileForSigningOut(with profileId: String, completion: @escaping () -> Void) {
+        let authService = Application.app.services.authentication
+        
+        guard let user = authService.user else { return }
+        
+        let request = UserHTTPDTO.PATCH.Request(user: user, selectedProfile: profileId)
+        
+        userUseCase.repository.task = userUseCase.request(
+            for: UserHTTPDTO.PATCH.Response.self,
+            request: request,
+            cached: { _ in },
+            completion: { result in
+                switch result {
+                case .success:
+                    completion()
+                case .failure(let error):
+                    printIfDebug(.error, "\(error)")
+                }
+            })
+    }
+    
+    func updateUserProfileForSigningOut() async -> Bool {
+        let authService = Application.app.services.authentication
+        let authResponses = Application.app.stores.authResponses
+        
+        guard let user = authService.user else { return false }
+        
+        let request = UserHTTPDTO.PATCH.Request(user: user, selectedProfile: nil)
+        
+        let response = await userUseCase.request(for: UserHTTPDTO.PATCH.Response.self, request: request)
+        
+        guard let response = response else { return false }
+        
+        authResponses.save(response: response, for: request)
+        print("successSigningOutUserProfile")
+        return true
+    }
+    
+    func userProfileDidUpdate(with profileId: String) async {
+        let authService = Application.app.services.authentication
+        let authResponses = Application.app.stores.authResponses
+        
+        guard let user = authService.user else { return }
+        
+        let request = UserHTTPDTO.PATCH.Request(user: user, selectedProfile: profileId)
+        
+        let response = await userUseCase.request(for: UserHTTPDTO.PATCH.Response.self, request: request)
+        
+        guard let response = response else { return }
+        
+        authResponses.save(response: response, for: request)
+        
+        mainQueueDispatch {
+            let coordinator = Application.app.coordinator
+            coordinator.coordinate(to: .tabBar)
+        }
     }
     
     fileprivate func didFinish() {

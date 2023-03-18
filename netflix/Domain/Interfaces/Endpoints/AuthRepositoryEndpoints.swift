@@ -10,7 +10,7 @@ import Foundation
 // MARK: - AuthRepositoryEndpoints Type
 
 protocol AuthRepositoryEndpoints {
-    static func signUp(with requestDTO: UserHTTPDTO.Request) -> Endpoint<UserHTTPDTO.Response>
-    static func signIn(with requestDTO: UserHTTPDTO.Request) -> Endpoint<UserHTTPDTO.Response>
-    static func signOut(with request: UserHTTPDTO.Request) -> Endpoint<Void>?
+    static func signUp(with requestDTO: UserHTTPDTO.POST.Request) -> Endpoint<UserHTTPDTO.POST.Response>
+    static func signIn(with requestDTO: UserHTTPDTO.POST.Request) -> Endpoint<UserHTTPDTO.POST.Response>
+    static func signOut(with request: UserHTTPDTO.GET.Request) -> Endpoint<VoidHTTP.Response>?
 }

@@ -26,6 +26,10 @@ final class AccountMenuTableViewDataSource: NSObject, UITableViewDelegate, UITab
     
     fileprivate let reusableViewPointSize: CGFloat = 1.0
     
+    deinit {
+        print("deinit \(String(describing: Self.self))")
+    }
+    
     init(with viewModel: AccountViewModel) {
         self.viewModel = viewModel
         super.init()

@@ -10,7 +10,7 @@ import Foundation
 // MARK: - ViewModelProtocol Type
 
 private protocol ViewModelInput {
-    func didFinish(with status: Bool)
+    func didFinish(with status: Bool, _ user: UserDTO)
 }
 
 private protocol ViewModelOutput {
@@ -71,24 +71,26 @@ extension SignInViewModel: ViewModelProtocol {
         ActivityIndicatorView.viewDidShow()
         
         let userDTO = UserDTO(email: email, password: password)
-        let requestDTO = UserHTTPDTO.Request(user: userDTO)
+        let requestDTO = UserHTTPDTO.POST.Request(user: userDTO)
         
         if #available(iOS 13.0, *) {
             Task {
-                let status = await authService.signIn(with: requestDTO)
+                let response = await authService.signIn(with: requestDTO)
                 
-                didFinish(with: status)
+                guard let status = response?.status == "success" ? true : false, let user = response?.data else { return }
+                
+                didFinish(with: status, user)
             }
             
             return
         }
         
         authService.signIn(for: requestDTO) { [weak self] status in
-            self?.didFinish(with: status)
+//            self?.didFinish(with: status)
         }
     }
     
-    fileprivate func didFinish(with status: Bool) {
+    fileprivate func didFinish(with status: Bool, _ user: UserDTO) {
         ActivityIndicatorView.viewDidHide()
         
         mainQueueDispatch { [weak self] in
@@ -103,8 +105,14 @@ extension SignInViewModel: ViewModelProtocol {
                 return
             }
             
+            guard let selectedProfile = user.selectedProfile, selectedProfile.isNotEmpty else {
+                let coordinator = Application.app.coordinator
+                coordinator.coordinate(to: .profile)
+                return
+            }
+            
             let coordinator = Application.app.coordinator
-            coordinator.coordinate(to: .profile)
+            coordinator.coordinate(to: .tabBar)
         }
     }
 }

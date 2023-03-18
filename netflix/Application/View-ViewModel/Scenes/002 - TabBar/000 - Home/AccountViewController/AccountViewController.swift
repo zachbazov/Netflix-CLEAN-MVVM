@@ -20,10 +20,12 @@ final class AccountViewController: Controller<AccountViewModel> {
     
     private(set) lazy var collectionView: UICollectionView = createCollectionView()
     
-    private var profileDataSource: ProfileCollectionViewDataSource?
+    private(set) var profileDataSource: ProfileCollectionViewDataSource?
     private var accountMenuDataSource: AccountMenuTableViewDataSource?
     
     deinit {
+        print("deinit \(String(describing: Self.self))")
+        viewDidUnbindObservers()
         profileDataSource = nil
         accountMenuDataSource = nil
     }
@@ -33,6 +35,8 @@ final class AccountViewController: Controller<AccountViewModel> {
         super.viewDidLoadBehaviors()
         viewDidDeploySubviews()
         viewDidTargetSubviews()
+        viewDidBindObservers()
+        viewModel.viewDidLoad()
     }
     
     override func viewDidDeploySubviews() {
@@ -43,6 +47,16 @@ final class AccountViewController: Controller<AccountViewModel> {
     override func viewDidTargetSubviews() {
         backButton.addTarget(self, action: #selector(backButtonDidTap), for: .touchUpInside)
         signOutButton.addTarget(self, action: #selector(signOutDidTap), for: .touchUpInside)
+    }
+    
+    override func viewDidBindObservers() {
+        viewModel.profiles.observe(on: self) { [weak self] _ in self?.profileDataSource?.dataSourceDidChange() }
+    }
+    
+    override func viewDidUnbindObservers() {
+        guard let viewModel = viewModel else { return }
+        viewModel.profiles.remove(observer: self)
+        printIfDebug(.debug, "Removed `AccountViewModel` observers.")
     }
     
     func present() {
@@ -91,10 +105,12 @@ final class AccountViewController: Controller<AccountViewModel> {
         if #available(iOS 13, *) {
             Task {
                 guard let user = authService.user else { return }
-                let request = UserHTTPDTO.Request(user: user)
+                let request = UserHTTPDTO.GET.Request(user: user)
                 let status = await authService.signOut(with: request)
-                
+                print(status, user.toDomain())
                 guard status else { return }
+                
+                backButtonDidTap()
                 
                 mainQueueDispatch { coordinator.coordinate(to: .auth) }
             }

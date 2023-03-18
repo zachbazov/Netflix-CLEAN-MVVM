@@ -9,4 +9,8 @@ import UIKit
 
 // MARK: - ProfileViewController Type
 
-final class ProfileViewController: Controller<ProfileViewModel> {}
+final class ProfileViewController: Controller<ProfileViewModel> {
+    deinit {
+        print("deinit \(String(describing: Self.self))")
+    }
+}

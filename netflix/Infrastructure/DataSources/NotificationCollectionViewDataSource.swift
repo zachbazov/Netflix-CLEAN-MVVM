@@ -29,6 +29,10 @@ final class NotificationCollectionViewDataSource: NSObject, UICollectionViewDele
     
     fileprivate let numberOfSections: Int = 1
     
+    deinit {
+        print("deinit \(String(describing: Self.self))")
+    }
+    
     init(collectionView: UICollectionView, with viewModel: AccountViewModel) {
         self.collectionView = collectionView
         self.viewModel = viewModel

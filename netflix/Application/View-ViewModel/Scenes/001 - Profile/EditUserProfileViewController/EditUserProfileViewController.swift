@@ -27,5 +27,6 @@ final class EditUserProfileViewController: Controller<ProfileViewModel> {
         super.viewDidLoad()
         title = "Edit Profile"
         navigationController?.navigationBar.tintColor = .white
+        view.backgroundColor = .black
     }
 }

@@ -29,6 +29,10 @@ final class UserProfileCollectionViewCell: UICollectionViewCell {
     
     private var viewModel: ProfileViewModel?
     
+    deinit {
+        print("deinit \(String(describing: Self.self))")
+    }
+    
     static func create(in collectionView: UICollectionView,
                        at indexPath: IndexPath,
                        with viewModel: ProfileViewModel) -> UserProfileCollectionViewCell {
@@ -101,9 +105,18 @@ extension UserProfileCollectionViewCell: ViewProtocol {
             coordinator.coordinate(to: .addProfile)
         default:
             guard let profile = viewModel?.profiles[tag] else { return }
-            print(profile.name)
-            let authService = Application.app.services.authentication
-            print(authService.user?.toDomain())
+            
+            viewModel?.selectedProfile = profile
+            
+            if #available(iOS 13.0, *) {
+                Task {
+                    await viewModel?.userProfileDidUpdate(with: profile._id ?? "")
+                }
+                
+                return
+            }
+            
+            viewModel?.updateUserProfile(with: profile._id!)
         }
     }
     

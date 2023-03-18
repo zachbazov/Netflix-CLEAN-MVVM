@@ -33,6 +33,17 @@ struct UserProfileHTTPDTO {
             let data: UserProfileDTO
         }
     }
+    
+    struct PATCH: HTTP {
+        struct Request: Decodable {
+            let user: UserDTO
+        }
+        
+        struct Response: Decodable {
+            let status: String
+            let data: UserProfileDTO
+        }
+    }
 }
 
 // MARK: - Mappings
@@ -57,6 +68,18 @@ extension UserProfileHTTPDTO.POST.Request {
 
 extension UserProfileHTTPDTO.POST.Response {
     func toDomain() -> UserProfileHTTP.POST.Response {
+        return .init(status: status, data: data.toDomain())
+    }
+}
+
+extension UserProfileHTTPDTO.PATCH.Request {
+    func toDomain() -> UserProfileHTTP.PATCH.Request {
+        return .init(user: user.toDomain())
+    }
+}
+
+extension UserProfileHTTPDTO.PATCH.Response {
+    func toDomain() -> UserProfileHTTP.PATCH.Response {
         return .init(status: status, data: data.toDomain())
     }
 }

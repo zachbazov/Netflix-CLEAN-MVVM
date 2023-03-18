@@ -12,6 +12,10 @@ import UIKit
 final class ProfileCollectionViewDataSource: NSObject, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     private let viewModel: AccountViewModel
     
+    deinit {
+        print("deinit \(String(describing: Self.self))")
+    }
+    
     init(with viewModel: AccountViewModel) {
         self.viewModel = viewModel
         super.init()
@@ -30,7 +34,7 @@ final class ProfileCollectionViewDataSource: NSObject, UICollectionViewDelegate,
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return viewModel.profileItems.count
+        return viewModel.profiles.value.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {

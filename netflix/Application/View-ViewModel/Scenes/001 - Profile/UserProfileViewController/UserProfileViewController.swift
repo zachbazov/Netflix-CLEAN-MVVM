@@ -30,6 +30,10 @@ final class UserProfileViewController: Controller<ProfileViewModel> {
     fileprivate lazy var collectionView: UICollectionView = createCollectionView()
     fileprivate(set) lazy var dataSource: UserProfileCollectionViewDataSource = createDataSource()
     
+    deinit {
+        print("deinit \(String(describing: Self.self))")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         super.viewDidLoadBehaviors()
@@ -75,6 +79,7 @@ extension UserProfileViewController: ViewControllerProtocol {
         collectionView.showsVerticalScrollIndicator = false
         collectionView.showsHorizontalScrollIndicator = false
         collectionView.isScrollEnabled = false
+        collectionView.backgroundColor = .black
         collectionView.register(UserProfileCollectionViewCell.nib,
                                 forCellWithReuseIdentifier: UserProfileCollectionViewCell.reuseIdentifier)
         return collectionView

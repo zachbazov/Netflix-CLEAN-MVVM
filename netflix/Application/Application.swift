@@ -69,8 +69,18 @@ extension Application: ApplicationProtocol {
             }
         }
         
+        guard let user = user else { return }
+        guard let selectedProfile = user.selectedProfile else { return }
+        guard let approvedProfile = user.profiles?.contains(where: { return $0 == selectedProfile }) else { return }
+        
+        guard approvedProfile else {
+            return mainQueueDispatch { [weak self] in
+                self?.coordinator.coordinate(to: .profile)
+            }
+        }
+        
         mainQueueDispatch { [weak self] in
-            self?.coordinator.coordinate(to: .profile)
+            self?.coordinator.coordinate(to: .tabBar)
         }
     }
     /// Allocate a root view controller for the window.

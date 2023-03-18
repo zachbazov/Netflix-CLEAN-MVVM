@@ -36,6 +36,10 @@ final class ProfileCoordinator {
     fileprivate(set) lazy var userProfileController: UserProfileViewController = createUserProfileViewController()
     fileprivate lazy var addUserProfileController: AddUserProfileViewController = createAddUserProfileViewController()
     fileprivate lazy var editUserProfileController: EditUserProfileViewController = createEditUserProfileViewController()
+    
+    deinit {
+        print("deinit \(String(describing: Self.self))")
+    }
 }
 
 // MARK: - CoordinatorProtocol Implementation

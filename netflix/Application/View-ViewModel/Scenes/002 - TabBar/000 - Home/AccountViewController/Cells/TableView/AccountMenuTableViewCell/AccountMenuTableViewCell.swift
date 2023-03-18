@@ -44,6 +44,10 @@ final class AccountMenuTableViewCell: UITableViewCell {
     lazy var image: UIImageView? = createImageView()
     lazy var notificationIndicator: UIView? = createNotificationIndicatorView()
     
+    deinit {
+        print("deinit \(String(describing: Self.self))")
+    }
+    
     static func create(in tableView: UITableView,
                        at indexPath: IndexPath,
                        with viewModel: AccountViewModel) -> AccountMenuTableViewCell {

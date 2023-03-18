@@ -24,9 +24,16 @@ private typealias ViewModelProtocol = ViewModelInput & ViewModelOutput
 final class AccountViewModel {
     var coordinator: AccountViewCoordinator?
     
+    fileprivate lazy var userUseCase = UserUseCase()
+    
+    let profiles: Observable<[UserProfile]> = .init([])
     lazy var menuItems: [AccountMenuItem] = createMenuItems()
     private(set) lazy var profileItems: [ProfileItem] = createProfileItems()
     private(set) lazy var addProfileItem: ProfileItem = createAddProfileItem()
+    
+    deinit {
+        print("deinit \(String(describing: Self.self))")
+    }
     
     private func createMenuItems() -> [AccountMenuItem] {
         let homeViewController = Application.app.coordinator.tabCoordinator.home.viewControllers.first as? HomeViewController
@@ -43,8 +50,6 @@ final class AccountViewModel {
     
     private func createProfileItems() -> [ProfileItem] {
         let profile1 = ProfileItem(image: "av-light-yellow", name: "Zach")
-//        let profile2 = ProfileItem(image: "av-dark-green", name: "LeBron")
-//        let profile3 = ProfileItem(image: "av-dark-red", name: "John")
         let items = [profile1, addProfileItem]
         return items
     }
@@ -52,11 +57,66 @@ final class AccountViewModel {
     private func createAddProfileItem() -> ProfileItem {
         return ProfileItem(image: "plus", name: "Add Profile")
     }
+    
+    fileprivate func getUserProfiles() {
+        let authService = Application.app.services.authentication
+        
+        guard let user = authService.user else { return }
+        
+        let request = UserProfileHTTPDTO.GET.Request(user: user)
+        
+        userUseCase.repository.task = userUseCase.request(
+            for: UserProfileHTTPDTO.GET.Response.self,
+            request: request,
+            cached: { _ in },
+            completion: { [weak self] result in
+                guard let self = self else { return }
+                switch result {
+                case .success(let response):
+                    self.profiles.value = response.data.toDomain()
+                case .failure(let error):
+                    printIfDebug(.error, "\(error)")
+                }
+            })
+    }
+    
+    func userProfilesDidLoad() async {
+        let authService = Application.app.services.authentication
+        
+        guard let user = authService.user else { return }
+        
+        let request = UserProfileHTTPDTO.GET.Request(user: user)
+        let response = await userUseCase.request(for: UserProfileHTTPDTO.GET.Response.self, request: request)
+        
+        guard let profiles = response?.data.toDomain() else { return }
+        
+        self.profiles.value = profiles
+        
+        let addProfile = UserProfile(_id: "", name: "Add Profile", image: "plus", active: false, user: user._id!)
+        
+        self.profiles.value.append(addProfile)
+    }
 }
 
 // MARK: - ViewModel Implementation
 
-extension AccountViewModel: ViewModel {}
+extension AccountViewModel: ViewModel {
+    func viewDidLoad() {
+        loadData()
+    }
+    
+    private func loadData() {
+        if #available(iOS 13.0, *) {
+            Task {
+                await userProfilesDidLoad()
+            }
+            
+            return
+        }
+        
+        getUserProfiles()
+    }
+}
 
 // MARK: - ViewModelProtocol Implementation
 

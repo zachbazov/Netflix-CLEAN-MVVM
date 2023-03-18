@@ -25,5 +25,6 @@ final class AddUserProfileViewController: Controller<ProfileViewModel> {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        view.backgroundColor = .black
     }
 }
