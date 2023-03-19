@@ -12,5 +12,7 @@ import UIKit
 final class ProfileViewController: Controller<ProfileViewModel> {
     deinit {
         print("deinit \(String(describing: Self.self))")
+        viewModel.coordinator = nil
+        viewModel = nil
     }
 }

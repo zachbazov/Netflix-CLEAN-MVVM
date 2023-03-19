@@ -104,13 +104,13 @@ extension HomeViewCoordinator: CoordinatorProtocol {
             viewController?.add(child: search, container: view)
             
             guard let searchViewController = search.viewControllers.first as? SearchViewController else { return }
-            searchViewController.present()
+            searchViewController.viewWillAnimateAppearance()
         case .account:
             guard let account = account, let view = viewController?.view else { return }
             viewController?.add(child: account, container: view)
             
             guard let accountViewController = account.viewControllers.first as? AccountViewController else { return }
-            accountViewController.present()
+            accountViewController.viewWillAnimateAppearance()
         }
     }
 }

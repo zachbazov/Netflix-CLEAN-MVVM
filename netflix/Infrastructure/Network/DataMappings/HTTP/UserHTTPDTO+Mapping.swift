@@ -45,7 +45,6 @@ struct UserHTTPDTO {
         struct Response: Decodable {
             var status: String
             let data: UserDTO?
-            let message: String?
         }
     }
 }
@@ -90,7 +89,7 @@ extension UserHTTPDTO.PATCH.Request {
 
 extension UserHTTPDTO.PATCH.Response {
     func toDomain() -> UserHTTP.PATCH.Response {
-        return .init(status: status, data: data?.toDomain(), message: message)
+        return .init(status: status, data: data?.toDomain())
     }
 }
 

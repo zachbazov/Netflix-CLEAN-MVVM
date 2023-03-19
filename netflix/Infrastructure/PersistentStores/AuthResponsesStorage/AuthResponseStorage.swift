@@ -101,7 +101,17 @@ extension AuthResponseStorage {
         responseEntity.token = response.token
         responseEntity.data = response.data
         
-        do { try context.save() }
+        do {
+            if #available(iOS 15.0, *) {
+                context.performAndWait {
+                    do { try context.save() }
+                    catch { printIfDebug(.error, "CoreDataAuthResponseStorage asynchronous unresolved error \(error), \((error as NSError).userInfo)") }
+                }
+                return
+            }
+            
+            try context.save()
+        }
         catch { printIfDebug(.error, "CoreDataAuthResponseStorage unresolved error \(error), \((error as NSError).userInfo)") }
     }
     

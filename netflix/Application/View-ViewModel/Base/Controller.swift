@@ -7,6 +7,10 @@
 
 import UIKit
 
+protocol ViewAnimating {
+    func viewWillAnimateAppearance()
+}
+
 // MARK: - Controller<T> Type
 
 class Controller<T>: UIViewController, ViewModeling where T: ViewModel {
@@ -24,9 +28,41 @@ class Controller<T>: UIViewController, ViewModeling where T: ViewModel {
     func viewDidDeploySubviews() {}
     func viewDidConfigure() {}
     func viewDidTargetSubviews() {}
-    
     func viewDidBindObservers() {}
     func viewDidUnbindObservers() {}
+    func viewDidDeallocate() {}
+    
+    func viewWillAnimateAppearance() {
+        guard let view = navigationController?.view else { return }
+        
+        view.alpha = .zero
+        view.transform = CGAffineTransform(translationX: view.bounds.width, y: .zero)
+        
+        UIView.animate(
+            withDuration: 0.25,
+            delay: .zero,
+            options: .curveEaseInOut,
+            animations: {
+                view.transform = .identity
+                view.alpha = 1.0
+            })
+    }
+    
+    func viewWillAnimateDisappearance(_ completion: @escaping () -> Void) {
+        guard let view = navigationController?.view else { return }
+        
+        UIView.animate(
+            withDuration: 0.25,
+            delay: .zero,
+            options: .curveEaseInOut,
+            animations: {
+                view.transform = CGAffineTransform(translationX: view.bounds.width, y: .zero)
+                view.alpha = .zero
+            },
+            completion: { _ in
+                completion()
+            })
+    }
 }
 
 // MARK: - ViewLifecycleBehavior Implementation
@@ -36,6 +72,10 @@ extension Controller: ViewLifecycleBehavior {}
 // MARK: - ViewObserving Implementation
 
 extension Controller: ViewObserving {}
+
+// MARK: - ViewAnimating Implementation
+
+extension Controller: ViewAnimating {}
 
 // MARK: - DeviceOrienting Implementation
 
@@ -57,7 +97,7 @@ extension Controller: NavigationControllerStyling {
         let titleView = UIView(frame: rect)
         let image = UIImage(named: asset)
         let imageView = UIImageView(image: image)
-        imageView.frame = CGRect(x: 0.0, y: 0.0, width: size.width, height: size.height)
+        imageView.frame = CGRect(x: .zero, y: .zero, width: size.width, height: size.height)
         imageView.center = CGPoint(x: titleView.center.x, y: titleView.center.y)
         
         titleView.addSubview(imageView)

@@ -40,6 +40,8 @@ final class ProfileViewModel {
     
     deinit {
         print("deinit \(String(describing: Self.self))")
+        selectedProfile = nil
+        coordinator = nil
     }
 }
 
@@ -48,11 +50,6 @@ final class ProfileViewModel {
 extension ProfileViewModel: ViewModel {
     func viewDidLoad() {
         loadData()
-        
-//        Task {
-//            print("updating")
-//            await userProfileDidUpdate()
-//        }
     }
 }
 
@@ -194,7 +191,7 @@ extension ProfileViewModel: ViewModelProtocol {
         guard let response = response else { return false }
         
         authResponses.save(response: response, for: request)
-        print("successSigningOutUserProfile")
+        
         return true
     }
     

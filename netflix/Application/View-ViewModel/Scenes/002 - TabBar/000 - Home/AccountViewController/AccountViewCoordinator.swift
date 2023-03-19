@@ -11,10 +11,6 @@ import Foundation
 
 final class AccountViewCoordinator {
     var viewController: AccountViewController?
-    
-    deinit {
-        print("deinit \(String(describing: Self.self))")
-    }
 }
 
 // MARK: - Coordinate Implementation

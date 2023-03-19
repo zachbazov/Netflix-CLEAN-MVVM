@@ -28,12 +28,7 @@ final class AccountViewModel {
     
     let profiles: Observable<[UserProfile]> = .init([])
     lazy var menuItems: [AccountMenuItem] = createMenuItems()
-    private(set) lazy var profileItems: [ProfileItem] = createProfileItems()
-    private(set) lazy var addProfileItem: ProfileItem = createAddProfileItem()
-    
-    deinit {
-        print("deinit \(String(describing: Self.self))")
-    }
+    private(set) var profileItems = [ProfileItem]()
     
     private func createMenuItems() -> [AccountMenuItem] {
         let homeViewController = Application.app.coordinator.tabCoordinator.home.viewControllers.first as? HomeViewController
@@ -46,16 +41,6 @@ final class AccountViewModel {
         let help = AccountMenuItem(image: "questionmark.circle", title: "Help")
         let items = [notifications, myList, appSettings, account, help]
         return items
-    }
-    
-    private func createProfileItems() -> [ProfileItem] {
-        let profile1 = ProfileItem(image: "av-light-yellow", name: "Zach")
-        let items = [profile1, addProfileItem]
-        return items
-    }
-    
-    private func createAddProfileItem() -> ProfileItem {
-        return ProfileItem(image: "plus", name: "Add Profile")
     }
     
     fileprivate func getUserProfiles() {
@@ -92,7 +77,7 @@ final class AccountViewModel {
         
         self.profiles.value = profiles
         
-        let addProfile = UserProfile(_id: "", name: "Add Profile", image: "plus", active: false, user: user._id!)
+        let addProfile = UserProfile(_id: "add", name: "Add Profile", image: "plus", active: false, user: user._id!)
         
         self.profiles.value.append(addProfile)
     }

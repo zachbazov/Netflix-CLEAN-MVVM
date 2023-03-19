@@ -74,8 +74,8 @@ extension APIEndpoint: AuthRepositoryEndpoints {
                         method: .patch,
                         headerParameters: ["content-type": "application/json"],
                         queryParameters: ["email": request.user.email ?? ""],
-                        bodyParameters: ["name": request.user.name ?? "", "selectedProfile": request.selectedProfile],
-                        bodyEncoding: .jsonSerializationData)
+                        bodyParameters: ["name": request.user.name ?? "",
+                                         "selectedProfile": request.selectedProfile as Any])
     }
 }
 

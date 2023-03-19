@@ -12,6 +12,7 @@ import UIKit
 private protocol ApplicationInput {
     func didFinishResigning(with user: UserDTO?)
     func deployScene(in window: UIWindow?)
+    func coordinate(to screen: Coordinator.Screen)
 }
 
 private protocol ApplicationOutput {
@@ -58,31 +59,23 @@ extension Application: ApplicationProtocol {
             self.didFinishResigning(with: user)
         }
     }
+    
     /// Based on the corresponding user, navigate to a screen.
     /// In case there is a valid user, navigate to the tab bat screen.
     /// In case there isn't, navigate to the auth screen.
     /// - Parameter user: Corresponding user object.
     fileprivate func didFinishResigning(with user: UserDTO?) {
-        guard user != nil else {
-            return mainQueueDispatch { [weak self] in
-                self?.coordinator.coordinate(to: .auth)
-            }
+        guard let user = user else { return coordinate(to: .auth) }
+        
+        guard let selectedProfile = user.selectedProfile,
+              let profiles = user.profiles,
+              profiles.contains(where: { $0 == selectedProfile }) else {
+            return coordinate(to: .profile)
         }
         
-        guard let user = user else { return }
-        guard let selectedProfile = user.selectedProfile else { return }
-        guard let approvedProfile = user.profiles?.contains(where: { return $0 == selectedProfile }) else { return }
-        
-        guard approvedProfile else {
-            return mainQueueDispatch { [weak self] in
-                self?.coordinator.coordinate(to: .profile)
-            }
-        }
-        
-        mainQueueDispatch { [weak self] in
-            self?.coordinator.coordinate(to: .tabBar)
-        }
+        coordinate(to: .tabBar)
     }
+    
     /// Allocate a root view controller for the window.
     /// - Parameter window: Application's root window.
     func deployScene(in window: UIWindow?) {
@@ -91,5 +84,16 @@ extension Application: ApplicationProtocol {
         window?.makeKeyAndVisible()
         // Check for the latest signed response by the user.
         resign()
+    }
+    
+    fileprivate func coordinate(to screen: Coordinator.Screen) {
+        mainQueueDispatch { [weak self] in
+            guard let self = self else { return }
+            switch screen {
+            case .auth: self.coordinator.coordinate(to: .auth)
+            case .profile: self.coordinator.coordinate(to: .profile)
+            case .tabBar: self.coordinator.coordinate(to: .tabBar)
+            }
+        }
     }
 }

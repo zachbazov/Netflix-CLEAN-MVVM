@@ -7,6 +7,17 @@
 
 import UIKit
 
+// MARK: - ViewControllerProtocol Type
+
+private protocol ViewControllerOutput {
+    func backButtonDidTap()
+    func signOutDidTap()
+    func signOut()
+    func didFinish()
+}
+
+private typealias ViewControllerProtocol = ViewControllerOutput
+
 // MARK: - AccountViewController Type
 
 final class AccountViewController: Controller<AccountViewModel> {
@@ -22,13 +33,6 @@ final class AccountViewController: Controller<AccountViewModel> {
     
     private(set) var profileDataSource: ProfileCollectionViewDataSource?
     private var accountMenuDataSource: AccountMenuTableViewDataSource?
-    
-    deinit {
-        print("deinit \(String(describing: Self.self))")
-        viewDidUnbindObservers()
-        profileDataSource = nil
-        accountMenuDataSource = nil
-    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -59,55 +63,45 @@ final class AccountViewController: Controller<AccountViewModel> {
         printIfDebug(.debug, "Removed `AccountViewModel` observers.")
     }
     
-    func present() {
-        navigationController?.view.alpha = .zero
-        navigationController?.view.transform = CGAffineTransform(translationX: navigationController!.view.bounds.width, y: .zero)
+    override func viewDidDeallocate() {
+        viewDidUnbindObservers()
         
-        UIView.animate(
-            withDuration: 0.25,
-            delay: 0.0,
-            options: .curveEaseInOut,
-            animations: { [weak self] in
-                self?.navigationController?.view.transform = .identity
-                self?.navigationController?.view.alpha = 1.0
-            })
+        profileDataSource = nil
+        accountMenuDataSource = nil
+        
+        collectionView.removeFromSuperview()
+        
+        viewModel?.coordinator = nil
+        viewModel = nil
+        
+        remove()
     }
-    
+}
+
+// MARK: - ViewControllerProtocol Implementation
+
+extension AccountViewController: ViewControllerProtocol {
     @objc
     fileprivate func backButtonDidTap() {
-        guard let homeViewController = Application.app.coordinator.tabCoordinator.home.viewControllers.first as? HomeViewController else { return }
-        
-        UIView.animate(
-            withDuration: 0.25,
-            delay: 0.0,
-            options: .curveEaseInOut,
-            animations: { [weak self] in
-                self?.navigationController?.view.transform = CGAffineTransform(translationX: self!.navigationController!.view.bounds.width, y: .zero)
-                self?.navigationController?.view.alpha = .zero
-            },
-            completion: { [weak self] _ in
-                homeViewController.viewModel.coordinator?.account?.remove()
-                self?.profileDataSource = nil
-                self?.collectionView.removeFromSuperview()
-                self?.accountMenuDataSource = nil
-                self?.tableView?.removeFromSuperview()
-                self?.tableView = nil
-                self?.viewModel = nil
-                homeViewController.viewModel.coordinator?.account = nil
-            })
+        super.viewWillAnimateDisappearance { [weak self] in self?.viewDidDeallocate() }
     }
     
     @objc
     func signOutDidTap() {
+        signOut()
+    }
+    
+    fileprivate func signOut() {
         let authService = Application.app.services.authentication
         let coordinator = Application.app.coordinator
         
         if #available(iOS 13, *) {
             Task {
                 guard let user = authService.user else { return }
+                
                 let request = UserHTTPDTO.GET.Request(user: user)
                 let status = await authService.signOut(with: request)
-                print(status, user.toDomain())
+                
                 guard status else { return }
                 
                 backButtonDidTap()
@@ -123,6 +117,13 @@ final class AccountViewController: Controller<AccountViewModel> {
         mainQueueDispatch { coordinator.coordinate(to: .auth) }
     }
     
+    fileprivate func didFinish() {
+    }
+}
+
+// MARK: - Private UI Implementation
+
+extension AccountViewController {
     private func setupCollectionView() {
         collectionContainer.addSubview(collectionView)
         collectionView.constraintToSuperview(collectionContainer)

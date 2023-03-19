@@ -45,7 +45,6 @@ struct UserHTTP {
         struct Response {
             let status: String
             var data: User?
-            let message: String?
         }
     }
 }

@@ -39,6 +39,8 @@ final class ProfileCoordinator {
     
     deinit {
         print("deinit \(String(describing: Self.self))")
+        viewController?.removeFromParent()
+        viewController = nil
     }
 }
 
@@ -72,6 +74,9 @@ extension ProfileCoordinator: CoordinatorProtocol {
     fileprivate func deploy(_ screen: Screen) {
         switch screen {
         case .userProfile:
+            
+            navigationController.removeFromParent()
+            
             guard let view = viewController?.view else { return }
             
             viewController?.add(child: navigationController, container: view)
