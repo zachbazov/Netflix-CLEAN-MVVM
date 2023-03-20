@@ -17,12 +17,24 @@ final class SeasonUseCase {
 // MARK: - UseCase Implementation
 
 extension SeasonUseCase: UseCase {
-    func request<T, U>(for response: T.Type,
+    func request<T, U>(endpoint: Endpoints,
+                       for response: T.Type,
                        request: U?,
                        cached: ((T?) -> Void)?,
                        completion: ((Result<T, Error>) -> Void)?) -> Cancellable? {
-        guard let request = request as? SeasonHTTPDTO.Request else { return nil }
-        let completion = completion as? ((Result<SeasonHTTPDTO.Response, Error>) -> Void) ?? { _ in }
-        return repository.getOne(request: request, cached: { _ in }, completion: completion)
+        switch endpoint {
+        case .getSeason:
+            guard let request = request as? SeasonHTTPDTO.Request else { return nil }
+            let completion = completion as? ((Result<SeasonHTTPDTO.Response, Error>) -> Void) ?? { _ in }
+            return repository.getOne(request: request, cached: { _ in }, completion: completion)
+        }
+    }
+}
+
+// MARK: - Endpoints Type
+
+extension SeasonUseCase {
+    enum Endpoints {
+        case getSeason
     }
 }

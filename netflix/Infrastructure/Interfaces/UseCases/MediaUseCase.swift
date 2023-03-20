@@ -17,37 +17,48 @@ final class MediaUseCase {
 // MARK: - UseCase Implementation
 
 extension MediaUseCase: UseCase {
-    func request<T, U>(for response: T.Type,
+    func request<T, U>(endpoint: Endpoints,
+                       for response: T.Type,
                        request: U? = nil,
                        cached: ((T?) -> Void)?,
                        completion: ((Result<T, Error>) -> Void)?) -> Cancellable? {
-        switch response {
-        case is MediaHTTPDTO.Response.Type:
+        switch endpoint {
+        case .getAllMedia:
             let cached = cached as? ((MediaHTTPDTO.Response?) -> Void) ?? { _ in }
             let completion = completion as? ((Result<MediaHTTPDTO.Response, Error>) -> Void) ?? { _ in }
             return repository.getAll(cached: cached, completion: completion)
-        case is SearchHTTPDTO.Response.Type:
-            guard let request = request as? SearchHTTPDTO.Request else {
-                let completion = completion as? ((Result<SearchHTTPDTO.Response, Error>) -> Void) ?? { _ in }
-                return repository.getTopSearches(completion: completion)
-            }
+        case .getTopSearches:
+            let completion = completion as? ((Result<SearchHTTPDTO.Response, Error>) -> Void) ?? { _ in }
+            return repository.getTopSearches(completion: completion)
+        case .getUpcomings:
+            let completion = completion as? ((Result<NewsHTTPDTO.Response, Error>) -> Void) ?? { _ in }
+            return repository.getUpcomings(completion: completion)
+        case .searchMedia:
+            guard let request = request as? SearchHTTPDTO.Request else { return nil }
             let cached = cached as? ((SearchHTTPDTO.Response?) -> Void) ?? { _ in }
             let completion = completion as? ((Result<SearchHTTPDTO.Response, Error>) -> Void) ?? { _ in }
             return repository.search(requestDTO: request, cached: cached, completion: completion)
-        case is NewsHTTPDTO.Response.Type:
-            let completion = completion as? ((Result<NewsHTTPDTO.Response, Error>) -> Void) ?? { _ in }
-            return repository.getUpcomings(completion: completion)
-        default: return nil
         }
     }
     
-    func request<T>(for response: T.Type) async -> T? where T: Decodable {
-        switch response {
-        case is MediaHTTPDTO.Response.Type:
+    func request<T>(endpoint: Endpoints, for response: T.Type) async -> T? where T: Decodable {
+        switch endpoint {
+        case .getAllMedia:
             return await repository.getAll()
-        case is SearchHTTPDTO.Response.Type:
-            return await repository.getTopSeaches() as? T
+        case .getTopSearches:
+            return await repository.getTopSearches() as? T
         default: return nil
         }
+    }
+}
+
+// MARK: - Endpoints Type
+
+extension MediaUseCase {
+    enum Endpoints {
+        case getAllMedia
+        case getTopSearches
+        case getUpcomings
+        case searchMedia
     }
 }

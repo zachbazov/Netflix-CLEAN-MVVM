@@ -246,6 +246,7 @@ extension HomeViewModel: DataProviderProtocol {
     
     fileprivate func sectionsDidLoad(_ completion: @escaping () -> Void) {
         sectionUseCase.repository.task = sectionUseCase.request(
+            endpoint: .getSections,
             for: SectionHTTPDTO.Response.self,
             request: SectionHTTPDTO.Request.self,
             cached: { _ in },
@@ -267,6 +268,7 @@ extension HomeViewModel: DataProviderProtocol {
     
     fileprivate func mediaDidLoad(_ completion: @escaping () -> Void) {
         mediaUseCase.repository.task = mediaUseCase.request(
+            endpoint: .getAllMedia,
             for: MediaHTTPDTO.Response.self,
             request: MediaHTTPDTO.Request.self,
             cached: { [weak self] responseDTO in
@@ -290,6 +292,7 @@ extension HomeViewModel: DataProviderProtocol {
     
     fileprivate func topSearchesDidLoad(_ completion: @escaping () -> Void) {
         mediaUseCase.repository.task = mediaUseCase.request(
+            endpoint: .getTopSearches,
             for: SearchHTTPDTO.Response.self,
             request: SearchHTTPDTO.Request.self,
             cached: { _ in },
@@ -307,19 +310,19 @@ extension HomeViewModel: DataProviderProtocol {
     }
     
     fileprivate func sectionsDidLoad() async {
-        let response = await sectionUseCase.request(for: SectionHTTPDTO.Response.self)
+        let response = await sectionUseCase.request(endpoint: .getSections, for: SectionHTTPDTO.Response.self)
         guard let sections = response?.data.toDomain() else { return }
         self.sections = sections
     }
     
     fileprivate func mediaDidLoad() async {
-        let response = await mediaUseCase.request(for: MediaHTTPDTO.Response.self)
+        let response = await mediaUseCase.request(endpoint: .getAllMedia, for: MediaHTTPDTO.Response.self)
         guard let media = response?.data.toDomain() else { return }
         self.media = media
     }
     
     fileprivate func topSearchesDidLoad() async {
-        let response = await mediaUseCase.request(for: SearchHTTPDTO.Response.self)
+        let response = await mediaUseCase.request(endpoint: .getTopSearches, for: SearchHTTPDTO.Response.self)
         guard let media = response?.data.toDomain() else { return }
         self.topSearches = media
     }

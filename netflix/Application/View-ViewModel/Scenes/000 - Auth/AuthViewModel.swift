@@ -53,7 +53,8 @@ extension AuthViewModel: ViewModelProtocol {
     ///   - completion: Completion handler with a response.
     func signUp(requestDTO: UserHTTPDTO.POST.Request,
                 completion: @escaping (Result<UserHTTPDTO.POST.Response, DataTransferError>) -> Void) {
-        useCase.repository.task = useCase.request(for: UserHTTPDTO.POST.Response.self,
+        useCase.repository.task = useCase.request(endpoint: .signUp,
+                                                  for: UserHTTPDTO.POST.Response.self,
                                                   request: requestDTO,
                                                   cached: nil,
                                                   completion: completion)
@@ -66,7 +67,8 @@ extension AuthViewModel: ViewModelProtocol {
     func signIn(requestDTO: UserHTTPDTO.POST.Request,
                 cached: @escaping (UserHTTPDTO.POST.Response?) -> Void,
                 completion: @escaping (Result<UserHTTPDTO.POST.Response, DataTransferError>) -> Void) {
-        useCase.repository.task = useCase.request(for: UserHTTPDTO.POST.Response.self,
+        useCase.repository.task = useCase.request(endpoint: .signIn,
+                                                  for: UserHTTPDTO.POST.Response.self,
                                                   request: requestDTO,
                                                   cached: cached,
                                                   completion: completion)
@@ -74,7 +76,8 @@ extension AuthViewModel: ViewModelProtocol {
     /// Sign out request.
     /// - Parameter completion: Completion handler with a result object.
     func signOut(completion: @escaping (Result<VoidHTTP.Response, DataTransferError>) -> Void) {
-        useCase.repository.task = useCase.request(for: VoidHTTP.Response.self,
+        useCase.repository.task = useCase.request(endpoint: .signOut,
+                                                  for: VoidHTTP.Response.self,
                                                   request: Void.self,
                                                   cached: nil,
                                                   completion: completion)
@@ -83,18 +86,18 @@ extension AuthViewModel: ViewModelProtocol {
     /// - Parameter request: User's request object.
     /// - Returns: User's response object.
     func signUp(with request: UserHTTPDTO.POST.Request) async -> UserHTTPDTO.POST.Response? {
-        return await useCase.request(for: UserHTTPDTO.POST.Response.self, request: request)
+        return await useCase.request(endpoint: .signUp, for: UserHTTPDTO.POST.Response.self, request: request)
     }
     /// Asynchronous sign in request.
     /// - Parameter request: User's request object.
     /// - Returns: User's response object.
     func signIn(with request: UserHTTPDTO.POST.Request) async -> UserHTTPDTO.POST.Response? {
-        return await useCase.request(for: UserHTTPDTO.POST.Response.self, request: request)
+        return await useCase.request(endpoint: .signIn, for: UserHTTPDTO.POST.Response.self, request: request)
     }
     /// Asynchronous sign out request.
     /// - Parameter request: User's request object.
     /// - Returns: User's response object.
     func signOut(with request: UserHTTPDTO.GET.Request) async -> VoidHTTP.Response? {
-        return await useCase.request(for: VoidHTTP.Response.self, request: request)
+        return await useCase.request(endpoint: .signOut, for: VoidHTTP.Response.self, request: request)
     }
 }

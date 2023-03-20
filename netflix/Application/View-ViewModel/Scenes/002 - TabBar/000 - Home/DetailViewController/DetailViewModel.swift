@@ -97,7 +97,8 @@ extension DetailViewModel: ViewModelProtocol {
     }
     
     func getSeason(with request: SeasonHTTPDTO.Request, completion: @escaping () -> Void) {
-        useCase.repository.task = useCase.request(for: SeasonHTTPDTO.Response.self,
+        useCase.repository.task = useCase.request(endpoint: .getSeason,
+                                                  for: SeasonHTTPDTO.Response.self,
                                                   request: request,
                                                   cached: nil,
                                                   completion: { [weak self] result in

@@ -64,6 +64,7 @@ extension ProfileViewModel: ViewModelProtocol {
         let request = UserProfileHTTPDTO.GET.Request(user: user)
         
         userUseCase.repository.task = userUseCase.request(
+            endpoint: .getUserProfiles,
             for: UserProfileHTTPDTO.GET.Response.self,
             request: request,
             cached: { _ in },
@@ -84,7 +85,7 @@ extension ProfileViewModel: ViewModelProtocol {
         guard let user = authService.user else { return }
         
         let request = UserProfileHTTPDTO.GET.Request(user: user)
-        let response = await userUseCase.request(for: UserProfileHTTPDTO.GET.Response.self, request: request)
+        let response = await userUseCase.request(endpoint: .getUserProfiles, for: UserProfileHTTPDTO.GET.Response.self, request: request)
         
         guard let profiles = response?.data.toDomain() else { return }
         
@@ -104,6 +105,7 @@ extension ProfileViewModel: ViewModelProtocol {
         let request = UserProfileHTTPDTO.POST.Request(user: user, profile: profile)
         
         userUseCase.repository.task = userUseCase.request(
+            endpoint: .createUserProfile,
             for: UserProfileHTTPDTO.POST.Response.self,
             request: request,
             cached: { _ in },
@@ -126,7 +128,7 @@ extension ProfileViewModel: ViewModelProtocol {
         let profile = UserProfileDTO(name: "test", image: "av-dark-green", active: false, user: user._id ?? "")
         let request = UserProfileHTTPDTO.POST.Request(user: user, profile: profile)
         
-        let response = await userUseCase.request(for: UserProfileHTTPDTO.POST.Response.self, request: request)
+        let response = await userUseCase.request(endpoint: .createUserProfile, for: UserProfileHTTPDTO.POST.Response.self, request: request)
         
         guard let response = response else { return }
         
@@ -141,6 +143,7 @@ extension ProfileViewModel: ViewModelProtocol {
         let request = UserHTTPDTO.PATCH.Request(user: user, selectedProfile: profileId)
         
         userUseCase.repository.task = userUseCase.request(
+            endpoint: .updateUserData,
             for: UserHTTPDTO.PATCH.Response.self,
             request: request,
             cached: { _ in },
@@ -165,6 +168,7 @@ extension ProfileViewModel: ViewModelProtocol {
         let request = UserHTTPDTO.PATCH.Request(user: user, selectedProfile: profileId)
         
         userUseCase.repository.task = userUseCase.request(
+            endpoint: .updateUserData,
             for: UserHTTPDTO.PATCH.Response.self,
             request: request,
             cached: { _ in },
@@ -186,7 +190,7 @@ extension ProfileViewModel: ViewModelProtocol {
         
         let request = UserHTTPDTO.PATCH.Request(user: user, selectedProfile: nil)
         
-        let response = await userUseCase.request(for: UserHTTPDTO.PATCH.Response.self, request: request)
+        let response = await userUseCase.request(endpoint: .updateUserData, for: UserHTTPDTO.PATCH.Response.self, request: request)
         
         guard let response = response else { return false }
         
@@ -203,7 +207,7 @@ extension ProfileViewModel: ViewModelProtocol {
         
         let request = UserHTTPDTO.PATCH.Request(user: user, selectedProfile: profileId)
         
-        let response = await userUseCase.request(for: UserHTTPDTO.PATCH.Response.self, request: request)
+        let response = await userUseCase.request(endpoint: .updateUserData, for: UserHTTPDTO.PATCH.Response.self, request: request)
         
         guard let response = response else { return }
         

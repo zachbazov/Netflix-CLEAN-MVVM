@@ -56,6 +56,7 @@ extension MyListViewModel: ViewModelProtocol {
     func fetchList() {
         let requestDTO = ListHTTPDTO.GET.Request(user: user)
         useCase.repository.task = useCase.request(
+            endpoint: .getList,
             for: ListHTTPDTO.GET.Response.self,
             request: requestDTO,
             cached: { _ in },
@@ -76,6 +77,7 @@ extension MyListViewModel: ViewModelProtocol {
         let requestDTO = ListHTTPDTO.PATCH.Request(user: user._id!,
                                                    media: media.toObjectIDs())
         useCase.repository.task = useCase.request(
+            endpoint: .updateList,
             for: ListHTTPDTO.PATCH.Response.self,
             request: requestDTO,
             cached: { _ in },

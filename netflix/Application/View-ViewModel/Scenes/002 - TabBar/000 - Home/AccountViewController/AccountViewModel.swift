@@ -51,6 +51,7 @@ final class AccountViewModel {
         let request = UserProfileHTTPDTO.GET.Request(user: user)
         
         userUseCase.repository.task = userUseCase.request(
+            endpoint: .getUserProfiles,
             for: UserProfileHTTPDTO.GET.Response.self,
             request: request,
             cached: { _ in },
@@ -71,7 +72,7 @@ final class AccountViewModel {
         guard let user = authService.user else { return }
         
         let request = UserProfileHTTPDTO.GET.Request(user: user)
-        let response = await userUseCase.request(for: UserProfileHTTPDTO.GET.Response.self, request: request)
+        let response = await userUseCase.request(endpoint: .getUserProfiles, for: UserProfileHTTPDTO.GET.Response.self, request: request)
         
         guard let profiles = response?.data.toDomain() else { return }
         

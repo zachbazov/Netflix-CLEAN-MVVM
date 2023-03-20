@@ -86,6 +86,7 @@ extension SearchViewModel: ViewModelProtocol {
         coordinator?.viewController?.textFieldIndicatorView?.isLoading = true
         
         useCase.repository.task = useCase.request(
+            endpoint: .searchMedia,
             for: SearchHTTPDTO.Response.self,
             request: requestDTO,
             cached: { _ in },

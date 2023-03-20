@@ -44,13 +44,18 @@ extension NewsViewModel: ViewModelProtocol {
     }
     
     fileprivate func fetchUpcomingMedia() {
-        useCase.repository.task = useCase.request(for: NewsHTTPDTO.Response.self, request: Any.self, cached: nil, completion: { [weak self] result in
-            if case let .success(responseDTO) = result {
-                self?.items.value = responseDTO.toCellViewModels()
-            }
-            if case let .failure(error) = result {
-                printIfDebug(.error, "\(error)")
-            }
-        })
+        useCase.repository.task = useCase.request(
+            endpoint: .getUpcomings,
+            for: NewsHTTPDTO.Response.self,
+            request: Any.self,
+            cached: nil,
+            completion: { [weak self] result in
+                if case let .success(responseDTO) = result {
+                    self?.items.value = responseDTO.toCellViewModels()
+                }
+                if case let .failure(error) = result {
+                    printIfDebug(.error, "\(error)")
+                }
+            })
     }
 }

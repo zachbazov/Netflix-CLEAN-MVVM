@@ -141,7 +141,7 @@ extension MediaRepository {
         return task
     }
     
-    func getTopSeaches() async -> SearchHTTPDTO.Response? {
+    func getTopSearches() async -> SearchHTTPDTO.Response? {
         let endpoint = APIEndpoint.getTopSearchedMedia()
         let result = await dataTransferService.request(with: endpoint)
         
