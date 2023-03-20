@@ -22,7 +22,7 @@ class URLImageProtocol: URLProtocol {
     static func urlSession() -> URLSession {
         let config = URLSessionConfiguration.ephemeral
         config.protocolClasses = [URLImageProtocol.classForCoder()]
-        config.timeoutIntervalForRequest = 70
+        config.timeoutIntervalForRequest = 15
         return URLSession(configuration: config)
     }
     
@@ -42,27 +42,27 @@ class URLImageProtocol: URLProtocol {
     
     final override func startLoading() {
         guard let reqURL = request.url, let urlClient = client else { return }
-        /// Allocate the work item.
+        // Allocate the work item.
         block = DispatchWorkItem { [weak self] in
             guard let self = self else { return }
-            /// In-case the operation isn't completed or cancelled.
+            // In-case the operation isn't completed or cancelled.
             if self.cancelledOrComplete == false {
-                /// Create the image url reference.
+                // Create the image url reference.
                 let imageURL = URL(string: reqURL.absoluteString)!
-                /// In-case of a valid data object.
+                // In-case of a valid data object.
                 if let data = try? Data(contentsOf: imageURL) {
-                    /// Inform the client that the data has been loaded.
+                    // Inform the client that the data has been loaded.
                     urlClient.urlProtocol(self, didLoad: data)
-                    /// Inform the client that the data has finished loading.
+                    // Inform the client that the data has finished loading.
                     urlClient.urlProtocolDidFinishLoading(self)
                 }
             }
-            /// Operation has been complete.
+            // Operation has been complete.
             self.cancelledOrComplete = true
         }
-        /// Create a dispatch time value.
+        // Create a dispatch time value.
         let time = DispatchTime(uptimeNanoseconds: 500 * NSEC_PER_MSEC)
-        /// Execute the operation.
+        // Execute the operation.
         URLImageProtocol.queue.asyncAfter(deadline: time, execute: block)
     }
     
@@ -70,7 +70,7 @@ class URLImageProtocol: URLProtocol {
         URLImageProtocol.queue.async { [weak self] in
             guard let self = self else { return }
             if self.cancelledOrComplete == false, let cancelBlock = self.block {
-                /// Cancel the operation.
+                // Cancel the operation.
                 cancelBlock.cancel()
                 self.cancelledOrComplete = true
             }
@@ -104,7 +104,9 @@ extension AsyncImageService {
     
     func load(url: URL, identifier: NSString, completion: @escaping (UIImage?) -> Void) {
         if let cachedImage = object(for: identifier) {
-            return mainQueueDispatch { completion(cachedImage) }
+            return DispatchQueue.global(qos: .userInitiated).async {
+                completion(cachedImage)
+            }
         }
         
         URLImageProtocol.urlSession().dataTask(with: url) { [weak self] data, response, error in
@@ -114,8 +116,12 @@ extension AsyncImageService {
                   let image = UIImage(data: data) else {
                 return
             }
-            self.set(image, forKey: identifier)
-            mainQueueDispatch { completion(image) }
+            
+            DispatchQueue.global(qos: .userInitiated).async {
+                self.set(image, forKey: identifier)
+                
+                completion(image)
+            }
         }.resume()
     }
 }

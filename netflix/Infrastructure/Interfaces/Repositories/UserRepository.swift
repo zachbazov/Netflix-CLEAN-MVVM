@@ -17,14 +17,14 @@ private protocol UserRepositoryInput {
                 completion: @escaping (Result<UserHTTPDTO.POST.Response, DataTransferError>) -> Void) -> Cancellable?
     func signOut(completion: @escaping (Result<VoidHTTP.Response, DataTransferError>) -> Void) -> Cancellable?
     
-    func signUp(request: UserHTTPDTO.POST.Request) async -> UserHTTPDTO.POST.Response?
-    func signIn(request: UserHTTPDTO.POST.Request) async -> UserHTTPDTO.POST.Response?
-    func signOut(request: UserHTTPDTO.GET.Request) async -> VoidHTTP.Response?
-    
     func getUserProfiles(request: UserProfileHTTPDTO.GET.Request,
                          completion: @escaping (Result<UserProfileHTTPDTO.GET.Response, DataTransferError>) -> Void) -> Cancellable?
     func createUserProfile(request: UserProfileHTTPDTO.POST.Request,
                            completion: @escaping (Result<UserProfileHTTPDTO.POST.Response, DataTransferError>) -> Void) -> Cancellable?
+    
+    func signUp(request: UserHTTPDTO.POST.Request) async -> UserHTTPDTO.POST.Response?
+    func signIn(request: UserHTTPDTO.POST.Request) async -> UserHTTPDTO.POST.Response?
+    func signOut(request: UserHTTPDTO.GET.Request) async -> VoidHTTP.Response?
     
     func getUserProfiles(request: UserProfileHTTPDTO.GET.Request) async -> UserProfileHTTPDTO.GET.Response?
     func createUserProfile(request: UserProfileHTTPDTO.POST.Request) async -> UserProfileHTTPDTO.POST.Response?

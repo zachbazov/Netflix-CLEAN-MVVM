@@ -11,7 +11,7 @@ import Foundation
 
 final class UserUseCase {
     typealias T = UserRepository
-    let repository = UserRepository()
+    let repository: T = UserRepository()
 }
 
 // MARK: - UseCase Implementation
@@ -50,7 +50,9 @@ extension UserUseCase: UseCase {
         }
     }
     
-    func request<T, U>(endpoint: Endpoints, for response: T.Type, request: U) async -> T? where T: Decodable {
+    func request<T, U>(endpoint: Endpoints,
+                       for response: T.Type,
+                       request: U) async -> T? where T: Decodable {
         switch endpoint {
         case .signUp:
             guard let request = request as? UserHTTPDTO.POST.Request else { return nil }
