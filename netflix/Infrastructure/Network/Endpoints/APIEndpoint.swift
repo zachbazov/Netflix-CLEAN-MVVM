@@ -14,7 +14,7 @@ struct APIEndpoint {}
 // MARK: - AuthRepositoryEndpoints Implementation
 
 extension APIEndpoint: AuthRepositoryEndpoints {
-    static func signUp(with request: UserHTTPDTO.POST.Request) -> Endpoint<UserHTTPDTO.POST.Response> {
+    static func signUp(with request: UserHTTPDTO.Request) -> Endpoint<UserHTTPDTO.Response> {
         return Endpoint(path: "api/v1/users/signup",
                         method: .post,
                         headerParameters: ["content-type": "application/json"],
@@ -25,7 +25,7 @@ extension APIEndpoint: AuthRepositoryEndpoints {
                         bodyEncoding: .jsonSerializationData)
     }
     
-    static func signIn(with request: UserHTTPDTO.POST.Request) -> Endpoint<UserHTTPDTO.POST.Response> {
+    static func signIn(with request: UserHTTPDTO.Request) -> Endpoint<UserHTTPDTO.Response> {
         return Endpoint(path: "api/v1/users/signin",
                         method: .post,
                         headerParameters: ["content-type": "application/json"],
@@ -34,15 +34,7 @@ extension APIEndpoint: AuthRepositoryEndpoints {
                         bodyEncoding: .jsonSerializationData)
     }
     
-//    static func signOut(with request: UserHTTPDTO.GET.Request) -> Endpoint<Void>? {
-//        let authService = Application.app.services.authentication
-//        guard authService.user?._id == request.user._id else { return nil }
-//        return Endpoint(path: "api/v1/users/signout",
-//                        method: .get,
-//                        headerParameters: ["content-type": "application/json"])
-//    }
-    
-    static func signOut(with request: UserHTTPDTO.GET.Request) -> Endpoint<VoidHTTP.Response>? {
+    static func signOut(with request: UserHTTPDTO.Request) -> Endpoint<VoidHTTP.Response>? {
         let authService = Application.app.services.authentication
         guard authService.user?._id == request.user._id else { return nil }
         return Endpoint(path: "api/v1/users/signout",
@@ -69,7 +61,7 @@ extension APIEndpoint: AuthRepositoryEndpoints {
                         bodyParameters: ["name": request.profile.name])
     }
     
-    static func updateUserData(with request: UserHTTPDTO.PATCH.Request) -> Endpoint<UserHTTPDTO.PATCH.Response> {
+    static func updateUserData(with request: UserHTTPDTO.Request) -> Endpoint<UserHTTPDTO.Response> {
         return Endpoint(path: "api/v1/users/update-data",
                         method: .patch,
                         headerParameters: ["content-type": "application/json"],

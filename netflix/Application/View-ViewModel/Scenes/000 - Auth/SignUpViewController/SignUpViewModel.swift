@@ -86,7 +86,7 @@ extension SignUpViewModel: ViewModelProtocol {
                               password: password,
                               passwordConfirm: passwordConfirm)
         
-        let requestDTO = UserHTTPDTO.POST.Request(user: userDTO)
+        let requestDTO = UserHTTPDTO.Request(user: userDTO, selectedProfile: nil)
         
         if #available(iOS 13.0, *) {
             Task {

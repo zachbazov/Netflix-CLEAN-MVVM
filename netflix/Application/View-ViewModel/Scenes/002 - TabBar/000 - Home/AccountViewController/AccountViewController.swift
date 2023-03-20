@@ -99,7 +99,7 @@ extension AccountViewController: ViewControllerProtocol {
             Task {
                 guard let user = authService.user else { return }
                 
-                let request = UserHTTPDTO.GET.Request(user: user)
+                let request = UserHTTPDTO.Request(user: user, selectedProfile: nil)
                 let status = await authService.signOut(with: request)
                 
                 guard status else { return }

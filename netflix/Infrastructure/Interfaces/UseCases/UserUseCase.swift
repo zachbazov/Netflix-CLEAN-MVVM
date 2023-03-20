@@ -24,20 +24,20 @@ extension UserUseCase: UseCase {
                        completion: ((Result<T, DataTransferError>) -> Void)?) -> Cancellable? {
         switch endpoint {
         case .signUp:
-            guard let request = request as? UserHTTPDTO.POST.Request else { return nil }
-            let completion = completion as? ((Result<UserHTTPDTO.POST.Response, DataTransferError>) -> Void) ?? { _ in }
+            guard let request = request as? UserHTTPDTO.Request else { return nil }
+            let completion = completion as? ((Result<UserHTTPDTO.Response, DataTransferError>) -> Void) ?? { _ in }
             return repository.signUp(request: request, completion: completion)
         case .signIn:
-            guard let request = request as? UserHTTPDTO.POST.Request else { return nil }
-            let completion = completion as? ((Result<UserHTTPDTO.POST.Response, DataTransferError>) -> Void) ?? { _ in }
-            let cached = cached as? ((UserHTTPDTO.POST.Response?) -> Void) ?? { _ in }
+            guard let request = request as? UserHTTPDTO.Request else { return nil }
+            let completion = completion as? ((Result<UserHTTPDTO.Response, DataTransferError>) -> Void) ?? { _ in }
+            let cached = cached as? ((UserHTTPDTO.Response?) -> Void) ?? { _ in }
             return repository.signIn(request: request, cached: cached, completion: completion)
         case .signOut:
             let completion = completion as? ((Result<VoidHTTP.Response, DataTransferError>) -> Void) ?? { _ in }
             return repository.signOut(completion: completion)
         case .updateUserData:
-            guard let request = request as? UserHTTPDTO.PATCH.Request else { return nil }
-            let completion = completion as? ((Result<UserHTTPDTO.PATCH.Response, DataTransferError>) -> Void) ?? { _ in }
+            guard let request = request as? UserHTTPDTO.Request else { return nil }
+            let completion = completion as? ((Result<UserHTTPDTO.Response, DataTransferError>) -> Void) ?? { _ in }
             return repository.updateUserProfile(request: request, completion: completion)
         case .getUserProfiles:
             guard let request = request as? UserProfileHTTPDTO.GET.Request else { return nil }
@@ -55,16 +55,16 @@ extension UserUseCase: UseCase {
                        request: U) async -> T? where T: Decodable {
         switch endpoint {
         case .signUp:
-            guard let request = request as? UserHTTPDTO.POST.Request else { return nil }
+            guard let request = request as? UserHTTPDTO.Request else { return nil }
             return await repository.signUp(request: request) as? T
         case .signIn:
-            guard let request = request as? UserHTTPDTO.POST.Request else { return nil }
+            guard let request = request as? UserHTTPDTO.Request else { return nil }
             return await repository.signIn(request: request) as? T
         case .signOut:
-            guard let request = request as? UserHTTPDTO.GET.Request else { return nil }
+            guard let request = request as? UserHTTPDTO.Request else { return nil }
             return await repository.signOut(request: request) as? T
         case .updateUserData:
-            guard let request = request as? UserHTTPDTO.PATCH.Request else { return nil }
+            guard let request = request as? UserHTTPDTO.Request else { return nil }
             return await repository.updateUserData(request: request) as? T
         case .getUserProfiles:
             guard let request = request as? UserProfileHTTPDTO.GET.Request else { return nil }

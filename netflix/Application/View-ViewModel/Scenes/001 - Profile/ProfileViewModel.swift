@@ -140,11 +140,11 @@ extension ProfileViewModel: ViewModelProtocol {
         
         guard let user = authService.user else { return }
         
-        let request = UserHTTPDTO.PATCH.Request(user: user, selectedProfile: profileId)
+        let request = UserHTTPDTO.Request(user: user, selectedProfile: profileId)
         
         userUseCase.repository.task = userUseCase.request(
             endpoint: .updateUserData,
-            for: UserHTTPDTO.PATCH.Response.self,
+            for: UserHTTPDTO.Response.self,
             request: request,
             cached: { _ in },
             completion: { result in
@@ -165,11 +165,11 @@ extension ProfileViewModel: ViewModelProtocol {
         
         guard let user = authService.user else { return }
         
-        let request = UserHTTPDTO.PATCH.Request(user: user, selectedProfile: profileId)
+        let request = UserHTTPDTO.Request(user: user, selectedProfile: profileId)
         
         userUseCase.repository.task = userUseCase.request(
             endpoint: .updateUserData,
-            for: UserHTTPDTO.PATCH.Response.self,
+            for: UserHTTPDTO.Response.self,
             request: request,
             cached: { _ in },
             completion: { result in
@@ -188,9 +188,9 @@ extension ProfileViewModel: ViewModelProtocol {
         
         guard let user = authService.user else { return false }
         
-        let request = UserHTTPDTO.PATCH.Request(user: user, selectedProfile: nil)
+        let request = UserHTTPDTO.Request(user: user, selectedProfile: nil)
         
-        let response = await userUseCase.request(endpoint: .updateUserData, for: UserHTTPDTO.PATCH.Response.self, request: request)
+        let response = await userUseCase.request(endpoint: .updateUserData, for: UserHTTPDTO.Response.self, request: request)
         
         guard let response = response else { return false }
         
@@ -205,9 +205,9 @@ extension ProfileViewModel: ViewModelProtocol {
         
         guard let user = authService.user else { return }
         
-        let request = UserHTTPDTO.PATCH.Request(user: user, selectedProfile: profileId)
+        let request = UserHTTPDTO.Request(user: user, selectedProfile: profileId)
         
-        let response = await userUseCase.request(endpoint: .updateUserData, for: UserHTTPDTO.PATCH.Response.self, request: request)
+        let response = await userUseCase.request(endpoint: .updateUserData, for: UserHTTPDTO.Response.self, request: request)
         
         guard let response = response else { return }
         
