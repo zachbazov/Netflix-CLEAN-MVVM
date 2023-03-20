@@ -101,18 +101,7 @@ extension AuthResponseStorage {
         responseEntity.token = response.token
         responseEntity.data = response.data
         
-        do {
-            if #available(iOS 15.0, *) {
-                context.performAndWait {
-                    do { try context.save() }
-                    catch { printIfDebug(.error, "CoreDataAuthResponseStorage asynchronous unresolved error \(error), \((error as NSError).userInfo)") }
-                }
-                return
-            }
-            
-            try context.save()
-        }
-        catch { printIfDebug(.error, "CoreDataAuthResponseStorage unresolved error \(error), \((error as NSError).userInfo)") }
+        coreDataStorage.saveContext()
     }
     
     func save(response: UserHTTPDTO.PATCH.Response, for request: UserHTTPDTO.PATCH.Request) {
@@ -144,9 +133,8 @@ extension AuthResponseStorage {
         responseEntity?.request = requestEntity
         responseEntity?.token = token
         responseEntity?.data = response.data
-        print("saved", response)
-        do { try context.save() }
-        catch { printIfDebug(.error, "CoreDataAuthResponseStorage unresolved error \(error), \((error as NSError).userInfo)") }
+        
+        coreDataStorage.saveContext()
     }
     
     func deleteResponse(for request: UserHTTPDTO.POST.Request,
@@ -157,7 +145,7 @@ extension AuthResponseStorage {
             if let result = try context.fetch(fetchRequest).first {
                 context.delete(result)
                 
-                try context.save()
+                coreDataStorage.saveContext()
                 
                 completion?()
             }
@@ -174,7 +162,7 @@ extension AuthResponseStorage {
             if let result = try context.fetch(fetchRequest).first {
                 context.delete(result)
                 
-                try context.save()
+                coreDataStorage.saveContext()
                 
                 completion?()
             }
@@ -191,7 +179,7 @@ extension AuthResponseStorage {
             if let result = try context.fetch(fetchRequest).first {
                 context.delete(result)
                 
-                try context.save()
+                coreDataStorage.saveContext()
                 
                 completion?()
             }
