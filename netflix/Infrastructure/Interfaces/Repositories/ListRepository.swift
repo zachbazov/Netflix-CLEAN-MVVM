@@ -7,6 +7,13 @@
 
 import Foundation
 
+// MARK: - ListRepositoryRouting Type
+
+protocol ListRepositoryRouting {
+    static func getMyList(with request: ListHTTPDTO.GET.Request) -> Endpoint<ListHTTPDTO.GET.Response>
+    static func updateMyList(with request: ListHTTPDTO.PATCH.Request) -> Endpoint<ListHTTPDTO.PATCH.Response>
+}
+
 // MARK: - ListRepository Type
 
 final class ListRepository: Repository {

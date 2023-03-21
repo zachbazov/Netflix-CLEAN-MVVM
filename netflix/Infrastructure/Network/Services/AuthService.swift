@@ -27,7 +27,7 @@ private protocol AuthServiceInput {
 
 private protocol AuthServiceOutput {
     var user: UserDTO? { get }
-    var responses: AuthResponseStorage { get }
+    var responses: UserResponseStore { get }
     
     func signOut()
 }
@@ -38,7 +38,7 @@ private typealias AuthServiceProtocol = AuthServiceInput & AuthServiceOutput
 
 class AuthService {
     var user: UserDTO?
-    fileprivate var responses: AuthResponseStorage { return Application.app.stores.authResponses }
+    fileprivate var responses: UserResponseStore { return Application.app.stores.userResponses }
 }
 
 // MARK: - AuthServiceProtocol Implementation
@@ -61,7 +61,7 @@ extension AuthService: AuthServiceProtocol {
     /// - Parameter request: Request object via invocation.
     fileprivate func deleteResponse(for request: UserHTTPDTO.Request) {
         let mediaResponses = Application.app.stores.mediaResponses
-        let context = Application.app.stores.authResponses.coreDataStorage.context()
+        let context = Application.app.stores.userResponses.coreDataStorage.context()
         responses.deleteResponse(for: request, in: context)
         mediaResponses.deleteResponse(in: context)
         
@@ -70,7 +70,7 @@ extension AuthService: AuthServiceProtocol {
     
     fileprivate func deleteResponse(for request: UserHTTPDTO.Request) async {
         let mediaResponses = Application.app.stores.mediaResponses
-        let context = Application.app.stores.authResponses.coreDataStorage.context()
+        let context = Application.app.stores.userResponses.coreDataStorage.context()
         responses.deleteResponse(for: request, in: context)
         mediaResponses.deleteResponse(in: context)
         

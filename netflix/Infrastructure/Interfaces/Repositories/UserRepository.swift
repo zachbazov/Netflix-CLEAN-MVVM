@@ -7,6 +7,14 @@
 
 import Foundation
 
+// MARK: - UserRepositoryRouting Type
+
+protocol UserRepositoryRouting {
+    static func signUp(with requestDTO: UserHTTPDTO.Request) -> Endpoint<UserHTTPDTO.Response>
+    static func signIn(with requestDTO: UserHTTPDTO.Request) -> Endpoint<UserHTTPDTO.Response>
+    static func signOut(with request: UserHTTPDTO.Request) -> Endpoint<VoidHTTP.Response>?
+}
+
 // MARK: - UserRepositoryProtocol Type
 
 private protocol UserRepositoryInput {
@@ -21,6 +29,8 @@ private protocol UserRepositoryInput {
                          completion: @escaping (Result<UserProfileHTTPDTO.GET.Response, DataTransferError>) -> Void) -> Cancellable?
     func createUserProfile(request: UserProfileHTTPDTO.POST.Request,
                            completion: @escaping (Result<UserProfileHTTPDTO.POST.Response, DataTransferError>) -> Void) -> Cancellable?
+    func updateUserProfile(request: UserHTTPDTO.Request,
+                           completion: @escaping (Result<UserHTTPDTO.Response, DataTransferError>) -> Void) -> Cancellable?
     
     func signUp(request: UserHTTPDTO.Request) async -> UserHTTPDTO.Response?
     func signIn(request: UserHTTPDTO.Request) async -> UserHTTPDTO.Response?
@@ -28,15 +38,22 @@ private protocol UserRepositoryInput {
     
     func getUserProfiles(request: UserProfileHTTPDTO.GET.Request) async -> UserProfileHTTPDTO.GET.Response?
     func createUserProfile(request: UserProfileHTTPDTO.POST.Request) async -> UserProfileHTTPDTO.POST.Response?
+    func updateUserData(request: UserHTTPDTO.Request) async -> UserHTTPDTO.Response?
 }
 
-private typealias UserRepositoryProtocol = UserRepositoryInput
+private protocol UserRepositoryOutput {
+    var dataTransferService: DataTransferService { get }
+    var userResponses: UserResponseStore { get }
+    var task: Cancellable? { get }
+}
+
+private typealias UserRepositoryProtocol = UserRepositoryInput & UserRepositoryOutput
 
 // MARK: - UserRepository Type
 
 final class UserRepository {
     let dataTransferService: DataTransferService = Application.app.services.dataTransfer
-    let responseStorage: AuthResponseStorage = Application.app.stores.authResponses
+    let userResponses: UserResponseStore = Application.app.stores.userResponses
     var task: Cancellable? { willSet { task?.cancel() } }
 }
 
@@ -57,7 +74,7 @@ extension UserRepository: UserRepositoryProtocol {
         task.networkTask = dataTransferService.request(with: endpoint) { [weak self] result in
             switch result {
             case .success(let response):
-                self?.responseStorage.save(response: response, for: request)
+                self?.userResponses.save(response: response, for: request)
                 completion(.success(response))
             case .failure(let error):
                 completion(.failure(error))
@@ -72,7 +89,7 @@ extension UserRepository: UserRepositoryProtocol {
                 completion: @escaping (Result<UserHTTPDTO.Response, DataTransferError>) -> Void) -> Cancellable? {
         let task = RepositoryTask()
         
-        responseStorage.getResponse(for: request) { [weak self] result in
+        userResponses.getResponse(for: request) { [weak self] result in
             guard let self = self else { return }
             
             if case let .success(response?) = result {
@@ -85,7 +102,7 @@ extension UserRepository: UserRepositoryProtocol {
             task.networkTask = self.dataTransferService.request(with: endpoint) { result in
                 switch result {
                 case .success(let response):
-                    self.responseStorage.save(response: response, for: request)
+                    self.userResponses.save(response: response, for: request)
                     completion(.success(response))
                 case .failure(let error):
                     completion(.failure(error))
@@ -106,8 +123,8 @@ extension UserRepository: UserRepositoryProtocol {
         guard let endpoint = APIEndpoint.signOut(with: request) else { return nil }
         task.networkTask = dataTransferService.request(with: endpoint, completion: completion)
         
-        let context = responseStorage.coreDataStorage.context()
-        responseStorage.deleteResponse(for: request, in: context)
+        let context = userResponses.coreDataStorage.context()
+        userResponses.deleteResponse(for: request, in: context)
         
         return task
     }
@@ -117,7 +134,7 @@ extension UserRepository: UserRepositoryProtocol {
         let result = await dataTransferService.request(with: endpoint)
         
         if case let .success(response) = result {
-            responseStorage.save(response: response, for: request)
+            userResponses.save(response: response, for: request)
             return response
         }
         
@@ -125,12 +142,12 @@ extension UserRepository: UserRepositoryProtocol {
     }
     
     func signIn(request: UserHTTPDTO.Request) async -> UserHTTPDTO.Response? {
-        guard let cached = await responseStorage.getResponse(for: request) else {
+        guard let cached = await userResponses.getResponse(for: request) else {
             let endpoint = APIEndpoint.signIn(with: request)
             let result = await dataTransferService.request(with: endpoint)
             
             if case let .success(response) = result {
-                responseStorage.save(response: response, for: request)
+                userResponses.save(response: response, for: request)
                 return response
             }
             
@@ -202,8 +219,8 @@ extension UserRepository: UserRepositoryProtocol {
         let result = await dataTransferService.request(with: endpoint)
 
         if case let .success(response) = result {
-            let context = responseStorage.coreDataStorage.context()
-            responseStorage.deleteResponse(for: request, in: context)
+            let context = userResponses.coreDataStorage.context()
+            userResponses.deleteResponse(for: request, in: context)
             return response
         }
         
@@ -237,7 +254,7 @@ extension UserRepository: UserRepositoryProtocol {
         let result = await dataTransferService.request(with: endpoint)
         
         if case let .success(response) = result {
-            responseStorage.save(response: response, for: request)
+            userResponses.save(response: response, for: request)
             return response
         }
         

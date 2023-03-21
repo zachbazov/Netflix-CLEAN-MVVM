@@ -41,8 +41,8 @@ extension UserHTTPDTO.Response {
 }
 
 extension UserHTTPDTO.Request {
-    func toEntity(in context: NSManagedObjectContext) -> AuthRequestEntity {
-        let entity: AuthRequestEntity = .init(context: context)
+    func toEntity(in context: NSManagedObjectContext) -> UserHTTPRequestEntity {
+        let entity: UserHTTPRequestEntity = .init(context: context)
         entity.user?._id = user._id
         entity.user?.name = user.name
         entity.user?.email = user.email
@@ -57,8 +57,8 @@ extension UserHTTPDTO.Request {
 }
 
 extension UserHTTPDTO.Response {
-    func toEntity(in context: NSManagedObjectContext) -> AuthResponseEntity {
-        let entity: AuthResponseEntity = .init(context: context)
+    func toEntity(in context: NSManagedObjectContext) -> UserHTTPResponseEntity {
+        let entity: UserHTTPResponseEntity = .init(context: context)
         entity.status = status
         entity.token = token
         entity.data = data

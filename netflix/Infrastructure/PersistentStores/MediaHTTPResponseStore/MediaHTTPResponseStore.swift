@@ -1,5 +1,5 @@
 //
-//  MediaResponseStorage.swift
+//  MediaHTTPResponseStore.swift
 //  netflix
 //
 //  Created by Zach Bazov on 19/10/2022.
@@ -7,9 +7,9 @@
 
 import CoreData
 
-// MARK: - MediaResponseStorage Type
+// MARK: - MediaHTTPResponseStore Type
 
-final class MediaResponseStorage {
+final class MediaHTTPResponseStore {
     private let coreDataStorage: CoreDataStorage
     
     init(coreDataStorage: CoreDataStorage = .shared) {
@@ -19,9 +19,9 @@ final class MediaResponseStorage {
 
 // MARK: - Methods
 
-extension MediaResponseStorage {
-    private func fetchRequest() -> NSFetchRequest<MediaResponseEntity> {
-        let request: NSFetchRequest = MediaResponseEntity.fetchRequest()
+extension MediaHTTPResponseStore {
+    private func fetchRequest() -> NSFetchRequest<MediaHTTPResponseEntity> {
+        let request: NSFetchRequest = MediaHTTPResponseEntity.fetchRequest()
         return request
     }
     
@@ -54,7 +54,7 @@ extension MediaResponseStorage {
         
         deleteResponse(in: context)
         
-        let responseEntity: MediaResponseEntity = response.toEntity(in: context)
+        let responseEntity: MediaHTTPResponseEntity = response.toEntity(in: context)
         responseEntity.status = response.status
         responseEntity.results = Int32(response.results)
         responseEntity.data = response.data

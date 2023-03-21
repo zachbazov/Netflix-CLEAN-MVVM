@@ -11,8 +11,8 @@ import Foundation
 
 private protocol StoresOutput {
     var services: Services { get }
-    var authResponses: AuthResponseStorage { get }
-    var mediaResponses: MediaResponseStorage { get }
+    var userResponses: UserResponseStore { get }
+    var mediaResponses: MediaHTTPResponseStore { get }
 }
 
 private typealias StoresProtocol = StoresOutput
@@ -22,8 +22,8 @@ private typealias StoresProtocol = StoresOutput
 final class Stores: StoresProtocol {
     fileprivate let services: Services
     
-    lazy var authResponses = AuthResponseStorage(authService: services.authentication)
-    lazy var mediaResponses = MediaResponseStorage()
+    lazy var userResponses = UserResponseStore(authService: services.authentication)
+    lazy var mediaResponses = MediaHTTPResponseStore()
     
     required init(services: Services) {
         self.services = services

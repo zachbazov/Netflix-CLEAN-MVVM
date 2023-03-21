@@ -11,9 +11,9 @@ import Foundation
 
 struct APIEndpoint {}
 
-// MARK: - AuthRepositoryEndpoints Implementation
+// MARK: - UserRepositoryRouting Implementation
 
-extension APIEndpoint: AuthRepositoryEndpoints {
+extension APIEndpoint: UserRepositoryRouting {
     static func signUp(with request: UserHTTPDTO.Request) -> Endpoint<UserHTTPDTO.Response> {
         return Endpoint(path: "api/v1/users/signup",
                         method: .post,
@@ -67,9 +67,9 @@ extension APIEndpoint: AuthRepositoryEndpoints {
     }
 }
 
-// MARK: - SectionsRepositoryEndpoints Implementation
+// MARK: - SectionsRepositoryRouting Implementation
 
-extension APIEndpoint: SectionsRepositoryEndpoints {
+extension APIEndpoint: SectionsRepositoryRouting {
     static func getAllSections() -> Endpoint<SectionHTTPDTO.Response> {
         return Endpoint(path: "api/v1/sections",
                         method: .get,
@@ -78,9 +78,9 @@ extension APIEndpoint: SectionsRepositoryEndpoints {
     }
 }
 
-// MARK: - MediaRepositoryEndpoints Implementation
+// MARK: - MediaRepositoryRouting Implementation
 
-extension APIEndpoint: MediaRepositoryEndpoints {
+extension APIEndpoint: MediaRepositoryRouting {
     static func getAllMedia() -> Endpoint<MediaHTTPDTO.Response> {
         return Endpoint(path: "api/v1/media",
                         method: .get,
@@ -116,9 +116,9 @@ extension APIEndpoint: MediaRepositoryEndpoints {
     }
 }
 
-// MARK: - SeasonRepositoryEndpoints Implementation
+// MARK: - SeasonRepositoryRouting Implementation
 
-extension APIEndpoint: SeasonRepositoryEndpoints {
+extension APIEndpoint: SeasonRepositoryRouting {
     static func getSeason(with request: SeasonHTTPDTO.Request) -> Endpoint<SeasonHTTPDTO.Response> {
         return Endpoint(path: "api/v1/seasons",
                         method: .get,
@@ -127,9 +127,9 @@ extension APIEndpoint: SeasonRepositoryEndpoints {
     }
 }
 
-// MARK: - ListRepositoryEndpoints Implementation
+// MARK: - ListRepositoryRouting Implementation
 
-extension APIEndpoint: ListRepositoryEndpoints {
+extension APIEndpoint: ListRepositoryRouting {
     static func getMyList(with request: ListHTTPDTO.GET.Request) -> Endpoint<ListHTTPDTO.GET.Response> {
         return Endpoint(path: "api/v1/mylists",
                         method: .get,

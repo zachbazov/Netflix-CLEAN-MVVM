@@ -31,8 +31,8 @@ extension MediaHTTPDTO.Response {
                      data: data.map { $0.toDomain() })
     }
     
-    func toEntity(in context: NSManagedObjectContext) -> MediaResponseEntity {
-        let entity: MediaResponseEntity = .init(context: context)
+    func toEntity(in context: NSManagedObjectContext) -> MediaHTTPResponseEntity {
+        let entity: MediaHTTPResponseEntity = .init(context: context)
         entity.status = status
         entity.results = Int32(results)
         entity.data = data

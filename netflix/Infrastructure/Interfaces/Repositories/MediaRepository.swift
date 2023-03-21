@@ -7,11 +7,30 @@
 
 import Foundation
 
+// MARK: - MediaRepositoryRouting Type
+
+protocol MediaRepositoryRouting: SearchRepositoryRouting, NewsRepositoryRouting {
+    static func getAllMedia() -> Endpoint<MediaHTTPDTO.Response>
+    static func getMedia(with request: MediaHTTPDTO.Request) -> Endpoint<MediaHTTPDTO.Response>
+}
+
+// MARK: - SearchRepositoryRouting Type
+
+protocol SearchRepositoryRouting {
+    static func searchMedia(with request: SearchHTTPDTO.Request) -> Endpoint<SearchHTTPDTO.Response>
+}
+
+// MARK: - NewsRepositoryRouting Type
+
+protocol NewsRepositoryRouting {
+    static func getUpcomingMedia(with request: NewsHTTPDTO.Request) -> Endpoint<NewsHTTPDTO.Response>
+}
+
 // MARK: - MediaRepository Type
 
 final class MediaRepository: Repository {
     let dataTransferService: DataTransferService = Application.app.services.dataTransfer
-    let responseStorage: MediaResponseStorage = Application.app.stores.mediaResponses
+    let responseStorage: MediaHTTPResponseStore = Application.app.stores.mediaResponses
     var task: Cancellable? { willSet { task?.cancel() } }
 }
 

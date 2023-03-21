@@ -1,5 +1,5 @@
 //
-//  MediaResponseEntity+Mapping.swift
+//  MediaHTTPResponseEntity+Mapping.swift
 //  netflix
 //
 //  Created by Zach Bazov on 20/10/2022.
@@ -7,9 +7,9 @@
 
 import Foundation
 
-// MARK: - MediaResponseEntity + Mapping
+// MARK: - MediaHTTPResponseEntity + Mapping
 
-extension MediaResponseEntity {
+extension MediaHTTPResponseEntity {
     func toDTO() -> MediaHTTPDTO.Response {
         return .init(status: status!,
                      results: Int(results),

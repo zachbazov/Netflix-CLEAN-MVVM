@@ -7,6 +7,12 @@
 
 import Foundation
 
+// MARK: - SectionsRepositoryRouting Type
+
+protocol SectionsRepositoryRouting {
+    static func getAllSections() -> Endpoint<SectionHTTPDTO.Response>
+}
+
 // MARK: - SectionRepository Type
 
 final class SectionRepository: Repository {
@@ -35,7 +41,7 @@ extension SectionRepository {
         return task
     }
     
-    func getAll<T>() async -> T? where T : Decodable {
+    func getAll<T>() async -> T? where T: Decodable {
         let endpoint = APIEndpoint.getAllSections()
         let result = await self.dataTransferService.request(with: endpoint)
         if case let .success(response) = result {

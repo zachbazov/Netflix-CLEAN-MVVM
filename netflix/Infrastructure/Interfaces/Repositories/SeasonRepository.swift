@@ -7,6 +7,12 @@
 
 import Foundation
 
+// MARK: - SeasonRepositoryRouting Type
+
+protocol SeasonRepositoryRouting {
+    static func getSeason(with request: SeasonHTTPDTO.Request) -> Endpoint<SeasonHTTPDTO.Response>
+}
+
 // MARK: - SeasonRepository Type
 
 final class SeasonRepository: Repository {

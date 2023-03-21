@@ -1,5 +1,5 @@
 //
-//  AuthResponseStorage.swift
+//  UserResponseStore.swift
 //  netflix
 //
 //  Created by Zach Bazov on 01/09/2022.
@@ -7,9 +7,9 @@
 
 import CoreData
 
-// MARK: - AuthResponseStorage Type
+// MARK: - UserResponseStore Type
 
-final class AuthResponseStorage {
+final class UserResponseStore {
     let coreDataStorage: CoreDataStorage
     private let authService: AuthService
     
@@ -22,11 +22,11 @@ final class AuthResponseStorage {
 
 // MARK: - Methods
 
-extension AuthResponseStorage {
-    func fetchRequest(for requestDTO: UserHTTPDTO.Request) -> NSFetchRequest<AuthRequestEntity> {
-        let request: NSFetchRequest = AuthRequestEntity.fetchRequest()
+extension UserResponseStore {
+    func fetchRequest(for requestDTO: UserHTTPDTO.Request) -> NSFetchRequest<UserHTTPRequestEntity> {
+        let request: NSFetchRequest = UserHTTPRequestEntity.fetchRequest()
         request.predicate = NSPredicate(format: "%K = %@",
-                                        #keyPath(AuthRequestEntity.userId),
+                                        #keyPath(UserHTTPRequestEntity.userId),
                                         requestDTO.user._id ?? "")
         return request
     }
@@ -34,7 +34,7 @@ extension AuthResponseStorage {
     func getResponse(completion: @escaping (Result<UserHTTPDTO.Response?, CoreDataStorageError>) -> Void) {
         let context = coreDataStorage.context()
         do {
-            let fetchRequest: NSFetchRequest = AuthResponseEntity.fetchRequest()
+            let fetchRequest: NSFetchRequest = UserHTTPResponseEntity.fetchRequest()
             let responseEntity = try context.fetch(fetchRequest).first
             completion(.success(responseEntity?.toDTO()))
         } catch {
@@ -59,8 +59,8 @@ extension AuthResponseStorage {
         
         deleteResponse(for: request, in: context)
         
-        let requestEntity: AuthRequestEntity = request.toEntity(in: context)
-        let responseEntity: AuthResponseEntity = response.toEntity(in: context)
+        let requestEntity: UserHTTPRequestEntity = request.toEntity(in: context)
+        let responseEntity: UserHTTPResponseEntity = response.toEntity(in: context)
         
         request.user._id = response.data?._id
         request.user.name = response.data?.name
@@ -104,7 +104,7 @@ extension AuthResponseStorage {
     
     func getResponse() async -> UserHTTPDTO.Response? {
         let context = coreDataStorage.context()
-        let fetchRequest = AuthResponseEntity.fetchRequest()
+        let fetchRequest = UserHTTPResponseEntity.fetchRequest()
         guard let responseEntity = try? context.fetch(fetchRequest).first else { return nil }
         let response = responseEntity.toDTO()
         return response
