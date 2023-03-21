@@ -1088,18 +1088,8 @@
 		A186923628CA92620087DE3B /* DataSources */ = {
 			isa = PBXGroup;
 			children = (
-				A1E81D2928CFE4A400D044EA /* HomeTableViewDataSource.swift */,
-				A1E81D2B28CFE4A900D044EA /* HomeCollectionViewDataSource.swift */,
-				A1BA1DC128DCB7D700730EA8 /* NavigationOverlayTableViewDataSource.swift */,
-				A18D85212940DA7000840045 /* BrowseOverlayCollectionViewDataSource.swift */,
-				A1741D1228E67A4F00F3C46B /* DetailTableViewDataSource.swift */,
-				A1741D3928EBA16E00F3C46B /* DetailCollectionViewDataSource.swift */,
-				A130BCA3294FAA210070EA5E /* SearchCollectionViewDataSource.swift */,
-				A130BCE3295135820070EA5E /* NewsCollectionViewDataSource.swift */,
-				A14E0CCE29BCBE6D00F55500 /* ProfileCollectionViewDataSource.swift */,
-				A14E0CCA29BCAB9D00F55500 /* AccountMenuTableViewDataSource.swift */,
-				A14E0CD329BE81F200F55500 /* NotificationCollectionViewDataSource.swift */,
-				A14E0CF529C337A800F55500 /* UserProfileCollectionViewDataSource.swift */,
+				A1D23AB729CA1A1100748029 /* TableView */,
+				A1D23AB829CA1A1B00748029 /* CollectionView */,
 			);
 			path = DataSources;
 			sourceTree = "<group>";
@@ -1971,6 +1961,32 @@
 				A14E0CC829BCAB3600F55500 /* AccountMenuItem.swift */,
 			);
 			path = AccountMenuItem;
+			sourceTree = "<group>";
+		};
+		A1D23AB729CA1A1100748029 /* TableView */ = {
+			isa = PBXGroup;
+			children = (
+				A1E81D2928CFE4A400D044EA /* HomeTableViewDataSource.swift */,
+				A1BA1DC128DCB7D700730EA8 /* NavigationOverlayTableViewDataSource.swift */,
+				A1741D1228E67A4F00F3C46B /* DetailTableViewDataSource.swift */,
+				A14E0CCA29BCAB9D00F55500 /* AccountMenuTableViewDataSource.swift */,
+			);
+			path = TableView;
+			sourceTree = "<group>";
+		};
+		A1D23AB829CA1A1B00748029 /* CollectionView */ = {
+			isa = PBXGroup;
+			children = (
+				A1E81D2B28CFE4A900D044EA /* HomeCollectionViewDataSource.swift */,
+				A18D85212940DA7000840045 /* BrowseOverlayCollectionViewDataSource.swift */,
+				A1741D3928EBA16E00F3C46B /* DetailCollectionViewDataSource.swift */,
+				A130BCA3294FAA210070EA5E /* SearchCollectionViewDataSource.swift */,
+				A130BCE3295135820070EA5E /* NewsCollectionViewDataSource.swift */,
+				A14E0CCE29BCBE6D00F55500 /* ProfileCollectionViewDataSource.swift */,
+				A14E0CD329BE81F200F55500 /* NotificationCollectionViewDataSource.swift */,
+				A14E0CF529C337A800F55500 /* UserProfileCollectionViewDataSource.swift */,
+			);
+			path = CollectionView;
 			sourceTree = "<group>";
 		};
 		A1E3706629BB1E2B00CFEE9C /* AccountViewController */ = {
