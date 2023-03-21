@@ -32,28 +32,25 @@ extension AuthResponseStorage {
     }
     
     func getResponse(completion: @escaping (Result<UserHTTPDTO.Response?, CoreDataStorageError>) -> Void) {
-        coreDataStorage.performBackgroundTask { context in
-            do {
-                let fetchRequest: NSFetchRequest = AuthResponseEntity.fetchRequest()
-                let responseEntity = try context.fetch(fetchRequest).first
-                completion(.success(responseEntity?.toDTO()))
-            } catch {
-                completion(.failure(CoreDataStorageError.readError(error)))
-            }
+        let context = coreDataStorage.context()
+        do {
+            let fetchRequest: NSFetchRequest = AuthResponseEntity.fetchRequest()
+            let responseEntity = try context.fetch(fetchRequest).first
+            completion(.success(responseEntity?.toDTO()))
+        } catch {
+            completion(.failure(CoreDataStorageError.readError(error)))
         }
     }
     
     func getResponse(for request: UserHTTPDTO.Request,
                      completion: @escaping (Result<UserHTTPDTO.Response?, CoreDataStorageError>) -> Void) {
-        coreDataStorage.performBackgroundTask { [weak self] context in
-            guard let self = self else { return }
-            do {
-                let fetchRequest: NSFetchRequest = self.fetchRequest(for: request)
-                let requestEntity = try context.fetch(fetchRequest).first
-                completion(.success(requestEntity?.response?.toDTO()))
-            } catch {
-                completion(.failure(CoreDataStorageError.readError(error)))
-            }
+        let context = coreDataStorage.context()
+        do {
+            let fetchRequest: NSFetchRequest = self.fetchRequest(for: request)
+            let requestEntity = try context.fetch(fetchRequest).first
+            completion(.success(requestEntity?.response?.toDTO()))
+        } catch {
+            completion(.failure(CoreDataStorageError.readError(error)))
         }
     }
     
@@ -87,39 +84,6 @@ extension AuthResponseStorage {
         
         coreDataStorage.saveContext()
     }
-//
-//    func save(response: UserHTTPDTO.PATCH.Response, for request: UserHTTPDTO.PATCH.Request) {
-//        let context = coreDataStorage.context()
-//
-//        deleteResponse(for: request, in: context)
-//
-//        let requestEntity: AuthRequestEntity = request.toEntity(in: context)
-//        let responseEntity: AuthResponseEntity? = response.toEntity(in: context)
-//
-//        let token = authService.user?.token
-//
-//        request.user._id = response.data?._id
-//        request.user.name = response.data?.name
-//        request.user.role = response.data?.role
-//        request.user.active = response.data?.active
-//        request.user.mylist = response.data?.mylist
-//        request.user.token = token
-//        request.user.profiles = response.data?.profiles
-//        request.user.selectedProfile = response.data?.selectedProfile
-//
-//        requestEntity.response = responseEntity
-//        requestEntity.user = request.user
-//        requestEntity.userId = request.user._id
-//
-//        response.data?.token = token
-//        response.data?.password = request.user.password
-//
-//        responseEntity?.request = requestEntity
-//        responseEntity?.token = token
-//        responseEntity?.data = response.data
-//
-//        coreDataStorage.saveContext()
-//    }
     
     func deleteResponse(for request: UserHTTPDTO.Request,
                         in context: NSManagedObjectContext,
@@ -137,40 +101,6 @@ extension AuthResponseStorage {
             printIfDebug(.error, "Unresolved error \(error) occured as trying to delete object.")
         }
     }
-    
-//    func deleteResponse(for request: UserHTTPDTO.GET.Request,
-//                        in context: NSManagedObjectContext,
-//                        completion: (() -> Void)? = nil) {
-//        let fetchRequest = self.fetchRequest(for: request)
-//        do {
-//            if let result = try context.fetch(fetchRequest).first {
-//                context.delete(result)
-//
-//                coreDataStorage.saveContext()
-//
-//                completion?()
-//            }
-//        } catch {
-//            printIfDebug(.error, "Unresolved error \(error) occured as trying to delete object.")
-//        }
-//    }
-//
-//    func deleteResponse(for request: UserHTTPDTO.PATCH.Request,
-//                        in context: NSManagedObjectContext,
-//                        completion: (() -> Void)? = nil) {
-//        let fetchRequest = self.fetchRequest(for: request)
-//        do {
-//            if let result = try context.fetch(fetchRequest).first {
-//                context.delete(result)
-//
-//                coreDataStorage.saveContext()
-//
-//                completion?()
-//            }
-//        } catch {
-//            printIfDebug(.error, "Unresolved error \(error) occured as trying to delete object.")
-//        }
-//    }
     
     func getResponse() async -> UserHTTPDTO.Response? {
         let context = coreDataStorage.context()

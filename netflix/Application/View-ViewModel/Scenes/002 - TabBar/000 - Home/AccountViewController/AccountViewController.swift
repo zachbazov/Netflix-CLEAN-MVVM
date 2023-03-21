@@ -95,6 +95,8 @@ extension AccountViewController: ViewControllerProtocol {
         let authService = Application.app.services.authentication
         let coordinator = Application.app.coordinator
         
+        ActivityIndicatorView.viewDidShow()
+        
         if #available(iOS 13, *) {
             Task {
                 guard let user = authService.user else { return }
@@ -103,6 +105,8 @@ extension AccountViewController: ViewControllerProtocol {
                 let status = await authService.signOut(with: request)
                 
                 guard status else { return }
+                
+                ActivityIndicatorView.viewDidHide()
                 
                 backButtonDidTap()
                 
@@ -113,8 +117,6 @@ extension AccountViewController: ViewControllerProtocol {
         }
         
         authService.signOut()
-        
-        mainQueueDispatch { coordinator.coordinate(to: .auth) }
     }
     
     fileprivate func didFinish() {

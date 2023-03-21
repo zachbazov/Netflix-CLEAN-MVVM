@@ -200,6 +200,8 @@ extension UserRepository: UserRepositoryProtocol {
         let result = await dataTransferService.request(with: endpoint)
 
         if case let .success(response) = result {
+            let context = responseStorage.coreDataStorage.context()
+            responseStorage.deleteResponse(for: request, in: context)
             return response
         }
         
@@ -233,6 +235,7 @@ extension UserRepository: UserRepositoryProtocol {
         let result = await dataTransferService.request(with: endpoint)
         
         if case let .success(response) = result {
+            responseStorage.save(response: response, for: request)
             return response
         }
         

@@ -33,9 +33,25 @@ final class CoreDataStorage {
 //        printContainerUrl(for: container)
         return container
     }()
+    
+    private(set) lazy var mainContext: NSManagedObjectContext = createMainContext()
+    
+    private lazy var privateContext: NSManagedObjectContext = createPrivateContext()
+    
+    private func createMainContext() -> NSManagedObjectContext {
+        let context = NSManagedObjectContext(concurrencyType: .mainQueueConcurrencyType)
+        context.parent = self.privateContext
+        return context
+    }
+    
+    private func createPrivateContext() -> NSManagedObjectContext {
+        let context = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
+        context.persistentStoreCoordinator = self.persistentContainer.persistentStoreCoordinator
+        return context
+    }
 }
 
-// MARK: - UI Setup
+// MARK: - Private UI Implementation
 
 extension CoreDataStorage {
     private func printContainerUrl(for container: NSPersistentContainer) {
@@ -58,19 +74,27 @@ extension CoreDataStorage {
 
 extension CoreDataStorage {
     func context() -> NSManagedObjectContext {
-        return persistentContainer.viewContext
-    }
-    
-    func performBackgroundTask(_ block: @escaping (NSManagedObjectContext) -> Void) {
-        persistentContainer.performBackgroundTask(block)
+        return mainContext
     }
     
     func saveContext() {
-        let context = persistentContainer.viewContext
-        
-        guard context.hasChanges else { return }
-        
-        do { try context.save() }
-        catch { assertionFailure("CoreDataStorage unresolved error \(error), \((error as NSError).userInfo)") }
+        mainContext.performAndWait {
+            do {
+                guard mainContext.hasChanges else { return }
+                try mainContext.save()
+            } catch {
+                assertionFailure("CoreDataStorage main context unresolved error \(error), \((error as NSError).userInfo)")
+            }
+            
+            privateContext.perform { [weak self] in
+                guard let self = self else { return }
+                do {
+                    guard self.privateContext.hasChanges else { return }
+                    try self.privateContext.save()
+                } catch {
+                    assertionFailure("CoreDataStorage private context unresolved error \(error), \((error as NSError).userInfo)")
+                }
+            }
+        }
     }
 }

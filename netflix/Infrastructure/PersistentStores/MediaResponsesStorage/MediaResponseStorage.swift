@@ -26,14 +26,13 @@ extension MediaResponseStorage {
     }
     
     func getResponse(completion: @escaping (Result<MediaHTTPDTO.Response?, CoreDataStorageError>) -> Void) {
-        coreDataStorage.performBackgroundTask { context in
-            do {
-                let fetchRequest = self.fetchRequest()
-                let responseEntity = try context.fetch(fetchRequest).first
-                completion(.success(responseEntity?.toDTO()))
-            } catch {
-                completion(.failure(CoreDataStorageError.readError(error)))
-            }
+        let context = coreDataStorage.context()
+        do {
+            let fetchRequest = self.fetchRequest()
+            let responseEntity = try context.fetch(fetchRequest).first
+            completion(.success(responseEntity?.toDTO()))
+        } catch {
+            completion(.failure(CoreDataStorageError.readError(error)))
         }
     }
     
@@ -52,27 +51,24 @@ extension MediaResponseStorage {
     
     func save(response: MediaHTTPDTO.Response) {
         let context = coreDataStorage.context()
-        do {
-            self.deleteResponse(in: context)
-            
-            let responseEntity: MediaResponseEntity = response.toEntity(in: context)
-            responseEntity.status = response.status
-            responseEntity.results = Int32(response.results)
-            responseEntity.data = response.data
-            
-            try context.save()
-        } catch {
-            printIfDebug(.error, "CoreDataMediaResponseStorage unresolved error \(error), \((error as NSError).userInfo) occured trying to save a response.")
-        }
+        
+        deleteResponse(in: context)
+        
+        let responseEntity: MediaResponseEntity = response.toEntity(in: context)
+        responseEntity.status = response.status
+        responseEntity.results = Int32(response.results)
+        responseEntity.data = response.data
+        
+        coreDataStorage.saveContext()
     }
     
     func deleteResponse(in context: NSManagedObjectContext) {
-        let fetchRequest = self.fetchRequest()
+        let fetchRequest = fetchRequest()
         do {
             if let result = try context.fetch(fetchRequest).first {
                 context.delete(result)
                 
-                try context.save()
+                coreDataStorage.saveContext()
             }
         } catch {
             printIfDebug(.error, "CoreDataMediaResponseStorage Unresolved error \((error as NSError).userInfo) occured trying to delete a response.")

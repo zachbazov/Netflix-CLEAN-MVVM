@@ -285,6 +285,7 @@
 		A1BA1DC228DCB7D700730EA8 /* NavigationOverlayTableViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1BA1DC128DCB7D700730EA8 /* NavigationOverlayTableViewDataSource.swift */; };
 		A1C7E7A9292A784A004690B9 /* AuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1C7E7A8292A784A004690B9 /* AuthService.swift */; };
 		A1C7E7AB292BC5C1004690B9 /* ShowcaseTableViewCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1C7E7AA292BC5C1004690B9 /* ShowcaseTableViewCellViewModel.swift */; };
+		A1D23ABA29CA1C9C00748029 /* Optional+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1D23AB929CA1C9C00748029 /* Optional+Extension.swift */; };
 		A1E3706329B5DAE900CFEE9C /* TextFieldActivityIndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1E3706229B5DAE900CFEE9C /* TextFieldActivityIndicatorView.swift */; };
 		A1E3706529B7C45700CFEE9C /* VoidHTTP.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1E3706429B7C45600CFEE9C /* VoidHTTP.swift */; };
 		A1E3706829BB1E7E00CFEE9C /* AccountViewCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1E3706729BB1E7E00CFEE9C /* AccountViewCoordinator.swift */; };
@@ -605,6 +606,7 @@
 		A1BA1DC128DCB7D700730EA8 /* NavigationOverlayTableViewDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationOverlayTableViewDataSource.swift; sourceTree = "<group>"; };
 		A1C7E7A8292A784A004690B9 /* AuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthService.swift; sourceTree = "<group>"; };
 		A1C7E7AA292BC5C1004690B9 /* ShowcaseTableViewCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowcaseTableViewCellViewModel.swift; sourceTree = "<group>"; };
+		A1D23AB929CA1C9C00748029 /* Optional+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Optional+Extension.swift"; sourceTree = "<group>"; };
 		A1E3706229B5DAE900CFEE9C /* TextFieldActivityIndicatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextFieldActivityIndicatorView.swift; sourceTree = "<group>"; };
 		A1E3706429B7C45600CFEE9C /* VoidHTTP.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoidHTTP.swift; sourceTree = "<group>"; };
 		A1E3706729BB1E7E00CFEE9C /* AccountViewCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountViewCoordinator.swift; sourceTree = "<group>"; };
@@ -1221,6 +1223,7 @@
 				A130BCB42950F4F50070EA5E /* Media+Extension.swift */,
 				A1F56A6828C68FB10089BD4F /* NSAttributedString+Extension.swift */,
 				A14E0CF729C3387D00F55500 /* NSDirectionalEdgeInsets+Extension.swift */,
+				A1D23AB929CA1C9C00748029 /* Optional+Extension.swift */,
 				A1B68F2D2923DF2300FF5F18 /* Set+Extension.swift */,
 				A14E0CED29C322ED00F55500 /* String+Extension.swift */,
 				A18691BD28C764600087DE3B /* UIBarButtonItem+Extension.swift */,
@@ -2428,6 +2431,7 @@
 				A18B994A28BFD9DD0077A5A6 /* User+Mapping.swift in Sources */,
 				A14E0CC329BB983300F55500 /* NotificationCollectionViewCell.swift in Sources */,
 				A14E0CCF29BCBE6D00F55500 /* ProfileCollectionViewDataSource.swift in Sources */,
+				A1D23ABA29CA1C9C00748029 /* Optional+Extension.swift in Sources */,
 				A14E0CB729BB979000F55500 /* ProfileCollectionViewCell.swift in Sources */,
 				A18B995728BFF66C0077A5A6 /* SectionDTO+Mapping.swift in Sources */,
 				A18D851C29403CE900840045 /* BrowseOverlayView.swift in Sources */,

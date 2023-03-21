@@ -10,13 +10,14 @@ import Foundation
 // MARK: - AuthServiceProtocol Type
 
 private protocol AuthServiceInput {
-    func setResponse(request: UserHTTPDTO.Request?, response: UserHTTPDTO.Response)
     func setUser(request: UserHTTPDTO.Request?, response: UserHTTPDTO.Response)
     func deleteResponse(for request: UserHTTPDTO.Request)
     
     func resign(completion: @escaping (UserDTO?) -> Void)
-    func signIn(for requestDTO: UserHTTPDTO.Request, completion: @escaping (Bool) -> Void)
+    func signIn(for requestDTO: UserHTTPDTO.Request, completion: @escaping (UserDTO?) -> Void)
     func signUp(for requestDTO: UserHTTPDTO.Request, completion: @escaping (Bool) -> Void)
+    
+    func deleteResponse(for request: UserHTTPDTO.Request) async
     
     func resign() async -> UserDTO?
     func signIn(with request: UserHTTPDTO.Request) async -> UserHTTPDTO.Response?
@@ -26,8 +27,6 @@ private protocol AuthServiceInput {
 
 private protocol AuthServiceOutput {
     var user: UserDTO? { get }
-    var request: UserHTTPDTO.Request? { get }
-    var response: UserHTTPDTO.Response? { get }
     var responses: AuthResponseStorage { get }
     
     func signOut()
@@ -39,24 +38,12 @@ private typealias AuthServiceProtocol = AuthServiceInput & AuthServiceOutput
 
 class AuthService {
     var user: UserDTO?
-    private(set) var request: UserHTTPDTO.Request?
-    private(set) var response: UserHTTPDTO.Response?
     fileprivate var responses: AuthResponseStorage { return Application.app.stores.authResponses }
 }
 
 // MARK: - AuthServiceProtocol Implementation
 
 extension AuthService: AuthServiceProtocol {
-    /// Assign the user and its request-response properties.
-    /// - Parameters:
-    ///   - request: Request object via invocation.
-    ///   - response: Response object via invocation.
-    func setResponse(request: UserHTTPDTO.Request?, response: UserHTTPDTO.Response) {
-        self.request = request
-        self.response = response
-        
-        setUser(request: request, response: response)
-    }
     /// Assign and manipulate the `user` property.
     /// - Parameters:
     ///   - request: Request object via invocation.
@@ -69,6 +56,7 @@ extension AuthService: AuthServiceProtocol {
             user?.password = request.user.password
         }
     }
+    
     /// Delete all `user`'s related data and clean up service's attributes.
     /// - Parameter request: Request object via invocation.
     fileprivate func deleteResponse(for request: UserHTTPDTO.Request) {
@@ -77,8 +65,6 @@ extension AuthService: AuthServiceProtocol {
         responses.deleteResponse(for: request, in: context)
         mediaResponses.deleteResponse(in: context)
         
-        self.request = nil
-        self.response = nil
         self.user = nil
     }
     
@@ -88,8 +74,6 @@ extension AuthService: AuthServiceProtocol {
         responses.deleteResponse(for: request, in: context)
         mediaResponses.deleteResponse(in: context)
         
-        self.request = nil
-        self.response = nil
         self.user = nil
     }
     
@@ -105,7 +89,7 @@ extension AuthService: AuthServiceProtocol {
             case .success(let response):
                 mainQueueDispatch {
                     if let response = response {
-                        self.setResponse(request: response.request, response: response)
+                        self.setUser(request: response.request, response: response)
                         
                         completion(self.user)
                         
@@ -119,6 +103,7 @@ extension AuthService: AuthServiceProtocol {
             }
         }
     }
+    
     /// Check for the latest authentication response signed by user.
     /// In case there is a valid response, return user object.
     /// In case there isn't a valid response, return nil.
@@ -129,39 +114,41 @@ extension AuthService: AuthServiceProtocol {
         let request = response.request
         let user = response.data
         
-        setResponse(request: request, response: response)
+        setUser(request: request, response: response)
         
         return user
     }
+    
     /// Invoke a sign in request.
     /// - Parameters:
     ///   - request: Auth request object.
     ///   - completion: Completion handler.
-    func signIn(for requestDTO: UserHTTPDTO.Request, completion: @escaping (Bool) -> Void) {
+    func signIn(for requestDTO: UserHTTPDTO.Request, completion: @escaping (UserDTO?) -> Void) {
         let viewModel = AuthViewModel()
         
         viewModel.signIn(
             requestDTO: requestDTO,
             cached: { [weak self] responseDTO in
                 guard let self = self, let responseDTO = responseDTO else { return }
-                self.setResponse(request: requestDTO, response: responseDTO)
+                self.setUser(request: requestDTO, response: responseDTO)
                 
-                completion(true)
+                completion(responseDTO.data)
             },
             completion: { [weak self] result in
                 switch result {
                 case .success(let responseDTO):
                     guard let self = self else { return }
-                    self.setResponse(request: requestDTO, response: responseDTO)
+                    self.setUser(request: requestDTO, response: responseDTO)
                     
-                    completion(true)
+                    completion(responseDTO.data)
                 case .failure(let error):
                     printIfDebug(.error, "Unresolved error \(error)")
                     
-                    completion(false)
+                    completion(nil)
                 }
             })
     }
+    
     /// Invoke a sign up request.
     /// - Parameters:
     ///   - request: Auth request object.
@@ -173,7 +160,7 @@ extension AuthService: AuthServiceProtocol {
             guard let self = self else { return }
             if case let .success(responseDTO) = result {
                 
-                self.setResponse(request: requestDTO, response: responseDTO)
+                self.setUser(request: requestDTO, response: responseDTO)
                 
                 completion(true)
             }
@@ -184,54 +171,45 @@ extension AuthService: AuthServiceProtocol {
             }
         }
     }
+    
     /// Invoke a sign out request.
     func signOut() {
-        let requestDTO = UserHTTPDTO.Request(user: user!, selectedProfile: nil)
-        
-        let viewModel = AuthViewModel()
+        let coordinator = Application.app.coordinator
+        let context = responses.coreDataStorage.context()
         let group = DispatchGroup()
+        let viewModel = AuthViewModel()
+        let profileViewModel = coordinator.profileCoordinator.viewController?.viewModel
+        let requestDTO = UserHTTPDTO.Request(user: user!, selectedProfile: nil)
         
         ActivityIndicatorView.viewDidShow()
         
         group.enter()
         
-        responses.coreDataStorage.performBackgroundTask { [weak self] context in
+        profileViewModel?.updateUserProfileForSigningOut { group.leave() }
+        
+        group.enter()
+        
+        viewModel.signOut() { [weak self] result in
             guard let self = self else { return }
-            
-            self.responses.deleteResponse(for: requestDTO, in: context) {
-                group.leave()
-            }
-        }
-        
-        group.enter()
-        
-        let profileViewModel = Application.app.coordinator.profileCoordinator.viewController?.viewModel
-        profileViewModel?.updateUserProfileForSigningOut(with: "", completion: {
-            group.leave()
-        })
-        
-        group.enter()
-        
-        viewModel.signOut() { result in
             switch result {
             case .success:
-                self.request = nil
-                self.response = nil
-                self.user = nil
+                self.responses.deleteResponse(for: requestDTO, in: context) { group.leave() }
                 
-                group.leave()
+                self.user = nil
             case .failure(let error):
                 printIfDebug(.error, "\(error)")
+                
+                group.leave()
             }
         }
         
         group.notify(queue: .main) {
-            mainQueueDispatch {
-                let coordinator = Application.app.coordinator
-                coordinator.coordinate(to: .auth)
-            }
+            ActivityIndicatorView.viewDidHide()
+            
+            coordinator.coordinate(to: .auth)
         }
     }
+    
     /// Invoke an asynchronous sign in request.
     /// - Parameter request: User's request object.
     /// - Returns: A boolean that indicates of the response status.
@@ -240,10 +218,11 @@ extension AuthService: AuthServiceProtocol {
         
         guard let response = await viewModel.signIn(with: request) else { return nil }
         
-        setResponse(request: request, response: response)
+        setUser(request: request, response: response)
         
         return response
     }
+    
     /// Invoke an asynchronous sign up request.
     /// - Parameter request: User's request object.
     /// - Returns: A boolean that indicates of the response status.
@@ -252,32 +231,28 @@ extension AuthService: AuthServiceProtocol {
         
         guard let response = await viewModel.signUp(with: request) else { return false }
         
-        setResponse(request: request, response: response)
+        setUser(request: request, response: response)
         
         return true
     }
+    
     /// Invoke an asynchronous sign out request.
     /// - Parameter request: User's request object.
     /// - Returns: A boolean that indicates of the response status.
     func signOut(with request: UserHTTPDTO.Request) async -> Bool {
         let viewModel = AuthViewModel()
-        
-        ActivityIndicatorView.viewDidShow()
-        
         let profileViewModel = ProfileViewModel()
         
-        guard let status = await profileViewModel.updateUserProfileForSigningOut() as Bool? else { return false }
+        let status = await profileViewModel.updateUserProfileForSigningOut()
         
         guard status else { return false }
         
         let response = await viewModel.signOut(with: request)
         
-        guard let status = response?.status, status == "success" else { return false }
+        guard let status = response?.status, status == .success else { return false }
         
         await deleteResponse(for: request)
         
-        ActivityIndicatorView.viewDidHide()
-        print("successSignOut")
         return true
     }
 }

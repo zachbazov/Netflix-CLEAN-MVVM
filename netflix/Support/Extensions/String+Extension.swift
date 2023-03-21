@@ -10,11 +10,9 @@ import UIKit
 // MARK: - String Extension
 
 extension String {
-    var isNotEmpty: Bool {
-        return !self.isEmpty
-    }
+    static var success: String { return "success" }
     
-    mutating func toBlankValue() {
-        self = ""
-    }
+    var isNotEmpty: Bool { return !self.isEmpty }
+    
+    mutating func toBlankValue() { self = "" }
 }

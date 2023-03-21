@@ -10,7 +10,7 @@ import Foundation
 // MARK: - ViewModelProtocol Type
 
 private protocol ViewModelInput {
-    func didFinish(with status: Bool, _ user: UserDTO)
+    func didFinish(with user: UserDTO?)
 }
 
 private protocol ViewModelOutput {
@@ -77,20 +77,20 @@ extension SignInViewModel: ViewModelProtocol {
             Task {
                 let response = await authService.signIn(with: requestDTO)
                 
-                guard let status = response?.status == "success" ? true : false, let user = response?.data else { return }
+                guard let user = response?.data else { return }
                 
-                didFinish(with: status, user)
+                didFinish(with: user)
             }
             
             return
         }
         
-        authService.signIn(for: requestDTO) { [weak self] status in
-//            self?.didFinish(with: status)
+        authService.signIn(for: requestDTO) { [weak self] user in
+            self?.didFinish(with: user)
         }
     }
     
-    fileprivate func didFinish(with status: Bool, _ user: UserDTO) {
+    fileprivate func didFinish(with user: UserDTO?) {
         ActivityIndicatorView.viewDidHide()
         
         mainQueueDispatch { [weak self] in
@@ -99,13 +99,13 @@ extension SignInViewModel: ViewModelProtocol {
             let emailTextField = self.coordinator?.signInController.emailTextField
             let passTextField = self.coordinator?.signInController.passwordTextField
             
-            guard status else {
+            guard user.isNotNil else {
                 emailTextField?.text?.toBlankValue()
                 passTextField?.text?.toBlankValue()
                 return
             }
             
-            guard let selectedProfile = user.selectedProfile, selectedProfile.isNotEmpty else {
+            guard let selectedProfile = user?.selectedProfile, selectedProfile.isNotEmpty else {
                 let coordinator = Application.app.coordinator
                 coordinator.coordinate(to: .profile)
                 return
