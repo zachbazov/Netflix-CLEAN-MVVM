@@ -59,6 +59,7 @@ extension AuthViewModel: ViewModelProtocol {
                                                   cached: nil,
                                                   completion: completion)
     }
+    
     /// Sign in request.
     /// - Parameters:
     ///   - request: Representation of the candidate user for the operation.
@@ -73,6 +74,7 @@ extension AuthViewModel: ViewModelProtocol {
                                                   cached: cached,
                                                   completion: completion)
     }
+    
     /// Sign out request.
     /// - Parameter completion: Completion handler with a result object.
     func signOut(completion: @escaping (Result<VoidHTTP.Response, DataTransferError>) -> Void) {
@@ -82,18 +84,21 @@ extension AuthViewModel: ViewModelProtocol {
                                                   cached: nil,
                                                   completion: completion)
     }
+    
     /// Asynchronous sign up request.
     /// - Parameter request: User's request object.
     /// - Returns: User's response object.
     func signUp(with request: UserHTTPDTO.Request) async -> UserHTTPDTO.Response? {
         return await useCase.request(endpoint: .signUp, for: UserHTTPDTO.Response.self, request: request)
     }
+    
     /// Asynchronous sign in request.
     /// - Parameter request: User's request object.
     /// - Returns: User's response object.
     func signIn(with request: UserHTTPDTO.Request) async -> UserHTTPDTO.Response? {
         return await useCase.request(endpoint: .signIn, for: UserHTTPDTO.Response.self, request: request)
     }
+    
     /// Asynchronous sign out request.
     /// - Parameter request: User's request object.
     /// - Returns: User's response object.

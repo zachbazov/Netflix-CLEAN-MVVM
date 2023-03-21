@@ -72,7 +72,9 @@ extension UserRepository: UserRepositoryProtocol {
                 completion: @escaping (Result<UserHTTPDTO.Response, DataTransferError>) -> Void) -> Cancellable? {
         let task = RepositoryTask()
         
-        responseStorage.getResponse(for: request) { result in
+        responseStorage.getResponse(for: request) { [weak self] result in
+            guard let self = self else { return }
+            
             if case let .success(response?) = result {
                 return cached(response)
             }

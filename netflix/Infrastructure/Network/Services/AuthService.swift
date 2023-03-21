@@ -87,17 +87,15 @@ extension AuthService: AuthServiceProtocol {
             
             switch result {
             case .success(let response):
-                mainQueueDispatch {
-                    if let response = response {
-                        self.setUser(request: response.request, response: response)
-                        
-                        completion(self.user)
-                        
-                        return
-                    }
+                if let response = response {
+                    self.setUser(request: response.request, response: response)
                     
-                    completion(nil)
+                    completion(self.user)
+                    
+                    return
                 }
+                
+                completion(nil)
             case .failure(let error):
                 printIfDebug(.error, "\(error)")
             }
@@ -123,24 +121,24 @@ extension AuthService: AuthServiceProtocol {
     /// - Parameters:
     ///   - request: Auth request object.
     ///   - completion: Completion handler.
-    func signIn(for requestDTO: UserHTTPDTO.Request, completion: @escaping (UserDTO?) -> Void) {
+    func signIn(for request: UserHTTPDTO.Request, completion: @escaping (UserDTO?) -> Void) {
         let viewModel = AuthViewModel()
         
         viewModel.signIn(
-            requestDTO: requestDTO,
-            cached: { [weak self] responseDTO in
-                guard let self = self, let responseDTO = responseDTO else { return }
-                self.setUser(request: requestDTO, response: responseDTO)
+            requestDTO: request,
+            cached: { [weak self] response in
+                guard let self = self, let response = response else { return }
+                self.setUser(request: request, response: response)
                 
-                completion(responseDTO.data)
+                completion(response.data)
             },
             completion: { [weak self] result in
+                guard let self = self else { return }
                 switch result {
-                case .success(let responseDTO):
-                    guard let self = self else { return }
-                    self.setUser(request: requestDTO, response: responseDTO)
+                case .success(let response):
+                    self.setUser(request: request, response: response)
                     
-                    completion(responseDTO.data)
+                    completion(response.data)
                 case .failure(let error):
                     printIfDebug(.error, "Unresolved error \(error)")
                     
@@ -180,8 +178,6 @@ extension AuthService: AuthServiceProtocol {
         let viewModel = AuthViewModel()
         let profileViewModel = coordinator.profileCoordinator.viewController?.viewModel
         let requestDTO = UserHTTPDTO.Request(user: user!, selectedProfile: nil)
-        
-        ActivityIndicatorView.viewDidShow()
         
         group.enter()
         
