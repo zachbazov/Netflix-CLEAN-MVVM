@@ -15,13 +15,58 @@ enum CoreDataStorageError: Error {
     case deleteError(Error)
 }
 
+// MARK: - CoreDataProtocol Type
+
+private protocol CoreDataInput {
+    func printContainerUrl(for container: NSPersistentContainer)
+}
+
+private protocol CoreDataOutput {
+    var persistentContainer: NSPersistentContainer { get }
+    var mainContext: NSManagedObjectContext { get }
+    var privateContext: NSManagedObjectContext { get }
+    
+    func createMainContext() -> NSManagedObjectContext
+    func createPrivateContext() -> NSManagedObjectContext
+    func createPersistentContainer() -> NSPersistentContainer
+    
+    func transformersDidRegister()
+    
+    func context() -> NSManagedObjectContext
+    func saveContext()
+}
+
+private typealias CoreDataProtocol = CoreDataInput & CoreDataOutput
+
 // MARK: - CoreDataStorage Type
 
 final class CoreDataStorage {
     static let shared = CoreDataStorage()
     private init() {}
     
-    private lazy var persistentContainer: NSPersistentContainer = {
+    fileprivate lazy var persistentContainer: NSPersistentContainer = createPersistentContainer()
+    
+    fileprivate lazy var mainContext: NSManagedObjectContext = createMainContext()
+    
+    fileprivate lazy var privateContext: NSManagedObjectContext = createPrivateContext()
+}
+
+// MARK: - CoreDataProtocol Implementation
+
+extension CoreDataStorage: CoreDataProtocol {
+    fileprivate func createMainContext() -> NSManagedObjectContext {
+        let context = NSManagedObjectContext(concurrencyType: .mainQueueConcurrencyType)
+        context.parent = self.privateContext
+        return context
+    }
+    
+    fileprivate func createPrivateContext() -> NSManagedObjectContext {
+        let context = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
+        context.persistentStoreCoordinator = self.persistentContainer.persistentStoreCoordinator
+        return context
+    }
+    
+    fileprivate func createPersistentContainer() -> NSPersistentContainer {
         transformersDidRegister()
 
         let container = NSPersistentContainer(name: "CoreDataStorage")
@@ -32,35 +77,15 @@ final class CoreDataStorage {
         }
 //        printContainerUrl(for: container)
         return container
-    }()
-    
-    private(set) lazy var mainContext: NSManagedObjectContext = createMainContext()
-    
-    private lazy var privateContext: NSManagedObjectContext = createPrivateContext()
-    
-    private func createMainContext() -> NSManagedObjectContext {
-        let context = NSManagedObjectContext(concurrencyType: .mainQueueConcurrencyType)
-        context.parent = self.privateContext
-        return context
     }
     
-    private func createPrivateContext() -> NSManagedObjectContext {
-        let context = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
-        context.persistentStoreCoordinator = self.persistentContainer.persistentStoreCoordinator
-        return context
-    }
-}
-
-// MARK: - Private UI Implementation
-
-extension CoreDataStorage {
-    private func printContainerUrl(for container: NSPersistentContainer) {
+    fileprivate func printContainerUrl(for container: NSPersistentContainer) {
         let persistentStore = container.persistentStoreCoordinator.persistentStores.first!
         let url = container.persistentStoreCoordinator.url(for: persistentStore)
         printIfDebug(.url, "persistentStore url \(url)")
     }
     
-    private func transformersDidRegister() {
+    fileprivate func transformersDidRegister() {
         ValueTransformer.setValueTransformer(ValueTransformer<UserDTO>(),
                                              forName: .userTransformer)
         ValueTransformer.setValueTransformer(ValueTransformer<MediaDTO>(),
@@ -68,11 +93,7 @@ extension CoreDataStorage {
         ValueTransformer.setValueTransformer(ValueTransformer<MediaResourcesDTO>(),
                                              forName: .mediaResourcesTransformer)
     }
-}
-
-// MARK: - Methods
-
-extension CoreDataStorage {
+    
     func context() -> NSManagedObjectContext {
         return mainContext
     }
