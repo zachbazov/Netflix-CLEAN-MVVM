@@ -42,11 +42,7 @@ extension APIEndpoint: AuthRepositoryEndpoints {
                         headerParameters: ["content-type": "application/json"])
     }
     
-    
-    
-    
-    
-    static func getMyUserProfiles(with request: UserProfileHTTPDTO.GET.Request) -> Endpoint<UserProfileHTTPDTO.GET.Response> {
+    static func getUserProfiles(with request: UserProfileHTTPDTO.GET.Request) -> Endpoint<UserProfileHTTPDTO.GET.Response> {
         return Endpoint(path: "api/v1/users/profiles",
                         method: .get,
                         headerParameters: ["content-type": "application/json"],

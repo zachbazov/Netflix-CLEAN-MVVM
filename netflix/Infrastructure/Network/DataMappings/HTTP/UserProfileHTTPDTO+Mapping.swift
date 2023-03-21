@@ -7,6 +7,10 @@
 
 import Foundation
 
+protocol Gen {
+    associatedtype T: Decodable
+}
+
 // MARK: - UserProfileHTTPDTO Type
 
 struct UserProfileHTTPDTO {

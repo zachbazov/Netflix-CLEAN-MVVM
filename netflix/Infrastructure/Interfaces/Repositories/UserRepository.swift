@@ -144,7 +144,7 @@ extension UserRepository: UserRepositoryProtocol {
         
         guard !task.isCancelled else { return nil }
         
-        let endpoint = APIEndpoint.getMyUserProfiles(with: request)
+        let endpoint = APIEndpoint.getUserProfiles(with: request)
         task.networkTask = dataTransferService.request(with: endpoint) { result in
             switch result {
             case .success(let response):
@@ -207,7 +207,7 @@ extension UserRepository: UserRepositoryProtocol {
     }
     
     func getUserProfiles(request: UserProfileHTTPDTO.GET.Request) async -> UserProfileHTTPDTO.GET.Response? {
-        let endpoint = APIEndpoint.getMyUserProfiles(with: request)
+        let endpoint = APIEndpoint.getUserProfiles(with: request)
         let result = await dataTransferService.request(with: endpoint)
         
         if case let .success(response) = result {

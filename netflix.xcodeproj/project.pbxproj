@@ -785,6 +785,7 @@
 				A14E0CB629BB979000F55500 /* ProfileCollectionViewCell.swift */,
 				A14E0CB829BB979900F55500 /* ProfileCollectionViewCellViewModel.swift */,
 				A14E0CBA29BB979F00F55500 /* ProfileCollectionViewCell.xib */,
+				A1D23AB529CA185C00748029 /* ProfileItem */,
 			);
 			path = ProfileCollectionViewCell;
 			sourceTree = "<group>";
@@ -794,6 +795,7 @@
 			children = (
 				A14E0CBD29BB97E500F55500 /* AccountMenuTableViewCell.swift */,
 				A14E0CCC29BCAC4B00F55500 /* AccountMenuTableViewCellViewModel.swift */,
+				A1D23AB629CA195B00748029 /* AccountMenuItem */,
 			);
 			path = AccountMenuTableViewCell;
 			sourceTree = "<group>";
@@ -823,15 +825,6 @@
 				A14E0CC629BB983C00F55500 /* NotificationCollectionViewCell.xib */,
 			);
 			path = NotificationCollectionViewCell;
-			sourceTree = "<group>";
-		};
-		A14E0CD229BCBF0C00F55500 /* Items */ = {
-			isa = PBXGroup;
-			children = (
-				A14E0CC829BCAB3600F55500 /* AccountMenuItem.swift */,
-				A14E0CD029BCBEE900F55500 /* ProfileItem.swift */,
-			);
-			path = Items;
 			sourceTree = "<group>";
 		};
 		A14E0CD529C08D6600F55500 /* 001 - Profile */ = {
@@ -1284,7 +1277,6 @@
 			children = (
 				A18B995E28BFFCA10077A5A6 /* Protocols */,
 				A1B98BB4298AD251001B7B62 /* HTTP */,
-				A14E0CD229BCBF0C00F55500 /* Items */,
 				A18B997F28C03CA20077A5A6 /* JWT.swift */,
 				A18B994928BFD9DD0077A5A6 /* User+Mapping.swift */,
 				A14E0CDE29C0DA1700F55500 /* UserProfile.swift */,
@@ -1963,6 +1955,22 @@
 				A1BA1DBE28DCB6F300730EA8 /* NavigationOverlayCollectionViewCellViewModel.swift */,
 			);
 			path = Cells;
+			sourceTree = "<group>";
+		};
+		A1D23AB529CA185C00748029 /* ProfileItem */ = {
+			isa = PBXGroup;
+			children = (
+				A14E0CD029BCBEE900F55500 /* ProfileItem.swift */,
+			);
+			path = ProfileItem;
+			sourceTree = "<group>";
+		};
+		A1D23AB629CA195B00748029 /* AccountMenuItem */ = {
+			isa = PBXGroup;
+			children = (
+				A14E0CC829BCAB3600F55500 /* AccountMenuItem.swift */,
+			);
+			path = AccountMenuItem;
 			sourceTree = "<group>";
 		};
 		A1E3706629BB1E2B00CFEE9C /* AccountViewController */ = {
