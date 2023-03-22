@@ -1,5 +1,5 @@
 //
-//  UserResponseStore.swift
+//  UserHTTPResponseStore.swift
 //  netflix
 //
 //  Created by Zach Bazov on 01/09/2022.
@@ -7,9 +7,9 @@
 
 import CoreData
 
-// MARK: - UserResponseStore Type
+// MARK: - UserHTTPResponseStore Type
 
-final class UserResponseStore {
+final class UserHTTPResponseStore {
     let coreDataStorage: CoreDataStorage
     private let authService: AuthService
     
@@ -22,7 +22,7 @@ final class UserResponseStore {
 
 // MARK: - Methods
 
-extension UserResponseStore {
+extension UserHTTPResponseStore {
     func fetchRequest(for requestDTO: UserHTTPDTO.Request) -> NSFetchRequest<UserHTTPRequestEntity> {
         let request: NSFetchRequest = UserHTTPRequestEntity.fetchRequest()
         request.predicate = NSPredicate(format: "%K = %@",

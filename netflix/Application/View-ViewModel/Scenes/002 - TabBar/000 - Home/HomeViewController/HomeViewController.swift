@@ -19,7 +19,7 @@ private typealias ViewControllerProtocol = ViewControllerOutput
 
 // MARK: - HomeViewController Type
 
-final class HomeViewController: Controller<HomeViewModel>, ViewControllerProtocol {
+final class HomeViewController: Controller<HomeViewModel> {
     @IBOutlet private(set) var tableView: UITableView!
     @IBOutlet private(set) var navigationViewContainer: UIView!
     @IBOutlet private(set) var navigationViewTopConstraint: NSLayoutConstraint!
@@ -33,8 +33,8 @@ final class HomeViewController: Controller<HomeViewModel>, ViewControllerProtoco
     override func viewDidLoad() {
         super.viewDidLoad()
         super.viewDidLoadBehaviors()
-        viewDidConfigure()
         viewDidBindObservers()
+//        viewDidConfigure()
         viewModel.viewDidLoad()
     }
     
@@ -50,9 +50,9 @@ final class HomeViewController: Controller<HomeViewModel>, ViewControllerProtoco
     }
     
     override func viewDidBindObservers() {
-        viewModel.dataSourceState.observe(on: self) { [weak self] _ in
+        viewModel.dataSourceState.observe(on: self) { [weak self] state in
             guard let self = self else { return }
-            self.dataSource.dataSourceDidChange()
+            self.dataSource?.dataSourceDidChange()
         }
         viewModel.showcase.observe(on: self) { [weak self] in
             guard let self = self, let media = $0 else { return }
@@ -68,15 +68,19 @@ final class HomeViewController: Controller<HomeViewModel>, ViewControllerProtoco
     }
 }
 
-// MARK: - Private UI Implementation
+// MARK: - ViewControllerProtocol Implementation
 
-extension HomeViewController {
+extension HomeViewController: ViewControllerProtocol {
     private func setupDataSource() {
         dataSource = HomeTableViewDataSource(tableView: tableView, viewModel: viewModel)
+        
+        viewModel?.dataSourceState.value = .all
     }
     
     private func setupNavigationView() {
         navigationView = NavigationView(on: navigationViewContainer, with: viewModel)
+        
+        navigationView.viewModel?.navigationViewDidAppear()
     }
     
     private func setupBrowseOverlayView() {

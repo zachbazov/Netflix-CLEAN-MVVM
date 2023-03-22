@@ -100,8 +100,8 @@ extension SignInViewModel: ViewModelProtocol {
             let passTextField = self.coordinator?.signInController.passwordTextField
             
             guard user.isNotNil else {
-                emailTextField?.text?.toBlankValue()
-                passTextField?.text?.toBlankValue()
+                emailTextField?.text = .toBlank()
+                passTextField?.text = .toBlank()
                 return
             }
             

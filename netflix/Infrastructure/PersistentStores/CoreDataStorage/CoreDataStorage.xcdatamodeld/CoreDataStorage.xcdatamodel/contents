@@ -5,6 +5,11 @@
         <attribute name="results" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="status" optional="YES" attributeType="String"/>
     </entity>
+    <entity name="SectionHTTPResponseEntity" representedClassName="SectionHTTPResponseEntity" syncable="YES" codeGenerationType="class">
+        <attribute name="data" optional="YES" attributeType="Transformable" valueTransformerName="SectionTransformer" customClassName="[SectionDTO]"/>
+        <attribute name="results" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="status" optional="YES" attributeType="String"/>
+    </entity>
     <entity name="UserHTTPRequestEntity" representedClassName="UserHTTPRequestEntity" syncable="YES" codeGenerationType="class">
         <attribute name="selectedProfile" optional="YES" attributeType="String"/>
         <attribute name="user" optional="YES" attributeType="Transformable" valueTransformerName="UserTransformer" customClassName="UserDTO"/>

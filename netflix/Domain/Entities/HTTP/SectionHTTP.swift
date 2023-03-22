@@ -10,6 +10,10 @@ import Foundation
 // MARK: - SectionHTTP Type
 
 struct SectionHTTP {
+    struct Request {
+        let user: User
+    }
+    
     struct Response {
         let status: String
         let results: Int

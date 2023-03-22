@@ -92,6 +92,8 @@ extension CoreDataStorage: CoreDataProtocol {
                                              forName: .mediaTransformer)
         ValueTransformer.setValueTransformer(ValueTransformer<MediaResourcesDTO>(),
                                              forName: .mediaResourcesTransformer)
+        ValueTransformer.setValueTransformer(ValueTransformer<SectionDTO>(),
+                                             forName: .sectionTransformer)
     }
     
     func context() -> NSManagedObjectContext {

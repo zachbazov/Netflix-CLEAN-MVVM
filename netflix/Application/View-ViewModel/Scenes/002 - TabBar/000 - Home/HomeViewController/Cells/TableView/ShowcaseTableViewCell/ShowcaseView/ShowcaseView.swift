@@ -26,13 +26,14 @@ final class ShowcaseView: View<ShowcaseViewViewModel> {
     @IBOutlet private(set) weak var panelViewContainer: UIView!
     
     private(set) var panelView: PanelView!
+    
     /// Create a display view object.
     /// - Parameter viewModel: Coordinating view model.
     init(with viewModel: ShowcaseTableViewCellViewModel) {
         super.init(frame: .zero)
         self.nibDidLoad()
         let homeViewModel = viewModel.coordinator!.viewController!.viewModel!
-        let media = homeViewModel.showcases[homeViewModel.dataSourceState.value]!
+        let media = homeViewModel.showcases[homeViewModel.dataSourceState.value ?? .all]
         self.viewModel = ShowcaseViewViewModel(with: media)
         self.panelView = PanelView(on: panelViewContainer, with: viewModel)
         self.viewDidDeploySubviews()
@@ -40,6 +41,13 @@ final class ShowcaseView: View<ShowcaseViewViewModel> {
     }
     
     required init?(coder: NSCoder) { fatalError() }
+    
+    deinit {
+        print("deinit \(Self.self)")
+        panelView.viewDidUnbindObservers()
+        panelView.removeFromSuperview()
+        panelView = nil
+    }
     
     override func viewDidDeploySubviews() {
         setupGradients()
@@ -78,7 +86,7 @@ extension ShowcaseView: ViewProtocol {}
 // MARK: - Private UI Implementation
 
 extension ShowcaseView {
-    private func setupGradients() {
+    func setupGradients() {
         bottomGradientView.addGradientLayer(colors: [.clear, .black], locations: [0.0, 0.66])
     }
     

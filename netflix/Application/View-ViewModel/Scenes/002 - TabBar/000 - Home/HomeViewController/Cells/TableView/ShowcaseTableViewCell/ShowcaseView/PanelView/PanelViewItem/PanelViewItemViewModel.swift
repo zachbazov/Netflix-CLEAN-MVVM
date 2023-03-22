@@ -40,11 +40,14 @@ struct PanelViewItemViewModel {
         let trailing = trailingTitle
         return tag == 0 ? leading : trailing
     }
+    
     /// Create a panel view item view model object.
     /// - Parameters:
     ///   - item: Corresponding view.
     ///   - media: The media object to be interacted.
-    init(item: PanelViewItem, with media: Media) {
+    init?(item: PanelViewItem, with media: Media?) {
+        guard media.isNotNil else { return nil }
+        
         self.tag = item.tag
         self.isSelected = .init(item.isSelected)
         self.media = media

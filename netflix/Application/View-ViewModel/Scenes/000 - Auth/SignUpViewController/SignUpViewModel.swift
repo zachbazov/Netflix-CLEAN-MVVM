@@ -115,10 +115,10 @@ extension SignUpViewModel: ViewModelProtocol {
             let passConfirmTextField = self.coordinator?.signUpController.passwordConfirmTextField
             
             guard status else {
-                nameTextField?.text?.toBlankValue()
-                emailTextField?.text?.toBlankValue()
-                passTextField?.text?.toBlankValue()
-                passConfirmTextField?.text?.toBlankValue()
+                nameTextField?.text = .toBlank()
+                emailTextField?.text = .toBlank()
+                passTextField?.text = .toBlank()
+                passConfirmTextField?.text = .toBlank()
                 return
             }
             

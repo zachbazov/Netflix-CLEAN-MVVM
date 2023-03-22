@@ -98,7 +98,9 @@ extension MyListViewModel: ViewModelProtocol {
               let section = coordinator!.viewController?.viewModel?.section(at: .myList) else {
             return
         }
+        
         filter(section: section)
+        
         let index = IndexSet(integer: myListIndex.rawValue)
         coordinator!.viewController?.tableView.reloadSections(index, with: .automatic)
     }
@@ -131,6 +133,7 @@ extension MyListViewModel: ViewModelProtocol {
             case .all: break
             case .tvShows: media = media.filter { $0.type == "series" }
             case .movies: media = media.filter { $0.type == "film" }
+            default: break
             }
             homeViewModel.sections[section.id].media = media.toArray()
         }

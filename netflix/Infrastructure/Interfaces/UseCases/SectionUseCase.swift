@@ -24,8 +24,9 @@ extension SectionUseCase: UseCase {
                        completion: ((Result<T, Error>) -> Void)?) -> Cancellable? {
         switch endpoint {
         case .getSections:
+            let cached = cached as? ((SectionHTTPDTO.Response?) -> Void) ?? { _ in }
             let completion = completion as? ((Result<SectionHTTPDTO.Response, Error>) -> Void) ?? { _ in }
-            return repository.getAll(cached: { _ in }, completion: completion)
+            return repository.getAll(cached: cached, completion: completion)
         }
     }
     

@@ -77,7 +77,7 @@ extension PanelView: ViewProtocol {
         /// Allocate a new detail controller.
         let coordinator = viewModel.coordinator!
         let section = viewModel.sectionAt(.resumable)
-        let media = viewModel.presentedMedia.value!
+        let media = viewModel.presentedMedia!
         let rotated = true
         coordinator.section = section
         coordinator.media = media

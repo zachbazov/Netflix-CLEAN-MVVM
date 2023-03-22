@@ -144,7 +144,7 @@
 		A18B998A28C040A70077A5A6 /* Cancellable.swift in Sources */ = {isa = PBXBuildFile; fileRef = A18B998928C040A70077A5A6 /* Cancellable.swift */; };
 		A18B998D28C0426E0077A5A6 /* RepositoryTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = A18B998C28C0426E0077A5A6 /* RepositoryTask.swift */; };
 		A18B999228C0DE710077A5A6 /* APIEndpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = A18B999128C0DE710077A5A6 /* APIEndpoint.swift */; };
-		A18B999E28C0E6D80077A5A6 /* UserResponseStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = A18B999D28C0E6D80077A5A6 /* UserResponseStore.swift */; };
+		A18B999E28C0E6D80077A5A6 /* UserHTTPResponseStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = A18B999D28C0E6D80077A5A6 /* UserHTTPResponseStore.swift */; };
 		A18B99A128C0FEC40077A5A6 /* UserHTTPResponseEntity+Mapping.swift in Sources */ = {isa = PBXBuildFile; fileRef = A18B99A028C0FEC40077A5A6 /* UserHTTPResponseEntity+Mapping.swift */; };
 		A18D851C29403CE900840045 /* BrowseOverlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A18D851B29403CE900840045 /* BrowseOverlayView.swift */; };
 		A18D852029403D5D00840045 /* BrowseOverlayViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A18D851F29403D5D00840045 /* BrowseOverlayViewModel.swift */; };
@@ -281,6 +281,8 @@
 		A1C7E7A9292A784A004690B9 /* AuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1C7E7A8292A784A004690B9 /* AuthService.swift */; };
 		A1C7E7AB292BC5C1004690B9 /* ShowcaseTableViewCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1C7E7AA292BC5C1004690B9 /* ShowcaseTableViewCellViewModel.swift */; };
 		A1D23ABA29CA1C9C00748029 /* Optional+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1D23AB929CA1C9C00748029 /* Optional+Extension.swift */; };
+		A1D23ABD29CA715200748029 /* SectionHTTPResponseStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1D23ABC29CA715200748029 /* SectionHTTPResponseStore.swift */; };
+		A1D23AC029CA746D00748029 /* SectionHTTPResponseEntity+Mapping.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1D23ABF29CA746D00748029 /* SectionHTTPResponseEntity+Mapping.swift */; };
 		A1E3706329B5DAE900CFEE9C /* TextFieldActivityIndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1E3706229B5DAE900CFEE9C /* TextFieldActivityIndicatorView.swift */; };
 		A1E3706529B7C45700CFEE9C /* VoidHTTP.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1E3706429B7C45600CFEE9C /* VoidHTTP.swift */; };
 		A1E3706829BB1E7E00CFEE9C /* AccountViewCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1E3706729BB1E7E00CFEE9C /* AccountViewCoordinator.swift */; };
@@ -459,7 +461,7 @@
 		A18B998928C040A70077A5A6 /* Cancellable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Cancellable.swift; sourceTree = "<group>"; };
 		A18B998C28C0426E0077A5A6 /* RepositoryTask.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepositoryTask.swift; sourceTree = "<group>"; };
 		A18B999128C0DE710077A5A6 /* APIEndpoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIEndpoint.swift; sourceTree = "<group>"; };
-		A18B999D28C0E6D80077A5A6 /* UserResponseStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserResponseStore.swift; sourceTree = "<group>"; };
+		A18B999D28C0E6D80077A5A6 /* UserHTTPResponseStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserHTTPResponseStore.swift; sourceTree = "<group>"; };
 		A18B99A028C0FEC40077A5A6 /* UserHTTPResponseEntity+Mapping.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UserHTTPResponseEntity+Mapping.swift"; sourceTree = "<group>"; };
 		A18D851B29403CE900840045 /* BrowseOverlayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowseOverlayView.swift; sourceTree = "<group>"; };
 		A18D851F29403D5D00840045 /* BrowseOverlayViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowseOverlayViewModel.swift; sourceTree = "<group>"; };
@@ -597,6 +599,8 @@
 		A1C7E7A8292A784A004690B9 /* AuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthService.swift; sourceTree = "<group>"; };
 		A1C7E7AA292BC5C1004690B9 /* ShowcaseTableViewCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowcaseTableViewCellViewModel.swift; sourceTree = "<group>"; };
 		A1D23AB929CA1C9C00748029 /* Optional+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Optional+Extension.swift"; sourceTree = "<group>"; };
+		A1D23ABC29CA715200748029 /* SectionHTTPResponseStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SectionHTTPResponseStore.swift; sourceTree = "<group>"; };
+		A1D23ABF29CA746D00748029 /* SectionHTTPResponseEntity+Mapping.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SectionHTTPResponseEntity+Mapping.swift"; sourceTree = "<group>"; };
 		A1E3706229B5DAE900CFEE9C /* TextFieldActivityIndicatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextFieldActivityIndicatorView.swift; sourceTree = "<group>"; };
 		A1E3706429B7C45600CFEE9C /* VoidHTTP.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoidHTTP.swift; sourceTree = "<group>"; };
 		A1E3706729BB1E7E00CFEE9C /* AccountViewCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountViewCoordinator.swift; sourceTree = "<group>"; };
@@ -1306,6 +1310,7 @@
 			isa = PBXGroup;
 			children = (
 				A18B998228C03DFE0077A5A6 /* CoreDataStorage */,
+				A1D23ABB29CA712A00748029 /* SectionHTTPResponseStore */,
 				A18B999A28C0E6670077A5A6 /* UserHTTPResponseStore */,
 				A1B93C7528FF884500AF2C7F /* MediaHTTPResponseStore */,
 			);
@@ -1366,7 +1371,7 @@
 		A18B999A28C0E6670077A5A6 /* UserHTTPResponseStore */ = {
 			isa = PBXGroup;
 			children = (
-				A18B999D28C0E6D80077A5A6 /* UserResponseStore.swift */,
+				A18B999D28C0E6D80077A5A6 /* UserHTTPResponseStore.swift */,
 				A18B999F28C0FEA70077A5A6 /* EntityMapping */,
 			);
 			path = UserHTTPResponseStore;
@@ -1969,6 +1974,23 @@
 			path = CollectionView;
 			sourceTree = "<group>";
 		};
+		A1D23ABB29CA712A00748029 /* SectionHTTPResponseStore */ = {
+			isa = PBXGroup;
+			children = (
+				A1D23ABC29CA715200748029 /* SectionHTTPResponseStore.swift */,
+				A1D23ABE29CA715900748029 /* EntityMapping */,
+			);
+			path = SectionHTTPResponseStore;
+			sourceTree = "<group>";
+		};
+		A1D23ABE29CA715900748029 /* EntityMapping */ = {
+			isa = PBXGroup;
+			children = (
+				A1D23ABF29CA746D00748029 /* SectionHTTPResponseEntity+Mapping.swift */,
+			);
+			path = EntityMapping;
+			sourceTree = "<group>";
+		};
 		A1E3706629BB1E2B00CFEE9C /* AccountViewController */ = {
 			isa = PBXGroup;
 			children = (
@@ -2277,6 +2299,7 @@
 				A18B998728C03F050077A5A6 /* CoreDataStorage.xcdatamodeld in Sources */,
 				A1B98BA7298A419A001B7B62 /* UserHTTPDTO+Mapping.swift in Sources */,
 				A1741D1528E67AA900F3C46B /* DetailViewModel.swift in Sources */,
+				A1D23AC029CA746D00748029 /* SectionHTTPResponseEntity+Mapping.swift in Sources */,
 				A14E0CF029C32CA300F55500 /* UserProfileCollectionViewCellViewModel.swift in Sources */,
 				A14E0CDF29C0DA1700F55500 /* UserProfile.swift in Sources */,
 				A18B999228C0DE710077A5A6 /* APIEndpoint.swift in Sources */,
@@ -2370,7 +2393,7 @@
 				A1BA1DC228DCB7D700730EA8 /* NavigationOverlayTableViewDataSource.swift in Sources */,
 				A130BCB929510C900070EA5E /* DownloadsViewCoordinator.swift in Sources */,
 				A1B93C832900D2A800AF2C7F /* QoS.swift in Sources */,
-				A18B999E28C0E6D80077A5A6 /* UserResponseStore.swift in Sources */,
+				A18B999E28C0E6D80077A5A6 /* UserHTTPResponseStore.swift in Sources */,
 				A1BA1DA328D8149B00730EA8 /* UIImage+Rendering.swift in Sources */,
 				A18B995B28BFFB500077A5A6 /* SeasonDTO+Mapping.swift in Sources */,
 				A18B995928BFF6A20077A5A6 /* MediaDTO+Mapping.swift in Sources */,
@@ -2397,6 +2420,7 @@
 				A1A71AA7298B2A6C001C6AB1 /* ListHTTP.swift in Sources */,
 				A1E3706C29BB1E8A00CFEE9C /* AccountViewController.swift in Sources */,
 				A14E0CC529BB983700F55500 /* NotificationCollectionViewCellViewModel.swift in Sources */,
+				A1D23ABD29CA715200748029 /* SectionHTTPResponseStore.swift in Sources */,
 				A1B98BB9298B1F3E001B7B62 /* ListHTTPDTO+Mapping.swift in Sources */,
 				A1741D2A28E6864600F3C46B /* DetailCollectionView.swift in Sources */,
 				A1BA1DBB28DBE02C00730EA8 /* UIView+Constraints.swift in Sources */,

@@ -12,7 +12,7 @@ import UIKit
 extension String {
     static var success: String { return "success" }
     
-    var isNotEmpty: Bool { return !self.isEmpty }
+    static func toBlank() -> String { return "" }
     
-    mutating func toBlankValue() { self = "" }
+    var isNotEmpty: Bool { return !self.isEmpty }
 }

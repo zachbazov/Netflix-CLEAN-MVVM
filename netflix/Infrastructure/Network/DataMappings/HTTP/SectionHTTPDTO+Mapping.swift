@@ -5,12 +5,14 @@
 //  Created by Zach Bazov on 01/02/2023.
 //
 
-import Foundation
+import CoreData
 
 // MARK: - SectionHTTPDTO Type
 
 struct SectionHTTPDTO: HTTP {
-    typealias Request = Void
+    struct Request: Decodable {
+        let user: UserDTO
+    }
 
     struct Response: Decodable {
         let status: String
@@ -26,5 +28,15 @@ extension SectionHTTPDTO.Response {
         return .init(status: status,
                      results: results,
                      data: data.map { $0.toDomain() })
+    }
+}
+
+extension SectionHTTPDTO.Response {
+    func toEntity(in context: NSManagedObjectContext) -> SectionHTTPResponseEntity {
+        let entity: SectionHTTPResponseEntity = .init(context: context)
+        entity.status = status
+        entity.results = Int32(results)
+        entity.data = data
+        return entity
     }
 }

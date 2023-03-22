@@ -43,7 +43,7 @@ private protocol UserRepositoryInput {
 
 private protocol UserRepositoryOutput {
     var dataTransferService: DataTransferService { get }
-    var userResponses: UserResponseStore { get }
+    var userResponses: UserHTTPResponseStore { get }
     var task: Cancellable? { get }
 }
 
@@ -53,7 +53,7 @@ private typealias UserRepositoryProtocol = UserRepositoryInput & UserRepositoryO
 
 final class UserRepository {
     let dataTransferService: DataTransferService = Application.app.services.dataTransfer
-    let userResponses: UserResponseStore = Application.app.stores.userResponses
+    let userResponses: UserHTTPResponseStore = Application.app.stores.userResponses
     var task: Cancellable? { willSet { task?.cancel() } }
 }
 

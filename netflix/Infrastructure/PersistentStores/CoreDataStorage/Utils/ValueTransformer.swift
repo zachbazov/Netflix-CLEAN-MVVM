@@ -13,6 +13,7 @@ private enum ValueTransformerValue: String {
     case user = "UserTransformer"
     case media = "MediaTransformer"
     case mediaResources = "MediaResourcesTransformer"
+    case section = "SectionTransformer"
 }
 
 // MARK: - NSValueTransformerName Extension
@@ -21,6 +22,7 @@ extension NSValueTransformerName {
     static let userTransformer = NSValueTransformerName(rawValue: ValueTransformerValue.user.rawValue)
     static let mediaTransformer = NSValueTransformerName(rawValue: ValueTransformerValue.media.rawValue)
     static let mediaResourcesTransformer = NSValueTransformerName(rawValue: ValueTransformerValue.mediaResources.rawValue)
+    static let sectionTransformer = NSValueTransformerName(rawValue: ValueTransformerValue.section.rawValue)
 }
 
 // MARK: - ValueTransformer Type

@@ -39,6 +39,16 @@ final class HomeTableViewDataSource: NSObject {
         super.init()
         self.viewDidLoad()
     }
+    
+    deinit {
+        print("deinit \(Self.self)")
+        showcaseCell.removeFromSuperview()
+        showcaseCell = nil
+        tableView.removeFromSuperview()
+        tableView = nil
+        viewModel.coordinator = nil
+        viewModel = nil
+    }
 }
 
 // MARK: - DataSourceProtocol Implementation
@@ -46,7 +56,6 @@ final class HomeTableViewDataSource: NSObject {
 extension HomeTableViewDataSource: DataSourceProtocol {
     fileprivate func viewDidLoad() {
         viewsDidRegister()
-        dataSourceDidChange()
     }
     
     fileprivate func viewsDidRegister() {
@@ -58,8 +67,7 @@ extension HomeTableViewDataSource: DataSourceProtocol {
     }
     
     func dataSourceDidChange() {
-        // Filters the sections based on the data source state.
-        viewModel.filter(sections: viewModel.sections)
+        viewModel?.filter(sections: viewModel?.sections ?? [])
         
         tableView.delegate = self
         tableView.dataSource = self

@@ -25,7 +25,7 @@ private protocol ViewModelOutput {
     var media: [Media] { get }
     var topSearches: [Media] { get }
     
-    var dataSourceState: Observable<HomeTableViewDataSource.State> { get }
+    var dataSourceState: Observable<HomeTableViewDataSource.State?> { get }
     var showcase: Observable<Media?> { get }
     var showcases: [HomeTableViewDataSource.State: Media] { get }
     
@@ -50,7 +50,7 @@ final class HomeViewModel {
     fileprivate(set) lazy var media = [Media]()
     fileprivate(set) lazy var topSearches = [Media]()
     
-    let dataSourceState: Observable<HomeTableViewDataSource.State> = Observable(.all)
+    let dataSourceState: Observable<HomeTableViewDataSource.State?> = Observable(.none)
     let showcase: Observable<Media?> = Observable(.none)
     lazy var showcases = [HomeTableViewDataSource.State: Media]()
     
@@ -76,12 +76,8 @@ extension HomeViewModel: ViewModel {
     func dataDidDownload() {
         ActivityIndicatorView.viewDidHide()
         
-        mainQueueDispatch { [weak self] in
-            let navigationViewModel = self?.coordinator?.viewController?.navigationView.viewModel
-            navigationViewModel?.navigationViewDidAppear()
-        }
-        
-        notifyObservers()
+        guard let viewController = coordinator?.viewController else { return }
+        mainQueueDispatch { viewController.viewDidConfigure() }
     }
 }
 
@@ -131,6 +127,7 @@ extension HomeViewModel: ViewModelProtocol {
                     .sorted { $0.rating > $1.rating }
                     .filter { $0.rating > 7.5 }
                     .slice(10)
+            default: return []
             }
         case .resumable:
             switch dataSourceState.value {
@@ -140,6 +137,7 @@ extension HomeViewModel: ViewModelProtocol {
                 return media.shuffled().filter { $0.type == "series" }
             case .movies:
                 return media.shuffled().filter { $0.type == "film" }
+            default: return []
             }
         case .myList:
             let media = myList.viewModel.list.value
@@ -150,6 +148,7 @@ extension HomeViewModel: ViewModelProtocol {
                 return media.shuffled().filter { $0.type == "series" }
             case .movies:
                 return media.shuffled().filter { $0.type == "film" }
+            default: return []
             }
         case .blockbuster:
             let value = Float(7.5)
@@ -160,6 +159,7 @@ extension HomeViewModel: ViewModelProtocol {
                 return media.filter { $0.type == "series" }.filter { $0.rating > value }
             case .movies:
                 return media.filter { $0.type == "film" }.filter { $0.rating > value }
+            default: return []
             }
         default:
             switch dataSourceState.value {
@@ -177,16 +177,9 @@ extension HomeViewModel: ViewModelProtocol {
                     .shuffled()
                     .filter { $0.type == "film" }
                     .filter { $0.genres.contains(sections[index.rawValue].title) }
+            default: return []
             }
         }
-    }
-}
-
-// MARK: - Private UI Implementation
-
-extension HomeViewModel {
-    private func notifyObservers() {
-        dataSourceState.value = .all
     }
 }
 
@@ -249,7 +242,13 @@ extension HomeViewModel: DataProviderProtocol {
             endpoint: .getSections,
             for: SectionHTTPDTO.Response.self,
             request: SectionHTTPDTO.Request.self,
-            cached: { _ in },
+            cached: { [weak self] response in
+                guard let self = self, let response = response else { return }
+                
+                self.sections = response.data.toDomain()
+                
+                completion()
+            },
             completion: { [weak self] result in
                 guard let self = self else { return }
                 switch result {
@@ -319,6 +318,18 @@ extension HomeViewModel: DataProviderProtocol {
         let response = await mediaUseCase.request(endpoint: .getAllMedia, for: MediaHTTPDTO.Response.self)
         guard let media = response?.data.toDomain() else { return }
         self.media = media
+        
+        HomeTableViewDataSource.State.allCases.forEach {
+            guard showcases[$0] == nil else { return }
+            switch $0 {
+            case .all:
+                showcases[$0] = media.randomElement()
+            case .tvShows:
+                showcases[$0] = media.filter { $0.type == "series" }.randomElement()!
+            case .movies:
+                showcases[$0] = media.filter { $0.type == "film" }.randomElement()!
+            }
+        }
     }
     
     fileprivate func topSearchesDidLoad() async {

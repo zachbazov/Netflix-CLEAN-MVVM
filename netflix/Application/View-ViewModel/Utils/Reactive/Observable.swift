@@ -32,9 +32,12 @@ private typealias ObserverProtocol = ObserverInput & ObserverOutput
 
 final class Observable<Value> {
     fileprivate var observers = [Observer<Value>]()
+    
     var value: Value { didSet { notifyObservers() } }
     
-    init(_ value: Value) { self.value = value }
+    init(_ value: Value) {
+        self.value = value
+    }
 }
 
 // MARK: - Observer Type

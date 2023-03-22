@@ -21,6 +21,7 @@ private typealias ViewProtocol = ViewOutput
 final class ShowcaseTableViewCell: UITableViewCell {
     private(set) var showcaseView: ShowcaseView!
     private(set) var viewModel: ShowcaseTableViewCellViewModel!
+    
     /// Create a display table view cell object.
     /// - Parameters:
     ///   - tableView: Corresponding table view.
@@ -43,15 +44,17 @@ final class ShowcaseTableViewCell: UITableViewCell {
         return cell
     }
     
-    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-        super.init(style: style, reuseIdentifier: reuseIdentifier)
+    deinit {
+        print("deinit \(Self.self)")
+        showcaseView.removeFromSuperview()
+        showcaseView = nil
+        viewModel.coordinator = nil
+        viewModel = nil
     }
-    
-    required init?(coder: NSCoder) { fatalError() }
     
     override func prepareForReuse() {
         super.prepareForReuse()
-        showcaseView.removeFromSuperview()
+        showcaseView.setupGradients()
     }
 }
 

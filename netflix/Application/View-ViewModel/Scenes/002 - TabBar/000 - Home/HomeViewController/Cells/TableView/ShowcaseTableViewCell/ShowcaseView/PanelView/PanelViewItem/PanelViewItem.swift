@@ -119,7 +119,7 @@ extension PanelViewItemConfiguration: ConfigurationProtocol {
         case .myList:
             /// Since, the tap event occurs from the `PanelViewItem`,
             /// the presenting view on the `DisplayView` is to be interacted.
-            let media = viewModel.presentedMedia.value!
+            let media = viewModel.presentedMedia!
             // Add or remove the object from the list.
             viewModel.myList.viewModel.shouldAddOrRemove(media, uponSelection: view.viewModel.isSelected.value)
             // Reload browse overlay's collection data.
@@ -128,7 +128,7 @@ extension PanelViewItemConfiguration: ConfigurationProtocol {
             // Allocate a new detail controller.
             let coordinator = viewModel.coordinator!
             let section = viewModel.sectionAt(.resumable)
-            let media = viewModel.presentedMedia.value!
+            let media = viewModel.presentedMedia!
             coordinator.section = section
             coordinator.media = media
             coordinator.shouldScreenRotate = false
@@ -172,7 +172,7 @@ final class PanelViewItem: View<PanelViewItemViewModel> {
         self.tag = parent.tag
         parent.addSubview(self)
         self.constraintToSuperview(parent)
-        self.viewModel = PanelViewItemViewModel(item: self, with: viewModel.presentedMedia.value!)
+        self.viewModel = PanelViewItemViewModel(item: self, with: viewModel.presentedMedia)
         self.configuration = PanelViewItemConfiguration(view: self, gestureRecognizers: [.tap], with: viewModel)
         self.viewDidBindObservers()
     }

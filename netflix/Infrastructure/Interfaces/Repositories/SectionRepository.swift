@@ -17,24 +17,36 @@ protocol SectionsRepositoryRouting {
 
 final class SectionRepository: Repository {
     let dataTransferService: DataTransferService = Application.app.services.dataTransfer
+    let sectionResponseStore: SectionHTTPResponseStore = Application.app.stores.sectionResponses
     var task: Cancellable? { willSet { task?.cancel() } }
 }
 
 // MARK: - SectionRepositoryProtocol Implementation
 
 extension SectionRepository {
-    func getAll<T>(cached: @escaping (T?) -> Void, completion: @escaping (Result<T, Error>) -> Void) -> Cancellable? where T : Decodable {
+    func getAll<T>(cached: @escaping (T?) -> Void,
+                   completion: @escaping (Result<T, Error>) -> Void) -> Cancellable? where T: Decodable {
         let task = RepositoryTask()
         
-        guard !task.isCancelled else { return nil }
-        
-        let endpoint = APIEndpoint.getAllSections()
-        task.networkTask = dataTransferService.request(with: endpoint) { result in
-            switch result {
-            case .success(let response):
-                completion(.success(response as! T))
-            case .failure(let error):
-                completion(.failure(error))
+        sectionResponseStore.getResponse { [weak self] result in
+            guard let self = self else { return }
+            
+            if case let .success(response) = result {
+                return cached(response as? T)
+            }
+            
+            guard !task.isCancelled else { return }
+            
+            let endpoint = APIEndpoint.getAllSections()
+            
+            task.networkTask = self.dataTransferService.request(with: endpoint) { result in
+                switch result {
+                case .success(let response):
+                    self.sectionResponseStore.save(response: response)
+                    completion(.success(response as! T))
+                case .failure(let error):
+                    completion(.failure(error))
+                }
             }
         }
         
@@ -42,12 +54,19 @@ extension SectionRepository {
     }
     
     func getAll<T>() async -> T? where T: Decodable {
-        let endpoint = APIEndpoint.getAllSections()
-        let result = await self.dataTransferService.request(with: endpoint)
-        if case let .success(response) = result {
-            return response as? T
+        guard let cached = await sectionResponseStore.getResponse() else {
+            let endpoint = APIEndpoint.getAllSections()
+            let result = await self.dataTransferService.request(with: endpoint)
+            
+            if case let .success(response) = result {
+                sectionResponseStore.save(response: response)
+                return response as? T
+            }
+            
+            return nil
         }
-        return nil
+        
+        return cached as? T
     }
     
     func getOne<T, U>(request: U,

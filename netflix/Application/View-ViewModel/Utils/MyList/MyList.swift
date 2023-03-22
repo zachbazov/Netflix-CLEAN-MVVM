@@ -39,9 +39,9 @@ extension MyList: ListProtocol {
     }
     
     func viewDidBindObservers() {
-        viewModel.list.observe(on: self) { [weak self] _ in
-            self?.viewModel.updateView()
-        }
+//        viewModel.list.observe(on: self) { [weak self] _ in
+//            self?.viewModel.updateView()
+//        }
     }
     
     func viewDidUnbindObservers() {

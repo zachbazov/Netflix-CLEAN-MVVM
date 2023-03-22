@@ -27,7 +27,7 @@ private protocol AuthServiceInput {
 
 private protocol AuthServiceOutput {
     var user: UserDTO? { get }
-    var responses: UserResponseStore { get }
+    var responses: UserHTTPResponseStore { get }
     
     func signOut()
 }
@@ -38,7 +38,7 @@ private typealias AuthServiceProtocol = AuthServiceInput & AuthServiceOutput
 
 class AuthService {
     var user: UserDTO?
-    fileprivate var responses: UserResponseStore { return Application.app.stores.userResponses }
+    fileprivate var responses: UserHTTPResponseStore { return Application.app.stores.userResponses }
 }
 
 // MARK: - AuthServiceProtocol Implementation
