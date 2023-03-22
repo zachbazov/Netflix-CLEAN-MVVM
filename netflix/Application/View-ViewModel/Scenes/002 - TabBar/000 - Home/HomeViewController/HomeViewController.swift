@@ -34,7 +34,7 @@ final class HomeViewController: Controller<HomeViewModel> {
         super.viewDidLoad()
         super.viewDidLoadBehaviors()
         viewDidBindObservers()
-//        viewDidConfigure()
+        viewDidDeploySubviews()
         viewModel.viewDidLoad()
     }
     
@@ -43,13 +43,21 @@ final class HomeViewController: Controller<HomeViewModel> {
         super.didLockDeviceOrientation(.portrait)
     }
     
-    override func viewDidConfigure() {
+    override func viewDidDeploySubviews() {
         setupDataSource()
         setupNavigationView()
         setupBrowseOverlayView()
     }
     
+    override func viewDidConfigure() {
+        viewModel?.dataSourceState.value = .all
+        
+        navigationView?.viewModel?.navigationViewDidAppear()
+    }
+    
     override func viewDidBindObservers() {
+        guard viewModel.isNotNil else { return }
+        
         viewModel.dataSourceState.observe(on: self) { [weak self] state in
             guard let self = self else { return }
             self.dataSource?.dataSourceDidChange()
@@ -73,14 +81,10 @@ final class HomeViewController: Controller<HomeViewModel> {
 extension HomeViewController: ViewControllerProtocol {
     private func setupDataSource() {
         dataSource = HomeTableViewDataSource(tableView: tableView, viewModel: viewModel)
-        
-        viewModel?.dataSourceState.value = .all
     }
     
     private func setupNavigationView() {
         navigationView = NavigationView(on: navigationViewContainer, with: viewModel)
-        
-        navigationView.viewModel?.navigationViewDidAppear()
     }
     
     private func setupBrowseOverlayView() {

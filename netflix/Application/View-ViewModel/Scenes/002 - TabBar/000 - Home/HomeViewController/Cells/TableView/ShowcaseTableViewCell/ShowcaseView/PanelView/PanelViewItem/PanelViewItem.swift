@@ -180,20 +180,21 @@ final class PanelViewItem: View<PanelViewItemViewModel> {
     required init?(coder: NSCoder) { fatalError() }
     
     deinit {
+        print("deinit \(Self.self)")
         configuration.view = nil
         configuration = nil
         viewModel = nil
     }
     
     override func viewDidBindObservers() {
-        viewModel.isSelected.observe(on: self) { [weak self] _ in
+        viewModel?.isSelected.observe(on: self) { [weak self] _ in
             guard let self = self else { return }
             self.configuration?.viewDidUpdate()
         }
     }
     
     override func viewDidUnbindObservers() {
-        viewModel.isSelected.remove(observer: self)
+        viewModel?.isSelected.remove(observer: self)
     }
 }
 
