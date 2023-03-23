@@ -9,17 +9,13 @@ import Foundation
 
 // MARK: - ServicesProtocol Type
 
-private protocol ServicesInput {
-    func createDataTransferService() -> DataTransferService
-}
-
-private protocol ServicesOutput {
+private protocol ServicesProtocol {
     var configuration: Configuration { get }
     var authentication: AuthService { get }
     var dataTransfer: DataTransferService { get }
+    
+    func createDataTransferService() -> DataTransferService
 }
-
-private typealias ServicesProtocol = ServicesInput & ServicesOutput
 
 // MARK: - Services Type
 

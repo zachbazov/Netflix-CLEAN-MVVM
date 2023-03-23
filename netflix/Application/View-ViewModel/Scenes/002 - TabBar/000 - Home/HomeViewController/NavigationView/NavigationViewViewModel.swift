@@ -9,18 +9,13 @@ import Foundation
 
 // MARK: - ViewModelProtocol Type
 
-private protocol ViewModelInput {
-    func stateDidChange(_ state: NavigationView.State)
-}
-
-private protocol ViewModelOutput {
+private protocol ViewModelProtocol {
     var items: [NavigationViewItem] { get }
     var state: Observable<NavigationView.State> { get }
     
     func navigationViewDidAppear()
+    func stateDidChange(_ state: NavigationView.State)
 }
-
-private typealias ViewModelProtocol = ViewModelInput & ViewModelOutput
 
 // MARK: - NavigationViewViewModel Type
 
@@ -29,6 +24,7 @@ final class NavigationViewViewModel {
     
     fileprivate let items: [NavigationViewItem]
     let state: Observable<NavigationView.State> = Observable(.home)
+    
     /// Create a navigation view view model object.
     /// - Parameters:
     ///   - items: Represented items on the navigation.
@@ -51,12 +47,13 @@ extension NavigationViewViewModel: ViewModelProtocol {
         let homeViewController = coordinator.viewController!
         mainQueueDispatch {
             homeViewController.navigationViewTopConstraint.constant = 0.0
-            homeViewController.navigationView.alpha = 1.0
+            homeViewController.navigationView?.alpha = 1.0
             homeViewController.view.animateUsingSpring(withDuration: 0.66,
                                                        withDamping: 1.0,
                                                        initialSpringVelocity: 1.0)
         }
     }
+    
     /// Controls the navigation presentation of items.
     /// - Parameter state: Corresponding state.
     func stateDidChange(_ state: NavigationView.State) {

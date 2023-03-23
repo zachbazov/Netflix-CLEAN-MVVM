@@ -9,7 +9,7 @@ import Foundation
 
 // MARK: - ViewModelProtocol Type
 
-private protocol ViewModelOutput {
+private protocol ViewModelProtocol {
     var media: Media { get }
     var previewPosterImagePath: String { get }
     var previewPosterImageIdentifier: NSString { get }
@@ -20,8 +20,6 @@ private protocol ViewModelOutput {
     var eta: String { get }
     var mediaType: String { get }
 }
-
-private typealias ViewModelProtocol = ViewModelOutput
 
 // MARK: - NewsCollectionViewCellViewModel Type
 
@@ -35,6 +33,7 @@ struct NewsCollectionViewCellViewModel {
     var displayLogoImageURL: URL!
     let eta: String
     let mediaType: String
+    
     /// Create a news table view cell view model object.
     /// - Parameter media: Corresponding media object.
     init(with media: Media) {

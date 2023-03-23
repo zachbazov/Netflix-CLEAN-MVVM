@@ -9,16 +9,12 @@ import UIKit
 
 // MARK: - ViewProtocol Type
 
-private protocol ViewInput {
-    func viewDidUpdate(with media: Media)
-}
-
-private protocol ViewOutput {
+private protocol ViewProtocol {
     var imageView: UIImageView! { get }
     var blurView: UIVisualEffectView! { get }
+    
+    func viewDidUpdate(with media: Media)
 }
-
-private typealias ViewProtocol = ViewOutput
 
 // MARK: - OpaqueView Type
 

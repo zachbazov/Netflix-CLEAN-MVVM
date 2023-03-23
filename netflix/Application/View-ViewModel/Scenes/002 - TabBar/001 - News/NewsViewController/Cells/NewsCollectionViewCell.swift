@@ -9,13 +9,11 @@ import UIKit
 
 // MARK: - ViewProtocol Type
 
-private protocol ViewOutput {
+private protocol ViewProtocol {
     var representedIdentifier: String? { get }
     
     func viewDidConfigure(with viewModel: NewsCollectionViewCellViewModel)
 }
-
-private typealias ViewProtocol = ViewOutput
 
 // MARK: - NewsCollectionViewCell Type
 

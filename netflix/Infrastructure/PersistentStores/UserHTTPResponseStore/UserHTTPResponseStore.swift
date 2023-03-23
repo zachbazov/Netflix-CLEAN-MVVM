@@ -74,6 +74,7 @@ extension UserHTTPResponseStore {
         requestEntity.response = responseEntity
         requestEntity.user = request.user
         requestEntity.userId = request.user._id
+        requestEntity.selectedProfile = request.selectedProfile
         
         response.data?.token = response.token
         response.data?.password = request.user.password
@@ -81,6 +82,7 @@ extension UserHTTPResponseStore {
         responseEntity.request = requestEntity
         responseEntity.token = response.token
         responseEntity.data = response.data
+        responseEntity.userId = response.data?._id
         
         coreDataStorage.saveContext()
     }

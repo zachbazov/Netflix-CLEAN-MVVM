@@ -9,15 +9,11 @@ import UIKit
 
 // MARK: - ListProtocol Type
 
-private protocol ListOutput {
+private protocol ListProtocol {
     var viewModel: MyListViewModel { get }
     
     func viewDidLoad()
-    func viewDidBindObservers()
-    func viewDidUnbindObservers()
 }
-
-private typealias ListProtocol = ListOutput
 
 // MARK: - MyList Type
 
@@ -27,7 +23,6 @@ final class MyList {
     init(with viewModel: HomeViewModel) {
         self.viewModel = MyListViewModel(with: viewModel)
         self.viewDidLoad()
-        self.viewDidBindObservers()
     }
 }
 
@@ -36,18 +31,5 @@ final class MyList {
 extension MyList: ListProtocol {
     fileprivate func viewDidLoad() {
         viewModel.fetchList()
-    }
-    
-    func viewDidBindObservers() {
-//        viewModel.list.observe(on: self) { [weak self] _ in
-//            self?.viewModel.updateView()
-//        }
-    }
-    
-    func viewDidUnbindObservers() {
-        if let list = viewModel.list as Observable<Set<Media>>? {
-            printIfDebug(.success, "Removed `MyList` observers.")
-            list.remove(observer: self)
-        }
     }
 }

@@ -9,7 +9,7 @@ import Foundation
 
 // MARK: - ViewModelProtocol Type
 
-private protocol ViewModelOutput {
+private protocol ViewModelProtocol {
     var media: Media? { get }
     var title: String { get }
     var slug: String { get }
@@ -24,8 +24,6 @@ private protocol ViewModelOutput {
     var presentedLogoAlignment: PresentedLogoAlignment { get }
     var presentedSearchLogoAlignment: PresentedSearchLogoAlignment { get }
 }
-
-private typealias ViewModelProtocol = ViewModelOutput
 
 // MARK: - SearchCollectionViewCellViewModel Type
 
@@ -43,6 +41,7 @@ struct SearchCollectionViewCellViewModel {
     var logoImageURL: URL!
     let presentedLogoAlignment: PresentedLogoAlignment
     var presentedSearchLogoAlignment: PresentedSearchLogoAlignment
+    
     /// Create a search collection view cell view model object.
     /// - Parameter media: Corresponding media object.
     init(media: Media) {

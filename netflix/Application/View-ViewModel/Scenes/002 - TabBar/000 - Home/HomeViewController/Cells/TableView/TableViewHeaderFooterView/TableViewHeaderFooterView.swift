@@ -9,13 +9,11 @@ import UIKit
 
 // MARK: - ViewModelProtocol Type
 
-private protocol ViewModelOutput {
+private protocol ViewModelProtocol {
     var titleLabel: UILabel { get }
     
     func createLabel() -> UILabel
 }
-
-private typealias ViewModelProtocol = ViewModelOutput
 
 // MARK: - TableViewHeaderFooterView Type
 

@@ -9,7 +9,7 @@ import UIKit
 
 // MARK: - DataSourceProtocol Type
 
-private protocol DataSourceOutput {
+private protocol DataSourceProtocol {
     associatedtype T
     
     var viewModel: DetailViewModel { get }
@@ -17,8 +17,6 @@ private protocol DataSourceOutput {
     var collectionView: UICollectionView { get }
     var items: [T] { get }
 }
-
-private typealias DataSourceProtocol = DataSourceOutput
 
 // MARK: - DetailCollectionViewDataSource Type
 

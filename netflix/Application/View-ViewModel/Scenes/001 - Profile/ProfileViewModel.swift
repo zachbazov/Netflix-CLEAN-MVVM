@@ -9,7 +9,7 @@ import Foundation
 
 // MARK: - ViewModelProtocol Type
 
-private protocol ViewModelOutput {
+private protocol ViewModelProtocol {
     var userUseCase: UserUseCase { get }
     
     var profiles: [UserProfile] { get }
@@ -27,8 +27,6 @@ private protocol ViewModelOutput {
     
     func didFinish()
 }
-
-private typealias ViewModelProtocol = ViewModelOutput
 
 // MARK: - ProfileViewModel Type
 

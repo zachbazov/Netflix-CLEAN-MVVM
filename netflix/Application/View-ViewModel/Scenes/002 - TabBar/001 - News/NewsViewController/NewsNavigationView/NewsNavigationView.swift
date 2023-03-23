@@ -13,6 +13,7 @@ final class NewsNavigationView: UIView {
     @IBOutlet private weak var titleLabel: UILabel!
     @IBOutlet private weak var airPlayButton: UIButton!
     @IBOutlet private weak var accountButton: UIButton!
+    
     /// Create a navigation view object.
     /// - Parameter parent: Instantiating view.
     init(on parent: UIView) {

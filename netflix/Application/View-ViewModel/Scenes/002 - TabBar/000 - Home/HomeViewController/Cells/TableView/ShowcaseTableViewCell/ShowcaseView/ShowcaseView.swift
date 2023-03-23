@@ -9,11 +9,9 @@ import UIKit
 
 // MARK: - ViewProtocol Type
 
-private protocol ViewOutput {
+private protocol ViewProtocol {
     var panelView: PanelView! { get }
 }
-
-private typealias ViewProtocol = ViewOutput
 
 // MARK: - ShowcaseView Type
 

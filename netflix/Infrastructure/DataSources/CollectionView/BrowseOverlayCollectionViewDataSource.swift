@@ -9,13 +9,11 @@ import UIKit
 
 // MARK: - DataSourceProtocol Type
 
-private protocol DataSourceOutput {
+private protocol DataSourceProtocol {
     var coordinator: HomeViewCoordinator { get }
     var section: Section { get }
     var items: [Media] { get }
 }
-
-private typealias DataSourceProtocol = DataSourceOutput
 
 // MARK: - BrowseOverlayCollectionViewDataSource Type
 

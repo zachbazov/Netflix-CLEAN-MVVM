@@ -20,6 +20,7 @@ extension SearchViewCoordinator: Coordinate {
     enum Screen {
         case search
     }
+    
     /// Screen presentation control.
     /// - Parameter screen: The screen to be allocated and presented.
     func coordinate(to screen: Screen) {}

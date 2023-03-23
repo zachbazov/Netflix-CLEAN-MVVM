@@ -5,17 +5,14 @@
 //  Created by Zach Bazov on 07/09/2022.
 //
 
-import UIKit
 import AVKit
 
 // MARK: - ControllerProtocol Type
 
-private protocol ControllerOutput {
+private protocol ControllerProtocol {
     var previewView: PreviewView! { get }
     var dataSource: DetailTableViewDataSource! { get }
 }
-
-private typealias ControllerProtocol = ControllerOutput
 
 // MARK: - DetailViewController Type
 
@@ -51,6 +48,7 @@ final class DetailViewController: Controller<DetailViewModel> {
         viewModel.navigationViewState.observe(on: self) { [weak self] state in
             self?.dataSource.reloadData(at: .collection)
         }
+        
         viewModel.season.observe(on: self) { [weak self] season in
             self?.dataSource.reloadData(at: .collection)
         }

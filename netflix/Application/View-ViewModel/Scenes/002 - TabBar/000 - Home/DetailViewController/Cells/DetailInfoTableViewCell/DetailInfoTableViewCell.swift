@@ -9,13 +9,11 @@ import UIKit
 
 // MARK: - ViewProtocol Type
 
-private protocol ViewOutput {
+private protocol ViewProtocol {
     var infoView: DetailInfoView! { get }
     
     func viewDidConfigure()
 }
-
-private typealias ViewProtocol = ViewOutput
 
 // MARK: - DetailInfoTableViewCell Type
 

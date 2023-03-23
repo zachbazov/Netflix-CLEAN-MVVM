@@ -9,13 +9,7 @@ import Foundation
 
 // MARK: - ViewModelProtocol Type
 
-private protocol ViewModelInput {
-    func section(at index: HomeTableViewDataSource.Index) -> Section
-    func filter(sections: [Section])
-    func filter(at index: HomeTableViewDataSource.Index) -> [Media]
-}
-
-private protocol ViewModelOutput {
+private protocol ViewModelProtocol {
     var sectionUseCase: SectionUseCase { get }
     var mediaUseCase: MediaUseCase { get }
     
@@ -32,9 +26,11 @@ private protocol ViewModelOutput {
     var myList: MyList { get }
     
     var isSectionsEmpty: Bool { get }
+    
+    func section(at index: HomeTableViewDataSource.Index) -> Section
+    func filter(sections: [Section])
+    func filter(at index: HomeTableViewDataSource.Index) -> [Media]
 }
-
-private typealias ViewModelProtocol = ViewModelInput & ViewModelOutput
 
 // MARK: - HomeViewModel Type
 
@@ -59,7 +55,6 @@ final class HomeViewModel {
     var isSectionsEmpty: Bool { return sections.isEmpty }
     
     deinit {
-        myList.viewDidUnbindObservers()
         coordinator = nil
     }
 }
@@ -140,7 +135,7 @@ extension HomeViewModel: ViewModelProtocol {
             default: return []
             }
         case .myList:
-            let media = myList.viewModel.list.value
+            let media = myList.viewModel.list
             switch dataSourceState.value {
             case .all:
                 return media.shuffled()

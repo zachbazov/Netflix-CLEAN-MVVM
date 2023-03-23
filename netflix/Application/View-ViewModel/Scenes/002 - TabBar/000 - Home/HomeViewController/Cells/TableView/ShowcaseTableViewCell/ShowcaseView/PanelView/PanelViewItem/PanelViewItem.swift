@@ -9,7 +9,7 @@ import UIKit
 
 // MARK: - ConfigurationProtocol Type
 
-private protocol ConfigurationOutput {
+private protocol ConfigurationProtocol {
     var view: PanelViewItem? { get }
     var viewModel: ShowcaseTableViewCellViewModel { get }
     var gestureRecognizers: [PanelViewItemConfiguration.GestureGecognizer] { get }
@@ -23,8 +23,6 @@ private protocol ConfigurationOutput {
     func viewDidLongPress()
 }
 
-private typealias ConfigurationProtocol = ConfigurationOutput
-
 // MARK: - PanelViewItemConfiguration Type
 
 final class PanelViewItemConfiguration {
@@ -33,6 +31,7 @@ final class PanelViewItemConfiguration {
     fileprivate var gestureRecognizers: [GestureGecognizer]
     fileprivate var tapRecognizer: UITapGestureRecognizer!
     fileprivate var longPressRecognizer: UILongPressGestureRecognizer!
+    
     /// Create a new panel view object.
     /// - Parameters:
     ///   - view: Instantiating view.
@@ -123,7 +122,7 @@ extension PanelViewItemConfiguration: ConfigurationProtocol {
             // Add or remove the object from the list.
             viewModel.myList.viewModel.shouldAddOrRemove(media, uponSelection: view.viewModel.isSelected.value)
             // Reload browse overlay's collection data.
-            viewModel.coordinator?.viewController?.browseOverlayView.collectionView.reloadData()
+            viewModel.coordinator?.viewController?.browseOverlayView?.collectionView.reloadData()
         case .info:
             // Allocate a new detail controller.
             let coordinator = viewModel.coordinator!
@@ -146,13 +145,11 @@ extension PanelViewItemConfiguration: ConfigurationProtocol {
 
 // MARK: - ViewProtocol Type
 
-private protocol ViewOutput {
+private protocol ViewProtocol {
     var configuration: PanelViewItemConfiguration! { get }
     
     var isSelected: Bool { get }
 }
-
-private typealias ViewProtocol = ViewOutput
 
 // MARK: - PanelViewItem Type
 
@@ -162,6 +159,7 @@ final class PanelViewItem: View<PanelViewItemViewModel> {
     
     private(set) var configuration: PanelViewItemConfiguration!
     private(set) var isSelected = false
+    
     /// Create a panel view item object.
     /// - Parameters:
     ///   - parent: Instantiating view.

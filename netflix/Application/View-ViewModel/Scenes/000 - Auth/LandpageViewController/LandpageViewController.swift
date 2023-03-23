@@ -9,13 +9,11 @@ import UIKit
 
 // MARK: - ViewControllerProtocol Type
 
-private protocol ViewControllerOutput {
+private protocol ViewControllerProtocol {
     var signInBarButton: UIView! { get }
     var hasGradient: Bool { get }
     var hasAnimate: Bool { get }
 }
-
-private typealias ViewControllerProtocol = ViewControllerOutput
 
 // MARK: - LandpageViewController Type
 

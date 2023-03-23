@@ -9,16 +9,11 @@ import AVKit
 
 // MARK: - ViewProtocol Type
 
-private protocol ViewInput {
-    var prepareToPlay: ((Bool) -> Void)? { get }
-}
-
-private protocol ViewOutput {
+private protocol ViewProtocol {
     var mediaPlayer: MediaPlayer! { get }
     var overlayView: MediaPlayerOverlayView! { get }
+    var prepareToPlay: ((Bool) -> Void)? { get }
 }
-
-private typealias ViewProtocol = ViewInput & ViewOutput
 
 // MARK: - MediaPlayerView Type
 

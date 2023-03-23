@@ -9,12 +9,7 @@ import Foundation
 
 // MARK: - ViewModelProtocol Type
 
-private protocol ViewModelInput {
-    func navigationViewStateDidChange(_ state: NavigationView.State)
-    func didSelectRow(at indexPath: IndexPath)
-}
-
-private protocol ViewModelOutput {
+private protocol ViewModelProtocol {
     var isPresented: Observable<Bool> { get }
     var items: Observable<[Valuable]> { get }
     var state: NavigationOverlayTableViewDataSource.State { get }
@@ -28,9 +23,9 @@ private protocol ViewModelOutput {
     func dataSourceDidChange()
     func itemsDidChange()
     func animatePresentation()
+    func navigationViewStateDidChange(_ state: NavigationView.State)
+    func didSelectRow(at indexPath: IndexPath)
 }
-
-private typealias ViewModelProtocol = ViewModelInput & ViewModelOutput
 
 // MARK: - NavigationOverlayViewModel Type
 
@@ -44,6 +39,7 @@ final class NavigationOverlayViewModel {
     fileprivate var hasHomeExpanded = false
     fileprivate var hasTvExpanded = false
     fileprivate var hasMoviesExpanded = false
+    
     /// Create a navigation overlay view view model object.
     /// - Parameter viewModel: Coordinating view model.
     init(with viewModel: HomeViewModel) {
@@ -64,6 +60,7 @@ extension NavigationOverlayViewModel: ViewModelProtocol {
         
         animatePresentation()
     }
+    
     /// Release data source changes and center the content.
     func dataSourceDidChange() {
         guard let navigationOverlayView = coordinator.viewController?.navigationView?.navigationOverlayView else {
@@ -81,12 +78,14 @@ extension NavigationOverlayViewModel: ViewModelProtocol {
         /// Center the content.
         tableView.centerVertically(on: navigationOverlayView)
     }
+    
     /// Change `items` value based on the data source `state` value.
     fileprivate func itemsDidChange() {
         if case .main = state { items.value = NavigationView.State.allCases[3...5].toArray() }
         else if case .genres = state { items.value = NavigationOverlayView.Category.allCases }
         else { items.value = [] }
     }
+    
     /// Animate the presentation of the view.
     fileprivate func animatePresentation() {
         guard let navigationOverlayView = coordinator.viewController?.navigationView?.navigationOverlayView else {

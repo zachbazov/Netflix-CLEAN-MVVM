@@ -9,15 +9,7 @@ import Foundation
 
 // MARK: - ViewModelProtocol Type
 
-private protocol ViewModelInput {
-    
-}
-
-private protocol ViewModelOutput {
-    
-}
-
-private typealias ViewModelProtocol = ViewModelInput & ViewModelOutput
+private protocol ViewModelProtocol {}
 
 // MARK: - AccountViewModel Type
 
@@ -32,7 +24,7 @@ final class AccountViewModel {
     
     private func createMenuItems() -> [AccountMenuItem] {
         let homeViewController = Application.app.coordinator.tabCoordinator.home.viewControllers.first as? HomeViewController
-        let media = homeViewController!.viewModel.myList.viewModel.list.value.toArray()
+        let media = homeViewController!.viewModel.myList.viewModel.list.toArray()
         
         let notifications = AccountMenuItem(image: "bell", title: "Notifications", options: media, isExpanded: false)
         let myList = AccountMenuItem(image: "checkmark", title: "My List")

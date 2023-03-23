@@ -9,11 +9,7 @@ import UIKit
 
 // MARK: - CoordinatorProtocol Type
 
-private protocol CoordinatorInput {
-    func deploy(_ screen: AuthCoordinator.Screen)
-}
-
-private protocol CoordinatorOutput {
+private protocol CoordinatorProtocol {
     var navigationController: NavigationController { get }
     var landpageController: LandpageViewController { get }
     var signInController: SignInViewController { get }
@@ -23,9 +19,9 @@ private protocol CoordinatorOutput {
     func createLandpageController() -> LandpageViewController
     func createSignInController() -> SignInViewController
     func createSignUpController() -> SignUpViewController
+    
+    func deploy(_ screen: AuthCoordinator.Screen)
 }
-
-private typealias CoordinatorProtocol = CoordinatorInput & CoordinatorOutput
 
 // MARK: - AuthCoordinator Type
 
@@ -81,7 +77,6 @@ extension AuthCoordinator: CoordinatorProtocol {
         }
     }
 }
-
 
 // MARK: - Coordinate Implementation
 

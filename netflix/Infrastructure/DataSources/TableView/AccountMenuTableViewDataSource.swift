@@ -9,15 +9,12 @@ import UIKit
 
 // MARK: - DataSourceProtocol Type
 
-private protocol DataSourceOutput {
+private protocol DataSourceProtocol {
     var reusableViewPointSize: CGFloat { get }
     
     func createDummyView() -> UIView
-    
     func dataSourceDidChange()
 }
-
-private typealias DataSourceProtocol = DataSourceOutput
 
 // MARK: - AccountMenuTableViewDataSource Type
 

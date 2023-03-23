@@ -9,16 +9,7 @@ import Foundation
 
 // MARK: - ViewModelProtocol Type
 
-private protocol ViewModelInput {
-    func set(media: [Media])
-    func load(requestDTO: SearchHTTPDTO.Request)
-    func update(requestDTO: SearchHTTPDTO.Request)
-    
-    func didLoadNextPage(requestDTO: SearchHTTPDTO.Request)
-    func didSearch(query: String)
-}
-
-private protocol ViewModelOutput {
+private protocol ViewModelProtocol {
     var useCase: MediaUseCase { get }
     
     var items: Observable<[SearchCollectionViewCellViewModel]> { get }
@@ -27,11 +18,15 @@ private protocol ViewModelOutput {
     var isEmpty: Bool { get }
     var topSearches: [Media] { get }
     
+    func set(media: [Media])
+    func load(requestDTO: SearchHTTPDTO.Request)
+    func update(requestDTO: SearchHTTPDTO.Request)
     func reset()
+    
+    func didLoadNextPage(requestDTO: SearchHTTPDTO.Request)
+    func didSearch(query: String)
     func didCancelSearch()
 }
-
-private typealias ViewModelProtocol = ViewModelInput & ViewModelOutput
 
 // MARK: - SearchViewModel Type
 

@@ -9,12 +9,10 @@ import UIKit
 
 // MARK: - ViewProtocol Type
 
-private protocol ViewOutput {
+private protocol ViewProtocol {
     var ageRestrictionView: AgeRestrictionView! { get }
     var hdView: HDView! { get }
 }
-
-private typealias ViewProtocol = ViewOutput
 
 // MARK: - DetailInfoView Type
 

@@ -9,14 +9,7 @@ import UIKit
 
 // MARK: - DataSourceProtocol Type
 
-private protocol DataSourceInput {
-    func contentSize(with state: DetailNavigationView.State) -> Float
-    func reloadRow(at index: DetailTableViewDataSource.Index)
-    func heightForRow(at index: DetailTableViewDataSource.Index)
-    func reloadData(at index: DetailTableViewDataSource.Index)
-}
-
-private protocol DataSourceOutput {
+private protocol DataSourceProtocol {
     var viewModel: DetailViewModel { get }
     var tableView: UITableView { get }
     var numberOfRows: Int { get }
@@ -25,9 +18,12 @@ private protocol DataSourceOutput {
     
     func viewsDidRegister()
     func dataSourceDidChange()
+    
+    func contentSize(with state: DetailNavigationView.State) -> Float
+    func reloadRow(at index: DetailTableViewDataSource.Index)
+    func heightForRow(at index: DetailTableViewDataSource.Index)
+    func reloadData(at index: DetailTableViewDataSource.Index)
 }
-
-private typealias DataSourceProtocol = DataSourceInput & DataSourceOutput
 
 // MARK: - DetailTableViewDataSource Type
 
@@ -37,6 +33,7 @@ final class DetailTableViewDataSource: NSObject {
     fileprivate let numberOfRows: Int = 1
     fileprivate let numberOfSections = Index.allCases.count
     fileprivate(set) var collectionCell: DetailCollectionTableViewCell!
+    
     /// Create a detail table view data source object.
     /// - Parameters:
     ///   - tableView: Corresponding table view.

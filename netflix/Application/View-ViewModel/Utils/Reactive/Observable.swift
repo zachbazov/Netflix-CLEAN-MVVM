@@ -9,24 +9,17 @@ import Foundation
 
 // MARK: - ObserverProtocol Type
 
-private protocol ObserverInput {
-    associatedtype Value
-    
-    func observe(on observer: AnyObject, block: @escaping (Value) -> Void)
-    func remove(observer: AnyObject)
-}
-
-private protocol ObserverOutput {
+private protocol ObserverProtocol {
     associatedtype Value
     associatedtype T
     
     var observers: T { get }
     var value: Value { get }
     
+    func observe(on observer: AnyObject, block: @escaping (Value) -> Void)
+    func remove(observer: AnyObject)
     func notifyObservers()
 }
-
-private typealias ObserverProtocol = ObserverInput & ObserverOutput
 
 // MARK: - Observable Type
 

@@ -9,7 +9,7 @@ import UIKit
 
 // MARK: - ConfigurationProtocol Type
 
-private protocol ConfigurationOutput {
+private protocol ConfigurationProtocol {
     var view: DetailNavigationViewItem! { get }
     var navigationView: DetailNavigationView! { get }
     
@@ -17,13 +17,12 @@ private protocol ConfigurationOutput {
     func viewDidTap()
 }
 
-private typealias ConfigurationProtocol = ConfigurationOutput
-
 // MARK: - DetailNavigationViewItemConfiguration Type
 
 final class DetailNavigationViewItemConfiguration {
     fileprivate weak var view: DetailNavigationViewItem!
     fileprivate weak var navigationView: DetailNavigationView!
+    
     /// Create a navigation view item configuration object.
     /// - Parameters:
     ///   - view: Corresponding view.
@@ -57,7 +56,7 @@ extension DetailNavigationViewItemConfiguration: ConfigurationProtocol {
 
 // MARK: - ViewProtocol Type
 
-private protocol ViewOutput {
+private protocol ViewProtocol {
     var configuration: DetailNavigationViewItemConfiguration! { get }
     var indicatorView: UIView { get }
     var button: UIButton { get }
@@ -68,8 +67,6 @@ private protocol ViewOutput {
     func createButton() -> UIButton
 }
 
-private typealias ViewProtocol = ViewOutput
-
 // MARK: - DetailNavigationViewItem Type
 
 final class DetailNavigationViewItem: View<DetailNavigationViewItemViewModel> {
@@ -78,6 +75,7 @@ final class DetailNavigationViewItem: View<DetailNavigationViewItemViewModel> {
     fileprivate lazy var button = createButton()
     var isSelected = false
     fileprivate(set) var widthConstraint: NSLayoutConstraint!
+    
     /// Create a navigation view item object.
     /// - Parameters:
     ///   - navigationView: Root navigation view object.

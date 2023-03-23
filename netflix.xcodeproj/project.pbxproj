@@ -131,8 +131,6 @@
 		A18B995928BFF6A20077A5A6 /* MediaDTO+Mapping.swift in Sources */ = {isa = PBXBuildFile; fileRef = A18B995828BFF6A20077A5A6 /* MediaDTO+Mapping.swift */; };
 		A18B995B28BFFB500077A5A6 /* SeasonDTO+Mapping.swift in Sources */ = {isa = PBXBuildFile; fileRef = A18B995A28BFFB500077A5A6 /* SeasonDTO+Mapping.swift */; };
 		A18B995D28BFFBF30077A5A6 /* EpisodeDTO+Mapping.swift in Sources */ = {isa = PBXBuildFile; fileRef = A18B995C28BFFBF30077A5A6 /* EpisodeDTO+Mapping.swift */; };
-		A18B996028BFFCA80077A5A6 /* Sectionable.swift in Sources */ = {isa = PBXBuildFile; fileRef = A18B995F28BFFCA80077A5A6 /* Sectionable.swift */; };
-		A18B996228BFFE2B0077A5A6 /* Mediable.swift in Sources */ = {isa = PBXBuildFile; fileRef = A18B996128BFFE2B0077A5A6 /* Mediable.swift */; };
 		A18B997628C0119A0077A5A6 /* NetworkConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = A18B997528C0119A0077A5A6 /* NetworkConfig.swift */; };
 		A18B997828C020FC0077A5A6 /* NetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A18B997728C020FC0077A5A6 /* NetworkService.swift */; };
 		A18B997A28C0244D0077A5A6 /* Endpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = A18B997928C0244D0077A5A6 /* Endpoint.swift */; };
@@ -283,6 +281,7 @@
 		A1D23ABA29CA1C9C00748029 /* Optional+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1D23AB929CA1C9C00748029 /* Optional+Extension.swift */; };
 		A1D23ABD29CA715200748029 /* SectionHTTPResponseStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1D23ABC29CA715200748029 /* SectionHTTPResponseStore.swift */; };
 		A1D23AC029CA746D00748029 /* SectionHTTPResponseEntity+Mapping.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1D23ABF29CA746D00748029 /* SectionHTTPResponseEntity+Mapping.swift */; };
+		A1D23AC429CBB22D00748029 /* VoidHTTPDTO+Mapping.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1D23AC329CBB22D00748029 /* VoidHTTPDTO+Mapping.swift */; };
 		A1E3706329B5DAE900CFEE9C /* TextFieldActivityIndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1E3706229B5DAE900CFEE9C /* TextFieldActivityIndicatorView.swift */; };
 		A1E3706529B7C45700CFEE9C /* VoidHTTP.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1E3706429B7C45600CFEE9C /* VoidHTTP.swift */; };
 		A1E3706829BB1E7E00CFEE9C /* AccountViewCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1E3706729BB1E7E00CFEE9C /* AccountViewCoordinator.swift */; };
@@ -448,8 +447,6 @@
 		A18B995828BFF6A20077A5A6 /* MediaDTO+Mapping.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MediaDTO+Mapping.swift"; sourceTree = "<group>"; };
 		A18B995A28BFFB500077A5A6 /* SeasonDTO+Mapping.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SeasonDTO+Mapping.swift"; sourceTree = "<group>"; };
 		A18B995C28BFFBF30077A5A6 /* EpisodeDTO+Mapping.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EpisodeDTO+Mapping.swift"; sourceTree = "<group>"; };
-		A18B995F28BFFCA80077A5A6 /* Sectionable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sectionable.swift; sourceTree = "<group>"; };
-		A18B996128BFFE2B0077A5A6 /* Mediable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Mediable.swift; sourceTree = "<group>"; };
 		A18B997528C0119A0077A5A6 /* NetworkConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkConfig.swift; sourceTree = "<group>"; };
 		A18B997728C020FC0077A5A6 /* NetworkService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkService.swift; sourceTree = "<group>"; };
 		A18B997928C0244D0077A5A6 /* Endpoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Endpoint.swift; sourceTree = "<group>"; };
@@ -601,6 +598,7 @@
 		A1D23AB929CA1C9C00748029 /* Optional+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Optional+Extension.swift"; sourceTree = "<group>"; };
 		A1D23ABC29CA715200748029 /* SectionHTTPResponseStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SectionHTTPResponseStore.swift; sourceTree = "<group>"; };
 		A1D23ABF29CA746D00748029 /* SectionHTTPResponseEntity+Mapping.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SectionHTTPResponseEntity+Mapping.swift"; sourceTree = "<group>"; };
+		A1D23AC329CBB22D00748029 /* VoidHTTPDTO+Mapping.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "VoidHTTPDTO+Mapping.swift"; sourceTree = "<group>"; };
 		A1E3706229B5DAE900CFEE9C /* TextFieldActivityIndicatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextFieldActivityIndicatorView.swift; sourceTree = "<group>"; };
 		A1E3706429B7C45600CFEE9C /* VoidHTTP.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoidHTTP.swift; sourceTree = "<group>"; };
 		A1E3706729BB1E7E00CFEE9C /* AccountViewCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountViewCoordinator.swift; sourceTree = "<group>"; };
@@ -1262,7 +1260,6 @@
 		A18B994028BFD96E0077A5A6 /* Entities */ = {
 			isa = PBXGroup;
 			children = (
-				A18B995E28BFFCA10077A5A6 /* Protocols */,
 				A1B98BB4298AD251001B7B62 /* HTTP */,
 				A18B997F28C03CA20077A5A6 /* JWT.swift */,
 				A18B994928BFD9DD0077A5A6 /* User+Mapping.swift */,
@@ -1281,18 +1278,8 @@
 			isa = PBXGroup;
 			children = (
 				A18B999928C0E0120077A5A6 /* Entities */,
-				A1B98BA5298A4177001B7B62 /* HTTP */,
 			);
 			path = DataMappings;
-			sourceTree = "<group>";
-		};
-		A18B995E28BFFCA10077A5A6 /* Protocols */ = {
-			isa = PBXGroup;
-			children = (
-				A18B995F28BFFCA80077A5A6 /* Sectionable.swift */,
-				A18B996128BFFE2B0077A5A6 /* Mediable.swift */,
-			);
-			path = Protocols;
 			sourceTree = "<group>";
 		};
 		A18B997428C011700077A5A6 /* Network */ = {
@@ -1357,6 +1344,7 @@
 		A18B999928C0E0120077A5A6 /* Entities */ = {
 			isa = PBXGroup;
 			children = (
+				A1B98BA5298A4177001B7B62 /* HTTP */,
 				A18B995428BFF1D10077A5A6 /* UserDTO+Mapping.swift */,
 				A14E0CE029C0DA5A00F55500 /* UserProfileDTO+Mapping.swift */,
 				A18B995628BFF66C0077A5A6 /* SectionDTO+Mapping.swift */,
@@ -1885,6 +1873,7 @@
 				A1B98BB8298B1F3E001B7B62 /* ListHTTPDTO+Mapping.swift */,
 				A1B98BAE298A48B2001B7B62 /* SearchHTTPDTO.swift */,
 				A1B98BB0298A495F001B7B62 /* NewsHTTPDTO+Mapping.swift */,
+				A1D23AC329CBB22D00748029 /* VoidHTTPDTO+Mapping.swift */,
 			);
 			path = HTTP;
 			sourceTree = "<group>";
@@ -2331,6 +2320,7 @@
 				A14E0CB929BB979900F55500 /* ProfileCollectionViewCellViewModel.swift in Sources */,
 				A14E0CDB29C08DD000F55500 /* ProfileViewController.swift in Sources */,
 				A1A71AA1298B2A5E001C6AB1 /* MediaHTTP.swift in Sources */,
+				A1D23AC429CBB22D00748029 /* VoidHTTPDTO+Mapping.swift in Sources */,
 				A18691E028C8D4640087DE3B /* SectionRepository.swift in Sources */,
 				A1741D3F28EBD33200F3C46B /* AgeRestrictionView.swift in Sources */,
 				A14E0CF429C330A100F55500 /* UserProfileViewController.swift in Sources */,
@@ -2371,7 +2361,6 @@
 				A1E3706A29BB1E8600CFEE9C /* AccountViewModel.swift in Sources */,
 				A1BA1DBF28DCB6F300730EA8 /* NavigationOverlayCollectionViewCellViewModel.swift in Sources */,
 				A1E3706829BB1E7E00CFEE9C /* AccountViewCoordinator.swift in Sources */,
-				A18B996028BFFCA80077A5A6 /* Sectionable.swift in Sources */,
 				A1BA1DB928DA20CA00730EA8 /* NavigationOverlayViewModel.swift in Sources */,
 				A14E0CD929C08DCD00F55500 /* ProfileViewModel.swift in Sources */,
 				A18D85222940DA7000840045 /* BrowseOverlayCollectionViewDataSource.swift in Sources */,
@@ -2458,7 +2447,6 @@
 				A1B98BAF298A48B2001B7B62 /* SearchHTTPDTO.swift in Sources */,
 				A130BC98294CE0B30070EA5E /* SearchViewController.swift in Sources */,
 				A1B1B0D4299B9F870070AD29 /* SeasonUseCase.swift in Sources */,
-				A18B996228BFFE2B0077A5A6 /* Mediable.swift in Sources */,
 				A1B70A6F293D578200C718C6 /* View.swift in Sources */,
 				A14E0CC929BCAB3600F55500 /* AccountMenuItem.swift in Sources */,
 				A1B98BA4298A414E001B7B62 /* HTTP.swift in Sources */,

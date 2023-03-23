@@ -9,13 +9,17 @@ import Foundation
 
 // MARK: - AuthServiceProtocol Type
 
-private protocol AuthServiceInput {
+private protocol AuthServiceProtocol {
+    var user: UserDTO? { get }
+    var responses: UserHTTPResponseStore { get }
+    
     func setUser(request: UserHTTPDTO.Request?, response: UserHTTPDTO.Response)
     func deleteResponse(for request: UserHTTPDTO.Request)
     
     func resign(completion: @escaping (UserDTO?) -> Void)
     func signIn(for requestDTO: UserHTTPDTO.Request, completion: @escaping (UserDTO?) -> Void)
     func signUp(for requestDTO: UserHTTPDTO.Request, completion: @escaping (Bool) -> Void)
+    func signOut()
     
     func deleteResponse(for request: UserHTTPDTO.Request) async
     
@@ -25,19 +29,15 @@ private protocol AuthServiceInput {
     func signOut(with request: UserHTTPDTO.Request) async -> Bool
 }
 
-private protocol AuthServiceOutput {
-    var user: UserDTO? { get }
-    var responses: UserHTTPResponseStore { get }
-    
-    func signOut()
-}
-
-private typealias AuthServiceProtocol = AuthServiceInput & AuthServiceOutput
-
 // MARK: - AuthService Type
 
 class AuthService {
+    var userId: String?
+    var userToken: String?
+    var userSelectedProfile: String?
+    
     var user: UserDTO?
+    
     fileprivate var responses: UserHTTPResponseStore { return Application.app.stores.userResponses }
 }
 
@@ -49,6 +49,10 @@ extension AuthService: AuthServiceProtocol {
     ///   - request: Request object via invocation.
     ///   - response: Response object via invocation.
     fileprivate func setUser(request: UserHTTPDTO.Request?, response: UserHTTPDTO.Response) {
+        userId = response.data?._id
+        userToken = response.token
+        userSelectedProfile = request?.selectedProfile
+        
         user = response.data
         user?._id = response.data?._id
         user?.token = response.token
@@ -60,18 +64,22 @@ extension AuthService: AuthServiceProtocol {
     /// Delete all `user`'s related data and clean up service's attributes.
     /// - Parameter request: Request object via invocation.
     fileprivate func deleteResponse(for request: UserHTTPDTO.Request) {
+        let sectionResponses = Application.app.stores.sectionResponses
         let mediaResponses = Application.app.stores.mediaResponses
         let context = Application.app.stores.userResponses.coreDataStorage.context()
         responses.deleteResponse(for: request, in: context)
+        sectionResponses.deleteResponse(in: context)
         mediaResponses.deleteResponse(in: context)
         
         self.user = nil
     }
     
     fileprivate func deleteResponse(for request: UserHTTPDTO.Request) async {
+        let sectionResponses = Application.app.stores.sectionResponses
         let mediaResponses = Application.app.stores.mediaResponses
         let context = Application.app.stores.userResponses.coreDataStorage.context()
         responses.deleteResponse(for: request, in: context)
+        sectionResponses.deleteResponse(in: context)
         mediaResponses.deleteResponse(in: context)
         
         self.user = nil

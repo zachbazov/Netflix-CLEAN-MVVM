@@ -9,15 +9,13 @@ import UIKit
 
 // MARK: - IndicatorProtocol Type
 
-private protocol IndicatorOutput {
+private protocol IndicatorProtocol {
     static var indicator: UIActivityIndicatorView? { get }
     
     static func viewDidShow()
     static func viewDidHide()
     static func viewDidUpdate()
 }
-
-private typealias IndicatorProtocol = IndicatorOutput
 
 // MARK: - ActivityIndicatorView Type
 

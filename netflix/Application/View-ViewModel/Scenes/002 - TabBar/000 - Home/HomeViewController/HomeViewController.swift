@@ -9,13 +9,11 @@ import UIKit
 
 // MARK: - ViewControllerProtocol Type
 
-private protocol ViewControllerOutput {
-    var dataSource: HomeTableViewDataSource! { get }
-    var navigationView: NavigationView! { get }
-    var browseOverlayView: BrowseOverlayView! { get }
+private protocol ViewControllerProtocol {
+    var dataSource: HomeTableViewDataSource? { get }
+    var navigationView: NavigationView? { get }
+    var browseOverlayView: BrowseOverlayView? { get }
 }
-
-private typealias ViewControllerProtocol = ViewControllerOutput
 
 // MARK: - HomeViewController Type
 
@@ -25,10 +23,9 @@ final class HomeViewController: Controller<HomeViewModel> {
     @IBOutlet private(set) var navigationViewTopConstraint: NSLayoutConstraint!
     @IBOutlet private(set) var browseOverlayViewContainer: UIView!
     
-    private(set) var dataSource: HomeTableViewDataSource!
-    
-    var navigationView: NavigationView!
-    var browseOverlayView: BrowseOverlayView!
+    private(set) var dataSource: HomeTableViewDataSource?
+    var navigationView: NavigationView?
+    var browseOverlayView: BrowseOverlayView?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -50,35 +47,44 @@ final class HomeViewController: Controller<HomeViewModel> {
     }
     
     override func viewDidConfigure() {
+        guard viewModel.isNotNil else { return }
+        
         viewModel?.dataSourceState.value = .all
         
         navigationView?.viewModel?.navigationViewDidAppear()
     }
     
     override func viewDidBindObservers() {
-        guard viewModel.isNotNil else { return }
+        guard let viewModel = viewModel else { return }
         
-        viewModel.dataSourceState.observe(on: self) { [weak self] state in
+        viewModel.dataSourceState.observe(on: self) { [weak self] _ in
             guard let self = self else { return }
             self.dataSource?.dataSourceDidChange()
         }
+        
         viewModel.showcase.observe(on: self) { [weak self] in
             guard let self = self, let media = $0 else { return }
-            self.navigationView.navigationOverlayView.opaqueView.viewDidUpdate(with: media)
+            self.navigationView?.navigationOverlayView.opaqueView.viewDidUpdate(with: media)
         }
     }
     
     override func viewDidUnbindObservers() {
-        guard let viewModel = viewModel else { return }
+        guard viewModel.isNotNil else { return }
+        
         viewModel.dataSourceState.remove(observer: self)
         viewModel.showcase.remove(observer: self)
+        
         printIfDebug(.success, "Removed `HomeViewModel` observers.")
     }
 }
 
 // MARK: - ViewControllerProtocol Implementation
 
-extension HomeViewController: ViewControllerProtocol {
+extension HomeViewController: ViewControllerProtocol {}
+
+// MARK: - Private UI Implementation
+
+extension HomeViewController {
     private func setupDataSource() {
         dataSource = HomeTableViewDataSource(tableView: tableView, viewModel: viewModel)
     }

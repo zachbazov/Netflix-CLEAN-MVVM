@@ -7,6 +7,13 @@
 
 import Foundation
 
+// MARK: - Sectionable Type
+
+protocol Sectionable {
+    var id: Int { get }
+    var title: String { get }
+}
+
 // MARK: - Section Type
 
 final class Section {

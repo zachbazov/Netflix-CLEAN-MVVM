@@ -9,13 +9,11 @@ import Foundation
 
 // MARK: - ViewModelProtocol Type
 
-private protocol ViewModelOutput {
+private protocol ViewModelProtocol {
     var isPresented: Bool { get }
     
     func shouldDisplayOrHide()
 }
-
-private typealias ViewModelProtocol = ViewModelOutput
 
 // MARK: - BrowseOverlayViewModel Type
 

@@ -9,7 +9,7 @@ import UIKit
 
 // MARK: - ViewProtocol Type
 
-private protocol ViewOutput {
+private protocol ViewProtocol {
     var dataSource: NavigationOverlayTableViewDataSource! { get }
     var opaqueView: OpaqueView { get }
     var footerView: NavigationOverlayFooterView! { get }
@@ -18,8 +18,6 @@ private protocol ViewOutput {
     
     func createTableView() -> UITableView
 }
-
-private typealias ViewProtocol = ViewOutput
 
 // MARK: - NavigationOverlayView Type
 

@@ -13,6 +13,7 @@ final class DetailDescriptionView: View<DetailDescriptionViewViewModel> {
     @IBOutlet private weak var descriptionTextView: UITextView!
     @IBOutlet private weak var castLabel: UILabel!
     @IBOutlet private weak var writersLabel: UILabel!
+    
     /// Create a description view object.
     /// - Parameters:
     ///   - parent: Instantiating view.

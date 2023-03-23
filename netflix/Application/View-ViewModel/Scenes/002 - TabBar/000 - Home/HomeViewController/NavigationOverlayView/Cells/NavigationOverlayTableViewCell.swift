@@ -9,15 +9,11 @@ import UIKit
 
 // MARK: - ViewProtocol Type
 
-private protocol ViewInput {
+private protocol ViewProtocol {
+    var titleLabel: UILabel { get }
+    
     func viewDidConfigure(with viewModel: NavigationOverlayCollectionViewCellViewModel)
 }
-
-private protocol ViewOutput {
-    var titleLabel: UILabel { get }
-}
-
-private typealias ViewProtocol = ViewInput & ViewOutput
 
 // MARK: - NavigationOverlayTableViewCell Type
 

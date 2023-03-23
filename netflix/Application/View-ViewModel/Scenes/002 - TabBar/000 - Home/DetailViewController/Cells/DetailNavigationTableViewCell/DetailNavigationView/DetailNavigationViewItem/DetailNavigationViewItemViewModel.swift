@@ -9,13 +9,11 @@ import Foundation
 
 // MARK: - ViewModelProtocol Type
 
-private protocol ViewModelOutput {
+private protocol ViewModelProtocol {
     var tag: Int { get }
     var isSelected: Bool { get }
     var title: String { get }
 }
-
-private typealias ViewModelProtocol = ViewModelOutput
 
 // MARK: - DetailNavigationViewItemViewModel Type
 
@@ -31,6 +29,7 @@ final class DetailNavigationViewItemViewModel {
         case .similarContent: return Localization.TabBar.Detail.Navigation().trailingItem
         }
     }
+    
     /// Create a navigation view item view model object.
     /// - Parameter item: Corresponding item object.
     init(with item: DetailNavigationViewItem) {

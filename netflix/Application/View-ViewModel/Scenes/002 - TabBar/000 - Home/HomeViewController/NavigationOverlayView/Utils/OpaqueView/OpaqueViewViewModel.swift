@@ -9,13 +9,11 @@ import Foundation
 
 // MARK: - ViewModelProtocol Type
 
-private protocol ViewModelOutput {
+private protocol ViewModelProtocol {
     var imagePath: String { get }
     var identifier: NSString { get }
     var imageURL: URL { get }
 }
-
-private typealias ViewModelProtocol = ViewModelOutput
 
 // MARK: - OpaqueViewViewModel Type
 
@@ -23,6 +21,7 @@ struct OpaqueViewViewModel {
     let imagePath: String
     let identifier: NSString
     let imageURL: URL
+    
     /// Create a opaque view view model object.
     /// - Parameter media: Corresponding media object.
     init(with media: Media) {

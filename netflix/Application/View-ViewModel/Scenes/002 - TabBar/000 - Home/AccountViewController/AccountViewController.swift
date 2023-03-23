@@ -9,14 +9,12 @@ import UIKit
 
 // MARK: - ViewControllerProtocol Type
 
-private protocol ViewControllerOutput {
+private protocol ViewControllerProtocol {
     func backButtonDidTap()
     func signOutDidTap()
     func signOut()
     func didFinish()
 }
-
-private typealias ViewControllerProtocol = ViewControllerOutput
 
 // MARK: - AccountViewController Type
 

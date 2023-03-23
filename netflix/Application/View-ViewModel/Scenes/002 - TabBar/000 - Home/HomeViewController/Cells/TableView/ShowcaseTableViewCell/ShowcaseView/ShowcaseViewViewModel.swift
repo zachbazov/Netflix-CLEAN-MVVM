@@ -9,7 +9,7 @@ import Foundation
 
 // MARK: - ViewModelProtocol Type
 
-private protocol ViewModelOutput {
+private protocol ViewModelProtocol {
     var slug: String { get }
     var genres: [String] { get }
     var posterImagePath: String { get }
@@ -20,8 +20,6 @@ private protocol ViewModelOutput {
     var logoImageURL: URL! { get }
     var attributedGenres: NSMutableAttributedString { get }
 }
-
-private typealias ViewModelProtocol = ViewModelOutput
 
 // MARK: - ShowcaseViewViewModel Type
 

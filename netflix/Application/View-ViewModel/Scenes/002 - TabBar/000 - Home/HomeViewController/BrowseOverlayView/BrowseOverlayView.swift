@@ -9,15 +9,13 @@ import UIKit
 
 // MARK: - ViewProtocol Type
 
-private protocol ViewOutput {
+private protocol ViewProtocol {
     var collectionView: UICollectionView { get }
     var dataSource: BrowseOverlayCollectionViewDataSource? { get }
     
     func createCollectionView() -> UICollectionView
     func dataSourceDidChange()
 }
-
-private typealias ViewProtocol = ViewOutput
 
 // MARK: - BrowseOverlayView Type
 

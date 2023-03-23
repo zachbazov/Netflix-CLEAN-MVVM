@@ -9,7 +9,7 @@ import UIKit
 
 // MARK: - ViewProtocol Type
 
-private protocol ViewOutput {
+private protocol ViewProtocol {
     var collectionView: UICollectionView { get }
     var dataSource: DetailCollectionViewDataSource<Mediable>! { get }
     var layout: CollectionViewLayout! { get }
@@ -18,14 +18,13 @@ private protocol ViewOutput {
     func dataSourceDidChange()
 }
 
-private typealias ViewProtocol = ViewOutput
-
 // MARK: - DetailCollectionView Type
 
 final class DetailCollectionView: View<DetailViewModel> {
     fileprivate lazy var collectionView: UICollectionView = createCollectionView()
     fileprivate var dataSource: DetailCollectionViewDataSource<Mediable>!
     fileprivate var layout: CollectionViewLayout!
+    
     /// Create a detail collection view object.
     /// - Parameters:
     ///   - parent: Instantiating view.

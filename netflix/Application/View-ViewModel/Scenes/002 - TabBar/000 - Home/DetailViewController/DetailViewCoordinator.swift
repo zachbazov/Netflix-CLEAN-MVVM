@@ -9,13 +9,11 @@ import UIKit
 
 // MARK: - CoordinatorProtocol Type
 
-private protocol CoordinatorOutput {
+private protocol CoordinatorProtocol {
     var media: Media? { get }
     
     func createDetailController()
 }
-
-private typealias CoordinatorProtocol = CoordinatorOutput
 
 // MARK: - DetailViewCoordinator Type
 
@@ -60,6 +58,7 @@ extension DetailViewCoordinator: Coordinate {
     enum Screen {
         case detail
     }
+    
     /// Screen representation control.
     /// - Parameter screen: The screen to be allocated and presented.
     func coordinate(to screen: Screen) {

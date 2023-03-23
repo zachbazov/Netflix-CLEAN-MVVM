@@ -9,19 +9,14 @@ import Foundation
 
 // MARK: - ViewModelProtocol Type
 
-private protocol ViewModelInput {
-    func didFinish(with user: UserDTO?)
-}
-
-private protocol ViewModelOutput {
+private protocol ViewModelProtocol {
     var email: String? { get }
     var password: String? { get }
     
     func signInButtonDidTap()
     func signInRequest()
+    func didFinish(with user: UserDTO?)
 }
-
-private typealias ViewModelProtocol = ViewModelInput & ViewModelOutput
 
 // MARK: - SignInViewModel Type
 

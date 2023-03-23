@@ -20,6 +20,7 @@ extension DownloadsViewCoordinator: Coordinate {
     enum Screen {
         case downloads
     }
+    
     /// Screen presentation control.
     /// - Parameter screen: The screen to be allocated and presented.
     func coordinate(to screen: Screen) {}

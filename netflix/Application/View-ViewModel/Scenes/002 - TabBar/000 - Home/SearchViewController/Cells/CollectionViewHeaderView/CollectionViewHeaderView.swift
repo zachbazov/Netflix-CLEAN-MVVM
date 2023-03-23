@@ -9,16 +9,13 @@ import UIKit
 
 // MARK: - ViewProtocol Type
 
-private protocol ViewOutput {
+private protocol ViewProtocol {
     var titleLabel: UILabel { get }
 }
-
-private typealias ViewProtocol = ViewOutput
 
 // MARK: - CollectionViewHeaderView Type
 
 final class CollectionViewHeaderView: UICollectionReusableView {
-    
     fileprivate(set) var titleLabel = UILabel(frame: .zero)
     
     static func create(in collectionView: UICollectionView, at indexPath: IndexPath) -> CollectionViewHeaderView {

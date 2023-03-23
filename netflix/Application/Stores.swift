@@ -9,13 +9,11 @@ import Foundation
 
 // MARK: - StoresProtocol Type
 
-private protocol StoresOutput {
+private protocol StoresProtocol {
     var services: Services { get }
     var userResponses: UserHTTPResponseStore { get }
     var mediaResponses: MediaHTTPResponseStore { get }
 }
-
-private typealias StoresProtocol = StoresOutput
 
 // MARK: - Stores Type
 

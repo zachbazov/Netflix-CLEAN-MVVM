@@ -9,7 +9,7 @@ import Foundation
 
 // MARK: - ViewModelProtocol Type
 
-private protocol ViewModelOutput {
+private protocol ViewModelProtocol {
     var tag: Int { get }
     var isSelected: Observable<Bool> { get }
     var media: Media! { get }
@@ -17,8 +17,6 @@ private protocol ViewModelOutput {
     var systemImage: String { get }
     var title: String { get }
 }
-
-private typealias ViewModelProtocol = ViewModelOutput
 
 // MARK: - DetailPanelViewItemViewModel Type
 
@@ -44,6 +42,7 @@ final class DetailPanelViewItemViewModel {
         case .share: return Localization.TabBar.Detail.Panel().trailingItem
         }
     }
+    
     /// Create a panel view item view model object.
     /// - Parameters:
     ///   - item: Corresponding view.

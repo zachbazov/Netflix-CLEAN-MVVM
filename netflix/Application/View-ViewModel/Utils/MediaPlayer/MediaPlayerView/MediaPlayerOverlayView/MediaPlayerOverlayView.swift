@@ -9,12 +9,7 @@ import AVKit
 
 // MARK: - ConfigurationProtocol Type
 
-private protocol ConfigurationInput {
-    func startTimer(target: Any, selector: Selector)
-    func viewDidTap(_ view: UIButton)
-}
-
-private protocol ConfigurationOutput {
+private protocol ConfigurationProtocol {
     var durationThreshold: CGFloat! { get }
     var repeats: Bool! { get }
     var mediaPlayerView: MediaPlayerView! { get }
@@ -26,9 +21,10 @@ private protocol ConfigurationOutput {
     func setupPlayButton()
     func viewDidBindObservers()
     func viewDidUnbindObservers()
+    
+    func startTimer(target: Any, selector: Selector)
+    func viewDidTap(_ view: UIButton)
 }
-
-private typealias ConfigurationProtocol = ConfigurationInput & ConfigurationOutput
 
 // MARK: - MediaPlayerOverlayViewConfiguration Type
 
@@ -245,19 +241,15 @@ extension MediaPlayerOverlayViewConfiguration: ConfigurationProtocol {
 
 // MARK: -  ViewProtocol Type
 
-private protocol ViewInput {
+private protocol ViewProtocol {
+    var configuration: MediaPlayerOverlayViewConfiguration! { get }
+    var mediaPlayerView: MediaPlayerView! { get }
+    var mediaPlayerViewModel: MediaPlayerViewViewModel! { get }
+    
     func valueDidChange(for slider: UISlider)
     func didSelect(view: Any)
     func didTarget(_ views: UIButton...)
 }
-
-private protocol ViewOutput {
-    var configuration: MediaPlayerOverlayViewConfiguration! { get }
-    var mediaPlayerView: MediaPlayerView! { get }
-    var mediaPlayerViewModel: MediaPlayerViewViewModel! { get }
-}
-
-private typealias ViewProtocol = ViewInput & ViewOutput
 
 // MARK: - MediaPlayerOverlayView Type
 

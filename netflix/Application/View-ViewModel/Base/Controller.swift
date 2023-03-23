@@ -7,13 +7,15 @@
 
 import UIKit
 
+// MARK: - ViewAnimating
+
 protocol ViewAnimating {
     func viewWillAnimateAppearance()
 }
 
 // MARK: - Controller<T> Type
 
-class Controller<T>: UIViewController, ViewModeling where T: ViewModel {
+class Controller<T>: UIViewController where T: ViewModel {
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return .lightContent
     }
@@ -68,6 +70,10 @@ class Controller<T>: UIViewController, ViewModeling where T: ViewModel {
 // MARK: - ViewLifecycleBehavior Implementation
 
 extension Controller: ViewLifecycleBehavior {}
+
+// MARK: - ViewModeling Implementation
+
+extension Controller: ViewModeling {}
 
 // MARK: - ViewObserving Implementation
 

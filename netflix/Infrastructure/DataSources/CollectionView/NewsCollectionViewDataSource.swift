@@ -9,14 +9,12 @@ import UIKit
 
 // MARK: - DataSourceProtocol Type
 
-private protocol DataSourceOutput {
+private protocol DataSourceProtocol {
     var viewModel: NewsViewModel { get }
     var numberOfSections: Int { get }
     
     func dataSourceDidChange()
 }
-
-private typealias DataSourceProtocol = DataSourceOutput
 
 // MARK: - NewsCollectionViewDataSource Type
 

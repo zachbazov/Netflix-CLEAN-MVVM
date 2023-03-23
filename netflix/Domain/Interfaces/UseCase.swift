@@ -9,8 +9,11 @@ import Foundation
 
 // MARK: - UseCase Type
 
-protocol UseCaseInput {
+protocol UseCase {
     associatedtype Endpoint
+    associatedtype T: Repository
+    
+    var repository: T { get }
     
     func request<T, U>(endpoint: Endpoint,
                        for response: T.Type,
@@ -27,16 +30,9 @@ protocol UseCaseInput {
     func request<T, U>(endpoint: Endpoint, for response: T.Type, request: U) async -> T? where T: Decodable
 }
 
-protocol UseCaseOutput {
-    associatedtype T: Repository
-    var repository: T { get }
-}
-
-typealias UseCase = UseCaseInput & UseCaseOutput
-
 // MARK: - Default Implementation
 
-extension UseCaseInput {
+extension UseCase {
     func request<T, U>(endpoint: Endpoint,
                        for response: T.Type,
                        request: U?,

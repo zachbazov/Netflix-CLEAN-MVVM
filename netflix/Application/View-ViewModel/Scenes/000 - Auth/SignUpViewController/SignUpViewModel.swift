@@ -9,7 +9,7 @@ import Foundation
 
 // MARK: - ViewModelProtocol Type
 
-private protocol ViewModelOutput {
+private protocol ViewModelProtocol {
     var name: String? { get }
     var email: String? { get }
     var password: String? { get }
@@ -18,8 +18,6 @@ private protocol ViewModelOutput {
     func signUpButtonDidTap()
     func signUpRequest()
 }
-
-private typealias ViewModelProtocol = ViewModelOutput
 
 // MARK: - SignUpViewModel Type
 

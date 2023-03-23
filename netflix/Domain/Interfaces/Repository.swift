@@ -9,7 +9,10 @@ import Foundation
 
 // MARK: - Repository Type
 
-protocol RepositoryInput {
+protocol Repository {
+    var dataTransferService: DataTransferService { get }
+    var task: Cancellable? { get set }
+    
     func getAll<T>(cached: @escaping (T?) -> Void,
                    completion: @escaping (Result<T, Error>) -> Void) -> Cancellable? where T: Decodable
     func getOne<T, U>(request: U,
@@ -19,16 +22,9 @@ protocol RepositoryInput {
     func getAll<T>() async -> T? where T: Decodable
 }
 
-protocol RepositoryOutput {
-    var dataTransferService: DataTransferService { get }
-    var task: Cancellable? { get set }
-}
-
-typealias Repository = RepositoryInput & RepositoryOutput
-
 // MARK: - Default Implementation
 
-extension RepositoryInput {
+extension Repository {
     func getAll<T>(cached: @escaping (T?) -> Void,
                    completion: @escaping (Result<T, Error>) -> Void) -> Cancellable? where T: Decodable { return nil }
     func getOne<T, U>(request: U,

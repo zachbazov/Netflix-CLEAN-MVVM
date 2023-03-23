@@ -10,7 +10,6 @@ import UIKit
 // MARK: - FastLaughsViewController Type
 
 final class FastLaughsViewController: Controller<FastLaughsViewModel> {
-    
     override func viewDidLoad() {
         super.viewDidLoad()
     }

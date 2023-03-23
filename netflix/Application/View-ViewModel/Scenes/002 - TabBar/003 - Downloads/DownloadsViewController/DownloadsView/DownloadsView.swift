@@ -15,6 +15,7 @@ final class DownloadsView: UIView, ViewInstantiable {
     @IBOutlet private var imageView: UIImageView!
     @IBOutlet private var setupButton: UIButton!
     @IBOutlet private var canDownloadButton: UIButton!
+    
     /// Create a downloads view object.
     /// - Parameter parent: Instantiating view.
     init(on parent: UIView) {

@@ -16,9 +16,9 @@ enum DataTransferError: Error {
     case resolvedNetworlFailure(Error)
 }
 
-// MARK: - DataTransferServiceInput Type
+// MARK: - DataTransferServiceProtocol Type
 
-protocol DataTransferServiceInput {
+protocol DataTransferServiceProtocol {
     typealias CompletionHandler<T> = (Result<T, DataTransferError>) -> Void
     
     @discardableResult
@@ -32,9 +32,9 @@ protocol DataTransferServiceInput {
         completion: @escaping CompletionHandler<Void>) -> NetworkCancellable? where E.Response == Void
 }
 
-// MARK: - DataTransferErrorResolverInput Type
+// MARK: - DataTransferErrorResolverProtocol Type
 
-protocol DataTransferErrorResolverInput {
+protocol DataTransferErrorResolverProtocol {
     func resolve(error: NetworkError) -> Error
 }
 
@@ -44,9 +44,9 @@ protocol ResponseDecoder {
     func decode<T: Decodable>(_ data: Data) throws -> T
 }
 
-// MARK: - DataTransferErrorLoggerInput Type
+// MARK: - DataTransferErrorLoggerProtocol Type
 
-protocol DataTransferErrorLoggerInput {
+protocol DataTransferErrorLoggerProtocol {
     func log(error: Error)
 }
 
@@ -58,9 +58,9 @@ struct DataTransferService {
     let errorLogger = DataTransferErrorLogger()
 }
 
-// MARK: - DataTransferServiceInput Implementation
+// MARK: - DataTransferServiceProtocol Implementation
 
-extension DataTransferService: DataTransferServiceInput {
+extension DataTransferService: DataTransferServiceProtocol {
     func request<T, E>(
         with endpoint: E,
         completion: @escaping CompletionHandler<T>) -> NetworkCancellable? where T: Decodable, E: ResponseRequestable, T == E.Response {
@@ -109,9 +109,9 @@ extension DataTransferService: DataTransferServiceInput {
         return result
     }
     
-    func request<E>(with endpoint: E) async -> Result<VoidHTTP.Response, DataTransferError>? where E: ResponseRequestable {
+    func request<E>(with endpoint: E) async -> Result<VoidHTTPDTO.Response, DataTransferError>? where E: ResponseRequestable {
         guard let (data, _) = await self.networkService.request(endpoint: endpoint) else { return nil }
-        let result: Result<VoidHTTP.Response, DataTransferError> = self.decode(data: data, decoder: endpoint.responseDecoder)
+        let result: Result<VoidHTTPDTO.Response, DataTransferError> = self.decode(data: data, decoder: endpoint.responseDecoder)
         if case .failure(let error) = result {
             self.errorLogger.log(error: error)
             return nil
@@ -138,7 +138,7 @@ extension DataTransferService: DataTransferServiceInput {
 
 // MARK: - DataTransferErrorLogger Type
 
-struct DataTransferErrorLogger: DataTransferErrorLoggerInput {
+struct DataTransferErrorLogger: DataTransferErrorLoggerProtocol {
     func log(error: Error) {
         printIfDebug(.none, "------------")
         printIfDebug(.error, "\(error)")
@@ -147,7 +147,7 @@ struct DataTransferErrorLogger: DataTransferErrorLoggerInput {
 
 // MARK: - DataTransferErrorResolver Type
 
-struct DataTransferErrorResolver: DataTransferErrorResolverInput {
+struct DataTransferErrorResolver: DataTransferErrorResolverProtocol {
     func resolve(error: NetworkError) -> Error { error }
 }
 

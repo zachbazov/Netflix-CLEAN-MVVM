@@ -9,11 +9,7 @@ import UIKit
 
 // MARK: - CoordinatorProtocol Type
 
-private protocol CoordinatorInput {
-    func deploy(_ screen: ProfileCoordinator.Screen)
-}
-
-private protocol CoordinatorOutput {
+private protocol CoordinatorProtocol {
     var navigationController: UINavigationController { get }
     var userProfileController: UserProfileViewController { get }
     var addUserProfileController: AddUserProfileViewController { get }
@@ -23,9 +19,9 @@ private protocol CoordinatorOutput {
     func createUserProfileViewController() -> UserProfileViewController
     func createAddUserProfileViewController() -> AddUserProfileViewController
     func createEditUserProfileViewController() -> EditUserProfileViewController
+    
+    func deploy(_ screen: ProfileCoordinator.Screen)
 }
-
-private typealias CoordinatorProtocol = CoordinatorInput & CoordinatorOutput
 
 // MARK: - ProfileCoordinator Type
 

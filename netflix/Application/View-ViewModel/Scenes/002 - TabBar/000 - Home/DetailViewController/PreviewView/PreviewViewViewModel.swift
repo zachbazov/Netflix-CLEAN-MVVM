@@ -9,15 +9,13 @@ import Foundation
 
 // MARK: - ViewModelProtocol Type
 
-private protocol ViewModelOutput {
+private protocol ViewModelProtocol {
     var title: String { get }
     var slug: String { get }
     var posterImagePath: String { get }
     var identifier: NSString { get }
     var url: URL { get }
 }
-
-private typealias ViewModelProtocol = ViewModelOutput
 
 // MARK: - PreviewViewViewModel Type
 
@@ -27,6 +25,7 @@ struct PreviewViewViewModel {
     let posterImagePath: String
     let identifier: NSString
     let url: URL
+    
     /// Create a preview view view model object.
     /// - Parameter media: Corresponding media object.
     init(with media: Media) {

@@ -15,20 +15,15 @@ protocol DeviceOrienting {
 
 // MARK: - OrientationProtocol Type
 
-private protocol OrientationInput {
-    func set(orientation: UIInterfaceOrientationMask)
-    func setLock(orientation: UIInterfaceOrientationMask)
-}
-
-private protocol OrientationOutput {
+private protocol OrientationProtocol {
     var orientationLock: UIInterfaceOrientationMask { get }
     var orientation: UIInterfaceOrientationMask { get }
     var windowScene: UIWindowScene? { get }
     
+    func set(orientation: UIInterfaceOrientationMask)
+    func setLock(orientation: UIInterfaceOrientationMask)
     func rotate()
 }
-
-private typealias OrientationProtocol = OrientationInput & OrientationOutput
 
 // MARK: - DeviceOrientation Type
 
@@ -37,10 +32,13 @@ final class DeviceOrientation {
     private init() {}
     
     private let orientationKey = "orientation"
+    
     private(set) var orientationLock: UIInterfaceOrientationMask = .all
+    
     var orientation: UIInterfaceOrientationMask = .portrait {
         didSet { set(orientation: orientation) }
     }
+    
     fileprivate var windowScene: UIWindowScene? {
         return UIApplication.shared.connectedScenes.first as? UIWindowScene
     }

@@ -9,16 +9,12 @@ import Foundation
 
 // MARK: - ModelProtocol Type
 
-private protocol ModelInput {
-    init(with item: AccountMenuItem)
-}
-
-private protocol ModelOutput {
+private protocol ModelProtocol {
     var image: String { get }
     var title: String { get }
+    
+    init(with item: AccountMenuItem)
 }
-
-private typealias ModelProtocol = ModelInput & ModelOutput
 
 // MARK: - AccountMenuTableViewCellViewModel Type
 

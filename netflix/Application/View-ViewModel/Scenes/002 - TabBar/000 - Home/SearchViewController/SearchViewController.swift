@@ -9,11 +9,7 @@ import UIKit
 
 // MARK: - ControllerProtocol Type
 
-private protocol ControllerInput {
-    func updateSearchQuery(_ query: String)
-}
-
-private protocol ControllerOutput {
+private protocol ControllerProtocol {
     var collectionView: UICollectionView { get }
     var dataSource: SearchCollectionViewDataSource! { get }
     var searchController: UISearchController { get }
@@ -23,9 +19,9 @@ private protocol ControllerOutput {
     func removeDataSource()
     func present()
     func backButtonDidTap()
+    
+    func updateSearchQuery(_ query: String)
 }
-
-private typealias ControllerProtocol = ControllerInput & ControllerOutput
 
 // MARK: - SearchViewController Type
 

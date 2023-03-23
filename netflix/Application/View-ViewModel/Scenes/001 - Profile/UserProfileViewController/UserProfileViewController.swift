@@ -9,7 +9,7 @@ import UIKit
 
 // MARK: - ViewControllerProtocol Type
 
-private protocol ViewControllerOutput {
+private protocol ViewControllerProtocol {
     var collectionView: UICollectionView { get }
     var dataSource: UserProfileCollectionViewDataSource { get }
     
@@ -20,8 +20,6 @@ private protocol ViewControllerOutput {
     
     func editDidTap()
 }
-
-private typealias ViewControllerProtocol = ViewControllerOutput
 
 // MARK: - UserProfileViewController Type
 

@@ -9,15 +9,13 @@ import Foundation
 
 // MARK: - ViewModelProtocol Type
 
-private protocol ViewModelOutput {
+private protocol ViewModelProtocol {
     var media: Media { get }
     var posterImagePath: String { get }
     var posterImageIdentifier: NSString { get }
     var posterImageURL: URL! { get }
     var season: Season! { get }
 }
-
-private typealias ViewModelProtocol = ViewModelOutput
 
 // MARK: - EpisodeCollectionViewCellViewModel Type
 
@@ -27,6 +25,7 @@ struct EpisodeCollectionViewCellViewModel {
     let posterImageIdentifier: NSString
     var posterImageURL: URL!
     var season: Season!
+    
     /// Create an episode collection view cell view model object.
     /// - Parameter viewModel: Coordinating view model.
     init(with viewModel: DetailViewModel) {

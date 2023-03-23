@@ -9,12 +9,10 @@ import UIKit
 
 // MARK: - DataSourceProtocol Type
 
-private protocol DataSourceOutput {
+private protocol DataSourceProtocol {
     var viewModel: SearchViewModel { get }
     var headerView: CollectionViewHeaderView! { get }
 }
-
-private typealias DataSourceProtocol = DataSourceOutput
 
 // MARK: - SearchCollectionViewDataSource Type
 

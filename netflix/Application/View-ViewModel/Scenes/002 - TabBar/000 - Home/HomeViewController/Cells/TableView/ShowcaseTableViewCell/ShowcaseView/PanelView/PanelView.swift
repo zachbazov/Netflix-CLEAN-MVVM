@@ -9,14 +9,12 @@ import UIKit
 
 // MARK: - ViewProtocol Type
 
-private protocol ViewOutput {
+private protocol ViewProtocol {
     var leadingItem: PanelViewItem! { get }
     var trailingItem: PanelViewItem! { get }
     
     func playDidTap()
 }
-
-private typealias ViewProtocol = ViewOutput
 
 // MARK: - PanelView Type
 

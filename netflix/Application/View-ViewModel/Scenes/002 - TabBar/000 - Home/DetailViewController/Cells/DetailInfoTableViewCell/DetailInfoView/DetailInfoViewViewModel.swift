@@ -9,7 +9,7 @@ import Foundation
 
 // MARK: - ViewModelProtocol Type
 
-private protocol ViewModelOutput {
+private protocol ViewModelProtocol {
     var state: HomeTableViewDataSource.State { get }
     var mediaType: String { get }
     var title: String { get }
@@ -18,8 +18,6 @@ private protocol ViewModelOutput {
     var length: String { get }
     var isHD: Bool { get }
 }
-
-private typealias ViewModelProtocol = ViewModelOutput
 
 // MARK: - DetailInfoViewViewModel Type
 
@@ -31,6 +29,7 @@ struct DetailInfoViewViewModel {
     let duration: String
     let length: String
     let isHD: Bool
+    
     /// Create a info view view model object.
     /// - Parameter viewModel: Coordinating view model.
     init(with viewModel: DetailViewModel) {

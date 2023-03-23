@@ -9,7 +9,10 @@ import UIKit
 
 // MARK: - ProfileCollectionViewDataSource Type
 
-final class ProfileCollectionViewDataSource: NSObject, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+final class ProfileCollectionViewDataSource: NSObject,
+                                             UICollectionViewDelegate,
+                                             UICollectionViewDataSource,
+                                             UICollectionViewDelegateFlowLayout {
     private let viewModel: AccountViewModel
     
     deinit {

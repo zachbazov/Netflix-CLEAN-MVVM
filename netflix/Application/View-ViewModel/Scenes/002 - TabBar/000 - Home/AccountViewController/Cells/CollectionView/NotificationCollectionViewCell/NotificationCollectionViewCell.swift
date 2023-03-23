@@ -9,16 +9,12 @@ import UIKit
 
 // MARK: - ViewProtocol Type
 
-private protocol ViewInput {
+private protocol ViewProtocol {
+    var representedIdentifier: NSString? { get }
+    
     func viewDidConfigure(with viewModel: NotificationCollectionViewCellViewModel)
     func logoDidAlign(with viewModel: NotificationCollectionViewCellViewModel)
 }
-
-private protocol ViewOutput {
-    var representedIdentifier: NSString? { get }
-}
-
-private typealias ViewProtocol = ViewInput & ViewOutput
 
 // MARK: - NotificationCollectionViewCell Type
 
@@ -41,7 +37,7 @@ final class NotificationCollectionViewCell: UICollectionViewCell {
             withReuseIdentifier: NotificationCollectionViewCell.reuseIdentifier,
             for: indexPath) as? NotificationCollectionViewCell else { fatalError() }
         guard let homeViewController = Application.app.coordinator.tabCoordinator.home.viewControllers.first as? HomeViewController else { fatalError() }
-        let myList = homeViewController.viewModel.myList.viewModel.list.value.toArray()
+        let myList = homeViewController.viewModel.myList.viewModel.list.toArray()
         let model = myList[indexPath.row]
         let cellViewModel = NotificationCollectionViewCellViewModel(media: model)
         view.representedIdentifier = cellViewModel.slug as NSString

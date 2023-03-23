@@ -9,7 +9,7 @@ import Foundation
 
 // MARK: - MediaHTTP Type
 
-struct MediaHTTP {
+struct MediaHTTP: HTTP {
     struct Request {
         var user: UserDTO? = nil
         let media: MediaHTTPDTO.Request

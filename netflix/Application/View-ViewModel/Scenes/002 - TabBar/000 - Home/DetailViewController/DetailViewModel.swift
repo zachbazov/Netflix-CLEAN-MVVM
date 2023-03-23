@@ -9,11 +9,7 @@ import Foundation
 
 // MARK: - ViewModelProtocol Type
 
-private protocol ViewModelInput {
-    func getSeason(with request: SeasonHTTPDTO.Request, completion: @escaping () -> Void)
-}
-
-private protocol ViewModelOutput {
+private protocol ViewModelProtocol {
     var useCase: SeasonUseCase { get }
     var orientation: DeviceOrientation { get }
     
@@ -30,9 +26,9 @@ private protocol ViewModelOutput {
     
     func shouldScreenRotate()
     func resetOrientation()
+    
+    func getSeason(with request: SeasonHTTPDTO.Request, completion: @escaping () -> Void)
 }
-
-private typealias ViewModelProtocol = ViewModelInput & ViewModelOutput
 
 // MARK: - DetailViewModel Type
 
@@ -52,6 +48,7 @@ final class DetailViewModel {
     fileprivate(set) var season: Observable<Season?>! = Observable(nil)
     fileprivate(set) var myList: MyList!
     fileprivate(set) var myListSection: Section!
+    
     /// Create a detail view model object.
     /// - Parameters:
     ///   - section: The section that corresponds to the media object.

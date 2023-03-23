@@ -9,12 +9,10 @@ import AVKit
 
 // MARK: - LayerProtocol Type
 
-private protocol LayerOutput {
+private protocol LayerProtocol {
     var playerLayer: AVPlayerLayer { get }
     var player: AVPlayer! { get }
 }
-
-private typealias LayerProtocol = LayerOutput
 
 // MARK: - MediaPlayerLayer Type
 

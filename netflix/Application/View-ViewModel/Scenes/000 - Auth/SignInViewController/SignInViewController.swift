@@ -9,11 +9,9 @@ import UIKit
 
 // MARK: - ViewControllerProtocol Type
 
-private protocol ViewControllerInput {
+private protocol ViewControllerProtocol {
     func textFieldValueDidChange(_ textField: UITextField)
 }
-
-private typealias ViewControllerProtocol = ViewControllerInput
 
 // MARK: - SignInViewController Type
 

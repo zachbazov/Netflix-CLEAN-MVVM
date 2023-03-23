@@ -9,7 +9,7 @@ import UIKit
 
 // MARK: - ViewProtocol Type
 
-private protocol ViewOutput {
+private protocol ViewProtocol {
     var leadingItem: DetailPanelViewItem! { get }
     var centerItem: DetailPanelViewItem! { get }
     var trailingItem: DetailPanelViewItem! { get }
@@ -17,8 +17,6 @@ private protocol ViewOutput {
     func viewDidConfigure()
     func viewDidUnbindObservers()
 }
-
-private typealias ViewProtocol = ViewOutput
 
 // MARK: - DetailPanelView Type
 
@@ -30,6 +28,7 @@ final class DetailPanelView: UIView {
     fileprivate(set) var leadingItem: DetailPanelViewItem!
     fileprivate(set) var centerItem: DetailPanelViewItem!
     fileprivate(set) var trailingItem: DetailPanelViewItem!
+    
     /// Create a panel view object.
     /// - Parameters:
     ///   - parent: Instantiating view.

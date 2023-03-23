@@ -9,13 +9,11 @@ import Foundation
 
 // MARK: - ViewModelProtocol Type
 
-private protocol ViewModelOutput {
+private protocol ViewModelProtocol {
     var media: Media { get }
     var item: MediaPlayerViewItem? { get }
     var isPlaying: Bool { get }
 }
-
-private typealias ViewModelProtocol = ViewModelOutput
 
 // MARK: - MediaPlayerViewViewModel Type
 

@@ -9,7 +9,7 @@ import Foundation
 
 // MARK: - ViewModelProtocol Type
 
-private protocol ViewModelOutput {
+private protocol ViewModelProtocol {
     var indexPath: IndexPath { get }
     var title: String { get }
     var slug: String { get }
@@ -23,8 +23,6 @@ private protocol ViewModelOutput {
     var logoImageURL: URL! { get }
     var presentedLogoAlignment: PresentedLogoAlignment { get }
 }
-
-private typealias ViewModelProtocol = ViewModelOutput
 
 // MARK: - CollectionViewCellViewModel Type
 
@@ -41,6 +39,7 @@ struct CollectionViewCellViewModel {
     var logoImageIdentifier: NSString
     var logoImageURL: URL!
     let presentedLogoAlignment: PresentedLogoAlignment
+    
     /// Create a collection view cell view model object.
     /// - Parameters:
     ///   - media: Represented media object.

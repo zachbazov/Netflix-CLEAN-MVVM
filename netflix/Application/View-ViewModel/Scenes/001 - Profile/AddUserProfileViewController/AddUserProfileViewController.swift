@@ -9,15 +9,7 @@ import UIKit
 
 // MARK: - ViewControllerProtocol Type
 
-private protocol ViewControllerInput {
-    
-}
-
-private protocol ViewControllerOutput {
-    
-}
-
-private typealias ViewControllerProtocol = ViewControllerInput & ViewControllerOutput
+private protocol ViewControllerProtocol {}
 
 // MARK: - AddUserProfileViewController Type
 
@@ -28,3 +20,7 @@ final class AddUserProfileViewController: Controller<ProfileViewModel> {
         view.backgroundColor = .black
     }
 }
+
+// MARK: - ViewControllerProtocol Implementation
+
+extension AddUserProfileViewController: ViewControllerProtocol {}

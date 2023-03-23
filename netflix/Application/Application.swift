@@ -9,21 +9,16 @@ import UIKit
 
 // MARK: - ApplicationProtocol Type
 
-private protocol ApplicationInput {
-    func didFinishResigning(with user: UserDTO?)
-    func deployScene(in window: UIWindow?)
-    func coordinate(to screen: Coordinator.Screen)
-}
-
-private protocol ApplicationOutput {
+private protocol ApplicationProtocol {
     var coordinator: Coordinator { get }
     var services: Services { get }
     var stores: Stores { get }
     
     func resign()
+    func didFinishResigning(with user: UserDTO?)
+    func deployScene(in window: UIWindow?)
+    func coordinate(to screen: Coordinator.Screen)
 }
-
-private typealias ApplicationProtocol = ApplicationInput & ApplicationOutput
 
 // MARK: - Application Type
 
@@ -89,11 +84,7 @@ extension Application: ApplicationProtocol {
     fileprivate func coordinate(to screen: Coordinator.Screen) {
         mainQueueDispatch { [weak self] in
             guard let self = self else { return }
-            switch screen {
-            case .auth: self.coordinator.coordinate(to: .auth)
-            case .profile: self.coordinator.coordinate(to: .profile)
-            case .tabBar: self.coordinator.coordinate(to: .tabBar)
-            }
+            self.coordinator.coordinate(to: screen)
         }
     }
 }

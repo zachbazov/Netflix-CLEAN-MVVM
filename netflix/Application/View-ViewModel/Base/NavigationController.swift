@@ -15,13 +15,11 @@ protocol NavigationControllerStyling {
 
 // MARK: - NavigationProtocol Type
 
-private protocol NavigationOutput {
+private protocol NavigationProtocol {
     var isHidden: Bool { get }
     
     func viewDidConfigure()
 }
-
-private typealias NavigationProtocol = NavigationOutput
 
 // MARK: - NavigationController Type
 

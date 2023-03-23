@@ -9,15 +9,11 @@ import Foundation
 
 // MARK: - ViewModelProtocol Type
 
-private protocol ViewModelInput {
+private protocol ViewModelProtocol {
+    var timeRemainingFormatter: DateComponentsFormatter { get }
+    
     func timeString(_ time: Float) -> String
 }
-
-private protocol ViewModelOutput {
-    var timeRemainingFormatter: DateComponentsFormatter { get }
-}
-
-private typealias ViewModelProtocol = ViewModelInput & ViewModelOutput
 
 // MARK: - MediaPlayerOverlayViewViewModel Type
 

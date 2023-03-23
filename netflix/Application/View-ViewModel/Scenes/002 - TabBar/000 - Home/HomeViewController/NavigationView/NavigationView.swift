@@ -9,7 +9,7 @@ import UIKit
 
 // MARK: - ViewProtocol Type
 
-private protocol ViewOutput {
+private protocol ViewProtocol {
     var navigationOverlayView: NavigationOverlayView! { get }
     var homeItemView: NavigationViewItem! { get }
     var airPlayItemView: NavigationViewItem! { get }
@@ -18,8 +18,6 @@ private protocol ViewOutput {
     var moviesItemView: NavigationViewItem! { get }
     var categoriesItemView: NavigationViewItem! { get }
 }
-
-private typealias ViewProtocol = ViewOutput
 
 // MARK: - NavigationView Type
 
@@ -43,6 +41,7 @@ final class NavigationView: View<NavigationViewViewModel> {
     fileprivate(set) var tvShowsItemView: NavigationViewItem!
     fileprivate(set) var moviesItemView: NavigationViewItem!
     fileprivate(set) var categoriesItemView: NavigationViewItem!
+    
     /// Create a navigation view object.
     /// - Parameters:
     ///   - parent: Instantiating view.

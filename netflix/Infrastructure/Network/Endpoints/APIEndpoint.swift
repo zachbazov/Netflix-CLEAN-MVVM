@@ -34,7 +34,7 @@ extension APIEndpoint: UserRepositoryRouting {
                         bodyEncoding: .jsonSerializationData)
     }
     
-    static func signOut(with request: UserHTTPDTO.Request) -> Endpoint<VoidHTTP.Response>? {
+    static func signOut(with request: UserHTTPDTO.Request) -> Endpoint<VoidHTTPDTO.Response>? {
         let authService = Application.app.services.authentication
         guard authService.user?._id == request.user._id else { return nil }
         return Endpoint(path: "api/v1/users/signout",

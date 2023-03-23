@@ -9,13 +9,12 @@ import UIKit
 
 // MARK: - ViewProtocol Type
 
-private protocol ViewOutput {
+private protocol ViewProtocol {
     associatedtype T
+    
     var layerView: UIView { get }
     var textLayer: T { get }
 }
-
-private typealias ViewProtocol = ViewOutput
 
 // MARK: - RatedCollectionViewCell Type
 

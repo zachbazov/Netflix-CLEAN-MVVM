@@ -9,19 +9,18 @@ import UIKit
 
 // MARK: - ViewProtocol Type
 
-private protocol ViewOutput {
+private protocol ViewProtocol {
     var label: UILabel { get }
     
     func createLabel() -> UILabel
     func viewDidConfigure()
 }
 
-private typealias ViewProtocol = ViewOutput
-
 // MARK: - HDView Type
 
 final class HDView: UIView {
     fileprivate lazy var label = createLabel()
+    
     /// Create an HD view object.
     /// - Parameter parent: Instantiating view.
     init(on parent: UIView) {

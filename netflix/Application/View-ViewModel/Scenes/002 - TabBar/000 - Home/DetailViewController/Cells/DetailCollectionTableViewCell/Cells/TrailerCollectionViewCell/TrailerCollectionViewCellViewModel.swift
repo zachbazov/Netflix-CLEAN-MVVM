@@ -9,14 +9,12 @@ import Foundation
 
 // MARK: - ViewModelProtocol Type
 
-private protocol ViewModelOutput {
+private protocol ViewModelProtocol {
     var title: String { get }
     var posterImagePath: String { get }
     var posterImageIdentifier: NSString { get }
     var posterImageURL: URL! { get }
 }
-
-private typealias ViewModelProtocol = ViewModelOutput
 
 // MARK: - TrailerCollectionViewCellViewModel Type
 
@@ -25,6 +23,7 @@ struct TrailerCollectionViewCellViewModel {
     var posterImagePath: String
     var posterImageIdentifier: NSString
     var posterImageURL: URL!
+    
     /// Create a trailer collection view cell view model object.
     /// - Parameter media: Corresponding media object.
     init(with media: Media) {

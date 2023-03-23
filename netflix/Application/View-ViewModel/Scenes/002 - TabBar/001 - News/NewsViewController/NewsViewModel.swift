@@ -9,7 +9,7 @@ import Foundation
 
 // MARK: - ViewModelProtocol Type
 
-private protocol ViewModelOutput {
+private protocol ViewModelProtocol {
     var useCase: MediaUseCase { get }
     
     var items: Observable<[NewsCollectionViewCellViewModel]> { get }
@@ -18,8 +18,6 @@ private protocol ViewModelOutput {
     func viewDidLoad()
     func fetchUpcomingMedia()
 }
-
-private typealias ViewModelProtocol = ViewModelOutput
 
 // MARK: - NewsViewModel Type
 

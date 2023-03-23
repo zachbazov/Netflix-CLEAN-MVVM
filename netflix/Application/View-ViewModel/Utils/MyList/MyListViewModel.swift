@@ -9,25 +9,21 @@ import Foundation
 
 // MARK: - ViewModelProtocol Type
 
-private protocol ViewModelInput {
-    func shouldAddOrRemove(_ media: Media, uponSelection selected: Bool)
-    func contains(_ media: Media, in list: [Media]) -> Bool
-    func filter(section: Section)
-}
-
-private protocol ViewModelOutput {
+private protocol ViewModelProtocol {
     var coordinator: HomeViewCoordinator? { get }
     var useCase: ListUseCase { get }
     var user: UserDTO { get }
-    var list: Observable<Set<Media>> { get }
+    var list: Set<Media> { get }
     var section: Section { get }
     
     func fetchList()
     func updateList()
     func updateView()
+    
+    func shouldAddOrRemove(_ media: Media, uponSelection selected: Bool)
+    func contains(_ media: Media, in list: [Media]) -> Bool
+    func filter(section: Section)
 }
-
-private typealias ViewModelProtocol = ViewModelInput & ViewModelOutput
 
 // MARK: - MyListViewModel Type
 
@@ -36,7 +32,7 @@ final class MyListViewModel {
     
     fileprivate let useCase = ListUseCase()
     fileprivate let user: UserDTO
-    let list: Observable<Set<Media>> = Observable([])
+    var list = Set<Media>()
     let section: Section
     
     init(with viewModel: HomeViewModel) {
@@ -63,8 +59,8 @@ extension MyListViewModel: ViewModelProtocol {
             completion: { [weak self] result in
                 guard let self = self else { return }
                 if case let .success(responseDTO) = result {
-                    self.list.value = responseDTO.data.first!.toDomain().media.toSet()
-                    self.section.media = self.list.value.toArray()
+                    self.list = responseDTO.data.first!.toDomain().media.toSet()
+                    self.section.media = self.list.toArray()
                 }
                 if case let .failure(error) = result {
                     printIfDebug(.error, "\(error)")
@@ -84,7 +80,7 @@ extension MyListViewModel: ViewModelProtocol {
             completion: { [weak self] result in
                 guard let self = self else { return }
                 if case .success = result {
-                    self.section.media = self.list.value.toArray()
+                    self.section.media = self.list.toArray()
                 }
                 if case let .failure(error) = result {
                     printIfDebug(.error, "\(error)")
@@ -93,25 +89,26 @@ extension MyListViewModel: ViewModelProtocol {
     }
     
     func updateView() {
-        guard coordinator!.viewController!.tableView.numberOfSections > 0,
+        guard let viewController = coordinator?.viewController,
+              viewController.tableView?.numberOfSections ?? .zero > 0,
               let myListIndex = HomeTableViewDataSource.Index(rawValue: 6),
-              let section = coordinator!.viewController?.viewModel?.section(at: .myList) else {
+              let section = coordinator?.viewController?.viewModel?.section(at: .myList) else {
             return
         }
         
         filter(section: section)
         
         let index = IndexSet(integer: myListIndex.rawValue)
-        coordinator!.viewController?.tableView.reloadSections(index, with: .automatic)
+        viewController.tableView?.reloadSections(index, with: .automatic)
     }
     
     func shouldAddOrRemove(_ media: Media, uponSelection selected: Bool) {
         if selected {
-            list.value.remove(media)
-            section.media = list.value.toArray()
+            list.remove(media)
+            section.media = list.toArray()
         } else {
-            list.value.insert(media)
-            section.media = list.value.toArray()
+            list.insert(media)
+            section.media = list.toArray()
         }
         
         updateList()
@@ -128,7 +125,8 @@ extension MyListViewModel: ViewModelProtocol {
         guard !homeViewModel.isSectionsEmpty else { return }
         
         if section.id == homeViewModel.section(at: .myList).id {
-            var media = list.value
+            var media = list
+            
             switch homeViewModel.dataSourceState.value {
             case .all: break
             case .tvShows: media = media.filter { $0.type == "series" }

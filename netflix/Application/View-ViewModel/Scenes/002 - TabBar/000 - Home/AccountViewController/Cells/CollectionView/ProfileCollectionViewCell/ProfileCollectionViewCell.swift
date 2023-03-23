@@ -9,11 +9,9 @@ import UIKit
 
 // MARK: - ViewProtocol Type
 
-private protocol ViewInput {
+private protocol ViewProtocol {
     func viewDidConfigure(with viewModel: ProfileCollectionViewCellViewModel, at indexPath: IndexPath)
 }
-
-private typealias ViewProtocol = ViewInput
 
 // MARK: - ProfileCollectionViewCell Type
 

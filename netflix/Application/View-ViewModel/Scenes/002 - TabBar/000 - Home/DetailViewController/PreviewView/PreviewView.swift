@@ -9,26 +9,22 @@ import UIKit
 
 // MARK: - ViewProtocol Type
 
-private protocol ViewInput {
-    func createMediaPlayer(on parent: UIView,
-                           view: PreviewView,
-                           with viewModel: DetailViewModel) -> MediaPlayerView
-}
-
-private protocol ViewOutput {
+private protocol ViewProtocol {
     var mediaPlayerView: MediaPlayerView! { get }
     var imageView: UIImageView { get }
     
     func createImageView() -> UIImageView
+    func createMediaPlayer(on parent: UIView,
+                           view: PreviewView,
+                           with viewModel: DetailViewModel) -> MediaPlayerView
 }
-
-private typealias ViewProtocol = ViewOutput
 
 // MARK: - PreviewView Type
 
 final class PreviewView: View<PreviewViewViewModel> {
     private(set) var mediaPlayerView: MediaPlayerView!
     private(set) lazy var imageView = createImageView()
+    
     /// Create a preview view object.
     /// - Parameters:
     ///   - parent: Instantiating view.

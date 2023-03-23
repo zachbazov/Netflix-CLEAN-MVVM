@@ -9,7 +9,7 @@ import UIKit
 
 // MARK: - DataSourceProtocol Type
 
-private protocol DataSourceOutput {
+private protocol DataSourceProtocol {
     var coordinator: HomeViewCoordinator! { get }
     var collectionView: UICollectionView! { get }
     var section: Section { get }
@@ -17,8 +17,6 @@ private protocol DataSourceOutput {
     func viewDidLoad()
     func dataSourceDidChange()
 }
-
-private typealias DataSourceProtocol = DataSourceOutput
 
 // MARK: - HomeCollectionViewDataSource Type
 
@@ -29,6 +27,7 @@ final class HomeCollectionViewDataSource<Cell>: NSObject,
     fileprivate weak var coordinator: HomeViewCoordinator!
     fileprivate weak var collectionView: UICollectionView!
     fileprivate let section: Section
+    
     /// Create home's collection view data source object.
     /// - Parameters:
     ///   - collectionView: Corresponding collection view.

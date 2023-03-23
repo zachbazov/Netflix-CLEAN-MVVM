@@ -9,19 +9,15 @@ import UIKit
 
 // MARK: - ViewProtocol Type
 
-private protocol ViewInput {
+private protocol ViewProtocol {
+    var leadingItem: DetailNavigationViewItem! { get }
+    var centerItem: DetailNavigationViewItem! { get }
+    var trailingItem: DetailNavigationViewItem! { get }
+    
     func stateDidChange(view: DetailNavigationViewItem)
     func didSelectItem(view: DetailNavigationViewItem)
     func redMarkerConstraintValueDidChange(for state: DetailNavigationView.State)
 }
-
-private protocol ViewOutput {
-    var leadingItem: DetailNavigationViewItem! { get }
-    var centerItem: DetailNavigationViewItem! { get }
-    var trailingItem: DetailNavigationViewItem! { get }
-}
-
-private typealias ViewProtocol = ViewInput & ViewOutput
 
 // MARK: - DetailNavigationView Type
 
@@ -33,6 +29,7 @@ final class DetailNavigationView: View<DetailViewModel> {
     fileprivate(set) var leadingItem: DetailNavigationViewItem!
     fileprivate(set) var centerItem: DetailNavigationViewItem!
     fileprivate(set) var trailingItem: DetailNavigationViewItem!
+    
     /// Create a navigation view object.
     /// - Parameters:
     ///   - parent: Instantiating view.

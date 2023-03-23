@@ -9,13 +9,11 @@ import Foundation
 
 // MARK: - ViewModelProtocol Type
 
-private protocol ViewModelOutput {
+private protocol ViewModelProtocol {
     var description: String { get }
     var cast: String { get }
     var writers: String { get }
 }
-
-private typealias ViewModelProtocol = ViewModelOutput
 
 // MARK: - DetailDescriptionViewViewModel Type
 
@@ -23,6 +21,7 @@ struct DetailDescriptionViewViewModel {
     let description: String
     let cast: String
     let writers: String
+    
     /// Create a description view view model object.
     /// - Parameter media: Corresponding media object.
     init(with media: Media) {

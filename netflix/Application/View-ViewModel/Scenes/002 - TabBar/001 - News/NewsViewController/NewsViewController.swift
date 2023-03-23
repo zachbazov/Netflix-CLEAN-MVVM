@@ -9,13 +9,11 @@ import UIKit
 
 // MARK: - ControllerProtocol Type
 
-private protocol ControllerOutput {
+private protocol ControllerProtocol {
     var navigationView: NewsNavigationView! { get }
     var collectionView: UICollectionView! { get }
     var dataSource: NewsCollectionViewDataSource! { get }
 }
-
-private typealias ControllerProtocol = ControllerOutput
 
 // MARK: - NewsViewController Type
 

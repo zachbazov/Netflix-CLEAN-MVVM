@@ -9,19 +9,18 @@ import UIKit
 
 // MARK: - ViewProtocol Type
 
-private protocol ViewOutput {
+private protocol ViewProtocol {
     var button: UIButton { get }
     
     func createButton() -> UIButton
     func viewDidTap()
 }
 
-private typealias ViewProtocol = ViewOutput
-
 // MARK: - NavigationOverlayFooterView Type
 
 final class NavigationOverlayFooterView: View<NavigationOverlayViewModel> {
     fileprivate lazy var button = createButton()
+    
     /// Create a navigation overlay footer view object.
     /// - Parameters:
     ///   - parent: Instantiating view.

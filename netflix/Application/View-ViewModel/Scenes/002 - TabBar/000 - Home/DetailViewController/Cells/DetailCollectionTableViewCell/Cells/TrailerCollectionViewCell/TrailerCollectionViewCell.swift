@@ -9,14 +9,12 @@ import UIKit
 
 // MARK: - ViewProtocol Type
 
-private protocol ViewInput {
+private protocol ViewProtocol {
     func dataDidDownload(with viewModel: TrailerCollectionViewCellViewModel,
                          completion: (() -> Void)?)
     func viewDidConfigure(with viewModel: TrailerCollectionViewCellViewModel)
     func viewDidLoad(with viewModel: TrailerCollectionViewCellViewModel)
 }
-
-private typealias ViewProtocol = ViewInput
 
 // MARK: - TrailerCollectionViewCell Type
 
@@ -24,6 +22,7 @@ final class TrailerCollectionViewCell: UICollectionViewCell {
     @IBOutlet private weak var posterImageView: UIImageView!
     @IBOutlet private weak var titleLabel: UILabel!
     @IBOutlet private weak var playButton: UIButton!
+    
     /// Create a trailer collection view cell object.
     /// - Parameters:
     ///   - collectionView: Corresponding collection view.

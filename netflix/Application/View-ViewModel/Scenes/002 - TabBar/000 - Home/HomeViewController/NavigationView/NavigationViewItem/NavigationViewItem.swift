@@ -5,27 +5,22 @@
 //  Created by Zach Bazov on 17/09/2022.
 //
 
-import UIKit
 import AVKit
 
 // MARK: - ConfigurationProtocol Type
 
-private protocol ConfigurationInput {
-    func viewDidConfigure(item: NavigationViewItem)
-}
-
-private protocol ConfigurationOutput {
+private protocol ConfigurationProtocol {
     var item: NavigationViewItem! { get }
     
+    func viewDidConfigure(item: NavigationViewItem)
     func viewDidTap()
 }
-
-private typealias ConfigurationProtocol = ConfigurationInput & ConfigurationOutput
 
 // MARK: - NavigationViewItemConfiguration Type
 
 final class NavigationViewItemConfiguration {
     fileprivate weak var item: NavigationViewItem!
+    
     /// Create a configuration object for the item.
     /// - Parameter item: Corresponding view.
     init(with item: NavigationViewItem) {
@@ -90,22 +85,19 @@ extension NavigationViewItemConfiguration: ConfigurationProtocol {
 
 // MARK: - ViewProtocol Type
 
-private protocol ViewInput {
-    func viewDidConfigure(for state: NavigationView.State)
-}
-
-private protocol ViewOutput {
+private protocol ViewProtocol {
     var button: UIButton { get }
     var configuration: NavigationViewItemConfiguration! { get }
+    
+    func viewDidConfigure(for state: NavigationView.State)
 }
-
-private typealias ViewProtocol = ViewInput & ViewOutput
 
 // MARK: - NavigationViewItem Type
 
 final class NavigationViewItem: View<NavigationViewItemViewModel> {
     fileprivate lazy var button = UIButton(type: .system)
     fileprivate var configuration: NavigationViewItemConfiguration!
+    
     /// Create a navigation view item object.
     /// - Parameters:
     ///   - parent: Instantiating view.

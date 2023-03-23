@@ -9,13 +9,11 @@ import UIKit
 
 // MARK: - ViewProtocol Type
 
-private protocol ViewOutput {
+private protocol ViewProtocol {
     var textField: UITextField? { get }
     var indicatorView: UIActivityIndicatorView? { get }
     var isLoading: Bool { get }
 }
-
-private typealias ViewProtocol = ViewOutput
 
 // MARK: - TextFieldActivityIndicatorView Type
 

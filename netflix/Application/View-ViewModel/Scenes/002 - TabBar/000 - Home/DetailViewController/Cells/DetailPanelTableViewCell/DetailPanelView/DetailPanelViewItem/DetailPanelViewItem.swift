@@ -9,7 +9,7 @@ import UIKit
 
 // MARK: - ConfigurationProtocol Type
 
-private protocol ConfigurationOutput {
+private protocol ConfigurationProtocol {
     var view: DetailPanelViewItem! { get }
     var myList: MyList { get }
     var section: Section { get }
@@ -19,8 +19,6 @@ private protocol ConfigurationOutput {
     func selectIfNeeded()
     func viewDidTap()
 }
-
-private typealias ConfigurationProtocol = ConfigurationOutput
 
 // MARK: - DetailPanelViewItemConfiguration Type
 
@@ -77,7 +75,7 @@ extension DetailPanelViewItemConfiguration: ConfigurationProtocol {
             let media = viewModel.media!
             myList.viewModel.shouldAddOrRemove(media, uponSelection: viewModel.isSelected.value)
             // Reload browse overlay's collection data.
-            myList.viewModel.coordinator?.viewController?.browseOverlayView.collectionView.reloadData()
+            myList.viewModel.coordinator?.viewController?.browseOverlayView?.collectionView.reloadData()
         case .rate: printIfDebug(.debug, "rate")
         case .share: printIfDebug(.debug, "share")
         }
@@ -101,7 +99,7 @@ extension DetailPanelViewItemConfiguration {
 
 // MARK: - ViewProtocol Type
 
-private protocol ViewOutput {
+private protocol ViewProtocol {
     var configuration: DetailPanelViewItemConfiguration! { get }
     
     var imageView: UIImageView { get }
@@ -112,8 +110,6 @@ private protocol ViewOutput {
     func createLabel() -> UILabel
     func createImageView() -> UIImageView
 }
-
-private typealias ViewProtocol = ViewOutput
 
 // MARK: - DetailPanelViewItem Type
 

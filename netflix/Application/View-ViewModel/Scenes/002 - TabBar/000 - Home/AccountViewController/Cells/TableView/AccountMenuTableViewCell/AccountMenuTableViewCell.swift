@@ -9,12 +9,7 @@ import UIKit
 
 // MARK: - ViewProtocol Type
 
-private protocol ViewInput {
-    func viewDidConfigure(with viewModel: AccountMenuTableViewCellViewModel)
-    func viewDidConfigure(at indexPath: IndexPath)
-}
-
-private protocol ViewOutput {
+private protocol ViewProtocol {
     var collectionView: UICollectionView { get }
     var dataSource: NotificationCollectionViewDataSource! { get }
     var layout: CollectionViewLayout! { get }
@@ -27,9 +22,10 @@ private protocol ViewOutput {
     func createImageView() -> UIImageView
     func createTitleLabel() -> UILabel
     func createNotificationIndicatorView() -> UIView
+    
+    func viewDidConfigure(with viewModel: AccountMenuTableViewCellViewModel)
+    func viewDidConfigure(at indexPath: IndexPath)
 }
-
-private typealias ViewProtocol = ViewInput & ViewOutput
 
 // MARK: - AccountMenuTableViewCell Type
 

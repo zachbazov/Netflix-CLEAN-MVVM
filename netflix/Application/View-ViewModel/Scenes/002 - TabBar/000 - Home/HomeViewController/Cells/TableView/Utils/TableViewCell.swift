@@ -15,24 +15,21 @@ typealias StandardTableViewCell = TableViewCell<StandardCollectionViewCell>
 
 // MARK: - ViewInput Type
 
-private protocol ViewInput {
+private protocol ViewProtocol {
     associatedtype T: UICollectionViewCell
+    
     static func create(on tableView: UITableView,
                        for indexPath: IndexPath,
                        with viewModel: HomeViewModel) -> TableViewCell<T>
-    func collectionViewDidLayout(for section: Section, with viewModel: HomeViewModel)
-}
-
-private protocol ViewOutput {
-    associatedtype T: UICollectionViewCell
+    
     var collectionView: UICollectionView { get }
     var dataSource: HomeCollectionViewDataSource<T>! { get }
     var layout: CollectionViewLayout! { get }
     
     func createCollectionView() -> UICollectionView
+    
+    func collectionViewDidLayout(for section: Section, with viewModel: HomeViewModel)
 }
-
-private typealias ViewProtocol = ViewInput & ViewOutput
 
 // MARK: - TableViewCell<T> Type
 

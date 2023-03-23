@@ -9,16 +9,10 @@ import Foundation
 
 // MARK: - ModelProtocol Type
 
-private protocol ModelInput {
-    init(with profile: UserProfile)
-}
-
-private protocol ModelOutput {
+private protocol ModelProtocol {
     var image: String { get }
     var name: String { get }
 }
-
-private typealias ModelProtocol = ModelInput & ModelOutput
 
 // MARK: - UserProfileCollectionViewCellViewModel Type
 

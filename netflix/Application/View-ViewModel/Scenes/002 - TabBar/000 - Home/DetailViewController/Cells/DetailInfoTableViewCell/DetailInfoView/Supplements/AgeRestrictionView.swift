@@ -9,19 +9,18 @@ import UIKit
 
 // MARK: - ViewProtocol Type
 
-private protocol ViewOutput {
+private protocol ViewProtocol {
     var label: UILabel { get }
     
     func createLabel() -> UILabel
     func viewDidConfigure()
 }
 
-private typealias ViewProtocol = ViewOutput
-
 // MARK: - AgeRestrictionView Type
 
 final class AgeRestrictionView: UIView {
     fileprivate lazy var label = createLabel()
+    
     /// Create an age restriction view object.
     /// - Parameter parent: Instantiating view.
     init(on parent: UIView) {

@@ -9,11 +9,7 @@ import UIKit
 
 // MARK: - CoordinatorProtocol Type
 
-private protocol CoordinatorInput {
-    func deploy(_ screen: Coordinator.Screen)
-}
-
-private protocol CoordinatorOutput {
+private protocol CoordinatorProtocol {
     var viewController: UIViewController? { get }
     var window: UIWindow? { get }
     
@@ -24,9 +20,9 @@ private protocol CoordinatorOutput {
     func createAuthController() -> AuthController
     func createProfileController() -> ProfileViewController
     func createTabBarController() -> TabBarController
+    
+    func deploy(_ screen: Coordinator.Screen)
 }
-
-private typealias CoordinatorProtocol = CoordinatorInput & CoordinatorOutput
 
 // MARK: - Coordinator Type
 

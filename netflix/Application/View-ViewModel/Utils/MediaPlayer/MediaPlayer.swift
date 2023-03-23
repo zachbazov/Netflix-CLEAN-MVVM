@@ -18,12 +18,10 @@ protocol MediaPlayerDelegate: AnyObject {
 
 // MARK: - PlayerProtocol Type
 
-private protocol PlayerOutput {
+private protocol PlayerProtocol {
     var player: AVPlayer { get }
     var layer: MediaPlayerLayer { get }
 }
-
-private typealias PlayerProtocol = PlayerOutput
 
 // MARK: - MediaPlayer Type
 

@@ -94,7 +94,7 @@ extension TabBarConfiguration {
 
 // MARK: - CoordinatorProtocol Type
 
-private protocol CoordinatorOutput {
+private protocol CoordinatorProtocol {
     var configuration: TabBarConfiguration { get }
     
     var home: UINavigationController! { get }
@@ -109,8 +109,6 @@ private protocol CoordinatorOutput {
     
     func deploy()
 }
-
-private typealias CoordinatorProtocol = CoordinatorOutput
 
 // MARK: - TabBarCoordinator Type
 

@@ -9,18 +9,17 @@ import UIKit
 
 // MARK: - ViewProtocol Type
 
-private protocol ViewOutput {
+private protocol ViewProtocol {
     var descriptionView: DetailDescriptionView! { get }
     
     func viewDidConfigure()
 }
 
-private typealias ViewProtocol = ViewOutput
-
 // MARK: - DetailDescriptionTableViewCell Type
 
 final class DetailDescriptionTableViewCell: UITableViewCell {
     fileprivate var descriptionView: DetailDescriptionView!
+    
     /// Create a detail description table view cell object.
     /// - Parameters:
     ///   - tableView: Corresponding table view.

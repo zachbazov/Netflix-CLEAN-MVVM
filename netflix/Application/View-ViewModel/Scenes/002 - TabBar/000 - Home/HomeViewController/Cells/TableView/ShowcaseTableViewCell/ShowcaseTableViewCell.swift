@@ -9,12 +9,10 @@ import UIKit
 
 // MARK: - ViewProtocol Type
 
-private protocol ViewOutput {
+private protocol ViewProtocol {
     var showcaseView: ShowcaseView! { get }
     var viewModel: ShowcaseTableViewCellViewModel! { get }
 }
-
-private typealias ViewProtocol = ViewOutput
 
 // MARK: - ShowcaseTableViewCell Type
 

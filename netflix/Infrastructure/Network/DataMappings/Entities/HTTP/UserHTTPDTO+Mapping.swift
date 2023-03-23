@@ -12,12 +12,12 @@ import CoreData
 struct UserHTTPDTO: HTTP {
     struct Request: Decodable {
         let user: UserDTO
-        let selectedProfile: String?
+        var selectedProfile: String?
     }
     
     struct Response: Decodable {
         var status: String?
-        let token: String?
+        var token: String?
         let data: UserDTO?
         var request: Request?
     }
@@ -51,7 +51,7 @@ extension UserHTTPDTO.Request {
         entity.user?.role = user.role
         entity.user?.active = user.active
         entity.user?.token = user.token
-        entity.user?.selectedProfile = user.selectedProfile
+        entity.user?.selectedProfile = selectedProfile
         return entity
     }
 }
@@ -62,6 +62,7 @@ extension UserHTTPDTO.Response {
         entity.status = status
         entity.token = token
         entity.data = data
+        entity.userId = data?._id
         return entity
     }
 }

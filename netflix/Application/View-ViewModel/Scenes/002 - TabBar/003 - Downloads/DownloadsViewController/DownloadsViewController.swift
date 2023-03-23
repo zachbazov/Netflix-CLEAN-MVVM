@@ -9,12 +9,10 @@ import UIKit
 
 // MARK: - ControllerProtocol Type
 
-private protocol ControllerOutput {
+private protocol ControllerProtocol {
     var navigationView: DownloadsNavigationView! { get }
     var downloadsView: DownloadsView! { get }
 }
-
-private typealias ControllerProtocol = ControllerOutput
 
 // MARK: - DownloadsViewController Type
 

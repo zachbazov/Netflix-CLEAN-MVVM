@@ -9,15 +9,10 @@ import UIKit
 
 // MARK: - ViewProtocol Type
 
-private protocol ViewInput {
+private protocol ViewProtocol {
     func viewDidConfigure(with viewModel: UserProfileCollectionViewCellViewModel, at indexPath: IndexPath)
-}
-
-private protocol ViewOutput {
     func didSelect()
 }
-
-private typealias ViewProtocol = ViewInput & ViewOutput
 
 // MARK: - UserProfileCollectionViewCell Type
 

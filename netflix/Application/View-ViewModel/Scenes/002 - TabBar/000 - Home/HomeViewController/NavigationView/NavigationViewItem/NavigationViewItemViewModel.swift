@@ -9,19 +9,15 @@ import Foundation
 
 // MARK: - ViewModelProtocol Type
 
-private protocol ViewModelInput {
-    func title(for tag: Int) -> String?
-    func image(for tag: Int) -> String?
-}
-
-private protocol ViewModelOutput {
+private protocol ViewModelProtocol {
     var tag: Int { get }
     var title: String! { get }
     var image: String! { get }
     var isSelected: Bool { get }
+    
+    func title(for tag: Int) -> String?
+    func image(for tag: Int) -> String?
 }
-
-private typealias ViewModelProtocol = ViewModelOutput
 
 // MARK: - NavigationViewItemViewModel Type
 
@@ -32,6 +28,7 @@ struct NavigationViewItemViewModel {
     var title: String!
     var image: String!
     var isSelected: Bool
+    
     /// Create a navigation view item view model object.
     /// - Parameters:
     ///   - tag: View indicator.

@@ -9,11 +9,7 @@ import UIKit
 
 // MARK: - CoordinatorProtocol Type
 
-private protocol CoordinatorInput {
-    func deploy(_ screen: HomeViewCoordinator.Screen)
-}
-
-private protocol CoordinatorOutput {
+private protocol CoordinatorProtocol {
     var detail: UINavigationController? { get }
     var search: UINavigationController? { get }
     var account: UINavigationController? { get }
@@ -25,9 +21,9 @@ private protocol CoordinatorOutput {
     func createDetailNavigationController() -> UINavigationController?
     func createSearchNavigationController() -> UINavigationController
     func createAccountNavigationController() -> UINavigationController
+    
+    func deploy(_ screen: HomeViewCoordinator.Screen)
 }
-
-private typealias CoordinatorProtocol = CoordinatorInput & CoordinatorOutput
 
 // MARK: - HomeViewCoordinator Type
 
@@ -124,6 +120,7 @@ extension HomeViewCoordinator: Coordinate {
         case search
         case account
     }
+    
     /// Screen representation control.
     /// - Parameter screen: The screen to be allocated and presented.
     func coordinate(to screen: Screen) {

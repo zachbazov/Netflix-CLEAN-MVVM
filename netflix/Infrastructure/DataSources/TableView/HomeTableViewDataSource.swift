@@ -9,7 +9,7 @@ import UIKit
 
 // MARK: - DataSourceProtocol Type
 
-private protocol DataSourceOutput {
+private protocol DataSourceProtocol {
     var tableView: UITableView! { get }
     var viewModel: HomeViewModel! { get }
     var numberOfRows: Int { get }
@@ -20,8 +20,6 @@ private protocol DataSourceOutput {
     func dataSourceDidChange()
 }
 
-private typealias DataSourceProtocol = DataSourceOutput
-
 // MARK: - HomeTableViewDataSource Type
 
 final class HomeTableViewDataSource: NSObject {
@@ -29,6 +27,7 @@ final class HomeTableViewDataSource: NSObject {
     fileprivate weak var viewModel: HomeViewModel!
     fileprivate let numberOfRows = 1
     fileprivate(set) var showcaseCell: ShowcaseTableViewCell!
+    
     /// Create an home's table view data source object.
     /// - Parameters:
     ///   - tableView: Corresponding table view.
@@ -207,13 +206,13 @@ extension HomeTableViewDataSource {
         }
         let isScrollingUp = translation.y < 0
         let targetConstant: CGFloat = isScrollingUp
-            ? -homeViewController.navigationView.bounds.size.height
+            ? -(homeViewController.navigationView?.bounds.size.height ?? .zero)
             : 0.0
         let targetAlpha: CGFloat = isScrollingUp ? 0.0 : 1.0
         
         let animator = UIViewPropertyAnimator(duration: 0.66, dampingRatio: 1.0) {
             homeViewController.navigationViewTopConstraint.constant = targetConstant
-            homeViewController.navigationView.alpha = targetAlpha
+            homeViewController.navigationView?.alpha = targetAlpha
             homeViewController.view.layoutIfNeeded()
         }
         animator.startAnimation()

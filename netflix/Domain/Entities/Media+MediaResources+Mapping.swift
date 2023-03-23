@@ -7,6 +7,12 @@
 
 import UIKit
 
+// MARK: - Mediable Type
+
+protocol Mediable {
+    var id: String? { get }
+}
+
 // MARK: - MediaResources Type
 
 struct MediaResources {

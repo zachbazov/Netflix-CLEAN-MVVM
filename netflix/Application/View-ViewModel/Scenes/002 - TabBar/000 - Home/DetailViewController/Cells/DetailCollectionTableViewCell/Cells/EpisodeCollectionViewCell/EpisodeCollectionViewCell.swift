@@ -9,7 +9,7 @@ import UIKit
 
 // MARK: - ViewProtocol Type
 
-private protocol ViewInput {
+private protocol ViewProtocol {
     func dataDidDownload(with viewModel: EpisodeCollectionViewCellViewModel,
                          completion: (() -> Void)?)
     func viewDidLoad(at indexPath: IndexPath,
@@ -17,8 +17,6 @@ private protocol ViewInput {
     func viewDidConfigure(at indexPath: IndexPath,
                           with viewModel: EpisodeCollectionViewCellViewModel)
 }
-
-private typealias ViewProtocol = ViewInput
 
 // MARK: - EpisodeCollectionViewCell Type
 
@@ -29,6 +27,7 @@ final class EpisodeCollectionViewCell: UICollectionViewCell {
     @IBOutlet private weak var descriptionTextView: UITextView!
     @IBOutlet private weak var playButton: UIButton!
     @IBOutlet private weak var downloadButton: UIButton!
+    
     /// Create an episode collection view cell object.
     /// - Parameters:
     ///   - collectionView: Corresponding collection view.

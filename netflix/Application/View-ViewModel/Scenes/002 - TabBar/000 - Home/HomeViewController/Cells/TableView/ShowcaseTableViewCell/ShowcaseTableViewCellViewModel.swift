@@ -9,13 +9,11 @@ import Foundation
 
 // MARK: - ViewModelProtocol Type
 
-private protocol ViewModelOutput {
+private protocol ViewModelProtocol {
     var presentedMedia: Media? { get }
     var myList: MyList { get }
     var sectionAt: (HomeTableViewDataSource.Index) -> Section { get }
 }
-
-private typealias ViewModelProtocol = ViewModelOutput
 
 // MARK: - ShowcaseTableViewCellViewModel Type
 

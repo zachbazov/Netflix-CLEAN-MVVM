@@ -9,8 +9,10 @@ import Foundation
 
 // MARK: - VoidHTTP Type
 
-struct VoidHTTP {
-    struct Response: Decodable {
+struct VoidHTTP: HTTP {
+    typealias Request = Void
+    
+    struct Response {
         let status: String
         let message: String?
     }

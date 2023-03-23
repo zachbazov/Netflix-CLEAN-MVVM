@@ -9,15 +9,13 @@ import UIKit
 
 // MARK: - CoordinatorProtocol Type
 
-private protocol CoordinatorOutput {
+private protocol CoordinatorProtocol {
     var section: Section? { get }
     var media: Media? { get }
     var shouldScreenRotate: Bool { get }
     
     func createDetailController()
 }
-
-private typealias CoordinatorProtocol = CoordinatorOutput
 
 // MARK: - NewsViewCoordinator Type
 

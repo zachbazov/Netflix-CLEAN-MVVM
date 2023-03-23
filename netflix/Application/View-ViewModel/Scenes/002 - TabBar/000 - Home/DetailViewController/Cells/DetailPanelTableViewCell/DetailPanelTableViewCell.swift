@@ -9,18 +9,17 @@ import UIKit
 
 // MARK: - ViewProtocol Type
 
-private protocol ViewOutput {
+private protocol ViewProtocol {
     var panelView: DetailPanelView! { get }
     
     func viewDidConfigure()
 }
 
-private typealias ViewProtocol = ViewOutput
-
 // MARK: - DetailPanelTableViewCell Type
 
 final class DetailPanelTableViewCell: UITableViewCell {
     private(set) var panelView: DetailPanelView!
+    
     /// Create a detail panel table view cell object.
     /// - Parameters:
     ///   - tableView: Corresponding table view.

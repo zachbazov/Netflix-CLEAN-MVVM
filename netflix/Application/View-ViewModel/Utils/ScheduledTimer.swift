@@ -9,20 +9,15 @@ import Foundation
 
 // MARK: - TimerProtocol Type
 
-private protocol TimerInput {
+private protocol TimerProtocol {
+    var timer: Timer! { get }
+    
     func schedule(timeInterval: TimeInterval,
                   target: Any,
                   selector: Selector,
                   repeats: Bool)
-}
-
-private protocol TimerOutput {
-    var timer: Timer! { get }
-    
     func invalidate()
 }
-
-private typealias TimerProtocol = TimerInput & TimerOutput
 
 // MARK: - ScheduledTimer Type
 

@@ -17,11 +17,7 @@ enum CoreDataStorageError: Error {
 
 // MARK: - CoreDataProtocol Type
 
-private protocol CoreDataInput {
-    func printContainerUrl(for container: NSPersistentContainer)
-}
-
-private protocol CoreDataOutput {
+private protocol CoreDataProtocol {
     var persistentContainer: NSPersistentContainer { get }
     var mainContext: NSManagedObjectContext { get }
     var privateContext: NSManagedObjectContext { get }
@@ -34,9 +30,9 @@ private protocol CoreDataOutput {
     
     func context() -> NSManagedObjectContext
     func saveContext()
+    
+    func printContainerUrl(for container: NSPersistentContainer)
 }
-
-private typealias CoreDataProtocol = CoreDataInput & CoreDataOutput
 
 // MARK: - CoreDataStorage Type
 
@@ -45,9 +41,7 @@ final class CoreDataStorage {
     private init() {}
     
     fileprivate lazy var persistentContainer: NSPersistentContainer = createPersistentContainer()
-    
     fileprivate lazy var mainContext: NSManagedObjectContext = createMainContext()
-    
     fileprivate lazy var privateContext: NSManagedObjectContext = createPrivateContext()
 }
 

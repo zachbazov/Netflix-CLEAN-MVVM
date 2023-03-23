@@ -33,7 +33,7 @@ extension UserUseCase: UseCase {
             let cached = cached as? ((UserHTTPDTO.Response?) -> Void) ?? { _ in }
             return repository.signIn(request: request, cached: cached, completion: completion)
         case .signOut:
-            let completion = completion as? ((Result<VoidHTTP.Response, DataTransferError>) -> Void) ?? { _ in }
+            let completion = completion as? ((Result<VoidHTTPDTO.Response, DataTransferError>) -> Void) ?? { _ in }
             return repository.signOut(completion: completion)
         case .updateUserData:
             guard let request = request as? UserHTTPDTO.Request else { return nil }

@@ -9,16 +9,12 @@ import UIKit
 
 // MARK: - ViewProtocol Type
 
-private protocol ViewInput {
+private protocol ViewProtocol {
+    var representedIdentifier: NSString? { get }
+    
     func viewDidConfigure(with viewModel: SearchCollectionViewCellViewModel)
     func logoDidAlign(with viewModel: SearchCollectionViewCellViewModel)
 }
-
-private protocol ViewOutput {
-    var representedIdentifier: NSString? { get }
-}
-
-private typealias ViewProtocol = ViewInput & ViewOutput
 
 // MARK: - SearchCollectionViewCell Type
 
@@ -30,6 +26,7 @@ class SearchCollectionViewCell: UICollectionViewCell {
     @IBOutlet private weak var logoYConstraint: NSLayoutConstraint!
     
     fileprivate var representedIdentifier: NSString?
+    
     /// Create a search collection view cell object.
     /// - Parameters:
     ///   - collectionView: Corresponding collection view.
@@ -94,6 +91,7 @@ extension SearchCollectionViewCell: ViewProtocol {
         
         logoDidAlign(with: viewModel)
     }
+    
     /// Align the logo constraint based on `resources.presentedLogoHorizontalAlignment`
     /// property of the media object.
     /// - Parameters:

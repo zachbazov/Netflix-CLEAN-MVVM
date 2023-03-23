@@ -9,16 +9,12 @@ import UIKit
 
 // MARK: - DataSourceProtocol Type
 
-private protocol DataSourceInput {
-    func dataSourceDidChange(at indexPaths: [IndexPath])
-}
-
-private protocol DataSourceOutput {
+private protocol DataSourceProtocol {
     var collectionView: UICollectionView? { get }
     var numberOfSections: Int { get }
+    
+    func dataSourceDidChange(at indexPaths: [IndexPath])
 }
-
-private typealias DataSourceProtocol = DataSourceInput
 
 // MARK: - NotificationCollectionViewDataSource Type
 

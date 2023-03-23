@@ -9,15 +9,13 @@ import UIKit
 
 // MARK: - LayoutProtocol Type
 
-private protocol LayoutOutput {
+private protocol LayoutProtocol {
     var layout: CollectionViewLayout.Layout! { get }
     var itemsPerLine: CGFloat { get }
     var lineSpacing: CGFloat { get }
     var width: CGFloat { get }
     var height: CGFloat { get }
 }
-
-private typealias LayoutProtocol = LayoutOutput
 
 // MARK: - CollectionViewLayout Type
 

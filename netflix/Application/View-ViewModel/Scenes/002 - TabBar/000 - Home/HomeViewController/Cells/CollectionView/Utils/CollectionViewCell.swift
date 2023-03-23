@@ -9,23 +9,17 @@ import UIKit
 
 // MARK: - ViewProtocol Type
 
-private protocol ViewInput {
+private protocol ViewProtocol {
     associatedtype T: ViewModel
+    
+    var viewModel: T! { get }
+    var representedIdentifier: NSString? { get }
     
     func dataDidDownload(with viewModel: CollectionViewCellViewModel, completion: (() -> Void)?)
     func viewDidLoad(media: Media, with viewModel: CollectionViewCellViewModel)
     func viewDidConfigure(with viewModel: T)
     func logoDidAlign(_ constraint: NSLayoutConstraint, with viewModel: CollectionViewCellViewModel)
 }
-
-private protocol ViewOutput {
-    associatedtype T: ViewModel
-    
-    var viewModel: T! { get }
-    var representedIdentifier: NSString? { get }
-}
-
-private typealias ViewProtocol = ViewInput & ViewOutput
 
 // MARK: - CollectionViewCell Type
 
@@ -37,6 +31,7 @@ class CollectionViewCell: UICollectionViewCell {
     
     var viewModel: CollectionViewCellViewModel!
     fileprivate var representedIdentifier: NSString?
+    
     /// Create a collection view cell object.
     /// - Parameters:
     ///   - collectionView: The referenced collection view.
@@ -73,6 +68,7 @@ class CollectionViewCell: UICollectionViewCell {
         representedIdentifier = nil
         viewModel = nil
     }
+    
     /// Overridable configuration operation.
     /// Configure the view based on the view model.
     /// - Parameter viewModel: Coordinating view model.
@@ -88,6 +84,7 @@ class CollectionViewCell: UICollectionViewCell {
         
         logoDidAlign(logoBottomConstraint, with: viewModel)
     }
+    
     /// Asynchronous download/load object resources.
     /// - Parameters:
     ///   - viewModel: Coordinating view model.
@@ -105,6 +102,7 @@ class CollectionViewCell: UICollectionViewCell {
                 mainQueueDispatch { completion?() }
             }
     }
+    
     /// View's initials setup.
     /// - Parameters:
     ///   - media: Corresponding media object.
@@ -124,6 +122,7 @@ class CollectionViewCell: UICollectionViewCell {
         representedIdentifier = media.slug as NSString
         placeholderLabel.text = viewModel.title
     }
+    
     /// Align the logo constraint based on `resources.presentedLogoAlignment`
     /// property of the media object.
     /// - Parameters:

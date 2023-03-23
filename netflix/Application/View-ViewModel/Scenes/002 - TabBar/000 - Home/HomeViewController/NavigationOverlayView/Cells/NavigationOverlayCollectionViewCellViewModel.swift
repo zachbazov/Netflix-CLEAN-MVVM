@@ -9,11 +9,9 @@ import Foundation
 
 // MARK: - ViewModelProtocol Type
 
-private protocol ViewModelOutput {
+private protocol ViewModelProtocol {
     var title: String { get }
 }
-
-private typealias ViewModelProtocol = ViewModelOutput
 
 // MARK: - NavigationOverlayCollectionViewCellViewModel Type
 
