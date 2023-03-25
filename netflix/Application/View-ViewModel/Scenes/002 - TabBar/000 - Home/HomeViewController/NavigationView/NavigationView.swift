@@ -10,7 +10,6 @@ import UIKit
 // MARK: - ViewProtocol Type
 
 private protocol ViewProtocol {
-    var navigationOverlayView: NavigationOverlayView! { get }
     var homeItemView: NavigationViewItem! { get }
     var airPlayItemView: NavigationViewItem! { get }
     var accountItemView: NavigationViewItem! { get }
@@ -31,8 +30,6 @@ final class NavigationView: View<NavigationViewViewModel> {
     @IBOutlet private(set) weak var moviesItemViewContainer: UIView!
     @IBOutlet private(set) weak var categoriesItemViewContainer: UIView!
     @IBOutlet private(set) weak var itemsCenterXConstraint: NSLayoutConstraint!
-    
-    var navigationOverlayView: NavigationOverlayView!
     
     fileprivate(set) var homeItemView: NavigationViewItem!
     fileprivate var airPlayItemView: NavigationViewItem!
@@ -67,8 +64,6 @@ final class NavigationView: View<NavigationViewViewModel> {
         // Updates root coordinator's `navigationView` property.
         viewModel.coordinator?.viewController?.navigationView = self
         
-        self.navigationOverlayView = NavigationOverlayView(with: viewModel)
-        
         self.viewDidLoad()
         
         self.backgroundColor = .clear
@@ -78,8 +73,6 @@ final class NavigationView: View<NavigationViewViewModel> {
     
     deinit {
         viewDidUnbindObservers()
-        navigationOverlayView?.removeFromSuperview()
-        navigationOverlayView = nil
         viewModel = nil
     }
     
@@ -97,7 +90,9 @@ final class NavigationView: View<NavigationViewViewModel> {
     override func viewDidBindObservers() {
         viewModel.state.observe(on: self) { [weak self] state in
             self?.viewModel.stateDidChange(state)
-            self?.navigationOverlayView.viewModel.navigationViewStateDidChange(state)
+            
+            let homeViewController = Application.app.coordinator.tabCoordinator.home.viewControllers.first as? HomeViewController
+            homeViewController?.navigationOverlayView?.viewModel.navigationViewStateDidChange(state)
         }
     }
     

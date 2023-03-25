@@ -63,9 +63,7 @@ extension NavigationOverlayViewModel: ViewModelProtocol {
     
     /// Release data source changes and center the content.
     func dataSourceDidChange() {
-        guard let navigationOverlayView = coordinator.viewController?.navigationView?.navigationOverlayView else {
-            return
-        }
+        guard let navigationOverlayView = coordinator.viewController?.navigationOverlayView else { return }
         
         let tableView = navigationOverlayView.tableView
         /// In-case there is no allocated delegate.
@@ -88,7 +86,7 @@ extension NavigationOverlayViewModel: ViewModelProtocol {
     
     /// Animate the presentation of the view.
     fileprivate func animatePresentation() {
-        guard let navigationOverlayView = coordinator.viewController?.navigationView?.navigationOverlayView else {
+        guard let navigationOverlayView = coordinator.viewController?.navigationOverlayView else {
             return
         }
         

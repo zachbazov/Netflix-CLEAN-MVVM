@@ -43,7 +43,7 @@ final class NavigationOverlayView: View<NavigationOverlayViewModel> {
         parent.addSubview(self.footerView)
         self.addSubview(self.tableView)
         /// Updates root coordinator's `categoriesOverlayView` property.
-        viewModel.coordinator?.viewController?.navigationView?.navigationOverlayView = self
+        viewModel.coordinator?.viewController?.navigationOverlayView = self
         
         self.viewDidBindObservers()
     }
@@ -54,12 +54,13 @@ final class NavigationOverlayView: View<NavigationOverlayViewModel> {
         viewDidUnbindObservers()
         tableView.removeFromSuperview()
         footerView.removeFromSuperview()
+        removeFromSuperview()
     }
     
     override func viewDidBindObservers() {
         viewModel.isPresented.observe(on: self) { [weak self] _ in
             let homeVC = Application.app.coordinator.tabCoordinator.home.viewControllers.first as! HomeViewController
-            let homeVM = homeVC.viewModel.showcases[HomeTableViewDataSource.State(rawValue: homeVC.viewModel.dataSourceState.value!.rawValue)!]
+            let homeVM = homeVC.viewModel.showcases[HomeTableViewDataSource.State(rawValue: homeVC.viewModel.dataSourceState.value?.rawValue ?? 0) ?? .all]
             self?.opaqueView.viewDidUpdate(with: homeVM)
             self?.viewModel.isPresentedDidChange()
         }
