@@ -64,12 +64,14 @@ final class NavigationView: View<NavigationViewViewModel> {
                                            self.moviesItemView, self.categoriesItemView,
                                            self.searchItemView]
         self.viewModel = NavigationViewViewModel(items: items, with: viewModel)
-        /// Updates root coordinator's `navigationView` property.
+        // Updates root coordinator's `navigationView` property.
         viewModel.coordinator?.viewController?.navigationView = self
         
         self.navigationOverlayView = NavigationOverlayView(with: viewModel)
         
         self.viewDidLoad()
+        
+        self.backgroundColor = .clear
     }
     
     required init?(coder: NSCoder) { fatalError() }
@@ -84,6 +86,8 @@ final class NavigationView: View<NavigationViewViewModel> {
     override func viewDidLoad() {
         viewDidDeploySubviews()
         viewDidBindObservers()
+        
+//        self.layer.shadow(.black, radius: 16.0, opacity: 1.0)
     }
     
     override func viewDidDeploySubviews() {

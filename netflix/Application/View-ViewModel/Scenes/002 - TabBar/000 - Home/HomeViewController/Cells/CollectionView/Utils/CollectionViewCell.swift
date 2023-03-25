@@ -64,7 +64,7 @@ class CollectionViewCell: UICollectionViewCell {
         posterImageView.image = nil
         logoImageView.image = nil
         placeholderLabel.text = nil
-        logoBottomConstraint.constant = .zero
+        logoBottomConstraint?.constant = .zero
         representedIdentifier = nil
         viewModel = nil
     }
@@ -82,6 +82,7 @@ class CollectionViewCell: UICollectionViewCell {
 
         placeholderLabel.alpha = 0.0
         
+        guard logoBottomConstraint.isNotNil else { return }
         logoDidAlign(logoBottomConstraint, with: viewModel)
     }
     
@@ -108,7 +109,7 @@ class CollectionViewCell: UICollectionViewCell {
     ///   - media: Corresponding media object.
     ///   - viewModel: Coordinating view model.
     func viewDidLoad(media: Media, with viewModel: CollectionViewCellViewModel) {
-        backgroundColor = .black
+        backgroundColor = .clear
         
         placeholderLabel.alpha = 1.0
         posterImageView.clipsToBounds = true

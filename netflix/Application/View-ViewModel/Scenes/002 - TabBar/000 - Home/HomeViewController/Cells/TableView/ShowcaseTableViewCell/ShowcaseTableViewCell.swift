@@ -39,6 +39,7 @@ final class ShowcaseTableViewCell: UITableViewCell {
         cell.showcaseView = showcaseView
         cell.contentView.addSubview(cell.showcaseView)
         cell.showcaseView.constraintToSuperview(cell.contentView)
+        cell.backgroundColor = .clear
         return cell
     }
     

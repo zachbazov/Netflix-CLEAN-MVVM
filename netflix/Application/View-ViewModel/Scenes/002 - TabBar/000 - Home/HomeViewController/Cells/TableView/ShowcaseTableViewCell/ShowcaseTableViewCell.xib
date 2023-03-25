@@ -16,7 +16,7 @@
                 <rect key="frame" x="0.0" y="0.0" width="414" height="44"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="etN-Og-3Ca" customClass="ShowcaseView" customModule="netflix" customModuleProvider="target">
+                    <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="etN-Og-3Ca" customClass="ShowcaseView" customModule="netflix" customModuleProvider="target">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="44"/>
                     </view>
                 </subviews>
@@ -27,7 +27,7 @@
                     <constraint firstAttribute="trailing" secondItem="etN-Og-3Ca" secondAttribute="trailing" id="t5r-xA-dkk"/>
                 </constraints>
             </tableViewCellContentView>
-            <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
             <point key="canvasLocation" x="-107" y="78"/>
         </tableViewCell>
     </objects>

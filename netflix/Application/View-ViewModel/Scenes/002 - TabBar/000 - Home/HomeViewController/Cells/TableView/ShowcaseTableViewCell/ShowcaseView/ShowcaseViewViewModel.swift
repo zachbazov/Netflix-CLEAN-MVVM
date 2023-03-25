@@ -33,6 +33,7 @@ struct ShowcaseViewViewModel {
     let logoImageIdentifier: NSString
     let logoImageURL: URL!
     var attributedGenres: NSMutableAttributedString
+    let typeImagePath: String
     
     /// Create a view model based on a media object.
     /// - Parameter media: The media object represented on the display view.
@@ -40,16 +41,17 @@ struct ShowcaseViewViewModel {
         guard let media = media else { return nil }
         
         self.slug = media.slug
-        self.posterImagePath = media.resources.displayPoster
+        self.posterImagePath = media.path(forResourceOfType: PresentedPoster.self) ?? ""
         self.logoImagePath = .toBlank()
         self.genres = media.genres
         self.attributedGenres = .init()
-        self.posterImageIdentifier = .init(string: "display-poster_\(media.slug)")
+        self.posterImageIdentifier = .init(string: "poster_\(media.slug)")
         self.logoImageIdentifier = .init(string: "display-logo_\(media.slug)")
         self.logoImagePath = media.path(forResourceOfType: PresentedDisplayLogo.self) ?? ""
         self.posterImageURL = .init(string: self.posterImagePath)
         self.logoImageURL = .init(string: self.logoImagePath)
         self.attributedGenres = media.attributedString(for: .display)
+        self.typeImagePath = media.isExclusive ? "netflix-series" : "netflix-series"
     }
 }
 

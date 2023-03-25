@@ -19,6 +19,7 @@ private protocol ViewModelProtocol {
 
 final class TableViewHeaderFooterView: TableViewHeaderView<TableViewHeaderFooterViewViewModel> {
     fileprivate lazy var titleLabel = createLabel()
+    
     /// Create a table view header view object.
     /// - Parameters:
     ///   - tableView: Corresponding table view.
@@ -28,9 +29,7 @@ final class TableViewHeaderFooterView: TableViewHeaderView<TableViewHeaderFooter
     static func create(on tableView: UITableView,
                        for section: Int,
                        with viewModel: HomeViewModel) -> TableViewHeaderFooterView {
-        guard let cell = tableView.dequeueReusableHeaderFooterView(withIdentifier: reuseIdentifier) as? TableViewHeaderFooterView else {
-            fatalError()
-        }
+        guard let cell = tableView.dequeueReusableHeaderFooterView(withIdentifier: reuseIdentifier) as? TableViewHeaderFooterView else { fatalError() }
         cell.viewModel = TableViewHeaderFooterViewViewModel()
         cell.viewDidConfigure(at: section, with: viewModel)
         return cell
@@ -44,7 +43,8 @@ final class TableViewHeaderFooterView: TableViewHeaderView<TableViewHeaderFooter
     
     override func viewDidConfigure(at index: Int, with homeViewModel: HomeViewModel) {
         backgroundView = .init()
-        backgroundView?.backgroundColor = .black
+        backgroundView?.backgroundColor = .clear
+        backgroundView?.constraintToSuperview(contentView)
         
         titleLabel.text = viewModel.title(homeViewModel.sections, forHeaderAt: index)
     }

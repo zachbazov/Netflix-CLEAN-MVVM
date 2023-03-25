@@ -13,7 +13,6 @@ private protocol ViewModelProtocol {
     var items: [NavigationViewItem] { get }
     var state: Observable<NavigationView.State> { get }
     
-    func navigationViewDidAppear()
     func stateDidChange(_ state: NavigationView.State)
 }
 
@@ -42,22 +41,10 @@ extension NavigationViewViewModel: ViewModel {}
 // MARK: - ViewModelProtocol Implementation
 
 extension NavigationViewViewModel: ViewModelProtocol {
-    /// Animate the first appearance of the navigation view.
-    func navigationViewDidAppear() {
-        let homeViewController = coordinator.viewController!
-        mainQueueDispatch {
-            homeViewController.navigationViewTopConstraint.constant = 0.0
-            homeViewController.navigationView?.alpha = 1.0
-            homeViewController.view.animateUsingSpring(withDuration: 0.66,
-                                                       withDamping: 1.0,
-                                                       initialSpringVelocity: 1.0)
-        }
-    }
-    
     /// Controls the navigation presentation of items.
     /// - Parameter state: Corresponding state.
     func stateDidChange(_ state: NavigationView.State) {
-        let navigationView = coordinator.viewController!.navigationView!
+        guard let navigationView = coordinator.viewController?.navigationView else { return }
         
         navigationView.categoriesItemView.viewDidConfigure(for: state)
         

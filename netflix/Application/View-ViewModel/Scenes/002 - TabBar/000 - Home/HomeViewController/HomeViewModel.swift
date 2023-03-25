@@ -20,7 +20,6 @@ private protocol ViewModelProtocol {
     var topSearches: [Media] { get }
     
     var dataSourceState: Observable<HomeTableViewDataSource.State?> { get }
-    var showcase: Observable<Media?> { get }
     var showcases: [HomeTableViewDataSource.State: Media] { get }
     
     var myList: MyList { get }
@@ -47,7 +46,6 @@ final class HomeViewModel {
     fileprivate(set) lazy var topSearches = [Media]()
     
     let dataSourceState: Observable<HomeTableViewDataSource.State?> = Observable(.none)
-    let showcase: Observable<Media?> = Observable(.none)
     lazy var showcases = [HomeTableViewDataSource.State: Media]()
     
     fileprivate(set) lazy var myList = MyList(with: self)
@@ -103,6 +101,16 @@ extension HomeViewModel: ViewModelProtocol {
     /// - Returns: Filtered media array.
     fileprivate func filter(at index: HomeTableViewDataSource.Index) -> [Media] {
         switch index {
+        case .newRelease:
+            switch dataSourceState.value {
+            case .all:
+                return media.shuffled().filter { $0.isNewRelease }
+            case .tvShows:
+                return media.filter { $0.type == "series" && $0.isNewRelease }
+            case .movies:
+                return media.filter { $0.type == "film" && $0.isNewRelease }
+            default: return []
+            }
         case .rated:
             switch dataSourceState.value {
             case .all:

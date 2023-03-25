@@ -47,7 +47,6 @@ extension BrowseOverlayViewModel: ViewModelProtocol {
                 withDamping: 1.0,
                 initialSpringVelocity: 0.7,
                 animations: {
-                    homeViewController.navigationViewContainer.backgroundColor = .black
                     homeViewController.browseOverlayViewContainer.alpha = 1.0
                 })
             
@@ -59,7 +58,6 @@ extension BrowseOverlayViewModel: ViewModelProtocol {
             withDamping: 1.0,
             initialSpringVelocity: 0.7,
             animations: {
-                homeViewController.navigationViewContainer.backgroundColor = .clear
                 homeViewController.browseOverlayViewContainer.alpha = .zero
             }) { done in
                 if done {

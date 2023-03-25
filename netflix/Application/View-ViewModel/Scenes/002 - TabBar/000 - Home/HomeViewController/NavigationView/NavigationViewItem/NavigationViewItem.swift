@@ -126,7 +126,7 @@ extension NavigationViewItem: ViewProtocol {
     /// - Parameter state: Corresponding navigation state.
     func viewDidConfigure(for state: NavigationView.State) {
         guard let tag = NavigationView.State(rawValue: tag) else { return }
-        /// Release changes for `categories` item depending the navigation state.
+        // Release changes for `categories` item depending the navigation state.
         if case .home = state, case .categories = tag {
             button.setTitle(viewModel.title, for: .normal)
             button.titleLabel?.font = UIFont.systemFont(ofSize: 16.0, weight: .bold)

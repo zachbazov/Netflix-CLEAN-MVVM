@@ -27,6 +27,7 @@ final class HomeTableViewDataSource: NSObject {
     fileprivate weak var viewModel: HomeViewModel!
     fileprivate let numberOfRows = 1
     fileprivate(set) var showcaseCell: ShowcaseTableViewCell!
+    var navigationHeaderView: NavigationHeaderView!
     
     /// Create an home's table view data source object.
     /// - Parameters:
@@ -59,10 +60,12 @@ extension HomeTableViewDataSource: DataSourceProtocol {
     
     fileprivate func viewsDidRegister() {
         tableView.register(headerFooter: TableViewHeaderFooterView.self)
+        tableView.register(headerFooter: NavigationHeaderView.self)
         tableView.register(class: ShowcaseTableViewCell.self)
         tableView.register(class: RatedTableViewCell.self)
         tableView.register(class: ResumableTableViewCell.self)
         tableView.register(class: StandardTableViewCell.self)
+        tableView.register(class: BlockbusterTableViewCell.self)
     }
     
     func dataSourceDidChange() {
@@ -95,6 +98,8 @@ extension HomeTableViewDataSource: UITableViewDelegate, UITableViewDataSource {
             return RatedTableViewCell.create(on: tableView, for: indexPath, with: viewModel)
         case .resumable:
             return ResumableTableViewCell.create(on: tableView, for: indexPath, with: viewModel)
+        case .blockbuster:
+            return BlockbusterTableViewCell.create(on: tableView, for: indexPath, with: viewModel)
         default:
             return StandardTableViewCell.create(on: tableView, for: indexPath, with: viewModel)
         }
@@ -106,21 +111,29 @@ extension HomeTableViewDataSource: UITableViewDelegate, UITableViewDataSource {
             return .zero
         }
         switch index {
-        case .display: return view.bounds.height * 0.736
-        case .rated: return view.bounds.height * 0.215
+        case .display: return view.bounds.height * 0.787 - 88.0
+        case .blockbuster: return view.bounds.height * 0.430
         default: return view.bounds.height * 0.215
         }
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        return TableViewHeaderFooterView.create(on: tableView, for: section, with: viewModel)
+        guard let index = Index(rawValue: section) else { return nil }
+        switch index {
+        case .display:
+            guard navigationHeaderView == nil else { return navigationHeaderView }
+            navigationHeaderView = NavigationHeaderView.create(in: tableView, at: section, with: viewModel)
+            return navigationHeaderView
+        default:
+            return TableViewHeaderFooterView.create(on: tableView, for: section, with: viewModel)
+        }
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         guard let index = Index(rawValue: section) else { return .zero }
         switch index {
-        case .display: return 0.0
-        case .rated: return 32.0
+        case .display: return 88.0
+        case .newRelease: return 32.0
         default: return 44.0
         }
     }
@@ -130,26 +143,19 @@ extension HomeTableViewDataSource: UITableViewDelegate, UITableViewDataSource {
     }
 }
 
-// MARK: - UIScrollViewDelegate via UITableView Implementation
-
-extension HomeTableViewDataSource {
-    func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        navigationViewAnimation(with: scrollView)
-    }
-}
-
 // MARK: - Index Type
 
 extension HomeTableViewDataSource {
     /// Section index representation type.
     enum Index: Int, CaseIterable {
         case display
-        case rated
+        case newRelease
         case resumable
         case action
+        case rated
         case sciFi
-        case blockbuster
         case myList
+        case blockbuster
         case crime
         case thriller
         case adventure
@@ -179,6 +185,7 @@ extension HomeTableViewDataSource.Index: Valuable {
     var stringValue: String {
         switch self {
         case .display, .rated, .resumable: return ""
+        case .newRelease: return "New Release"
         case .action: return "Action"
         case .sciFi: return "Sci-Fi"
         case .blockbuster: return "Blockbusters"
@@ -193,28 +200,5 @@ extension HomeTableViewDataSource.Index: Valuable {
         case .familyNchildren: return "Family & Children"
         case .documentary: return "Documentary"
         }
-    }
-}
-
-// MARK: - Private UI Implementation
-
-extension HomeTableViewDataSource {
-    private func navigationViewAnimation(with scrollView: UIScrollView) {
-        guard let homeViewController = viewModel.coordinator?.viewController,
-              let translation = scrollView.panGestureRecognizer.translation(in: homeViewController.view) as CGPoint? else {
-            return
-        }
-        let isScrollingUp = translation.y < 0
-        let targetConstant: CGFloat = isScrollingUp
-            ? -(homeViewController.navigationView?.bounds.size.height ?? .zero)
-            : 0.0
-        let targetAlpha: CGFloat = isScrollingUp ? 0.0 : 1.0
-        
-        let animator = UIViewPropertyAnimator(duration: 0.66, dampingRatio: 1.0) {
-            homeViewController.navigationViewTopConstraint.constant = targetConstant
-            homeViewController.navigationView?.alpha = targetAlpha
-            homeViewController.view.layoutIfNeeded()
-        }
-        animator.startAnimation()
     }
 }

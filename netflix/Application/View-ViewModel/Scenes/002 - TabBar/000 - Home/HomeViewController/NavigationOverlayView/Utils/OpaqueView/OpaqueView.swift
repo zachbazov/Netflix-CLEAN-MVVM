@@ -13,7 +13,7 @@ private protocol ViewProtocol {
     var imageView: UIImageView! { get }
     var blurView: UIVisualEffectView! { get }
     
-    func viewDidUpdate(with media: Media)
+    func viewDidUpdate(with media: Media?)
 }
 
 // MARK: - OpaqueView Type
@@ -49,11 +49,10 @@ final class OpaqueView: View<OpaqueViewViewModel> {
 extension OpaqueView: ViewProtocol {
     /// Release changes for the view by the view model.
     /// - Parameter media: Corresponding media object.
-    func viewDidUpdate(with media: Media) {
-        // Extract the presented media object on `DisplayView`.
-        guard let presentedMedia = media as Media? else { return }
+    func viewDidUpdate(with media: Media?) {
+        guard let presentedMedia = media else { return }
         viewModel = OpaqueViewViewModel(with: presentedMedia)
-        // Release changes.
+        
         viewDidConfigure()
     }
 }

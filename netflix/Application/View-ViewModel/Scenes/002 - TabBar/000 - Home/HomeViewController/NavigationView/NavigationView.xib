@@ -22,44 +22,44 @@
         </placeholder>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
         <view contentMode="scaleToFill" id="RZF-uy-1Dj">
-            <rect key="frame" x="0.0" y="0.0" width="414" height="162"/>
+            <rect key="frame" x="0.0" y="0.0" width="414" height="96"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <subviews>
-                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="f6v-Ra-O22" userLabel="Gradient View">
-                    <rect key="frame" x="0.0" y="0.0" width="414" height="162"/>
+                <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="f6v-Ra-O22" userLabel="Gradient View">
+                    <rect key="frame" x="0.0" y="0.0" width="414" height="96"/>
                 </view>
                 <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="cB3-Lx-GME">
-                    <rect key="frame" x="0.0" y="0.0" width="414" height="162"/>
+                    <rect key="frame" x="0.0" y="0.0" width="414" height="96"/>
                     <subviews>
-                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="hbY-jh-ar7" userLabel="Navigation Bar Dummy Container">
-                            <rect key="frame" x="0.0" y="0.0" width="414" height="54"/>
+                        <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="hbY-jh-ar7" userLabel="Navigation Bar Dummy Container">
+                            <rect key="frame" x="0.0" y="0.0" width="414" height="0.0"/>
                         </view>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="p6X-Bg-Psj" userLabel="Top Container">
-                            <rect key="frame" x="0.0" y="54" width="414" height="54"/>
+                            <rect key="frame" x="0.0" y="0.0" width="414" height="48"/>
                             <subviews>
                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="xi4-Cf-x0R" userLabel="Home Button Container">
-                                    <rect key="frame" x="8" y="7" width="40" height="40"/>
+                                    <rect key="frame" x="8" y="4" width="40" height="40"/>
                                     <constraints>
                                         <constraint firstAttribute="height" constant="40" id="DM7-xw-fpX"/>
                                         <constraint firstAttribute="width" constant="40" id="Jfb-aQ-bvC"/>
                                     </constraints>
                                 </view>
                                 <view tag="1" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="jyM-Yo-6ZJ" userLabel="AirPlay Button Container">
-                                    <rect key="frame" x="270" y="7" width="40" height="40"/>
+                                    <rect key="frame" x="270" y="4" width="40" height="40"/>
                                     <constraints>
                                         <constraint firstAttribute="height" constant="40" id="dqn-OR-gQF"/>
                                         <constraint firstAttribute="width" constant="40" id="m3e-Gu-UY6"/>
                                     </constraints>
                                 </view>
                                 <view tag="2" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="bzF-Ir-7K2" userLabel="Account Button Container">
-                                    <rect key="frame" x="366" y="11" width="32" height="32"/>
+                                    <rect key="frame" x="366" y="8" width="32" height="32"/>
                                     <constraints>
                                         <constraint firstAttribute="height" constant="32" id="SQi-b1-LWK"/>
                                         <constraint firstAttribute="width" constant="32" id="T69-hO-7r8"/>
                                     </constraints>
                                 </view>
                                 <view tag="6" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="rCU-hF-Udf" userLabel="Search Button Container">
-                                    <rect key="frame" x="318" y="7" width="40" height="40"/>
+                                    <rect key="frame" x="318" y="4" width="40" height="40"/>
                                     <constraints>
                                         <constraint firstAttribute="width" constant="40" id="ALz-wQ-e3e"/>
                                         <constraint firstAttribute="height" constant="40" id="ZQC-Br-60j"/>
@@ -78,25 +78,24 @@
                             </constraints>
                         </view>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3MW-2P-t3I" userLabel="Bottom Container">
-                            <rect key="frame" x="0.0" y="108" width="414" height="54"/>
+                            <rect key="frame" x="0.0" y="48" width="414" height="48"/>
                             <subviews>
                                 <stackView opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="dtf-W1-okM">
-                                    <rect key="frame" x="31" y="0.0" width="352" height="54"/>
+                                    <rect key="frame" x="31" y="0.0" width="352" height="48"/>
                                     <subviews>
                                         <view tag="3" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="hup-KA-ylD" userLabel="Leading Item Container">
-                                            <rect key="frame" x="0.0" y="0.0" width="117.5" height="54"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="117.5" height="48"/>
                                         </view>
                                         <view tag="4" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="oaQ-J8-Kai" userLabel="Center Item Container">
-                                            <rect key="frame" x="117.5" y="0.0" width="117.5" height="54"/>
+                                            <rect key="frame" x="117.5" y="0.0" width="117.5" height="48"/>
                                         </view>
                                         <view tag="5" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cNO-pR-kSt" userLabel="Trailing Item Container">
-                                            <rect key="frame" x="235" y="0.0" width="117" height="54"/>
+                                            <rect key="frame" x="235" y="0.0" width="117" height="48"/>
                                         </view>
                                     </subviews>
                                     <constraints>
                                         <constraint firstItem="oaQ-J8-Kai" firstAttribute="width" secondItem="hup-KA-ylD" secondAttribute="width" id="0Cf-YS-lDk"/>
                                         <constraint firstItem="hup-KA-ylD" firstAttribute="width" secondItem="dtf-W1-okM" secondAttribute="width" multiplier="0.333807" id="dZD-4c-6C9"/>
-                                        <constraint firstItem="oaQ-J8-Kai" firstAttribute="height" secondItem="dtf-W1-okM" secondAttribute="height" id="jGm-cj-XzK"/>
                                     </constraints>
                                 </stackView>
                             </subviews>
@@ -110,7 +109,6 @@
                     </subviews>
                     <constraints>
                         <constraint firstAttribute="trailing" secondItem="3MW-2P-t3I" secondAttribute="trailing" id="5RP-0P-dDj"/>
-                        <constraint firstAttribute="bottom" secondItem="3MW-2P-t3I" secondAttribute="bottom" id="7Jp-cO-gCl"/>
                         <constraint firstItem="3MW-2P-t3I" firstAttribute="leading" secondItem="cB3-Lx-GME" secondAttribute="leading" id="Y1q-ff-S4p"/>
                         <constraint firstItem="3MW-2P-t3I" firstAttribute="top" secondItem="p6X-Bg-Psj" secondAttribute="bottom" id="m52-HC-Fi7"/>
                     </constraints>

@@ -25,8 +25,8 @@ struct OpaqueViewViewModel {
     /// Create a opaque view view model object.
     /// - Parameter media: Corresponding media object.
     init(with media: Media) {
-        self.imagePath = media.resources.displayPoster
-        self.identifier = "display-poster_\(media.slug)" as NSString
+        self.imagePath = media.path(forResourceOfType: PresentedPoster.self)!
+        self.identifier = "poster_\(media.slug)" as NSString
         self.imageURL = URL(string: self.imagePath)!
     }
 }

@@ -17,9 +17,9 @@ extension NSAttributedString {
     
     static let placeholderAttributes: Attributes = [.font: UIFont.systemFont(ofSize: 15.0, weight: .semibold),
                                                     .foregroundColor: UIColor.white]
-    static let displayGenresAttributes: Attributes = [.font: UIFont.systemFont(ofSize: 18.0, weight: .bold),
+    static let displayGenresAttributes: Attributes = [.font: UIFont.systemFont(ofSize: 15.0, weight: .medium),
                                                       .foregroundColor: UIColor.white]
-    static let displayGenresSeparatorAttributes: Attributes = [.font: UIFont.systemFont(ofSize: 26.0, weight: .heavy),
+    static let displayGenresSeparatorAttributes: Attributes = [.font: UIFont.systemFont(ofSize: 22.0, weight: .bold),
                                                                .foregroundColor: UIColor.white]
     
     static let newsGenresAttributes: Attributes = [.font: UIFont.systemFont(ofSize: 13.0, weight: .bold),

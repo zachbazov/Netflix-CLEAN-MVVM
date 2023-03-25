@@ -16,9 +16,11 @@ private protocol ViewProtocol {
 // MARK: - ShowcaseView Type
 
 final class ShowcaseView: View<ShowcaseViewViewModel> {
+    @IBOutlet private weak var contentView: UIView!
+    @IBOutlet private weak var container: UIView!
     @IBOutlet private(set) weak var posterImageView: UIImageView!
     @IBOutlet private(set) weak var logoImageView: UIImageView!
-    @IBOutlet private weak var bottomGradientView: UIView!
+    @IBOutlet private weak var bottomGradientView: UIView! // disposable
     @IBOutlet private(set) weak var genresLabel: UILabel!
     @IBOutlet private weak var typeImageView: UIImageView!
     @IBOutlet private(set) weak var panelViewContainer: UIView!
@@ -36,6 +38,7 @@ final class ShowcaseView: View<ShowcaseViewViewModel> {
         self.panelView = PanelView(on: panelViewContainer, with: viewModel)
         self.viewDidDeploySubviews()
         self.viewDidConfigure()
+        self.contentView.constraintToSuperview(self)
     }
     
     required init?(coder: NSCoder) { fatalError() }
@@ -49,10 +52,19 @@ final class ShowcaseView: View<ShowcaseViewViewModel> {
     
     override func viewDidDeploySubviews() {
         setupGradients()
-        setupImageContent()
     }
     
     override func viewDidConfigure() {
+        backgroundColor = .clear
+        
+        let gradient = UIImage.fillGradientStroke(bounds: posterImageView.bounds,
+                                                  colors: [.white.withAlphaComponent(0.5), .clear])
+        let gradientColor = UIColor(patternImage: gradient)
+        posterImageView.layer.borderColor = gradientColor.cgColor
+        posterImageView.layer.borderWidth = 1.5
+        posterImageView.layer.cornerRadius = 12.0
+//        contentView.layer.shadow(.black, radius: 24.0, opacity: 1.0)
+        
         posterImageView.image = nil
         logoImageView.image = nil
         genresLabel.attributedText = nil
@@ -60,7 +72,25 @@ final class ShowcaseView: View<ShowcaseViewViewModel> {
         AsyncImageService.shared.load(
             url: viewModel.posterImageURL,
             identifier: viewModel.posterImageIdentifier) { [weak self] image in
-                mainQueueDispatch { self?.posterImageView.image = image }
+                guard let self = self else { return }
+                mainQueueDispatch { self.posterImageView.image = image }
+                mainQueueDispatch {
+                    let colorComponents = image!.averageColor!.cgColor.components!
+                    let red = colorComponents[0]
+                    let green = colorComponents[1]
+                    let blue = colorComponents[2]
+                    let gradientView = UIView(frame: self.contentView.bounds)
+                    let gradientLayer = CAGradientLayer()
+                    let color = UIColor(red: red, green: green, blue: blue, alpha: 1.0)
+                    gradientLayer.frame = gradientView.bounds
+                    gradientLayer.colors = [UIColor.black.cgColor,
+                                            color.cgColor,
+                                            color.cgColor,
+                                            UIColor.black.cgColor]
+                    gradientLayer.locations = [0.0, 0.2, 0.8, 1.0]
+                    gradientView.layer.addSublayer(gradientLayer)
+                    self.contentView.insertSubview(gradientView, at: 0)
+                }
             }
         
         AsyncImageService.shared.load(
@@ -70,6 +100,25 @@ final class ShowcaseView: View<ShowcaseViewViewModel> {
             }
         
         genresLabel.attributedText = viewModel.attributedGenres
+        
+        self.typeImageView.image = UIImage(named: viewModel.typeImagePath)
+        
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(didTap))
+        contentView.addGestureRecognizer(tapGesture)
+    }
+    
+    @objc func didTap() {
+        let homeViewController = Application.app.coordinator.tabCoordinator.home.viewControllers.first as! HomeViewController
+        let homeViewModel = homeViewController.viewModel
+        guard let state = homeViewModel?.dataSourceState.value else { return }
+        let coordinator = homeViewModel!.coordinator!
+        let section = homeViewModel!.section(at: .resumable)
+        let media = homeViewModel!.showcases[HomeTableViewDataSource.State(rawValue: state.rawValue)!]
+        let rotated = false
+        coordinator.section = section
+        coordinator.media = media
+        coordinator.shouldScreenRotate = rotated
+        coordinator.coordinate(to: .detail)
     }
 }
 
@@ -85,10 +134,6 @@ extension ShowcaseView: ViewProtocol {}
 
 extension ShowcaseView {
     func setupGradients() {
-        bottomGradientView.addGradientLayer(colors: [.clear, .black], locations: [0.0, 0.66])
-    }
-    
-    private func setupImageContent() {
-        posterImageView.contentMode = .scaleAspectFill
+        bottomGradientView.addGradientLayer(colors: [.clear, .black.withAlphaComponent(0.5)], locations: [0.0, 0.66])
     }
 }

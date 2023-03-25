@@ -27,6 +27,7 @@ final class NavigationOverlayView: View<NavigationOverlayViewModel> {
     var footerView: NavigationOverlayFooterView!
     var tabBar: UITabBar!
     private(set) lazy var tableView: UITableView = createTableView()
+    
     /// Create a navigation overlay view object.
     /// - Parameter viewModel: Coordinating view model.
     init(with viewModel: HomeViewModel) {
@@ -56,7 +57,12 @@ final class NavigationOverlayView: View<NavigationOverlayViewModel> {
     }
     
     override func viewDidBindObservers() {
-        viewModel.isPresented.observe(on: self) { [weak self] _ in self?.viewModel.isPresentedDidChange() }
+        viewModel.isPresented.observe(on: self) { [weak self] _ in
+            let homeVC = Application.app.coordinator.tabCoordinator.home.viewControllers.first as! HomeViewController
+            let homeVM = homeVC.viewModel.showcases[HomeTableViewDataSource.State(rawValue: homeVC.viewModel.dataSourceState.value!.rawValue)!]
+            self?.opaqueView.viewDidUpdate(with: homeVM)
+            self?.viewModel.isPresentedDidChange()
+        }
         viewModel.items.observe(on: self) { [weak self] _ in self?.viewModel.dataSourceDidChange() }
     }
     

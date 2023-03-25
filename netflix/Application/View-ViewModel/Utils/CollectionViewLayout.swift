@@ -29,6 +29,7 @@ final class CollectionViewLayout: UICollectionViewFlowLayout, LayoutProtocol {
             guard let width = super.collectionView!.bounds.width as CGFloat? else { return .zero }
             switch layout {
             case .rated: return width / itemsPerLine + lineSpacing
+            case .blockbuster: return width / itemsPerLine + (lineSpacing * itemsPerLine)
             case .detail, .navigationOverlay: return width / itemsPerLine - (lineSpacing * itemsPerLine)
             case .descriptive: return width
             case .trailer: return width
@@ -48,6 +49,7 @@ final class CollectionViewLayout: UICollectionViewFlowLayout, LayoutProtocol {
             case .rated: return super.collectionView!.bounds.height - lineSpacing
             case .resumable: return super.collectionView!.bounds.height - lineSpacing
             case .standard: return super.collectionView!.bounds.height - lineSpacing
+            case .blockbuster: return super.collectionView!.bounds.height - lineSpacing
             case .navigationOverlay, .detail: return 146.0
             case .descriptive: return 156.0
             case .trailer: return 224.0
@@ -85,6 +87,8 @@ final class CollectionViewLayout: UICollectionViewFlowLayout, LayoutProtocol {
             sectionInset = .init(top: 0.0, left: 8.0, bottom: 0.0, right: 0.0)
         case .standard:
             sectionInset = .init(top: 0.0, left: 8.0, bottom: 0.0, right: 0.0)
+        case .blockbuster:
+            sectionInset = .init(top: 0.0, left: 8.0, bottom: 0.0, right: 0.0)
         case .detail:
             sectionInset = .init(top: 0.0, left: 28.0, bottom: 0.0, right: 28.0)
         case .navigationOverlay:
@@ -120,6 +124,7 @@ extension CollectionViewLayout {
         case rated
         case resumable
         case standard
+        case blockbuster
         case navigationOverlay
         case detail
         case descriptive

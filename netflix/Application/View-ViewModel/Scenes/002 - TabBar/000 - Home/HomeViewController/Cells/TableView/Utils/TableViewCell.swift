@@ -12,6 +12,7 @@ import UIKit
 typealias RatedTableViewCell = TableViewCell<RatedCollectionViewCell>
 typealias ResumableTableViewCell = TableViewCell<ResumableCollectionViewCell>
 typealias StandardTableViewCell = TableViewCell<StandardCollectionViewCell>
+typealias BlockbusterTableViewCell = TableViewCell<BlockbusterCollectionViewCell>
 
 // MARK: - ViewInput Type
 
@@ -37,6 +38,7 @@ class TableViewCell<T>: UITableViewCell where T: UICollectionViewCell {
     fileprivate lazy var collectionView: UICollectionView = createCollectionView()
     fileprivate var dataSource: HomeCollectionViewDataSource<T>!
     fileprivate var layout: CollectionViewLayout!
+    
     /// Create a table view cell which holds a collection view.
     /// - Parameters:
     ///   - indexPath: The index path from the table view data source.
@@ -67,7 +69,7 @@ class TableViewCell<T>: UITableViewCell where T: UICollectionViewCell {
     required init?(coder: NSCoder) { fatalError() }
     
     func viewDidLoad() {
-        backgroundColor = .black
+        backgroundColor = .clear
     }
 }
 
@@ -86,6 +88,9 @@ extension TableViewCell: ViewProtocol {
         case .rated:
             layout = CollectionViewLayout(layout: .rated, scrollDirection: .horizontal)
             collectionView.setCollectionViewLayout(layout, animated: false)
+        case .blockbuster:
+            layout = CollectionViewLayout(layout: .blockbuster, scrollDirection: .horizontal)
+            collectionView.setCollectionViewLayout(layout, animated: false)
         default:
             layout = CollectionViewLayout(layout: .standard, scrollDirection: .horizontal)
             collectionView.setCollectionViewLayout(layout, animated: false)
@@ -94,7 +99,7 @@ extension TableViewCell: ViewProtocol {
     
     fileprivate func createCollectionView() -> UICollectionView {
         let collectionView = UICollectionView(frame: bounds, collectionViewLayout: .init())
-        collectionView.backgroundColor = .black
+        collectionView.backgroundColor = .clear
         collectionView.showsVerticalScrollIndicator = false
         collectionView.showsHorizontalScrollIndicator = false
         collectionView.registerNib(T.self)
