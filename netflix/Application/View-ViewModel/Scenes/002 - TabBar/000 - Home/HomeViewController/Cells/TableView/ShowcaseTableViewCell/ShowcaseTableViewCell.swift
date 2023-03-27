@@ -45,6 +45,8 @@ final class ShowcaseTableViewCell: UITableViewCell {
     
     deinit {
         print("deinit \(Self.self)")
+        showcaseView.gradientView.removeFromSuperview()
+        showcaseView.gradientLayer.removeFromSuperlayer()
         showcaseView.removeFromSuperview()
         showcaseView = nil
         viewModel.coordinator = nil

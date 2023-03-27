@@ -82,13 +82,13 @@ final class CollectionViewLayout: UICollectionViewFlowLayout, LayoutProtocol {
         switch layout {
         case .rated:
             minimumLineSpacing = .zero
-            sectionInset = .init(top: 0.0, left: 8.0, bottom: 0.0, right: 0.0)
+            sectionInset = .init(top: 0.0, left: 0.0, bottom: 0.0, right: 0.0)
         case .resumable:
-            sectionInset = .init(top: 0.0, left: 8.0, bottom: 0.0, right: 0.0)
+            sectionInset = .init(top: 0.0, left: 0.0, bottom: 0.0, right: 0.0)
         case .standard:
-            sectionInset = .init(top: 0.0, left: 8.0, bottom: 0.0, right: 0.0)
+            sectionInset = .init(top: 0.0, left: 0.0, bottom: 0.0, right: 0.0)
         case .blockbuster:
-            sectionInset = .init(top: 0.0, left: 8.0, bottom: 0.0, right: 0.0)
+            sectionInset = .init(top: 0.0, left: 0.0, bottom: 0.0, right: 0.0)
         case .detail:
             sectionInset = .init(top: 0.0, left: 28.0, bottom: 0.0, right: 28.0)
         case .navigationOverlay:

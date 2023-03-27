@@ -26,6 +26,8 @@ final class ShowcaseView: View<ShowcaseViewViewModel> {
     @IBOutlet private(set) weak var panelViewContainer: UIView!
     
     private(set) var panelView: PanelView!
+    private(set) var gradientView: UIView!
+    private(set) var gradientLayer = CAGradientLayer()
     
     /// Create a display view object.
     /// - Parameter viewModel: Coordinating view model.
@@ -48,6 +50,8 @@ final class ShowcaseView: View<ShowcaseViewViewModel> {
         panelView.viewDidUnbindObservers()
         panelView.removeFromSuperview()
         panelView = nil
+        gradientView.removeFromSuperview()
+        gradientView = nil
     }
     
     override func viewDidDeploySubviews() {
@@ -63,7 +67,6 @@ final class ShowcaseView: View<ShowcaseViewViewModel> {
         posterImageView.layer.borderColor = gradientColor.cgColor
         posterImageView.layer.borderWidth = 1.5
         posterImageView.layer.cornerRadius = 12.0
-//        contentView.layer.shadow(.red, radius: 24.0, opacity: 1.0)
         
         posterImageView.image = nil
         logoImageView.image = nil
@@ -74,49 +77,49 @@ final class ShowcaseView: View<ShowcaseViewViewModel> {
             identifier: viewModel.posterImageIdentifier) { [weak self] image in
                 guard let self = self else { return }
                 mainQueueDispatch { self.posterImageView.image = image }
-                mainQueueDispatch {
-                    let colorComponents = image!.averageColor!.cgColor.components!
-                    let red = colorComponents[0]
-                    let green = colorComponents[1]
-                    let blue = colorComponents[2]
-                    let gradientView = UIView(frame: self.contentView.bounds)
-                    let gradientLayer = CAGradientLayer()
-                    
-                    let color1 = image!.averageColor
-                    let color2 = image!.areaAverage().darkerColor(for: color1!)
-                    let color3 = color2.darkerColor(for: color2)
-                    
-                    gradientLayer.frame = gradientView.bounds
-                    gradientLayer.colors = [color1!.cgColor,
-                                            color2.cgColor,
-                                            color3.cgColor,
-                                            UIColor.black.cgColor]
-                    gradientLayer.locations = [0.0, 0.3, 0.7, 1.0]
-                    gradientView.layer.addSublayer(gradientLayer)
-                    
-                    self.contentView.insertSubview(gradientView, at: 0)
-                    
-                    let homeViewController = Application.app.coordinator.tabCoordinator.home.viewControllers.first as! HomeViewController
-                    homeViewController.dataSource?.colors = [color1!, color2, color3]
-                    
-                    homeViewController.dataSource?.setupGradient(with: homeViewController)
-                    
-                    self.contentView.layer.shadow(color3, radius: 24.0, opacity: 1.0)
-                }
+                mainQueueDispatch { self.setupGradient(with: image!) }
             }
         
         AsyncImageService.shared.load(
             url: viewModel.logoImageURL,
             identifier: viewModel.logoImageIdentifier) { [weak self] image in
-                mainQueueDispatch { self?.logoImageView.image = image }
+                guard let self = self else { return }
+                mainQueueDispatch { self.logoImageView.image = image }
             }
         
         genresLabel.attributedText = viewModel.attributedGenres
         
-        self.typeImageView.image = UIImage(named: viewModel.typeImagePath)
-        
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(didTap))
         contentView.addGestureRecognizer(tapGesture)
+        
+        guard let typeImagePath = viewModel.typeImagePath,
+              typeImagePath.isNotEmpty else { return }
+        typeImageView.image = UIImage(named: typeImagePath)
+    }
+    
+    func setupGradient(with image: UIImage) {
+        gradientView = UIView(frame: self.contentView.bounds)
+        
+        let color1 = image.averageColor
+        let color2 = image.areaAverage().darkerColor(for: color1!)
+        let color3 = color2.darkerColor(for: color2)
+        
+        gradientLayer.frame = gradientView.bounds
+        gradientLayer.colors = [color1!.cgColor,
+                                color2.cgColor,
+                                color3.cgColor,
+                                UIColor.black.cgColor]
+        gradientLayer.locations = [0.0, 0.3, 0.7, 1.0]
+        gradientView.layer.addSublayer(gradientLayer)
+        
+        contentView.insertSubview(gradientView, at: 0)
+        
+        let homeViewController = Application.app.coordinator.tabCoordinator.home.viewControllers.first as! HomeViewController
+        homeViewController.dataSource?.colors = [color1!, color2, color3]
+        
+        homeViewController.dataSource?.setupGradient(with: homeViewController)
+        
+        contentView.layer.shadow(color3, radius: 24.0, opacity: 1.0)
     }
     
     @objc func didTap() {
@@ -146,6 +149,7 @@ extension ShowcaseView: ViewProtocol {}
 
 extension ShowcaseView {
     func setupGradients() {
-        bottomGradientView.addGradientLayer(colors: [.clear, .black.withAlphaComponent(0.5)], locations: [0.0, 0.66])
+        bottomGradientView.addGradientLayer(colors: [.clear, .black.withAlphaComponent(0.66)],
+                                            locations: [0.0, 0.66])
     }
 }

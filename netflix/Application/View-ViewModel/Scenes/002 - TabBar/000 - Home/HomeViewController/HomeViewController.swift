@@ -50,7 +50,6 @@ final class HomeViewController: Controller<HomeViewModel> {
     
     override func viewDidDeploySubviews() {
         setupDataSource()
-        setupBlurryContainer()
         setupNavigationView()
         setupSegmentControlView()
         setupNavigationOverlay()
@@ -90,13 +89,6 @@ extension HomeViewController: ViewControllerProtocol {}
 extension HomeViewController {
     private func setupDataSource() {
         dataSource = HomeTableViewDataSource(tableView: tableView, viewModel: viewModel)
-    }
-    
-    private func setupBlurryContainer() {
-//        let blurEffect = UIBlurEffect(style: .dark)
-//        let blurView = UIVisualEffectView(effect: blurEffect)
-//        blurryContainer.insertSubview(blurView, at: 0)
-//        blurView.constraintToSuperview(blurryContainer)
     }
     
     private func setupNavigationView() {

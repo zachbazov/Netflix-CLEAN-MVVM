@@ -10,7 +10,6 @@ import Foundation
 // MARK: - Optional Extension
 
 extension Optional {
-    var isNotNil: Bool {
-        return self != nil
-    }
+    var isNil: Bool { self == nil }
+    var isNotNil: Bool { self != nil }
 }

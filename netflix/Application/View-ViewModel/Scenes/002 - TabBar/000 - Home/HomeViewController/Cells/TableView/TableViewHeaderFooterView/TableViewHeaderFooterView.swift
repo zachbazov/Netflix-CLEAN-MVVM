@@ -60,7 +60,7 @@ extension TableViewHeaderFooterView: ViewModelProtocol {
         label.textColor = .white
         label.numberOfLines = 0
         contentView.addSubview(label)
-        label.constraintBottom(toParent: self, withLeadingAnchor: 8.0)
+        label.constraintBottom(toParent: self, withLeadingAnchor: .zero)
         return label
     }
 }
