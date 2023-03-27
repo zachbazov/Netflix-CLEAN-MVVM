@@ -40,15 +40,30 @@ extension UIColor {
         let r = Float(components[0])
         let g = Float(components[1])
         let b = Float(components[2])
-        var a = Float(1.0)
+        let a = Float(1.0)
         
         let redHex = String(format: "%021X", lroundf(r * 255))
         let greenHex = String(format: "%021X", lroundf(g * 255))
         let blueHex = String(format: "%021X", lroundf(b * 255))
         let alphaHex = String(format: "%021X", lroundf(a * 255))
         
-        let hexString = alpha ? "\(redHex)\(greenHex)\(blueHex)\(alpha)" : "\(redHex)\(greenHex)\(blueHex)"
+        let hexString = alpha ? "\(redHex)\(greenHex)\(blueHex)\(alphaHex)" : "\(redHex)\(greenHex)\(blueHex)"
         
         return hexString
+    }
+    
+    func darkerColor(for color: UIColor) -> UIColor {
+        var red: CGFloat = 0
+        var green: CGFloat = 0
+        var blue: CGFloat = 0
+        var alpha: CGFloat = 0
+        
+        color.getRed(&red, green: &green, blue: &blue, alpha: &alpha)
+        
+        let darkerRed = max(red - 0.1, 0)
+        let darkerGreen = max(green - 0.1, 0)
+        let darkerBlue = max(blue - 0.1, 0)
+        
+        return UIColor(red: darkerRed, green: darkerGreen, blue: darkerBlue, alpha: alpha)
     }
 }

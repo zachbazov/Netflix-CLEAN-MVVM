@@ -83,17 +83,25 @@ final class ShowcaseView: View<ShowcaseViewViewModel> {
                     let gradientLayer = CAGradientLayer()
                     
                     let color1 = image!.averageColor
-                    let color2 = image!.areaAverage()
+                    let color2 = image!.areaAverage().darkerColor(for: color1!)
+                    let color3 = color2.darkerColor(for: color2)
                     
                     gradientLayer.frame = gradientView.bounds
-                    gradientLayer.colors = [UIColor.black.cgColor,
-                                            color1!.cgColor,
+                    gradientLayer.colors = [color1!.cgColor,
                                             color2.cgColor,
+                                            color3.cgColor,
                                             UIColor.black.cgColor]
                     gradientLayer.locations = [0.0, 0.3, 0.7, 1.0]
                     gradientView.layer.addSublayer(gradientLayer)
                     
                     self.contentView.insertSubview(gradientView, at: 0)
+                    
+                    let homeViewController = Application.app.coordinator.tabCoordinator.home.viewControllers.first as! HomeViewController
+                    homeViewController.dataSource?.colors = [color1!, color2, color3]
+                    
+                    homeViewController.dataSource?.setupGradient(with: homeViewController)
+                    
+                    self.contentView.layer.shadow(color3, radius: 24.0, opacity: 1.0)
                 }
             }
         
@@ -110,30 +118,6 @@ final class ShowcaseView: View<ShowcaseViewViewModel> {
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(didTap))
         contentView.addGestureRecognizer(tapGesture)
     }
-    
-    
-    func getUIImageBytes<T: UnsignedInteger>(from image: UIImage, as type: T.Type) -> [T]? {
-        guard let cgImage = image.cgImage else { return nil }
-
-        let bytesPerPixel = cgImage.bitsPerPixel / 8
-        let bytesPerRow = cgImage.bytesPerRow % bytesPerPixel == 0 ? cgImage.bytesPerRow : (cgImage.bytesPerRow / bytesPerPixel + 1) * bytesPerPixel
-        let bitmapInfo = CGBitmapInfo(rawValue: CGImageAlphaInfo.premultipliedLast.rawValue)
-        guard let context = CGContext(data: nil, width: cgImage.width, height: cgImage.height, bitsPerComponent: cgImage.bitsPerComponent, bytesPerRow: bytesPerRow, space: cgImage.colorSpace ?? CGColorSpaceCreateDeviceRGB(), bitmapInfo: bitmapInfo.rawValue) else { return nil }
-
-        let rect = CGRect(x: 0, y: 0, width: cgImage.width, height: cgImage.height)
-        context.draw(cgImage, in: rect)
-
-        guard let buffer = context.data else { return nil }
-
-        let capacity = cgImage.height * bytesPerRow / MemoryLayout<T>.stride
-        let bytes = UnsafeBufferPointer<T>(start: buffer.assumingMemoryBound(to: T.self), count: capacity)
-        return Array(bytes)
-    }
-    
-    
-    
-    
-    
     
     @objc func didTap() {
         let homeViewController = Application.app.coordinator.tabCoordinator.home.viewControllers.first as! HomeViewController

@@ -93,7 +93,10 @@ extension HomeViewController {
     }
     
     private func setupBlurryContainer() {
-        blurryContainer.addBlurness()
+//        let blurEffect = UIBlurEffect(style: .dark)
+//        let blurView = UIVisualEffectView(effect: blurEffect)
+//        blurryContainer.insertSubview(blurView, at: 0)
+//        blurView.constraintToSuperview(blurryContainer)
     }
     
     private func setupNavigationView() {

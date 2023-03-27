@@ -29,6 +29,15 @@ final class HomeTableViewDataSource: NSObject {
     fileprivate let numberOfRows = 1
     fileprivate(set) var showcaseCell: ShowcaseTableViewCell!
     
+    
+    let blurEffect = UIBlurEffect(style: .dark)
+    var blurView: UIVisualEffectView?
+    
+    var colors = [UIColor]()
+    
+    var gradientView: UIView!
+    let gradientLayer = CAGradientLayer()
+    
     /// Create an home's table view data source object.
     /// - Parameters:
     ///   - tableView: Corresponding table view.
@@ -154,19 +163,66 @@ extension HomeTableViewDataSource: UITableViewDelegate, UITableViewDataSource {
         let topContainerHeight: CGFloat = isScrollingUp ? 96.0 : 48.0
         let blurryContainerHeight: CGFloat = isScrollingUp ? 202.0 : 162.0
         
+        gradientView?.backgroundColor = .clear
+        
         viewController.segmentControlView?.alpha = segmentControlAlpha
         viewController.segmentContainerHeight.constant = segmentContainerHeight
         viewController.topContainerHeight.constant = topContainerHeight
         viewController.blurryContainerHeight.constant = blurryContainerHeight
         
+        gradientView?.frame = CGRect(x: .zero, y: .zero, width: viewController.topContainer.bounds.width, height: blurryContainerHeight)
+        
+        if offsetY > 0 {
+            if scrollView.contentOffset.y <= -150.0 {
+                if gradientView == nil {
+                    viewController.dataSource?.setupGradient(with: viewController)
+                }
+                
+                blurView?.removeFromSuperview()
+                blurView = nil
+            }
+        } else {
+            gradientView?.removeFromSuperview()
+            gradientView = nil
+            
+            if blurView == nil {
+                viewController.blurryContainer.backgroundColor = .clear
+                blurView = UIVisualEffectView(effect: blurEffect)
+                viewController.blurryContainer.insertSubview(blurView!, at: 0)
+                blurView!.constraintToSuperview(viewController.blurryContainer)
+            }
+        }
+        
         UIView.animate(
             withDuration: 0.25,
             delay: .zero,
-            options: .curveEaseInOut,
-            animations: {
+            options: .curveEaseOut,
+            animations: { [weak self] in
+                self?.blurView?.layoutIfNeeded()
+                self?.gradientView?.layoutIfNeeded()
                 viewController.segmentViewContainer.layoutIfNeeded()
                 viewController.blurryContainer.layoutIfNeeded()
             })
+    }
+    
+    func setupGradient(with controller: HomeViewController) {
+        guard !colors.isEmpty else { return }
+        
+        gradientView = UIView(frame: controller.blurryContainer.bounds)
+        
+        let color1 = colors[0]
+        let color2 = colors[1]
+        let color3 = colors[2]
+        
+        gradientLayer.frame = gradientView.bounds
+        gradientLayer.colors = [UIColor.black.cgColor,
+                                color3.cgColor,
+                                color2.cgColor,
+                                color1.cgColor]
+        gradientLayer.locations = [0.0, 0.3, 0.7, 1.0]
+        gradientView.layer.addSublayer(gradientLayer)
+        
+        controller.blurryContainer.insertSubview(gradientView, at: 0)
     }
 }
 
