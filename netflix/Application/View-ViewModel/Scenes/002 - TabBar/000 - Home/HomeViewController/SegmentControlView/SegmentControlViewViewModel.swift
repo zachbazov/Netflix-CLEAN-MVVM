@@ -1,8 +1,8 @@
 //
-//  NavigationViewViewModel.swift
+//  SegmentControlViewViewModel.swift
 //  netflix
 //
-//  Created by Zach Bazov on 18/09/2022.
+//  Created by Zach Bazov on 17/09/2022.
 //
 
 import Foundation
@@ -16,13 +16,13 @@ private protocol ViewModelProtocol {
     func stateDidChange(_ state: NavigationView.State)
 }
 
-// MARK: - NavigationViewViewModel Type
+// MARK: - SegmentControlViewViewModel Type
 
-final class NavigationViewViewModel {
+final class SegmentControlViewViewModel {
     private let coordinator: HomeViewCoordinator
     
     fileprivate let items: [NavigationViewItem]
-    let state: Observable<NavigationView.State> = Observable(.home)
+    let state: Observable<NavigationView.State> = Observable(.tvShows)
     
     /// Create a navigation view view model object.
     /// - Parameters:
@@ -36,11 +36,11 @@ final class NavigationViewViewModel {
 
 // MARK: - ViewModel Implementation
 
-extension NavigationViewViewModel: ViewModel {}
+extension SegmentControlViewViewModel: ViewModel {}
 
 // MARK: - ViewModelProtocol Implementation
 
-extension NavigationViewViewModel: ViewModelProtocol {
+extension SegmentControlViewViewModel: ViewModelProtocol {
     /// Controls the navigation presentation of items.
     /// - Parameter state: Corresponding state.
     func stateDidChange(_ state: NavigationView.State) {

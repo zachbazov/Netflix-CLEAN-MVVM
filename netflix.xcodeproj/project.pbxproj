@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A1183FC529D07B8C00D76759 /* SegmentControlView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1183FC429D07B8C00D76759 /* SegmentControlView.swift */; };
+		A1183FC729D07CBC00D76759 /* SegmentControlViewViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1183FC629D07CBB00D76759 /* SegmentControlViewViewModel.swift */; };
+		A1183FC929D119BE00D76759 /* UIImage+Color.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1183FC829D119BE00D76759 /* UIImage+Color.swift */; };
 		A127C1E228DD00F100CEE34F /* NavigationOverlayFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A127C1E128DD00F100CEE34F /* NavigationOverlayFooterView.swift */; };
 		A130BC7F294CAB2B0070EA5E /* Localization.swift in Sources */ = {isa = PBXBuildFile; fileRef = A130BC7E294CAB2B0070EA5E /* Localization.swift */; };
 		A130BC82294CC8400070EA5E /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = A130BC84294CC8400070EA5E /* Localizable.strings */; };
@@ -300,9 +303,9 @@
 		A1E81D3B28D15D2E00D044EA /* UITableViewCell+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1E81D3A28D15D2E00D044EA /* UITableViewCell+Extension.swift */; };
 		A1E81D4128D15F4500D044EA /* UIViewController+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1E81D4028D15F4500D044EA /* UIViewController+Extension.swift */; };
 		A1E81D4328D1600100D044EA /* UIColor+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1E81D4228D1600100D044EA /* UIColor+Extension.swift */; };
-		A1F3389329CCD3C8005629DB /* NavigationHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1F3389229CCD3C8005629DB /* NavigationHeaderView.swift */; };
 		A1F3389629CCD634005629DB /* BlockbusterCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1F3389529CCD634005629DB /* BlockbusterCollectionViewCell.swift */; };
 		A1F3389829CCD638005629DB /* BlockbusterCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = A1F3389729CCD638005629DB /* BlockbusterCollectionViewCell.xib */; };
+		A1F3389A29D079E5005629DB /* SegmentControlView.xib in Resources */ = {isa = PBXBuildFile; fileRef = A1F3389929D079E5005629DB /* SegmentControlView.xib */; };
 		A1F56A5C28C668100089BD4F /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1F56A5B28C668100089BD4F /* Theme.swift */; };
 		A1F56A5E28C679980089BD4F /* UIView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1F56A5D28C679980089BD4F /* UIView+Extension.swift */; };
 		A1F56A6928C68FB10089BD4F /* NSAttributedString+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1F56A6828C68FB10089BD4F /* NSAttributedString+Extension.swift */; };
@@ -321,6 +324,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		A1183FC429D07B8C00D76759 /* SegmentControlView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SegmentControlView.swift; sourceTree = "<group>"; };
+		A1183FC629D07CBB00D76759 /* SegmentControlViewViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SegmentControlViewViewModel.swift; sourceTree = "<group>"; };
+		A1183FC829D119BE00D76759 /* UIImage+Color.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+Color.swift"; sourceTree = "<group>"; };
 		A127C1E128DD00F100CEE34F /* NavigationOverlayFooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationOverlayFooterView.swift; sourceTree = "<group>"; };
 		A130BC7E294CAB2B0070EA5E /* Localization.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Localization.swift; sourceTree = "<group>"; };
 		A130BC83294CC8400070EA5E /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -617,9 +623,9 @@
 		A1E81D3A28D15D2E00D044EA /* UITableViewCell+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITableViewCell+Extension.swift"; sourceTree = "<group>"; };
 		A1E81D4028D15F4500D044EA /* UIViewController+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Extension.swift"; sourceTree = "<group>"; };
 		A1E81D4228D1600100D044EA /* UIColor+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Extension.swift"; sourceTree = "<group>"; };
-		A1F3389229CCD3C8005629DB /* NavigationHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationHeaderView.swift; sourceTree = "<group>"; };
 		A1F3389529CCD634005629DB /* BlockbusterCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockbusterCollectionViewCell.swift; sourceTree = "<group>"; };
 		A1F3389729CCD638005629DB /* BlockbusterCollectionViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = BlockbusterCollectionViewCell.xib; sourceTree = "<group>"; };
+		A1F3389929D079E5005629DB /* SegmentControlView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SegmentControlView.xib; sourceTree = "<group>"; };
 		A1F56A5B28C668100089BD4F /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
 		A1F56A5D28C679980089BD4F /* UIView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Extension.swift"; sourceTree = "<group>"; };
 		A1F56A6828C68FB10089BD4F /* NSAttributedString+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSAttributedString+Extension.swift"; sourceTree = "<group>"; };
@@ -645,6 +651,16 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		A1183FCA29D11C0600D76759 /* SegmentControlView */ = {
+			isa = PBXGroup;
+			children = (
+				A1183FC429D07B8C00D76759 /* SegmentControlView.swift */,
+				A1183FC629D07CBB00D76759 /* SegmentControlViewViewModel.swift */,
+				A1F3389929D079E5005629DB /* SegmentControlView.xib */,
+			);
+			path = SegmentControlView;
+			sourceTree = "<group>";
+		};
 		A130BC91294CE08F0070EA5E /* 000 - Home */ = {
 			isa = PBXGroup;
 			children = (
@@ -1060,6 +1076,7 @@
 				A1B70A80293D8E7300C718C6 /* HomeViewController.xib */,
 				A1E81D1028CFE2B300D044EA /* Cells */,
 				A1AD25C328D4D25400F793B3 /* NavigationView */,
+				A1183FCA29D11C0600D76759 /* SegmentControlView */,
 				A1BA1DAA28D9D3D500730EA8 /* NavigationOverlayView */,
 				A18D851A29403CD100840045 /* BrowseOverlayView */,
 			);
@@ -1224,6 +1241,7 @@
 				A1AA28F028F738D80011EE9D /* UICollectionView+Register.swift */,
 				A1AD25BB28D3FBDC00F793B3 /* UICollectionViewCell+Extension.swift */,
 				A1BA1DA228D8149B00730EA8 /* UIImage+Rendering.swift */,
+				A1183FC829D119BE00D76759 /* UIImage+Color.swift */,
 				A1B0DE5929560F5900307866 /* UINavigationController+Identifier.swift */,
 				A1B0DE5829545A0600307866 /* UIView */,
 				A1E81D4628D1617E00D044EA /* UIViewController */,
@@ -2007,7 +2025,6 @@
 			children = (
 				A1AC9FB029A6476100DAD66D /* Utils */,
 				A1AD25AB28D2A6C200F793B3 /* ShowcaseTableViewCell */,
-				A1F3389129CCD3BF005629DB /* NavigationHeaderView */,
 				A1B70A86293E5BB900C718C6 /* TableViewHeaderFooterView */,
 			);
 			path = TableView;
@@ -2048,14 +2065,6 @@
 				A18B993E28BFD77F0077A5A6 /* UIViewController+ActivityIndicator.swift */,
 			);
 			path = UIViewController;
-			sourceTree = "<group>";
-		};
-		A1F3389129CCD3BF005629DB /* NavigationHeaderView */ = {
-			isa = PBXGroup;
-			children = (
-				A1F3389229CCD3C8005629DB /* NavigationHeaderView.swift */,
-			);
-			path = NavigationHeaderView;
 			sourceTree = "<group>";
 		};
 		A1F3389429CCD622005629DB /* BlockbusterCollectionViewCell */ = {
@@ -2172,6 +2181,7 @@
 				A1AC9FB829A65E5300DAD66D /* AlertView.xib in Resources */,
 				A130BCBF29510CA80070EA5E /* DownloadsViewController.xib in Resources */,
 				A1E81D3428CFF95300D044EA /* StandardCollectionViewCell.xib in Resources */,
+				A1F3389A29D079E5005629DB /* SegmentControlView.xib in Resources */,
 				A1741D3028E6968000F3C46B /* DetailDescriptionView.xib in Resources */,
 				A130BCE2295134520070EA5E /* NewsNavigationView.xib in Resources */,
 				A14E0CDD29C08DD500F55500 /* UserProfileViewController.xib in Resources */,
@@ -2229,6 +2239,7 @@
 				A130BCAF29509CC20070EA5E /* SearchCollectionViewCell.swift in Sources */,
 				A1B70A8A293E5E0400C718C6 /* Coordinate.swift in Sources */,
 				A1AD25BE28D3FC1200F793B3 /* UITableViewHeaderFooterView+Reusable.swift in Sources */,
+				A1183FC929D119BE00D76759 /* UIImage+Color.swift in Sources */,
 				A1AE02D1293BA29A00AF0BD6 /* DeviceOrientation.swift in Sources */,
 				A1B70A73293D6DC500C718C6 /* Coordinator.swift in Sources */,
 				A1AA28D428F590B30011EE9D /* EpisodeCollectionViewCell.swift in Sources */,
@@ -2333,7 +2344,6 @@
 				A1741D3F28EBD33200F3C46B /* AgeRestrictionView.swift in Sources */,
 				A14E0CF429C330A100F55500 /* UserProfileViewController.swift in Sources */,
 				A130BC96294CE0AF0070EA5E /* SearchViewModel.swift in Sources */,
-				A1F3389329CCD3C8005629DB /* NavigationHeaderView.swift in Sources */,
 				A1AA28CC28F4C3710011EE9D /* MediaPlayer.swift in Sources */,
 				A1B70A71293D578600C718C6 /* ViewModel.swift in Sources */,
 				A1B0D43029AE6FD4009977AB /* FastLaughsViewController.swift in Sources */,
@@ -2424,6 +2434,7 @@
 				A18B994A28BFD9DD0077A5A6 /* User+Mapping.swift in Sources */,
 				A14E0CC329BB983300F55500 /* NotificationCollectionViewCell.swift in Sources */,
 				A14E0CCF29BCBE6D00F55500 /* ProfileCollectionViewDataSource.swift in Sources */,
+				A1183FC729D07CBC00D76759 /* SegmentControlViewViewModel.swift in Sources */,
 				A1D23ABA29CA1C9C00748029 /* Optional+Extension.swift in Sources */,
 				A14E0CB729BB979000F55500 /* ProfileCollectionViewCell.swift in Sources */,
 				A18B995728BFF66C0077A5A6 /* SectionDTO+Mapping.swift in Sources */,
@@ -2448,6 +2459,7 @@
 				A186921C28CA2ED20087DE3B /* CollectionViewCellViewModel.swift in Sources */,
 				A19956DF29019A7700B7D655 /* ListDTO+Mapping.swift in Sources */,
 				A130BCE02951344C0070EA5E /* NewsNavigationView.swift in Sources */,
+				A1183FC529D07B8C00D76759 /* SegmentControlView.swift in Sources */,
 				A130BCDB29511E8C0070EA5E /* NewsViewController.swift in Sources */,
 				A130BCC7295115AC0070EA5E /* DownloadsNavigationView.swift in Sources */,
 				A1E81D0F28CFE21300D044EA /* CollectionViewLayout.swift in Sources */,

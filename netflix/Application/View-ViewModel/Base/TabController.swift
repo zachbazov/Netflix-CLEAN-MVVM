@@ -12,6 +12,6 @@ import UIKit
 class TabController: UITabBarController {
     func viewDidConfigure() {
         tabBar.barStyle = .black
-        tabBar.isTranslucent = false
+        tabBar.isTranslucent = true
     }
 }

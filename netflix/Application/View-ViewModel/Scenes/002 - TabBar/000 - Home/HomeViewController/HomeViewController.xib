@@ -4,13 +4,22 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21505"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="HomeViewController" customModule="netflix" customModuleProvider="target">
             <connections>
+                <outlet property="blurryContainer" destination="Z8G-SO-CB5" id="MPy-Tk-vvN"/>
+                <outlet property="blurryContainerHeight" destination="Hey-qv-1iW" id="qFZ-E8-8aU"/>
                 <outlet property="browseOverlayViewContainer" destination="q4T-AG-HT6" id="DKN-T8-CZU"/>
+                <outlet property="navigationContainerBottom" destination="SsU-cn-eUe" id="mIr-hX-5Ow"/>
+                <outlet property="navigationViewContainer" destination="zcf-b3-eQ7" id="1FD-hX-2fU"/>
+                <outlet property="segmentContainerHeight" destination="9AC-eH-YoE" id="zsw-RJ-zv0"/>
+                <outlet property="segmentViewContainer" destination="NOf-gN-KNT" id="DE8-dS-oiW"/>
                 <outlet property="tableView" destination="dfl-3U-b2R" id="POV-S2-ces"/>
+                <outlet property="topContainer" destination="dHz-nr-OmN" id="sNf-6e-pjT"/>
+                <outlet property="topContainerHeight" destination="SW6-jG-ecE" id="DGe-51-NKq"/>
                 <outlet property="view" destination="aac-7C-DY6" id="7Fy-dA-Lf8"/>
             </connections>
         </placeholder>
@@ -23,14 +32,52 @@
                     <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                     <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                 </tableView>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Z8G-SO-CB5" userLabel="Blurry Container">
+                    <rect key="frame" x="0.0" y="-48" width="393" height="202"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="202" id="Hey-qv-1iW"/>
+                    </constraints>
+                </view>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="dHz-nr-OmN" userLabel="Top Container">
+                    <rect key="frame" x="0.0" y="59" width="393" height="96"/>
+                    <subviews>
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="zcf-b3-eQ7" userLabel="Navigation Container">
+                            <rect key="frame" x="0.0" y="0.0" width="393" height="48"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="48" id="SsU-cn-eUe"/>
+                            </constraints>
+                        </view>
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="NOf-gN-KNT" userLabel="Segment Container">
+                            <rect key="frame" x="0.0" y="48" width="393" height="48"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="48" id="9AC-eH-YoE"/>
+                            </constraints>
+                        </view>
+                    </subviews>
+                    <constraints>
+                        <constraint firstItem="NOf-gN-KNT" firstAttribute="leading" secondItem="dHz-nr-OmN" secondAttribute="leading" id="QPT-Qk-QpA"/>
+                        <constraint firstAttribute="height" constant="96" id="SW6-jG-ecE"/>
+                        <constraint firstAttribute="trailing" secondItem="zcf-b3-eQ7" secondAttribute="trailing" id="UQa-CF-QAR"/>
+                        <constraint firstAttribute="trailing" secondItem="NOf-gN-KNT" secondAttribute="trailing" id="b0J-Ii-tQe"/>
+                        <constraint firstItem="zcf-b3-eQ7" firstAttribute="top" secondItem="dHz-nr-OmN" secondAttribute="top" id="eV0-IN-zyD"/>
+                        <constraint firstItem="zcf-b3-eQ7" firstAttribute="leading" secondItem="dHz-nr-OmN" secondAttribute="leading" id="gak-22-bgm"/>
+                        <constraint firstItem="NOf-gN-KNT" firstAttribute="top" secondItem="dHz-nr-OmN" secondAttribute="top" constant="48" id="gxX-SD-XeB"/>
+                    </constraints>
+                </view>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="q4T-AG-HT6" userLabel="Browse Overlay View Container">
                     <rect key="frame" x="0.0" y="162" width="393" height="690"/>
                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                 </view>
             </subviews>
+            <viewLayoutGuide key="safeArea" id="VM1-z1-Dbe"/>
             <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
             <constraints>
+                <constraint firstItem="Z8G-SO-CB5" firstAttribute="leading" secondItem="VM1-z1-Dbe" secondAttribute="leading" id="0X4-gS-Evx"/>
+                <constraint firstItem="Z8G-SO-CB5" firstAttribute="top" secondItem="aac-7C-DY6" secondAttribute="top" constant="-48" id="42V-dv-LTR"/>
+                <constraint firstItem="dHz-nr-OmN" firstAttribute="leading" secondItem="aac-7C-DY6" secondAttribute="leading" id="AE0-1S-mAD"/>
                 <constraint firstAttribute="trailing" secondItem="q4T-AG-HT6" secondAttribute="trailing" id="Ag7-xy-g2y"/>
+                <constraint firstAttribute="trailing" secondItem="dHz-nr-OmN" secondAttribute="trailing" id="CJN-mC-ZG8"/>
+                <constraint firstItem="VM1-z1-Dbe" firstAttribute="trailing" secondItem="Z8G-SO-CB5" secondAttribute="trailing" id="JZN-xc-W7b"/>
                 <constraint firstItem="q4T-AG-HT6" firstAttribute="height" secondItem="aac-7C-DY6" secondAttribute="height" multiplier="0.809859" id="SYl-4p-tYD"/>
                 <constraint firstItem="dfl-3U-b2R" firstAttribute="leading" secondItem="aac-7C-DY6" secondAttribute="leading" id="V1k-WO-ucP"/>
                 <constraint firstAttribute="bottom" secondItem="dfl-3U-b2R" secondAttribute="bottom" id="c3a-eP-LkU"/>
@@ -38,8 +85,9 @@
                 <constraint firstItem="q4T-AG-HT6" firstAttribute="leading" secondItem="aac-7C-DY6" secondAttribute="leading" id="khb-Yl-Mmq"/>
                 <constraint firstAttribute="trailing" secondItem="dfl-3U-b2R" secondAttribute="trailing" id="sXK-Bd-IJv"/>
                 <constraint firstItem="dfl-3U-b2R" firstAttribute="top" secondItem="aac-7C-DY6" secondAttribute="top" id="t2h-PY-cUN"/>
+                <constraint firstItem="dHz-nr-OmN" firstAttribute="top" secondItem="VM1-z1-Dbe" secondAttribute="top" id="wdq-Bv-taW"/>
             </constraints>
-            <point key="canvasLocation" x="674" y="9"/>
+            <point key="canvasLocation" x="672.51908396946567" y="8.4507042253521139"/>
         </view>
     </objects>
 </document>

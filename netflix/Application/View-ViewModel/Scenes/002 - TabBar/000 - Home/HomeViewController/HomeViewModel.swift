@@ -29,6 +29,7 @@ private protocol ViewModelProtocol {
     func section(at index: HomeTableViewDataSource.Index) -> Section
     func filter(sections: [Section])
     func filter(at index: HomeTableViewDataSource.Index) -> [Media]
+    func filterShowcases()
 }
 
 // MARK: - HomeViewModel Type
@@ -68,6 +69,8 @@ extension HomeViewModel: ViewModel {
     
     func dataDidDownload() {
         ActivityIndicatorView.viewDidHide()
+        
+        filterShowcases()
         
         guard let viewController = coordinator?.viewController else { return }
         mainQueueDispatch { viewController.viewDidConfigure() }
@@ -181,6 +184,20 @@ extension HomeViewModel: ViewModelProtocol {
                     .filter { $0.type == "film" }
                     .filter { $0.genres.contains(sections[index.rawValue].title) }
             default: return []
+            }
+        }
+    }
+    
+    fileprivate func filterShowcases() {
+        HomeTableViewDataSource.State.allCases.forEach {
+            guard showcases[$0] == nil else { return }
+            switch $0 {
+            case .all:
+                showcases[$0] = media.randomElement()
+            case .tvShows:
+                showcases[$0] = media.filter { $0.type == "series" }.randomElement()!
+            case .movies:
+                showcases[$0] = media.filter { $0.type == "film" }.randomElement()!
             }
         }
     }
@@ -321,18 +338,6 @@ extension HomeViewModel: DataProviderProtocol {
         let response = await mediaUseCase.request(endpoint: .getAllMedia, for: MediaHTTPDTO.Response.self)
         guard let media = response?.data.toDomain() else { return }
         self.media = media
-        
-        HomeTableViewDataSource.State.allCases.forEach {
-            guard showcases[$0] == nil else { return }
-            switch $0 {
-            case .all:
-                showcases[$0] = media.randomElement()
-            case .tvShows:
-                showcases[$0] = media.filter { $0.type == "series" }.randomElement()!
-            case .movies:
-                showcases[$0] = media.filter { $0.type == "film" }.randomElement()!
-            }
-        }
     }
     
     fileprivate func topSearchesDidLoad() async {

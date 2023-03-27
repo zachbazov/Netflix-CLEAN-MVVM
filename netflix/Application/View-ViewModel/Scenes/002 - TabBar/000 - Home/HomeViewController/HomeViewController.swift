@@ -19,10 +19,19 @@ private protocol ViewControllerProtocol {
 
 final class HomeViewController: Controller<HomeViewModel> {
     @IBOutlet private(set) var tableView: UITableView!
+    @IBOutlet private(set) var blurryContainer: UIView!
+    @IBOutlet private(set) var topContainer: UIView!
+    @IBOutlet private(set) var navigationViewContainer: UIView!
+    @IBOutlet private(set) var segmentViewContainer: UIView!
     @IBOutlet private(set) var browseOverlayViewContainer: UIView!
+    @IBOutlet private(set) var topContainerHeight: NSLayoutConstraint!
+    @IBOutlet private(set) var segmentContainerHeight: NSLayoutConstraint!
+    @IBOutlet private(set) var navigationContainerBottom: NSLayoutConstraint!
+    @IBOutlet private(set) var blurryContainerHeight: NSLayoutConstraint!
     
     private(set) var dataSource: HomeTableViewDataSource?
     var navigationView: NavigationView?
+    var segmentControlView: SegmentControlView?
     var navigationOverlayView: NavigationOverlayView!
     var browseOverlayView: BrowseOverlayView?
     
@@ -41,6 +50,9 @@ final class HomeViewController: Controller<HomeViewModel> {
     
     override func viewDidDeploySubviews() {
         setupDataSource()
+        setupBlurryContainer()
+        setupNavigationView()
+        setupSegmentControlView()
         setupNavigationOverlay()
         setupBrowseOverlayView()
     }
@@ -80,6 +92,18 @@ extension HomeViewController {
         dataSource = HomeTableViewDataSource(tableView: tableView, viewModel: viewModel)
     }
     
+    private func setupBlurryContainer() {
+        blurryContainer.addBlurness()
+    }
+    
+    private func setupNavigationView() {
+        navigationView = NavigationView(on: navigationViewContainer, with: viewModel)
+    }
+    
+    private func setupSegmentControlView() {
+        segmentControlView = SegmentControlView(on: segmentViewContainer, with: viewModel)
+    }
+    
     private func setupNavigationOverlay() {
         navigationOverlayView = NavigationOverlayView(with: viewModel)
     }
@@ -87,110 +111,4 @@ extension HomeViewController {
     private func setupBrowseOverlayView() {
         browseOverlayView = BrowseOverlayView(on: browseOverlayViewContainer, with: viewModel)
     }
-}
-
-extension UIImage {
-    var averageColor: UIColor? {
-        guard let inputImage = CIImage(image: self) else { return nil }
-        let extentVector = CIVector(x: inputImage.extent.origin.x, y: inputImage.extent.origin.y, z: inputImage.extent.size.width, w: inputImage.extent.size.height)
-        
-        guard let filter = CIFilter(name: "CIAreaAverage", parameters: [kCIInputImageKey: inputImage, kCIInputExtentKey: extentVector]) else { return nil }
-        guard let outputImage = filter.outputImage else { return nil }
-        
-        var bitmap = [UInt8](repeating: 0, count: 4)
-        let context = CIContext(options: [.workingColorSpace: kCFNull!])
-        context.render(outputImage, toBitmap: &bitmap, rowBytes: 4, bounds: CGRect(x: 0, y: 0, width: 1, height: 1), format: .RGBA8, colorSpace: nil)
-        
-        return UIColor(red: CGFloat(bitmap[0]) / 255, green: CGFloat(bitmap[1]) / 255, blue: CGFloat(bitmap[2]) / 255, alpha: CGFloat(bitmap[3]) / 255)
-    }
-    
-    func areaAverage() -> UIColor {
-        var bitmap = [UInt8](repeating: 0, count: 4)
-        
-        if #available(iOS 9.0, *) {
-            let context = CIContext()
-            let inputImage: CIImage = ciImage ?? CoreImage.CIImage(cgImage: cgImage!)
-            let extent = inputImage.extent
-            let inputExtent = CIVector(x: extent.origin.x, y: extent.origin.y, z: extent.size.width, w: extent.size.height)
-            let filter = CIFilter(name: "CIAreaAverage", parameters: [kCIInputImageKey: inputImage, kCIInputExtentKey: inputExtent])!
-            let outputImage = filter.outputImage!
-            let outputExtent = outputImage.extent
-            assert(outputExtent.size.width == 1 && outputExtent.size.height == 1)
-            
-            context.render(outputImage, toBitmap: &bitmap, rowBytes: 4, bounds: CGRect(x: 0, y: 0, width: 1, height: 1), format: CIFormat.RGBA8, colorSpace: CGColorSpaceCreateDeviceRGB())
-        } else {
-            let context = CGContext(data: &bitmap, width: 1, height: 1, bitsPerComponent: 8, bytesPerRow: 4, space: CGColorSpaceCreateDeviceRGB(), bitmapInfo: CGImageAlphaInfo.premultipliedLast.rawValue)!
-            let inputImage = cgImage ?? CIContext().createCGImage(ciImage!, from: ciImage!.extent)
-            
-            context.draw(inputImage!, in: CGRect(x: 0, y: 0, width: 1, height: 1))
-        }
-        
-        let result = UIColor(red: CGFloat(bitmap[0]) / 255.0, green: CGFloat(bitmap[1]) / 255.0, blue: CGFloat(bitmap[2]) / 255.0, alpha: CGFloat(bitmap[3]) / 255.0)
-        return result
-    }
-}
-
-extension UIColor {
-    convenience init?(hex: String) {
-        var hexSanitized = hex.trimmingCharacters(in: .whitespacesAndNewlines)
-        hexSanitized = hexSanitized.replacingOccurrences(of: "#", with: "")
-
-        var rgb: UInt32 = 0
-
-        var r: CGFloat = 0.0
-        var g: CGFloat = 0.0
-        var b: CGFloat = 0.0
-        var a: CGFloat = 1.0
-
-        let length = hexSanitized.count
-
-        guard Scanner(string: hexSanitized).scanHexInt32(&rgb) else { return nil }
-
-        if length == 6 {
-            r = CGFloat((rgb & 0xFF0000) >> 16) / 255.0
-            g = CGFloat((rgb & 0x00FF00) >> 8) / 255.0
-            b = CGFloat(rgb & 0x0000FF) / 255.0
-
-        } else if length == 8 {
-            r = CGFloat((rgb & 0xFF000000) >> 24) / 255.0
-            g = CGFloat((rgb & 0x00FF0000) >> 16) / 255.0
-            b = CGFloat((rgb & 0x0000FF00) >> 8) / 255.0
-            a = CGFloat(rgb & 0x000000FF) / 255.0
-
-        } else {
-            return nil
-        }
-
-        self.init(red: r, green: g, blue: b, alpha: a)
-    }
-
-    // MARK: - Computed Properties
-
-    var toHex: String? {
-        return toHex()
-    }
-
-    // MARK: - From UIColor to String
-
-    func toHex(alpha: Bool = false) -> String? {
-        guard let components = cgColor.components, components.count >= 3 else {
-            return nil
-        }
-
-        let r = Float(components[0])
-        let g = Float(components[1])
-        let b = Float(components[2])
-        var a = Float(1.0)
-
-        if components.count >= 4 {
-            a = Float(components[3])
-        }
-
-        if alpha {
-            return String(format: "%02lX%02lX%02lX%02lX", lroundf(r * 255), lroundf(g * 255), lroundf(b * 255), lroundf(a * 255))
-        } else {
-            return String(format: "%02lX%02lX%02lX", lroundf(r * 255), lroundf(g * 255), lroundf(b * 255))
-        }
-    }
-
 }

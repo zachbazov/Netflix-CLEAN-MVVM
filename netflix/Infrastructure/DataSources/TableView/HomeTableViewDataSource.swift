@@ -18,6 +18,7 @@ private protocol DataSourceProtocol {
     func viewDidLoad()
     func viewsDidRegister()
     func dataSourceDidChange()
+    func insetContent()
 }
 
 // MARK: - HomeTableViewDataSource Type
@@ -27,7 +28,6 @@ final class HomeTableViewDataSource: NSObject {
     fileprivate weak var viewModel: HomeViewModel!
     fileprivate let numberOfRows = 1
     fileprivate(set) var showcaseCell: ShowcaseTableViewCell!
-    var navigationHeaderView: NavigationHeaderView!
     
     /// Create an home's table view data source object.
     /// - Parameters:
@@ -56,11 +56,11 @@ final class HomeTableViewDataSource: NSObject {
 extension HomeTableViewDataSource: DataSourceProtocol {
     fileprivate func viewDidLoad() {
         viewsDidRegister()
+        insetContent()
     }
     
     fileprivate func viewsDidRegister() {
         tableView.register(headerFooter: TableViewHeaderFooterView.self)
-        tableView.register(headerFooter: NavigationHeaderView.self)
         tableView.register(class: ShowcaseTableViewCell.self)
         tableView.register(class: RatedTableViewCell.self)
         tableView.register(class: ResumableTableViewCell.self)
@@ -74,6 +74,10 @@ extension HomeTableViewDataSource: DataSourceProtocol {
         tableView.delegate = self
         tableView.dataSource = self
         tableView.reloadData()
+    }
+    
+    fileprivate func insetContent() {
+        tableView.contentInset = .init(top: 88.0, left: .zero, bottom: .zero, right: .zero)
     }
 }
 
@@ -111,7 +115,7 @@ extension HomeTableViewDataSource: UITableViewDelegate, UITableViewDataSource {
             return .zero
         }
         switch index {
-        case .display: return view.bounds.height * 0.787 - 88.0
+        case .display: return view.bounds.height * 0.710 - 88.0
         case .blockbuster: return view.bounds.height * 0.430
         default: return view.bounds.height * 0.215
         }
@@ -120,10 +124,6 @@ extension HomeTableViewDataSource: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         guard let index = Index(rawValue: section) else { return nil }
         switch index {
-        case .display:
-            guard navigationHeaderView == nil else { return navigationHeaderView }
-            navigationHeaderView = NavigationHeaderView.create(in: tableView, at: section, with: viewModel)
-            return navigationHeaderView
         default:
             return TableViewHeaderFooterView.create(on: tableView, for: section, with: viewModel)
         }
@@ -132,7 +132,7 @@ extension HomeTableViewDataSource: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         guard let index = Index(rawValue: section) else { return .zero }
         switch index {
-        case .display: return 88.0
+        case .display: return .zero
         case .newRelease: return 32.0
         default: return 44.0
         }
@@ -140,6 +140,33 @@ extension HomeTableViewDataSource: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         cell.opacityAnimation()
+    }
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        guard let viewController = viewModel.coordinator?.viewController,
+              let view = viewController.view,
+              let offsetY = scrollView.panGestureRecognizer.translation(in: view).y as CGFloat? else { return }
+        
+        let isScrollingUp = offsetY > 0
+//        let isScrollingDown = offsetY <= 0 || offsetY < -55.0
+        let segmentControlAlpha: CGFloat = isScrollingUp ? 1.0 : .zero
+        let segmentContainerHeight: CGFloat = isScrollingUp ? 48.0 : .zero
+        let topContainerHeight: CGFloat = isScrollingUp ? 96.0 : 48.0
+        let blurryContainerHeight: CGFloat = isScrollingUp ? 202.0 : 162.0
+        
+        viewController.segmentControlView?.alpha = segmentControlAlpha
+        viewController.segmentContainerHeight.constant = segmentContainerHeight
+        viewController.topContainerHeight.constant = topContainerHeight
+        viewController.blurryContainerHeight.constant = blurryContainerHeight
+        
+        UIView.animate(
+            withDuration: 0.25,
+            delay: .zero,
+            options: .curveEaseInOut,
+            animations: {
+                viewController.segmentViewContainer.layoutIfNeeded()
+                viewController.blurryContainer.layoutIfNeeded()
+            })
     }
 }
 

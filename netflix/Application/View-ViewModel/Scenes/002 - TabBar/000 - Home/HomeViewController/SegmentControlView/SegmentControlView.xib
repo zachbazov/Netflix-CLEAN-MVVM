@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="21507" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21505"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="SegmentControlView" customModule="netflix" customModuleProvider="target">
+            <connections>
+                <outlet property="bottomContainer" destination="jz8-FB-weZ" id="9jd-xN-Iiq"/>
+                <outlet property="categoriesItemViewContainer" destination="zfd-z3-48d" id="G5K-5o-izh"/>
+                <outlet property="itemsCenterXConstraint" destination="msg-hG-W8T" id="Bwh-Qo-lSW"/>
+                <outlet property="moviesItemViewContainer" destination="mvP-bl-NAW" id="JGb-wf-UsS"/>
+                <outlet property="tvShowsItemViewContainer" destination="Alp-ib-r8C" id="s4Z-vg-8po"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="HCM-Kf-nnt">
+            <rect key="frame" x="0.0" y="0.0" width="414" height="48"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <subviews>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="jz8-FB-weZ" userLabel="Bottom Container">
+                    <rect key="frame" x="0.0" y="0.0" width="414" height="48"/>
+                    <subviews>
+                        <stackView opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="g5h-mD-16a">
+                            <rect key="frame" x="31" y="0.0" width="352" height="48"/>
+                            <subviews>
+                                <view tag="4" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Alp-ib-r8C" userLabel="Leading Item Container">
+                                    <rect key="frame" x="0.0" y="0.0" width="117.66666666666667" height="48"/>
+                                </view>
+                                <view tag="5" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="mvP-bl-NAW" userLabel="Center Item Container">
+                                    <rect key="frame" x="117.66666666666666" y="0.0" width="117.33333333333334" height="48"/>
+                                </view>
+                                <view tag="6" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="zfd-z3-48d" userLabel="Trailing Item Container">
+                                    <rect key="frame" x="235" y="0.0" width="117" height="48"/>
+                                </view>
+                            </subviews>
+                            <constraints>
+                                <constraint firstItem="mvP-bl-NAW" firstAttribute="width" secondItem="Alp-ib-r8C" secondAttribute="width" id="NRn-XS-imw"/>
+                                <constraint firstItem="Alp-ib-r8C" firstAttribute="width" secondItem="g5h-mD-16a" secondAttribute="width" multiplier="0.333807" id="ZHD-iU-pyx"/>
+                            </constraints>
+                        </stackView>
+                    </subviews>
+                    <constraints>
+                        <constraint firstItem="g5h-mD-16a" firstAttribute="top" secondItem="jz8-FB-weZ" secondAttribute="top" id="8m6-bn-6Dh"/>
+                        <constraint firstAttribute="bottom" secondItem="g5h-mD-16a" secondAttribute="bottom" id="BZ9-Pn-egl"/>
+                        <constraint firstItem="g5h-mD-16a" firstAttribute="centerX" secondItem="jz8-FB-weZ" secondAttribute="centerX" id="msg-hG-W8T"/>
+                        <constraint firstItem="g5h-mD-16a" firstAttribute="width" secondItem="jz8-FB-weZ" secondAttribute="width" multiplier="0.85" id="pI6-i1-pTj"/>
+                    </constraints>
+                </view>
+            </subviews>
+            <constraints>
+                <constraint firstAttribute="trailing" secondItem="jz8-FB-weZ" secondAttribute="trailing" id="FXR-Hc-mi0"/>
+                <constraint firstItem="jz8-FB-weZ" firstAttribute="height" secondItem="HCM-Kf-nnt" secondAttribute="height" id="s4D-Nc-tk2"/>
+                <constraint firstItem="jz8-FB-weZ" firstAttribute="leading" secondItem="HCM-Kf-nnt" secondAttribute="leading" id="swu-Os-vKE"/>
+                <constraint firstItem="jz8-FB-weZ" firstAttribute="top" secondItem="HCM-Kf-nnt" secondAttribute="top" id="vec-wV-b2o"/>
+            </constraints>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <point key="canvasLocation" x="-45" y="108"/>
+        </view>
+    </objects>
+</document>

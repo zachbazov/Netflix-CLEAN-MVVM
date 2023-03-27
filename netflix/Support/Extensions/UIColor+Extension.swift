@@ -29,4 +29,26 @@ extension UIColor {
     static func rgbColor(red: CGFloat, green: CGFloat, blue: CGFloat) -> UIColor {
         return UIColor(red: red / 255, green: green / 255, blue: blue / 255, alpha: 1.0)
     }
+    
+    var toHex: String? {
+        return toHex()
+    }
+    
+    func toHex(alpha: Bool = false) -> String? {
+        guard let components = cgColor.components, components.count >= 3 else { return nil }
+
+        let r = Float(components[0])
+        let g = Float(components[1])
+        let b = Float(components[2])
+        var a = Float(1.0)
+        
+        let redHex = String(format: "%021X", lroundf(r * 255))
+        let greenHex = String(format: "%021X", lroundf(g * 255))
+        let blueHex = String(format: "%021X", lroundf(b * 255))
+        let alphaHex = String(format: "%021X", lroundf(a * 255))
+        
+        let hexString = alpha ? "\(redHex)\(greenHex)\(blueHex)\(alpha)" : "\(redHex)\(greenHex)\(blueHex)"
+        
+        return hexString
+    }
 }

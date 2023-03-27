@@ -12,32 +12,23 @@ import UIKit
 private protocol ViewProtocol {
     var homeItemView: NavigationViewItem! { get }
     var airPlayItemView: NavigationViewItem! { get }
+    var searchItemView: NavigationViewItem! { get }
     var accountItemView: NavigationViewItem! { get }
-    var tvShowsItemView: NavigationViewItem! { get }
-    var moviesItemView: NavigationViewItem! { get }
-    var categoriesItemView: NavigationViewItem! { get }
 }
 
 // MARK: - NavigationView Type
 
 final class NavigationView: View<NavigationViewViewModel> {
-    @IBOutlet private weak var gradientView: UIView!
+    @IBOutlet private(set) weak var topContainer: UIView!
     @IBOutlet private weak var homeItemViewContainer: UIView!
     @IBOutlet private weak var airPlayItemViewContainer: UIView!
     @IBOutlet private weak var searchItemViewContainer: UIView!
     @IBOutlet private weak var accountItemViewContainer: UIView!
-    @IBOutlet private(set) weak var tvShowsItemViewContainer: UIView!
-    @IBOutlet private(set) weak var moviesItemViewContainer: UIView!
-    @IBOutlet private(set) weak var categoriesItemViewContainer: UIView!
-    @IBOutlet private(set) weak var itemsCenterXConstraint: NSLayoutConstraint!
     
     fileprivate(set) var homeItemView: NavigationViewItem!
     fileprivate var airPlayItemView: NavigationViewItem!
     fileprivate var searchItemView: NavigationViewItem!
     fileprivate var accountItemView: NavigationViewItem!
-    fileprivate(set) var tvShowsItemView: NavigationViewItem!
-    fileprivate(set) var moviesItemView: NavigationViewItem!
-    fileprivate(set) var categoriesItemView: NavigationViewItem!
     
     /// Create a navigation view object.
     /// - Parameters:
@@ -53,20 +44,13 @@ final class NavigationView: View<NavigationViewViewModel> {
         self.airPlayItemView = NavigationViewItem(on: self.airPlayItemViewContainer, with: viewModel)
         self.searchItemView = NavigationViewItem(on: self.searchItemViewContainer, with: viewModel)
         self.accountItemView = NavigationViewItem(on: self.accountItemViewContainer, with: viewModel)
-        self.tvShowsItemView = NavigationViewItem(on: self.tvShowsItemViewContainer, with: viewModel)
-        self.moviesItemView = NavigationViewItem(on: self.moviesItemViewContainer, with: viewModel)
-        self.categoriesItemView = NavigationViewItem(on: self.categoriesItemViewContainer, with: viewModel)
         let items: [NavigationViewItem] = [self.homeItemView, self.airPlayItemView,
-                                           self.accountItemView, self.tvShowsItemView,
-                                           self.moviesItemView, self.categoriesItemView,
-                                           self.searchItemView]
+                                           self.accountItemView, self.searchItemView]
         self.viewModel = NavigationViewViewModel(items: items, with: viewModel)
         // Updates root coordinator's `navigationView` property.
         viewModel.coordinator?.viewController?.navigationView = self
         
         self.viewDidLoad()
-        
-        self.backgroundColor = .clear
     }
     
     required init?(coder: NSCoder) { fatalError() }
@@ -77,14 +61,7 @@ final class NavigationView: View<NavigationViewViewModel> {
     }
     
     override func viewDidLoad() {
-        viewDidDeploySubviews()
         viewDidBindObservers()
-        
-//        self.layer.shadow(.black, radius: 16.0, opacity: 1.0)
-    }
-    
-    override func viewDidDeploySubviews() {
-        setupGradients()
     }
     
     override func viewDidBindObservers() {
@@ -111,20 +88,6 @@ extension NavigationView: ViewInstantiable {}
 
 extension NavigationView: ViewProtocol {}
 
-// MARK: - Private UI Implementation
-
-extension NavigationView {
-    private func setupGradients() {
-        let rect = CGRect(x: 0.0, y: 0.0, width: UIScreen.main.bounds.width, height: bounds.height)
-        gradientView.addGradientLayer(
-            colors: [.black.withAlphaComponent(0.9),
-                     .black.withAlphaComponent(0.7),
-                     .clear],
-            locations: [0.0, 0.3, 1.0])
-        gradientView.frame = rect
-    }
-}
-
 // MARK: - State Type
 
 extension NavigationView {
@@ -132,11 +95,11 @@ extension NavigationView {
     enum State: Int, CaseIterable {
         case home
         case airPlay
+        case search
         case account
         case tvShows
         case movies
         case categories
-        case search
     }
 }
 
@@ -146,12 +109,12 @@ extension NavigationView.State: Valuable {
     var stringValue: String {
         switch self {
         case .home: return Localization.TabBar.Home.Navigation().home
+        case .airPlay: return Localization.TabBar.Home.Navigation().airPlay
+        case .account: return Localization.TabBar.Home.Navigation().account
         case .tvShows: return Localization.TabBar.Home.Navigation().tvShows
         case .movies: return Localization.TabBar.Home.Navigation().movies
         case .categories: return Localization.TabBar.Home.Navigation().categories
-        case .airPlay: return Localization.TabBar.Home.Navigation().airPlay
         case .search: return ""
-        case .account: return Localization.TabBar.Home.Navigation().account
         }
     }
 }
