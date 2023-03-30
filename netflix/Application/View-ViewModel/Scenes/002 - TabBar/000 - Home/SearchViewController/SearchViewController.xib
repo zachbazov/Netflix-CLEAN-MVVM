@@ -11,6 +11,7 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="SearchViewController" customModule="netflix" customModuleProvider="target">
             <connections>
                 <outlet property="backButton" destination="yTf-Ic-zxX" id="xwJ-Z4-iIa"/>
+                <outlet property="barContainer" destination="evQ-J7-ESg" id="vkL-od-fUg"/>
                 <outlet property="contentContainer" destination="Qav-6r-NUw" id="Lfv-0b-x5j"/>
                 <outlet property="contentView" destination="Eug-U7-55W" id="d2g-l1-Ubv"/>
                 <outlet property="searchBar" destination="T3U-kb-GFc" id="kvV-vX-9Em"/>

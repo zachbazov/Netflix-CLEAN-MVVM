@@ -38,6 +38,20 @@ final class HomeTableViewDataSource: NSObject {
     var gradientView: UIView!
     let gradientLayer = CAGradientLayer()
     
+    var initialOffsetY: CGFloat = .zero
+    
+    var isSegmentedShrunk = false
+    var isAnimating = false
+    
+    lazy var topContainerHeight: CGFloat = {
+        guard let viewController = viewModel.coordinator?.viewController else { return .zero }
+        return viewController.topContainer.bounds.size.height
+    }()
+    lazy var segmentContainerHeight: CGFloat = {
+        guard let viewController = viewModel.coordinator?.viewController else { return .zero }
+        return viewController.segmentViewContainer.bounds.size.height
+    }()
+    
     /// Create an home's table view data source object.
     /// - Parameters:
     ///   - tableView: Corresponding table view.
@@ -87,7 +101,9 @@ extension HomeTableViewDataSource: DataSourceProtocol {
     
     fileprivate func insetContent() {
         guard let viewController = viewModel.coordinator?.viewController else { return }
-        tableView.contentInset = .init(top: viewController.topContainer.bounds.size.height, left: .zero, bottom: .zero, right: .zero)
+        let inset = viewController.topContainer.bounds.size.height
+        tableView.contentInset = .init(top: inset, left: .zero, bottom: .zero, right: .zero)
+        initialOffsetY = inset
     }
 }
 
@@ -153,53 +169,276 @@ extension HomeTableViewDataSource: UITableViewDelegate, UITableViewDataSource {
     }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        guard let viewController = viewModel.coordinator?.viewController else { return }
+        guard let viewController = viewModel.coordinator?.viewController,
+              let view = viewController.view,
+              let offsetY = scrollView.panGestureRecognizer.translation(in: view).y as CGFloat?
+        else { return }
         
+        let isScrollingUp = offsetY > .zero
         let topContainerHeight = viewController.topContainer.bounds.size.height
         let segmentContainerHeight = viewController.segmentViewContainer.bounds.size.height
         let currentOffsetY = scrollView.contentOffset.y
         
         let segmentY = min(0, -currentOffsetY - topContainerHeight - segmentContainerHeight)
-        var maxSegmentY = max(0.0, -segmentY)
-        maxSegmentY = maxSegmentY > 48.0 ? 48.0 : maxSegmentY
+        var segmentMaxY = max(0.0, -segmentY)
+        segmentMaxY = segmentMaxY > 48.0 ? 48.0 : segmentMaxY
+        let statusBarHeight: CGFloat = 59.0
+        let requiredHeight: CGFloat = statusBarHeight + initialOffsetY
         
-        print(currentOffsetY, segmentY)
+        printIfDebug(.debug, "CURRENT OFFSET Y: \(currentOffsetY)")
         
         UIView.animate(
             withDuration: 0.25,
             delay: .zero,
-            options: .curveEaseOut,
+            options: .allowAnimatedContent,
             animations: { [weak self] in
                 guard let self = self else { return }
-                
-                viewController.segmentControlView?.frame = CGRect(x: 0, y: segmentY, width: scrollView.bounds.width, height: 48.0)
-                viewController.segmentControlView?.alpha = maxSegmentY > 1 ? .zero : 1.0
-                viewController.topContainerHeight?.constant = -maxSegmentY + 96.0
-                
-                if maxSegmentY > .zero {
-                    self.gradientView.isNotNil
+                if isScrollingUp {
+                    if currentOffsetY < requiredHeight {
+                        //up
+                        // hide 1
+                        print("currentOffsetY < requiredHeight")
+                        viewController.segmentControlView?.frame = CGRect(x: 0, y: -segmentMaxY, width: scrollView.bounds.width, height: 48.0)
+                        viewController.topContainerHeight.constant = -segmentMaxY + 96.0
+                        viewController.segmentControlView?.alpha = -segmentMaxY >= 0 ? 1.0 : .zero
+                        
+                    } else if currentOffsetY == requiredHeight {
+                        //up
+                        print("currentOffsetY == requiredHeight")
+                        viewController.segmentControlView?.frame = CGRect(x: 0, y: -segmentMaxY + 48.0, width: scrollView.bounds.width, height: 48.0)
+                        viewController.topContainerHeight.constant = -segmentMaxY + 96.0 + 48.0
+                        viewController.segmentControlView?.alpha = -segmentMaxY >= 0 ? 1.0 : .zero
+                        
+                    } else {
+                        //down
+                        print("else up")
+                        self.gradientView.isNotNil
                         ? _ = (self.gradientView?.removeFromSuperview(),
                                self.gradientView = nil)
                         : nil
-                    self.blurView.isNil
+                        self.blurView.isNil
                         ? _ = (viewController.blurryContainer.backgroundColor = .clear,
                                self.blurView = UIVisualEffectView(effect: self.blurEffect),
                                viewController.blurryContainer.insertSubview(self.blurView!, at: 0),
                                self.blurView!.constraintToSuperview(viewController.blurryContainer))
                         : nil
+                    }
+                    if currentOffsetY > requiredHeight {
+                        // down
+                        print("currentOffsetY > requiredHeight")
+                        viewController.segmentControlView?.frame = CGRect(x: 0, y: -segmentMaxY + 48.0, width: scrollView.bounds.width, height: 48.0)
+                        viewController.topContainerHeight.constant = -segmentMaxY + 96.0 + 48.0
+                        viewController.segmentControlView?.alpha = 1
+                    } else {
+                        //up
+                        print("else up2")
+                        viewController.segmentControlView?.frame = CGRect(x: 0, y: -segmentMaxY, width: scrollView.bounds.width, height: 48.0)
+                        viewController.topContainerHeight.constant = -segmentMaxY + 96.0
+                        //                        viewController.segmentControlView?.alpha = 0
+                        
+                        if -currentOffsetY >= requiredHeight {
+                            print("equals")
+                            self.gradientView.isNil
+                            ? viewController.dataSource?.setupGradient(with: viewController)
+                            : nil
+                            self.blurView.isNotNil
+                            ? _ = (self.blurView?.removeFromSuperview(),
+                                   self.blurView = nil)
+                            : nil
+                        }
+                    }
+                    
                 } else {
-                    self.gradientView.isNil
-                        ? viewController.dataSource?.setupGradient(with: viewController)
-                        : nil
-                    self.blurView.isNotNil
-                        ? _ = (self.blurView?.removeFromSuperview(),
-                               self.blurView = nil)
-                        : nil
+                    if currentOffsetY > requiredHeight {
+                        print("down close")
+                        viewController.segmentControlView?.frame = CGRect(x: 0, y: -segmentMaxY, width: scrollView.bounds.width, height: 48.0)
+                        viewController.topContainerHeight.constant = -segmentMaxY + 96.0
+                        viewController.segmentControlView?.alpha = -segmentMaxY > 1 ? 1.0 : .zero
+                    } else {
+                        print("down else")
+                        viewController.segmentControlView?.frame = CGRect(x: 0, y: -segmentMaxY, width: scrollView.bounds.width, height: 48.0)
+                        viewController.topContainerHeight.constant = -segmentMaxY + 96.0
+                        viewController.segmentControlView?.alpha = -segmentMaxY > 1 ? 1.0 : .zero
+                    }
+                    
+                    self.gradientView.isNotNil
+                    ? _ = (self.gradientView?.removeFromSuperview(),
+                           self.gradientView = nil)
+                    : nil
+                    self.blurView.isNil
+                    ? _ = (viewController.blurryContainer.backgroundColor = .clear,
+                           self.blurView = UIVisualEffectView(effect: self.blurEffect),
+                           viewController.blurryContainer.insertSubview(self.blurView!, at: 0),
+                           self.blurView!.constraintToSuperview(viewController.blurryContainer))
+                    : nil
                 }
             })
     }
+//    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+//        guard let viewController = viewModel.coordinator?.viewController,
+//              let view = viewController.view,
+//              let offsetY = scrollView.panGestureRecognizer.translation(in: view).y as CGFloat?
+//        else { return }
+//
+//        let currentOffsetY = scrollView.contentOffset.y
+//
+//        let segmentY = min(0, -currentOffsetY - topContainerHeight - segmentContainerHeight)
+//        var segmentMaxY = max(0.0, -segmentY)
+//        segmentMaxY = segmentMaxY > 48.0 ? 48.0 : segmentMaxY
+//
+//        let isScrollingUp = offsetY > .zero
+//
+//        let scrollingDownIsSmallerThanPassed48 = !isScrollingUp && -segmentY < 48.0
+//        let scrollingDownIsLargerThan48AndInRange = !isScrollingUp && -segmentY >= 48.0 && -segmentY < scrollView.contentSize.height
+//
+//        let scrollingUpHasPassed48 = isScrollingUp && -segmentY <= 48.0
+//
+//        let statusBarHeight: CGFloat = 59.0
+//        let requiredHeight: CGFloat = -(statusBarHeight + initialOffsetY)
+//
+//        let reqNegativeShow: CGFloat = requiredHeight + 48.0
+//
+//        printIfDebug(.none, "CURRENT OFFSET Y: \(currentOffsetY) , \(-segmentY) , \(segmentMaxY)")
+////        printIfDebug(.debug, "SEGMENT Y: \(segmentY)")
+////        printIfDebug(.debug, "MAX SEGMENT Y: \(segmentMaxY)")
+////        printIfDebug(.debug, "TOP CONTAINER HEIGHT: \(-segmentMaxY + 96.0)")
+//
+//
+//
+//        let yOffset = scrollView.contentOffset.y
+//
+//            // Define the maximum and minimum values for the y offset that trigger the resizing
+//        let maxOffset: CGFloat = scrollView.contentSize.height // adjust as needed
+//        let minOffset: CGFloat = 48.0 // adjust as needed
+//
+//        if !isAnimating {
+//            UIView.animate(withDuration: 0.3) {
+//
+//                if isScrollingUp {
+//                    // up (close)
+//                    viewController.segmentControlView?.frame = CGRect(x: .zero, y: -segmentMaxY - 48.0, width: scrollView.bounds.width, height: 48.0)
+//                    viewController.segmentControlView?.alpha = -segmentMaxY / 48.0
+//                    viewController.blurryContainer?.frame = CGRect(x: .zero, y: -segmentMaxY - 48.0, width: scrollView.bounds.width, height: 202.0)
+//                } else {
+//                    // down (open)
+//                    viewController.segmentControlView?.frame = CGRect(x: .zero, y: -segmentMaxY, width: scrollView.bounds.width, height: 48.0)
+//                    viewController.segmentControlView?.alpha = -segmentMaxY / 48.0
+//                    viewController.blurryContainer?.frame = CGRect(x: .zero, y: -segmentMaxY, width: scrollView.bounds.width, height: 202.0)
+//                }
+//
+////                if currentOffsetY < .zero && currentOffsetY <= -1.0 && currentOffsetY < reqNegativeShow {
+////
+////
+////                }
+////                print("x", self.initialOffsetY + reqNegativeShow)
+////                if currentOffsetY < .zero && currentOffsetY <= -1.0 && currentOffsetY > self.initialOffsetY + reqNegativeShow {
+////                    print("show")
+////                    // show the segment control view
+////                    viewController.segmentControlView?.frame.origin.y = -segmentMaxY
+////
+////                    // show the blurry container
+////                    viewController.segmentControlView?.alpha = 1.0
+////                    viewController.blurryContainer?.frame.origin.y = 0
+////                }
+//            } completion: { [weak self] _ in
+//                    self?.isAnimating = false
+//            }
+//
+//            isAnimating = true
+//        }
+//
+//
+//
+//
+////                viewController.segmentControlView?.frame = CGRect(
+////                    x: viewController.segmentControlView!.frame.origin.x,
+////                    y: -segmentMaxY,
+////                    width: viewController.segmentControlView!.frame.width,
+////                    height: viewController.segmentControlView!.frame.height
+////                )
+//
+////                viewController.segmentControlView?.frame = CGRect(x: 0, y: isScrollingUp ? -segmentMaxY : -segmentMaxY, width: scrollView.bounds.width, height: isScrollingUp ? 48.0 + -segmentMaxY : 48.0 + segmentMaxY)
+////                viewController.blurryContainer?.frame = CGRect(x: 0, y: isScrollingUp ? -segmentMaxY : -segmentMaxY, width: scrollView.bounds.width, height: isScrollingUp ? 155.0 + -segmentMaxY : 155.0 + segmentMaxY)
+////                viewController.segmentControlView?.alpha = -segmentMaxY >= 0 ? 1.0 : .zero
+//
+////                if scrollingDownIsSmallerThanPassed48 {
+////                    print("smallerThan48", currentOffsetY, -segmentY)
+////                    viewController.segmentControlView?.frame = CGRect(x: 0, y: -segmentMaxY, width: scrollView.bounds.width, height: 48.0)
+////                    viewController.blurryContainer?.frame = CGRect(x: 0, y: -segmentMaxY, width: scrollView.bounds.width, height: 155.0)
+////                    viewController.segmentControlView?.alpha = -segmentMaxY >= 0 ? 1.0 : .zero
+////                }
+////
+////                if scrollingDownIsLargerThan48AndInRange {
+////                    print("LargerThan48AndInRange", currentOffsetY, -segmentY)
+////                    viewController.segmentControlView?.frame = CGRect(x: 0, y: 0, width: scrollView.bounds.width, height: 48.0 + -segmentMaxY)
+////                    viewController.blurryContainer?.frame = CGRect(x: 0, y: 0, width: scrollView.bounds.width, height: 155.0 + -segmentMaxY)
+////                    viewController.segmentControlView?.alpha = -segmentMaxY >= 0 ? 1.0 : .zero
+////                }
+//////
+////                if scrollingUpHasPassed48 {
+////                    print("up", currentOffsetY, -segmentY)
+////                    viewController.segmentControlView?.frame = CGRect(x: 0, y: -segmentMaxY, width: scrollView.bounds.width, height: 48.0)
+////                    viewController.blurryContainer?.frame = CGRect(x: 0, y: -segmentMaxY, width: scrollView.bounds.width, height: 155.0)
+////                    viewController.segmentControlView?.alpha = -segmentMaxY >= 0 ? 1.0 : .zero
+////                }
+//
+//
+////                if isScrollingUp {
+////                    if currentOffsetY < requiredHeight {
+////                        guard -segmentMaxY <= 48.0 else { return }
+//////                        print("UP currentOffsetY < requiredHeight", currentOffsetY < requiredHeight, -segmentMaxY)
+//////                        viewController.segmentControlView?.frame = CGRect(x: 0, y: -segmentMaxY, width: scrollView.bounds.width, height: 48.0)
+//////                        viewController.blurryContainer?.frame = CGRect(x: 0, y: -segmentMaxY, width: scrollView.bounds.width, height: 155.0)
+//////                        viewController.segmentControlView?.alpha = -segmentMaxY >= 0 ? 1.0 : .zero
+////                    } else if currentOffsetY > requiredHeight {
+////                        guard -segmentMaxY >= 48.0 else { return }
+//////                        print("UP currentOffsetY > requiredHeight", currentOffsetY > requiredHeight)
+//////                        viewController.segmentControlView?.frame = CGRect(x: 0, y: -segmentMaxY, width: scrollView.bounds.width, height: 48.0)
+//////                        viewController.blurryContainer?.frame = CGRect(x: 0, y: -segmentMaxY, width: scrollView.bounds.width, height: 155.0)
+//////                        viewController.segmentControlView?.alpha = -segmentMaxY >= 0 ? 1.0 : .zero
+////                    }
+////                } else {
+////                    if currentOffsetY > requiredHeight {
+////                        guard -segmentMaxY >= 48.0 else { return }
+//////                        print("DOWN currentOffsetY > requiredHeight, \(currentOffsetY > requiredHeight)", -segmentMaxY)
+//////                        viewController.segmentControlView?.frame = CGRect(x: 0, y: segmentMaxY - 48.0, width: scrollView.bounds.width, height: 48.0)
+//////                        viewController.blurryContainer?.frame = CGRect(x: 0, y: -segmentMaxY - 48.0, width: scrollView.bounds.width, height: 155.0)
+//////                        viewController.segmentControlView?.alpha = -segmentMaxY >= 0 ? 1.0 : .zero
+////                    } else if currentOffsetY < requiredHeight {
+////                        guard -segmentMaxY <= 48.0 else { return }
+//////                        print("DOWN currentOffsetY < requiredHeight, \(currentOffsetY < requiredHeight)", -segmentMaxY)
+//////                        viewController.segmentControlView?.frame = CGRect(x: 0, y: -segmentMaxY, width: scrollView.bounds.width, height: 48.0)
+//////                        viewController.blurryContainer?.frame = CGRect(x: 0, y: -segmentMaxY, width: scrollView.bounds.width, height: 155.0)
+//////                        viewController.segmentControlView?.alpha = -segmentMaxY >= 0 ? 1.0 : .zero
+////                    }
+////
+////                    //self.removeGradientAndAddBlurness()
+////                }
+////            })
+//    }
+    
+//    func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
+//        print("XX", velocity.y, targetContentOffset.pointee.y)
+//    }
+    
+    private func removeGradientAndAddBlurness() {
+        guard let viewController = viewModel.coordinator?.viewController else { return }
+        
+        self.gradientView.isNotNil
+            ? _ = (self.gradientView?.removeFromSuperview(),
+                   self.gradientView = nil)
+            : nil
+        self.blurView.isNil
+            ? _ = (viewController.blurryContainer.backgroundColor = .clear,
+                   self.blurView = UIVisualEffectView(effect: self.blurEffect),
+                   viewController.blurryContainer.insertSubview(self.blurView!, at: 0),
+                   self.blurView!.constraintToSuperview(viewController.blurryContainer))
+            : nil
+    }
     
     func setupGradient(with controller: HomeViewController) {
+        gradientView?.layer.removeFromSuperlayer()
+        
         guard !colors.isEmpty else { return }
         
         gradientView = UIView(frame: controller.blurryContainer.bounds)
@@ -209,7 +448,7 @@ extension HomeTableViewDataSource: UITableViewDelegate, UITableViewDataSource {
         let color3 = colors[2]
         
         gradientLayer.frame = gradientView.bounds
-        gradientLayer.colors = [UIColor.black.cgColor,
+        gradientLayer.colors = [color3.cgColor,
                                 color3.cgColor,
                                 color2.cgColor,
                                 color1.cgColor]
@@ -329,4 +568,175 @@ extension HomeTableViewDataSource.Index: Valuable {
  //                blurView!.constraintToSuperview(viewController.blurryContainer)
  //            }
  //        }
+ */
+
+
+
+
+
+
+/*
+ //                if currentOffsetY > .zero {
+ //                    if isScrollingUp && currentOffsetY > 100 {
+ //                        print("bigger up")
+ //                        viewController.segmentControlView?.alpha = 1.0
+ //                        viewController.segmentControlView?.frame = CGRect(x: 0, y: segmentY, width: scrollView.bounds.width, height: 48.0)
+ //                        viewController.topContainerHeight.constant = -segmentMaxY + 96.0 + 48.0
+ //                    } else if !isScrollingUp && currentOffsetY < 100 {
+ //                        print("bigger down")
+ //                        viewController.segmentControlView?.alpha = .zero
+ //                        viewController.segmentControlView?.frame = CGRect(x: 0, y: segmentY, width: scrollView.bounds.width, height: 48.0)
+ //                        viewController.topContainerHeight.constant = -segmentMaxY + 96.0
+ //                    }
+ //                } else {
+ //                    if segmentMaxY > .zero {
+ //                        if isScrollingUp && currentOffsetY > 100 {
+ //                            print("smaller up2")
+ //                            viewController.segmentControlView?.alpha = 1.0
+ //                            viewController.segmentControlView?.frame = CGRect(x: 0, y: segmentY, width: scrollView.bounds.width, height: 48.0)
+ //                            viewController.topContainerHeight.constant = -segmentMaxY + 96.0 + 48.0
+ //                        }
+ //
+ //                        self.gradientView.isNotNil
+ //                            ? _ = (self.gradientView?.removeFromSuperview(),
+ //                                   self.gradientView = nil)
+ //                            : nil
+ //                        self.blurView.isNil
+ //                            ? _ = (viewController.blurryContainer.backgroundColor = .clear,
+ //                                   self.blurView = UIVisualEffectView(effect: self.blurEffect),
+ //                                   viewController.blurryContainer.insertSubview(self.blurView!, at: 0),
+ //                                   self.blurView!.constraintToSuperview(viewController.blurryContainer))
+ //                            : nil
+ //                    } else {
+ //                        if !isScrollingUp && currentOffsetY < 100 {
+ //                            print("smaller down2")
+ //                            viewController.segmentControlView?.alpha = .zero
+ //                            viewController.segmentControlView?.frame = CGRect(x: 0, y: segmentY, width: scrollView.bounds.width, height: 48.0)
+ //                            viewController.topContainerHeight.constant = -segmentMaxY + 96.0
+ //                        }
+ //
+ //                        self.gradientView.isNil
+ //                            ? viewController.dataSource?.setupGradient(with: viewController)
+ //                            : nil
+ //                        self.blurView.isNotNil
+ //                            ? _ = (self.blurView?.removeFromSuperview(),
+ //                                   self.blurView = nil)
+ //                            : nil
+ //                    }
+ //                }
+ */
+
+
+
+
+
+/*
+ func scrollViewDidScroll(_ scrollView: UIScrollView) {
+     guard let viewController = viewModel.coordinator?.viewController,
+           let view = viewController.view,
+           let offsetY = scrollView.panGestureRecognizer.translation(in: view).y as CGFloat?
+     else { return }
+     
+     let isScrollingUp = offsetY > .zero
+     let topContainerHeight = viewController.topContainer.bounds.size.height
+     let segmentContainerHeight = viewController.segmentViewContainer.bounds.size.height
+     let currentOffsetY = scrollView.contentOffset.y
+     
+     let segmentY = min(0, -currentOffsetY - topContainerHeight - segmentContainerHeight)
+     var segmentMaxY = max(0.0, -segmentY)
+     segmentMaxY = segmentMaxY > 48.0 ? 48.0 : segmentMaxY
+     let statusBarHeight: CGFloat = 59.0
+     let requiredHeight: CGFloat = statusBarHeight + initialOffsetY
+     
+     printIfDebug(.debug, "CURRENT OFFSET Y: \(currentOffsetY), \(requiredHeight)")
+//        printIfDebug(.debug, "SEGMENT Y: \(segmentY)")
+     printIfDebug(.debug, "MAX SEGMENT Y: \(segmentMaxY)")
+//        printIfDebug(.debug, "TOP CONTAINER HEIGHT: \(-segmentMaxY + 96.0)")
+     
+     UIView.animate(
+         withDuration: 0.25,
+         delay: .zero,
+         options: .curveEaseInOut,
+         animations: { [weak self] in
+             guard let self = self else { return }
+             if isScrollingUp {
+                 if currentOffsetY < requiredHeight {
+                     //up
+                     print("currentOffsetY = requiredHeight", currentOffsetY <= requiredHeight)
+                     viewController.segmentControlView?.frame = CGRect(x: 0, y: -segmentMaxY, width: scrollView.bounds.width, height: 48.0)
+                     viewController.topContainerHeight.constant = -segmentMaxY + 96.0
+                     viewController.segmentControlView?.alpha = -segmentMaxY >= 0 ? 1.0 : .zero
+                     
+                 } else if currentOffsetY == requiredHeight {
+                     //up
+                     print("currentOffsetY == requiredHeight", currentOffsetY <= requiredHeight)
+                     viewController.segmentControlView?.frame = CGRect(x: 0, y: -segmentMaxY + 48.0, width: scrollView.bounds.width, height: 48.0)
+                     viewController.topContainerHeight.constant = -segmentMaxY + 96.0 + 48.0
+                     viewController.segmentControlView?.alpha = -segmentMaxY >= 0 ? 1.0 : .zero
+                     
+                 } else {
+                     //down
+                     print("else up")
+                     self.gradientView.isNotNil
+                         ? _ = (self.gradientView?.removeFromSuperview(),
+                                self.gradientView = nil)
+                         : nil
+                     self.blurView.isNil
+                         ? _ = (viewController.blurryContainer.backgroundColor = .clear,
+                                self.blurView = UIVisualEffectView(effect: self.blurEffect),
+                                viewController.blurryContainer.insertSubview(self.blurView!, at: 0),
+                                self.blurView!.constraintToSuperview(viewController.blurryContainer))
+                         : nil
+                 }
+                 if currentOffsetY > requiredHeight {
+                     // down
+                     print("currentOffsetY >= requiredHeight", currentOffsetY > requiredHeight)
+                     viewController.segmentControlView?.frame = CGRect(x: 0, y: -segmentMaxY + 48.0, width: scrollView.bounds.width, height: 48.0)
+                     viewController.topContainerHeight.constant = -segmentMaxY + 96.0 + 48.0
+                     viewController.segmentControlView?.alpha = 1
+                 } else {
+                     //up
+                     print("else up2")
+                     viewController.segmentControlView?.frame = CGRect(x: 0, y: -segmentMaxY, width: scrollView.bounds.width, height: 48.0)
+                     viewController.topContainerHeight.constant = -segmentMaxY + 96.0
+//                        viewController.segmentControlView?.alpha = 0
+                     
+                     if -currentOffsetY >= requiredHeight {
+                         print("equals")
+                         self.gradientView.isNil
+                             ? viewController.dataSource?.setupGradient(with: viewController)
+                             : nil
+                         self.blurView.isNotNil
+                             ? _ = (self.blurView?.removeFromSuperview(),
+                                    self.blurView = nil)
+                             : nil
+                     }
+                 }
+                 
+             } else {
+                 if currentOffsetY > requiredHeight {
+                     print("down close")
+                     viewController.segmentControlView?.frame = CGRect(x: 0, y: -segmentMaxY, width: scrollView.bounds.width, height: 48.0)
+                     viewController.topContainerHeight.constant = -segmentMaxY + 96.0
+                     viewController.segmentControlView?.alpha = -segmentMaxY > 1 ? 1.0 : .zero
+                 } else {
+                     print("down else")
+                     viewController.segmentControlView?.frame = CGRect(x: 0, y: -segmentMaxY, width: scrollView.bounds.width, height: 48.0)
+                     viewController.topContainerHeight.constant = -segmentMaxY + 96.0
+                     viewController.segmentControlView?.alpha = -segmentMaxY > 1 ? 1.0 : .zero
+                 }
+                 
+                 self.gradientView.isNotNil
+                     ? _ = (self.gradientView?.removeFromSuperview(),
+                            self.gradientView = nil)
+                     : nil
+                 self.blurView.isNil
+                     ? _ = (viewController.blurryContainer.backgroundColor = .clear,
+                            self.blurView = UIVisualEffectView(effect: self.blurEffect),
+                            viewController.blurryContainer.insertSubview(self.blurView!, at: 0),
+                            self.blurView!.constraintToSuperview(viewController.blurryContainer))
+                     : nil
+             }
+         })
+ }
  */

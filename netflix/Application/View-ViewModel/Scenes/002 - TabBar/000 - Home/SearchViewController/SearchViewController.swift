@@ -27,6 +27,7 @@ private protocol ControllerProtocol {
 
 final class SearchViewController: Controller<SearchViewModel> {
     @IBOutlet private weak var contentView: UIView!
+    @IBOutlet private weak var barContainer: UIView!
     @IBOutlet private weak var searchBarContainer: UIView!
     @IBOutlet private weak var contentContainer: UIView!
     @IBOutlet private weak var backButton: UIButton!
