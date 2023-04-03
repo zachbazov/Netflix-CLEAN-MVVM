@@ -24,6 +24,7 @@ final class SegmentControlView: View<SegmentControlViewViewModel> {
     @IBOutlet private(set) weak var categoriesItemViewContainer: UIView!
     @IBOutlet private(set) weak var itemsCenterXConstraint: NSLayoutConstraint!
     
+    let parent: UIView
     fileprivate(set) var tvShowsItemView: NavigationViewItem!
     fileprivate(set) var moviesItemView: NavigationViewItem!
     fileprivate(set) var categoriesItemView: NavigationViewItem!
@@ -33,6 +34,7 @@ final class SegmentControlView: View<SegmentControlViewViewModel> {
     ///   - parent: Instantiating view.
     ///   - viewModel: Coordinating view model.
     init(on parent: UIView, with viewModel: HomeViewModel) {
+        self.parent = parent
         super.init(frame: parent.bounds)
         self.nibDidLoad()
         parent.addSubview(self)
@@ -80,4 +82,8 @@ extension SegmentControlView: ViewInstantiable {}
 
 // MARK: - ViewProtocol Implementation
 
-extension SegmentControlView: ViewProtocol {}
+extension SegmentControlView: ViewProtocol {
+    func origin(y: CGFloat) {
+        frame.origin.y = y
+    }
+}

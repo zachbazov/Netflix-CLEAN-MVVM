@@ -22,7 +22,7 @@ final class HomeViewController: Controller<HomeViewModel> {
     @IBOutlet private(set) var blurryContainer: UIView!
     @IBOutlet private(set) var topContainer: UIView!
     @IBOutlet private(set) var navigationViewContainer: UIView!
-    @IBOutlet private(set) var segmentViewContainer: UIView!
+    @IBOutlet private var segmentViewContainer: UIView!
     @IBOutlet private(set) var browseOverlayViewContainer: UIView!
     @IBOutlet private(set) var topContainerHeight: NSLayoutConstraint!
     @IBOutlet private(set) var segmentContainerHeight: NSLayoutConstraint!

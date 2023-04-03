@@ -77,16 +77,7 @@ final class ShowcaseView: View<ShowcaseViewViewModel> {
             identifier: viewModel.posterImageIdentifier) { [weak self] image in
                 guard let self = self else { return }
                 mainQueueDispatch { self.posterImageView.image = image }
-                
-                mainQueueDispatch {
-                UIView.animate(
-                    withDuration: 0.25,
-                    delay: .zero,
-                    options: .curveEaseInOut,
-                    animations: {
-                        self.setupGradient(with: image!)
-                    })
-                }
+                mainQueueDispatch { self.setupGradient(with: image!) }
             }
         
         AsyncImageService.shared.load(
