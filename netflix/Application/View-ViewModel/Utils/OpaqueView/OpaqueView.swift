@@ -13,7 +13,7 @@ private protocol ViewProtocol {
     var imageView: UIImageView! { get }
     var blurView: UIVisualEffectView! { get }
     
-    func viewDidUpdate(with media: Media?)
+    func viewDidUpdate()
 }
 
 // MARK: - OpaqueView Type
@@ -22,7 +22,16 @@ final class OpaqueView: View<OpaqueViewViewModel> {
     fileprivate var imageView: UIImageView!
     fileprivate var blurView: UIVisualEffectView!
     
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        self.viewDidConfigure()
+    }
+    
+    required init?(coder: NSCoder) { fatalError() }
+    
     override func viewDidConfigure() {
+        guard let viewModel = viewModel else { return }
+        
         imageView?.removeFromSuperview()
         blurView?.removeFromSuperview()
         
@@ -33,7 +42,7 @@ final class OpaqueView: View<OpaqueViewViewModel> {
         blurView = .init(effect: blurEffect)
         blurView.frame = imageView.bounds
         
-        insertSubview(imageView, at: 0)
+//        insertSubview(imageView, at: 0)
         insertSubview(blurView, at: 1)
         
         AsyncImageService.shared.load(
@@ -49,9 +58,12 @@ final class OpaqueView: View<OpaqueViewViewModel> {
 extension OpaqueView: ViewProtocol {
     /// Release changes for the view by the view model.
     /// - Parameter media: Corresponding media object.
-    func viewDidUpdate(with media: Media?) {
-        guard let presentedMedia = media else { return }
-        viewModel = OpaqueViewViewModel(with: presentedMedia)
+    func viewDidUpdate() {
+        guard let homeVC = Application.app.coordinator.tabCoordinator.home.viewControllers.first as? HomeViewController,
+              let media = homeVC.viewModel.showcases[HomeTableViewDataSource.State(rawValue: homeVC.viewModel.dataSourceState.value?.rawValue ?? 0) ?? .all]
+        else { return }
+        
+        viewModel = OpaqueViewViewModel(with: media)
         
         viewDidConfigure()
     }

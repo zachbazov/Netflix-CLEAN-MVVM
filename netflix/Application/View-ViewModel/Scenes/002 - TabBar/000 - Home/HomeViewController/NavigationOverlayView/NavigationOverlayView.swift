@@ -11,7 +11,7 @@ import UIKit
 
 private protocol ViewProtocol {
     var dataSource: NavigationOverlayTableViewDataSource! { get }
-    var opaqueView: OpaqueView { get }
+    var opaqueView: OpaqueView? { get }
     var footerView: NavigationOverlayFooterView! { get }
     var tabBar: UITabBar! { get }
     var tableView: UITableView { get }
@@ -23,7 +23,7 @@ private protocol ViewProtocol {
 
 final class NavigationOverlayView: View<NavigationOverlayViewModel> {
     var dataSource: NavigationOverlayTableViewDataSource!
-    let opaqueView = OpaqueView(frame: UIScreen.main.bounds)
+    var opaqueView: OpaqueView?
     var footerView: NavigationOverlayFooterView!
     var tabBar: UITabBar!
     private(set) lazy var tableView: UITableView = createTableView()
@@ -31,18 +31,22 @@ final class NavigationOverlayView: View<NavigationOverlayViewModel> {
     /// Create a navigation overlay view object.
     /// - Parameter viewModel: Coordinating view model.
     init(with viewModel: HomeViewModel) {
-        super.init(frame: UIScreen.main.bounds)
+        let rect = CGRect(x: UIScreen.main.bounds.width, y: .zero, width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
+        super.init(frame: rect)
+        self.alpha = .zero
         
         self.tabBar = viewModel.coordinator!.viewController!.tabBarController!.tabBar
         self.viewModel = NavigationOverlayViewModel(with: viewModel)
         self.dataSource = NavigationOverlayTableViewDataSource(with: self.viewModel)
+        self.opaqueView = OpaqueView(frame: UIScreen.main.bounds)
         let parent = viewModel.coordinator!.viewController!.view!
         self.footerView = NavigationOverlayFooterView(parent: parent, viewModel: self.viewModel)
         
         parent.addSubview(self)
         parent.addSubview(self.footerView)
         self.addSubview(self.tableView)
-        /// Updates root coordinator's `categoriesOverlayView` property.
+        
+        // Updates root coordinator's `categoriesOverlayView` property.
         viewModel.coordinator?.viewController?.navigationOverlayView = self
         
         self.viewDidBindObservers()
@@ -59,9 +63,7 @@ final class NavigationOverlayView: View<NavigationOverlayViewModel> {
     
     override func viewDidBindObservers() {
         viewModel.isPresented.observe(on: self) { [weak self] _ in
-            let homeVC = Application.app.coordinator.tabCoordinator.home.viewControllers.first as! HomeViewController
-            let homeVM = homeVC.viewModel.showcases[HomeTableViewDataSource.State(rawValue: homeVC.viewModel.dataSourceState.value?.rawValue ?? 0) ?? .all]
-            self?.opaqueView.viewDidUpdate(with: homeVM)
+            self?.opaqueView?.viewDidUpdate()
             self?.viewModel.isPresentedDidChange()
         }
         viewModel.items.observe(on: self) { [weak self] _ in self?.viewModel.dataSourceDidChange() }

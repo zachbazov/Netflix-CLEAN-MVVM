@@ -66,14 +66,14 @@ extension NavigationOverlayViewModel: ViewModelProtocol {
         guard let navigationOverlayView = coordinator.viewController?.navigationOverlayView else { return }
         
         let tableView = navigationOverlayView.tableView
-        /// In-case there is no allocated delegate.
+        // In-case there is no allocated delegate.
         if tableView.delegate == nil {
             tableView.delegate = navigationOverlayView.dataSource
             tableView.dataSource = navigationOverlayView.dataSource
         }
-        /// Release changes.
+        // Release changes.
         tableView.reloadData()
-        /// Center the content.
+        // Center the content.
         tableView.centerVertically(on: navigationOverlayView)
     }
     
@@ -96,6 +96,9 @@ extension NavigationOverlayViewModel: ViewModelProtocol {
             initialSpringVelocity: 0.5,
             animations: { [weak self] in
                 guard let self = self else { return }
+                navigationOverlayView.transform = self.isPresented.value
+                    ? CGAffineTransform(translationX: -navigationOverlayView.bounds.size.width, y: .zero)
+                    : .identity
                 navigationOverlayView.alpha = self.isPresented.value ? 1.0 : 0.0
                 navigationOverlayView.tableView.alpha = self.isPresented.value ? 1.0 : 0.0
                 navigationOverlayView.footerView.alpha = self.isPresented.value ? 1.0 : 0.0
@@ -211,6 +214,7 @@ extension NavigationOverlayViewModel: ViewModelProtocol {
                 with: homeViewModel)
             // Present the overlay.
             browseOverlayView.viewModel.isPresented = true
+//            homeViewController?.blurryContainer.layer.removeFromSuperlayer()
         } else if state == .main {
             /// In-case the overlay state has been set to `.mainMenu` value.
             /// Extract a slice of the navigation view states.

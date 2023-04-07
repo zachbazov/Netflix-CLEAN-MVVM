@@ -21,6 +21,76 @@ private protocol DataSourceProtocol {
     func insetContent()
 }
 
+final class BlurView: UIView {
+    let effect: UIBlurEffect
+    let view: UIVisualEffectView
+    
+    deinit {
+        print("deinit BlurView")
+        view.removeFromSuperview()
+    }
+    
+    init(on parent: UIView, effect: UIBlurEffect) {
+        self.effect = effect
+        self.view = UIVisualEffectView(effect: effect)
+        
+        super.init(frame: .zero)
+        
+        parent.backgroundColor = .clear
+        parent.insertSubview(view, at: .zero)
+        view.constraintToSuperview(parent)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError()
+    }
+}
+
+final class GradientView: UIView {
+    let parent: UIView
+    var view: UIView?
+    let gradientLayer = CAGradientLayer()
+    
+    deinit {
+        print("deinit GradientView")
+//        view?.layer.removeFromSuperlayer()
+//        view = nil
+    }
+    
+    init(on parent: UIView) {
+        self.parent = parent
+        self.view = UIView(frame: .zero)
+        
+        super.init(frame: .zero)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError()
+    }
+    
+    func setupGradient(with colors: [UIColor]) {
+        view?.layer.removeFromSuperlayer()
+        
+        guard !colors.isEmpty else { return }
+        
+        view = UIView(frame: parent.bounds)
+        
+        let color1 = colors[0]
+        let color2 = colors[1]
+        let color3 = colors[2]
+        
+        gradientLayer.frame = view!.bounds
+        gradientLayer.colors = [color3.cgColor,
+                                color3.cgColor,
+                                color2.cgColor,
+                                color1.cgColor]
+        gradientLayer.locations = [0.0, 0.3, 0.7, 1.0]
+        
+        view?.layer.addSublayer(gradientLayer)
+        parent.insertSubview(view!, at: .zero)
+    }
+}
+
 // MARK: - HomeTableViewDataSource Type
 
 final class HomeTableViewDataSource: NSObject {
@@ -29,16 +99,11 @@ final class HomeTableViewDataSource: NSObject {
     fileprivate let numberOfRows = 1
     fileprivate(set) var showcaseCell: ShowcaseTableViewCell!
     
-    
-    let blurEffect = UIBlurEffect(style: .dark)
-    var blurView: UIVisualEffectView?
-    
-    var colors = [UIColor]()
-    
-    var gradientView: UIView!
-    let gradientLayer = CAGradientLayer()
-    
     var initialOffsetY: CGFloat = .zero
+    
+    var blur: BlurView?
+    var gradient: GradientView?
+    var colors = [UIColor]()
     
     /// Create an home's table view data source object.
     /// - Parameters:
@@ -68,6 +133,7 @@ extension HomeTableViewDataSource: DataSourceProtocol {
     fileprivate func viewDidLoad() {
         viewsDidRegister()
         insetContent()
+        addGradient()
     }
     
     fileprivate func viewsDidRegister() {
@@ -92,6 +158,32 @@ extension HomeTableViewDataSource: DataSourceProtocol {
         let inset = viewController.topContainer.bounds.size.height
         tableView.contentInset = .init(top: inset, left: .zero, bottom: .zero, right: .zero)
         initialOffsetY = inset
+    }
+    
+    
+    private func addGradient() {
+        guard self.gradient.isNil, colors.isEmpty else { return }
+        guard let viewController = viewModel.coordinator?.viewController,
+              let container = viewController.blurryContainer else { return }
+        gradient = GradientView(on: container)
+        self.gradient?.setupGradient(with: colors)
+    }
+    private func removeGradient() {
+        guard let gradientView = self.gradient else { return }
+        gradientView.view?.layer.removeFromSuperlayer()
+        self.gradient = nil
+    }
+    private func addBlur() {
+        guard let viewController = viewModel.coordinator?.viewController else { return }
+        
+        guard self.blur == nil else { return }
+        let effect = UIBlurEffect(style: .dark)
+        self.blur = BlurView(on: viewController.blurryContainer, effect: effect)
+    }
+    private func removeBlur() {
+        guard let blurView = self.blur else { return }
+        blurView.view.removeFromSuperview()
+        self.blur = nil
     }
 }
 
@@ -206,51 +298,6 @@ extension HomeTableViewDataSource: UITableViewDelegate, UITableViewDataSource {
                     self.addBlur()
                 }
             })
-    }
-    private func addGradient() {
-        guard let viewController = viewModel.coordinator?.viewController else { return }
-        guard self.gradientView.isNil else { return }
-        viewController.dataSource?.setupGradient(with: viewController)
-    }
-    private func removeGradient() {
-        guard let gradientView = self.gradientView else { return }
-        gradientView.removeFromSuperview()
-        self.gradientView = nil
-    }
-    private func addBlur() {
-        guard let viewController = viewModel.coordinator?.viewController else { return }
-        
-        guard self.blurView == nil else { return }
-        viewController.blurryContainer.backgroundColor = .clear
-        self.blurView = UIVisualEffectView(effect: self.blurEffect)
-        viewController.blurryContainer.insertSubview(self.blurView!, at: 0)
-        self.blurView?.constraintToSuperview(viewController.blurryContainer)
-    }
-    private func removeBlur() {
-        guard let blurView = self.blurView else { return }
-        blurView.removeFromSuperview()
-        self.blurView = nil
-    }
-    func setupGradient(with controller: HomeViewController) {
-        gradientView?.layer.removeFromSuperlayer()
-        
-        guard !colors.isEmpty else { return }
-        
-        gradientView = UIView(frame: controller.blurryContainer.bounds)
-        
-        let color1 = colors[0]
-        let color2 = colors[1]
-        let color3 = colors[2]
-        
-        gradientLayer.frame = gradientView.bounds
-        gradientLayer.colors = [color3.cgColor,
-                                color3.cgColor,
-                                color2.cgColor,
-                                color1.cgColor]
-        gradientLayer.locations = [0.0, 0.3, 0.7, 1.0]
-        gradientView.layer.addSublayer(gradientLayer)
-        
-        controller.blurryContainer.insertSubview(gradientView, at: 0)
     }
 }
 

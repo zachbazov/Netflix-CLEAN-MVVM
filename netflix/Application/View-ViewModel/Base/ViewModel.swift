@@ -5,7 +5,7 @@
 //  Created by Zach Bazov on 05/12/2022.
 //
 
-import Foundation
+import UIKit
 
 // MARK: - ViewModel Type
 

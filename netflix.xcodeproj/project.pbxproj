@@ -1215,6 +1215,7 @@
 				A1AE02D0293BA29A00AF0BD6 /* DeviceOrientation.swift */,
 				A1741D5628EE5C9A00F3C46B /* MediaPlayer */,
 				A18D852529423F7600840045 /* MyList */,
+				A1BA1DB128DA203200730EA8 /* OpaqueView */,
 				A1741D6128EF716000F3C46B /* ScheduledTimer.swift */,
 				A1AEB44A299E56BD0016DE2B /* Reactive */,
 				A18B993928BFC95A0077A5A6 /* Behaviors */,
@@ -1392,21 +1393,12 @@
 			path = EntityMapping;
 			sourceTree = "<group>";
 		};
-		A18D85182940382500840045 /* FooterView */ = {
+		A18D85182940382500840045 /* NavigationOverlayFooterView */ = {
 			isa = PBXGroup;
 			children = (
 				A127C1E128DD00F100CEE34F /* NavigationOverlayFooterView.swift */,
 			);
-			path = FooterView;
-			sourceTree = "<group>";
-		};
-		A18D85192940383000840045 /* Utils */ = {
-			isa = PBXGroup;
-			children = (
-				A18D85182940382500840045 /* FooterView */,
-				A1BA1DB128DA203200730EA8 /* OpaqueView */,
-			);
-			path = Utils;
+			path = NavigationOverlayFooterView;
 			sourceTree = "<group>";
 		};
 		A18D851A29403CD100840045 /* BrowseOverlayView */ = {
@@ -1905,7 +1897,6 @@
 				A1BA1DAB28D9D42A00730EA8 /* NavigationOverlayView.swift */,
 				A1BA1DB828DA20CA00730EA8 /* NavigationOverlayViewModel.swift */,
 				A1BA1DC028DCB75600730EA8 /* Cells */,
-				A18D85192940383000840045 /* Utils */,
 			);
 			path = NavigationOverlayView;
 			sourceTree = "<group>";
@@ -1922,8 +1913,8 @@
 		A1BA1DC028DCB75600730EA8 /* Cells */ = {
 			isa = PBXGroup;
 			children = (
-				A1BA1DBC28DCB69100730EA8 /* NavigationOverlayTableViewCell.swift */,
-				A1BA1DBE28DCB6F300730EA8 /* NavigationOverlayCollectionViewCellViewModel.swift */,
+				A1FC093029DC5C4900CB4C9E /* NavigationOverlayTableViewCell */,
+				A18D85182940382500840045 /* NavigationOverlayFooterView */,
 			);
 			path = Cells;
 			sourceTree = "<group>";
@@ -2074,6 +2065,15 @@
 				A1F3389729CCD638005629DB /* BlockbusterCollectionViewCell.xib */,
 			);
 			path = BlockbusterCollectionViewCell;
+			sourceTree = "<group>";
+		};
+		A1FC093029DC5C4900CB4C9E /* NavigationOverlayTableViewCell */ = {
+			isa = PBXGroup;
+			children = (
+				A1BA1DBC28DCB69100730EA8 /* NavigationOverlayTableViewCell.swift */,
+				A1BA1DBE28DCB6F300730EA8 /* NavigationOverlayCollectionViewCellViewModel.swift */,
+			);
+			path = NavigationOverlayTableViewCell;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

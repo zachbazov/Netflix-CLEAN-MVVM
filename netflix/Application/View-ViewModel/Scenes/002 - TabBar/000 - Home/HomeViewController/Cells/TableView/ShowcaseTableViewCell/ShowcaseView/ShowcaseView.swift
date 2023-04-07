@@ -115,9 +115,9 @@ final class ShowcaseView: View<ShowcaseViewViewModel> {
         contentView.insertSubview(gradientView, at: 0)
         
         let homeViewController = Application.app.coordinator.tabCoordinator.home.viewControllers.first as! HomeViewController
-        homeViewController.dataSource?.colors = [color1!, color2, color3]
-        
-        homeViewController.dataSource?.setupGradient(with: homeViewController)
+        let colors = [color1!, color2, color3]
+        homeViewController.dataSource?.colors = colors
+        homeViewController.dataSource?.gradient?.setupGradient(with: colors)
         
         contentView.layer.shadow(color3, radius: 24.0, opacity: 1.0)
     }
