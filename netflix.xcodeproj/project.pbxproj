@@ -276,6 +276,8 @@
 		A1BA1DBD28DCB69100730EA8 /* NavigationOverlayTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1BA1DBC28DCB69100730EA8 /* NavigationOverlayTableViewCell.swift */; };
 		A1BA1DBF28DCB6F300730EA8 /* NavigationOverlayCollectionViewCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1BA1DBE28DCB6F300730EA8 /* NavigationOverlayCollectionViewCellViewModel.swift */; };
 		A1BA1DC228DCB7D700730EA8 /* NavigationOverlayTableViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1BA1DC128DCB7D700730EA8 /* NavigationOverlayTableViewDataSource.swift */; };
+		A1BD20E229E5B9CC0093749E /* BlurView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1BD20E129E5B9CC0093749E /* BlurView.swift */; };
+		A1BD20E429E5B9E70093749E /* GradientView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1BD20E329E5B9E70093749E /* GradientView.swift */; };
 		A1C7E7A9292A784A004690B9 /* AuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1C7E7A8292A784A004690B9 /* AuthService.swift */; };
 		A1C7E7AB292BC5C1004690B9 /* ShowcaseTableViewCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1C7E7AA292BC5C1004690B9 /* ShowcaseTableViewCellViewModel.swift */; };
 		A1D23ABA29CA1C9C00748029 /* Optional+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1D23AB929CA1C9C00748029 /* Optional+Extension.swift */; };
@@ -596,6 +598,8 @@
 		A1BA1DBC28DCB69100730EA8 /* NavigationOverlayTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationOverlayTableViewCell.swift; sourceTree = "<group>"; };
 		A1BA1DBE28DCB6F300730EA8 /* NavigationOverlayCollectionViewCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationOverlayCollectionViewCellViewModel.swift; sourceTree = "<group>"; };
 		A1BA1DC128DCB7D700730EA8 /* NavigationOverlayTableViewDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationOverlayTableViewDataSource.swift; sourceTree = "<group>"; };
+		A1BD20E129E5B9CC0093749E /* BlurView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlurView.swift; sourceTree = "<group>"; };
+		A1BD20E329E5B9E70093749E /* GradientView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradientView.swift; sourceTree = "<group>"; };
 		A1C7E7A8292A784A004690B9 /* AuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthService.swift; sourceTree = "<group>"; };
 		A1C7E7AA292BC5C1004690B9 /* ShowcaseTableViewCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowcaseTableViewCellViewModel.swift; sourceTree = "<group>"; };
 		A1D23AB929CA1C9C00748029 /* Optional+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Optional+Extension.swift"; sourceTree = "<group>"; };
@@ -1211,8 +1215,10 @@
 				A1AC9FB429A65E0A00DAD66D /* AlertView */,
 				A130BCA1294FA48E0070EA5E /* ActivityIndicatorView.swift */,
 				A1E3706229B5DAE900CFEE9C /* TextFieldActivityIndicatorView.swift */,
+				A1BD20E129E5B9CC0093749E /* BlurView.swift */,
 				A1E81D0E28CFE21300D044EA /* CollectionViewLayout.swift */,
 				A1AE02D0293BA29A00AF0BD6 /* DeviceOrientation.swift */,
+				A1BD20E329E5B9E70093749E /* GradientView.swift */,
 				A1741D5628EE5C9A00F3C46B /* MediaPlayer */,
 				A18D852529423F7600840045 /* MyList */,
 				A1BA1DB128DA203200730EA8 /* OpaqueView */,
@@ -2293,6 +2299,7 @@
 				A1B98BB1298A495F001B7B62 /* NewsHTTPDTO+Mapping.swift in Sources */,
 				A1A71AA3298B2A63001C6AB1 /* SeasonHTTP.swift in Sources */,
 				A18B993F28BFD77F0077A5A6 /* UIViewController+ActivityIndicator.swift in Sources */,
+				A1BD20E229E5B9CC0093749E /* BlurView.swift in Sources */,
 				A18691D828C8C1EE0087DE3B /* TabBarController.swift in Sources */,
 				A1B68F2C2923CB5300FF5F18 /* TableViewHeaderFooterViewViewModel.swift in Sources */,
 				A1F56A6B28C6934B0089BD4F /* UIButton+Extension.swift in Sources */,
@@ -2415,6 +2422,7 @@
 				A1E81D2028CFE47B00D044EA /* ResumableCollectionViewCell.swift in Sources */,
 				A1741D0B28E679A900F3C46B /* DetailDescriptionTableViewCell.swift in Sources */,
 				A1AA28E228F60ABE0011EE9D /* TrailerCollectionViewCellViewModel.swift in Sources */,
+				A1BD20E429E5B9E70093749E /* GradientView.swift in Sources */,
 				A14E0CD429BE81F200F55500 /* NotificationCollectionViewDataSource.swift in Sources */,
 				A1B70A7D293D800300C718C6 /* AuthCoordinator.swift in Sources */,
 				A18B98FE28BEB62C0077A5A6 /* SceneDelegate.swift in Sources */,
