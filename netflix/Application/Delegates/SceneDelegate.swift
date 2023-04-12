@@ -57,11 +57,6 @@ extension SceneDelegate: SceneObserverUnbinding {
         guard let tabCoordinator = Application.app.coordinator.tabCoordinator as TabBarCoordinator? else { return }
         // Remove any home-related observers.
         if let homeController = tabCoordinator.home?.viewControllers.first as? HomeViewController {
-            // Remove panel view observers.
-            if let showcaseCell = homeController.dataSource?.showcaseCell,
-               let panelView = showcaseCell.showcaseView.panelView as PanelView? {
-                panelView.viewDidUnbindObservers()
-            }
             // Remove navigation & navigation overlay views observers.
             if let navigationView = homeController.navigationView {
                 navigationView.viewDidUnbindObservers()

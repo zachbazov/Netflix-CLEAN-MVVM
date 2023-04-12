@@ -18,6 +18,8 @@ protocol ViewLifecycleBehavior {
     func viewWillAppear()
     func viewWillDisappear()
     func viewDidDeallocate()
+    
+    func prepareForReuse()
 }
 
 // MARK: - Default Implementation
@@ -31,4 +33,6 @@ extension ViewLifecycleBehavior {
     func viewWillAppear() {}
     func viewWillDisappear() {}
     func viewDidDeallocate() {}
+    
+    func prepareForReuse() {}
 }

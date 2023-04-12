@@ -29,25 +29,21 @@ final class GradientView: UIView {
         fatalError()
     }
     
-    func setupGradient(with colors: [UIColor]) {
+    @discardableResult
+    func applyGradient(with colors: [UIColor]) -> Self {
         view?.layer.removeFromSuperlayer()
         
-        guard !colors.isEmpty else { return }
+        guard !colors.isEmpty else { return self }
         
         view = UIView(frame: parent.bounds)
         
-        let color1 = colors[0]
-        let color2 = colors[1]
-        let color3 = colors[2]
-        
         gradientLayer.frame = view!.bounds
-        gradientLayer.colors = [color3.cgColor,
-                                color3.cgColor,
-                                color2.cgColor,
-                                color1.cgColor]
+        gradientLayer.colors = colors.map { $0.cgColor }
         gradientLayer.locations = [0.0, 0.3, 0.7, 1.0]
         
         view?.layer.addSublayer(gradientLayer)
         parent.insertSubview(view!, at: .zero)
+        
+        return self
     }
 }

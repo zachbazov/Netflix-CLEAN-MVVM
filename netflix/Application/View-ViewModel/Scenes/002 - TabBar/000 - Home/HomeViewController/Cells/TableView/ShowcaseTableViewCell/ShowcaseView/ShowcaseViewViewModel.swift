@@ -40,8 +40,8 @@ struct ShowcaseViewViewModel {
     
     /// Create a view model based on a media object.
     /// - Parameter media: The media object represented on the display view.
-    init?(media: Media?, with viewModel: HomeViewModel) {
-        self.coordinator = viewModel.coordinator
+    init?(media: Media?, with viewModel: HomeViewModel?) {
+        self.coordinator = viewModel?.coordinator
         
         guard let media = media else { return nil }
         

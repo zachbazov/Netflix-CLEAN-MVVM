@@ -26,21 +26,17 @@ final class ShowcaseView: View<ShowcaseViewViewModel> {
     @IBOutlet private(set) weak var panelViewContainer: UIView!
     
     private(set) var panelView: PanelView!
-    private(set) var gradientView: UIView!
-    private(set) var gradientLayer = CAGradientLayer()
+    private(set) var gradient: GradientView?
     
-//    private(set) var gradient: GradientView?
-    
-    init(with viewModel: ShowcaseTableViewCellViewModel) {
+    init(with viewModel: ShowcaseTableViewCellViewModel?) {
         super.init(frame: .zero)
         self.nibDidLoad()
-        let homeViewModel = viewModel.coordinator!.viewController!.viewModel!
-        let state = homeViewModel.dataSourceState.value ?? .all
-        let media = homeViewModel.showcases[state]
+        let homeViewModel = viewModel?.coordinator?.viewController?.viewModel
+        let state = homeViewModel?.dataSourceState.value ?? .all
+        let media = homeViewModel?.showcases[state]
         self.viewModel = ShowcaseViewViewModel(media: media, with: homeViewModel)
         self.panelView = PanelView(on: panelViewContainer, with: viewModel)
         self.viewDidDeploySubviews()
-        self.viewDidConfigure()
         self.contentView.constraintToSuperview(self)
     }
     
@@ -48,80 +44,43 @@ final class ShowcaseView: View<ShowcaseViewViewModel> {
     
     deinit {
         print("deinit \(Self.self)")
-        panelView.viewDidUnbindObservers()
-        panelView.removeFromSuperview()
+        viewDidDeallocate()
         panelView = nil
-        gradientView.removeFromSuperview()
-        gradientView = nil
+        gradient = nil
     }
     
     override func viewDidDeploySubviews() {
-        setupGradients()
+        setDarkBottomGradient()
+        setBackgroundColor()
+        setPosterStroke()
+        setGenres(attributed: viewModel.attributedGenres)
+        setMediaType()
+        setGestures()
+        
+        loadResources()
     }
     
-    override func viewDidConfigure() {
-        backgroundColor = .clear
-        
-        let gradient = UIImage.fillGradientStroke(bounds: posterImageView.bounds,
-                                                  colors: [.white.withAlphaComponent(0.5), .clear])
-        let gradientColor = UIColor(patternImage: gradient)
-        posterImageView.layer.borderColor = gradientColor.cgColor
-        posterImageView.layer.borderWidth = 1.5
-        posterImageView.layer.cornerRadius = 12.0
-        
+    override func prepareForReuse() {
         posterImageView.image = nil
         logoImageView.image = nil
         genresLabel.attributedText = nil
-        
-        AsyncImageService.shared.load(
-            url: viewModel.posterImageURL,
-            identifier: viewModel.posterImageIdentifier) { [weak self] image in
-                guard let self = self else { return }
-                mainQueueDispatch { self.posterImageView.image = image }
-                mainQueueDispatch { self.setupGradient(with: image!) }
-            }
-        
-        AsyncImageService.shared.load(
-            url: viewModel.logoImageURL,
-            identifier: viewModel.logoImageIdentifier) { [weak self] image in
-                guard let self = self else { return }
-                mainQueueDispatch { self.logoImageView.image = image }
-            }
-        
-        genresLabel.attributedText = viewModel.attributedGenres
-        
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(didTap))
-        contentView.addGestureRecognizer(tapGesture)
-        
-        guard let typeImagePath = viewModel.typeImagePath, typeImagePath.isNotEmpty else { return }
-        typeImageView.image = UIImage(named: typeImagePath)
     }
     
-    func setupGradient(with image: UIImage) {
-        gradientView = UIView(frame: self.contentView.bounds)
+    override func viewDidDeallocate() {
+        panelView?.viewDidUnbindObservers()
+        panelView?.removeFromSuperview()
         
-        let color1 = image.averageColor
-        let color2 = image.areaAverage().darkerColor(for: color1!)
-        let color3 = color2.darkerColor(for: color2)
-        
-        gradientLayer.frame = gradientView.bounds
-        gradientLayer.colors = [color1!.cgColor,
-                                color2.cgColor,
-                                color3.cgColor,
-                                UIColor.black.cgColor]
-        gradientLayer.locations = [0.0, 0.3, 0.7, 1.0]
-        gradientView.layer.addSublayer(gradientLayer)
-        
-        contentView.insertSubview(gradientView, at: 0)
-        
-        let homeViewController = Application.app.coordinator.tabCoordinator.home.viewControllers.first as! HomeViewController
-        let colors = [color1!, color2, color3]
-        homeViewController.dataSource?.style.colors = colors
-        homeViewController.dataSource?.style.gradient?.setupGradient(with: colors)
-        
-        contentView.layer.shadow(color3, radius: 24.0, opacity: 1.0)
+        gradient?.removeFromSuperview()
     }
-    
+}
+
+// MARK: - ViewInstantiable Implementation
+
+extension ShowcaseView: ViewInstantiable {}
+
+// MARK: - ViewProtocol Implementation
+
+extension ShowcaseView: ViewProtocol {
     @objc func didTap() {
         guard let controller = viewModel.coordinator?.viewController else { return }
         let homeViewModel = controller.viewModel
@@ -135,21 +94,94 @@ final class ShowcaseView: View<ShowcaseViewViewModel> {
         coordinator.shouldScreenRotate = rotated
         coordinator.coordinate(to: .detail)
     }
-}
-
-// MARK: - ViewInstantiable Implementation
-
-extension ShowcaseView: ViewInstantiable {}
-
-// MARK: - ViewProtocol Implementation
-
-extension ShowcaseView: ViewProtocol {}
-
-// MARK: - Private UI Implementation
-
-extension ShowcaseView {
-    func setupGradients() {
+    
+    func setDarkBottomGradient() {
         bottomGradientView.addGradientLayer(colors: [.clear, .black.withAlphaComponent(0.66)],
                                             locations: [0.0, 0.66])
+    }
+    
+    private func analyzeColors(for image: UIImage) -> [UIColor] {
+        let c1 = image.averageColor!
+        let c2 = image.areaAverage().darkerColor(for: c1)
+        let c3 = c2.darkerColor(for: c2)
+        let c4 = UIColor.black
+        return [c1, c2, c3, c4]
+    }
+    
+    private func setGradient(for image: UIImage) {
+        guard let controller = viewModel.coordinator?.viewController else { return }
+        
+        let colors = analyzeColors(for: image)
+        
+        gradient = GradientView(on: contentView).applyGradient(with: colors)
+        
+        controller.dataSource?.style.update(colors: colors)
+        
+        setPosterShadow(for: colors[2])
+    }
+    
+    private func setPosterShadow(for color: UIColor) {
+        contentView.layer.shadow(color, radius: 24.0, opacity: 1.0)
+    }
+    
+    private func setBackgroundColor() {
+        backgroundColor = .clear
+    }
+    
+    private func setPosterStroke() {
+        let gradient = UIImage.fillGradientStroke(bounds: posterImageView.bounds,
+                                                  colors: [.white.withAlphaComponent(0.5), .clear])
+        let color = UIColor(patternImage: gradient).cgColor
+        posterImageView.layer.borderColor = color
+        posterImageView.layer.borderWidth = 1.5
+        posterImageView.layer.cornerRadius = 12.0
+    }
+    
+    private func loadResources() {
+        prepareForReuse()
+        
+        AsyncImageService.shared.load(
+            url: viewModel.posterImageURL,
+            identifier: viewModel.posterImageIdentifier) { [weak self] image in
+                guard let self = self, let image = image else { return }
+                
+                mainQueueDispatch {
+                    self.setPoster(image: image)
+                    
+                    self.setGradient(for: image)
+                }
+            }
+        
+        AsyncImageService.shared.load(
+            url: viewModel.logoImageURL,
+            identifier: viewModel.logoImageIdentifier) { [weak self] image in
+                guard let self = self, let image = image else { return }
+                
+                mainQueueDispatch {
+                    self.setLogo(image: image)
+                }
+            }
+    }
+    
+    private func setPoster(image: UIImage) {
+        posterImageView.image = image
+    }
+    
+    private func setLogo(image: UIImage) {
+        logoImageView.image = image
+    }
+    
+    private func setGenres(attributed string: NSMutableAttributedString) {
+        genresLabel.attributedText = string
+    }
+    
+    private func setGestures() {
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(didTap))
+        contentView.addGestureRecognizer(tapGesture)
+    }
+    
+    private func setMediaType() {
+        guard let typeImagePath = viewModel.typeImagePath, typeImagePath.isNotEmpty else { return }
+        typeImageView.image = UIImage(named: typeImagePath)
     }
 }

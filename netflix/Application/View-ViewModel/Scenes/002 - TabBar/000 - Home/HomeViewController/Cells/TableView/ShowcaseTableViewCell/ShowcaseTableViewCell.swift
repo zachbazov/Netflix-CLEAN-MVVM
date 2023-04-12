@@ -10,15 +10,15 @@ import UIKit
 // MARK: - ViewProtocol Type
 
 private protocol ViewProtocol {
-    var showcaseView: ShowcaseView! { get }
-    var viewModel: ShowcaseTableViewCellViewModel! { get }
+    var showcaseView: ShowcaseView? { get }
+    var viewModel: ShowcaseTableViewCellViewModel? { get }
 }
 
 // MARK: - ShowcaseTableViewCell Type
 
 final class ShowcaseTableViewCell: UITableViewCell {
-    private(set) var showcaseView: ShowcaseView!
-    private(set) var viewModel: ShowcaseTableViewCellViewModel!
+    fileprivate var showcaseView: ShowcaseView?
+    fileprivate var viewModel: ShowcaseTableViewCellViewModel?
     
     /// Create a display table view cell object.
     /// - Parameters:
@@ -37,25 +37,25 @@ final class ShowcaseTableViewCell: UITableViewCell {
         cell.viewModel = ShowcaseTableViewCellViewModel(with: viewModel)
         let showcaseView = ShowcaseView(with: cell.viewModel)
         cell.showcaseView = showcaseView
-        cell.contentView.addSubview(cell.showcaseView)
-        cell.showcaseView.constraintToSuperview(cell.contentView)
+        cell.contentView.addSubview(cell.showcaseView ?? .init(with: nil))
+        cell.showcaseView?.constraintToSuperview(cell.contentView)
         cell.backgroundColor = .clear
         return cell
     }
     
     deinit {
         print("deinit \(Self.self)")
-        showcaseView.gradientView.removeFromSuperview()
-        showcaseView.gradientLayer.removeFromSuperlayer()
-        showcaseView.removeFromSuperview()
+        showcaseView?.gradient?.layer.removeFromSuperlayer()
+        showcaseView?.gradient?.removeFromSuperview()
+        showcaseView?.removeFromSuperview()
         showcaseView = nil
-        viewModel.coordinator = nil
+        viewModel?.coordinator = nil
         viewModel = nil
     }
     
     override func prepareForReuse() {
         super.prepareForReuse()
-        showcaseView.setupGradients()
+        showcaseView?.setDarkBottomGradient()
     }
 }
 

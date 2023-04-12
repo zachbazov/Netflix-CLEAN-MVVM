@@ -25,7 +25,7 @@ final class PanelView: View<ShowcaseTableViewCellViewModel> {
     /// - Parameters:
     ///   - parent: Instantiating view.
     ///   - viewModel: Coordinating view model.
-    init(on parent: UIView, with viewModel: ShowcaseTableViewCellViewModel) {
+    init(on parent: UIView, with viewModel: ShowcaseTableViewCellViewModel?) {
         super.init(frame: .zero)
         self.nibDidLoad()
         parent.addSubview(self)
@@ -38,6 +38,7 @@ final class PanelView: View<ShowcaseTableViewCellViewModel> {
     required init?(coder: NSCoder) { fatalError() }
     
     deinit {
+        print("deinit \(Self.self)")
         viewModel = nil
     }
     

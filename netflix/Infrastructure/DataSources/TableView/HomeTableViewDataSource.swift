@@ -53,9 +53,7 @@ extension HomeTableViewDataSourceStyle: HomeTableViewDataSourceStyling {
               let container = controller.navigationContainer
         else { return }
         
-        gradient = GradientView(on: container)
-        
-        gradient?.setupGradient(with: colors)
+        gradient = GradientView(on: container).applyGradient(with: colors.reversed())
     }
     
     fileprivate func removeGradient() {
@@ -92,6 +90,12 @@ extension HomeTableViewDataSourceStyle: HomeTableViewDataSourceStyling {
             removeBlur()
         }
     }
+    
+    func update(colors: [UIColor]) {
+        self.colors = colors
+        
+        gradient?.applyGradient(with: colors.reversed())
+    }
 }
 
 // MARK: - DataSourceProtocol Type
@@ -100,7 +104,6 @@ private protocol DataSourceProtocol {
     var tableView: UITableView! { get }
     var viewModel: HomeViewModel! { get }
     var numberOfRows: Int { get }
-    var showcaseCell: ShowcaseTableViewCell! { get }
     var style: HomeTableViewDataSourceStyle { get }
     var initialOffsetY: CGFloat { get }
     
@@ -116,7 +119,6 @@ private protocol DataSourceProtocol {
 final class HomeTableViewDataSource: NSObject {
     fileprivate weak var tableView: UITableView!
     fileprivate weak var viewModel: HomeViewModel!
-    fileprivate(set) var showcaseCell: ShowcaseTableViewCell!
     
     let style: HomeTableViewDataSourceStyle
     
@@ -137,8 +139,6 @@ final class HomeTableViewDataSource: NSObject {
     
     deinit {
         print("deinit \(Self.self)")
-        showcaseCell.removeFromSuperview()
-        showcaseCell = nil
         tableView.removeFromSuperview()
         tableView = nil
         viewModel.coordinator = nil
@@ -213,8 +213,7 @@ extension HomeTableViewDataSource: UITableViewDelegate, UITableViewDataSource {
         guard let index = Index(rawValue: indexPath.section) else { fatalError() }
         switch index {
         case .display:
-            showcaseCell = ShowcaseTableViewCell.create(on: tableView, for: indexPath, with: viewModel)
-            return showcaseCell
+            return ShowcaseTableViewCell.create(on: tableView, for: indexPath, with: viewModel)
         case .rated:
             return RatedTableViewCell.create(on: tableView, for: indexPath, with: viewModel)
         case .resumable:
