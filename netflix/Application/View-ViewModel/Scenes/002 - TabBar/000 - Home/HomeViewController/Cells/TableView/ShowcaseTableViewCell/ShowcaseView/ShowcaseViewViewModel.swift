@@ -25,6 +25,8 @@ private protocol ViewModelProtocol {
 // MARK: - ShowcaseViewViewModel Type
 
 struct ShowcaseViewViewModel {
+    let coordinator: HomeViewCoordinator?
+    
     let slug: String
     let genres: [String]
     let posterImagePath: String
@@ -38,7 +40,9 @@ struct ShowcaseViewViewModel {
     
     /// Create a view model based on a media object.
     /// - Parameter media: The media object represented on the display view.
-    init?(with media: Media?) {
+    init?(media: Media?, with viewModel: HomeViewModel) {
+        self.coordinator = viewModel.coordinator
+        
         guard let media = media else { return nil }
         
         self.slug = media.slug

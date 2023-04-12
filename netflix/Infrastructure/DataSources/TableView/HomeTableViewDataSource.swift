@@ -7,6 +7,93 @@
 
 import UIKit
 
+// MARK: - HomeTableViewDataSourceStyling Type
+
+private protocol HomeTableViewDataSourceStyling {
+    associatedtype Style
+    
+    var blur: BlurView? { get }
+    var gradient: GradientView? { get }
+    var colors: [UIColor] { get }
+    
+    func addGradient()
+    func removeGradient()
+    func addBlur()
+    func removeBlur()
+    func apply(_ style: HomeTableViewDataSourceStyle.Style)
+}
+
+// MARK: - HomeTableViewDataSourceStyle Type
+
+final class HomeTableViewDataSourceStyle {
+    let viewModel: HomeViewModel
+    
+    var blur: BlurView?
+    var gradient: GradientView?
+    var colors = [UIColor]()
+    
+    init(viewModel: HomeViewModel) {
+        self.viewModel = viewModel
+    }
+}
+
+// MARK: - HomeTableViewDataSourceStyling Implementation
+
+extension HomeTableViewDataSourceStyle: HomeTableViewDataSourceStyling {
+    /// Style representation type.
+    enum Style {
+        case blur
+        case gradient
+    }
+    
+    fileprivate func addGradient() {
+        guard gradient.isNil else { return }
+        
+        guard let controller = viewModel.coordinator?.viewController,
+              let container = controller.navigationContainer
+        else { return }
+        
+        gradient = GradientView(on: container)
+        
+        gradient?.setupGradient(with: colors)
+    }
+    
+    fileprivate func removeGradient() {
+        guard gradient.isNotNil else { return }
+        
+        gradient?.view?.layer.removeFromSuperlayer()
+        gradient = nil
+    }
+    
+    fileprivate func addBlur() {
+        guard blur.isNil else { return }
+        
+        guard let viewController = viewModel.coordinator?.viewController else { return }
+        
+        let effect = UIBlurEffect(style: .dark)
+        
+        blur = BlurView(on: viewController.navigationContainer, effect: effect)
+    }
+    
+    fileprivate func removeBlur() {
+        guard blur.isNotNil else { return }
+        
+        blur?.view.removeFromSuperview()
+        blur = nil
+    }
+    
+    func apply(_ style: HomeTableViewDataSourceStyle.Style) {
+        switch style {
+        case .blur:
+            addBlur()
+            removeGradient()
+        case .gradient:
+            addGradient()
+            removeBlur()
+        }
+    }
+}
+
 // MARK: - DataSourceProtocol Type
 
 private protocol DataSourceProtocol {
@@ -17,58 +104,11 @@ private protocol DataSourceProtocol {
     var style: HomeTableViewDataSourceStyle { get }
     var initialOffsetY: CGFloat { get }
     
-    func viewDidLoad()
-    func viewsDidRegister()
+    func didLoad()
+    func cellsDidRegister()
     func dataSourceDidChange()
-    func insetContent()
-}
-
-// MARK: - HomeTableViewDataSourceStyle Type
-
-private protocol HomeTableViewDataSourceStyling {
-    var blur: BlurView? { get }
-    var gradient: GradientView? { get }
-    var colors: [UIColor] { get }
-}
-
-final class HomeTableViewDataSourceStyle: HomeTableViewDataSourceStyling {
-    let viewModel: HomeViewModel
-    
-    var blur: BlurView?
-    var gradient: GradientView?
-    var colors = [UIColor]()
-    
-    init(viewModel: HomeViewModel) {
-        self.viewModel = viewModel
-    }
-    
-    func addGradient() {
-        guard self.gradient.isNil else { return }
-        guard let viewController = viewModel.coordinator?.viewController,
-              let container = viewController.navigationContainer else { return }
-        gradient = GradientView(on: container)
-        self.gradient?.setupGradient(with: colors)
-    }
-    
-    func removeGradient() {
-        guard let gradientView = self.gradient else { return }
-        gradientView.view?.layer.removeFromSuperlayer()
-        self.gradient = nil
-    }
-    
-    func addBlur() {
-        guard let viewController = viewModel.coordinator?.viewController else { return }
-        
-        guard self.blur == nil else { return }
-        let effect = UIBlurEffect(style: .dark)
-        self.blur = BlurView(on: viewController.navigationContainer, effect: effect)
-    }
-    
-    func removeBlur() {
-        guard let blurView = self.blur else { return }
-        blurView.view.removeFromSuperview()
-        self.blur = nil
-    }
+    func sectionsDidFilter()
+    func contentDidInset()
 }
 
 // MARK: - HomeTableViewDataSource Type
@@ -77,7 +117,9 @@ final class HomeTableViewDataSource: NSObject {
     fileprivate weak var tableView: UITableView!
     fileprivate weak var viewModel: HomeViewModel!
     fileprivate(set) var showcaseCell: ShowcaseTableViewCell!
-    fileprivate(set) var style: HomeTableViewDataSourceStyle
+    
+    let style: HomeTableViewDataSourceStyle
+    
     fileprivate let numberOfRows: Int = 1
     fileprivate var initialOffsetY: CGFloat = .zero
     
@@ -90,7 +132,7 @@ final class HomeTableViewDataSource: NSObject {
         self.viewModel = viewModel
         self.style = HomeTableViewDataSourceStyle(viewModel: viewModel)
         super.init()
-        self.viewDidLoad()
+        self.didLoad()
     }
     
     deinit {
@@ -107,13 +149,16 @@ final class HomeTableViewDataSource: NSObject {
 // MARK: - DataSourceProtocol Implementation
 
 extension HomeTableViewDataSource: DataSourceProtocol {
-    fileprivate func viewDidLoad() {
-        viewsDidRegister()
-        insetContent()
-        style.addGradient()
+    
+    fileprivate func didLoad() {
+        cellsDidRegister()
+        
+        contentDidInset()
+        
+        style.apply(.gradient)
     }
     
-    fileprivate func viewsDidRegister() {
+    fileprivate func cellsDidRegister() {
         tableView.register(headerFooter: TableViewHeaderFooterView.self)
         tableView.register(class: ShowcaseTableViewCell.self)
         tableView.register(class: RatedTableViewCell.self)
@@ -123,23 +168,33 @@ extension HomeTableViewDataSource: DataSourceProtocol {
     }
     
     func dataSourceDidChange() {
-        viewModel?.filter(sections: viewModel?.sections ?? [])
+        sectionsDidFilter()
         
         tableView.delegate = self
         tableView.dataSource = self
         tableView.reloadData()
     }
     
-    fileprivate func insetContent() {
-        guard let viewController = viewModel.coordinator?.viewController else { return }
+    fileprivate func sectionsDidFilter() {
+        guard viewModel.isNotNil else { return }
         
-        guard let window = UIApplication.shared.windows.first else { return }
-        let statusBarFrame = window.windowScene?.statusBarManager?.statusBarFrame ?? CGRect.zero
+        let sections = viewModel.sections
         
-        let remainder = viewController.view.bounds.height - viewController.navigationContainer.bounds.height
-        let inset = viewController.view.bounds.height - remainder - statusBarFrame.height
-        tableView.contentInset = .init(top: inset, left: .zero, bottom: .zero, right: .zero)
-        initialOffsetY = inset
+        viewModel?.filter(sections: sections)
+    }
+    
+    fileprivate func contentDidInset() {
+        guard let controller = viewModel.coordinator?.viewController,
+              let window = UIApplication.shared.windows.first
+        else { return }
+        
+        let statusBarHeight = window.windowScene?.statusBarManager?.statusBarFrame.size.height ?? .zero
+        let remainder = controller.view.bounds.height - controller.navigationContainer.bounds.height
+        let offset = controller.view.bounds.height - remainder - statusBarHeight
+        
+        initialOffsetY = offset
+        
+        tableView.contentInset = .init(top: initialOffsetY, left: .zero, bottom: .zero, right: .zero)
     }
 }
 
@@ -204,30 +259,24 @@ extension HomeTableViewDataSource: UITableViewDelegate, UITableViewDataSource {
     }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        handleViewScrolling(for: scrollView)
-    }
-    
-    private func handleViewScrolling(for scrollView: UIScrollView) {
         guard let window = UIApplication.shared.windows.first,
-              let viewController = viewModel.coordinator?.viewController,
-              let topContainer = viewController.navigationContainer,
-              let segmentControl = viewController.segmentControlView,
-              let view = viewController.view,
-              let offsetY = scrollView.panGestureRecognizer.translation(in: view).y as CGFloat?
+              let controller = viewModel.coordinator?.viewController
         else { return }
         
-        let topContainerHeight = topContainer.bounds.size.height
-        let segmentContainerHeight = segmentControl.parent.bounds.size.height
-        let currentOffsetY = scrollView.contentOffset.y
+        let offsetY = scrollView.panGestureRecognizer.translation(in: controller.view).y
         let isScrollingUp = offsetY > .zero
-        let segmentY = -currentOffsetY - topContainerHeight
+        
+        let segmentY = -scrollView.contentOffset.y - controller.navigationContainer.bounds.height
         var segmentMaxY = max(.zero, -segmentY)
-        var primaryOffsetY = min(.zero, -currentOffsetY - topContainerHeight)
+        var primaryOffsetY = min(.zero, -scrollView.contentOffset.y - controller.navigationContainer.bounds.height)
+        
+        let segmentHeight = controller.segmentControlView?.bounds.size.height ?? .zero
         let statusBarHeight = window.windowScene?.statusBarManager?.statusBarFrame.height ?? .zero
         let heightLimit: CGFloat = statusBarHeight + initialOffsetY
         
         primaryOffsetY = -primaryOffsetY
-        segmentMaxY = segmentMaxY > segmentContainerHeight ? segmentContainerHeight : segmentMaxY
+        
+        segmentMaxY = segmentMaxY > segmentHeight ? segmentHeight : segmentMaxY
         
         UIView.animate(
             withDuration: 0.25,
@@ -236,37 +285,30 @@ extension HomeTableViewDataSource: UITableViewDelegate, UITableViewDataSource {
             animations: { [weak self] in
                 guard let self = self else { return }
                 if isScrollingUp {
-                    if primaryOffsetY <= segmentContainerHeight {
-                        viewController.segmentControlView?.origin(y: -segmentMaxY)
-                        viewController.topContainerHeight.constant = heightLimit + (-segmentMaxY * 2)
-                        viewController.segmentControlView?.alpha = 1.0 - (segmentMaxY / segmentContainerHeight)
-                        
-                        self.style.addGradient()
-                        self.style.removeBlur()
+                    let condition = primaryOffsetY <= segmentHeight
+                    
+                    controller.segmentControlView?.origin(y: condition ? -segmentMaxY : -segmentMaxY + segmentHeight)
+                    controller.topContainerHeight.constant = condition ? heightLimit + (-segmentMaxY * 2) : heightLimit
+                    controller.segmentControlView?.alpha = condition ? 1.0 - (segmentMaxY / segmentHeight) : 1.0
+                    
+                    if primaryOffsetY <= segmentHeight {
+                        self.style.apply(.gradient)
                     } else {
-                        viewController.segmentControlView?.origin(y: -segmentMaxY + segmentContainerHeight)
-                        viewController.topContainerHeight.constant = heightLimit
-                        viewController.segmentControlView?.alpha = 1.0
-                        
-                        self.style.removeGradient()
-                        self.style.addBlur()
+                        self.style.apply(.blur)
                     }
                     
                     if primaryOffsetY <= .zero {
-                        self.style.addGradient()
-                        self.style.removeBlur()
+                        self.style.apply(.gradient)
                     }
                 } else {
-                    viewController.segmentControlView?.origin(y: -segmentMaxY)
-                    viewController.topContainerHeight.constant = heightLimit + -segmentMaxY
-                    viewController.segmentControlView?.alpha = 1.0 - (segmentMaxY / segmentContainerHeight)
+                    controller.segmentControlView?.origin(y: -segmentMaxY)
+                    controller.topContainerHeight.constant = heightLimit + -segmentMaxY
+                    controller.segmentControlView?.alpha = 1.0 - (segmentMaxY / segmentHeight)
                     
                     if primaryOffsetY >= .zero {
-                        self.style.removeGradient()
-                        self.style.addBlur()
+                        self.style.apply(.blur)
                     } else {
-                        self.style.removeBlur()
-                        self.style.addGradient()
+                        self.style.apply(.gradient)
                     }
                 }
             })

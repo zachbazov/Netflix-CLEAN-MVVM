@@ -28,7 +28,7 @@
                     <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                     <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                 </tableView>
-                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="dHz-nr-OmN" userLabel="Top Container">
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="dHz-nr-OmN" userLabel="Navigation Container">
                     <rect key="frame" x="0.0" y="0.0" width="393" height="155"/>
                     <subviews>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="zcf-b3-eQ7" userLabel="Navigation Container">

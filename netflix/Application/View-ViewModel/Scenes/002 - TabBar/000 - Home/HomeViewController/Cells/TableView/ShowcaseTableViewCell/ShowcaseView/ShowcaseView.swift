@@ -20,7 +20,7 @@ final class ShowcaseView: View<ShowcaseViewViewModel> {
     @IBOutlet private weak var container: UIView!
     @IBOutlet private(set) weak var posterImageView: UIImageView!
     @IBOutlet private(set) weak var logoImageView: UIImageView!
-    @IBOutlet private weak var bottomGradientView: UIView! // disposable
+    @IBOutlet private weak var bottomGradientView: UIView!
     @IBOutlet private(set) weak var genresLabel: UILabel!
     @IBOutlet private weak var typeImageView: UIImageView!
     @IBOutlet private(set) weak var panelViewContainer: UIView!
@@ -29,14 +29,15 @@ final class ShowcaseView: View<ShowcaseViewViewModel> {
     private(set) var gradientView: UIView!
     private(set) var gradientLayer = CAGradientLayer()
     
-    /// Create a display view object.
-    /// - Parameter viewModel: Coordinating view model.
+//    private(set) var gradient: GradientView?
+    
     init(with viewModel: ShowcaseTableViewCellViewModel) {
         super.init(frame: .zero)
         self.nibDidLoad()
         let homeViewModel = viewModel.coordinator!.viewController!.viewModel!
-        let media = homeViewModel.showcases[homeViewModel.dataSourceState.value ?? .all]
-        self.viewModel = ShowcaseViewViewModel(with: media)
+        let state = homeViewModel.dataSourceState.value ?? .all
+        let media = homeViewModel.showcases[state]
+        self.viewModel = ShowcaseViewViewModel(media: media, with: homeViewModel)
         self.panelView = PanelView(on: panelViewContainer, with: viewModel)
         self.viewDidDeploySubviews()
         self.viewDidConfigure()
@@ -92,8 +93,7 @@ final class ShowcaseView: View<ShowcaseViewViewModel> {
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(didTap))
         contentView.addGestureRecognizer(tapGesture)
         
-        guard let typeImagePath = viewModel.typeImagePath,
-              typeImagePath.isNotEmpty else { return }
+        guard let typeImagePath = viewModel.typeImagePath, typeImagePath.isNotEmpty else { return }
         typeImageView.image = UIImage(named: typeImagePath)
     }
     
@@ -123,9 +123,9 @@ final class ShowcaseView: View<ShowcaseViewViewModel> {
     }
     
     @objc func didTap() {
-        let homeViewController = Application.app.coordinator.tabCoordinator.home.viewControllers.first as! HomeViewController
-        let homeViewModel = homeViewController.viewModel
-        guard let state = homeViewModel?.dataSourceState.value else { return }
+        guard let controller = viewModel.coordinator?.viewController else { return }
+        let homeViewModel = controller.viewModel
+        let state = homeViewModel?.dataSourceState.value ?? .all
         let coordinator = homeViewModel!.coordinator!
         let section = homeViewModel!.section(at: .resumable)
         let media = homeViewModel!.showcases[HomeTableViewDataSource.State(rawValue: state.rawValue)!]

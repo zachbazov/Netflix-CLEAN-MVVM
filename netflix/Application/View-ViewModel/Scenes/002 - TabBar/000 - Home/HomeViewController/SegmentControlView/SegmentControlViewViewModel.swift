@@ -19,7 +19,7 @@ private protocol ViewModelProtocol {
 // MARK: - SegmentControlViewViewModel Type
 
 final class SegmentControlViewViewModel {
-    private let coordinator: HomeViewCoordinator
+    let coordinator: HomeViewCoordinator
     
     fileprivate let items: [NavigationViewItem]
     let state: Observable<NavigationView.State> = Observable(.tvShows)
@@ -44,14 +44,14 @@ extension SegmentControlViewViewModel: ViewModelProtocol {
     /// Controls the navigation presentation of items.
     /// - Parameter state: Corresponding state.
     func stateDidChange(_ state: NavigationView.State) {
-        guard let segmentView = coordinator.viewController?.segmentControlView else { return }
+        guard let controller = coordinator.viewController else { return }
         
         switch state {
         case .home:
-            segmentView.tvShowsItemViewContainer.isHidden(false)
-            segmentView.moviesItemViewContainer.isHidden(false)
-            segmentView.categoriesItemViewContainer.isHidden(false)
-            segmentView.itemsCenterXConstraint.constant = .zero
+            controller.segmentControlView?.tvShowsItemViewContainer.isHidden(false)
+            controller.segmentControlView?.moviesItemViewContainer.isHidden(false)
+            controller.segmentControlView?.categoriesItemViewContainer.isHidden(false)
+            controller.segmentControlView?.itemsCenterXConstraint.constant = .zero
         case .airPlay:
             break
         case .search:
@@ -59,21 +59,21 @@ extension SegmentControlViewViewModel: ViewModelProtocol {
         case .account:
             coordinator.coordinate(to: .account)
         case .tvShows:
-            segmentView.tvShowsItemViewContainer.isHidden(false)
-            segmentView.moviesItemViewContainer.isHidden(true)
-            segmentView.categoriesItemViewContainer.isHidden(false)
-            segmentView.itemsCenterXConstraint.constant = -24.0
+            controller.segmentControlView?.tvShowsItemViewContainer.isHidden(false)
+            controller.segmentControlView?.moviesItemViewContainer.isHidden(true)
+            controller.segmentControlView?.categoriesItemViewContainer.isHidden(false)
+            controller.segmentControlView?.itemsCenterXConstraint.constant = -24.0
         case .movies:
-            segmentView.tvShowsItemViewContainer.isHidden(true)
-            segmentView.moviesItemViewContainer.isHidden(false)
-            segmentView.categoriesItemViewContainer.isHidden(false)
-            segmentView.itemsCenterXConstraint.constant = -32.0
+            controller.segmentControlView?.tvShowsItemViewContainer.isHidden(true)
+            controller.segmentControlView?.moviesItemViewContainer.isHidden(false)
+            controller.segmentControlView?.categoriesItemViewContainer.isHidden(false)
+            controller.segmentControlView?.itemsCenterXConstraint.constant = -32.0
         case .categories:
             break
         }
         
-        segmentView.animateUsingSpring(withDuration: 0.33,
-                                          withDamping: 0.7,
-                                          initialSpringVelocity: 0.7)
+        controller.segmentControlView?.animateUsingSpring(withDuration: 0.33,
+                                                          withDamping: 0.7,
+                                                          initialSpringVelocity: 0.7)
     }
 }

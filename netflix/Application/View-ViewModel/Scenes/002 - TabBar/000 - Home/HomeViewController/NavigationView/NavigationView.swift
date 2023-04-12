@@ -47,8 +47,6 @@ final class NavigationView: View<NavigationViewViewModel> {
         let items: [NavigationViewItem] = [self.homeItemView, self.airPlayItemView,
                                            self.accountItemView, self.searchItemView]
         self.viewModel = NavigationViewViewModel(items: items, with: viewModel)
-        // Updates root coordinator's `navigationView` property.
-        viewModel.coordinator?.viewController?.navigationView = self
         
         self.viewDidLoad()
     }
@@ -65,17 +63,22 @@ final class NavigationView: View<NavigationViewViewModel> {
     }
     
     override func viewDidBindObservers() {
+        guard let controller = viewModel.coordinator.viewController else { return }
+        
         viewModel.state.observe(on: self) { [weak self] state in
-            self?.viewModel.stateDidChange(state)
+            guard let self = self else { return }
             
-            let homeViewController = Application.app.coordinator.tabCoordinator.home.viewControllers.first as? HomeViewController
-            homeViewController?.navigationOverlayView?.viewModel.navigationViewStateDidChange(state)
+            self.viewModel.stateDidChange(state)
+            
+            controller.navigationOverlayView?.viewModel.navigationViewStateDidChange(state)
         }
     }
     
     override func viewDidUnbindObservers() {
         guard let viewModel = viewModel else { return }
+        
         viewModel.state.remove(observer: self)
+        
         printIfDebug(.success, "Removed `NavigationView` observers.")
     }
 }

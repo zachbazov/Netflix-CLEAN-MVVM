@@ -24,7 +24,6 @@ final class SegmentControlView: View<SegmentControlViewViewModel> {
     @IBOutlet private(set) weak var categoriesItemViewContainer: UIView!
     @IBOutlet private(set) weak var itemsCenterXConstraint: NSLayoutConstraint!
     
-    let parent: UIView
     fileprivate(set) var tvShowsItemView: NavigationViewItem!
     fileprivate(set) var moviesItemView: NavigationViewItem!
     fileprivate(set) var categoriesItemView: NavigationViewItem!
@@ -34,7 +33,6 @@ final class SegmentControlView: View<SegmentControlViewViewModel> {
     ///   - parent: Instantiating view.
     ///   - viewModel: Coordinating view model.
     init(on parent: UIView, with viewModel: HomeViewModel) {
-        self.parent = parent
         super.init(frame: parent.bounds)
         self.nibDidLoad()
         parent.addSubview(self)
@@ -53,6 +51,7 @@ final class SegmentControlView: View<SegmentControlViewViewModel> {
     
     deinit {
         viewDidUnbindObservers()
+        
         viewModel = nil
     }
     
@@ -61,17 +60,22 @@ final class SegmentControlView: View<SegmentControlViewViewModel> {
     }
     
     override func viewDidBindObservers() {
+        guard let controller = viewModel.coordinator.viewController else { return }
+        
         viewModel.state.observe(on: self) { [weak self] state in
-            self?.viewModel.stateDidChange(state)
+            guard let self = self else { return }
             
-            let homeViewController = Application.app.coordinator.tabCoordinator.home.viewControllers.first as? HomeViewController
-            homeViewController?.navigationOverlayView?.viewModel.navigationViewStateDidChange(state)
+            self.viewModel.stateDidChange(state)
+            
+            controller.navigationOverlayView?.viewModel.navigationViewStateDidChange(state)
         }
     }
     
     override func viewDidUnbindObservers() {
         guard let viewModel = viewModel else { return }
+        
         viewModel.state.remove(observer: self)
+        
         printIfDebug(.success, "Removed `NavigationView` observers.")
     }
 }
@@ -82,8 +86,4 @@ extension SegmentControlView: ViewInstantiable {}
 
 // MARK: - ViewProtocol Implementation
 
-extension SegmentControlView: ViewProtocol {
-    func origin(y: CGFloat) {
-        frame.origin.y = y
-    }
-}
+extension SegmentControlView: ViewProtocol {}

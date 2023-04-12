@@ -31,7 +31,8 @@ final class NavigationOverlayView: View<NavigationOverlayViewModel> {
     /// Create a navigation overlay view object.
     /// - Parameter viewModel: Coordinating view model.
     init(with viewModel: HomeViewModel) {
-        let rect = CGRect(x: UIScreen.main.bounds.width, y: .zero, width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
+        let rect = CGRect(x: UIScreen.main.bounds.width, y: .zero,
+                          width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
         super.init(frame: rect)
         self.alpha = .zero
         
@@ -95,6 +96,7 @@ extension NavigationOverlayView: ViewProtocol {
 extension NavigationOverlayView {
     /// Genres representation type.
     enum Category: Int, CaseIterable {
+        case newRelease
         case home
         case myList
         case action
@@ -116,6 +118,7 @@ extension NavigationOverlayView {
 extension NavigationOverlayView.Category: Valuable {
     var stringValue: String {
         switch self {
+        case .newRelease: return "New Release"
         case .home: return Localization.TabBar.Home.Navigation.Overlay().home
         case .myList: return Localization.TabBar.Home.Navigation.Overlay().myList
         case .action: return Localization.TabBar.Home.Navigation.Overlay().action
@@ -138,6 +141,7 @@ extension NavigationOverlayView.Category: Valuable {
 extension NavigationOverlayView.Category {
     func toSection(with viewModel: HomeViewModel) -> Section {
         switch self {
+        case .newRelease: return viewModel.section(at: .newRelease)
         case .home: return viewModel.section(at: .resumable)
         case .myList: return viewModel.section(at: .myList)
         case .action: return viewModel.section(at: .action)

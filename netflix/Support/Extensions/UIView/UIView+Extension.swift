@@ -64,3 +64,11 @@ extension UIView {
         addSubview(airPlay)
     }
 }
+
+// MARK: - Frame
+
+extension UIView {
+    func origin(y: CGFloat) {
+        frame.origin.y = y
+    }
+}
