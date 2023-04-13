@@ -7,26 +7,14 @@
 
 import UIKit
 
-// MARK: - ViewProtocol Type
-
-private protocol ViewProtocol {
-    var tvShowsItemView: NavigationViewItem! { get }
-    var moviesItemView: NavigationViewItem! { get }
-    var categoriesItemView: NavigationViewItem! { get }
-}
-
 // MARK: - NavigationView Type
 
 final class SegmentControlView: View<SegmentControlViewViewModel> {
-    @IBOutlet private(set) weak var bottomContainer: UIView!
-    @IBOutlet private(set) weak var tvShowsItemViewContainer: UIView!
-    @IBOutlet private(set) weak var moviesItemViewContainer: UIView!
-    @IBOutlet private(set) weak var categoriesItemViewContainer: UIView!
+    @IBOutlet private(set) weak var xButton: UIButton!
+    @IBOutlet private(set) weak var tvShowsButton: UIButton!
+    @IBOutlet private(set) weak var moviesButton: UIButton!
+    @IBOutlet private(set) weak var categoriesButton: UIButton!
     @IBOutlet private(set) weak var itemsCenterXConstraint: NSLayoutConstraint!
-    
-    fileprivate(set) var tvShowsItemView: NavigationViewItem!
-    fileprivate(set) var moviesItemView: NavigationViewItem!
-    fileprivate(set) var categoriesItemView: NavigationViewItem!
     
     /// Create a navigation view object.
     /// - Parameters:
@@ -38,11 +26,7 @@ final class SegmentControlView: View<SegmentControlViewViewModel> {
         parent.addSubview(self)
         self.constraintToSuperview(parent)
         
-        self.tvShowsItemView = NavigationViewItem(on: self.tvShowsItemViewContainer, with: viewModel)
-        self.moviesItemView = NavigationViewItem(on: self.moviesItemViewContainer, with: viewModel)
-        self.categoriesItemView = NavigationViewItem(on: self.categoriesItemViewContainer, with: viewModel)
-        let items: [NavigationViewItem] = [self.tvShowsItemView, self.moviesItemView, self.categoriesItemView]
-        self.viewModel = SegmentControlViewViewModel(items: items, with: viewModel)
+        self.viewModel = SegmentControlViewViewModel(with: viewModel)
         
         self.viewDidLoad()
     }
@@ -62,11 +46,7 @@ final class SegmentControlView: View<SegmentControlViewViewModel> {
     override func viewDidBindObservers() {
         guard let controller = viewModel.coordinator.viewController else { return }
         
-        viewModel.state.observe(on: self) { [weak self] state in
-            guard let self = self else { return }
-            
-            self.viewModel.stateDidChange(state)
-            
+        viewModel.state.observe(on: self) { state in
             controller.navigationOverlayView?.viewModel.navigationViewStateDidChange(state)
         }
     }
@@ -78,12 +58,64 @@ final class SegmentControlView: View<SegmentControlViewViewModel> {
         
         printIfDebug(.success, "Removed `NavigationView` observers.")
     }
+    
+    @IBAction func buttonDidTap(_ sender: UIButton) {
+        guard let state = SegmentControlView.State(rawValue: sender.tag) else { return }
+        
+        viewModel.state.value = state
+        
+        switch state {
+        case .main:
+            xButton.isHidden(true)
+            tvShowsButton.isHidden(false)
+            moviesButton.isHidden(false)
+            categoriesButton.isHidden(false)
+            itemsCenterXConstraint.constant = .zero
+        case .tvShows:
+            xButton.isHidden(false)
+            tvShowsButton.isHidden(false)
+            moviesButton.isHidden(true)
+            categoriesButton.isHidden(false)
+            itemsCenterXConstraint.constant = -24.0
+        case .movies:
+            xButton.isHidden(false)
+            tvShowsButton.isHidden(true)
+            moviesButton.isHidden(false)
+            categoriesButton.isHidden(false)
+            itemsCenterXConstraint.constant = -32.0
+        case .categories:
+            break
+        }
+        
+        animateUsingSpring(withDuration: 0.33, withDamping: 0.7, initialSpringVelocity: 0.7)
+    }
 }
 
 // MARK: - ViewInstantiable Implementation
 
 extension SegmentControlView: ViewInstantiable {}
 
-// MARK: - ViewProtocol Implementation
+// MARK: - State Type
 
-extension SegmentControlView: ViewProtocol {}
+extension SegmentControlView {
+    /// State representation type.
+    enum State: Int, CaseIterable {
+        case main
+        case tvShows
+        case movies
+        case categories
+    }
+}
+
+// MARK: - Valuable Implementation
+
+extension SegmentControlView.State: Valuable {
+    var stringValue: String {
+        switch self {
+        case .main: return Localization.TabBar.Home.Navigation().home
+        case .tvShows: return Localization.TabBar.Home.Navigation().tvShows
+        case .movies: return Localization.TabBar.Home.Navigation().movies
+        case .categories: return Localization.TabBar.Home.Navigation().categories
+        }
+    }
+}

@@ -66,7 +66,9 @@ final class NavigationOverlayView: View<NavigationOverlayViewModel> {
         viewModel.isPresented.observe(on: self) { [weak self] _ in
             self?.opaqueView?.viewDidUpdate()
             self?.viewModel.isPresentedDidChange()
+            self?.animatePresentation()
         }
+        
         viewModel.items.observe(on: self) { [weak self] _ in self?.viewModel.dataSourceDidChange() }
     }
     
@@ -88,6 +90,32 @@ extension NavigationOverlayView: ViewProtocol {
         tableView.register(class: NavigationOverlayTableViewCell.self)
         tableView.backgroundView = opaqueView
         return tableView
+    }
+    
+    /// Animate the presentation of the view.
+    fileprivate func animatePresentation() {
+        animateUsingSpring(
+            withDuration: 0.5,
+            withDamping: 1.0,
+            initialSpringVelocity: 0.5,
+            animations: { [weak self] in
+                guard let self = self else { return }
+                self.transform = self.viewModel.isPresented.value
+                    ? CGAffineTransform(translationX: -self.bounds.size.width, y: .zero)
+                    : .identity
+                self.alpha = self.viewModel.isPresented.value ? 1.0 : 0.0
+                self.tableView.alpha = self.viewModel.isPresented.value ? 1.0 : 0.0
+                self.footerView.alpha = self.viewModel.isPresented.value ? 1.0 : 0.0
+                self.tabBar.alpha = self.viewModel.isPresented.value ? 0.0 : 1.0
+            },
+            completion: { [weak self] done in
+                guard let self = self else { return }
+                /// In-case the overlay has been closed and animation is done.
+                if !self.viewModel.isPresented.value && done {
+                    self.tableView.delegate = nil
+                    self.tableView.dataSource = nil
+                }
+            })
     }
 }
 

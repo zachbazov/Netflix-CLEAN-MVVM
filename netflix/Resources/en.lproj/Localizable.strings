@@ -23,6 +23,7 @@
 "HomeViewController.NavigationView.Movies.Title" = "Movies";
 "HomeViewController.NavigationView.Categories.Title" = "Categories";
 "HomeViewController.NavigationView.AirPlay.Title" = "Air Play";
+"HomeViewController.NavigationView.Search.Title" = "Search";
 "HomeViewController.NavigationView.Account.Title" = "Account";
 "HomeViewController.NavigationView.AllCategories.Title" = "All Categories";
 

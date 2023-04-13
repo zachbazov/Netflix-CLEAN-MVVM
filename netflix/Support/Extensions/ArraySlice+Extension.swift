@@ -12,3 +12,7 @@ import Foundation
 extension ArraySlice where Element == NavigationView.State {
     func toArray() -> [Element] { Array(self) }
 }
+
+extension ArraySlice where Element == SegmentControlView.State {
+    func toArray() -> [Element] { Array(self) }
+}

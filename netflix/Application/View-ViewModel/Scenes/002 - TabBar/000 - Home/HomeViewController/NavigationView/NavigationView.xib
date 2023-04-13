@@ -3,17 +3,14 @@
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21507"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21505"/>
+        <capability name="Image references" minToolsVersion="12.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="NavigationView" customModule="netflix" customModuleProvider="target">
             <connections>
-                <outlet property="accountItemViewContainer" destination="bzF-Ir-7K2" id="kOW-kx-OkP"/>
-                <outlet property="airPlayItemViewContainer" destination="jyM-Yo-6ZJ" id="WON-ON-Fpd"/>
-                <outlet property="homeItemViewContainer" destination="xi4-Cf-x0R" id="oBd-cx-IzV"/>
-                <outlet property="searchItemViewContainer" destination="rCU-hF-Udf" id="0xQ-mj-fCV"/>
-                <outlet property="topContainer" destination="p6X-Bg-Psj" id="dAS-IK-jGK"/>
+                <outlet property="airPlayButton" destination="lr7-yR-N5z" id="9T0-gr-pul"/>
             </connections>
         </placeholder>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
@@ -24,44 +21,57 @@
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="p6X-Bg-Psj" userLabel="Top Container">
                     <rect key="frame" x="0.0" y="0.0" width="414" height="48"/>
                     <subviews>
-                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="xi4-Cf-x0R" userLabel="Home Button Container">
-                            <rect key="frame" x="16" y="4" width="40" height="40"/>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lr7-yR-N5z" userLabel="AirPlay">
+                            <rect key="frame" x="246" y="4" width="40" height="40"/>
                             <constraints>
-                                <constraint firstAttribute="height" constant="40" id="MB3-T2-vVA"/>
-                                <constraint firstAttribute="width" constant="40" id="wL7-Ka-h4y"/>
+                                <constraint firstAttribute="height" constant="40" id="PgI-8N-8Pp"/>
+                                <constraint firstAttribute="width" constant="40" id="gpr-vt-se4"/>
                             </constraints>
-                        </view>
-                        <view tag="1" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="jyM-Yo-6ZJ" userLabel="AirPlay Button Container">
-                            <rect key="frame" x="254" y="4" width="40" height="40"/>
+                            <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                            <state key="normal">
+                                <imageReference key="image" image="airplayvideo" catalog="system"/>
+                            </state>
+                            <connections>
+                                <action selector="buttonDidTap:" destination="-1" eventType="touchUpInside" id="Klg-g8-n4R"/>
+                            </connections>
+                        </button>
+                        <button opaque="NO" tag="1" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="VcB-yH-3TM" userLabel="Search">
+                            <rect key="frame" x="302" y="4" width="40" height="40"/>
                             <constraints>
-                                <constraint firstAttribute="height" constant="40" id="0d6-TV-HT7"/>
-                                <constraint firstAttribute="width" constant="40" id="JAy-JO-KiG"/>
+                                <constraint firstAttribute="width" constant="40" id="KPT-cZ-3h8"/>
+                                <constraint firstAttribute="height" constant="40" id="P8S-jE-Ab8"/>
                             </constraints>
-                        </view>
-                        <view tag="2" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="rCU-hF-Udf" userLabel="Search Button Container">
-                            <rect key="frame" x="310" y="4" width="40" height="40"/>
+                            <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                            <state key="normal">
+                                <imageReference key="image" image="magnifyingglass" catalog="system"/>
+                            </state>
+                            <connections>
+                                <action selector="buttonDidTap:" destination="-1" eventType="touchUpInside" id="eGZ-py-WP3"/>
+                            </connections>
+                        </button>
+                        <button opaque="NO" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ysz-Yp-cDn" userLabel="Account">
+                            <rect key="frame" x="358" y="4" width="40" height="40"/>
                             <constraints>
-                                <constraint firstAttribute="width" constant="40" id="1TB-kE-2yi"/>
-                                <constraint firstAttribute="height" constant="40" id="DQk-K2-gQ2"/>
+                                <constraint firstAttribute="width" constant="40" id="Lct-Je-PKe"/>
+                                <constraint firstAttribute="height" constant="40" id="swK-Gm-s0O"/>
                             </constraints>
-                        </view>
-                        <view tag="3" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="bzF-Ir-7K2" userLabel="Account Button Container">
-                            <rect key="frame" x="366" y="8" width="32" height="32"/>
-                            <constraints>
-                                <constraint firstAttribute="height" constant="32" id="AY5-CJ-zg4"/>
-                                <constraint firstAttribute="width" constant="32" id="ouj-nZ-t5n"/>
-                            </constraints>
-                        </view>
+                            <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                            <state key="normal" image="person.circle" catalog="system"/>
+                            <connections>
+                                <action selector="buttonDidTap:" destination="-1" eventType="touchUpInside" id="Crc-OC-U3c"/>
+                            </connections>
+                        </button>
                     </subviews>
                     <constraints>
-                        <constraint firstItem="jyM-Yo-6ZJ" firstAttribute="centerY" secondItem="xi4-Cf-x0R" secondAttribute="centerY" id="2GN-tW-5fJ"/>
-                        <constraint firstItem="xi4-Cf-x0R" firstAttribute="centerY" secondItem="p6X-Bg-Psj" secondAttribute="centerY" id="5IO-Zj-lAC"/>
-                        <constraint firstItem="xi4-Cf-x0R" firstAttribute="leading" secondItem="p6X-Bg-Psj" secondAttribute="leading" constant="16" id="7xx-9h-ZJS"/>
-                        <constraint firstItem="rCU-hF-Udf" firstAttribute="leading" secondItem="jyM-Yo-6ZJ" secondAttribute="trailing" constant="16" id="EPy-DY-XsA"/>
-                        <constraint firstItem="bzF-Ir-7K2" firstAttribute="centerY" secondItem="xi4-Cf-x0R" secondAttribute="centerY" id="H6e-qi-p1w"/>
-                        <constraint firstAttribute="trailing" secondItem="bzF-Ir-7K2" secondAttribute="trailing" constant="16" id="e9A-yM-mDI"/>
-                        <constraint firstItem="bzF-Ir-7K2" firstAttribute="leading" secondItem="rCU-hF-Udf" secondAttribute="trailing" constant="16" id="q0o-MA-1Ca"/>
-                        <constraint firstItem="rCU-hF-Udf" firstAttribute="centerY" secondItem="xi4-Cf-x0R" secondAttribute="centerY" id="vWf-D2-CiK"/>
+                        <constraint firstItem="Ysz-Yp-cDn" firstAttribute="leading" secondItem="VcB-yH-3TM" secondAttribute="trailing" constant="16" id="0wo-y0-LjX"/>
+                        <constraint firstItem="VcB-yH-3TM" firstAttribute="centerY" secondItem="Ysz-Yp-cDn" secondAttribute="centerY" id="JEX-cu-OzC"/>
+                        <constraint firstAttribute="trailing" secondItem="Ysz-Yp-cDn" secondAttribute="trailing" constant="16" id="KQl-gW-NK3"/>
+                        <constraint firstItem="Ysz-Yp-cDn" firstAttribute="centerY" secondItem="p6X-Bg-Psj" secondAttribute="centerY" id="Qh3-bk-Fdx"/>
+                        <constraint firstItem="lr7-yR-N5z" firstAttribute="centerY" secondItem="VcB-yH-3TM" secondAttribute="centerY" id="uOL-43-wjP"/>
+                        <constraint firstItem="VcB-yH-3TM" firstAttribute="leading" secondItem="lr7-yR-N5z" secondAttribute="trailing" constant="16" id="wRW-RQ-Fsl"/>
                     </constraints>
                 </view>
             </subviews>
@@ -75,4 +85,9 @@
             <point key="canvasLocation" x="-45" y="108"/>
         </view>
     </objects>
+    <resources>
+        <image name="airplayvideo" catalog="system" width="128" height="97"/>
+        <image name="magnifyingglass" catalog="system" width="128" height="117"/>
+        <image name="person.circle" catalog="system" width="128" height="123"/>
+    </resources>
 </document>

@@ -14,7 +14,7 @@ private protocol ViewModelProtocol {
     var items: Observable<[Valuable]> { get }
     var state: NavigationOverlayTableViewDataSource.State { get }
     var numberOfSections: Int { get }
-    var latestState: NavigationView.State { get }
+    var latestState: SegmentControlView.State { get }
     var hasHomeExpanded: Bool { get }
     var hasTvExpanded: Bool { get }
     var hasMoviesExpanded: Bool { get }
@@ -22,8 +22,8 @@ private protocol ViewModelProtocol {
     func isPresentedDidChange()
     func dataSourceDidChange()
     func itemsDidChange()
-    func animatePresentation()
-    func navigationViewStateDidChange(_ state: NavigationView.State)
+//    func animatePresentation()
+    func navigationViewStateDidChange(_ state: SegmentControlView.State)
     func didSelectRow(at indexPath: IndexPath)
 }
 
@@ -35,7 +35,7 @@ final class NavigationOverlayViewModel {
     let items: Observable<[Valuable]> = Observable([])
     fileprivate var state: NavigationOverlayTableViewDataSource.State = .main
     let numberOfSections: Int = 1
-    fileprivate var latestState: NavigationView.State = .home
+    fileprivate var latestState: SegmentControlView.State = .main
     fileprivate var hasHomeExpanded = false
     fileprivate var hasTvExpanded = false
     fileprivate var hasMoviesExpanded = false
@@ -57,8 +57,6 @@ extension NavigationOverlayViewModel: ViewModelProtocol {
     /// Presentation of the view.
     func isPresentedDidChange() {
         if case true = isPresented.value { itemsDidChange() }
-        
-        animatePresentation()
     }
     
     /// Release data source changes and center the content.
@@ -79,51 +77,26 @@ extension NavigationOverlayViewModel: ViewModelProtocol {
     
     /// Change `items` value based on the data source `state` value.
     fileprivate func itemsDidChange() {
-        if case .main = state { items.value = NavigationView.State.allCases[3...5].toArray() }
-        else if case .genres = state { items.value = NavigationOverlayView.Category.allCases }
-        else { items.value = [] }
-    }
-    
-    /// Animate the presentation of the view.
-    fileprivate func animatePresentation() {
-        guard let navigationOverlayView = coordinator.viewController?.navigationOverlayView else {
-            return
+        switch state {
+        case .main:
+            items.value = SegmentControlView.State.allCases[1...3].toArray()
+        case .genres:
+            items.value = NavigationOverlayView.Category.allCases
+        default:
+            items.value = []
         }
-        
-        navigationOverlayView.animateUsingSpring(
-            withDuration: 0.5,
-            withDamping: 1.0,
-            initialSpringVelocity: 0.5,
-            animations: { [weak self] in
-                guard let self = self else { return }
-                navigationOverlayView.transform = self.isPresented.value
-                    ? CGAffineTransform(translationX: -navigationOverlayView.bounds.size.width, y: .zero)
-                    : .identity
-                navigationOverlayView.alpha = self.isPresented.value ? 1.0 : 0.0
-                navigationOverlayView.tableView.alpha = self.isPresented.value ? 1.0 : 0.0
-                navigationOverlayView.footerView.alpha = self.isPresented.value ? 1.0 : 0.0
-                navigationOverlayView.tabBar.alpha = self.isPresented.value ? 0.0 : 1.0
-            },
-            completion: { [weak self] done in
-                guard let self = self else { return }
-                /// In-case the overlay has been closed and animation is done.
-                if !self.isPresented.value && done {
-                    navigationOverlayView.tableView.delegate = nil
-                    navigationOverlayView.tableView.dataSource = nil
-                }
-            })
     }
     
-    func navigationViewStateDidChange(_ state: NavigationView.State) {
+    func navigationViewStateDidChange(_ state: SegmentControlView.State) {
         guard let homeViewController = coordinator.viewController,
               let homeViewModel = homeViewController.viewModel,
-              let navigationView = homeViewController.navigationView,
+              let segmentControlView = homeViewController.segmentControlView,
               let browseOverlayView = coordinator.viewController!.browseOverlayView else {
             return
         }
         
         switch state {
-        case .home:
+        case .main:
             // In-case the user already interacting with browse's overlay, and wants to dismiss it.
             if !isPresented.value && browseOverlayView.viewModel.isPresented {
                 // Set the navigation settings by the latest state stored value.
@@ -131,11 +104,7 @@ extension NavigationOverlayViewModel: ViewModelProtocol {
                 hasTvExpanded = latestState == .tvShows ? true : false
                 hasMoviesExpanded = latestState == .movies ? true : false
                 // Restore the navigation view state.
-                if case .tvShows = latestState {
-                    navigationView.viewModel.stateDidChange(.tvShows)
-                } else if case .movies = latestState {
-                    navigationView.viewModel.stateDidChange(.movies)
-                }
+                segmentControlView.viewModel.state.value = latestState
                 // Dismiss browse's overlay.
                 browseOverlayView.viewModel.isPresented = false
             // In-case the user wants to navigate back home's state.
@@ -146,7 +115,7 @@ extension NavigationOverlayViewModel: ViewModelProtocol {
                 hasTvExpanded = false
                 hasMoviesExpanded = false
                 homeViewModel.dataSourceState.value = .all
-                latestState = .home
+                latestState = .main
                 return
             // Default case.
             } else if homeViewModel.dataSourceState.value == .all
@@ -194,14 +163,13 @@ extension NavigationOverlayViewModel: ViewModelProtocol {
             self.state = .genres
             // Present the overlay.
             isPresented.value = true
-        default: break
         }
     }
     
     func didSelectRow(at indexPath: IndexPath) {
         let homeViewController = coordinator.viewController
         let homeViewModel = homeViewController!.viewModel!
-        let navigationView = homeViewController!.navigationView!
+        let segmentControlView = homeViewController!.segmentControlView
         let category = NavigationOverlayView.Category(rawValue: indexPath.row)!
         let browseOverlayView = coordinator.viewController!.browseOverlayView!
         /// Execute operations based on the row that has been selected on the overlay.
@@ -218,17 +186,17 @@ extension NavigationOverlayViewModel: ViewModelProtocol {
         } else if state == .main {
             /// In-case the overlay state has been set to `.mainMenu` value.
             /// Extract a slice of the navigation view states.
-            guard let options = NavigationView.State.allCases[3...5].toArray()[indexPath.row] as NavigationView.State? else { return }
+            guard let options = SegmentControlView.State.allCases[indexPath.row] as SegmentControlView.State? else { return }
             if case .tvShows = options {
                 // In-case the user reselect `.tvShows` state value, return.
-                if navigationView.viewModel.state.value == .tvShows { return }
+                if segmentControlView?.viewModel.state.value == .tvShows { return }
                 // Else, set the `navigationView` state to `.tvShows` value.
-                navigationView.viewModel.state.value = .tvShows
+                segmentControlView?.viewModel.state.value = .tvShows
                 // Close the browse overlay.
                 browseOverlayView.viewModel.isPresented = false
             } else if case .movies = options {
-                if navigationView.viewModel.state.value == .movies { return }
-                navigationView.viewModel.state.value = .movies
+                if segmentControlView?.viewModel.state.value == .movies { return }
+                segmentControlView?.viewModel.state.value = .movies
                 
                 browseOverlayView.viewModel.isPresented = false
             } else {
