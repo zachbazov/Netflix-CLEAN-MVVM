@@ -10,6 +10,7 @@ import UIKit
 // MARK: - NavigationView Type
 
 final class SegmentControlView: View<SegmentControlViewViewModel> {
+    @IBOutlet private(set) weak var stackView: UIStackView!
     @IBOutlet private(set) weak var xButton: UIButton!
     @IBOutlet private(set) weak var tvShowsButton: UIButton!
     @IBOutlet private(set) weak var moviesButton: UIButton!

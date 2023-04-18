@@ -44,8 +44,13 @@ extension NavigationOverlayTableViewDataSource: UITableViewDelegate, UITableView
         return NavigationOverlayTableViewCell.create(on: tableView, for: indexPath, with: viewModel)
     }
     
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return viewModel.rowHeight
+    }
+    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         viewModel.isPresented.value = false
+        
         viewModel.didSelectRow(at: indexPath)
         
         if case .none? = State(rawValue: indexPath.section) {}

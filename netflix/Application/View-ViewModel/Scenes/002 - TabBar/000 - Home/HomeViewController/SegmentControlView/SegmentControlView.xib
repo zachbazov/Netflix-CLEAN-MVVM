@@ -12,6 +12,7 @@
                 <outlet property="categoriesButton" destination="lID-ah-9ms" id="5aG-eb-FSe"/>
                 <outlet property="itemsCenterXConstraint" destination="msg-hG-W8T" id="Bwh-Qo-lSW"/>
                 <outlet property="moviesButton" destination="GRp-GW-Bqz" id="hRV-dR-gFX"/>
+                <outlet property="stackView" destination="g5h-mD-16a" id="VsX-dp-IeP"/>
                 <outlet property="tvShowsButton" destination="CVd-HS-TRs" id="ZpE-u6-MdC"/>
                 <outlet property="xButton" destination="IER-02-cJS" id="HSj-KH-zCf"/>
             </connections>

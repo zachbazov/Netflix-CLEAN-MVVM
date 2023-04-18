@@ -40,6 +40,9 @@ final class NavigationOverlayViewModel {
     fileprivate var hasTvExpanded = false
     fileprivate var hasMoviesExpanded = false
     
+    
+    let rowHeight: CGFloat = 56.0
+    
     /// Create a navigation overlay view view model object.
     /// - Parameter viewModel: Coordinating view model.
     init(with viewModel: HomeViewModel) {
@@ -54,9 +57,17 @@ extension NavigationOverlayViewModel: ViewModel {}
 // MARK: - ViewModelProtocol Implementation
 
 extension NavigationOverlayViewModel: ViewModelProtocol {
+    func removeBlurness() {
+        guard let navigationOverlay = coordinator.viewController?.navigationOverlayView else { return }
+        
+        navigationOverlay.opaqueView?.remove()
+    }
+    
     /// Presentation of the view.
     func isPresentedDidChange() {
-        if case true = isPresented.value { itemsDidChange() }
+        guard isPresented.value else { return }
+        
+        itemsDidChange()
     }
     
     /// Release data source changes and center the content.
@@ -65,14 +76,15 @@ extension NavigationOverlayViewModel: ViewModelProtocol {
         
         let tableView = navigationOverlayView.tableView
         // In-case there is no allocated delegate.
-        if tableView.delegate == nil {
-            tableView.delegate = navigationOverlayView.dataSource
-            tableView.dataSource = navigationOverlayView.dataSource
-        }
+        tableView.delegate = navigationOverlayView.dataSource
+        tableView.dataSource = navigationOverlayView.dataSource
+        
+        navigationOverlayView.opaqueView?.add()
         // Release changes.
         tableView.reloadData()
         // Center the content.
-        tableView.centerVertically(on: navigationOverlayView)
+//        tableView.centerVertically(on: navigationOverlayView)
+        tableView.contentInset = .init(top: 32.0, left: .zero, bottom: .zero, right: .zero)
     }
     
     /// Change `items` value based on the data source `state` value.

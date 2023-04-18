@@ -30,7 +30,7 @@ final class NavigationOverlayFooterView: View<NavigationOverlayViewModel> {
         self.addSubview(button)
         self.constraintToCenter(button)
         parent.addSubview(self)
-        self.constraintBottom(toParent: parent, withHeightAnchor: 60.0)
+        self.constraintBottomToSafeArea(toParent: parent, withHeightAnchor: 60.0)
         self.viewModel = viewModel
         self.viewDidConfigure()
     }
@@ -59,5 +59,7 @@ extension NavigationOverlayFooterView: ViewProtocol {
     @objc
     fileprivate func viewDidTap() {
         viewModel.isPresented.value = false
+        
+        viewModel.removeBlurness()
     }
 }

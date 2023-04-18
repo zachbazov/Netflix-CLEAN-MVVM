@@ -12,10 +12,11 @@ import UIKit.UITableView
 extension UITableView {
     func centerVertically(on parent: UIView) {
         let navigationOverlayFooterHeight = CGFloat(80.0)
+        print(11, (parent.bounds.height - contentSize.height) / 4.0 + navigationOverlayFooterHeight)
         contentInset = UIEdgeInsets(
-            top: (parent.bounds.height - contentSize.height) / 2.0 - navigationOverlayFooterHeight,
+            top: (parent.bounds.height - contentSize.height) / 4.0 + navigationOverlayFooterHeight,
             left: .zero,
-            bottom: (parent.bounds.height - contentSize.height) / 2.0,
+            bottom: (parent.bounds.height - contentSize.height) / 4.0,
             right: .zero)
     }
 }

@@ -27,11 +27,12 @@ final class NavigationOverlayView: View<NavigationOverlayViewModel> {
     var footerView: NavigationOverlayFooterView!
     var tabBar: UITabBar!
     private(set) lazy var tableView: UITableView = createTableView()
+    var gradientView: UIView!
     
     /// Create a navigation overlay view object.
     /// - Parameter viewModel: Coordinating view model.
     init(with viewModel: HomeViewModel) {
-        let rect = CGRect(x: UIScreen.main.bounds.width, y: .zero,
+        let rect = CGRect(x: .zero, y: .zero,
                           width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
         super.init(frame: rect)
         self.alpha = .zero
@@ -42,13 +43,13 @@ final class NavigationOverlayView: View<NavigationOverlayViewModel> {
         self.opaqueView = OpaqueView(frame: UIScreen.main.bounds)
         let parent = viewModel.coordinator!.viewController!.view!
         self.footerView = NavigationOverlayFooterView(parent: parent, viewModel: self.viewModel)
+        self.gradientView = .init(frame: CGRect(x: .zero, y: UIScreen.main.bounds.height - 192.0, width: UIScreen.main.bounds.width, height: 192.0))
+        self.gradientView.addGradientLayer(colors: [.clear, .hexColor("#050505")], locations: [0.0, 0.85])
         
         parent.addSubview(self)
         parent.addSubview(self.footerView)
         self.addSubview(self.tableView)
-        
-        // Updates root coordinator's `categoriesOverlayView` property.
-        viewModel.coordinator?.viewController?.navigationOverlayView = self
+        self.addSubview(self.gradientView)
         
         self.viewDidBindObservers()
     }
@@ -56,6 +57,7 @@ final class NavigationOverlayView: View<NavigationOverlayViewModel> {
     required init?(coder: NSCoder) { fatalError() }
     
     deinit {
+        print("deinit \(Self.self)")
         viewDidUnbindObservers()
         tableView.removeFromSuperview()
         footerView.removeFromSuperview()
@@ -88,33 +90,23 @@ extension NavigationOverlayView: ViewProtocol {
         tableView.showsHorizontalScrollIndicator = false
         tableView.separatorStyle = .none
         tableView.register(class: NavigationOverlayTableViewCell.self)
+        tableView.backgroundColor = .clear
         tableView.backgroundView = opaqueView
         return tableView
     }
     
     /// Animate the presentation of the view.
     fileprivate func animatePresentation() {
-        animateUsingSpring(
+        UIView.animate(
             withDuration: 0.5,
-            withDamping: 1.0,
-            initialSpringVelocity: 0.5,
+            delay: .zero,
+            options: .curveEaseInOut,
             animations: { [weak self] in
                 guard let self = self else { return }
-                self.transform = self.viewModel.isPresented.value
-                    ? CGAffineTransform(translationX: -self.bounds.size.width, y: .zero)
-                    : .identity
                 self.alpha = self.viewModel.isPresented.value ? 1.0 : 0.0
                 self.tableView.alpha = self.viewModel.isPresented.value ? 1.0 : 0.0
                 self.footerView.alpha = self.viewModel.isPresented.value ? 1.0 : 0.0
                 self.tabBar.alpha = self.viewModel.isPresented.value ? 0.0 : 1.0
-            },
-            completion: { [weak self] done in
-                guard let self = self else { return }
-                /// In-case the overlay has been closed and animation is done.
-                if !self.viewModel.isPresented.value && done {
-                    self.tableView.delegate = nil
-                    self.tableView.dataSource = nil
-                }
             })
     }
 }

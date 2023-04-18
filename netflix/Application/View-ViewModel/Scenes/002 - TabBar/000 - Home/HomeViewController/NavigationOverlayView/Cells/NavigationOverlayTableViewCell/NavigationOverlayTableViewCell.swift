@@ -19,6 +19,7 @@ private protocol ViewProtocol {
 
 final class NavigationOverlayTableViewCell: UITableViewCell {
     fileprivate lazy var titleLabel = createLabel()
+    
     /// Create and dequeue a navigation overlay table view cell.
     /// - Parameters:
     ///   - tableView: Corresponding table view.
@@ -52,8 +53,8 @@ final class NavigationOverlayTableViewCell: UITableViewCell {
 
 extension NavigationOverlayTableViewCell: ViewLifecycleBehavior {
     func viewDidDeploySubviews() {
-        self.backgroundColor = .clear
-        self.selectionStyle = .none
+        backgroundColor = .clear
+        selectionStyle = .none
     }
 }
 
@@ -61,10 +62,8 @@ extension NavigationOverlayTableViewCell: ViewLifecycleBehavior {
 
 extension NavigationOverlayTableViewCell: ViewProtocol {
     fileprivate func createLabel() -> UILabel {
-        let label = UILabel(frame: .init(x: .zero, y: .zero,
-                                         width: UIScreen.main.bounds.width, height: 44.0))
-        label.textAlignment = .center
-        label.textColor = .white
+        let label = UILabel(frame: .init(x: 24.0, y: .zero, width: bounds.width, height: 44.0))
+        label.textColor = .lightGray
         label.font = UIFont.systemFont(ofSize: 18.0, weight: .semibold)
         addSubview(label)
         return label

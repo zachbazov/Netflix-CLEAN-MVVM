@@ -37,9 +37,8 @@ final class NavigationView: View<NavigationViewViewModel> {
     }
     
     override func viewDidBindObservers() {
-        guard let controller = viewModel.coordinator.viewController else { return }
-        
-        guard let segmentState = controller.segmentControlView?.viewModel.state.value else { return }
+        guard let controller = viewModel.coordinator.viewController,
+              let segmentState = controller.segmentControlView?.viewModel.state.value else { return }
         
         viewModel.state.observe(on: self) { [weak self] state in
             guard let self = self, let state = state else { return }
@@ -61,7 +60,7 @@ final class NavigationView: View<NavigationViewViewModel> {
     @IBAction func buttonDidTap(_ sender: UIButton) {
         guard let state = NavigationView.State(rawValue: sender.tag) else { return }
         
-        viewModel.state.value = state
+        viewModel.stateDidChange(state)
     }
 }
 
