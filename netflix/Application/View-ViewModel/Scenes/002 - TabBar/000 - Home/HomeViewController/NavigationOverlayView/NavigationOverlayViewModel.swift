@@ -14,16 +14,11 @@ private protocol ViewModelProtocol {
     var items: Observable<[Valuable]> { get }
     var state: NavigationOverlayTableViewDataSource.State { get }
     var numberOfSections: Int { get }
-    var latestState: SegmentControlView.State { get }
-    var hasHomeExpanded: Bool { get }
-    var hasTvExpanded: Bool { get }
-    var hasMoviesExpanded: Bool { get }
+    var rowHeight: CGFloat { get }
     
     func isPresentedDidChange()
     func dataSourceDidChange()
     func itemsDidChange()
-//    func animatePresentation()
-    func navigationViewStateDidChange(_ state: SegmentControlView.State)
     func didSelectRow(at indexPath: IndexPath)
 }
 
@@ -31,16 +26,11 @@ private protocol ViewModelProtocol {
 
 final class NavigationOverlayViewModel {
     fileprivate let coordinator: HomeViewCoordinator
+    
     let isPresented: Observable<Bool> = Observable(false)
     let items: Observable<[Valuable]> = Observable([])
-    fileprivate var state: NavigationOverlayTableViewDataSource.State = .main
+    var state: NavigationOverlayTableViewDataSource.State = .main
     let numberOfSections: Int = 1
-    fileprivate var latestState: SegmentControlView.State = .main
-    fileprivate var hasHomeExpanded = false
-    fileprivate var hasTvExpanded = false
-    fileprivate var hasMoviesExpanded = false
-    
-    
     let rowHeight: CGFloat = 56.0
     
     /// Create a navigation overlay view view model object.
@@ -95,85 +85,6 @@ extension NavigationOverlayViewModel: ViewModelProtocol {
             items.value = NavigationOverlayView.Category.allCases
         default:
             items.value = []
-        }
-    }
-    
-    func navigationViewStateDidChange(_ state: SegmentControlView.State) {
-        guard let homeViewController = coordinator.viewController,
-              let homeViewModel = homeViewController.viewModel,
-              let segmentControlView = homeViewController.segmentControlView,
-              let browseOverlayView = coordinator.viewController!.browseOverlayView else {
-            return
-        }
-        
-        switch state {
-        case .main:
-            // In-case the user already interacting with browse's overlay, and wants to dismiss it.
-            if !isPresented.value && browseOverlayView.viewModel.isPresented {
-                // Set the navigation settings by the latest state stored value.
-                hasHomeExpanded = false
-                hasTvExpanded = latestState == .tvShows ? true : false
-                hasMoviesExpanded = latestState == .movies ? true : false
-                // Restore the navigation view state.
-                segmentControlView.viewModel.state.value = latestState
-                // Dismiss browse's overlay.
-                browseOverlayView.viewModel.isPresented = false
-            // In-case the user wants to navigate back home's state.
-            } else if homeViewModel.dataSourceState.value != .all
-                        && !isPresented.value
-                        && !browseOverlayView.viewModel.isPresented {
-                hasHomeExpanded = false
-                hasTvExpanded = false
-                hasMoviesExpanded = false
-                homeViewModel.dataSourceState.value = .all
-                latestState = .main
-                return
-            // Default case.
-            } else if homeViewModel.dataSourceState.value == .all
-                        && !isPresented.value
-                        && !browseOverlayView.viewModel.isPresented {
-                return
-            }
-            
-            hasHomeExpanded = true
-        case .tvShows:
-            // In-case the user wants to navigate to either tv-shows or movies state.
-            if hasTvExpanded || browseOverlayView.viewModel.isPresented {
-                // Set the navigation overlay state to main.
-                self.state = .main
-                // Present the overlay.
-                isPresented.value = true
-                return
-            // In-case either tv-shows or movies hasn't been expanded and a presented brose overlay.
-            }
-            // Else, set the navigation settings by state value.
-            hasHomeExpanded = false
-            hasTvExpanded = true
-            hasMoviesExpanded = false
-            // Store the latest navigation state.
-            latestState = .tvShows
-            // Set home's table view data source state to tv shows.
-            homeViewModel.dataSourceState.value = .tvShows
-        case .movies:
-            // In-case the user wants to navigate to either tv-shows or movies state.
-            if hasMoviesExpanded || browseOverlayView.viewModel.isPresented {
-                self.state = .main
-                isPresented.value = true
-                return
-            }
-            // Else, set the navigation settings by state value.
-            hasHomeExpanded = false
-            hasTvExpanded = false
-            hasMoviesExpanded = true
-            // Store the latest navigation state.
-            latestState = .movies
-            // Set home's table view data source state to tv shows.
-            homeViewModel.dataSourceState.value = .movies
-        case .categories:
-            // Set the navigation overlay state to genres.
-            self.state = .genres
-            // Present the overlay.
-            isPresented.value = true
         }
     }
     

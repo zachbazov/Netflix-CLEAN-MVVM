@@ -20,6 +20,11 @@ final class SegmentControlViewViewModel {
     
     let state: Observable<SegmentControlView.State> = Observable(.tvShows)
     
+    var latestState: SegmentControlView.State = .main
+    var hasHomeExpanded = false
+    var hasTvExpanded = false
+    var hasMoviesExpanded = false
+    
     /// Create a navigation view view model object.
     /// - Parameters:
     ///   - items: Represented items on the navigation.

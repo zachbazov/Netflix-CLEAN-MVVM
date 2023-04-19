@@ -11,6 +11,7 @@ import UIKit
 
 final class NavigationView: View<NavigationViewViewModel> {
     @IBOutlet private(set) weak var airPlayButton: UIButton!
+    @IBOutlet private(set) weak var profileLabel: UILabel!
     
     /// Create a navigation view object.
     /// - Parameters:
@@ -28,39 +29,30 @@ final class NavigationView: View<NavigationViewViewModel> {
     required init?(coder: NSCoder) { fatalError() }
     
     deinit {
-        viewDidUnbindObservers()
         viewModel = nil
     }
     
     override func viewDidLoad() {
-        viewDidBindObservers()
-    }
-    
-    override func viewDidBindObservers() {
-        guard let controller = viewModel.coordinator.viewController,
-              let segmentState = controller.segmentControlView?.viewModel.state.value else { return }
-        
-        viewModel.state.observe(on: self) { [weak self] state in
-            guard let self = self, let state = state else { return }
-            
-            self.viewModel.stateDidChange(state)
-            
-            controller.navigationOverlayView?.viewModel.navigationViewStateDidChange(segmentState)
-        }
-    }
-    
-    override func viewDidUnbindObservers() {
-        guard let viewModel = viewModel else { return }
-        
-        viewModel.state.remove(observer: self)
-        
-        printIfDebug(.success, "Removed `NavigationView` observers.")
+        viewModel.getUserProfiles()
     }
     
     @IBAction func buttonDidTap(_ sender: UIButton) {
         guard let state = NavigationView.State(rawValue: sender.tag) else { return }
         
-        viewModel.stateDidChange(state)
+        stateDidChange(state)
+    }
+    
+    /// Controls the navigation presentation of items.
+    /// - Parameter state: Corresponding state.
+    func stateDidChange(_ state: NavigationView.State) {
+        switch state {
+        case .airPlay:
+            airPlayButton.asRoutePickerView()
+        case .search:
+            viewModel.coordinator.coordinate(to: .search)
+        case .account:
+            viewModel.coordinator.coordinate(to: .account)
+        }
     }
 }
 

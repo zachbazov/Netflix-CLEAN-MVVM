@@ -33,7 +33,7 @@ private protocol ViewModelProtocol {
 final class ProfileViewModel {
     var coordinator: ProfileCoordinator?
     
-    fileprivate lazy var userUseCase = UserUseCase()
+    fileprivate(set) lazy var userUseCase = UserUseCase()
     
     var profiles = [UserProfile]()
     var selectedProfile: UserProfile?
