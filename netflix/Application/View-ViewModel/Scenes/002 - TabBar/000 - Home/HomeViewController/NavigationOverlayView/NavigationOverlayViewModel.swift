@@ -83,7 +83,6 @@ extension NavigationOverlayViewModel: ViewModelProtocol {
         // Release changes.
         tableView.reloadData()
         // Center the content.
-//        tableView.centerVertically(on: navigationOverlayView)
         tableView.contentInset = .init(top: 32.0, left: .zero, bottom: .zero, right: .zero)
     }
     

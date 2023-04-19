@@ -10,9 +10,9 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="SegmentControlView" customModule="netflix" customModuleProvider="target">
             <connections>
                 <outlet property="categoriesButton" destination="lID-ah-9ms" id="5aG-eb-FSe"/>
-                <outlet property="itemsCenterXConstraint" destination="msg-hG-W8T" id="Bwh-Qo-lSW"/>
                 <outlet property="moviesButton" destination="GRp-GW-Bqz" id="hRV-dR-gFX"/>
                 <outlet property="stackView" destination="g5h-mD-16a" id="VsX-dp-IeP"/>
+                <outlet property="stackViewLeadingConstraint" destination="q9n-4M-IEd" id="ZOH-OY-t1n"/>
                 <outlet property="tvShowsButton" destination="CVd-HS-TRs" id="ZpE-u6-MdC"/>
                 <outlet property="xButton" destination="IER-02-cJS" id="HSj-KH-zCf"/>
             </connections>
@@ -25,13 +25,13 @@
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="jz8-FB-weZ" userLabel="Bottom Container">
                     <rect key="frame" x="0.0" y="0.0" width="414" height="48"/>
                     <subviews>
-                        <stackView opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="g5h-mD-16a">
-                            <rect key="frame" x="31" y="0.0" width="352" height="48"/>
+                        <stackView opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" spacing="16" translatesAutoresizingMaskIntoConstraints="NO" id="g5h-mD-16a">
+                            <rect key="frame" x="24" y="4" width="390" height="36"/>
                             <subviews>
                                 <button hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="249" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="IER-02-cJS" userLabel="X">
-                                    <rect key="frame" x="0.0" y="0.0" width="40" height="48"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="32" height="36"/>
                                     <constraints>
-                                        <constraint firstAttribute="width" constant="40" id="SGH-IQ-D9j"/>
+                                        <constraint firstAttribute="width" constant="32" id="SGH-IQ-D9j"/>
                                     </constraints>
                                     <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
@@ -40,9 +40,10 @@
                                         <action selector="buttonDidTap:" destination="-1" eventType="touchUpInside" id="dnb-i2-VHy"/>
                                     </connections>
                                 </button>
-                                <button opaque="NO" tag="1" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="CVd-HS-TRs">
-                                    <rect key="frame" x="0.0" y="0.0" width="117.33333333333333" height="48"/>
-                                    <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="15"/>
+                                <button opaque="NO" tag="1" contentMode="scaleToFill" horizontalCompressionResistancePriority="1000" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="CVd-HS-TRs">
+                                    <rect key="frame" x="0.0" y="0.0" width="106" height="36"/>
+                                    <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="13"/>
+                                    <inset key="contentEdgeInsets" minX="18" minY="0.0" maxX="18" maxY="0.0"/>
                                     <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                     <state key="normal" title="TV Shows">
                                         <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -51,9 +52,10 @@
                                         <action selector="buttonDidTap:" destination="-1" eventType="touchUpInside" id="kZq-9B-iuP"/>
                                     </connections>
                                 </button>
-                                <button opaque="NO" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="GRp-GW-Bqz">
-                                    <rect key="frame" x="117.33333333333334" y="0.0" width="117.33333333333334" height="48"/>
-                                    <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="15"/>
+                                <button opaque="NO" tag="2" contentMode="scaleToFill" horizontalCompressionResistancePriority="1000" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="GRp-GW-Bqz">
+                                    <rect key="frame" x="122" y="0.0" width="81" height="36"/>
+                                    <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="13"/>
+                                    <inset key="contentEdgeInsets" minX="18" minY="0.0" maxX="18" maxY="0.0"/>
                                     <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                     <state key="normal" title="Movies">
                                         <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -62,9 +64,10 @@
                                         <action selector="buttonDidTap:" destination="-1" eventType="touchUpInside" id="mgw-NY-Jde"/>
                                     </connections>
                                 </button>
-                                <button opaque="NO" tag="3" contentMode="scaleToFill" horizontalHuggingPriority="249" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lID-ah-9ms">
-                                    <rect key="frame" x="234.66666666666671" y="0.0" width="117.33333333333334" height="48"/>
-                                    <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="15"/>
+                                <button opaque="NO" tag="3" contentMode="scaleToFill" horizontalCompressionResistancePriority="1000" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lID-ah-9ms">
+                                    <rect key="frame" x="219" y="0.0" width="105" height="36"/>
+                                    <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="13"/>
+                                    <inset key="contentEdgeInsets" minX="18" minY="0.0" maxX="18" maxY="0.0"/>
                                     <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                     <state key="normal" title="Categories">
                                         <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -73,21 +76,23 @@
                                         <action selector="buttonDidTap:" destination="-1" eventType="touchUpInside" id="WZq-3a-o4t"/>
                                     </connections>
                                 </button>
+                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="dqU-Pd-qwk" userLabel="Dummy View">
+                                    <rect key="frame" x="340" y="0.0" width="50" height="36"/>
+                                </view>
                             </subviews>
                             <constraints>
                                 <constraint firstItem="IER-02-cJS" firstAttribute="top" secondItem="g5h-mD-16a" secondAttribute="top" id="Dhi-dO-b4H"/>
-                                <constraint firstItem="CVd-HS-TRs" firstAttribute="width" secondItem="g5h-mD-16a" secondAttribute="width" multiplier="0.33333" id="GFC-yu-3rf"/>
                                 <constraint firstAttribute="bottom" secondItem="IER-02-cJS" secondAttribute="bottom" id="SoK-Ub-fXk"/>
                                 <constraint firstItem="IER-02-cJS" firstAttribute="leading" secondItem="g5h-mD-16a" secondAttribute="leading" id="USM-KI-DWY"/>
-                                <constraint firstItem="GRp-GW-Bqz" firstAttribute="width" secondItem="CVd-HS-TRs" secondAttribute="width" id="xXS-DY-Y3q"/>
                             </constraints>
                         </stackView>
                     </subviews>
                     <constraints>
-                        <constraint firstItem="g5h-mD-16a" firstAttribute="top" secondItem="jz8-FB-weZ" secondAttribute="top" id="8m6-bn-6Dh"/>
-                        <constraint firstAttribute="bottom" secondItem="g5h-mD-16a" secondAttribute="bottom" id="BZ9-Pn-egl"/>
-                        <constraint firstItem="g5h-mD-16a" firstAttribute="centerX" secondItem="jz8-FB-weZ" secondAttribute="centerX" id="msg-hG-W8T"/>
-                        <constraint firstItem="g5h-mD-16a" firstAttribute="width" secondItem="jz8-FB-weZ" secondAttribute="width" multiplier="0.85" id="pI6-i1-pTj"/>
+                        <constraint firstItem="g5h-mD-16a" firstAttribute="top" secondItem="jz8-FB-weZ" secondAttribute="top" constant="4" id="8m6-bn-6Dh"/>
+                        <constraint firstAttribute="bottom" secondItem="g5h-mD-16a" secondAttribute="bottom" constant="8" id="BZ9-Pn-egl"/>
+                        <constraint firstAttribute="trailing" secondItem="g5h-mD-16a" secondAttribute="trailing" id="e5m-xO-CuH"/>
+                        <constraint firstItem="g5h-mD-16a" firstAttribute="width" relation="greaterThanOrEqual" secondItem="jz8-FB-weZ" secondAttribute="width" multiplier="0.8" id="pI6-i1-pTj"/>
+                        <constraint firstItem="g5h-mD-16a" firstAttribute="leading" secondItem="jz8-FB-weZ" secondAttribute="leading" constant="24" id="q9n-4M-IEd"/>
                     </constraints>
                 </view>
             </subviews>

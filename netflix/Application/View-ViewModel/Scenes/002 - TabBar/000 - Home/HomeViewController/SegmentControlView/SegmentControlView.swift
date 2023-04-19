@@ -15,7 +15,7 @@ final class SegmentControlView: View<SegmentControlViewViewModel> {
     @IBOutlet private(set) weak var tvShowsButton: UIButton!
     @IBOutlet private(set) weak var moviesButton: UIButton!
     @IBOutlet private(set) weak var categoriesButton: UIButton!
-    @IBOutlet private(set) weak var itemsCenterXConstraint: NSLayoutConstraint!
+    @IBOutlet private(set) weak var stackViewLeadingConstraint: NSLayoutConstraint!
     
     /// Create a navigation view object.
     /// - Parameters:
@@ -30,6 +30,7 @@ final class SegmentControlView: View<SegmentControlViewViewModel> {
         self.viewModel = SegmentControlViewViewModel(with: viewModel)
         
         self.viewDidLoad()
+        self.viewDidConfigure()
     }
     
     required init?(coder: NSCoder) { fatalError() }
@@ -42,6 +43,18 @@ final class SegmentControlView: View<SegmentControlViewViewModel> {
     
     override func viewDidLoad() {
         viewDidBindObservers()
+    }
+    
+    override func viewDidConfigure() {
+        tvShowsButton.layer.borderColor = UIColor.white.withAlphaComponent(0.5).cgColor
+        tvShowsButton.layer.borderWidth = 1.5
+        tvShowsButton.layer.cornerRadius = 18.0
+        moviesButton.layer.borderColor = UIColor.white.withAlphaComponent(0.5).cgColor
+        moviesButton.layer.borderWidth = 1.5
+        moviesButton.layer.cornerRadius = 20.0
+        categoriesButton.layer.borderColor = UIColor.white.withAlphaComponent(0.5).cgColor
+        categoriesButton.layer.borderWidth = 1.5
+        categoriesButton.layer.cornerRadius = 18.0
     }
     
     override func viewDidBindObservers() {
@@ -71,19 +84,22 @@ final class SegmentControlView: View<SegmentControlViewViewModel> {
             tvShowsButton.isHidden(false)
             moviesButton.isHidden(false)
             categoriesButton.isHidden(false)
-            itemsCenterXConstraint.constant = .zero
+            
+            stackViewLeadingConstraint.constant = 24.0
         case .tvShows:
             xButton.isHidden(false)
             tvShowsButton.isHidden(false)
             moviesButton.isHidden(true)
             categoriesButton.isHidden(false)
-            itemsCenterXConstraint.constant = -24.0
+            
+            stackViewLeadingConstraint.constant = 16.0
         case .movies:
             xButton.isHidden(false)
             tvShowsButton.isHidden(true)
             moviesButton.isHidden(false)
             categoriesButton.isHidden(false)
-            itemsCenterXConstraint.constant = -32.0
+            
+            stackViewLeadingConstraint.constant = 16.0
         case .categories:
             break
         }
