@@ -21,6 +21,7 @@ private protocol ViewProtocol {
 
 final class BrowseOverlayView: View<BrowseOverlayViewModel> {
     private(set) lazy var collectionView: UICollectionView = createCollectionView()
+    
     var dataSource: BrowseOverlayCollectionViewDataSource? {
         didSet { dataSourceDidChange() }
     }
@@ -29,8 +30,6 @@ final class BrowseOverlayView: View<BrowseOverlayViewModel> {
         super.init(frame: parent.bounds)
         
         self.viewModel = BrowseOverlayViewModel(with: viewModel)
-        // Updates root coordinator's `browseOverlayView` property.
-        viewModel.coordinator?.viewController?.browseOverlayView = self
         
         parent.addSubview(self)
         self.constraintToSuperview(parent)

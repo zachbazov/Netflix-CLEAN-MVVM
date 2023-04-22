@@ -40,6 +40,8 @@ extension BrowseOverlayViewModel: ViewModelProtocol {
         guard let homeViewController = coordinator.viewController else { return }
         
         if isPresented {
+//            homeViewController.dataSource?.style.removeGradient()
+            
             homeViewController.browseOverlayViewContainer.isHidden(false)
             
             homeViewController.view.animateUsingSpring(
@@ -48,10 +50,14 @@ extension BrowseOverlayViewModel: ViewModelProtocol {
                 initialSpringVelocity: 0.7,
                 animations: {
                     homeViewController.browseOverlayViewContainer.alpha = 1.0
+                    
+                    homeViewController.navigationContainer.backgroundColor = .black
                 })
             
             return
         }
+        
+//        homeViewController.dataSource?.style.addGradient()
         
         homeViewController.view.animateUsingSpring(
             withDuration: 0.5,
@@ -59,6 +65,8 @@ extension BrowseOverlayViewModel: ViewModelProtocol {
             initialSpringVelocity: 0.7,
             animations: {
                 homeViewController.browseOverlayViewContainer.alpha = .zero
+                
+                homeViewController.navigationContainer.backgroundColor = .clear
             }) { done in
                 if done {
                     homeViewController.browseOverlayViewContainer.isHidden(true)

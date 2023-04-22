@@ -24,6 +24,7 @@ final class DetailViewController: Controller<DetailViewModel> {
     private(set) var dataSource: DetailTableViewDataSource!
     
     deinit {
+        print("deinit \(Self.self)")
         viewModel?.resetOrientation()
         viewDidUnbindObservers()
         previewView = nil

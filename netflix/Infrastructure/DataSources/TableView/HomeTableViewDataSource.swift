@@ -46,7 +46,7 @@ extension HomeTableViewDataSourceStyle: HomeTableViewDataSourceStyling {
         case gradient
     }
     
-    fileprivate func addGradient() {
+    func addGradient() {
         guard gradient.isNil else { return }
         
         guard let controller = viewModel.coordinator?.viewController,
@@ -56,7 +56,7 @@ extension HomeTableViewDataSourceStyle: HomeTableViewDataSourceStyling {
         gradient = GradientView(on: container).applyGradient(with: colors.reversed())
     }
     
-    fileprivate func removeGradient() {
+    func removeGradient() {
         guard gradient.isNotNil else { return }
         
         gradient?.view?.layer.removeFromSuperlayer()

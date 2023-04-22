@@ -89,11 +89,12 @@ extension NavigationOverlayViewModel: ViewModelProtocol {
     }
     
     func didSelectRow(at indexPath: IndexPath) {
-        let homeViewController = coordinator.viewController
-        let homeViewModel = homeViewController!.viewModel!
-        let segmentControlView = homeViewController!.segmentControlView
-        let category = NavigationOverlayView.Category(rawValue: indexPath.row)!
-        let browseOverlayView = coordinator.viewController!.browseOverlayView!
+        guard let homeViewController = coordinator.viewController,
+              let homeViewModel = homeViewController.viewModel,
+              let segmentControlView = homeViewController.segmentControlView,
+              let category = NavigationOverlayView.Category(rawValue: indexPath.row),
+              let browseOverlayView = homeViewController.browseOverlayView
+        else { print("r");return }
         /// Execute operations based on the row that has been selected on the overlay.
         /// In-case the overlay state has been set to `.categories` value.
         if case .genres = state {
@@ -111,14 +112,14 @@ extension NavigationOverlayViewModel: ViewModelProtocol {
             guard let options = SegmentControlView.State.allCases[indexPath.row] as SegmentControlView.State? else { return }
             if case .tvShows = options {
                 // In-case the user reselect `.tvShows` state value, return.
-                if segmentControlView?.viewModel.state.value == .tvShows { return }
+                if segmentControlView.viewModel.state.value == .tvShows { return }
                 // Else, set the `navigationView` state to `.tvShows` value.
-                segmentControlView?.viewModel.state.value = .tvShows
+                segmentControlView.viewModel.state.value = .tvShows
                 // Close the browse overlay.
                 browseOverlayView.viewModel.isPresented = false
             } else if case .movies = options {
-                if segmentControlView?.viewModel.state.value == .movies { return }
-                segmentControlView?.viewModel.state.value = .movies
+                if segmentControlView.viewModel.state.value == .movies { return }
+                segmentControlView.viewModel.state.value = .movies
                 
                 browseOverlayView.viewModel.isPresented = false
             } else {

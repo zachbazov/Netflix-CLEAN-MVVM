@@ -21,6 +21,7 @@ final class BrowseOverlayCollectionViewDataSource: NSObject {
     fileprivate let coordinator: HomeViewCoordinator
     fileprivate let section: Section
     fileprivate let items: [Media]
+    
     /// Create a browse overlay collection view data source object.
     /// - Parameters:
     ///   - section: Corresponding media's section object.

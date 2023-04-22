@@ -134,7 +134,7 @@ extension ShowcaseView: ViewProtocol {
         let color = UIColor(patternImage: gradient).cgColor
         posterImageView.layer.borderColor = color
         posterImageView.layer.borderWidth = 1.5
-        posterImageView.layer.cornerRadius = 12.0
+        posterImageView?.layer.cornerRadius = 12.0
     }
     
     private func loadResources() {
