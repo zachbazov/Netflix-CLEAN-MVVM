@@ -38,6 +38,8 @@ class View<T>: UIView where T: ViewModel {
     func viewDidBindObservers() {}
     func viewDidUnbindObservers() {}
     
+    func viewWillAnimateAppearance() {}
+    
     func viewWillDeallocate() {}
     func viewDidDeallocate() {}
     

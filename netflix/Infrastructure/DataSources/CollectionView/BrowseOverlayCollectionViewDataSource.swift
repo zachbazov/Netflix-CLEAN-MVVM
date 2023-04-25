@@ -11,7 +11,7 @@ import UIKit
 
 private protocol DataSourceProtocol {
     var coordinator: HomeViewCoordinator { get }
-    var section: Section { get }
+    var section: Section? { get }
     var items: [Media] { get }
 }
 
@@ -19,17 +19,17 @@ private protocol DataSourceProtocol {
 
 final class BrowseOverlayCollectionViewDataSource: NSObject {
     fileprivate let coordinator: HomeViewCoordinator
-    fileprivate let section: Section
+    var section: Section?
     fileprivate let items: [Media]
     
     /// Create a browse overlay collection view data source object.
     /// - Parameters:
     ///   - section: Corresponding media's section object.
     ///   - viewModel: Coordinating view model.
-    init(section: Section, with viewModel: HomeViewModel) {
+    init(section: Section? = nil, with viewModel: HomeViewModel) {
         self.coordinator = viewModel.coordinator!
         self.section = section
-        self.items = section.media
+        self.items = section?.media ?? []
     }
 }
 
@@ -41,10 +41,11 @@ extension BrowseOverlayCollectionViewDataSource: DataSourceProtocol {}
 
 extension BrowseOverlayCollectionViewDataSource: UICollectionViewDelegate, UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return self.section.media.count
+        return self.section?.media.count ?? .zero
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        guard let section = section else { return UICollectionViewCell() }
         return StandardCollectionViewCell.create(
             on: collectionView,
             reuseIdentifier: StandardCollectionViewCell.reuseIdentifier,

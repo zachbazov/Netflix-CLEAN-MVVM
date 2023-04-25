@@ -39,7 +39,7 @@ final class HomeViewCoordinator {
     var media: Media?
     var shouldScreenRotate = false
     
-    var navigationOverlaySection: Section?
+//    var navigationOverlaySection: Section?
 }
 
 // MARK: - CoordinatorProtocol Implementation
@@ -113,7 +113,6 @@ extension HomeViewCoordinator: CoordinatorProtocol {
         case .browse:
             guard let controller = viewController else { return }
             
-            controller.browseOverlayView?.setupDataSource()
             controller.browseOverlayView?.viewModel.isPresented.value = true
         }
     }

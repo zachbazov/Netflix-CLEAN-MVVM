@@ -89,11 +89,11 @@ extension NavigationOverlayViewModel: ViewModelProtocol {
     }
     
     func didSelectRow(at indexPath: IndexPath) {
-        guard let homeViewController = coordinator.viewController,
-              let homeViewModel = homeViewController.viewModel,
-              let segmentControlView = homeViewController.segmentControlView,
+        guard let controller = coordinator.viewController,
+              let homeViewModel = controller.viewModel,
+              let segmentControlView = controller.segmentControlView,
               let category = NavigationOverlayView.Category(rawValue: indexPath.row),
-              let browseOverlayView = homeViewController.browseOverlayView
+              let browseOverlayView = controller.browseOverlayView
         else { return }
         
         switch state {
@@ -101,17 +101,18 @@ extension NavigationOverlayViewModel: ViewModelProtocol {
             break
         case .main:
             guard let options = SegmentControlView.State.allCases[indexPath.row] as SegmentControlView.State? else { return }
+            
             switch options {
             case .main:
                 break
             case .tvShows:
-                guard segmentControlView.viewModel.state.value != .tvShows else { return }
+                if segmentControlView.viewModel.state.value == .tvShows { return }
                 
                 segmentControlView.viewModel.state.value = .tvShows
                 
                 browseOverlayView.viewModel.isPresented.value = false
             case .movies:
-                guard segmentControlView.viewModel.state.value != .movies else { return }
+                if segmentControlView.viewModel.state.value == .movies { return }
                 
                 segmentControlView.viewModel.state.value = .movies
                 
@@ -124,10 +125,11 @@ extension NavigationOverlayViewModel: ViewModelProtocol {
                 isPresented.value = true
             }
         case .genres:
-            coordinator.viewController?.dataSource?.style.removeGradient()
+            controller.dataSource?.style.removeGradient()
             
             let section = category.toSection(with: homeViewModel)
-            coordinator.navigationOverlaySection = section
+            
+            browseOverlayView.viewModel.section.value = section
             
             coordinator.coordinate(to: .browse)
         }

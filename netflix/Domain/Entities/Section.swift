@@ -21,6 +21,12 @@ final class Section {
     let title: String
     var media: [Media]
     
+    init() {
+        self.id = .zero
+        self.title = .toBlank()
+        self.media = []
+    }
+    
     init(id: Int, title: String, media: [Media]) {
         self.id = id
         self.title = title
@@ -31,3 +37,11 @@ final class Section {
 // MARK: - Sectionable Implementation
 
 extension Section: Sectionable {}
+
+// MARK: -
+
+extension Section {
+    static var vacantValue: Section {
+        return Section(id: .zero, title: .toBlank(), media: [])
+    }
+}

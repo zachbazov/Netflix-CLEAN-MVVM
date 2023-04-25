@@ -11,8 +11,7 @@ import Foundation
 
 private protocol ViewModelProtocol {
     var isPresented: Observable<Bool> { get }
-    
-    func shouldDisplayOrHide()
+    var section: Observable<Section> { get }
 }
 
 // MARK: - BrowseOverlayViewModel Type
@@ -21,6 +20,7 @@ struct BrowseOverlayViewModel {
     let coordinator: HomeViewCoordinator
     
     let isPresented: Observable<Bool> = Observable(false)
+    let section: Observable<Section> = Observable(.vacantValue)
     
     init(with viewModel: HomeViewModel) {
         self.coordinator = viewModel.coordinator!
@@ -33,36 +33,4 @@ extension BrowseOverlayViewModel: ViewModel {}
 
 // MARK: - ViewModelProtocol Implementation
 
-extension BrowseOverlayViewModel: ViewModelProtocol {
-    func shouldDisplayOrHide() {
-        guard let homeViewController = coordinator.viewController else { return }
-        
-        if isPresented.value {
-            homeViewController.browseOverlayViewContainer.isHidden(false)
-            
-            homeViewController.view.animateUsingSpring(
-                withDuration: 0.5,
-                withDamping: 1.0,
-                initialSpringVelocity: 0.7,
-                animations: {
-                    homeViewController.browseOverlayViewContainer.alpha = 1.0
-                    homeViewController.browseOverlayViewContainer.transform = .identity
-                })
-            
-            return
-        }
-        
-        homeViewController.view.animateUsingSpring(
-            withDuration: 0.5,
-            withDamping: 1.0,
-            initialSpringVelocity: 0.7,
-            animations: {
-                homeViewController.browseOverlayViewContainer.alpha = .zero
-                homeViewController.browseOverlayViewContainer.transform = CGAffineTransform(translationX: .zero, y: homeViewController.browseOverlayViewContainer.bounds.height)
-            }) { done in
-                if done {
-                    homeViewController.browseOverlayViewContainer.isHidden(true)
-                }
-            }
-    }
-}
+extension BrowseOverlayViewModel: ViewModelProtocol {}

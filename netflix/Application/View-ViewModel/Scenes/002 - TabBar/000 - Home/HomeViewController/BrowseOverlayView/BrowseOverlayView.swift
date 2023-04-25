@@ -14,15 +14,15 @@ private protocol ViewProtocol {
     var dataSource: BrowseOverlayCollectionViewDataSource? { get }
     
     func createCollectionView() -> UICollectionView
-    func dataSourceDidChange()
+    func createDataSource() -> BrowseOverlayCollectionViewDataSource?
+    func sectionDidChange()
 }
 
 // MARK: - BrowseOverlayView Type
 
 final class BrowseOverlayView: View<BrowseOverlayViewModel> {
     private(set) lazy var collectionView: UICollectionView = createCollectionView()
-    
-    var dataSource: BrowseOverlayCollectionViewDataSource?
+    private(set) lazy var dataSource: BrowseOverlayCollectionViewDataSource? = createDataSource()
     
     init(on parent: UIView, with viewModel: HomeViewModel) {
         super.init(frame: parent.bounds)
@@ -49,8 +49,15 @@ final class BrowseOverlayView: View<BrowseOverlayViewModel> {
     override func viewDidBindObservers() {
         viewModel?.isPresented.observe(on: self) { [weak self] _ in
             guard let self = self else { return }
-            self.viewModel?.shouldDisplayOrHide()
-            self.dataSourceDidChange()
+            
+            self.viewWillAnimateAppearance()
+        }
+        
+        viewModel?.section.observe(on: self) { [weak self] section in
+            guard let self = self else { return }
+            
+            self.dataSource?.section = section
+            self.sectionDidChange()
         }
     }
     
@@ -58,8 +65,35 @@ final class BrowseOverlayView: View<BrowseOverlayViewModel> {
         guard viewModel.isNotNil else { return }
         
         viewModel?.isPresented.remove(observer: self)
+        viewModel?.section.remove(observer: self)
         
         printIfDebug(.debug, "Removed \(Self.self) observers.")
+    }
+    
+    override func viewWillAnimateAppearance() {
+        guard let controller = viewModel?.coordinator.viewController else { return }
+        
+        if viewModel?.isPresented.value ?? false {
+            controller.view.animateUsingSpring(
+                withDuration: 0.5,
+                withDamping: 1.0,
+                initialSpringVelocity: 0.7,
+                animations: {
+                    controller.browseOverlayViewContainer.alpha = 1.0
+                    controller.browseOverlayViewContainer.transform = .identity
+                })
+            
+            return
+        }
+        
+        controller.view.animateUsingSpring(
+            withDuration: 0.5,
+            withDamping: 1.0,
+            initialSpringVelocity: 0.7,
+            animations: {
+                controller.browseOverlayViewContainer.alpha = .zero
+                controller.browseOverlayViewContainer.transform = CGAffineTransform(translationX: .zero, y: controller.browseOverlayViewContainer.bounds.height)
+            })
     }
     
     override func viewWillDeallocate() {
@@ -71,14 +105,6 @@ final class BrowseOverlayView: View<BrowseOverlayViewModel> {
         
         dataSource = nil
     }
-    
-    func setupDataSource() {
-        guard let controller = viewModel.coordinator.viewController else { return }
-        guard let section = viewModel.coordinator.navigationOverlaySection else { return }
-        guard dataSource.isNil else { return }
-        
-        dataSource = BrowseOverlayCollectionViewDataSource(section: section, with: controller.viewModel)
-    }
 }
 
 // MARK: - ViewProtocol Implementation
@@ -87,17 +113,28 @@ extension BrowseOverlayView: ViewProtocol {
     fileprivate func createCollectionView() -> UICollectionView {
         let layout = CollectionViewLayout(layout: .navigationOverlay, scrollDirection: .vertical)
         let collectionView = UICollectionView(frame: bounds, collectionViewLayout: layout)
+        
         collectionView.register(StandardCollectionViewCell.nib,
                                 forCellWithReuseIdentifier: StandardCollectionViewCell.reuseIdentifier)
-        collectionView.contentInset = UIEdgeInsets(top: 8.0, left: 0.0, bottom: 0.0, right: 0.0)
         collectionView.backgroundColor = .black
+        
         addSubview(collectionView)
+        
         return collectionView
     }
     
-    fileprivate func dataSourceDidChange() {
+    fileprivate func createDataSource() -> BrowseOverlayCollectionViewDataSource? {
+        guard let viewModel = viewModel?.coordinator.viewController?.viewModel else { return nil }
+        
+        let dataSource = BrowseOverlayCollectionViewDataSource(with: viewModel)
+        
         collectionView.delegate = dataSource
         collectionView.dataSource = dataSource
+        
+        return dataSource
+    }
+    
+    fileprivate func sectionDidChange() {
         collectionView.reloadData()
     }
 }
