@@ -22,9 +22,7 @@ private protocol ViewProtocol {
 final class BrowseOverlayView: View<BrowseOverlayViewModel> {
     private(set) lazy var collectionView: UICollectionView = createCollectionView()
     
-    var dataSource: BrowseOverlayCollectionViewDataSource? {
-        didSet { dataSourceDidChange() }
-    }
+    var dataSource: BrowseOverlayCollectionViewDataSource?
     
     init(on parent: UIView, with viewModel: HomeViewModel) {
         super.init(frame: parent.bounds)
@@ -34,10 +32,53 @@ final class BrowseOverlayView: View<BrowseOverlayViewModel> {
         parent.addSubview(self)
         self.constraintToSuperview(parent)
         
-        parent.isHidden(true)
+        self.viewDidLoad()
     }
     
     required init?(coder: NSCoder) { fatalError() }
+    
+    deinit {
+        print("deinit \(Self.self)")
+        viewDidUnbindObservers()
+    }
+    
+    override func viewDidLoad() {
+        viewDidBindObservers()
+    }
+    
+    override func viewDidBindObservers() {
+        viewModel?.isPresented.observe(on: self) { [weak self] _ in
+            guard let self = self else { return }
+            self.viewModel?.shouldDisplayOrHide()
+            self.dataSourceDidChange()
+        }
+    }
+    
+    override func viewDidUnbindObservers() {
+        guard viewModel.isNotNil else { return }
+        
+        viewModel?.isPresented.remove(observer: self)
+        
+        printIfDebug(.debug, "Removed \(Self.self) observers.")
+    }
+    
+    override func viewWillDeallocate() {
+        viewDidUnbindObservers()
+        
+        collectionView.dataSource = nil
+        collectionView.delegate = nil
+        collectionView.removeFromSuperview()
+        
+        dataSource = nil
+    }
+    
+    func setupDataSource() {
+        guard let controller = viewModel.coordinator.viewController else { return }
+        guard let section = viewModel.coordinator.navigationOverlaySection else { return }
+        guard dataSource.isNil else { return }
+        
+        dataSource = BrowseOverlayCollectionViewDataSource(section: section, with: controller.viewModel)
+    }
 }
 
 // MARK: - ViewProtocol Implementation

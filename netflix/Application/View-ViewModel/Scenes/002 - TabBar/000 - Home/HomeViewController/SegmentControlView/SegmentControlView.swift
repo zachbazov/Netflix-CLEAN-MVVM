@@ -116,7 +116,7 @@ final class SegmentControlView: View<SegmentControlViewViewModel> {
         switch state {
         case .main:
             // In-case the user already interacting with browse's overlay, and wants to dismiss it.
-            if !navigationOverlayView.viewModel.isPresented.value && browseOverlayView.viewModel.isPresented {
+            if !navigationOverlayView.viewModel.isPresented.value && browseOverlayView.viewModel.isPresented.value {
                 // Set the navigation settings by the latest state stored value.
                 viewModel.hasHomeExpanded = false
                 viewModel.hasTvExpanded = viewModel.latestState == .tvShows ? true : false
@@ -124,13 +124,13 @@ final class SegmentControlView: View<SegmentControlViewViewModel> {
                 // Restore the navigation view state.
                 viewModel.state.value = viewModel.latestState
                 // Dismiss browse's overlay.
-                browseOverlayView.viewModel.isPresented = false
+                browseOverlayView.viewModel.isPresented.value = false
                 
                 homeViewController.dataSource?.style.addGradient()
             // In-case the user wants to navigate back home's state.
             } else if homeViewModel.dataSourceState.value != .all
                         && !navigationOverlayView.viewModel.isPresented.value
-                        && !browseOverlayView.viewModel.isPresented {
+                        && !browseOverlayView.viewModel.isPresented.value {
                 viewModel.hasHomeExpanded = false
                 viewModel.hasTvExpanded = false
                 viewModel.hasMoviesExpanded = false
@@ -140,14 +140,14 @@ final class SegmentControlView: View<SegmentControlViewViewModel> {
             // Default case.
             } else if homeViewModel.dataSourceState.value == .all
                         && !navigationOverlayView.viewModel.isPresented.value
-                        && !browseOverlayView.viewModel.isPresented {
+                        && !browseOverlayView.viewModel.isPresented.value {
                 return
             }
             
             viewModel.hasHomeExpanded = true
         case .tvShows:
             // In-case the user wants to navigate to either tv-shows or movies state.
-            if viewModel.hasTvExpanded || browseOverlayView.viewModel.isPresented {
+            if viewModel.hasTvExpanded || browseOverlayView.viewModel.isPresented.value {
                 // Set the navigation overlay state to main.
                 navigationOverlayView.viewModel.state = .main
                 // Present the overlay.
@@ -165,7 +165,7 @@ final class SegmentControlView: View<SegmentControlViewViewModel> {
             homeViewModel.dataSourceState.value = .tvShows
         case .movies:
             // In-case the user wants to navigate to either tv-shows or movies state.
-            if viewModel.hasMoviesExpanded || browseOverlayView.viewModel.isPresented {
+            if viewModel.hasMoviesExpanded || browseOverlayView.viewModel.isPresented.value {
                 navigationOverlayView.viewModel.state = .main
                 navigationOverlayView.viewModel.isPresented.value = true
                 return

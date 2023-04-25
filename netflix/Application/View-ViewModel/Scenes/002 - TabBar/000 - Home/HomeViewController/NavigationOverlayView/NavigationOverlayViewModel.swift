@@ -109,13 +109,13 @@ extension NavigationOverlayViewModel: ViewModelProtocol {
                 
                 segmentControlView.viewModel.state.value = .tvShows
                 
-                browseOverlayView.viewModel.isPresented = false
+                browseOverlayView.viewModel.isPresented.value = false
             case .movies:
                 guard segmentControlView.viewModel.state.value != .movies else { return }
                 
                 segmentControlView.viewModel.state.value = .movies
                 
-                browseOverlayView.viewModel.isPresented = false
+                browseOverlayView.viewModel.isPresented.value = false
             case .categories:
                 state = .genres
                 

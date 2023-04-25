@@ -10,7 +10,7 @@ import Foundation
 // MARK: - ViewModelProtocol Type
 
 private protocol ViewModelProtocol {
-    var isPresented: Bool { get }
+    var isPresented: Observable<Bool> { get }
     
     func shouldDisplayOrHide()
 }
@@ -18,11 +18,9 @@ private protocol ViewModelProtocol {
 // MARK: - BrowseOverlayViewModel Type
 
 struct BrowseOverlayViewModel {
-    private let coordinator: HomeViewCoordinator
+    let coordinator: HomeViewCoordinator
     
-    var isPresented = false {
-        didSet { shouldDisplayOrHide() }
-    }
+    let isPresented: Observable<Bool> = Observable(false)
     
     init(with viewModel: HomeViewModel) {
         self.coordinator = viewModel.coordinator!
@@ -36,12 +34,10 @@ extension BrowseOverlayViewModel: ViewModel {}
 // MARK: - ViewModelProtocol Implementation
 
 extension BrowseOverlayViewModel: ViewModelProtocol {
-    fileprivate func shouldDisplayOrHide() {
+    func shouldDisplayOrHide() {
         guard let homeViewController = coordinator.viewController else { return }
         
-        if isPresented {
-//            homeViewController.dataSource?.style.removeGradient()
-            
+        if isPresented.value {
             homeViewController.browseOverlayViewContainer.isHidden(false)
             
             homeViewController.view.animateUsingSpring(
@@ -50,14 +46,11 @@ extension BrowseOverlayViewModel: ViewModelProtocol {
                 initialSpringVelocity: 0.7,
                 animations: {
                     homeViewController.browseOverlayViewContainer.alpha = 1.0
-                    
-//                    homeViewController.navigationContainer.backgroundColor = .black
+                    homeViewController.browseOverlayViewContainer.transform = .identity
                 })
             
             return
         }
-        
-//        homeViewController.dataSource?.style.addGradient()
         
         homeViewController.view.animateUsingSpring(
             withDuration: 0.5,
@@ -65,8 +58,7 @@ extension BrowseOverlayViewModel: ViewModelProtocol {
             initialSpringVelocity: 0.7,
             animations: {
                 homeViewController.browseOverlayViewContainer.alpha = .zero
-                
-//                homeViewController.navigationContainer.backgroundColor = .clear
+                homeViewController.browseOverlayViewContainer.transform = CGAffineTransform(translationX: .zero, y: homeViewController.browseOverlayViewContainer.bounds.height)
             }) { done in
                 if done {
                     homeViewController.browseOverlayViewContainer.isHidden(true)

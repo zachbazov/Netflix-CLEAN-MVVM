@@ -17,6 +17,7 @@ protocol ViewLifecycleBehavior {
     func viewDidTargetSubviews()
     func viewWillAppear()
     func viewWillDisappear()
+    func viewWillDeallocate()
     func viewDidDeallocate()
     
     func prepareForReuse()
@@ -32,6 +33,7 @@ extension ViewLifecycleBehavior {
     func viewDidTargetSubviews() {}
     func viewWillAppear() {}
     func viewWillDisappear() {}
+    func viewWillDeallocate() {}
     func viewDidDeallocate() {}
     
     func prepareForReuse() {}

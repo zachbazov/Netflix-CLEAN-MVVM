@@ -112,12 +112,9 @@ extension HomeViewCoordinator: CoordinatorProtocol {
             controller.viewWillAnimateAppearance()
         case .browse:
             guard let controller = viewController else { return }
-            guard let section = navigationOverlaySection else { return }
             
-            controller.browseOverlayView?.dataSource = BrowseOverlayCollectionViewDataSource(
-                section: section,
-                with: controller.viewModel)
-            controller.browseOverlayView?.viewModel.isPresented = true
+            controller.browseOverlayView?.setupDataSource()
+            controller.browseOverlayView?.viewModel.isPresented.value = true
         }
     }
 }
