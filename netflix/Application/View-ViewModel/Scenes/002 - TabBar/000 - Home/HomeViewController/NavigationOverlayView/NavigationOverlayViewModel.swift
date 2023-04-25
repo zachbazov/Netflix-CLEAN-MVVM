@@ -65,14 +65,14 @@ extension NavigationOverlayViewModel: ViewModelProtocol {
         guard let navigationOverlayView = coordinator.viewController?.navigationOverlayView else { return }
         
         let tableView = navigationOverlayView.tableView
-        // In-case there is no allocated delegate.
+        
         tableView.delegate = navigationOverlayView.dataSource
         tableView.dataSource = navigationOverlayView.dataSource
         
         navigationOverlayView.opaqueView?.add()
-        // Release changes.
+        
         tableView.reloadData()
-        // Center the content.
+        
         tableView.contentInset = .init(top: 32.0, left: .zero, bottom: .zero, right: .zero)
     }
     
@@ -94,41 +94,42 @@ extension NavigationOverlayViewModel: ViewModelProtocol {
               let segmentControlView = homeViewController.segmentControlView,
               let category = NavigationOverlayView.Category(rawValue: indexPath.row),
               let browseOverlayView = homeViewController.browseOverlayView
-        else { print("r");return }
-        /// Execute operations based on the row that has been selected on the overlay.
-        /// In-case the overlay state has been set to `.categories` value.
-        if case .genres = state {
-            // Allocate `browseOverlayView` data source.
-            let section = category.toSection(with: homeViewModel)
-            browseOverlayView.dataSource = BrowseOverlayCollectionViewDataSource(
-                section: section,
-                with: homeViewModel)
-            // Present the overlay.
-            browseOverlayView.viewModel.isPresented = true
-//            homeViewController?.blurryContainer.layer.removeFromSuperlayer()
-        } else if state == .main {
-            /// In-case the overlay state has been set to `.mainMenu` value.
-            /// Extract a slice of the navigation view states.
+        else { return }
+        
+        switch state {
+        case .none:
+            break
+        case .main:
             guard let options = SegmentControlView.State.allCases[indexPath.row] as SegmentControlView.State? else { return }
-            if case .tvShows = options {
-                // In-case the user reselect `.tvShows` state value, return.
-                if segmentControlView.viewModel.state.value == .tvShows { return }
-                // Else, set the `navigationView` state to `.tvShows` value.
+            switch options {
+            case .main:
+                break
+            case .tvShows:
+                guard segmentControlView.viewModel.state.value != .tvShows else { return }
+                
                 segmentControlView.viewModel.state.value = .tvShows
-                // Close the browse overlay.
+                
                 browseOverlayView.viewModel.isPresented = false
-            } else if case .movies = options {
-                if segmentControlView.viewModel.state.value == .movies { return }
+            case .movies:
+                guard segmentControlView.viewModel.state.value != .movies else { return }
+                
                 segmentControlView.viewModel.state.value = .movies
                 
                 browseOverlayView.viewModel.isPresented = false
-            } else {
-                // In-case the overlay state has been set to `.categories` value.
+            case .categories:
                 state = .genres
+                
                 isPresentedDidChange()
-                // Present the navigation overlay.
+                
                 isPresented.value = true
             }
+        case .genres:
+            coordinator.viewController?.dataSource?.style.removeGradient()
+            
+            let section = category.toSection(with: homeViewModel)
+            coordinator.navigationOverlaySection = section
+            
+            coordinator.coordinate(to: .browse)
         }
     }
 }

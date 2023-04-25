@@ -46,4 +46,10 @@ final class GradientView: UIView {
         
         return self
     }
+    
+    func remove() {
+        guard let view = view else { return }
+        
+        view.removeFromSuperview()
+    }
 }

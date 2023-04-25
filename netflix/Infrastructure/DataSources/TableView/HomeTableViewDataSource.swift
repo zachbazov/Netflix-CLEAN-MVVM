@@ -59,18 +59,18 @@ extension HomeTableViewDataSourceStyle: HomeTableViewDataSourceStyling {
     func removeGradient() {
         guard gradient.isNotNil else { return }
         
-        gradient?.view?.layer.removeFromSuperlayer()
+        gradient?.remove()
         gradient = nil
     }
     
     fileprivate func addBlur() {
         guard blur.isNil else { return }
         
-        guard let viewController = viewModel.coordinator?.viewController else { return }
+        guard let controller = viewModel.coordinator?.viewController else { return }
         
         let effect = UIBlurEffect(style: .dark)
         
-        blur = BlurView(on: viewController.navigationContainer, effect: effect)
+        blur = BlurView(on: controller.navigationContainer, effect: effect)
     }
     
     fileprivate func removeBlur() {

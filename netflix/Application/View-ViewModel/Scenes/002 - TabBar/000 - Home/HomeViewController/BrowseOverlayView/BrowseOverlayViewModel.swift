@@ -51,7 +51,7 @@ extension BrowseOverlayViewModel: ViewModelProtocol {
                 animations: {
                     homeViewController.browseOverlayViewContainer.alpha = 1.0
                     
-                    homeViewController.navigationContainer.backgroundColor = .black
+//                    homeViewController.navigationContainer.backgroundColor = .black
                 })
             
             return
@@ -66,7 +66,7 @@ extension BrowseOverlayViewModel: ViewModelProtocol {
             animations: {
                 homeViewController.browseOverlayViewContainer.alpha = .zero
                 
-                homeViewController.navigationContainer.backgroundColor = .clear
+//                homeViewController.navigationContainer.backgroundColor = .clear
             }) { done in
                 if done {
                     homeViewController.browseOverlayViewContainer.isHidden(true)

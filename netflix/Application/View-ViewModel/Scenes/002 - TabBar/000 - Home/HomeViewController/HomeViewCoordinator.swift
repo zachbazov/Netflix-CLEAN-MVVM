@@ -33,10 +33,13 @@ final class HomeViewCoordinator {
     fileprivate weak var detail: UINavigationController?
     weak var search: UINavigationController?
     weak var account: UINavigationController?
+    weak var browse: UINavigationController?
     
     var section: Section?
     var media: Media?
     var shouldScreenRotate = false
+    
+    var navigationOverlaySection: Section?
 }
 
 // MARK: - CoordinatorProtocol Implementation
@@ -93,20 +96,28 @@ extension HomeViewCoordinator: CoordinatorProtocol {
     fileprivate func deploy(_ screen: Screen) {
         switch screen {
         case .detail:
-            guard let navigationController = detail else { return }
-            viewController?.present(navigationController, animated: true)
+            guard let navigation = detail else { return }
+            viewController?.present(navigation, animated: true)
         case .search:
-            guard let search = search, let view = viewController?.view else { return }
-            viewController?.add(child: search, container: view)
+            guard let navigation = search, let view = viewController?.view else { return }
+            viewController?.add(child: navigation, container: view)
             
-            guard let searchViewController = search.viewControllers.first as? SearchViewController else { return }
-            searchViewController.viewWillAnimateAppearance()
+            guard let controller = navigation.viewControllers.first as? SearchViewController else { return }
+            controller.viewWillAnimateAppearance()
         case .account:
-            guard let account = account, let view = viewController?.view else { return }
-            viewController?.add(child: account, container: view)
+            guard let navigation = account, let view = viewController?.view else { return }
+            viewController?.add(child: navigation, container: view)
             
-            guard let accountViewController = account.viewControllers.first as? AccountViewController else { return }
-            accountViewController.viewWillAnimateAppearance()
+            guard let controller = navigation.viewControllers.first as? AccountViewController else { return }
+            controller.viewWillAnimateAppearance()
+        case .browse:
+            guard let controller = viewController else { return }
+            guard let section = navigationOverlaySection else { return }
+            
+            controller.browseOverlayView?.dataSource = BrowseOverlayCollectionViewDataSource(
+                section: section,
+                with: controller.viewModel)
+            controller.browseOverlayView?.viewModel.isPresented = true
         }
     }
 }
@@ -119,6 +130,7 @@ extension HomeViewCoordinator: Coordinate {
         case detail
         case search
         case account
+        case browse
     }
     
     /// Screen representation control.
@@ -128,6 +140,7 @@ extension HomeViewCoordinator: Coordinate {
         case .detail: detail = createDetailNavigationController()
         case .search: search = createSearchNavigationController()
         case .account: account = createAccountNavigationController()
+        case .browse: break
         }
         
         deploy(screen)

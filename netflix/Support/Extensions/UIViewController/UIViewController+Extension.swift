@@ -9,7 +9,8 @@ import UIKit
 
 // MARK: - UIViewController + Child
 
-@nonobjc extension UIViewController {
+@nonobjc
+extension UIViewController {
     func add(child: UIViewController, container: UIView) {
         addChild(child)
         

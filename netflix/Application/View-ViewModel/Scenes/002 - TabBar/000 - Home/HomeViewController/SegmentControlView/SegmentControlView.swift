@@ -125,6 +125,8 @@ final class SegmentControlView: View<SegmentControlViewViewModel> {
                 viewModel.state.value = viewModel.latestState
                 // Dismiss browse's overlay.
                 browseOverlayView.viewModel.isPresented = false
+                
+                homeViewController.dataSource?.style.addGradient()
             // In-case the user wants to navigate back home's state.
             } else if homeViewModel.dataSourceState.value != .all
                         && !navigationOverlayView.viewModel.isPresented.value
