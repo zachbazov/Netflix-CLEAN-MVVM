@@ -12,7 +12,9 @@ import UIKit
 private protocol ViewProtocol {
     func buttonDidTap(_ sender: UIButton)
     func stateDidChange(_ state: SegmentControlView.State)
-    func setupButtons()
+    func leadingConstraintDidUpdate(for state: SegmentControlView.State)
+    func buttonsDidUpdate(for state: SegmentControlView.State)
+    func updateState(_ state: SegmentControlView.State)
 }
 
 // MARK: - NavigationView Type
@@ -84,64 +86,66 @@ extension SegmentControlView: ViewInstantiable {}
 // MARK: - ViewProtocol Implementation
 
 extension SegmentControlView: ViewProtocol {
-    fileprivate func setupButtons() {
-        tvShowsButton
-            .border(.white.withAlphaComponent(0.3), width: 1.5)
-            .round()
-        moviesButton
-            .border(.white.withAlphaComponent(0.3), width: 1.5)
-            .round()
-        categoriesButton
-            .border(.white.withAlphaComponent(0.3), width: 1.5)
-            .round()
-    }
-    
-    @IBAction func buttonDidTap(_ sender: UIButton) {
+    @IBAction fileprivate func buttonDidTap(_ sender: UIButton) {
         guard let state = SegmentControlView.State(rawValue: sender.tag) else { return }
         
-        viewModel.state.value = state
+        updateState(state)
+        buttonsDidUpdate(for: state)
+        leadingConstraintDidUpdate(for: state)
         
+        animateUsingSpring(withDuration: 0.33, withDamping: 0.7, initialSpringVelocity: 0.7)
+    }
+    
+    fileprivate func updateState(_ state: SegmentControlView.State) {
+        viewModel.state.value = state
+    }
+    
+    fileprivate func buttonsDidUpdate(for state: SegmentControlView.State) {
         switch state {
         case .main:
             xButton.isHidden(true)
             tvShowsButton.isHidden(false)
             moviesButton.isHidden(false)
             categoriesButton.isHidden(false)
-            
-            stackViewLeadingConstraint.constant = 24.0
         case .tvShows:
             xButton.isHidden(false)
             tvShowsButton.isHidden(false)
             moviesButton.isHidden(true)
             categoriesButton.isHidden(false)
-            
-            stackViewLeadingConstraint.constant = 16.0
         case .movies:
             xButton.isHidden(false)
             tvShowsButton.isHidden(true)
             moviesButton.isHidden(false)
             categoriesButton.isHidden(false)
-            
+        case .categories:
+            break
+        }
+    }
+    
+    fileprivate func leadingConstraintDidUpdate(for state: SegmentControlView.State) {
+        switch state {
+        case .main:
+            stackViewLeadingConstraint.constant = 24.0
+        case .tvShows:
+            stackViewLeadingConstraint.constant = 16.0
+        case .movies:
             stackViewLeadingConstraint.constant = 16.0
         case .categories:
             break
         }
-        
-        animateUsingSpring(withDuration: 0.33, withDamping: 0.7, initialSpringVelocity: 0.7)
     }
     
-    func stateDidChange(_ state: SegmentControlView.State) {
-        guard let homeViewController = viewModel.coordinator.viewController,
-              let homeViewModel = homeViewController.viewModel,
-              let navigationOverlayView = homeViewController.navigationOverlayView,
-              let browseOverlayView = homeViewController.browseOverlayView else {
-            return
-        }
+    fileprivate func stateDidChange(_ state: SegmentControlView.State) {
+        guard let controller = viewModel.coordinator.viewController,
+              let homeViewModel = controller.viewModel,
+              let navigationOverlay = controller.navigationOverlayView,
+              let browseOverlay = controller.browseOverlayView
+        else { return }
         
         switch state {
         case .main:
             // In-case the user already interacting with browse's overlay, and wants to dismiss it.
-            if !navigationOverlayView.viewModel.isPresented.value && browseOverlayView.viewModel.isPresented.value {
+            if !navigationOverlay.viewModel.isPresented.value && browseOverlay.viewModel.isPresented.value {
                 // Set the navigation settings by the latest state stored value.
                 viewModel.hasHomeExpanded = false
                 viewModel.hasTvExpanded = viewModel.latestState == .tvShows ? true : false
@@ -149,13 +153,13 @@ extension SegmentControlView: ViewProtocol {
                 // Restore the navigation view state.
                 viewModel.state.value = viewModel.latestState
                 // Dismiss browse's overlay.
-                browseOverlayView.viewModel.isPresented.value = false
+                browseOverlay.viewModel.isPresented.value = false
                 
-                homeViewController.dataSource?.style.addGradient()
+                controller.dataSource?.style.addGradient()
             // In-case the user wants to navigate back home's state.
             } else if homeViewModel.dataSourceState.value != .all
-                        && !navigationOverlayView.viewModel.isPresented.value
-                        && !browseOverlayView.viewModel.isPresented.value {
+                        && !navigationOverlay.viewModel.isPresented.value
+                        && !browseOverlay.viewModel.isPresented.value {
                 viewModel.hasHomeExpanded = false
                 viewModel.hasTvExpanded = false
                 viewModel.hasMoviesExpanded = false
@@ -164,19 +168,19 @@ extension SegmentControlView: ViewProtocol {
                 return
             // Default case.
             } else if homeViewModel.dataSourceState.value == .all
-                        && !navigationOverlayView.viewModel.isPresented.value
-                        && !browseOverlayView.viewModel.isPresented.value {
+                        && !navigationOverlay.viewModel.isPresented.value
+                        && !browseOverlay.viewModel.isPresented.value {
                 return
             }
             
             viewModel.hasHomeExpanded = true
         case .tvShows:
             // In-case the user wants to navigate to either tv-shows or movies state.
-            if viewModel.hasTvExpanded || browseOverlayView.viewModel.isPresented.value {
+            if viewModel.hasTvExpanded || browseOverlay.viewModel.isPresented.value {
                 // Set the navigation overlay state to main.
-                navigationOverlayView.viewModel.state = .main
+                navigationOverlay.viewModel.state = .main
                 // Present the overlay.
-                navigationOverlayView.viewModel.isPresented.value = true
+                navigationOverlay.viewModel.isPresented.value = true
                 return
             // In-case either tv-shows or movies hasn't been expanded and a presented brose overlay.
             }
@@ -190,9 +194,9 @@ extension SegmentControlView: ViewProtocol {
             homeViewModel.dataSourceState.value = .tvShows
         case .movies:
             // In-case the user wants to navigate to either tv-shows or movies state.
-            if viewModel.hasMoviesExpanded || browseOverlayView.viewModel.isPresented.value {
-                navigationOverlayView.viewModel.state = .main
-                navigationOverlayView.viewModel.isPresented.value = true
+            if viewModel.hasMoviesExpanded || browseOverlay.viewModel.isPresented.value {
+                navigationOverlay.viewModel.state = .main
+                navigationOverlay.viewModel.isPresented.value = true
                 return
             }
             // Else, set the navigation settings by state value.
@@ -205,10 +209,26 @@ extension SegmentControlView: ViewProtocol {
             homeViewModel.dataSourceState.value = .movies
         case .categories:
             // Set the navigation overlay state to genres.
-            navigationOverlayView.viewModel.state = .genres
+            navigationOverlay.viewModel.state = .genres
             // Present the overlay.
-            navigationOverlayView.viewModel.isPresented.value = true
+            navigationOverlay.viewModel.isPresented.value = true
         }
+    }
+}
+
+// MARK: - Private UI Implementation
+
+extension SegmentControlView {
+    private func setupButtons() {
+        tvShowsButton
+            .border(.white.withAlphaComponent(0.3), width: 1.5)
+            .round()
+        moviesButton
+            .border(.white.withAlphaComponent(0.3), width: 1.5)
+            .round()
+        categoriesButton
+            .border(.white.withAlphaComponent(0.3), width: 1.5)
+            .round()
     }
 }
 
