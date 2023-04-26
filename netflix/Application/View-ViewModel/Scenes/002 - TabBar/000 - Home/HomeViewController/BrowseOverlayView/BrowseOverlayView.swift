@@ -15,7 +15,7 @@ private protocol ViewProtocol {
     
     func createCollectionView() -> UICollectionView
     func createDataSource() -> BrowseOverlayCollectionViewDataSource?
-    func sectionDidChange()
+    func sectionDidChange(_ section: Section)
 }
 
 // MARK: - BrowseOverlayView Type
@@ -56,8 +56,7 @@ final class BrowseOverlayView: View<BrowseOverlayViewModel> {
         viewModel?.section.observe(on: self) { [weak self] section in
             guard let self = self else { return }
             
-            self.dataSource?.section = section
-            self.sectionDidChange()
+            self.sectionDidChange(section)
         }
     }
     
@@ -104,6 +103,10 @@ final class BrowseOverlayView: View<BrowseOverlayViewModel> {
         collectionView.removeFromSuperview()
         
         dataSource = nil
+        
+        viewModel = nil
+        
+        removeFromSuperview()
     }
 }
 
@@ -134,7 +137,9 @@ extension BrowseOverlayView: ViewProtocol {
         return dataSource
     }
     
-    fileprivate func sectionDidChange() {
+    fileprivate func sectionDidChange(_ section: Section) {
+        dataSource?.section = section
+        
         collectionView.reloadData()
     }
 }

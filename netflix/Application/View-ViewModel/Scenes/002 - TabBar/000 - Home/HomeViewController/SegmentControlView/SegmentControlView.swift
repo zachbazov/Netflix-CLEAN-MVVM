@@ -7,15 +7,23 @@
 
 import UIKit
 
+// MARK: - ViewProtocol Type
+
+private protocol ViewProtocol {
+    func buttonDidTap(_ sender: UIButton)
+    func stateDidChange(_ state: SegmentControlView.State)
+    func setupButtons()
+}
+
 // MARK: - NavigationView Type
 
 final class SegmentControlView: View<SegmentControlViewViewModel> {
-    @IBOutlet private(set) weak var stackView: UIStackView!
-    @IBOutlet private(set) weak var xButton: UIButton!
-    @IBOutlet private(set) weak var tvShowsButton: UIButton!
-    @IBOutlet private(set) weak var moviesButton: UIButton!
-    @IBOutlet private(set) weak var categoriesButton: UIButton!
-    @IBOutlet private(set) weak var stackViewLeadingConstraint: NSLayoutConstraint!
+    @IBOutlet private weak var stackView: UIStackView!
+    @IBOutlet private weak var xButton: UIButton!
+    @IBOutlet private weak var tvShowsButton: UIButton!
+    @IBOutlet private weak var moviesButton: UIButton!
+    @IBOutlet private weak var categoriesButton: UIButton!
+    @IBOutlet private weak var stackViewLeadingConstraint: NSLayoutConstraint!
     
     /// Create a navigation view object.
     /// - Parameters:
@@ -23,19 +31,21 @@ final class SegmentControlView: View<SegmentControlViewViewModel> {
     ///   - viewModel: Coordinating view model.
     init(on parent: UIView, with viewModel: HomeViewModel) {
         super.init(frame: parent.bounds)
+        
         self.nibDidLoad()
+        
         parent.addSubview(self)
         self.constraintToSuperview(parent)
         
         self.viewModel = SegmentControlViewViewModel(with: viewModel)
         
         self.viewDidLoad()
-        self.viewDidConfigure()
     }
     
     required init?(coder: NSCoder) { fatalError() }
     
     deinit {
+        print("deinit \(Self.self)")
         viewDidUnbindObservers()
         
         viewModel = nil
@@ -43,23 +53,18 @@ final class SegmentControlView: View<SegmentControlViewViewModel> {
     
     override func viewDidLoad() {
         viewDidBindObservers()
+        viewDidDeploySubviews()
     }
     
-    override func viewDidConfigure() {
-        tvShowsButton.layer.borderColor = UIColor.white.withAlphaComponent(0.3).cgColor
-        tvShowsButton.layer.borderWidth = 1.5
-        tvShowsButton.layer.cornerRadius = 18.0
-        moviesButton.layer.borderColor = UIColor.white.withAlphaComponent(0.3).cgColor
-        moviesButton.layer.borderWidth = 1.5
-        moviesButton.layer.cornerRadius = 20.0
-        categoriesButton.layer.borderColor = UIColor.white.withAlphaComponent(0.3).cgColor
-        categoriesButton.layer.borderWidth = 1.5
-        categoriesButton.layer.cornerRadius = 18.0
+    override func viewDidDeploySubviews() {
+        setupButtons()
     }
     
     override func viewDidBindObservers() {
-        viewModel.state.observe(on: self) { [weak self] state in
-            self?.stateDidChange(state)
+        viewModel?.state.observe(on: self) { [weak self] state in
+            guard let self = self else { return }
+            
+            self.stateDidChange(state)
         }
     }
     
@@ -68,7 +73,27 @@ final class SegmentControlView: View<SegmentControlViewViewModel> {
         
         viewModel.state.remove(observer: self)
         
-        printIfDebug(.success, "Removed `NavigationView` observers.")
+        printIfDebug(.success, "Removed `\(Self.self)` observers.")
+    }
+}
+
+// MARK: - ViewInstantiable Implementation
+
+extension SegmentControlView: ViewInstantiable {}
+
+// MARK: - ViewProtocol Implementation
+
+extension SegmentControlView: ViewProtocol {
+    fileprivate func setupButtons() {
+        tvShowsButton
+            .border(.white.withAlphaComponent(0.3), width: 1.5)
+            .round()
+        moviesButton
+            .border(.white.withAlphaComponent(0.3), width: 1.5)
+            .round()
+        categoriesButton
+            .border(.white.withAlphaComponent(0.3), width: 1.5)
+            .round()
     }
     
     @IBAction func buttonDidTap(_ sender: UIButton) {
@@ -186,10 +211,6 @@ final class SegmentControlView: View<SegmentControlViewViewModel> {
         }
     }
 }
-
-// MARK: - ViewInstantiable Implementation
-
-extension SegmentControlView: ViewInstantiable {}
 
 // MARK: - State Type
 

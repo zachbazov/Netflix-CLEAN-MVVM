@@ -30,7 +30,7 @@ final class SignInViewController: Controller<SignInViewModel> {
     override func viewDidDeploySubviews() {
         setAttributes(for: [emailTextField, passwordTextField])
         
-        signInButton.setLayerBorder(.black, width: 1.5)
+        signInButton.border(.black, width: 1.5)
         
         didConfigureTitleView()
     }

@@ -33,7 +33,7 @@ final class SignUpViewController: Controller<SignUpViewModel> {
         setAttributes(for: [nameTextField, emailTextField,
                             passwordTextField, passwordConfirmTextField])
         
-        signUpButton.setLayerBorder(.black, width: 1.5)
+        signUpButton.border(.black, width: 1.5)
         
         didConfigureTitleView()
     }
