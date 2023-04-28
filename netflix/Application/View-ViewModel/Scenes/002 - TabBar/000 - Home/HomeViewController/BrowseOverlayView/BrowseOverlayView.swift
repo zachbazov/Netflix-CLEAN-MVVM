@@ -138,6 +138,7 @@ extension BrowseOverlayView: ViewProtocol {
     }
     
     fileprivate func sectionDidChange(_ section: Section) {
+        print("BrowseOverlayView.sectionDidChange", section.id, section.title)
         dataSource?.section = section
         
         collectionView.reloadData()

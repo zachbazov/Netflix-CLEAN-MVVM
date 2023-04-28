@@ -19,10 +19,14 @@ final class NavigationView: View<NavigationViewViewModel> {
     ///   - viewModel: Coordinating view model.
     init(on parent: UIView, with viewModel: HomeViewModel) {
         super.init(frame: parent.bounds)
+        
         self.nibDidLoad()
+        
         parent.addSubview(self)
         self.constraintToSuperview(parent)
+        
         self.viewModel = NavigationViewViewModel(with: viewModel)
+        
         self.viewDidLoad()
     }
     
@@ -76,9 +80,9 @@ extension NavigationView {
 extension NavigationView.State: Valuable {
     var stringValue: String {
         switch self {
-        case .airPlay: return Localization.TabBar.Home.Navigation().airPlay
-        case .account: return Localization.TabBar.Home.Navigation().account
-        case .search: return Localization.TabBar.Home.Navigation().search
+        case .airPlay: return Localization.TabBar.Home.SegmentControl().airPlay
+        case .account: return Localization.TabBar.Home.SegmentControl().account
+        case .search: return Localization.TabBar.Home.SegmentControl().search
         }
     }
 }

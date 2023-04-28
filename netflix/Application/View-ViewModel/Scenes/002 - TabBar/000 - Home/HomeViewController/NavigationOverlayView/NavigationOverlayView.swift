@@ -25,16 +25,16 @@ final class NavigationOverlayView: View<NavigationOverlayViewModel> {
     var dataSource: NavigationOverlayTableViewDataSource!
     var opaqueView: OpaqueView?
     var footerView: NavigationOverlayFooterView!
+    
     var tabBar: UITabBar!
     private(set) lazy var tableView: UITableView = createTableView()
+    
     var gradientView: UIView!
     
     /// Create a navigation overlay view object.
     /// - Parameter viewModel: Coordinating view model.
     init(with viewModel: HomeViewModel) {
-        let rect = CGRect(x: .zero, y: .zero,
-                          width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
-        super.init(frame: rect)
+        super.init(frame: .screenSize)
         self.alpha = .zero
         
         self.tabBar = viewModel.coordinator!.viewController!.tabBarController!.tabBar
@@ -65,19 +65,38 @@ final class NavigationOverlayView: View<NavigationOverlayViewModel> {
     }
     
     override func viewDidBindObservers() {
-        viewModel.isPresented.observe(on: self) { [weak self] _ in
+        viewModel?.isPresented.observe(on: self) { [weak self] isPresented in
             self?.opaqueView?.viewDidUpdate()
-            self?.viewModel.isPresentedDidChange()
-            self?.animatePresentation()
+            self?.viewWillAnimateAppearance()
+            self?.removeBlurness()
         }
         
-        viewModel.items.observe(on: self) { [weak self] _ in self?.viewModel.dataSourceDidChange() }
+        viewModel?.state.observe(on: self) { [weak self] state in
+            self?.dataSourceDidChange()
+        }
     }
     
     override func viewDidUnbindObservers() {
-        printIfDebug(.success, "Removed `NavigationOverlayView` observers.")
-        viewModel.isPresented.remove(observer: self)
-        viewModel.items.remove(observer: self)
+        guard viewModel.isNotNil else { return }
+        
+        viewModel?.isPresented.remove(observer: self)
+        viewModel?.state.remove(observer: self)
+        
+        printIfDebug(.success, "Removed `\(Self.self)` observers.")
+    }
+    
+    override func viewWillAnimateAppearance() {
+        UIView.animate(
+            withDuration: 0.5,
+            delay: .zero,
+            options: .curveEaseInOut,
+            animations: { [weak self] in
+                guard let self = self else { return }
+                self.alpha = self.viewModel.isPresented.value ? 1.0 : 0.0
+                self.tableView.alpha = self.viewModel.isPresented.value ? 1.0 : 0.0
+                self.footerView.alpha = self.viewModel.isPresented.value ? 1.0 : 0.0
+                self.tabBar.alpha = self.viewModel.isPresented.value ? 0.0 : 1.0
+            })
     }
 }
 
@@ -95,19 +114,24 @@ extension NavigationOverlayView: ViewProtocol {
         return tableView
     }
     
-    /// Animate the presentation of the view.
-    fileprivate func animatePresentation() {
-        UIView.animate(
-            withDuration: 0.5,
-            delay: .zero,
-            options: .curveEaseInOut,
-            animations: { [weak self] in
-                guard let self = self else { return }
-                self.alpha = self.viewModel.isPresented.value ? 1.0 : 0.0
-                self.tableView.alpha = self.viewModel.isPresented.value ? 1.0 : 0.0
-                self.footerView.alpha = self.viewModel.isPresented.value ? 1.0 : 0.0
-                self.tabBar.alpha = self.viewModel.isPresented.value ? 0.0 : 1.0
-            })
+    /// Release data source changes and center the content.
+    func dataSourceDidChange() {
+        self.viewModel?.itemsDidChange()
+        
+        tableView.delegate = dataSource
+        tableView.dataSource = dataSource
+        
+        tableView.reloadData()
+        
+        tableView.contentInset = .init(top: 32.0, left: .zero, bottom: .zero, right: .zero)
+        
+        opaqueView?.add()
+    }
+    
+    func removeBlurness() {
+        guard !viewModel.isPresented.value else { return }
+        
+        opaqueView?.remove()
     }
 }
 
@@ -139,19 +163,19 @@ extension NavigationOverlayView.Category: Valuable {
     var stringValue: String {
         switch self {
         case .newRelease: return "New Release"
-        case .home: return Localization.TabBar.Home.Navigation.Overlay().home
-        case .myList: return Localization.TabBar.Home.Navigation.Overlay().myList
-        case .action: return Localization.TabBar.Home.Navigation.Overlay().action
-        case .sciFi: return Localization.TabBar.Home.Navigation.Overlay().sciFi
-        case .crime: return Localization.TabBar.Home.Navigation.Overlay().crime
-        case .thriller: return Localization.TabBar.Home.Navigation.Overlay().thriller
-        case .adventure: return Localization.TabBar.Home.Navigation.Overlay().adventure
-        case .comedy: return Localization.TabBar.Home.Navigation.Overlay().comedy
-        case .drama: return Localization.TabBar.Home.Navigation.Overlay().drama
-        case .horror: return Localization.TabBar.Home.Navigation.Overlay().horror
-        case .anime: return Localization.TabBar.Home.Navigation.Overlay().anime
-        case .familyNchildren: return Localization.TabBar.Home.Navigation.Overlay().familyNchildren
-        case .documentary: return Localization.TabBar.Home.Navigation.Overlay().documentary
+        case .home: return Localization.TabBar.Home.SegmentControl.Overlay().home
+        case .myList: return Localization.TabBar.Home.SegmentControl.Overlay().myList
+        case .action: return Localization.TabBar.Home.SegmentControl.Overlay().action
+        case .sciFi: return Localization.TabBar.Home.SegmentControl.Overlay().sciFi
+        case .crime: return Localization.TabBar.Home.SegmentControl.Overlay().crime
+        case .thriller: return Localization.TabBar.Home.SegmentControl.Overlay().thriller
+        case .adventure: return Localization.TabBar.Home.SegmentControl.Overlay().adventure
+        case .comedy: return Localization.TabBar.Home.SegmentControl.Overlay().comedy
+        case .drama: return Localization.TabBar.Home.SegmentControl.Overlay().drama
+        case .horror: return Localization.TabBar.Home.SegmentControl.Overlay().horror
+        case .anime: return Localization.TabBar.Home.SegmentControl.Overlay().anime
+        case .familyNchildren: return Localization.TabBar.Home.SegmentControl.Overlay().familyNchildren
+        case .documentary: return Localization.TabBar.Home.SegmentControl.Overlay().documentary
         }
     }
 }

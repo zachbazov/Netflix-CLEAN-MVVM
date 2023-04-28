@@ -43,9 +43,9 @@ struct Localization {
                                                       comment: "Info Button")
             }
             
-            struct Navigation {
-                let home = NSLocalizedString("HomeViewController.NavigationView.Home.Title",
-                                             comment: "Home Button")
+            struct SegmentControl {
+                let main = NSLocalizedString("HomeViewController.NavigationView.Main.Title",
+                                             comment: "Main Button")
                 let tvShows = NSLocalizedString("HomeViewController.NavigationView.TVShows.Title",
                                                 comment: "TV Shows Button")
                 let movies = NSLocalizedString("HomeViewController.NavigationView.Movies.Title",

@@ -59,7 +59,5 @@ extension NavigationOverlayFooterView: ViewProtocol {
     @objc
     fileprivate func viewDidTap() {
         viewModel.isPresented.value = false
-        
-        viewModel.removeBlurness()
     }
 }

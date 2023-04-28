@@ -102,7 +102,7 @@ extension HomeViewModel: ViewModelProtocol {
     /// Filter a section based on an index of the table view data source.
     /// - Parameter index: Representation of the section's index.
     /// - Returns: Filtered media array.
-    fileprivate func filter(at index: HomeTableViewDataSource.Index) -> [Media] {
+    func filter(at index: HomeTableViewDataSource.Index) -> [Media] {
         switch index {
         case .newRelease:
             switch dataSourceState.value {

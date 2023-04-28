@@ -34,7 +34,7 @@ final class NavigationOverlayTableViewCell: UITableViewCell {
             for: indexPath) as? NavigationOverlayTableViewCell else {
             fatalError()
         }
-        let model = viewModel.items.value[indexPath.row]
+        let model = viewModel.items[indexPath.row]
         let viewModel = NavigationOverlayCollectionViewCellViewModel(title: model.stringValue)
         cell.viewDidDeploySubviews()
         cell.viewDidConfigure(with: viewModel)

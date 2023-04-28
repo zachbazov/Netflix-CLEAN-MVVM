@@ -18,10 +18,8 @@ private protocol ViewModelProtocol {
 final class SegmentControlViewViewModel {
     let coordinator: HomeViewCoordinator
     
-    let state: Observable<SegmentControlView.State> = Observable(.tvShows)
+    let state: Observable<SegmentControlView.State> = Observable(.main)
     
-    var latestState: SegmentControlView.State = .main
-    var hasHomeExpanded = false
     var hasTvExpanded = false
     var hasMoviesExpanded = false
     

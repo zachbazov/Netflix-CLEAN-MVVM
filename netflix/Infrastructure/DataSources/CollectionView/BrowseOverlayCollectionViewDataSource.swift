@@ -20,7 +20,7 @@ private protocol DataSourceProtocol {
 final class BrowseOverlayCollectionViewDataSource: NSObject {
     fileprivate let coordinator: HomeViewCoordinator
     var section: Section?
-    fileprivate let items: [Media]
+    var items: [Media]
     
     /// Create a browse overlay collection view data source object.
     /// - Parameters:
@@ -41,7 +41,7 @@ extension BrowseOverlayCollectionViewDataSource: DataSourceProtocol {}
 
 extension BrowseOverlayCollectionViewDataSource: UICollectionViewDelegate, UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return self.section?.media.count ?? .zero
+        return items.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
