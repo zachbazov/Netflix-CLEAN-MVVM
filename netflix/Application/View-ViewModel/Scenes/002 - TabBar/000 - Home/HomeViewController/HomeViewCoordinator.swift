@@ -38,8 +38,6 @@ final class HomeViewCoordinator {
     var section: Section?
     var media: Media?
     var shouldScreenRotate = false
-    
-//    var navigationOverlaySection: Section?
 }
 
 // MARK: - CoordinatorProtocol Implementation
