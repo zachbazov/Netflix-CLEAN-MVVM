@@ -26,12 +26,13 @@ final class NavigationOverlayViewModel {
     let coordinator: HomeViewCoordinator
     
     let isPresented: Observable<Bool> = Observable(false)
-    var items: [Valuable] = []
     let state: Observable<NavigationOverlayTableViewDataSource.State> = Observable(.main)
+    
+    var items: [Valuable] = []
+    var category: NavigationOverlayView.Category = .display
+    
     let numberOfSections: Int = 1
     let rowHeight: CGFloat = 56.0
-    
-    var currentCategory: NavigationOverlayView.Category = .home
     
     /// Create a navigation overlay view view model object.
     /// - Parameter viewModel: Coordinating view model.
@@ -61,59 +62,39 @@ extension NavigationOverlayViewModel: ViewModelProtocol {
     
     func didSelectRow(at indexPath: IndexPath) {
         guard let controller = coordinator.viewController,
-              let homeViewModel = controller.viewModel,
-              let segmentControl = controller.segmentControlView,
-              let browseOverlay = controller.browseOverlayView
+              let segmentControl = controller.segmentControlView
         else { return }
         
         switch state.value {
         case .none:
             break
         case .main:
-            guard let states = SegmentControlView.State.allCases[indexPath.row] as SegmentControlView.State? else { return }
-            
-            switch states {
-            case .main:
-                segmentControl.viewModel?.state.value = .main
-            case .tvShows:
-                guard segmentControl.viewModel.state.value != .tvShows else { print(1);return }
-                
-                let section = Section(id: 1111, title: "BrowseOverlay", media: controller.viewModel.media)
-                
-                controller.browseOverlayView?.dataSource?.items = section.media
-                
-                browseOverlay.viewModel.section.value = section
-                
-                segmentControl.viewModel.state.value = .tvShows
-            case .movies:
-                guard segmentControl.viewModel.state.value != .movies else { print(11);return }
-                
-                let section = Section(id: 2222, title: "BrowseOverlay", media: controller.viewModel.media)
-                
-                controller.browseOverlayView?.dataSource?.items = section.media
-                
-                browseOverlay.viewModel.section.value = section
-                
-                segmentControl.viewModel.state.value = .movies
-            case .categories:
-                state.value = .genres
-                
-                isPresented.value = true
-            }
+            segmentControl.stateWillChange(at: indexPath)
         case .genres:
-            controller.dataSource?.style.removeGradient()
-            
-            guard let category = NavigationOverlayView.Category(rawValue: indexPath.row) else { return }
-            
-            currentCategory = category
-            
-            let section = category.toSection(with: homeViewModel)
-            
-            controller.browseOverlayView?.dataSource?.items = section.media
-            
-            browseOverlay.viewModel.section.value = section
-            
-            coordinator.coordinate(to: .browse)
+            didSelectCategory(at: indexPath)
         }
+    }
+    
+    func didSelectCategory(at indexPath: IndexPath) {
+        guard let controller = coordinator.viewController,
+              let homeViewModel = controller.viewModel,
+              let browseOverlay = controller.browseOverlayView
+        else { return }
+        
+        guard let category = NavigationOverlayView.Category(rawValue: indexPath.row) else { return }
+        
+        let section = category.toSection(with: homeViewModel)
+        
+        setCategory(category)
+        
+        browseOverlay.viewModel?.section.value = section
+        
+        controller.dataSource?.style.removeGradient()
+
+        coordinator.coordinate(to: .browse)
+    }
+    
+    fileprivate func setCategory(_ category: NavigationOverlayView.Category) {
+        self.category = category
     }
 }

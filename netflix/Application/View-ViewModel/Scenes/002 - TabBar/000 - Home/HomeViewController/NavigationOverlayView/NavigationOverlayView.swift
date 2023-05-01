@@ -65,10 +65,9 @@ final class NavigationOverlayView: View<NavigationOverlayViewModel> {
     }
     
     override func viewDidBindObservers() {
-        viewModel?.isPresented.observe(on: self) { [weak self] isPresented in
+        viewModel?.isPresented.observe(on: self) { [weak self] _ in
             self?.opaqueView?.viewDidUpdate()
             self?.viewWillAnimateAppearance()
-            self?.removeBlurness()
         }
         
         viewModel?.state.observe(on: self) { [weak self] state in
@@ -111,73 +110,25 @@ extension NavigationOverlayView: ViewProtocol {
         tableView.register(class: NavigationOverlayTableViewCell.self)
         tableView.backgroundColor = .clear
         tableView.backgroundView = opaqueView
+        tableView.contentInset = .init(top: 32.0, left: .zero, bottom: .zero, right: .zero)
         return tableView
     }
     
     /// Release data source changes and center the content.
     func dataSourceDidChange() {
-        self.viewModel?.itemsDidChange()
+        viewModel?.itemsDidChange()
         
         tableView.delegate = dataSource
         tableView.dataSource = dataSource
-        
         tableView.reloadData()
-        
-        tableView.contentInset = .init(top: 32.0, left: .zero, bottom: .zero, right: .zero)
-        
-        opaqueView?.add()
-    }
-    
-    func removeBlurness() {
-        guard !viewModel.isPresented.value else { return }
-        
-        opaqueView?.remove()
     }
 }
 
 // MARK: - Category Type
 
 extension NavigationOverlayView {
-    /// Genres representation type.
-    enum Category: Int, CaseIterable {
-        case newRelease
-        case home
-        case myList
-        case action
-        case sciFi
-        case crime
-        case thriller
-        case adventure
-        case comedy
-        case drama
-        case horror
-        case anime
-        case familyNchildren
-        case documentary
-    }
-}
-
-// MARK: - Valuable Implementation
-
-extension NavigationOverlayView.Category: Valuable {
-    var stringValue: String {
-        switch self {
-        case .newRelease: return "New Release"
-        case .home: return Localization.TabBar.Home.SegmentControl.Overlay().home
-        case .myList: return Localization.TabBar.Home.SegmentControl.Overlay().myList
-        case .action: return Localization.TabBar.Home.SegmentControl.Overlay().action
-        case .sciFi: return Localization.TabBar.Home.SegmentControl.Overlay().sciFi
-        case .crime: return Localization.TabBar.Home.SegmentControl.Overlay().crime
-        case .thriller: return Localization.TabBar.Home.SegmentControl.Overlay().thriller
-        case .adventure: return Localization.TabBar.Home.SegmentControl.Overlay().adventure
-        case .comedy: return Localization.TabBar.Home.SegmentControl.Overlay().comedy
-        case .drama: return Localization.TabBar.Home.SegmentControl.Overlay().drama
-        case .horror: return Localization.TabBar.Home.SegmentControl.Overlay().horror
-        case .anime: return Localization.TabBar.Home.SegmentControl.Overlay().anime
-        case .familyNchildren: return Localization.TabBar.Home.SegmentControl.Overlay().familyNchildren
-        case .documentary: return Localization.TabBar.Home.SegmentControl.Overlay().documentary
-        }
-    }
+    /// Category aka Media's genres representation type.
+    typealias Category = HomeTableViewDataSource.Index
 }
 
 // MARK: - NavigationOverlayView.Category - Section Conversion
@@ -186,7 +137,6 @@ extension NavigationOverlayView.Category {
     func toSection(with viewModel: HomeViewModel) -> Section {
         switch self {
         case .newRelease: return viewModel.section(at: .newRelease)
-        case .home: return viewModel.section(at: .resumable)
         case .myList: return viewModel.section(at: .myList)
         case .action: return viewModel.section(at: .action)
         case .sciFi: return viewModel.section(at: .sciFi)
@@ -199,6 +149,7 @@ extension NavigationOverlayView.Category {
         case .anime: return viewModel.section(at: .anime)
         case .familyNchildren: return viewModel.section(at: .familyNchildren)
         case .documentary: return viewModel.section(at: .documentary)
+        default: return viewModel.section(at: .rated)
         }
     }
 }

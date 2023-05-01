@@ -69,6 +69,10 @@ extension OpaqueView: ViewProtocol {
     /// Release changes for the view by the view model.
     /// - Parameter media: Corresponding media object.
     func viewDidUpdate() {
+        remove()
+        
         viewDidConfigure()
+        
+        add()
     }
 }

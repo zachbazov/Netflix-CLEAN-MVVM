@@ -178,9 +178,7 @@ extension HomeTableViewDataSource: DataSourceProtocol {
     fileprivate func sectionsDidFilter() {
         guard viewModel.isNotNil else { return }
         
-        let sections = viewModel.sections
-        
-        viewModel?.filter(sections: sections)
+        viewModel?.filter(sections: viewModel.sections)
     }
     
     fileprivate func contentDidInset() {
@@ -355,7 +353,9 @@ extension HomeTableViewDataSource {
 extension HomeTableViewDataSource.Index: Valuable {
     var stringValue: String {
         switch self {
-        case .display, .rated, .resumable: return ""
+        case .display: return "Display"
+        case .rated: return "Top Rated"
+        case .resumable: return "Resume Watching"
         case .newRelease: return "New Release"
         case .action: return "Action"
         case .sciFi: return "Sci-Fi"

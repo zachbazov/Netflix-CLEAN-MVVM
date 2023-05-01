@@ -12,7 +12,6 @@ import UIKit
 private protocol DataSourceProtocol {
     var coordinator: HomeViewCoordinator { get }
     var section: Section? { get }
-    var items: [Media] { get }
 }
 
 // MARK: - BrowseOverlayCollectionViewDataSource Type
@@ -20,7 +19,6 @@ private protocol DataSourceProtocol {
 final class BrowseOverlayCollectionViewDataSource: NSObject {
     fileprivate let coordinator: HomeViewCoordinator
     var section: Section?
-    var items: [Media]
     
     /// Create a browse overlay collection view data source object.
     /// - Parameters:
@@ -29,7 +27,6 @@ final class BrowseOverlayCollectionViewDataSource: NSObject {
     init(section: Section? = nil, with viewModel: HomeViewModel) {
         self.coordinator = viewModel.coordinator!
         self.section = section
-        self.items = section?.media ?? []
     }
 }
 
@@ -41,7 +38,7 @@ extension BrowseOverlayCollectionViewDataSource: DataSourceProtocol {}
 
 extension BrowseOverlayCollectionViewDataSource: UICollectionViewDelegate, UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return items.count
+        return self.section?.media.count ?? .zero
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -54,7 +51,7 @@ extension BrowseOverlayCollectionViewDataSource: UICollectionViewDelegate, UICol
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let media = items[indexPath.row]
+        guard let media = section?.media[indexPath.row] else { return }
         coordinator.section = section
         coordinator.media = media
         coordinator.shouldScreenRotate = false

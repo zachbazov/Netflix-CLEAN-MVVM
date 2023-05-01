@@ -135,6 +135,23 @@ extension SegmentControlView: ViewProtocol {
         }
     }
     
+    func stateWillChange(at indexPath: IndexPath) {
+        guard let state = SegmentControlView.State.allCases[indexPath.row] as SegmentControlView.State? else { return }
+        
+        switch state {
+        case .tvShows:
+            guard viewModel?.state.value != .tvShows else { return }
+            
+            viewModel?.state.value = .tvShows
+        case .movies:
+            guard viewModel?.state.value != .movies else { return }
+            
+            viewModel?.state.value = .movies
+        default:
+            viewModel?.state.value = state
+        }
+    }
+    
     func stateDidChange(_ state: SegmentControlView.State) {
         guard let controller = viewModel.coordinator.viewController,
               let homeViewModel = controller.viewModel,
@@ -155,27 +172,35 @@ extension SegmentControlView: ViewProtocol {
             
             controller.dataSource?.style.addGradient()
         case .tvShows:
-            if !viewModel.hasTvExpanded {
-                viewModel.hasTvExpanded = true
-                viewModel.hasMoviesExpanded = false
+            guard !viewModel.hasTvExpanded else {
+                navigationOverlay.viewModel.isPresented.value = true
+                navigationOverlay.viewModel.state.value = .main
                 
-                homeViewModel.dataSourceState.value = .tvShows
                 return
             }
             
-            navigationOverlay.viewModel.isPresented.value = true
-            navigationOverlay.viewModel.state.value = .main
+            viewModel.hasTvExpanded = true
+            viewModel.hasMoviesExpanded = false
+            
+            homeViewModel.dataSourceState.value = .tvShows
+            
+            let section = navigationOverlay.viewModel.category.toSection(with: homeViewModel)
+            browseOverlay.viewModel.section.value = section
         case .movies:
-            if !viewModel.hasMoviesExpanded {
-                viewModel.hasTvExpanded = false
-                viewModel.hasMoviesExpanded = true
+            guard !viewModel.hasMoviesExpanded else {
+                navigationOverlay.viewModel.isPresented.value = true
+                navigationOverlay.viewModel.state.value = .main
                 
-                homeViewModel.dataSourceState.value = .movies
                 return
             }
             
-            navigationOverlay.viewModel.isPresented.value = true
-            navigationOverlay.viewModel.state.value = .main
+            viewModel.hasTvExpanded = false
+            viewModel.hasMoviesExpanded = true
+            
+            homeViewModel.dataSourceState.value = .movies
+            
+            let section = navigationOverlay.viewModel.category.toSection(with: homeViewModel)
+            browseOverlay.viewModel.section.value = section
         case .categories:
             navigationOverlay.viewModel.isPresented.value = true
             navigationOverlay.viewModel.state.value = .genres

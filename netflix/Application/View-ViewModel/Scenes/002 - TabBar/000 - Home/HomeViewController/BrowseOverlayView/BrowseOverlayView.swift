@@ -32,6 +32,8 @@ final class BrowseOverlayView: View<BrowseOverlayViewModel> {
         parent.addSubview(self)
         self.constraintToSuperview(parent)
         
+        self.collectionView.constraintToSuperview(parent)
+        
         self.viewDidLoad()
     }
     
@@ -138,9 +140,10 @@ extension BrowseOverlayView: ViewProtocol {
     }
     
     fileprivate func sectionDidChange(_ section: Section) {
-        print("BrowseOverlayView.sectionDidChange", section.id, section.title)
         dataSource?.section = section
         
+        collectionView.delegate = dataSource
+        collectionView.dataSource = dataSource
         collectionView.reloadData()
     }
 }
