@@ -22,6 +22,7 @@ private protocol ViewProtocol {
 final class SegmentControlView: View<SegmentControlViewViewModel> {
     @IBOutlet private weak var stackView: UIStackView!
     @IBOutlet private weak var xButton: UIButton!
+    @IBOutlet private weak var allButton: UIButton!
     @IBOutlet private weak var tvShowsButton: UIButton!
     @IBOutlet private weak var moviesButton: UIButton!
     @IBOutlet private weak var categoriesButton: UIButton!
@@ -106,16 +107,25 @@ extension SegmentControlView: ViewProtocol {
         switch state {
         case .main:
             xButton.isHidden(true)
+            allButton.isHidden(true)
             tvShowsButton.isHidden(false)
             moviesButton.isHidden(false)
             categoriesButton.isHidden(false)
+        case .all:
+            xButton.isHidden(false)
+            allButton.isHidden(false)
+            tvShowsButton.isHidden(true)
+            moviesButton.isHidden(true)
+            categoriesButton.isHidden(false)
         case .tvShows:
             xButton.isHidden(false)
+            allButton.isHidden(true)
             tvShowsButton.isHidden(false)
             moviesButton.isHidden(true)
             categoriesButton.isHidden(false)
         case .movies:
             xButton.isHidden(false)
+            allButton.isHidden(true)
             tvShowsButton.isHidden(true)
             moviesButton.isHidden(false)
             categoriesButton.isHidden(false)
@@ -128,6 +138,8 @@ extension SegmentControlView: ViewProtocol {
         switch state {
         case .main:
             stackViewLeadingConstraint.constant = 24.0
+        case .all:
+            break
         case .tvShows, .movies:
             stackViewLeadingConstraint.constant = 16.0
         case .categories:
@@ -136,7 +148,7 @@ extension SegmentControlView: ViewProtocol {
     }
     
     func stateWillChange(at indexPath: IndexPath) {
-        guard let state = SegmentControlView.State.allCases[indexPath.row] as SegmentControlView.State? else { return }
+        guard let state = SegmentControlView.State(rawValue: indexPath.row) else { return }
         
         switch state {
         case .tvShows:
@@ -159,51 +171,73 @@ extension SegmentControlView: ViewProtocol {
               let browseOverlay = controller.browseOverlayView
         else { return }
         
+        guard let section = navigationOverlay.viewModel?.category.toSection() else { return }
+        
         switch state {
         case .main:
-            viewModel.hasTvExpanded = false
-            viewModel.hasMoviesExpanded = false
+            viewModel?.hasAllExpanded = false
+            viewModel?.hasTvExpanded = false
+            viewModel?.hasMoviesExpanded = false
             
             homeViewModel.dataSourceState.value = .all
             
-            navigationOverlay.viewModel.state.value = .main
+            navigationOverlay.viewModel?.state.value = .main
             
-            browseOverlay.viewModel.isPresented.value = false
+            browseOverlay.viewModel?.isPresented.value = false
             
             controller.dataSource?.style.addGradient()
-        case .tvShows:
-            guard !viewModel.hasTvExpanded else {
-                navigationOverlay.viewModel.isPresented.value = true
-                navigationOverlay.viewModel.state.value = .main
+        case .all:
+            guard !viewModel.hasAllExpanded else {
+                navigationOverlay.viewModel?.isPresented.value = true
+                navigationOverlay.viewModel?.state.value = .main
                 
                 return
             }
             
-            viewModel.hasTvExpanded = true
-            viewModel.hasMoviesExpanded = false
+            viewModel?.hasAllExpanded = true
+            viewModel?.hasTvExpanded = false
+            viewModel?.hasMoviesExpanded = false
+            
+            homeViewModel.dataSourceState.value = .all
+            
+            browseOverlay.viewModel?.section.value = section
+            
+            controller.dataSource?.style.removeGradient()
+
+            viewModel?.coordinator.coordinate(to: .browse)
+        case .tvShows:
+            guard !viewModel.hasTvExpanded else {
+                navigationOverlay.viewModel?.isPresented.value = true
+                navigationOverlay.viewModel?.state.value = .main
+                
+                return
+            }
+            
+            viewModel?.hasAllExpanded = false
+            viewModel?.hasTvExpanded = true
+            viewModel?.hasMoviesExpanded = false
             
             homeViewModel.dataSourceState.value = .tvShows
             
-            let section = navigationOverlay.viewModel.category.toSection(with: homeViewModel)
-            browseOverlay.viewModel.section.value = section
+            browseOverlay.viewModel?.section.value = section
         case .movies:
             guard !viewModel.hasMoviesExpanded else {
-                navigationOverlay.viewModel.isPresented.value = true
-                navigationOverlay.viewModel.state.value = .main
+                navigationOverlay.viewModel?.isPresented.value = true
+                navigationOverlay.viewModel?.state.value = .main
                 
                 return
             }
             
-            viewModel.hasTvExpanded = false
-            viewModel.hasMoviesExpanded = true
+            viewModel?.hasAllExpanded = false
+            viewModel?.hasTvExpanded = false
+            viewModel?.hasMoviesExpanded = true
             
             homeViewModel.dataSourceState.value = .movies
             
-            let section = navigationOverlay.viewModel.category.toSection(with: homeViewModel)
-            browseOverlay.viewModel.section.value = section
+            browseOverlay.viewModel?.section.value = section
         case .categories:
-            navigationOverlay.viewModel.isPresented.value = true
-            navigationOverlay.viewModel.state.value = .genres
+            navigationOverlay.viewModel?.isPresented.value = true
+            navigationOverlay.viewModel?.state.value = .genres
         }
     }
 }
@@ -212,6 +246,9 @@ extension SegmentControlView: ViewProtocol {
 
 extension SegmentControlView {
     private func setupButtons() {
+        allButton
+            .border(.white.withAlphaComponent(0.3), width: 1.5)
+            .round()
         tvShowsButton
             .border(.white.withAlphaComponent(0.3), width: 1.5)
             .round()
@@ -230,6 +267,7 @@ extension SegmentControlView {
     /// State representation type.
     enum State: Int, CaseIterable {
         case main
+        case all
         case tvShows
         case movies
         case categories
@@ -242,6 +280,7 @@ extension SegmentControlView.State: Valuable {
     var stringValue: String {
         switch self {
         case .main: return Localization.TabBar.Home.SegmentControl().main
+        case .all: return Localization.TabBar.Home.SegmentControl().all
         case .tvShows: return Localization.TabBar.Home.SegmentControl().tvShows
         case .movies: return Localization.TabBar.Home.SegmentControl().movies
         case .categories: return Localization.TabBar.Home.SegmentControl().categories

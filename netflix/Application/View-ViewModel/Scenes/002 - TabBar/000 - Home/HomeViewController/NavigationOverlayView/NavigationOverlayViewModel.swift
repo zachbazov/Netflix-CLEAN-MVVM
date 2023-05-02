@@ -77,21 +77,13 @@ extension NavigationOverlayViewModel: ViewModelProtocol {
     
     func didSelectCategory(at indexPath: IndexPath) {
         guard let controller = coordinator.viewController,
-              let homeViewModel = controller.viewModel,
-              let browseOverlay = controller.browseOverlayView
+              let segmentControl = controller.segmentControlView
         else { return }
         
         guard let category = NavigationOverlayView.Category(rawValue: indexPath.row) else { return }
-        
-        let section = category.toSection(with: homeViewModel)
-        
         setCategory(category)
         
-        browseOverlay.viewModel?.section.value = section
-        
-        controller.dataSource?.style.removeGradient()
-
-        coordinator.coordinate(to: .browse)
+        segmentControl.viewModel?.state.value = .all
     }
     
     fileprivate func setCategory(_ category: NavigationOverlayView.Category) {

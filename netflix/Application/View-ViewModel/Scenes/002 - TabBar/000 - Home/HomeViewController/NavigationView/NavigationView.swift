@@ -80,9 +80,9 @@ extension NavigationView {
 extension NavigationView.State: Valuable {
     var stringValue: String {
         switch self {
-        case .airPlay: return Localization.TabBar.Home.SegmentControl().airPlay
-        case .account: return Localization.TabBar.Home.SegmentControl().account
-        case .search: return Localization.TabBar.Home.SegmentControl().search
+        case .airPlay: return Localization.TabBar.Home.NavigationView().airPlay
+        case .account: return Localization.TabBar.Home.NavigationView().account
+        case .search: return Localization.TabBar.Home.NavigationView().search
         }
     }
 }

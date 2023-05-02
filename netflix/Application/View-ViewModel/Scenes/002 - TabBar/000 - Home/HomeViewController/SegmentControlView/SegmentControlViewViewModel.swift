@@ -20,6 +20,7 @@ final class SegmentControlViewViewModel {
     
     let state: Observable<SegmentControlView.State> = Observable(.main)
     
+    var hasAllExpanded = false
     var hasTvExpanded = false
     var hasMoviesExpanded = false
     

@@ -44,21 +44,26 @@ struct Localization {
             }
             
             struct SegmentControl {
-                let main = NSLocalizedString("HomeViewController.NavigationView.Main.Title",
-                                             comment: "Main Button")
-                let tvShows = NSLocalizedString("HomeViewController.NavigationView.TVShows.Title",
-                                                comment: "TV Shows Button")
-                let movies = NSLocalizedString("HomeViewController.NavigationView.Movies.Title",
-                                               comment: "Movies Button")
-                let categories = NSLocalizedString("HomeViewController.NavigationView.Categories.Title",
-                                                   comment: "Categories Button")
+                let main = NSLocalizedString("HomeViewController.SegmentControlView.Main.Title",
+                                             comment: "Main Button Title")
+                let all = NSLocalizedString("HomeViewController.SegmentControlView.All.Title",
+                                             comment: "All Button Title")
+                let tvShows = NSLocalizedString("HomeViewController.SegmentControlView.TVShows.Title",
+                                                comment: "TV Shows Button Title")
+                let movies = NSLocalizedString("HomeViewController.SegmentControlView.Movies.Title",
+                                               comment: "Movies Button Title")
+                let categories = NSLocalizedString("HomeViewController.SegmentControlView.Categories.Title",
+                                                   comment: "Categories Button Title")
+                let allCategories = NSLocalizedString("HomeViewController.SegmentControlView.AllCategories.Title", comment: "All Categories Button Title")
+            }
+            
+            struct NavigationView {
                 let airPlay = NSLocalizedString("HomeViewController.NavigationView.AirPlay.Title",
                                                 comment: "AirPlay Button")
                 let search = NSLocalizedString("HomeViewController.NavigationView.Search.Title",
                                                 comment: "Search Button")
                 let account = NSLocalizedString("HomeViewController.NavigationView.Account.Title",
                                                 comment: "Account Button")
-                let allCategories = NSLocalizedString("HomeViewController.NavigationView.AllCategories.Title", comment: "All Categories Title")
                 
                 struct Overlay {
                     let home = NSLocalizedString("HomeViewController.NavigationOverlayView.Home.Title",
