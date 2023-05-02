@@ -151,6 +151,10 @@ extension SegmentControlView: ViewProtocol {
         guard let state = SegmentControlView.State(rawValue: indexPath.row) else { return }
         
         switch state {
+        case .all:
+            guard viewModel?.state.value != .all else { return }
+            
+            viewModel?.state.value = .all
         case .tvShows:
             guard viewModel?.state.value != .tvShows else { return }
             

@@ -10,69 +10,32 @@ import UIKit
 // MARK: - ViewProtocol Type
 
 private protocol ViewProtocol {
-    var blurView: UIVisualEffectView! { get }
-    
-    func viewDidUpdate()
+    var blurView: UIVisualEffectView { get }
 }
 
 // MARK: - OpaqueView Type
 
 final class OpaqueView: UIView {
-    var blurView: UIVisualEffectView!
-    
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        self.viewDidConfigure()
-    }
-    
-    required init?(coder: NSCoder) { fatalError() }
+    fileprivate lazy var blurView: UIVisualEffectView = createVisualEffectView()
     
     deinit {
         print("deinit \(Self.self)")
-        remove()
     }
     
-    func viewDidConfigure() {
-        guard blurView.isNil else { return }
+    fileprivate func createVisualEffectView() -> UIVisualEffectView {
         let blurEffect = UIBlurEffect(style: .dark)
-        blurView = .init(effect: blurEffect)
+        let blurView = UIVisualEffectView(effect: blurEffect)
         blurView.frame = bounds
+        return blurView
     }
     
-    func add() {
-        guard blurView.isNotNil else { return }
-        self.alpha = 1.0
+    func apply() -> Self {
         insertSubview(blurView, at: 0)
-    }
-    
-    func remove() {
-        guard blurView.isNotNil else { return }
         
-        UIView.animate(
-            withDuration: 0.5,
-            delay: .zero,
-            options: .curveEaseInOut,
-            animations: { [weak self] in
-                guard let self = self else { return }
-                self.alpha = .zero
-            }, completion: { [weak self] done in
-                guard let self = self else { return }
-                self.blurView?.removeFromSuperview()
-                self.blurView = nil
-            })
+        return self
     }
 }
 
 // MARK: - ViewProtocol Implementation
 
-extension OpaqueView: ViewProtocol {
-    /// Release changes for the view by the view model.
-    /// - Parameter media: Corresponding media object.
-    func viewDidUpdate() {
-        remove()
-        
-        viewDidConfigure()
-        
-        add()
-    }
-}
+extension OpaqueView: ViewProtocol {}

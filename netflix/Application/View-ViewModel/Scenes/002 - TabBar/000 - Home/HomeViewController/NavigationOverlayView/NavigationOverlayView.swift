@@ -10,26 +10,27 @@ import UIKit
 // MARK: - ViewProtocol Type
 
 private protocol ViewProtocol {
-    var dataSource: NavigationOverlayTableViewDataSource! { get }
+    var dataSource: NavigationOverlayTableViewDataSource? { get }
     var opaqueView: OpaqueView? { get }
-    var footerView: NavigationOverlayFooterView! { get }
-    var tabBar: UITabBar! { get }
+    var footerView: NavigationOverlayFooterView? { get }
     var tableView: UITableView { get }
     
-    func createTableView() -> UITableView
+    func createDataSource() -> NavigationOverlayTableViewDataSource
+    func createTableView(with dataSource: NavigationOverlayTableViewDataSource?) -> UITableView
+    func setupViewModel(with viewModel: HomeViewModel) -> NavigationOverlayViewModel
+    func createOpaqueView() -> OpaqueView
+    func createFooterView() -> NavigationOverlayFooterView?
 }
 
 // MARK: - NavigationOverlayView Type
 
 final class NavigationOverlayView: View<NavigationOverlayViewModel> {
-    var dataSource: NavigationOverlayTableViewDataSource!
-    var opaqueView: OpaqueView?
-    var footerView: NavigationOverlayFooterView!
+    private(set) lazy var dataSource: NavigationOverlayTableViewDataSource? = createDataSource()
+    private(set) lazy var tableView: UITableView = createTableView(with: dataSource)
+    private(set) lazy var opaqueView: OpaqueView? = createOpaqueView()
+    private(set) lazy var footerView: NavigationOverlayFooterView? = createFooterView()
     
-    var tabBar: UITabBar!
-    private(set) lazy var tableView: UITableView = createTableView()
-    
-    var gradientView: UIView!
+    var gradientView: UIView?
     
     /// Create a navigation overlay view object.
     /// - Parameter viewModel: Coordinating view model.
@@ -37,19 +38,18 @@ final class NavigationOverlayView: View<NavigationOverlayViewModel> {
         super.init(frame: .screenSize)
         self.alpha = .zero
         
-        self.tabBar = viewModel.coordinator!.viewController!.tabBarController!.tabBar
-        self.viewModel = NavigationOverlayViewModel(with: viewModel)
-        self.dataSource = NavigationOverlayTableViewDataSource(with: self.viewModel)
-        self.opaqueView = OpaqueView(frame: UIScreen.main.bounds)
-        let parent = viewModel.coordinator!.viewController!.view!
-        self.footerView = NavigationOverlayFooterView(parent: parent, viewModel: self.viewModel)
-        self.gradientView = .init(frame: CGRect(x: .zero, y: UIScreen.main.bounds.height - 192.0, width: UIScreen.main.bounds.width, height: 192.0))
-        self.gradientView.addGradientLayer(colors: [.clear, .hexColor("#050505")], locations: [0.0, 0.85])
+        self.viewModel = setupViewModel(with: viewModel)
         
-        parent.addSubview(self)
-        parent.addSubview(self.footerView)
+        let rect = CGRect(x: .zero, y: CGRect.screenSize.height - 192.0, width: CGRect.screenSize.width, height: 192.0)
+        self.gradientView = .init(frame: rect)
+        self.gradientView?.addGradientLayer(colors: [.clear, .hexColor("#050505")], locations: [0.0, 0.85])
+        
+        guard let controller = viewModel.coordinator?.viewController else { return }
+        controller.view.addSubview(self)
+        controller.view.addSubview(self.footerView!)
+        
         self.addSubview(self.tableView)
-        self.addSubview(self.gradientView)
+        self.addSubview(self.gradientView!)
         
         self.viewDidBindObservers()
     }
@@ -60,18 +60,18 @@ final class NavigationOverlayView: View<NavigationOverlayViewModel> {
         print("deinit \(Self.self)")
         viewDidUnbindObservers()
         tableView.removeFromSuperview()
-        footerView.removeFromSuperview()
+        footerView?.removeFromSuperview()
         removeFromSuperview()
     }
     
     override func viewDidBindObservers() {
         viewModel?.isPresented.observe(on: self) { [weak self] _ in
-            self?.opaqueView?.viewDidUpdate()
             self?.viewWillAnimateAppearance()
         }
         
-        viewModel?.state.observe(on: self) { [weak self] state in
-            self?.dataSourceDidChange()
+        viewModel?.state.observe(on: self) { [weak self] _ in
+            self?.viewModel?.updateItems()
+            self?.tableView.reloadData()
         }
     }
     
@@ -85,16 +85,20 @@ final class NavigationOverlayView: View<NavigationOverlayViewModel> {
     }
     
     override func viewWillAnimateAppearance() {
+        guard let controller = viewModel.coordinator.viewController else { return }
+        
         UIView.animate(
             withDuration: 0.5,
             delay: .zero,
             options: .curveEaseInOut,
             animations: { [weak self] in
                 guard let self = self else { return }
+                
                 self.alpha = self.viewModel.isPresented.value ? 1.0 : 0.0
                 self.tableView.alpha = self.viewModel.isPresented.value ? 1.0 : 0.0
-                self.footerView.alpha = self.viewModel.isPresented.value ? 1.0 : 0.0
-                self.tabBar.alpha = self.viewModel.isPresented.value ? 0.0 : 1.0
+                self.footerView?.alpha = self.viewModel.isPresented.value ? 1.0 : 0.0
+                
+                controller.tabBarController?.tabBar.alpha = self.viewModel.isPresented.value ? 0.0 : 1.0
             })
     }
 }
@@ -102,7 +106,11 @@ final class NavigationOverlayView: View<NavigationOverlayViewModel> {
 // MARK: - ViewProtocol Implementation
 
 extension NavigationOverlayView: ViewProtocol {
-    fileprivate func createTableView() -> UITableView {
+    fileprivate func createDataSource() -> NavigationOverlayTableViewDataSource {
+        return NavigationOverlayTableViewDataSource(with: viewModel)
+    }
+    
+    fileprivate func createTableView(with dataSource: NavigationOverlayTableViewDataSource?) -> UITableView {
         let tableView = UITableView(frame: UIScreen.main.bounds, style: .plain)
         tableView.showsVerticalScrollIndicator = false
         tableView.showsHorizontalScrollIndicator = false
@@ -111,16 +119,22 @@ extension NavigationOverlayView: ViewProtocol {
         tableView.backgroundColor = .clear
         tableView.backgroundView = opaqueView
         tableView.contentInset = .init(top: 32.0, left: .zero, bottom: .zero, right: .zero)
+        tableView.delegate = dataSource
+        tableView.dataSource = dataSource
         return tableView
     }
     
-    /// Release data source changes and center the content.
-    func dataSourceDidChange() {
-        viewModel?.itemsDidChange()
-        
-        tableView.delegate = dataSource
-        tableView.dataSource = dataSource
-        tableView.reloadData()
+    fileprivate func setupViewModel(with viewModel: HomeViewModel) -> NavigationOverlayViewModel {
+        return NavigationOverlayViewModel(with: viewModel)
+    }
+    
+    fileprivate func createOpaqueView() -> OpaqueView {
+        return OpaqueView(frame: .screenSize).apply()
+    }
+    
+    fileprivate func createFooterView() -> NavigationOverlayFooterView? {
+        guard let controller = viewModel.coordinator.viewController else { return nil }
+        return NavigationOverlayFooterView(parent: controller.view, viewModel: viewModel)
     }
 }
 
@@ -131,7 +145,7 @@ extension NavigationOverlayView {
     typealias Category = HomeTableViewDataSource.Index
 }
 
-// MARK: - NavigationOverlayView.Category - Section Conversion
+// MARK: - NavigationOverlayView.Category to Section Conversion
 
 extension NavigationOverlayView.Category {
     func toSection() -> Section {

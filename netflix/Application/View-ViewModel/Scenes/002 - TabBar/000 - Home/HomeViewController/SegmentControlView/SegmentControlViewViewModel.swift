@@ -24,6 +24,8 @@ final class SegmentControlViewViewModel {
     var hasTvExpanded = false
     var hasMoviesExpanded = false
     
+    var segment: SegmentControlView.State = .main
+    
     /// Create a navigation view view model object.
     /// - Parameters:
     ///   - items: Represented items on the navigation.

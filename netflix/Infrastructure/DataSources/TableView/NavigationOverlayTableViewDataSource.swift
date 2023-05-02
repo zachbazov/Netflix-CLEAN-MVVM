@@ -51,7 +51,7 @@ extension NavigationOverlayTableViewDataSource: UITableViewDelegate, UITableView
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         viewModel.isPresented.value = false
         
-        viewModel.didSelectRow(at: indexPath)
+        viewModel.selectRow(at: indexPath)
         
         if case .none? = State(rawValue: indexPath.section) {}
     }
