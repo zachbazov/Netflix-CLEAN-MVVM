@@ -34,7 +34,7 @@ final class NavigationOverlayViewModel {
     
     fileprivate(set) var items: [Valuable] = []
     fileprivate(set) var category: NavigationOverlayView.Category = .display
-    fileprivate var segment: SegmentControlView.State = .main
+    var segment: SegmentControlView.State = .main
     
     let numberOfSections: Int = 1
     let rowHeight: CGFloat = 56.0
@@ -106,6 +106,7 @@ extension NavigationOverlayViewModel: ViewModelProtocol {
         
         controller.dataSource?.style.removeGradient()
         
+        print(self.segment.stringValue)
         switch self.segment {
         case .main:
             segmentControl.viewModel.segment.value = .all

@@ -169,6 +169,7 @@ extension SegmentControlView: ViewProtocol {
             homeViewModel.dataSourceState.value = .all
             
             navigationOverlay.viewModel?.state.value = .main
+            navigationOverlay.viewModel.segment = .main
             
             browseOverlay.viewModel?.isPresented.value = false
             
@@ -186,6 +187,8 @@ extension SegmentControlView: ViewProtocol {
             if homeViewModel.dataSourceState.value != .all {
                 homeViewModel.dataSourceState.value = .all
                 
+                navigationOverlay.viewModel.segment = .all
+                
                 browseOverlay.viewModel?.section.value = section
             }
         case .tvShows:
@@ -201,6 +204,8 @@ extension SegmentControlView: ViewProtocol {
             if homeViewModel.dataSourceState.value != .tvShows {
                 homeViewModel.dataSourceState.value = .tvShows
                 
+                navigationOverlay.viewModel.segment = .tvShows
+                
                 browseOverlay.viewModel?.section.value = section
             }
         case .movies:
@@ -215,6 +220,8 @@ extension SegmentControlView: ViewProtocol {
             
             if homeViewModel.dataSourceState.value != .movies {
                 homeViewModel.dataSourceState.value = .movies
+                
+                navigationOverlay.viewModel.segment = .movies
                 
                 browseOverlay.viewModel?.section.value = section
             }

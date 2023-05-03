@@ -53,6 +53,8 @@ extension NavigationOverlayTableViewDataSource: UITableViewDelegate, UITableView
         
         viewModel.selectRow(at: indexPath)
         
+        print(111, viewModel.items[indexPath.row].stringValue)
+        
         if case .none? = State(rawValue: indexPath.section) {}
     }
 }
