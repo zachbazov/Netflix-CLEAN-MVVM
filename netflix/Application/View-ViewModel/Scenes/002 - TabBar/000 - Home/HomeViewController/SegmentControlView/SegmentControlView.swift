@@ -67,9 +67,14 @@ final class SegmentControlView: View<SegmentControlViewViewModel> {
         viewModel?.state.observe(on: self) { [weak self] state in
             guard let self = self else { return }
             
-            self.buttonsDidUpdate(for: state)
-            self.leadingConstraintDidUpdate(for: state)
             self.stateDidChange(state)
+        }
+        
+        viewModel?.segment.observe(on: self) { [weak self] segment in
+            guard let self = self else { return }
+            
+            self.buttonsDidUpdate(for: segment)
+            self.leadingConstraintDidUpdate(for: segment)
         }
     }
     
@@ -77,6 +82,7 @@ final class SegmentControlView: View<SegmentControlViewViewModel> {
         guard let viewModel = viewModel else { return }
         
         viewModel.state.remove(observer: self)
+        viewModel.segment.remove(observer: self)
         
         printIfDebug(.success, "Removed `\(Self.self)` observers.")
     }
@@ -147,27 +153,6 @@ extension SegmentControlView: ViewProtocol {
         }
     }
     
-    func stateWillChange(at indexPath: IndexPath) {
-        guard let state = SegmentControlView.State(rawValue: indexPath.row) else { return }
-        
-        switch state {
-        case .all:
-            guard viewModel?.state.value != .all else { return }
-            
-            viewModel?.state.value = .all
-        case .tvShows:
-            guard viewModel?.state.value != .tvShows else { return }
-            
-            viewModel?.state.value = .tvShows
-        case .movies:
-            guard viewModel?.state.value != .movies else { return }
-            
-            viewModel?.state.value = .movies
-        default:
-            viewModel?.state.value = state
-        }
-    }
-    
     func stateDidChange(_ state: SegmentControlView.State) {
         guard let controller = viewModel.coordinator.viewController,
               let homeViewModel = controller.viewModel,
@@ -179,9 +164,7 @@ extension SegmentControlView: ViewProtocol {
         
         switch state {
         case .main:
-            viewModel?.hasAllExpanded = false
-            viewModel?.hasTvExpanded = false
-            viewModel?.hasMoviesExpanded = false
+            viewModel.isSegmentSelected = false
             
             homeViewModel.dataSourceState.value = .all
             
@@ -191,54 +174,50 @@ extension SegmentControlView: ViewProtocol {
             
             controller.dataSource?.style.addGradient()
         case .all:
-            guard !viewModel.hasAllExpanded else {
+            if viewModel.isSegmentSelected {
                 navigationOverlay.viewModel?.isPresented.value = true
                 navigationOverlay.viewModel?.state.value = .main
                 
                 return
             }
             
-            viewModel?.hasAllExpanded = true
-            viewModel?.hasTvExpanded = false
-            viewModel?.hasMoviesExpanded = false
+            viewModel.isSegmentSelected = true
             
-            homeViewModel.dataSourceState.value = .all
-            
-            browseOverlay.viewModel?.section.value = section
-            
-            controller.dataSource?.style.removeGradient()
-
-            viewModel?.coordinator.coordinate(to: .browse)
+            if homeViewModel.dataSourceState.value != .all {
+                homeViewModel.dataSourceState.value = .all
+                
+                browseOverlay.viewModel?.section.value = section
+            }
         case .tvShows:
-            guard !viewModel.hasTvExpanded else {
+            if viewModel.isSegmentSelected {
                 navigationOverlay.viewModel?.isPresented.value = true
                 navigationOverlay.viewModel?.state.value = .main
                 
                 return
             }
             
-            viewModel?.hasAllExpanded = false
-            viewModel?.hasTvExpanded = true
-            viewModel?.hasMoviesExpanded = false
+            viewModel.isSegmentSelected = true
             
-            homeViewModel.dataSourceState.value = .tvShows
-            
-            browseOverlay.viewModel?.section.value = section
+            if homeViewModel.dataSourceState.value != .tvShows {
+                homeViewModel.dataSourceState.value = .tvShows
+                
+                browseOverlay.viewModel?.section.value = section
+            }
         case .movies:
-            guard !viewModel.hasMoviesExpanded else {
+            if viewModel.isSegmentSelected {
                 navigationOverlay.viewModel?.isPresented.value = true
                 navigationOverlay.viewModel?.state.value = .main
                 
                 return
             }
             
-            viewModel?.hasAllExpanded = false
-            viewModel?.hasTvExpanded = false
-            viewModel?.hasMoviesExpanded = true
+            viewModel.isSegmentSelected = true
             
-            homeViewModel.dataSourceState.value = .movies
-            
-            browseOverlay.viewModel?.section.value = section
+            if homeViewModel.dataSourceState.value != .movies {
+                homeViewModel.dataSourceState.value = .movies
+                
+                browseOverlay.viewModel?.section.value = section
+            }
         case .categories:
             navigationOverlay.viewModel?.isPresented.value = true
             navigationOverlay.viewModel?.state.value = .genres

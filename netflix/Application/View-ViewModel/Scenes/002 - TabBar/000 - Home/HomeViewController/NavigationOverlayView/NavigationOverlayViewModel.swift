@@ -11,14 +11,16 @@ import Foundation
 
 private protocol ViewModelProtocol {
     var isPresented: Observable<Bool> { get }
-    var items: [Valuable] { get }
     var state: Observable<NavigationOverlayTableViewDataSource.State> { get }
+    var items: [Valuable] { get }
+    var category: NavigationOverlayView.Category { get }
+    var segment: SegmentControlView.State { get }
     var numberOfSections: Int { get }
     var rowHeight: CGFloat { get }
     
     func updateItems()
     func selectRow(at indexPath: IndexPath)
-    func setCategory(for indexPath: IndexPath)
+    func selectSegment(at indexPath: IndexPath)
     func selectCategory(at indexPath: IndexPath)
 }
 
@@ -30,8 +32,9 @@ final class NavigationOverlayViewModel {
     let isPresented: Observable<Bool> = Observable(false)
     let state: Observable<NavigationOverlayTableViewDataSource.State> = Observable(.none)
     
-    var items: [Valuable] = []
-    var category: NavigationOverlayView.Category = .display
+    fileprivate(set) var items: [Valuable] = []
+    fileprivate(set) var category: NavigationOverlayView.Category = .display
+    fileprivate var segment: SegmentControlView.State = .main
     
     let numberOfSections: Int = 1
     let rowHeight: CGFloat = 56.0
@@ -63,44 +66,64 @@ extension NavigationOverlayViewModel: ViewModelProtocol {
     }
     
     func selectRow(at indexPath: IndexPath) {
-        guard let controller = coordinator.viewController,
-              let segmentControl = controller.segmentControlView
-        else { return }
-        
         switch state.value {
         case .none:
             break
         case .main:
-            segmentControl.stateWillChange(at: indexPath)
+            selectSegment(at: indexPath)
         case .genres:
             selectCategory(at: indexPath)
         }
     }
     
-    fileprivate func selectCategory(at indexPath: IndexPath) {
-        guard let controller = coordinator.viewController,
-              let segmentControl = controller.segmentControlView
-        else { return }
+    fileprivate func selectSegment(at indexPath: IndexPath) {
+        guard let segment = SegmentControlView.State(rawValue: indexPath.row) else { return }
         
-        setCategory(for: indexPath)
+        self.segment = segment
         
-        print(controller.viewModel.dataSourceState.value)
-        segmentControl.viewModel?.state.value = .all
-//        switch controller.viewModel.dataSourceState.value {
-//        case .none:
-//            segmentControl.viewModel?.state.value = .main
-//        case .all:
-//            segmentControl.viewModel?.state.value = .all
-//        case .tvShows:
-//            segmentControl.viewModel?.state.value = .tvShows
-//        case .movies:
-//            segmentControl.viewModel?.state.value = .movies
-//        }
+        guard let controller = coordinator.viewController, let segmentControl = controller.segmentControlView else { return }
+        
+        segmentControl.viewModel.segment.value = segment
+        
+        segmentControl.viewModel.isSegmentSelected = false
+        
+        segmentControl.viewModel.state.value = segment
     }
     
-    fileprivate func setCategory(for indexPath: IndexPath) {
+    fileprivate func selectCategory(at indexPath: IndexPath) {
+        guard let controller = coordinator.viewController,
+              let segmentControl = controller.segmentControlView,
+              let browseOverlay = controller.browseOverlayView
+        else { return }
+        
         guard let category = NavigationOverlayView.Category(rawValue: indexPath.row) else { return }
         
         self.category = category
+        
+        browseOverlay.viewModel.section.value = category.toSection()
+        
+        browseOverlay.viewModel.isPresented.value = true
+        
+        controller.dataSource?.style.removeGradient()
+        
+        switch self.segment {
+        case .main:
+            segmentControl.viewModel.segment.value = .all
+            segmentControl.viewModel.isSegmentSelected = false
+            segmentControl.viewModel.state.value = .all
+        case .all:
+            segmentControl.viewModel.segment.value = .all
+            segmentControl.viewModel.isSegmentSelected = false
+            segmentControl.viewModel.state.value = .all
+        case .tvShows:
+            segmentControl.viewModel.segment.value = .tvShows
+            segmentControl.viewModel.isSegmentSelected = false
+            segmentControl.viewModel.state.value = .tvShows
+        case .movies:
+            segmentControl.viewModel.segment.value = .movies
+            segmentControl.viewModel.isSegmentSelected = false
+            segmentControl.viewModel.state.value = .movies
+        default: break
+        }
     }
 }

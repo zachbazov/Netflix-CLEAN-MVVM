@@ -11,6 +11,9 @@ import Foundation
 
 private protocol ViewModelProtocol {
     var state: Observable<SegmentControlView.State> { get }
+    var segment: Observable<SegmentControlView.State> { get }
+    
+    var isSegmentSelected: Bool { get }
 }
 
 // MARK: - SegmentControlViewViewModel Type
@@ -19,12 +22,9 @@ final class SegmentControlViewViewModel {
     let coordinator: HomeViewCoordinator
     
     let state: Observable<SegmentControlView.State> = Observable(.main)
+    let segment: Observable<SegmentControlView.State> = Observable(.main)
     
-    var hasAllExpanded = false
-    var hasTvExpanded = false
-    var hasMoviesExpanded = false
-    
-    var segment: SegmentControlView.State = .main
+    var isSegmentSelected = false
     
     /// Create a navigation view view model object.
     /// - Parameters:
