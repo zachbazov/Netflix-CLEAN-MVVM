@@ -18,6 +18,8 @@ private protocol ViewProtocol {
 final class OpaqueView: UIView {
     fileprivate lazy var blurView: UIVisualEffectView = createVisualEffectView()
     
+    var gradientView: UIView?
+    
     deinit {
         print("deinit \(Self.self)")
     }
@@ -26,6 +28,13 @@ final class OpaqueView: UIView {
         let blurEffect = UIBlurEffect(style: .dark)
         let blurView = UIVisualEffectView(effect: blurEffect)
         blurView.frame = bounds
+        
+        let rect = CGRect(x: .zero, y: CGRect.screenSize.height - 192.0, width: CGRect.screenSize.width, height: 192.0)
+        self.gradientView = .init(frame: rect)
+        self.gradientView?.addGradientLayer(colors: [.clear, .hexColor("#050505")], locations: [0.0, 0.85])
+        
+        self.addSubview(self.gradientView!)
+        
         return blurView
     }
     

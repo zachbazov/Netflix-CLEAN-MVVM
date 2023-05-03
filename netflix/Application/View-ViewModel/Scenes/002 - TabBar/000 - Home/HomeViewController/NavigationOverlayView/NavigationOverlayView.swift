@@ -30,7 +30,7 @@ final class NavigationOverlayView: View<NavigationOverlayViewModel> {
     private(set) lazy var opaqueView: OpaqueView? = createOpaqueView()
     private(set) lazy var footerView: NavigationOverlayFooterView? = createFooterView()
     
-    var gradientView: UIView?
+//    var gradientView: UIView?
     
     /// Create a navigation overlay view object.
     /// - Parameter viewModel: Coordinating view model.
@@ -40,16 +40,16 @@ final class NavigationOverlayView: View<NavigationOverlayViewModel> {
         
         self.viewModel = setupViewModel(with: viewModel)
         
-        let rect = CGRect(x: .zero, y: CGRect.screenSize.height - 192.0, width: CGRect.screenSize.width, height: 192.0)
-        self.gradientView = .init(frame: rect)
-        self.gradientView?.addGradientLayer(colors: [.clear, .hexColor("#050505")], locations: [0.0, 0.85])
+//        let rect = CGRect(x: .zero, y: CGRect.screenSize.height - 192.0, width: CGRect.screenSize.width, height: 192.0)
+//        self.gradientView = .init(frame: rect)
+//        self.gradientView?.addGradientLayer(colors: [.clear, .hexColor("#050505")], locations: [0.0, 0.85])
         
         guard let controller = viewModel.coordinator?.viewController else { return }
         controller.view.addSubview(self)
         controller.view.addSubview(self.footerView!)
         
         self.addSubview(self.tableView)
-        self.addSubview(self.gradientView!)
+//        self.addSubview(self.gradientView!)
         
         self.viewDidBindObservers()
     }
