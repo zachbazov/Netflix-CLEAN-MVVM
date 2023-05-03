@@ -11,10 +11,12 @@ import UIKit
 
 private protocol ViewProtocol {
     func buttonDidTap(_ sender: UIButton)
-    func stateDidChange(_ state: SegmentControlView.State)
+    func updateState(_ state: SegmentControlView.State)
     func leadingConstraintDidUpdate(for state: SegmentControlView.State)
     func buttonsDidUpdate(for state: SegmentControlView.State)
-    func updateState(_ state: SegmentControlView.State)
+    func stateDidChange(_ state: SegmentControlView.State)
+    
+    func presentNavigationOverlayIfNeeded()
 }
 
 // MARK: - NavigationView Type
@@ -153,7 +155,7 @@ extension SegmentControlView: ViewProtocol {
         }
     }
     
-    func stateDidChange(_ state: SegmentControlView.State) {
+    fileprivate func stateDidChange(_ state: SegmentControlView.State) {
         guard let controller = viewModel.coordinator.viewController,
               let homeViewModel = controller.viewModel,
               let navigationOverlay = controller.navigationOverlayView,
@@ -175,59 +177,57 @@ extension SegmentControlView: ViewProtocol {
             
             controller.dataSource?.style.addGradient()
         case .all:
-            if viewModel.isSegmentSelected {
-                navigationOverlay.viewModel?.isPresented.value = true
-                navigationOverlay.viewModel?.state.value = .main
-                
-                return
-            }
+            presentNavigationOverlayIfNeeded()
             
             viewModel.isSegmentSelected = true
             
-            if homeViewModel.dataSourceState.value != .all {
-                homeViewModel.dataSourceState.value = .all
-                
-                navigationOverlay.viewModel.segment = .all
-                
-                browseOverlay.viewModel?.section.value = section
-            }
+            guard homeViewModel.dataSourceState.value != .all else { return }
+            
+            homeViewModel.dataSourceState.value = .all
+            
+            navigationOverlay.viewModel.segment = .all
+            
+            browseOverlay.viewModel?.section.value = section
         case .tvShows:
-            if viewModel.isSegmentSelected {
-                navigationOverlay.viewModel?.isPresented.value = true
-                navigationOverlay.viewModel?.state.value = .main
-                
-                return
-            }
+            presentNavigationOverlayIfNeeded()
             
             viewModel.isSegmentSelected = true
             
-            if homeViewModel.dataSourceState.value != .tvShows {
-                homeViewModel.dataSourceState.value = .tvShows
-                
-                navigationOverlay.viewModel.segment = .tvShows
-                
-                browseOverlay.viewModel?.section.value = section
-            }
+            guard homeViewModel.dataSourceState.value != .tvShows else { return }
+            
+            homeViewModel.dataSourceState.value = .tvShows
+            
+            navigationOverlay.viewModel.segment = .tvShows
+            
+            browseOverlay.viewModel?.section.value = section
         case .movies:
-            if viewModel.isSegmentSelected {
-                navigationOverlay.viewModel?.isPresented.value = true
-                navigationOverlay.viewModel?.state.value = .main
-                
-                return
-            }
+            presentNavigationOverlayIfNeeded()
             
             viewModel.isSegmentSelected = true
             
-            if homeViewModel.dataSourceState.value != .movies {
-                homeViewModel.dataSourceState.value = .movies
-                
-                navigationOverlay.viewModel.segment = .movies
-                
-                browseOverlay.viewModel?.section.value = section
-            }
+            guard homeViewModel.dataSourceState.value != .movies else { return }
+            
+            homeViewModel.dataSourceState.value = .movies
+            
+            navigationOverlay.viewModel.segment = .movies
+            
+            browseOverlay.viewModel?.section.value = section
         case .categories:
             navigationOverlay.viewModel?.isPresented.value = true
             navigationOverlay.viewModel?.state.value = .genres
+        }
+    }
+    
+    fileprivate func presentNavigationOverlayIfNeeded() {
+        guard let controller = viewModel.coordinator.viewController,
+              let navigationOverlay = controller.navigationOverlayView
+        else { return }
+        
+        guard !viewModel.isSegmentSelected else {
+            navigationOverlay.viewModel?.isPresented.value = true
+            navigationOverlay.viewModel?.state.value = .main
+            
+            return
         }
     }
 }

@@ -152,6 +152,7 @@ extension NavigationOverlayView.Category {
         guard let controller = Application.app.coordinator.tabCoordinator.home.viewControllers.first as? HomeViewController,
               let viewModel = controller.viewModel
         else { return .vacantValue }
+        
         switch self {
         case .newRelease: return viewModel.section(at: .newRelease)
         case .myList: return viewModel.section(at: .myList)

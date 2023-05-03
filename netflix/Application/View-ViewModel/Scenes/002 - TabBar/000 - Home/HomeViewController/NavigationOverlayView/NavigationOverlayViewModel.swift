@@ -77,17 +77,15 @@ extension NavigationOverlayViewModel: ViewModelProtocol {
     }
     
     fileprivate func selectSegment(at indexPath: IndexPath) {
+        guard let controller = coordinator.viewController,
+              let segmentControl = controller.segmentControlView
+        else { return }
+        
         guard let segment = SegmentControlView.State(rawValue: indexPath.row) else { return }
         
         self.segment = segment
         
-        guard let controller = coordinator.viewController, let segmentControl = controller.segmentControlView else { return }
-        
-        segmentControl.viewModel.segment.value = segment
-        
-        segmentControl.viewModel.isSegmentSelected = false
-        
-        segmentControl.viewModel.state.value = segment
+        segmentControl.viewModel.segmentDidChange(segment)
     }
     
     fileprivate func selectCategory(at indexPath: IndexPath) {
@@ -101,30 +99,10 @@ extension NavigationOverlayViewModel: ViewModelProtocol {
         self.category = category
         
         browseOverlay.viewModel.section.value = category.toSection()
-        
         browseOverlay.viewModel.isPresented.value = true
         
-        controller.dataSource?.style.removeGradient()
+        segmentControl.viewModel.segmentDidChange(segment)
         
-        print(self.segment.stringValue)
-        switch self.segment {
-        case .main:
-            segmentControl.viewModel.segment.value = .all
-            segmentControl.viewModel.isSegmentSelected = false
-            segmentControl.viewModel.state.value = .all
-        case .all:
-            segmentControl.viewModel.segment.value = .all
-            segmentControl.viewModel.isSegmentSelected = false
-            segmentControl.viewModel.state.value = .all
-        case .tvShows:
-            segmentControl.viewModel.segment.value = .tvShows
-            segmentControl.viewModel.isSegmentSelected = false
-            segmentControl.viewModel.state.value = .tvShows
-        case .movies:
-            segmentControl.viewModel.segment.value = .movies
-            segmentControl.viewModel.isSegmentSelected = false
-            segmentControl.viewModel.state.value = .movies
-        default: break
-        }
+        controller.dataSource?.style.removeGradient()
     }
 }

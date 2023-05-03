@@ -63,7 +63,7 @@ extension HomeTableViewDataSourceStyle: HomeTableViewDataSourceStyling {
         gradient = nil
     }
     
-    fileprivate func addBlur() {
+    func addBlur() {
         guard blur.isNil else { return }
         
         guard let controller = viewModel.coordinator?.viewController else { return }
@@ -73,7 +73,7 @@ extension HomeTableViewDataSourceStyle: HomeTableViewDataSourceStyling {
         blur = BlurView(on: controller.navigationContainer, effect: effect)
     }
     
-    fileprivate func removeBlur() {
+    func removeBlur() {
         guard blur.isNotNil else { return }
         
         blur?.view.removeFromSuperview()
