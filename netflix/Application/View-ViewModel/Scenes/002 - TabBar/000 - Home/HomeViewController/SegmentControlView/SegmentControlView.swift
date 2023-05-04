@@ -19,7 +19,7 @@ private protocol ViewProtocol {
 
 // MARK: - SegmentControlView Type
 
-final class SegmentControlView: View<SegmentControlViewViewModel> {
+final class SegmentControlView: View<SegmentControlViewModel> {
     @IBOutlet private weak var stackView: UIStackView!
     @IBOutlet private weak var xButton: UIButton!
     @IBOutlet private weak var allButton: UIButton!
@@ -40,7 +40,7 @@ final class SegmentControlView: View<SegmentControlViewViewModel> {
         parent.addSubview(self)
         self.constraintToSuperview(parent)
         
-        self.viewModel = SegmentControlViewViewModel(with: viewModel)
+        self.viewModel = SegmentControlViewModel(with: viewModel)
         
         self.viewDidLoad()
     }
@@ -49,6 +49,7 @@ final class SegmentControlView: View<SegmentControlViewViewModel> {
     
     deinit {
         print("deinit \(Self.self)")
+        
         viewDidUnbindObservers()
         
         viewModel = nil

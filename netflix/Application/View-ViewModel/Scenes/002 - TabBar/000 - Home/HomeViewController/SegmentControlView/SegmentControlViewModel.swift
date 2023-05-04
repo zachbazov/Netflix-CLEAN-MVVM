@@ -1,5 +1,5 @@
 //
-//  SegmentControlViewViewModel.swift
+//  SegmentControlViewModel.swift
 //  netflix
 //
 //  Created by Zach Bazov on 17/09/2022.
@@ -22,9 +22,9 @@ private protocol ViewModelProtocol {
     func segmentDidChange(_ segment: SegmentControlView.State)
 }
 
-// MARK: - SegmentControlViewViewModel Type
+// MARK: - SegmentControlViewModel Type
 
-final class SegmentControlViewViewModel {
+final class SegmentControlViewModel {
     let coordinator: HomeViewCoordinator
     
     let state: Observable<SegmentControlView.State> = Observable(.main)
@@ -44,11 +44,11 @@ final class SegmentControlViewViewModel {
 
 // MARK: - ViewModel Implementation
 
-extension SegmentControlViewViewModel: ViewModel {}
+extension SegmentControlViewModel: ViewModel {}
 
 // MARK: - ViewModelProtocol Implementation
 
-extension SegmentControlViewViewModel: ViewModelProtocol {
+extension SegmentControlViewModel: ViewModelProtocol {
     func stateWillChange(_ state: SegmentControlView.State) {
         self.state.value = state
     }

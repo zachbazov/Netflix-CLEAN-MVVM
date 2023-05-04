@@ -56,9 +56,14 @@ final class NavigationOverlayView: View<NavigationOverlayViewModel> {
     
     deinit {
         print("deinit \(Self.self)")
+        
         viewDidUnbindObservers()
+        
         tableView.removeFromSuperview()
         footerView?.removeFromSuperview()
+        
+        viewModel = nil
+        
         removeFromSuperview()
     }
     

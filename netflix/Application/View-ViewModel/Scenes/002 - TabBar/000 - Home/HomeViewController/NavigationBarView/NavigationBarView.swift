@@ -28,10 +28,10 @@ final class NavigationBarView: View<NavigationBarViewModel> {
         
         self.nibDidLoad()
         
+        self.viewModel = NavigationBarViewModel(with: viewModel)
+        
         parent.addSubview(self)
         self.constraintToSuperview(parent)
-        
-        self.viewModel = NavigationBarViewModel(with: viewModel)
         
         self.viewDidLoad()
     }
@@ -39,11 +39,13 @@ final class NavigationBarView: View<NavigationBarViewModel> {
     required init?(coder: NSCoder) { fatalError() }
     
     deinit {
+        print("deinit \(Self.self)")
+        
         viewModel = nil
     }
     
     override func viewDidLoad() {
-        viewModel.getUserProfiles()
+        viewModel?.getUserProfiles()
     }
 }
 

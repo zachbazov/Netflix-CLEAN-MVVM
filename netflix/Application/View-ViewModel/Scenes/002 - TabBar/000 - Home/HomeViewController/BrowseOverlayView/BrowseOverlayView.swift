@@ -40,7 +40,10 @@ final class BrowseOverlayView: View<BrowseOverlayViewModel> {
     
     deinit {
         print("deinit \(Self.self)")
+        
         viewDidUnbindObservers()
+        
+        viewModel = nil
     }
     
     override func viewDidLoad() {

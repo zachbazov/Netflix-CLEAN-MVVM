@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		A1183FC529D07B8C00D76759 /* SegmentControlView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1183FC429D07B8C00D76759 /* SegmentControlView.swift */; };
-		A1183FC729D07CBC00D76759 /* SegmentControlViewViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1183FC629D07CBB00D76759 /* SegmentControlViewViewModel.swift */; };
+		A1183FC729D07CBC00D76759 /* SegmentControlViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1183FC629D07CBB00D76759 /* SegmentControlViewModel.swift */; };
 		A1183FC929D119BE00D76759 /* UIImage+Color.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1183FC829D119BE00D76759 /* UIImage+Color.swift */; };
 		A127C1E228DD00F100CEE34F /* NavigationOverlayFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A127C1E128DD00F100CEE34F /* NavigationOverlayFooterView.swift */; };
 		A130BC7F294CAB2B0070EA5E /* Localization.swift in Sources */ = {isa = PBXBuildFile; fileRef = A130BC7E294CAB2B0070EA5E /* Localization.swift */; };
@@ -278,7 +278,6 @@
 		A1BD20E929EED6A00093749E /* OpaqueView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1BD20E829EED69F0093749E /* OpaqueView.swift */; };
 		A1C7E7A9292A784A004690B9 /* AuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1C7E7A8292A784A004690B9 /* AuthService.swift */; };
 		A1C7E7AB292BC5C1004690B9 /* ShowcaseTableViewCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1C7E7AA292BC5C1004690B9 /* ShowcaseTableViewCellViewModel.swift */; };
-		A1D23ABA29CA1C9C00748029 /* Optional+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1D23AB929CA1C9C00748029 /* Optional+Extension.swift */; };
 		A1D23ABD29CA715200748029 /* SectionHTTPResponseStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1D23ABC29CA715200748029 /* SectionHTTPResponseStore.swift */; };
 		A1D23AC029CA746D00748029 /* SectionHTTPResponseEntity+Mapping.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1D23ABF29CA746D00748029 /* SectionHTTPResponseEntity+Mapping.swift */; };
 		A1D23AC429CBB22D00748029 /* VoidHTTPDTO+Mapping.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1D23AC329CBB22D00748029 /* VoidHTTPDTO+Mapping.swift */; };
@@ -325,7 +324,7 @@
 
 /* Begin PBXFileReference section */
 		A1183FC429D07B8C00D76759 /* SegmentControlView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SegmentControlView.swift; sourceTree = "<group>"; };
-		A1183FC629D07CBB00D76759 /* SegmentControlViewViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SegmentControlViewViewModel.swift; sourceTree = "<group>"; };
+		A1183FC629D07CBB00D76759 /* SegmentControlViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SegmentControlViewModel.swift; sourceTree = "<group>"; };
 		A1183FC829D119BE00D76759 /* UIImage+Color.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+Color.swift"; sourceTree = "<group>"; };
 		A127C1E128DD00F100CEE34F /* NavigationOverlayFooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationOverlayFooterView.swift; sourceTree = "<group>"; };
 		A130BC7E294CAB2B0070EA5E /* Localization.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Localization.swift; sourceTree = "<group>"; };
@@ -598,7 +597,6 @@
 		A1BD20E829EED69F0093749E /* OpaqueView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OpaqueView.swift; sourceTree = "<group>"; };
 		A1C7E7A8292A784A004690B9 /* AuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthService.swift; sourceTree = "<group>"; };
 		A1C7E7AA292BC5C1004690B9 /* ShowcaseTableViewCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowcaseTableViewCellViewModel.swift; sourceTree = "<group>"; };
-		A1D23AB929CA1C9C00748029 /* Optional+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Optional+Extension.swift"; sourceTree = "<group>"; };
 		A1D23ABC29CA715200748029 /* SectionHTTPResponseStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SectionHTTPResponseStore.swift; sourceTree = "<group>"; };
 		A1D23ABF29CA746D00748029 /* SectionHTTPResponseEntity+Mapping.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SectionHTTPResponseEntity+Mapping.swift"; sourceTree = "<group>"; };
 		A1D23AC329CBB22D00748029 /* VoidHTTPDTO+Mapping.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "VoidHTTPDTO+Mapping.swift"; sourceTree = "<group>"; };
@@ -655,7 +653,7 @@
 			isa = PBXGroup;
 			children = (
 				A1183FC429D07B8C00D76759 /* SegmentControlView.swift */,
-				A1183FC629D07CBB00D76759 /* SegmentControlViewViewModel.swift */,
+				A1183FC629D07CBB00D76759 /* SegmentControlViewModel.swift */,
 				A1F3389929D079E5005629DB /* SegmentControlView.xib */,
 			);
 			path = SegmentControlView;
@@ -1236,7 +1234,6 @@
 				A130BCB42950F4F50070EA5E /* Media+Extension.swift */,
 				A1F56A6828C68FB10089BD4F /* NSAttributedString+Extension.swift */,
 				A14E0CF729C3387D00F55500 /* NSDirectionalEdgeInsets+Extension.swift */,
-				A1D23AB929CA1C9C00748029 /* Optional+Extension.swift */,
 				A1B68F2D2923DF2300FF5F18 /* Set+Extension.swift */,
 				A14E0CED29C322ED00F55500 /* String+Extension.swift */,
 				A18691BD28C764600087DE3B /* UIBarButtonItem+Extension.swift */,
@@ -2418,8 +2415,7 @@
 				A18B994A28BFD9DD0077A5A6 /* User+Mapping.swift in Sources */,
 				A14E0CC329BB983300F55500 /* NotificationCollectionViewCell.swift in Sources */,
 				A14E0CCF29BCBE6D00F55500 /* ProfileCollectionViewDataSource.swift in Sources */,
-				A1183FC729D07CBC00D76759 /* SegmentControlViewViewModel.swift in Sources */,
-				A1D23ABA29CA1C9C00748029 /* Optional+Extension.swift in Sources */,
+				A1183FC729D07CBC00D76759 /* SegmentControlViewModel.swift in Sources */,
 				A14E0CB729BB979000F55500 /* ProfileCollectionViewCell.swift in Sources */,
 				A18B995728BFF66C0077A5A6 /* SectionDTO+Mapping.swift in Sources */,
 				A18D851C29403CE900840045 /* BrowseOverlayView.swift in Sources */,
