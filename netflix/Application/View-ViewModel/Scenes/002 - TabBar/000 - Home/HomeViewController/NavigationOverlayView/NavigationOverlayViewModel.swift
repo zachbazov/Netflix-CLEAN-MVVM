@@ -19,8 +19,12 @@ private protocol ViewModelProtocol {
     
     func itemsDidChange()
     func didSelectRow(at indexPath: IndexPath)
+    func isPresentedWillChange(_ presented: Bool)
+    func stateWillChange(_ state: NavigationOverlayTableViewDataSource.State)
+    func stateDidChange(_ state: NavigationOverlayTableViewDataSource.State)
     func didSelectSegment(at indexPath: IndexPath)
     func didSelectCategory(at indexPath: IndexPath)
+    func setCategory(_ category: NavigationOverlayView.Category)
 }
 
 // MARK: - NavigationOverlayViewModel Type
@@ -74,6 +78,10 @@ extension NavigationOverlayViewModel: ViewModelProtocol {
         }
     }
     
+    func isPresentedWillChange(_ presented: Bool) {
+        isPresented.value = presented
+    }
+    
     func stateWillChange(_ state: NavigationOverlayTableViewDataSource.State) {
         self.state.value = state
     }
@@ -89,9 +97,8 @@ extension NavigationOverlayViewModel: ViewModelProtocol {
         
         guard let segment = SegmentControlView.State(rawValue: indexPath.row) else { return }
         
-        segmentControl.viewModel?.segmentWillChange(segment)
-        
-        segmentControl.viewModel.segmentDidChange(segment)
+        segmentControl.viewModel?.setSegment(segment)
+        segmentControl.viewModel?.segmentDidChange(segment)
     }
     
     fileprivate func didSelectCategory(at indexPath: IndexPath) {
@@ -107,12 +114,12 @@ extension NavigationOverlayViewModel: ViewModelProtocol {
         browseOverlay.viewModel.section.value = category.toSection()
         browseOverlay.viewModel.isPresented.value = true
         
-        segmentControl.viewModel.segmentDidChange(segmentControl.viewModel.segment.value)
+        segmentControl.viewModel.segmentDidChange(segmentControl.viewModel.segment)
         
         controller.dataSource?.style.removeGradient()
     }
     
-    func setCategory(_ category: NavigationOverlayView.Category) {
+    fileprivate func setCategory(_ category: NavigationOverlayView.Category) {
         self.category = category
     }
 }

@@ -50,6 +50,8 @@ final class ShowcaseView: View<ShowcaseViewViewModel> {
     }
     
     override func viewDidDeploySubviews() {
+        guard let viewModel = viewModel else { return }
+        
         setDarkBottomGradient()
         setBackgroundColor()
         setPosterStroke()

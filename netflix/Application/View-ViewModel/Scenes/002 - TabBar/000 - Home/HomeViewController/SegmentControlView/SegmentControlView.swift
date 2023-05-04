@@ -67,14 +67,10 @@ final class SegmentControlView: View<SegmentControlViewViewModel> {
         viewModel?.state.observe(on: self) { [weak self] state in
             guard let self = self else { return }
             
-            self.viewModel?.stateDidChange(state)
-        }
-        
-        viewModel?.segment.observe(on: self) { [weak self] segment in
-            guard let self = self else { return }
+            self.buttonsDidChange(for: state)
+            self.leadingConstraintDidUpdate(for: state)
             
-            self.buttonsDidChange(for: segment)
-            self.leadingConstraintDidUpdate(for: segment)
+            self.viewModel?.stateDidChange(state)
         }
     }
     
@@ -82,7 +78,6 @@ final class SegmentControlView: View<SegmentControlViewViewModel> {
         guard let viewModel = viewModel else { return }
         
         viewModel.state.remove(observer: self)
-        viewModel.segment.remove(observer: self)
         
         printIfDebug(.success, "Removed `\(Self.self)` observers.")
     }
@@ -156,12 +151,10 @@ extension SegmentControlView: ViewProtocol {
               let navigationOverlay = controller.navigationOverlayView
         else { return }
         
-        guard !viewModel.isSegmentSelected else {
-            navigationOverlay.viewModel?.isPresented.value = true
-            navigationOverlay.viewModel?.state.value = .main
-            
-            return
-        }
+        guard viewModel.isSegmentSelected else { return }
+        
+        navigationOverlay.viewModel?.isPresented.value = true
+        navigationOverlay.viewModel?.state.value = .main
     }
 }
 

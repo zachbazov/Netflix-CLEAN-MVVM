@@ -201,6 +201,16 @@ extension HomeViewModel: ViewModelProtocol {
             }
         }
     }
+    
+    func dataSourceStateWillChange(_ state: HomeTableViewDataSource.State) {
+        dataSourceState.value = state
+    }
+    
+    func changeDataSourceStateIfNeeded(_ state: HomeTableViewDataSource.State) {
+        guard dataSourceState.value != state else { return }
+        
+        dataSourceState.value = state
+    }
 }
 
 // MARK: - DataProviderProtocol Type

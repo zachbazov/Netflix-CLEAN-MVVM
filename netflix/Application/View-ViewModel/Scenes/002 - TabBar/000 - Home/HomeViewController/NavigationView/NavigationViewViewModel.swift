@@ -23,7 +23,15 @@ final class NavigationViewViewModel {
     init(with viewModel: HomeViewModel) {
         self.coordinator = viewModel.coordinator!
     }
-    
+}
+
+// MARK: - ViewModel Implementation
+
+extension NavigationViewViewModel: ViewModel {}
+
+// MARK: - ViewModelProtocol Implementation
+
+extension NavigationViewViewModel: ViewModelProtocol {
     func getUserProfiles() {
         let authService = Application.app.services.authentication
         let profileViewModel = ProfileViewModel()
@@ -48,12 +56,20 @@ final class NavigationViewViewModel {
                 }
             })
     }
+    
+    /// Controls the navigation presentation of items.
+    /// - Parameter state: Corresponding state.
+    func stateDidChange(_ state: NavigationView.State) {
+        switch state {
+        case .airPlay:
+            guard let controller = coordinator.viewController,
+                  let navigation = controller.navigationView
+            else { return }
+            navigation.airPlayButton.asRoutePickerView()
+        case .search:
+            coordinator.coordinate(to: .search)
+        case .account:
+            coordinator.coordinate(to: .account)
+        }
+    }
 }
-
-// MARK: - ViewModel Implementation
-
-extension NavigationViewViewModel: ViewModel {}
-
-// MARK: - ViewModelProtocol Implementation
-
-extension NavigationViewViewModel: ViewModelProtocol {}

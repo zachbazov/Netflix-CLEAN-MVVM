@@ -7,6 +7,12 @@
 
 import UIKit
 
+// MARK: - ViewProtocol Type
+
+private protocol ViewProtocol {
+    func buttonDidTap(_ sender: UIButton)
+}
+
 // MARK: - NavigationView Type
 
 final class NavigationView: View<NavigationViewViewModel> {
@@ -39,30 +45,21 @@ final class NavigationView: View<NavigationViewViewModel> {
     override func viewDidLoad() {
         viewModel.getUserProfiles()
     }
-    
-    @IBAction func buttonDidTap(_ sender: UIButton) {
-        guard let state = NavigationView.State(rawValue: sender.tag) else { return }
-        
-        stateDidChange(state)
-    }
-    
-    /// Controls the navigation presentation of items.
-    /// - Parameter state: Corresponding state.
-    func stateDidChange(_ state: NavigationView.State) {
-        switch state {
-        case .airPlay:
-            airPlayButton.asRoutePickerView()
-        case .search:
-            viewModel.coordinator.coordinate(to: .search)
-        case .account:
-            viewModel.coordinator.coordinate(to: .account)
-        }
-    }
 }
 
 // MARK: - ViewInstantiable Implementation
 
 extension NavigationView: ViewInstantiable {}
+
+// MARK: - ViewProtocol Implementation
+
+extension NavigationView: ViewProtocol {
+    @IBAction fileprivate func buttonDidTap(_ sender: UIButton) {
+        guard let state = NavigationView.State(rawValue: sender.tag) else { return }
+        
+        viewModel?.stateDidChange(state)
+    }
+}
 
 // MARK: - State Type
 

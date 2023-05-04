@@ -13,6 +13,8 @@ private protocol ViewModelProtocol {
     var isPresented: Observable<Bool> { get }
     var section: Observable<Section> { get }
     
+    func isPresentedWillChange(_ presented: Bool)
+    func sectionWillChange(_ section: Section)
     func sectionDidChange(_ section: Section)
 }
 
@@ -36,9 +38,19 @@ extension BrowseOverlayViewModel: ViewModel {}
 // MARK: - ViewModelProtocol Implementation
 
 extension BrowseOverlayViewModel: ViewModelProtocol {
+    func isPresentedWillChange(_ presented: Bool) {
+        isPresented.value = presented
+    }
+    
+    func sectionWillChange(_ section: Section) {
+        self.section.value = section
+    }
+    
     func sectionDidChange(_ section: Section) {
-        guard let controller = coordinator.viewController else { return }
+        guard let controller = coordinator.viewController,
+              let browseOverlay = controller.browseOverlayView
+        else { return }
         
-        controller.browseOverlayView?.dataSource?.section = section
+        browseOverlay.dataSource?.section = section
     }
 }
