@@ -14,6 +14,12 @@ private protocol ViewControllerProtocol {
     var navigationView: NavigationView? { get }
     var navigationOverlayView: NavigationOverlayView? { get }
     var browseOverlayView: BrowseOverlayView? { get }
+    
+    func createDataSource()
+    func createNavigationView()
+    func createSegmentControlView()
+    func createNavigationOverlayView()
+    func createBrowseOverlayView()
 }
 
 // MARK: - HomeViewController Type
@@ -28,10 +34,10 @@ final class HomeViewController: Controller<HomeViewModel> {
     @IBOutlet private(set) var topContainerHeight: NSLayoutConstraint!
     
     private(set) var dataSource: HomeTableViewDataSource?
-    var navigationView: NavigationView?
-    var segmentControlView: SegmentControlView?
-    var navigationOverlayView: NavigationOverlayView?
-    var browseOverlayView: BrowseOverlayView?
+    private(set) var navigationView: NavigationView?
+    private(set) var segmentControlView: SegmentControlView?
+    private(set) var navigationOverlayView: NavigationOverlayView?
+    private(set) var browseOverlayView: BrowseOverlayView?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -47,11 +53,11 @@ final class HomeViewController: Controller<HomeViewModel> {
     }
     
     override func viewDidDeploySubviews() {
-        setupDataSource()
-        setupNavigationView()
-        setupSegmentControlView()
-        setupNavigationOverlay()
-        setupBrowseOverlayView()
+        createDataSource()
+        createNavigationView()
+        createSegmentControlView()
+        createNavigationOverlayView()
+        createBrowseOverlayView()
     }
     
     override func viewDidConfigure() {
@@ -80,28 +86,24 @@ final class HomeViewController: Controller<HomeViewModel> {
 
 // MARK: - ViewControllerProtocol Implementation
 
-extension HomeViewController: ViewControllerProtocol {}
-
-// MARK: - Private UI Implementation
-
-extension HomeViewController {
-    private func setupDataSource() {
+extension HomeViewController: ViewControllerProtocol {
+    fileprivate func createDataSource() {
         dataSource = HomeTableViewDataSource(tableView: tableView, viewModel: viewModel)
     }
     
-    private func setupNavigationView() {
+    fileprivate func createNavigationView() {
         navigationView = NavigationView(on: navigationBarContainer, with: viewModel)
     }
     
-    private func setupSegmentControlView() {
+    fileprivate func createSegmentControlView() {
         segmentControlView = SegmentControlView(on: segmentedContainer, with: viewModel)
     }
     
-    private func setupNavigationOverlay() {
+    fileprivate func createNavigationOverlayView() {
         navigationOverlayView = NavigationOverlayView(on: navigationOverlayContainer, with: viewModel)
     }
     
-    private func setupBrowseOverlayView() {
+    fileprivate func createBrowseOverlayView() {
         browseOverlayView = BrowseOverlayView(on: browseOverlayViewContainer, with: viewModel)
     }
 }
