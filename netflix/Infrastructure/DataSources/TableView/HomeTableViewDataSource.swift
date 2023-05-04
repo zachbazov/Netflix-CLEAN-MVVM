@@ -47,7 +47,7 @@ extension HomeTableViewDataSourceStyle: HomeTableViewDataSourceStyling {
     }
     
     func addGradient() {
-        guard gradient.isNil else { return }
+        guard gradient == nil else { return }
         
         guard let controller = viewModel.coordinator?.viewController,
               let container = controller.navigationContainer
@@ -57,14 +57,15 @@ extension HomeTableViewDataSourceStyle: HomeTableViewDataSourceStyling {
     }
     
     func removeGradient() {
-        guard gradient.isNotNil else { return }
+        guard let gradient = gradient else { return }
         
-        gradient?.remove()
-        gradient = nil
+        gradient.remove()
+        
+        self.gradient = nil
     }
     
     func addBlur() {
-        guard blur.isNil else { return }
+        guard blur == nil else { return }
         
         guard let controller = viewModel.coordinator?.viewController else { return }
         
@@ -74,10 +75,11 @@ extension HomeTableViewDataSourceStyle: HomeTableViewDataSourceStyling {
     }
     
     func removeBlur() {
-        guard blur.isNotNil else { return }
+        guard let blur = blur else { return }
         
-        blur?.view.removeFromSuperview()
-        blur = nil
+        blur.view.removeFromSuperview()
+        
+        self.blur = nil
     }
     
     func apply(_ style: HomeTableViewDataSourceStyle.Style) {
@@ -176,9 +178,9 @@ extension HomeTableViewDataSource: DataSourceProtocol {
     }
     
     fileprivate func sectionsDidFilter() {
-        guard viewModel.isNotNil else { return }
+        guard let viewModel = viewModel else { return }
         
-        viewModel?.filter(sections: viewModel.sections)
+        viewModel.filter(sections: viewModel.sections)
     }
     
     fileprivate func contentDidInset() {

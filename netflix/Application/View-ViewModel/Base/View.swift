@@ -39,6 +39,12 @@ class View<T>: UIView where T: ViewModel {
     func viewDidUnbindObservers() {}
     
     func viewWillAnimateAppearance() {}
+    func viewWillAnimateDisappearance() {}
+    func viewShouldAppear(_ presented: Bool) {
+        guard presented else { return self.viewWillAnimateDisappearance() }
+        
+        self.viewWillAnimateAppearance()
+    }
     
     func viewWillDeallocate() {}
     func viewDidDeallocate() {}

@@ -15,7 +15,6 @@ private protocol ViewProtocol {
     
     func createCollectionView() -> UICollectionView
     func createDataSource() -> BrowseOverlayCollectionViewDataSource?
-    func sectionDidChange(_ section: Section)
 }
 
 // MARK: - BrowseOverlayView Type
@@ -49,24 +48,26 @@ final class BrowseOverlayView: View<BrowseOverlayViewModel> {
     }
     
     override func viewDidBindObservers() {
-        viewModel?.isPresented.observe(on: self) { [weak self] _ in
+        viewModel?.isPresented.observe(on: self) { [weak self] presented in
             guard let self = self else { return }
             
-            self.viewWillAnimateAppearance()
+            self.viewShouldAppear(presented)
         }
         
         viewModel?.section.observe(on: self) { [weak self] section in
             guard let self = self else { return }
             
-            self.sectionDidChange(section)
+            self.viewModel?.sectionDidChange(section)
+            
+            self.collectionView.reloadData()
         }
     }
     
     override func viewDidUnbindObservers() {
-        guard viewModel.isNotNil else { return }
+        guard let viewModel = viewModel else { return }
         
-        viewModel?.isPresented.remove(observer: self)
-        viewModel?.section.remove(observer: self)
+        viewModel.isPresented.remove(observer: self)
+        viewModel.section.remove(observer: self)
         
         printIfDebug(.debug, "Removed \(Self.self) observers.")
     }
@@ -74,18 +75,18 @@ final class BrowseOverlayView: View<BrowseOverlayViewModel> {
     override func viewWillAnimateAppearance() {
         guard let controller = viewModel?.coordinator.viewController else { return }
         
-        if viewModel?.isPresented.value ?? false {
-            controller.view.animateUsingSpring(
-                withDuration: 0.5,
-                withDamping: 1.0,
-                initialSpringVelocity: 0.7,
-                animations: {
-                    controller.browseOverlayViewContainer.alpha = 1.0
-                    controller.browseOverlayViewContainer.transform = .identity
-                })
-            
-            return
-        }
+        controller.view.animateUsingSpring(
+            withDuration: 0.5,
+            withDamping: 1.0,
+            initialSpringVelocity: 0.7,
+            animations: {
+                controller.browseOverlayViewContainer.alpha = 1.0
+                controller.browseOverlayViewContainer.transform = .identity
+            })
+    }
+    
+    override func viewWillAnimateDisappearance() {
+        guard let controller = viewModel?.coordinator.viewController else { return }
         
         controller.view.animateUsingSpring(
             withDuration: 0.5,
@@ -137,13 +138,5 @@ extension BrowseOverlayView: ViewProtocol {
         collectionView.dataSource = dataSource
         
         return dataSource
-    }
-    
-    fileprivate func sectionDidChange(_ section: Section) {
-        dataSource?.section = section
-        
-        collectionView.delegate = dataSource
-        collectionView.dataSource = dataSource
-        collectionView.reloadData()
     }
 }

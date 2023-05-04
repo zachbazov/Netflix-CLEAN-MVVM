@@ -12,6 +12,7 @@ import UIKit
 private protocol ViewControllerProtocol {
     var dataSource: HomeTableViewDataSource? { get }
     var navigationView: NavigationView? { get }
+    var navigationOverlayView: NavigationOverlayView? { get }
     var browseOverlayView: BrowseOverlayView? { get }
 }
 
@@ -22,13 +23,14 @@ final class HomeViewController: Controller<HomeViewModel> {
     @IBOutlet private(set) var navigationContainer: UIView!
     @IBOutlet private(set) var navigationBarContainer: UIView!
     @IBOutlet private var segmentedContainer: UIView!
+    @IBOutlet private(set) var navigationOverlayContainer: UIView!
     @IBOutlet private(set) var browseOverlayViewContainer: UIView!
     @IBOutlet private(set) var topContainerHeight: NSLayoutConstraint!
     
     private(set) var dataSource: HomeTableViewDataSource?
     var navigationView: NavigationView?
     var segmentControlView: SegmentControlView?
-    var navigationOverlayView: NavigationOverlayView!
+    var navigationOverlayView: NavigationOverlayView?
     var browseOverlayView: BrowseOverlayView?
     
     override func viewDidLoad() {
@@ -53,9 +55,9 @@ final class HomeViewController: Controller<HomeViewModel> {
     }
     
     override func viewDidConfigure() {
-        guard viewModel.isNotNil else { return }
+        guard let viewModel = viewModel else { return }
         
-        viewModel?.dataSourceState.value = .all
+        viewModel.dataSourceState.value = .all
     }
     
     override func viewDidBindObservers() {
@@ -68,7 +70,7 @@ final class HomeViewController: Controller<HomeViewModel> {
     }
     
     override func viewDidUnbindObservers() {
-        guard viewModel.isNotNil else { return }
+        guard let viewModel = viewModel else { return }
         
         viewModel.dataSourceState.remove(observer: self)
         
@@ -96,7 +98,7 @@ extension HomeViewController {
     }
     
     private func setupNavigationOverlay() {
-        navigationOverlayView = NavigationOverlayView(with: viewModel)
+        navigationOverlayView = NavigationOverlayView(on: navigationOverlayContainer, with: viewModel)
     }
     
     private func setupBrowseOverlayView() {

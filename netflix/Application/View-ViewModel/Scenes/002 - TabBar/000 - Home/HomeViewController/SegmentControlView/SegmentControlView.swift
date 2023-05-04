@@ -11,10 +11,8 @@ import UIKit
 
 private protocol ViewProtocol {
     func buttonDidTap(_ sender: UIButton)
-    func updateState(_ state: SegmentControlView.State)
     func leadingConstraintDidUpdate(for state: SegmentControlView.State)
-    func buttonsDidUpdate(for state: SegmentControlView.State)
-    func stateDidChange(_ state: SegmentControlView.State)
+    func buttonsDidChange(for state: SegmentControlView.State)
     
     func presentNavigationOverlayIfNeeded()
 }
@@ -69,13 +67,13 @@ final class SegmentControlView: View<SegmentControlViewViewModel> {
         viewModel?.state.observe(on: self) { [weak self] state in
             guard let self = self else { return }
             
-            self.stateDidChange(state)
+            self.viewModel?.stateDidChange(state)
         }
         
         viewModel?.segment.observe(on: self) { [weak self] segment in
             guard let self = self else { return }
             
-            self.buttonsDidUpdate(for: segment)
+            self.buttonsDidChange(for: segment)
             self.leadingConstraintDidUpdate(for: segment)
         }
     }
@@ -100,18 +98,16 @@ extension SegmentControlView: ViewProtocol {
     @IBAction fileprivate func buttonDidTap(_ sender: UIButton) {
         guard let state = SegmentControlView.State(rawValue: sender.tag) else { return }
         
-        updateState(state)
-        buttonsDidUpdate(for: state)
-        leadingConstraintDidUpdate(for: state)
+        viewModel?.stateWillChange(state)
+        buttonsDidChange(for: state)
         
         animateUsingSpring(withDuration: 0.33, withDamping: 0.7, initialSpringVelocity: 0.7)
     }
     
-    fileprivate func updateState(_ state: SegmentControlView.State) {
-        viewModel.state.value = state
-    }
-    
-    fileprivate func buttonsDidUpdate(for state: SegmentControlView.State) {
+    fileprivate func buttonsDidChange(for state: SegmentControlView.State) {
+        
+        leadingConstraintDidUpdate(for: state)
+        
         switch state {
         case .main:
             xButton.isHidden(true)
@@ -155,70 +151,7 @@ extension SegmentControlView: ViewProtocol {
         }
     }
     
-    fileprivate func stateDidChange(_ state: SegmentControlView.State) {
-        guard let controller = viewModel.coordinator.viewController,
-              let homeViewModel = controller.viewModel,
-              let navigationOverlay = controller.navigationOverlayView,
-              let browseOverlay = controller.browseOverlayView
-        else { return }
-        
-        guard let section = navigationOverlay.viewModel?.category.toSection() else { return }
-        
-        switch state {
-        case .main:
-            viewModel.isSegmentSelected = false
-            
-            homeViewModel.dataSourceState.value = .all
-            
-            navigationOverlay.viewModel?.state.value = .main
-            navigationOverlay.viewModel.segment = .main
-            
-            browseOverlay.viewModel?.isPresented.value = false
-            
-            controller.dataSource?.style.addGradient()
-        case .all:
-            presentNavigationOverlayIfNeeded()
-            
-            viewModel.isSegmentSelected = true
-            
-            guard homeViewModel.dataSourceState.value != .all else { return }
-            
-            homeViewModel.dataSourceState.value = .all
-            
-            navigationOverlay.viewModel.segment = .all
-            
-            browseOverlay.viewModel?.section.value = section
-        case .tvShows:
-            presentNavigationOverlayIfNeeded()
-            
-            viewModel.isSegmentSelected = true
-            
-            guard homeViewModel.dataSourceState.value != .tvShows else { return }
-            
-            homeViewModel.dataSourceState.value = .tvShows
-            
-            navigationOverlay.viewModel.segment = .tvShows
-            
-            browseOverlay.viewModel?.section.value = section
-        case .movies:
-            presentNavigationOverlayIfNeeded()
-            
-            viewModel.isSegmentSelected = true
-            
-            guard homeViewModel.dataSourceState.value != .movies else { return }
-            
-            homeViewModel.dataSourceState.value = .movies
-            
-            navigationOverlay.viewModel.segment = .movies
-            
-            browseOverlay.viewModel?.section.value = section
-        case .categories:
-            navigationOverlay.viewModel?.isPresented.value = true
-            navigationOverlay.viewModel?.state.value = .genres
-        }
-    }
-    
-    fileprivate func presentNavigationOverlayIfNeeded() {
+    func presentNavigationOverlayIfNeeded() {
         guard let controller = viewModel.coordinator.viewController,
               let navigationOverlay = controller.navigationOverlayView
         else { return }

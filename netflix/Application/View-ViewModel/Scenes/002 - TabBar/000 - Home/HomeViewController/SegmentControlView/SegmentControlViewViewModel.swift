@@ -15,8 +15,10 @@ private protocol ViewModelProtocol {
     
     var isSegmentSelected: Bool { get }
     
+    func stateWillChange(_ state: SegmentControlView.State)
+    func stateDidChange(_ state: SegmentControlView.State)
     func segmentDidChange(_ segment: SegmentControlView.State)
-    func restoreDefaultStateIfNeeded()
+    func stateDidDefault()
 }
 
 // MARK: - SegmentControlViewViewModel Type
@@ -45,10 +47,83 @@ extension SegmentControlViewViewModel: ViewModel {}
 // MARK: - ViewModelProtocol Implementation
 
 extension SegmentControlViewViewModel: ViewModelProtocol {
+    func stateWillChange(_ state: SegmentControlView.State) {
+        self.state.value = state
+    }
+    
+    func stateDidChange(_ state: SegmentControlView.State) {
+        guard let controller = coordinator.viewController,
+              let homeViewModel = controller.viewModel,
+              let segmentControl = controller.segmentControlView,
+              let navigationOverlay = controller.navigationOverlayView,
+              let browseOverlay = controller.browseOverlayView
+        else { return }
+        
+        guard let section = navigationOverlay.viewModel?.category.toSection() else { return }
+        
+        switch state {
+        case .main:
+            isSegmentSelected = false
+            
+            homeViewModel.dataSourceState.value = .all
+            
+            navigationOverlay.viewModel?.stateWillChange(.main)
+            
+            segmentWillChange(state)
+            
+            browseOverlay.viewModel?.isPresented.value = false
+            
+            controller.dataSource?.style.addGradient()
+        case .all:
+            segmentControl.presentNavigationOverlayIfNeeded()
+            
+            isSegmentSelected = true
+            
+            guard homeViewModel.dataSourceState.value != .all else { return }
+            
+            homeViewModel.dataSourceState.value = .all
+            
+            segmentWillChange(state)
+            
+            browseOverlay.viewModel?.section.value = section
+        case .tvShows:
+            segmentControl.presentNavigationOverlayIfNeeded()
+            
+            isSegmentSelected = true
+            
+            guard homeViewModel.dataSourceState.value != .tvShows else { return }
+            
+            homeViewModel.dataSourceState.value = .tvShows
+            
+            segmentWillChange(state)
+            
+            browseOverlay.viewModel?.section.value = section
+        case .movies:
+            segmentControl.presentNavigationOverlayIfNeeded()
+            
+            isSegmentSelected = true
+            
+            guard homeViewModel.dataSourceState.value != .movies else { return }
+            
+            homeViewModel.dataSourceState.value = .movies
+            
+            segmentWillChange(state)
+            
+            browseOverlay.viewModel?.section.value = section
+        case .categories:
+            navigationOverlay.viewModel?.isPresented.value = true
+            navigationOverlay.viewModel?.state.value = .genres
+        }
+    }
+    
+    func segmentWillChange(_ segment: SegmentControlView.State) {
+        self.segment.value = segment
+    }
+    
     func segmentDidChange(_ segment: SegmentControlView.State) {
         switch segment {
         case .main:
-            restoreDefaultStateIfNeeded()
+            stateDidDefault()
         default:
             self.segment.value = segment
             isSegmentSelected = false
@@ -64,7 +139,7 @@ extension SegmentControlViewViewModel: ViewModelProtocol {
     /// Once the `state` value set to `.categories` which represents the default case in this function,
     /// the selection of any category on the `navigationOverlay`
     /// without changing the `.main` state would be stated as `.all`.
-    fileprivate func restoreDefaultStateIfNeeded() {
+    fileprivate func stateDidDefault() {
         switch state.value {
         case .all, .tvShows, .movies:
             segment.value = .main

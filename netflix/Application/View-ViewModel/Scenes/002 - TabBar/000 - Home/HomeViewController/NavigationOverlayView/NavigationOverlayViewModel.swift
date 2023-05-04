@@ -14,14 +14,13 @@ private protocol ViewModelProtocol {
     var state: Observable<NavigationOverlayTableViewDataSource.State> { get }
     var items: [Valuable] { get }
     var category: NavigationOverlayView.Category { get }
-    var segment: SegmentControlView.State { get }
     var numberOfSections: Int { get }
     var rowHeight: CGFloat { get }
     
-    func updateItems()
-    func selectRow(at indexPath: IndexPath)
-    func selectSegment(at indexPath: IndexPath)
-    func selectCategory(at indexPath: IndexPath)
+    func itemsDidChange()
+    func didSelectRow(at indexPath: IndexPath)
+    func didSelectSegment(at indexPath: IndexPath)
+    func didSelectCategory(at indexPath: IndexPath)
 }
 
 // MARK: - NavigationOverlayViewModel Type
@@ -34,7 +33,6 @@ final class NavigationOverlayViewModel {
     
     fileprivate(set) var items: [Valuable] = []
     fileprivate(set) var category: NavigationOverlayView.Category = .display
-    var segment: SegmentControlView.State = .main
     
     let numberOfSections: Int = 1
     let rowHeight: CGFloat = 56.0
@@ -54,7 +52,7 @@ extension NavigationOverlayViewModel: ViewModel {}
 
 extension NavigationOverlayViewModel: ViewModelProtocol {
     /// Change `items` value based on the data source `state` value.
-    func updateItems() {
+    fileprivate func itemsDidChange() {
         switch state.value {
         case .main:
             items = SegmentControlView.State.allCases[0...3].toArray()
@@ -65,30 +63,38 @@ extension NavigationOverlayViewModel: ViewModelProtocol {
         }
     }
     
-    func selectRow(at indexPath: IndexPath) {
+    func didSelectRow(at indexPath: IndexPath) {
         switch state.value {
         case .none:
             break
         case .main:
-            selectSegment(at: indexPath)
+            didSelectSegment(at: indexPath)
         case .genres:
-            selectCategory(at: indexPath)
+            didSelectCategory(at: indexPath)
         }
     }
     
-    fileprivate func selectSegment(at indexPath: IndexPath) {
+    func stateWillChange(_ state: NavigationOverlayTableViewDataSource.State) {
+        self.state.value = state
+    }
+    
+    func stateDidChange(_ state: NavigationOverlayTableViewDataSource.State) {
+        itemsDidChange()
+    }
+    
+    fileprivate func didSelectSegment(at indexPath: IndexPath) {
         guard let controller = coordinator.viewController,
               let segmentControl = controller.segmentControlView
         else { return }
         
         guard let segment = SegmentControlView.State(rawValue: indexPath.row) else { return }
         
-        self.segment = segment
+        segmentControl.viewModel?.segmentWillChange(segment)
         
         segmentControl.viewModel.segmentDidChange(segment)
     }
     
-    fileprivate func selectCategory(at indexPath: IndexPath) {
+    fileprivate func didSelectCategory(at indexPath: IndexPath) {
         guard let controller = coordinator.viewController,
               let segmentControl = controller.segmentControlView,
               let browseOverlay = controller.browseOverlayView
@@ -96,13 +102,17 @@ extension NavigationOverlayViewModel: ViewModelProtocol {
         
         guard let category = NavigationOverlayView.Category(rawValue: indexPath.row) else { return }
         
-        self.category = category
+        setCategory(category)
         
         browseOverlay.viewModel.section.value = category.toSection()
         browseOverlay.viewModel.isPresented.value = true
         
-        segmentControl.viewModel.segmentDidChange(segment)
+        segmentControl.viewModel.segmentDidChange(segmentControl.viewModel.segment.value)
         
         controller.dataSource?.style.removeGradient()
+    }
+    
+    func setCategory(_ category: NavigationOverlayView.Category) {
+        self.category = category
     }
 }

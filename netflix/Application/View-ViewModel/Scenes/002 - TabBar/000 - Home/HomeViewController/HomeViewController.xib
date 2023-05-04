@@ -13,6 +13,7 @@
                 <outlet property="browseOverlayViewContainer" destination="q4T-AG-HT6" id="DKN-T8-CZU"/>
                 <outlet property="navigationBarContainer" destination="zcf-b3-eQ7" id="1FD-hX-2fU"/>
                 <outlet property="navigationContainer" destination="dHz-nr-OmN" id="sNf-6e-pjT"/>
+                <outlet property="navigationOverlayContainer" destination="nrb-9S-djP" id="16r-Gn-Clh"/>
                 <outlet property="segmentedContainer" destination="NOf-gN-KNT" id="DE8-dS-oiW"/>
                 <outlet property="tableView" destination="dfl-3U-b2R" id="POV-S2-ces"/>
                 <outlet property="topContainerHeight" destination="SW6-jG-ecE" id="DGe-51-NKq"/>
@@ -58,17 +59,24 @@
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="q4T-AG-HT6" userLabel="Browse Overlay View Container">
                     <rect key="frame" x="0.0" y="155" width="393" height="697"/>
                 </view>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="nrb-9S-djP" userLabel="Navigation Overlay View Container">
+                    <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                </view>
             </subviews>
             <viewLayoutGuide key="safeArea" id="VM1-z1-Dbe"/>
             <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
             <constraints>
+                <constraint firstItem="nrb-9S-djP" firstAttribute="leading" secondItem="VM1-z1-Dbe" secondAttribute="leading" id="454-en-Skt"/>
+                <constraint firstItem="nrb-9S-djP" firstAttribute="top" secondItem="aac-7C-DY6" secondAttribute="top" id="4up-Qp-Qgf"/>
                 <constraint firstItem="dHz-nr-OmN" firstAttribute="leading" secondItem="aac-7C-DY6" secondAttribute="leading" id="AE0-1S-mAD"/>
                 <constraint firstAttribute="trailing" secondItem="q4T-AG-HT6" secondAttribute="trailing" id="Ag7-xy-g2y"/>
                 <constraint firstAttribute="trailing" secondItem="dHz-nr-OmN" secondAttribute="trailing" id="CJN-mC-ZG8"/>
                 <constraint firstItem="dfl-3U-b2R" firstAttribute="leading" secondItem="aac-7C-DY6" secondAttribute="leading" id="V1k-WO-ucP"/>
                 <constraint firstItem="q4T-AG-HT6" firstAttribute="top" secondItem="dHz-nr-OmN" secondAttribute="bottom" id="aQK-bs-hpy"/>
                 <constraint firstAttribute="bottom" secondItem="dfl-3U-b2R" secondAttribute="bottom" id="c3a-eP-LkU"/>
+                <constraint firstItem="VM1-z1-Dbe" firstAttribute="trailing" secondItem="nrb-9S-djP" secondAttribute="trailing" id="cJv-UH-aOJ"/>
                 <constraint firstItem="q4T-AG-HT6" firstAttribute="bottom" secondItem="aac-7C-DY6" secondAttribute="bottom" id="dKF-al-WCX"/>
+                <constraint firstAttribute="bottom" secondItem="nrb-9S-djP" secondAttribute="bottom" id="jsF-w6-HJD"/>
                 <constraint firstItem="q4T-AG-HT6" firstAttribute="leading" secondItem="aac-7C-DY6" secondAttribute="leading" id="khb-Yl-Mmq"/>
                 <constraint firstAttribute="trailing" secondItem="dfl-3U-b2R" secondAttribute="trailing" id="sXK-Bd-IJv"/>
                 <constraint firstItem="dfl-3U-b2R" firstAttribute="top" secondItem="aac-7C-DY6" secondAttribute="top" id="t2h-PY-cUN"/>

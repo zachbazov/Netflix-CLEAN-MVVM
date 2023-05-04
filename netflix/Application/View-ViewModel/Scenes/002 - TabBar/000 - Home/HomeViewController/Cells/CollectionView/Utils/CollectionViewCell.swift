@@ -82,7 +82,7 @@ class CollectionViewCell: UICollectionViewCell {
 
         placeholderLabel.alpha = 0.0
         
-        guard logoBottomConstraint.isNotNil else { return }
+        guard let logoBottomConstraint = logoBottomConstraint else { return }
         logoDidAlign(logoBottomConstraint, with: viewModel)
     }
     

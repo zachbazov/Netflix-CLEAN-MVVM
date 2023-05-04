@@ -27,11 +27,15 @@ final class NavigationOverlayFooterView: View<NavigationOverlayViewModel> {
     ///   - viewModel: Coordinating view model.
     init(parent: UIView, viewModel: NavigationOverlayViewModel) {
         super.init(frame: .zero)
+        
         self.addSubview(button)
-        self.constraintToCenter(button)
         parent.addSubview(self)
+        
+        self.constraintToCenter(button)
         self.constraintBottomToSafeArea(toParent: parent, withHeightAnchor: 60.0)
+        
         self.viewModel = viewModel
+        
         self.viewDidConfigure()
     }
     

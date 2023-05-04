@@ -30,26 +30,24 @@ final class NavigationOverlayView: View<NavigationOverlayViewModel> {
     private(set) lazy var opaqueView: OpaqueView? = createOpaqueView()
     private(set) lazy var footerView: NavigationOverlayFooterView? = createFooterView()
     
-//    var gradientView: UIView?
+    private let parent: UIView
     
     /// Create a navigation overlay view object.
     /// - Parameter viewModel: Coordinating view model.
-    init(with viewModel: HomeViewModel) {
-        super.init(frame: .screenSize)
-        self.alpha = .zero
+    init(on parent: UIView, with viewModel: HomeViewModel) {
+        self.parent = parent
+        
+        super.init(frame: parent.bounds)
         
         self.viewModel = setupViewModel(with: viewModel)
         
-//        let rect = CGRect(x: .zero, y: CGRect.screenSize.height - 192.0, width: CGRect.screenSize.width, height: 192.0)
-//        self.gradientView = .init(frame: rect)
-//        self.gradientView?.addGradientLayer(colors: [.clear, .hexColor("#050505")], locations: [0.0, 0.85])
-        
-        guard let controller = viewModel.coordinator?.viewController else { return }
-        controller.view.addSubview(self)
-        controller.view.addSubview(self.footerView!)
+        parent.addSubview(self)
+        parent.addSubview(self.footerView!)
         
         self.addSubview(self.tableView)
-//        self.addSubview(self.gradientView!)
+        
+        self.constraintToSuperview(parent)
+        self.tableView.constraintToSuperview(parent)
         
         self.viewDidBindObservers()
     }
@@ -65,26 +63,50 @@ final class NavigationOverlayView: View<NavigationOverlayViewModel> {
     }
     
     override func viewDidBindObservers() {
-        viewModel?.isPresented.observe(on: self) { [weak self] _ in
-            self?.viewWillAnimateAppearance()
+        viewModel?.isPresented.observe(on: self) { [weak self] presented in
+            guard let self = self else { return }
+                
+            self.viewShouldAppear(presented)
         }
         
-        viewModel?.state.observe(on: self) { [weak self] _ in
-            self?.viewModel?.updateItems()
-            self?.tableView.reloadData()
+        viewModel?.state.observe(on: self) { [weak self] state in
+            guard let self = self else { return }
+            
+            self.viewModel?.stateDidChange(state)
+            self.tableView.reloadData()
         }
     }
     
     override func viewDidUnbindObservers() {
-        guard viewModel.isNotNil else { return }
+        guard let viewModel = viewModel else { return }
         
-        viewModel?.isPresented.remove(observer: self)
-        viewModel?.state.remove(observer: self)
+        viewModel.isPresented.remove(observer: self)
+        viewModel.state.remove(observer: self)
         
         printIfDebug(.success, "Removed `\(Self.self)` observers.")
     }
     
     override func viewWillAnimateAppearance() {
+        guard let controller = viewModel.coordinator.viewController else { return }
+        
+        parent.isHidden(false)
+        
+        UIView.animate(
+            withDuration: 0.5,
+            delay: .zero,
+            options: .curveEaseInOut,
+            animations: { [weak self] in
+                guard let self = self else { return }
+                
+                self.alpha = 1.0
+                self.tableView.alpha = 1.0
+                self.footerView?.alpha = 1.0
+                
+                controller.tabBarController?.tabBar.alpha = .zero
+            })
+    }
+    
+    override func viewWillAnimateDisappearance() {
         guard let controller = viewModel.coordinator.viewController else { return }
         
         UIView.animate(
@@ -94,11 +116,16 @@ final class NavigationOverlayView: View<NavigationOverlayViewModel> {
             animations: { [weak self] in
                 guard let self = self else { return }
                 
-                self.alpha = self.viewModel.isPresented.value ? 1.0 : 0.0
-                self.tableView.alpha = self.viewModel.isPresented.value ? 1.0 : 0.0
-                self.footerView?.alpha = self.viewModel.isPresented.value ? 1.0 : 0.0
+                self.alpha = .zero
+                self.tableView.alpha = .zero
+                self.footerView?.alpha = .zero
                 
-                controller.tabBarController?.tabBar.alpha = self.viewModel.isPresented.value ? 0.0 : 1.0
+                controller.tabBarController?.tabBar.alpha = 1.0
+            },
+            completion: { [weak self] done in
+                guard let self = self else { return }
+                
+                self.parent.isHidden(true)
             })
     }
 }

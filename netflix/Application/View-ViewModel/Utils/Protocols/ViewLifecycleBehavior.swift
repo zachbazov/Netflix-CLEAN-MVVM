@@ -18,6 +18,8 @@ protocol ViewLifecycleBehavior {
     func viewWillAppear()
     func viewWillDisappear()
     func viewWillAnimateAppearance()
+    func viewWillAnimateDisappearance()
+    func viewShouldAppear(_ presented: Bool)
     func viewWillDeallocate()
     func viewDidDeallocate()
     
@@ -35,6 +37,8 @@ extension ViewLifecycleBehavior {
     func viewWillAppear() {}
     func viewWillDisappear() {}
     func viewWillAnimateAppearance() {}
+    func viewWillAnimateDisappearance() {}
+    func viewShouldAppear(_ presented: Bool) {}
     func viewWillDeallocate() {}
     func viewDidDeallocate() {}
     

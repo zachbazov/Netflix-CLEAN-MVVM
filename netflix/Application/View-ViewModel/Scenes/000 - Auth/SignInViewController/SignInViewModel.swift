@@ -94,13 +94,13 @@ extension SignInViewModel: ViewModelProtocol {
             let emailTextField = self.coordinator?.signInController.emailTextField
             let passTextField = self.coordinator?.signInController.passwordTextField
             
-            guard user.isNotNil else {
+            guard let user = user else {
                 emailTextField?.text = .toBlank()
                 passTextField?.text = .toBlank()
                 return
             }
             
-            guard let selectedProfile = user?.selectedProfile, selectedProfile.isNotEmpty else {
+            guard let selectedProfile = user.selectedProfile, selectedProfile.isNotEmpty else {
                 let coordinator = Application.app.coordinator
                 coordinator.coordinate(to: .profile)
                 return

@@ -12,6 +12,8 @@ import Foundation
 private protocol ViewModelProtocol {
     var isPresented: Observable<Bool> { get }
     var section: Observable<Section> { get }
+    
+    func sectionDidChange(_ section: Section)
 }
 
 // MARK: - BrowseOverlayViewModel Type
@@ -33,4 +35,10 @@ extension BrowseOverlayViewModel: ViewModel {}
 
 // MARK: - ViewModelProtocol Implementation
 
-extension BrowseOverlayViewModel: ViewModelProtocol {}
+extension BrowseOverlayViewModel: ViewModelProtocol {
+    func sectionDidChange(_ section: Section) {
+        guard let controller = coordinator.viewController else { return }
+        
+        controller.browseOverlayView?.dataSource?.section = section
+    }
+}
