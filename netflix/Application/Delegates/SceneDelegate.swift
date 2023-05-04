@@ -58,12 +58,20 @@ extension SceneDelegate: SceneObserverUnbinding {
         // Remove any home-related observers.
         if let homeController = tabCoordinator.home?.viewControllers.first as? HomeViewController {
             // Remove navigation & navigation overlay views observers.
-            if let navigationView = homeController.navigationView {
-                navigationView.viewDidUnbindObservers()
+            if let navigationBar = homeController.navigationBar {
+                navigationBar.viewDidUnbindObservers()
             }
             
-            if let navigationOverlayView = homeController.navigationOverlayView {
-                navigationOverlayView.viewDidUnbindObservers()
+            if let segmentControl = homeController.segmentControl {
+                segmentControl.viewDidUnbindObservers()
+            }
+            
+            if let navigationOverlay = homeController.navigationOverlay {
+                navigationOverlay.viewDidUnbindObservers()
+            }
+            
+            if let browseOverlay = homeController.browseOverlayView {
+                browseOverlay.viewDidUnbindObservers()
             }
             
             homeController.viewDidUnbindObservers()

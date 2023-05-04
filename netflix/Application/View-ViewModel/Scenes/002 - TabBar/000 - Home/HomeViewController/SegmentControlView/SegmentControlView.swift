@@ -17,7 +17,7 @@ private protocol ViewProtocol {
     func presentNavigationOverlayIfNeeded()
 }
 
-// MARK: - NavigationView Type
+// MARK: - SegmentControlView Type
 
 final class SegmentControlView: View<SegmentControlViewViewModel> {
     @IBOutlet private weak var stackView: UIStackView!
@@ -148,7 +148,7 @@ extension SegmentControlView: ViewProtocol {
     
     func presentNavigationOverlayIfNeeded() {
         guard let controller = viewModel.coordinator.viewController,
-              let navigationOverlay = controller.navigationOverlayView
+              let navigationOverlay = controller.navigationOverlay
         else { return }
         
         guard viewModel.isSegmentSelected else { return }

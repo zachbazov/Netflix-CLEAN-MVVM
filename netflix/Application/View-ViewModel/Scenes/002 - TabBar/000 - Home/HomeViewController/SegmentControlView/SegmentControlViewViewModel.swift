@@ -56,8 +56,8 @@ extension SegmentControlViewViewModel: ViewModelProtocol {
     func stateDidChange(_ state: SegmentControlView.State) {
         guard let controller = coordinator.viewController,
               let homeViewModel = controller.viewModel,
-              let segmentControl = controller.segmentControlView,
-              let navigationOverlay = controller.navigationOverlayView,
+              let segmentControl = controller.segmentControl,
+              let navigationOverlay = controller.navigationOverlay,
               let browseOverlay = controller.browseOverlayView
         else { return }
         

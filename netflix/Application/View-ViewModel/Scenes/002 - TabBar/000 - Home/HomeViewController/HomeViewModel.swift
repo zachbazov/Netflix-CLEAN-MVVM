@@ -30,6 +30,8 @@ private protocol ViewModelProtocol {
     func filter(sections: [Section])
     func filter(at index: HomeTableViewDataSource.Index) -> [Media]
     func filterShowcases()
+    func changeDataSourceStateIfNeeded(_ state: HomeTableViewDataSource.State)
+    func dataSourceStateWillChange(_ state: HomeTableViewDataSource.State)
 }
 
 // MARK: - HomeViewModel Type

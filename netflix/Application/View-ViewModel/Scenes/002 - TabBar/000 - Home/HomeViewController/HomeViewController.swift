@@ -11,15 +11,15 @@ import UIKit
 
 private protocol ViewControllerProtocol {
     var dataSource: HomeTableViewDataSource? { get }
-    var navigationView: NavigationView? { get }
-    var navigationOverlayView: NavigationOverlayView? { get }
+    var navigationBar: NavigationBarView? { get }
+    var navigationOverlay: NavigationOverlayView? { get }
     var browseOverlayView: BrowseOverlayView? { get }
     
     func createDataSource()
-    func createNavigationView()
-    func createSegmentControlView()
-    func createNavigationOverlayView()
-    func createBrowseOverlayView()
+    func createNavigationBar()
+    func createSegmentControl()
+    func createNavigationOverlay()
+    func createBrowseOverlay()
 }
 
 // MARK: - HomeViewController Type
@@ -34,9 +34,9 @@ final class HomeViewController: Controller<HomeViewModel> {
     @IBOutlet private(set) var topContainerHeight: NSLayoutConstraint!
     
     private(set) var dataSource: HomeTableViewDataSource?
-    private(set) var navigationView: NavigationView?
-    private(set) var segmentControlView: SegmentControlView?
-    private(set) var navigationOverlayView: NavigationOverlayView?
+    private(set) var navigationBar: NavigationBarView?
+    private(set) var segmentControl: SegmentControlView?
+    private(set) var navigationOverlay: NavigationOverlayView?
     private(set) var browseOverlayView: BrowseOverlayView?
     
     override func viewDidLoad() {
@@ -54,10 +54,10 @@ final class HomeViewController: Controller<HomeViewModel> {
     
     override func viewDidDeploySubviews() {
         createDataSource()
-        createNavigationView()
-        createSegmentControlView()
-        createNavigationOverlayView()
-        createBrowseOverlayView()
+        createNavigationBar()
+        createSegmentControl()
+        createNavigationOverlay()
+        createBrowseOverlay()
     }
     
     override func viewDidConfigure() {
@@ -91,19 +91,19 @@ extension HomeViewController: ViewControllerProtocol {
         dataSource = HomeTableViewDataSource(tableView: tableView, viewModel: viewModel)
     }
     
-    fileprivate func createNavigationView() {
-        navigationView = NavigationView(on: navigationBarContainer, with: viewModel)
+    fileprivate func createNavigationBar() {
+        navigationBar = NavigationBarView(on: navigationBarContainer, with: viewModel)
     }
     
-    fileprivate func createSegmentControlView() {
-        segmentControlView = SegmentControlView(on: segmentedContainer, with: viewModel)
+    fileprivate func createSegmentControl() {
+        segmentControl = SegmentControlView(on: segmentedContainer, with: viewModel)
     }
     
-    fileprivate func createNavigationOverlayView() {
-        navigationOverlayView = NavigationOverlayView(on: navigationOverlayContainer, with: viewModel)
+    fileprivate func createNavigationOverlay() {
+        navigationOverlay = NavigationOverlayView(on: navigationOverlayContainer, with: viewModel)
     }
     
-    fileprivate func createBrowseOverlayView() {
+    fileprivate func createBrowseOverlay() {
         browseOverlayView = BrowseOverlayView(on: browseOverlayViewContainer, with: viewModel)
     }
 }

@@ -196,9 +196,9 @@
 		A1AD25BE28D3FC1200F793B3 /* UITableViewHeaderFooterView+Reusable.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1AD25BD28D3FC1200F793B3 /* UITableViewHeaderFooterView+Reusable.swift */; };
 		A1AD25C028D3FC9600F793B3 /* UITableView+Register.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1AD25BF28D3FC9600F793B3 /* UITableView+Register.swift */; };
 		A1AD25C228D4C61300F793B3 /* ShowcaseViewViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1AD25C128D4C61300F793B3 /* ShowcaseViewViewModel.swift */; };
-		A1AD25C528D4D35700F793B3 /* NavigationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1AD25C428D4D35700F793B3 /* NavigationView.swift */; };
-		A1AD25C728D55DF300F793B3 /* NavigationView.xib in Resources */ = {isa = PBXBuildFile; fileRef = A1AD25C628D55DF300F793B3 /* NavigationView.xib */; };
-		A1AD25D028D6D31000F793B3 /* NavigationViewViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1AD25CF28D6D31000F793B3 /* NavigationViewViewModel.swift */; };
+		A1AD25C528D4D35700F793B3 /* NavigationBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1AD25C428D4D35700F793B3 /* NavigationBarView.swift */; };
+		A1AD25C728D55DF300F793B3 /* NavigationBarView.xib in Resources */ = {isa = PBXBuildFile; fileRef = A1AD25C628D55DF300F793B3 /* NavigationBarView.xib */; };
+		A1AD25D028D6D31000F793B3 /* NavigationBarViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1AD25CF28D6D31000F793B3 /* NavigationBarViewModel.swift */; };
 		A1AD767529AC85AE00669667 /* NewsCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = A1AD767429AC85AE00669667 /* NewsCollectionViewCell.xib */; };
 		A1AD767729AC85B200669667 /* NewsCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1AD767629AC85B200669667 /* NewsCollectionViewCell.swift */; };
 		A1AE02D1293BA29A00AF0BD6 /* DeviceOrientation.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1AE02D0293BA29A00AF0BD6 /* DeviceOrientation.swift */; };
@@ -516,9 +516,9 @@
 		A1AD25BD28D3FC1200F793B3 /* UITableViewHeaderFooterView+Reusable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITableViewHeaderFooterView+Reusable.swift"; sourceTree = "<group>"; };
 		A1AD25BF28D3FC9600F793B3 /* UITableView+Register.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITableView+Register.swift"; sourceTree = "<group>"; };
 		A1AD25C128D4C61300F793B3 /* ShowcaseViewViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowcaseViewViewModel.swift; sourceTree = "<group>"; };
-		A1AD25C428D4D35700F793B3 /* NavigationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationView.swift; sourceTree = "<group>"; };
-		A1AD25C628D55DF300F793B3 /* NavigationView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = NavigationView.xib; sourceTree = "<group>"; };
-		A1AD25CF28D6D31000F793B3 /* NavigationViewViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationViewViewModel.swift; sourceTree = "<group>"; };
+		A1AD25C428D4D35700F793B3 /* NavigationBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationBarView.swift; sourceTree = "<group>"; };
+		A1AD25C628D55DF300F793B3 /* NavigationBarView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = NavigationBarView.xib; sourceTree = "<group>"; };
+		A1AD25CF28D6D31000F793B3 /* NavigationBarViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationBarViewModel.swift; sourceTree = "<group>"; };
 		A1AD767429AC85AE00669667 /* NewsCollectionViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = NewsCollectionViewCell.xib; sourceTree = "<group>"; };
 		A1AD767629AC85B200669667 /* NewsCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsCollectionViewCell.swift; sourceTree = "<group>"; };
 		A1AE02D0293BA29A00AF0BD6 /* DeviceOrientation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceOrientation.swift; sourceTree = "<group>"; };
@@ -1075,7 +1075,7 @@
 				A18B992528BEC7920077A5A6 /* HomeViewController.swift */,
 				A1B70A80293D8E7300C718C6 /* HomeViewController.xib */,
 				A1E81D1028CFE2B300D044EA /* Cells */,
-				A1AD25C328D4D25400F793B3 /* NavigationView */,
+				A1AD25C328D4D25400F793B3 /* NavigationBarView */,
 				A1183FCA29D11C0600D76759 /* SegmentControlView */,
 				A1BA1DAA28D9D3D500730EA8 /* NavigationOverlayView */,
 				A18D851A29403CD100840045 /* BrowseOverlayView */,
@@ -1615,14 +1615,14 @@
 			path = ShowcaseTableViewCell;
 			sourceTree = "<group>";
 		};
-		A1AD25C328D4D25400F793B3 /* NavigationView */ = {
+		A1AD25C328D4D25400F793B3 /* NavigationBarView */ = {
 			isa = PBXGroup;
 			children = (
-				A1AD25C428D4D35700F793B3 /* NavigationView.swift */,
-				A1AD25CF28D6D31000F793B3 /* NavigationViewViewModel.swift */,
-				A1AD25C628D55DF300F793B3 /* NavigationView.xib */,
+				A1AD25C428D4D35700F793B3 /* NavigationBarView.swift */,
+				A1AD25CF28D6D31000F793B3 /* NavigationBarViewModel.swift */,
+				A1AD25C628D55DF300F793B3 /* NavigationBarView.xib */,
 			);
-			path = NavigationView;
+			path = NavigationBarView;
 			sourceTree = "<group>";
 		};
 		A1AEB447299E17580016DE2B /* Base */ = {
@@ -2148,7 +2148,7 @@
 				A130BC82294CC8400070EA5E /* Localizable.strings in Resources */,
 				A1AD25A428D29A7800F793B3 /* ShowcaseView.xib in Resources */,
 				A1B0D43229AE6FD8009977AB /* FastLaughsViewController.xib in Resources */,
-				A1AD25C728D55DF300F793B3 /* NavigationView.xib in Resources */,
+				A1AD25C728D55DF300F793B3 /* NavigationBarView.xib in Resources */,
 				A1B70A8C293E72D000C718C6 /* SignInViewController.xib in Resources */,
 				A1741D2E28E694CF00F3C46B /* DetailInfoView.xib in Resources */,
 				A1741D3228E697A600F3C46B /* DetailPanelView.xib in Resources */,
@@ -2230,7 +2230,7 @@
 				A18B997828C020FC0077A5A6 /* NetworkService.swift in Sources */,
 				A14E0CBE29BB97E500F55500 /* AccountMenuTableViewCell.swift in Sources */,
 				A127C1E228DD00F100CEE34F /* NavigationOverlayFooterView.swift in Sources */,
-				A1AD25D028D6D31000F793B3 /* NavigationViewViewModel.swift in Sources */,
+				A1AD25D028D6D31000F793B3 /* NavigationBarViewModel.swift in Sources */,
 				A1AD767729AC85B200669667 /* NewsCollectionViewCell.swift in Sources */,
 				A18B995D28BFFBF30077A5A6 /* EpisodeDTO+Mapping.swift in Sources */,
 				A1B70A94293E9FA400C718C6 /* NavigationController.swift in Sources */,
@@ -2253,7 +2253,7 @@
 				A130BCBD29510CA10070EA5E /* DownloadsViewController.swift in Sources */,
 				A130BCA4294FAA210070EA5E /* SearchCollectionViewDataSource.swift in Sources */,
 				A1B70A7F293D80C000C718C6 /* DetailViewCoordinator.swift in Sources */,
-				A1AD25C528D4D35700F793B3 /* NavigationView.swift in Sources */,
+				A1AD25C528D4D35700F793B3 /* NavigationBarView.swift in Sources */,
 				A1AA28E828F6909B0011EE9D /* Trailer+Mapping.swift in Sources */,
 				A18B993828BFC7820077A5A6 /* UIViewController+AddBehaviors.swift in Sources */,
 				A1B70A79293D780100C718C6 /* TabBarViewModel.swift in Sources */,

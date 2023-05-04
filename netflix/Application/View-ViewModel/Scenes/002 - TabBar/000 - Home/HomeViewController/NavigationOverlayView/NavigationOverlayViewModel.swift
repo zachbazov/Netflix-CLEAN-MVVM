@@ -92,7 +92,7 @@ extension NavigationOverlayViewModel: ViewModelProtocol {
     
     fileprivate func didSelectSegment(at indexPath: IndexPath) {
         guard let controller = coordinator.viewController,
-              let segmentControl = controller.segmentControlView
+              let segmentControl = controller.segmentControl
         else { return }
         
         guard let segment = SegmentControlView.State(rawValue: indexPath.row) else { return }
@@ -103,7 +103,7 @@ extension NavigationOverlayViewModel: ViewModelProtocol {
     
     fileprivate func didSelectCategory(at indexPath: IndexPath) {
         guard let controller = coordinator.viewController,
-              let segmentControl = controller.segmentControlView,
+              let segmentControl = controller.segmentControl,
               let browseOverlay = controller.browseOverlayView
         else { return }
         

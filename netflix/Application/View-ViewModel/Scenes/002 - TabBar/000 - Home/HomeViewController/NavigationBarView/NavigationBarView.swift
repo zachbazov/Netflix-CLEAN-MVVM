@@ -1,5 +1,5 @@
 //
-//  NavigationView.swift
+//  NavigationBarView.swift
 //  netflix
 //
 //  Created by Zach Bazov on 16/09/2022.
@@ -13,9 +13,9 @@ private protocol ViewProtocol {
     func buttonDidTap(_ sender: UIButton)
 }
 
-// MARK: - NavigationView Type
+// MARK: - NavigationBarView Type
 
-final class NavigationView: View<NavigationViewViewModel> {
+final class NavigationBarView: View<NavigationBarViewModel> {
     @IBOutlet private(set) weak var airPlayButton: UIButton!
     @IBOutlet private(set) weak var profileLabel: UILabel!
     
@@ -31,7 +31,7 @@ final class NavigationView: View<NavigationViewViewModel> {
         parent.addSubview(self)
         self.constraintToSuperview(parent)
         
-        self.viewModel = NavigationViewViewModel(with: viewModel)
+        self.viewModel = NavigationBarViewModel(with: viewModel)
         
         self.viewDidLoad()
     }
@@ -49,13 +49,13 @@ final class NavigationView: View<NavigationViewViewModel> {
 
 // MARK: - ViewInstantiable Implementation
 
-extension NavigationView: ViewInstantiable {}
+extension NavigationBarView: ViewInstantiable {}
 
 // MARK: - ViewProtocol Implementation
 
-extension NavigationView: ViewProtocol {
+extension NavigationBarView: ViewProtocol {
     @IBAction fileprivate func buttonDidTap(_ sender: UIButton) {
-        guard let state = NavigationView.State(rawValue: sender.tag) else { return }
+        guard let state = NavigationBarView.State(rawValue: sender.tag) else { return }
         
         viewModel?.stateDidChange(state)
     }
@@ -63,7 +63,7 @@ extension NavigationView: ViewProtocol {
 
 // MARK: - State Type
 
-extension NavigationView {
+extension NavigationBarView {
     /// Item representation type.
     enum State: Int, CaseIterable {
         case airPlay
@@ -74,7 +74,7 @@ extension NavigationView {
 
 // MARK: - Valuable Implementation
 
-extension NavigationView.State: Valuable {
+extension NavigationBarView.State: Valuable {
     var stringValue: String {
         switch self {
         case .airPlay: return Localization.TabBar.Home.NavigationView().airPlay

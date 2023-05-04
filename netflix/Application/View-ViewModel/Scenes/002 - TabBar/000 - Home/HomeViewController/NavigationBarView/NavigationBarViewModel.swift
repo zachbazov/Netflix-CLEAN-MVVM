@@ -1,5 +1,5 @@
 //
-//  NavigationViewViewModel.swift
+//  NavigationBarViewModel.swift
 //  netflix
 //
 //  Created by Zach Bazov on 18/09/2022.
@@ -11,9 +11,9 @@ import Foundation
 
 private protocol ViewModelProtocol {}
 
-// MARK: - NavigationViewViewModel Type
+// MARK: - NavigationBarViewModel Type
 
-final class NavigationViewViewModel {
+final class NavigationBarViewModel {
     let coordinator: HomeViewCoordinator
     
     /// Create a navigation view view model object.
@@ -27,11 +27,11 @@ final class NavigationViewViewModel {
 
 // MARK: - ViewModel Implementation
 
-extension NavigationViewViewModel: ViewModel {}
+extension NavigationBarViewModel: ViewModel {}
 
 // MARK: - ViewModelProtocol Implementation
 
-extension NavigationViewViewModel: ViewModelProtocol {
+extension NavigationBarViewModel: ViewModelProtocol {
     func getUserProfiles() {
         let authService = Application.app.services.authentication
         let profileViewModel = ProfileViewModel()
@@ -50,7 +50,7 @@ extension NavigationViewViewModel: ViewModelProtocol {
                 switch result {
                 case .success(let response):
                     let x = response.data.toDomain().first(where: { user.selectedProfile == $0._id })
-                    self.coordinator.viewController?.navigationView?.profileLabel.text = x?.name ?? "N/A"
+                    self.coordinator.viewController?.navigationBar?.profileLabel.text = x?.name ?? "N/A"
                 case .failure(let error):
                     printIfDebug(.error, "\(error)")
                 }
@@ -59,11 +59,11 @@ extension NavigationViewViewModel: ViewModelProtocol {
     
     /// Controls the navigation presentation of items.
     /// - Parameter state: Corresponding state.
-    func stateDidChange(_ state: NavigationView.State) {
+    func stateDidChange(_ state: NavigationBarView.State) {
         switch state {
         case .airPlay:
             guard let controller = coordinator.viewController,
-                  let navigation = controller.navigationView
+                  let navigation = controller.navigationBar
             else { return }
             navigation.airPlayButton.asRoutePickerView()
         case .search:

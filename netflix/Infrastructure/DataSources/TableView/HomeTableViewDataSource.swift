@@ -269,7 +269,7 @@ extension HomeTableViewDataSource: UITableViewDelegate, UITableViewDataSource {
         var segmentMaxY = max(.zero, -segmentY)
         var primaryOffsetY = min(.zero, -scrollView.contentOffset.y - controller.navigationContainer.bounds.height)
         
-        let segmentHeight = controller.segmentControlView?.bounds.size.height ?? .zero
+        let segmentHeight = controller.segmentControl?.bounds.size.height ?? .zero
         let statusBarHeight = window.windowScene?.statusBarManager?.statusBarFrame.height ?? .zero
         let heightLimit: CGFloat = statusBarHeight + initialOffsetY
         
@@ -286,9 +286,9 @@ extension HomeTableViewDataSource: UITableViewDelegate, UITableViewDataSource {
                 if isScrollingUp {
                     let condition = primaryOffsetY <= segmentHeight
                     
-                    controller.segmentControlView?.origin(y: condition ? -segmentMaxY : -segmentMaxY + segmentHeight)
+                    controller.segmentControl?.origin(y: condition ? -segmentMaxY : -segmentMaxY + segmentHeight)
                     controller.topContainerHeight.constant = condition ? heightLimit + (-segmentMaxY * 2) : heightLimit
-                    controller.segmentControlView?.alpha = condition ? 1.0 - (segmentMaxY / segmentHeight) : 1.0
+                    controller.segmentControl?.alpha = condition ? 1.0 - (segmentMaxY / segmentHeight) : 1.0
                     
                     if primaryOffsetY <= segmentHeight {
                         self.style.apply(.gradient)
@@ -300,9 +300,9 @@ extension HomeTableViewDataSource: UITableViewDelegate, UITableViewDataSource {
                         self.style.apply(.gradient)
                     }
                 } else {
-                    controller.segmentControlView?.origin(y: -segmentMaxY)
+                    controller.segmentControl?.origin(y: -segmentMaxY)
                     controller.topContainerHeight.constant = heightLimit + -segmentMaxY
-                    controller.segmentControlView?.alpha = 1.0 - (segmentMaxY / segmentHeight)
+                    controller.segmentControl?.alpha = 1.0 - (segmentMaxY / segmentHeight)
                     
                     if primaryOffsetY >= .zero {
                         self.style.apply(.blur)
