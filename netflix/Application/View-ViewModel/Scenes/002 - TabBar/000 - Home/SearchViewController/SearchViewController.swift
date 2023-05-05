@@ -163,7 +163,7 @@ extension SearchViewController: UISearchBarDelegate {
         
         viewModel?.set(media: viewModel?.topSearches ?? [])
         
-        dataSource.headerView.titleLabel.text = "Searches"
+        dataSource.headerView?.titleLabel.text = "Searches"
     }
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
@@ -196,7 +196,7 @@ extension SearchViewController: UISearchControllerDelegate {
 extension SearchViewController: UISearchResultsUpdating {
     func updateSearchResults(for searchController: UISearchController) {
         if let searchText = searchController.searchBar.searchTextField.text, !searchText.isEmpty {
-            dataSource.headerView.titleLabel.text = searchText
+            dataSource.headerView?.titleLabel.text = searchText
             return
         } else {
             viewModel?.set(media: viewModel?.topSearches ?? [])

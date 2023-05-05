@@ -11,14 +11,16 @@ import UIKit
 
 private protocol DataSourceProtocol {
     var viewModel: SearchViewModel { get }
-    var headerView: CollectionViewHeaderView! { get }
+    var headerView: CollectionViewHeaderView? { get }
 }
 
 // MARK: - SearchCollectionViewDataSource Type
 
 final class SearchCollectionViewDataSource: NSObject {
     fileprivate let viewModel: SearchViewModel
-    fileprivate(set) var headerView: CollectionViewHeaderView!
+    
+    fileprivate(set) var headerView: CollectionViewHeaderView?
+    
     /// Create a search collection view data source object.
     /// - Parameter viewModel: Coordinating view model.
     init(with viewModel: SearchViewModel) {
@@ -42,15 +44,20 @@ extension SearchCollectionViewDataSource: UICollectionViewDelegate, UICollection
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        guard let controller = Application.app.coordinator.tabCoordinator.home?.viewControllers.first as? HomeViewController,
+              let homeViewModel = controller.viewModel,
+              let coordinator = homeViewModel.coordinator
+        else { return }
+        
         guard let row = indexPath.row as Int?, row >= 0, row <= viewModel.items.value.count - 1 else { return }
-        let navigation = Application.app.coordinator.tabCoordinator.home!
-        let controller = navigation.viewControllers.first! as! HomeViewController
-        let coordinator = controller.viewModel.coordinator!
-        let section = controller.viewModel.section(at: .resumable)
+        
+        let section = controller.viewModel.section(at: .rated)
         let cellViewModel = viewModel.items.value[row]
-        coordinator.section = section
-        coordinator.media = cellViewModel.media
-        coordinator.shouldScreenRotate = false
+        
+        homeViewModel.detailSection = section
+        homeViewModel.detailMedia = cellViewModel.media
+        homeViewModel.shouldScreenRotate = false
+        
         coordinator.coordinate(to: .detail)
     }
     
@@ -59,8 +66,7 @@ extension SearchCollectionViewDataSource: UICollectionViewDelegate, UICollection
                         at indexPath: IndexPath) -> UICollectionReusableView {
         switch kind {
         case UICollectionView.elementKindSectionHeader:
-            headerView = CollectionViewHeaderView.create(in: collectionView, at: indexPath)
-            return headerView
+            return CollectionViewHeaderView.create(in: collectionView, at: indexPath)
         default: return .init()
         }
     }

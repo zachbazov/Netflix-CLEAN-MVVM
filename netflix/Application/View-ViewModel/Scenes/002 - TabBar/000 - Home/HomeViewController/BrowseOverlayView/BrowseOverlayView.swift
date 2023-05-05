@@ -15,6 +15,7 @@ private protocol ViewProtocol {
     
     func createCollectionView() -> UICollectionView
     func createDataSource() -> BrowseOverlayCollectionViewDataSource?
+    func reloadData()
 }
 
 // MARK: - BrowseOverlayView Type
@@ -141,5 +142,9 @@ extension BrowseOverlayView: ViewProtocol {
         collectionView.dataSource = dataSource
         
         return dataSource
+    }
+    
+    func reloadData() {
+        collectionView.reloadData()
     }
 }

@@ -14,10 +14,6 @@ private protocol CoordinatorProtocol {
     var search: UINavigationController? { get }
     var account: UINavigationController? { get }
     
-    var section: Section? { get }
-    var media: Media? { get }
-    var shouldScreenRotate: Bool { get }
-    
     func createDetailNavigationController() -> UINavigationController?
     func createSearchNavigationController() -> UINavigationController
     func createAccountNavigationController() -> UINavigationController
@@ -34,27 +30,27 @@ final class HomeViewCoordinator {
     weak var search: UINavigationController?
     weak var account: UINavigationController?
     weak var browse: UINavigationController?
-    
-    var section: Section?
-    var media: Media?
-    var shouldScreenRotate = false
 }
 
 // MARK: - CoordinatorProtocol Implementation
 
 extension HomeViewCoordinator: CoordinatorProtocol {
     fileprivate func createDetailNavigationController() -> UINavigationController? {
-        guard let section = section, let media = media else { return nil }
+        guard let homeViewModel = viewController?.viewModel else { return nil }
+        
+        guard let section = homeViewModel.detailSection, let media = homeViewModel.detailMedia else { return nil }
+        
         // Allocate the controller and it's dependencies.
         let controller = DetailViewController()
-        let homeViewModel = viewController!.viewModel!
         let viewModel = DetailViewModel(section: section, media: media, with: homeViewModel)
+        
         // Allocate controller dependencies.
         controller.viewModel = viewModel
         controller.viewModel.coordinator = DetailViewCoordinator()
         controller.viewModel.coordinator?.viewController = controller
-        controller.viewModel.isRotated = shouldScreenRotate
-        controller.viewModel.orientation.orientation = shouldScreenRotate ? .landscapeLeft : .portrait
+        controller.viewModel.isRotated = homeViewModel.shouldScreenRotate
+        controller.viewModel.orientation.orientation = homeViewModel.shouldScreenRotate ? .landscapeLeft : .portrait
+        
         // Wrap the controller with a navigation controller.
         let navigation = UINavigationController(rootViewController: controller)
         navigation.setNavigationBarHidden(true, animated: false)

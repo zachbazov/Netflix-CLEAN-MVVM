@@ -221,6 +221,7 @@
 		A1B1B0DA299BA0910070AD29 /* SectionUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B1B0D9299BA0910070AD29 /* SectionUseCase.swift */; };
 		A1B1B0DC299BA1FA0070AD29 /* ListUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B1B0DB299BA1FA0070AD29 /* ListUseCase.swift */; };
 		A1B2BADA29FC0BB0004B612A /* CGRect+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2BAD929FC0BB0004B612A /* CGRect+Extension.swift */; };
+		A1B2BAE32A0401F2004B612A /* TableViewCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2BAE22A0401F2004B612A /* TableViewCellViewModel.swift */; };
 		A1B3F98A28C54F510042DE9F /* UserRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B3F98928C54F510042DE9F /* UserRepository.swift */; };
 		A1B3F98C28C55B500042DE9F /* HomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B3F98B28C55B500042DE9F /* HomeViewModel.swift */; };
 		A1B3F99428C575A30042DE9F /* AuthViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B3F99328C575A30042DE9F /* AuthViewModel.swift */; };
@@ -540,6 +541,7 @@
 		A1B1B0D9299BA0910070AD29 /* SectionUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SectionUseCase.swift; sourceTree = "<group>"; };
 		A1B1B0DB299BA1FA0070AD29 /* ListUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListUseCase.swift; sourceTree = "<group>"; };
 		A1B2BAD929FC0BB0004B612A /* CGRect+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CGRect+Extension.swift"; sourceTree = "<group>"; };
+		A1B2BAE22A0401F2004B612A /* TableViewCellViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TableViewCellViewModel.swift; sourceTree = "<group>"; };
 		A1B3F98928C54F510042DE9F /* UserRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserRepository.swift; sourceTree = "<group>"; };
 		A1B3F98B28C55B500042DE9F /* HomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModel.swift; sourceTree = "<group>"; };
 		A1B3F99328C575A30042DE9F /* AuthViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthViewModel.swift; sourceTree = "<group>"; };
@@ -1567,6 +1569,7 @@
 			isa = PBXGroup;
 			children = (
 				A1E81D1528CFE2D800D044EA /* TableViewCell.swift */,
+				A1B2BAE22A0401F2004B612A /* TableViewCellViewModel.swift */,
 				A1AC9FAB29A4D1A300DAD66D /* TableViewHeaderView.swift */,
 			);
 			path = Utils;
@@ -2447,6 +2450,7 @@
 				A130BC98294CE0B30070EA5E /* SearchViewController.swift in Sources */,
 				A1B1B0D4299B9F870070AD29 /* SeasonUseCase.swift in Sources */,
 				A1B70A6F293D578200C718C6 /* View.swift in Sources */,
+				A1B2BAE32A0401F2004B612A /* TableViewCellViewModel.swift in Sources */,
 				A14E0CC929BCAB3600F55500 /* AccountMenuItem.swift in Sources */,
 				A1B98BA4298A414E001B7B62 /* HTTP.swift in Sources */,
 				A14E0CD129BCBEE900F55500 /* ProfileItem.swift in Sources */,

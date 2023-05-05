@@ -23,4 +23,16 @@ extension UIButton {
         
         return self
     }
+    
+    func cornerRadius(_ value: CGFloat) {
+        layer.cornerRadius = value
+    }
+    
+    func toggle() {
+        isSelected = !isSelected
+    }
+    
+    func toggle(_ contains: Bool) {
+        isSelected = contains
+    }
 }

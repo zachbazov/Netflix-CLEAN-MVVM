@@ -30,6 +30,7 @@ class CollectionViewCell: UICollectionViewCell {
     @IBOutlet private weak var logoBottomConstraint: NSLayoutConstraint!
     
     var viewModel: CollectionViewCellViewModel!
+    
     fileprivate var representedIdentifier: NSString?
     
     /// Create a collection view cell object.
@@ -41,16 +42,20 @@ class CollectionViewCell: UICollectionViewCell {
     /// - Returns: A collection cell object.
     static func create(on collectionView: UICollectionView,
                        reuseIdentifier: String,
-                       section: Section,
+                       section: Section?,
                        for indexPath: IndexPath) -> CollectionViewCell {
         guard let view = collectionView.dequeueReusableCell(
-            withReuseIdentifier: reuseIdentifier, for: indexPath) as? CollectionViewCell else {
-            fatalError()
-        }
+            withReuseIdentifier: reuseIdentifier, for: indexPath) as? CollectionViewCell,
+              let section = section
+        else { fatalError() }
+        
         let media = section.media[indexPath.row]
         let cellViewModel = CollectionViewCellViewModel(media: media, indexPath: indexPath)
+        
         view.viewModel = cellViewModel
+        
         view.viewDidLoad(media: media, with: cellViewModel)
+        
         return view
     }
     

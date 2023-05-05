@@ -55,6 +55,10 @@ final class HomeViewModel {
     
     var isSectionsEmpty: Bool { return sections.isEmpty }
     
+    var detailSection: Section?
+    var detailMedia: Media?
+    var shouldScreenRotate: Bool = false
+    
     deinit {
         coordinator = nil
     }
@@ -92,6 +96,7 @@ extension HomeViewModel: ViewModelProtocol {
     func section(at index: HomeTableViewDataSource.Index) -> Section {
         return sections[index.rawValue]
     }
+    
     /// Filter all the sections based on the state of the table view data source.
     /// - Parameter sections: The sections to be filtered.
     func filter(sections: [Section]) {
@@ -101,6 +106,7 @@ extension HomeViewModel: ViewModelProtocol {
             sections[$0.rawValue].media = filter(at: $0)
         }
     }
+    
     /// Filter a section based on an index of the table view data source.
     /// - Parameter index: Representation of the section's index.
     /// - Returns: Filtered media array.

@@ -50,7 +50,7 @@ extension HomeTableViewDataSourceStyle: HomeTableViewDataSourceStyling {
         guard gradient == nil else { return }
         
         guard let controller = viewModel.coordinator?.viewController,
-              let container = controller.navigationContainer
+              let container = controller.topContainer
         else { return }
         
         gradient = GradientView(on: container).applyGradient(with: colors.reversed())
@@ -71,7 +71,7 @@ extension HomeTableViewDataSourceStyle: HomeTableViewDataSourceStyling {
         
         let effect = UIBlurEffect(style: .dark)
         
-        blur = BlurView(on: controller.navigationContainer, effect: effect)
+        blur = BlurView(on: controller.topContainer, effect: effect)
     }
     
     func removeBlur() {
@@ -189,7 +189,7 @@ extension HomeTableViewDataSource: DataSourceProtocol {
         else { return }
         
         let statusBarHeight = window.windowScene?.statusBarManager?.statusBarFrame.size.height ?? .zero
-        let remainder = controller.view.bounds.height - controller.navigationContainer.bounds.height
+        let remainder = controller.view.bounds.height - controller.topContainer.bounds.height
         let offset = controller.view.bounds.height - remainder - statusBarHeight
         
         initialOffsetY = offset
@@ -265,9 +265,9 @@ extension HomeTableViewDataSource: UITableViewDelegate, UITableViewDataSource {
         let offsetY = scrollView.panGestureRecognizer.translation(in: controller.view).y
         let isScrollingUp = offsetY > .zero
         
-        let segmentY = -scrollView.contentOffset.y - controller.navigationContainer.bounds.height
+        let segmentY = -scrollView.contentOffset.y - controller.topContainer.bounds.height
         var segmentMaxY = max(.zero, -segmentY)
-        var primaryOffsetY = min(.zero, -scrollView.contentOffset.y - controller.navigationContainer.bounds.height)
+        var primaryOffsetY = min(.zero, -scrollView.contentOffset.y - controller.topContainer.bounds.height)
         
         let segmentHeight = controller.segmentControl?.bounds.size.height ?? .zero
         let statusBarHeight = window.windowScene?.statusBarManager?.statusBarFrame.height ?? .zero

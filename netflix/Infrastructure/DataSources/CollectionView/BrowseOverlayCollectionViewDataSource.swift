@@ -18,6 +18,7 @@ private protocol DataSourceProtocol {
 
 final class BrowseOverlayCollectionViewDataSource: NSObject {
     fileprivate let coordinator: HomeViewCoordinator
+    
     var section: Section?
     
     /// Create a browse overlay collection view data source object.
@@ -38,11 +39,11 @@ extension BrowseOverlayCollectionViewDataSource: DataSourceProtocol {}
 
 extension BrowseOverlayCollectionViewDataSource: UICollectionViewDelegate, UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return self.section?.media.count ?? .zero
+        guard let s = self.section else { return .zero }
+        return s.media.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let section = section else { return UICollectionViewCell() }
         return StandardCollectionViewCell.create(
             on: collectionView,
             reuseIdentifier: StandardCollectionViewCell.reuseIdentifier,
@@ -51,10 +52,16 @@ extension BrowseOverlayCollectionViewDataSource: UICollectionViewDelegate, UICol
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        guard let media = section?.media[indexPath.row] else { return }
-        coordinator.section = section
-        coordinator.media = media
-        coordinator.shouldScreenRotate = false
+        guard let homeViewModel = coordinator.viewController?.viewModel,
+              let section = section
+        else { return }
+        
+        let media = section.media[indexPath.row]
+        
+        homeViewModel.detailSection = section
+        homeViewModel.detailMedia = media
+        homeViewModel.shouldScreenRotate = false
+        
         coordinator.coordinate(to: .detail)
     }
 }

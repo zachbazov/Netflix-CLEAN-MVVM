@@ -10,11 +10,11 @@ import UIKit
 // MARK: - DataSourceProtocol Type
 
 private protocol DataSourceProtocol {
-    var coordinator: HomeViewCoordinator! { get }
-    var collectionView: UICollectionView! { get }
+    var collectionView: UICollectionView? { get }
+    var coordinator: HomeViewCoordinator { get }
     var section: Section { get }
     
-    func viewDidLoad()
+    func didLoad()
     func dataSourceDidChange()
 }
 
@@ -24,8 +24,8 @@ final class HomeCollectionViewDataSource<Cell>: NSObject,
                                                 UICollectionViewDelegate,
                                                 UICollectionViewDataSource,
                                                 UICollectionViewDataSourcePrefetching where Cell: UICollectionViewCell {
-    fileprivate weak var coordinator: HomeViewCoordinator!
-    fileprivate weak var collectionView: UICollectionView!
+    fileprivate weak var collectionView: UICollectionView?
+    fileprivate let coordinator: HomeViewCoordinator
     fileprivate let section: Section
     
     /// Create home's collection view data source object.
@@ -36,16 +36,24 @@ final class HomeCollectionViewDataSource<Cell>: NSObject,
     init(on collectionView: UICollectionView,
          section: Section,
          viewModel: HomeViewModel) {
-        self.coordinator = viewModel.coordinator
+        guard let coordinator = viewModel.coordinator else {
+            fatalError("Unexpected \(type(of: viewModel.coordinator)) coordinator value.")
+        }
+        
+        self.coordinator = coordinator
         self.section = section
         self.collectionView = collectionView
+        
         super.init()
-        self.viewDidLoad()
+        
+        self.didLoad()
     }
     
     deinit {
+        print("deinit \(Self.self)")
+        
+        collectionView?.removeFromSuperview()
         collectionView = nil
-        coordinator = nil
     }
     
     // MARK: UICollectionViewDelegate & UICollectionViewDataSource & UICollectionViewDataSourcePrefetching Implementation
@@ -62,10 +70,14 @@ final class HomeCollectionViewDataSource<Cell>: NSObject,
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        guard let homeViewModel = coordinator.viewController?.viewModel else { return }
+        
         let media = section.media[indexPath.row]
-        coordinator.section = section
-        coordinator.media = media
-        coordinator.shouldScreenRotate = false
+        
+        homeViewModel.detailSection = section
+        homeViewModel.detailMedia = media
+        homeViewModel.shouldScreenRotate = false
+        
         coordinator.coordinate(to: .detail)
     }
     
@@ -81,14 +93,14 @@ final class HomeCollectionViewDataSource<Cell>: NSObject,
 // MARK: - DataSourceProtocol Implementation
 
 extension HomeCollectionViewDataSource: DataSourceProtocol {
-    fileprivate func viewDidLoad() {
+    fileprivate func didLoad() {
         dataSourceDidChange()
     }
     
     fileprivate func dataSourceDidChange() {
-        collectionView.delegate = self
-        collectionView.dataSource = self
-        collectionView.prefetchDataSource = self
-        collectionView.reloadData()
+        collectionView?.delegate = self
+        collectionView?.dataSource = self
+        collectionView?.prefetchDataSource = self
+        collectionView?.reloadData()
     }
 }

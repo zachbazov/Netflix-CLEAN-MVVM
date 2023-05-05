@@ -27,10 +27,14 @@ final class PanelView: View<ShowcaseTableViewCellViewModel> {
     ///   - viewModel: Coordinating view model.
     init(on parent: UIView, with viewModel: ShowcaseTableViewCellViewModel?) {
         super.init(frame: .zero)
+        
         self.nibDidLoad()
-        parent.addSubview(self)
+        
         self.viewModel = viewModel
+        
+        parent.addSubview(self)
         self.constraintToSuperview(parent)
+        
         self.viewDidConfigure()
         self.viewDidTargetSubviews()
     }
@@ -43,9 +47,7 @@ final class PanelView: View<ShowcaseTableViewCellViewModel> {
     }
     
     override func viewDidConfigure() {
-        playButton.layer.cornerRadius = 6.0
-        myListButton.layer.cornerRadius = 6.0
-        
+        configureButtons()
         selectIfNeeded()
     }
     
@@ -64,38 +66,65 @@ extension PanelView: ViewInstantiable {}
 extension PanelView: ViewProtocol {
     @objc
     fileprivate func playDidTap() {
-        let coordinator = viewModel.coordinator!
+        guard let homeViewModel = viewModel?.coordinator?.viewController?.viewModel,
+              let coordinator = viewModel?.coordinator
+        else { return }
+        
         let section = viewModel.sectionAt(.resumable)
         let media = viewModel.presentedMedia!
         let rotated = true
-        coordinator.section = section
-        coordinator.media = media
-        coordinator.shouldScreenRotate = rotated
+        
+        homeViewModel.detailSection = section
+        homeViewModel.detailMedia = media
+        homeViewModel.shouldScreenRotate = rotated
+        
         coordinator.coordinate(to: .detail)
     }
     
     @objc
     fileprivate func myListDidTap() {
-        let media = viewModel.presentedMedia!
-        viewModel.myList.viewModel.shouldAddOrRemove(media, uponSelection: myListButton.isSelected)
-        viewModel.coordinator?.viewController?.browseOverlayView?.collectionView.reloadData()
+        guard let media = viewModel?.presentedMedia,
+              let myList = viewModel?.myList,
+              let controller = viewModel?.coordinator?.viewController
+        else { return }
         
+        myList.viewModel.shouldAddOrRemove(media, uponSelection: myListButton.isSelected)
+        
+        controller.browseOverlayView?.reloadData()
+        
+        myListButton.toggle()
+    }
+    
+    fileprivate func selectIfNeeded() {
+        guard let presentedMedia = viewModel?.presentedMedia,
+              let myList = viewModel?.myList
+        else { return }
+        
+        let media = viewModel.sectionAt(.myList).media
+        let contains = myList.viewModel.contains(presentedMedia, in: media)
+        
+        myListButton.toggle(contains)
+    }
+}
+
+// MARK: - Private Presentation Logic
+
+extension PanelView {
+    private func configureButtons() {
+        configurePlayButton()
+        configureMyListButton()
+    }
+    
+    private func configurePlayButton() {
+        playButton.cornerRadius(6.0)
+    }
+    
+    private func configureMyListButton() {
         let symbolConfiguration = UIImage.SymbolConfiguration(pointSize: 15.0)
         let plus = UIImage(systemName: "plus")!.whiteRendering(with: symbolConfiguration)
         let checkmark = UIImage(systemName: "checkmark")!.whiteRendering(with: symbolConfiguration)
         myListButton.setImage(plus, for: .normal)
         myListButton.setImage(checkmark, for: .selected)
-        
-        myListButton.isSelected = !myListButton.isSelected
-    }
-    
-    fileprivate func selectIfNeeded() {
-        guard let presentedMedia = viewModel.presentedMedia else { return }
-        
-        let myListViewModel = viewModel.myList.viewModel
-        
-        myListButton.isSelected = myListViewModel.contains(
-            presentedMedia,
-            in: viewModel.sectionAt(.myList).media)
+        myListButton.cornerRadius(6.0)
     }
 }

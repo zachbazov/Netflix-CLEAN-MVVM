@@ -26,9 +26,9 @@ private protocol ViewControllerProtocol {
 
 final class HomeViewController: Controller<HomeViewModel> {
     @IBOutlet private(set) var tableView: UITableView!
-    @IBOutlet private(set) var navigationContainer: UIView!
+    @IBOutlet private(set) var topContainer: UIView!
     @IBOutlet private(set) var navigationBarContainer: UIView!
-    @IBOutlet private var segmentedContainer: UIView!
+    @IBOutlet private var segmentControlContainer: UIView!
     @IBOutlet private(set) var navigationOverlayContainer: UIView!
     @IBOutlet private(set) var browseOverlayViewContainer: UIView!
     @IBOutlet private(set) var topContainerHeight: NSLayoutConstraint!
@@ -96,7 +96,7 @@ extension HomeViewController: ViewControllerProtocol {
     }
     
     fileprivate func createSegmentControl() {
-        segmentControl = SegmentControlView(on: segmentedContainer, with: viewModel)
+        segmentControl = SegmentControlView(on: segmentControlContainer, with: viewModel)
     }
     
     fileprivate func createNavigationOverlay() {

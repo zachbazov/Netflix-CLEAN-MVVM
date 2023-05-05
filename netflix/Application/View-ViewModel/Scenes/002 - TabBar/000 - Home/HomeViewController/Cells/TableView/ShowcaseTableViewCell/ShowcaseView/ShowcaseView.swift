@@ -10,7 +10,24 @@ import UIKit
 // MARK: - ViewProtocol Type
 
 private protocol ViewProtocol {
-    var panelView: PanelView! { get }
+    var panelView: PanelView? { get }
+    var gradient: GradientView? { get }
+    
+    func didTap()
+    
+    func analyzeColors(for image: UIImage) -> [UIColor]
+    func setDarkBottomGradient()
+    func setGradient(for image: UIImage)
+    func setPosterShadow(for color: UIColor)
+    func setBackgroundColor()
+    func setPosterStroke()
+    func setGenres(attributed string: NSMutableAttributedString)
+    func setMediaType()
+    func setGestures()
+    func setLogo(image: UIImage)
+    func setPoster(image: UIImage)
+    
+    func loadResources()
 }
 
 // MARK: - ShowcaseView Type
@@ -25,18 +42,23 @@ final class ShowcaseView: View<ShowcaseViewViewModel> {
     @IBOutlet private weak var typeImageView: UIImageView!
     @IBOutlet private(set) weak var panelViewContainer: UIView!
     
-    private(set) var panelView: PanelView!
+    private(set) var panelView: PanelView?
     private(set) var gradient: GradientView?
     
     init(with viewModel: ShowcaseTableViewCellViewModel?) {
         super.init(frame: .zero)
+        
         self.nibDidLoad()
+        
         let homeViewModel = viewModel?.coordinator?.viewController?.viewModel
         let state = homeViewModel?.dataSourceState.value ?? .all
         let media = homeViewModel?.showcases[state]
+        
         self.viewModel = ShowcaseViewViewModel(media: media, with: homeViewModel)
         self.panelView = PanelView(on: panelViewContainer, with: viewModel)
+        
         self.viewDidDeploySubviews()
+        
         self.contentView.constraintToSuperview(self)
     }
     
@@ -44,7 +66,9 @@ final class ShowcaseView: View<ShowcaseViewViewModel> {
     
     deinit {
         print("deinit \(Self.self)")
+        
         viewDidDeallocate()
+        
         panelView = nil
         gradient = nil
     }
@@ -83,17 +107,22 @@ extension ShowcaseView: ViewInstantiable {}
 // MARK: - ViewProtocol Implementation
 
 extension ShowcaseView: ViewProtocol {
-    @objc func didTap() {
-        guard let controller = viewModel.coordinator?.viewController else { return }
-        let homeViewModel = controller.viewModel
-        let state = homeViewModel?.dataSourceState.value ?? .all
-        let coordinator = homeViewModel!.coordinator!
-        let section = homeViewModel!.section(at: .resumable)
-        let media = homeViewModel!.showcases[HomeTableViewDataSource.State(rawValue: state.rawValue)!]
+    @objc
+    func didTap() {
+        guard let controller = viewModel.coordinator?.viewController,
+              let homeViewModel = controller.viewModel,
+              let coordinator = homeViewModel.coordinator
+        else { return }
+        
+        let state = homeViewModel.dataSourceState.value ?? .all
+        let section = homeViewModel.section(at: .resumable)
+        let media = homeViewModel.showcases[HomeTableViewDataSource.State(rawValue: state.rawValue)!]
         let rotated = false
-        coordinator.section = section
-        coordinator.media = media
-        coordinator.shouldScreenRotate = rotated
+        
+        homeViewModel.detailSection = section
+        homeViewModel.detailMedia = media
+        homeViewModel.shouldScreenRotate = rotated
+        
         coordinator.coordinate(to: .detail)
     }
     
@@ -102,7 +131,7 @@ extension ShowcaseView: ViewProtocol {
                                             locations: [0.0, 0.66])
     }
     
-    private func analyzeColors(for image: UIImage) -> [UIColor] {
+    fileprivate func analyzeColors(for image: UIImage) -> [UIColor] {
         let c1 = image.averageColor!
         let c2 = image.areaAverage().darkerColor(for: c1)
         let c3 = c2.darkerColor(for: c2)
@@ -110,7 +139,7 @@ extension ShowcaseView: ViewProtocol {
         return [c1, c2, c3, c4]
     }
     
-    private func setGradient(for image: UIImage) {
+    fileprivate func setGradient(for image: UIImage) {
         guard let controller = viewModel.coordinator?.viewController else { return }
         
         let colors = analyzeColors(for: image)
@@ -122,15 +151,15 @@ extension ShowcaseView: ViewProtocol {
         setPosterShadow(for: colors[2])
     }
     
-    private func setPosterShadow(for color: UIColor) {
+    fileprivate func setPosterShadow(for color: UIColor) {
         contentView.layer.shadow(color, radius: 24.0, opacity: 1.0)
     }
     
-    private func setBackgroundColor() {
+    fileprivate func setBackgroundColor() {
         backgroundColor = .clear
     }
     
-    private func setPosterStroke() {
+    fileprivate func setPosterStroke() {
         let gradient = UIImage.fillGradientStroke(bounds: posterImageView.bounds,
                                                   colors: [.white.withAlphaComponent(0.5), .clear])
         let color = UIColor(patternImage: gradient).cgColor
@@ -139,7 +168,7 @@ extension ShowcaseView: ViewProtocol {
         posterImageView?.layer.cornerRadius = 12.0
     }
     
-    private func loadResources() {
+    fileprivate func loadResources() {
         prepareForReuse()
         
         AsyncImageService.shared.load(
@@ -165,24 +194,24 @@ extension ShowcaseView: ViewProtocol {
             }
     }
     
-    private func setPoster(image: UIImage) {
+    fileprivate func setPoster(image: UIImage) {
         posterImageView.image = image
     }
     
-    private func setLogo(image: UIImage) {
+    fileprivate func setLogo(image: UIImage) {
         logoImageView.image = image
     }
     
-    private func setGenres(attributed string: NSMutableAttributedString) {
+    fileprivate func setGenres(attributed string: NSMutableAttributedString) {
         genresLabel.attributedText = string
     }
     
-    private func setGestures() {
+    fileprivate func setGestures() {
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(didTap))
         contentView.addGestureRecognizer(tapGesture)
     }
     
-    private func setMediaType() {
+    fileprivate func setMediaType() {
         guard let typeImagePath = viewModel.typeImagePath, typeImagePath.isNotEmpty else { return }
         typeImageView.image = UIImage(named: typeImagePath)
     }
