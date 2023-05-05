@@ -12,6 +12,8 @@ import UIKit
 private protocol ViewProtocol {
     var showcaseView: ShowcaseView? { get }
     var viewModel: ShowcaseTableViewCellViewModel? { get }
+    
+    func createShowcaseView()
 }
 
 // MARK: - ShowcaseTableViewCell Type
@@ -34,31 +36,61 @@ final class ShowcaseTableViewCell: UITableViewCell {
             for: indexPath) as? ShowcaseTableViewCell else {
             fatalError()
         }
+        
         cell.viewModel = ShowcaseTableViewCellViewModel(with: viewModel)
-        let showcaseView = ShowcaseView(with: cell.viewModel)
-        cell.showcaseView = showcaseView
-        cell.contentView.addSubview(cell.showcaseView ?? .init(with: nil))
-        cell.showcaseView?.constraintToSuperview(cell.contentView)
-        cell.backgroundColor = .clear
+        
+        cell.viewDidLoad()
+        
         return cell
     }
     
     deinit {
         print("deinit \(Self.self)")
+        
         showcaseView?.gradient?.layer.removeFromSuperlayer()
         showcaseView?.gradient?.removeFromSuperview()
         showcaseView?.removeFromSuperview()
         showcaseView = nil
+        
         viewModel?.coordinator = nil
         viewModel = nil
     }
     
     override func prepareForReuse() {
         super.prepareForReuse()
+        
         showcaseView?.setDarkBottomGradient()
+    }
+    
+    func viewDidLoad() {
+        viewDidConfigure()
+        viewDidDeploySubviews()
+        viewHierarchyDidConfigure()
+    }
+    
+    func viewDidDeploySubviews() {
+        createShowcaseView()
+    }
+    
+    func viewHierarchyDidConfigure() {
+        showcaseView?
+            .addToHierarchy(on: contentView)
+            .constraintToSuperview(contentView)
+    }
+    
+    func viewDidConfigure() {
+        setBackgroundColor(.clear)
     }
 }
 
+// MARK: - ViewLifecycleBehavior Implementation
+
+extension ShowcaseTableViewCell: ViewLifecycleBehavior {}
+
 // MARK: - ViewProtocol Implementation
 
-extension ShowcaseTableViewCell: ViewProtocol {}
+extension ShowcaseTableViewCell: ViewProtocol {
+    fileprivate func createShowcaseView() {
+        showcaseView = ShowcaseView(on: contentView, with: viewModel)
+    }
+}

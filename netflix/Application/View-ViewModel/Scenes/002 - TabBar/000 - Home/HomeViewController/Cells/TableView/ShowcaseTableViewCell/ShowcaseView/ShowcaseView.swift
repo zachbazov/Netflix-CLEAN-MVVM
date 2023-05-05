@@ -45,7 +45,7 @@ final class ShowcaseView: View<ShowcaseViewViewModel> {
     private(set) var panelView: PanelView?
     private(set) var gradient: GradientView?
     
-    init(with viewModel: ShowcaseTableViewCellViewModel?) {
+    init(on parent: UIView, with viewModel: ShowcaseTableViewCellViewModel?) {
         super.init(frame: .zero)
         
         self.nibDidLoad()
@@ -56,6 +56,11 @@ final class ShowcaseView: View<ShowcaseViewViewModel> {
         
         self.viewModel = ShowcaseViewViewModel(media: media, with: homeViewModel)
         self.panelView = PanelView(on: panelViewContainer, with: viewModel)
+        
+//        guard let parent = parent as? ShowcaseTableViewCell else { return }
+        
+//        parent.contentView.addSubview(cell.showcaseView ?? .init(with: nil))
+//        parent.contentView.showcaseView?.constraintToSuperview(parent)
         
         self.viewDidDeploySubviews()
         

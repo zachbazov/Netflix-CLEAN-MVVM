@@ -13,6 +13,7 @@ protocol ViewLifecycleBehavior {
     func viewDidLoad()
     func viewDidLoadBehaviors()
     func viewDidDeploySubviews()
+    func viewHierarchyDidConfigure()
     func viewDidConfigure()
     func viewDidTargetSubviews()
     func viewWillAppear()
@@ -32,6 +33,7 @@ extension ViewLifecycleBehavior {
     func viewDidLoad() {}
     func viewDidLoadBehaviors() {}
     func viewDidDeploySubviews() {}
+    func viewHierarchyDidConfigure() {}
     func viewDidConfigure() {}
     func viewDidTargetSubviews() {}
     func viewWillAppear() {}

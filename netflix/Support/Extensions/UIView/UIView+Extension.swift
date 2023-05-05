@@ -7,6 +7,23 @@
 
 import AVKit
 
+// MARK: - UIView + Hierarchy
+
+extension UIView {
+    func addToHierarchy(on view: UIView) -> UIView {
+        view.addSubview(self)
+        return self
+    }
+}
+
+// MARK: - UIView + Styling
+
+extension UIView {
+    func setBackgroundColor(_ color: UIColor) {
+        backgroundColor = color
+    }
+}
+
 // MARK: - UIView + Gradients
 
 extension UIView {

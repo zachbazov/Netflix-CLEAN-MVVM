@@ -30,6 +30,7 @@ class View<T>: UIView where T: ViewModel {
     
     func viewDidLoad() {}
     func viewDidDeploySubviews() {}
+    func viewHierarchyDidConfigure() {}
     func viewDidConfigure() {}
     func viewDidTargetSubviews() {}
     func viewWillAppear() {}
