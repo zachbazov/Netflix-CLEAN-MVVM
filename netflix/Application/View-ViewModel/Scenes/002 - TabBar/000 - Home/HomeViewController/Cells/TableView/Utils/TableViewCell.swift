@@ -31,8 +31,8 @@ private protocol ViewProtocol {
     func createCollectionView() -> UICollectionView
     func createDataSource()
     func createLayout()
-    func layoutDidChange(with viewModel: TableViewCellViewModel)
     func setLayout()
+    func layoutWillChange(with viewModel: TableViewCellViewModel)
 }
 
 // MARK: - TableViewCell<T> Type
@@ -67,25 +67,29 @@ class TableViewCell<T>: UITableViewCell where T: UICollectionViewCell {
     deinit {
         print("deinit \(Self.self)")
         
+        viewWillDeallocate()
+    }
+    
+    func viewDidLoad() {
+        viewWillConfigure()
+        viewWillDeploySubviews()
+    }
+    
+    func viewWillConfigure() {
+        setBackgroundColor(.clear)
+    }
+    
+    func viewWillDeploySubviews() {
+        createDataSource()
+        createLayout()
+    }
+    
+    func viewWillDeallocate() {
         collectionView.removeFromSuperview()
         
         dataSource = nil
         layout = nil
         viewModel = nil
-    }
-    
-    func viewDidLoad() {
-        viewDidConfigure()
-        viewDidDeploySubviews()
-    }
-    
-    func viewDidConfigure() {
-        backgroundColor = .clear
-    }
-    
-    func viewDidDeploySubviews() {
-        createDataSource()
-        createLayout()
     }
 }
 
@@ -114,14 +118,20 @@ extension TableViewCell: ViewProtocol {
     func createLayout() {
         guard let viewModel = viewModel else { return }
         
-        layoutDidChange(with: viewModel)
+        layoutWillChange(with: viewModel)
+    }
+    
+    fileprivate func setLayout() {
+        guard let layout = layout else { return }
+        
+        collectionView.setCollectionViewLayout(layout, animated: false)
     }
     
     /// Setting a layout for the collection view.
     /// - Parameters:
     ///   - section: A section object that represent the cell.
     ///   - viewModel: Coordinating view model.
-    fileprivate func layoutDidChange(with viewModel: TableViewCellViewModel) {
+    fileprivate func layoutWillChange(with viewModel: TableViewCellViewModel) {
         guard let indices = HomeTableViewDataSource.Index(rawValue: viewModel.section.id) else { return }
         
         switch indices {
@@ -136,12 +146,6 @@ extension TableViewCell: ViewProtocol {
         }
         
         setLayout()
-    }
-    
-    fileprivate func setLayout() {
-        guard let layout = layout else { return }
-        
-        collectionView.setCollectionViewLayout(layout, animated: false)
     }
 }
 

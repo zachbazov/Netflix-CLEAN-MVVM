@@ -10,6 +10,7 @@ import UIKit
 // MARK: - UIButton Extension
 
 extension UIButton {
+    @discardableResult
     func border(_ color: UIColor, width: CGFloat) -> Self {
         layer.borderWidth = width
         layer.borderColor = color.cgColor

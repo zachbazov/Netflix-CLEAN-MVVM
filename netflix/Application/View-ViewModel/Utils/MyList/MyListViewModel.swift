@@ -131,7 +131,6 @@ extension MyListViewModel: ViewModelProtocol {
             case .all: break
             case .tvShows: media = media.filter { $0.type == "series" }
             case .movies: media = media.filter { $0.type == "film" }
-            default: break
             }
             homeViewModel.sections[section.id].media = media.toArray()
         }

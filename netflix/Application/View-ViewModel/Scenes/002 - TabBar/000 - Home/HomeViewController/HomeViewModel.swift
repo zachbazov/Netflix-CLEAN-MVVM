@@ -19,7 +19,7 @@ private protocol ViewModelProtocol {
     var media: [Media] { get }
     var topSearches: [Media] { get }
     
-    var dataSourceState: Observable<HomeTableViewDataSource.State?> { get }
+    var dataSourceState: Observable<HomeTableViewDataSource.State> { get }
     var showcases: [HomeTableViewDataSource.State: Media] { get }
     
     var myList: MyList { get }
@@ -48,7 +48,7 @@ final class HomeViewModel {
     fileprivate(set) lazy var media = [Media]()
     fileprivate(set) lazy var topSearches = [Media]()
     
-    let dataSourceState: Observable<HomeTableViewDataSource.State?> = Observable(.none)
+    let dataSourceState: Observable<HomeTableViewDataSource.State> = Observable(.all)
     lazy var showcases = [HomeTableViewDataSource.State: Media]()
     
     fileprivate(set) lazy var myList = MyList(with: self)
@@ -68,18 +68,21 @@ final class HomeViewModel {
 
 extension HomeViewModel: ViewModel {
     func viewDidLoad() {
+        dataWillLoad()
+    }
+    
+    func dataWillLoad() {
         ActivityIndicatorView.viewDidShow()
         
         loadData()
     }
     
-    func dataDidDownload() {
+    func dataDidLoad() {
         ActivityIndicatorView.viewDidHide()
         
         filterShowcases()
         
-        guard let viewController = coordinator?.viewController else { return }
-        mainQueueDispatch { viewController.viewDidConfigure() }
+        dataSourceStateWillChange(.all)
     }
 }
 
@@ -120,7 +123,6 @@ extension HomeViewModel: ViewModelProtocol {
                 return media.filter { $0.type == "series" && $0.isNewRelease }
             case .movies:
                 return media.filter { $0.type == "film" && $0.isNewRelease }
-            default: return []
             }
         case .rated:
             switch dataSourceState.value {
@@ -141,7 +143,6 @@ extension HomeViewModel: ViewModelProtocol {
                     .sorted { $0.rating > $1.rating }
                     .filter { $0.rating > 7.5 }
                     .slice(10)
-            default: return []
             }
         case .resumable:
             switch dataSourceState.value {
@@ -151,7 +152,6 @@ extension HomeViewModel: ViewModelProtocol {
                 return media.shuffled().filter { $0.type == "series" }
             case .movies:
                 return media.shuffled().filter { $0.type == "film" }
-            default: return []
             }
         case .myList:
             let media = myList.viewModel.list
@@ -162,7 +162,6 @@ extension HomeViewModel: ViewModelProtocol {
                 return media.shuffled().filter { $0.type == "series" }
             case .movies:
                 return media.shuffled().filter { $0.type == "film" }
-            default: return []
             }
         case .blockbuster:
             let value = Float(7.5)
@@ -173,7 +172,6 @@ extension HomeViewModel: ViewModelProtocol {
                 return media.filter { $0.type == "series" }.filter { $0.rating > value }
             case .movies:
                 return media.filter { $0.type == "film" }.filter { $0.rating > value }
-            default: return []
             }
         default:
             switch dataSourceState.value {
@@ -191,7 +189,6 @@ extension HomeViewModel: ViewModelProtocol {
                     .shuffled()
                     .filter { $0.type == "film" }
                     .filter { $0.genres.contains(sections[index.rawValue].title) }
-            default: return []
             }
         }
     }
@@ -262,7 +259,7 @@ extension HomeViewModel: DataProviderProtocol {
         group.enter()
         topSearchesDidLoad { group.leave() }
         
-        group.notify(queue: .main) { [weak self] in self?.dataDidDownload() }
+        group.notify(queue: .main) { [weak self] in self?.dataDidLoad() }
     }
     
     fileprivate func awaitLoading() {
@@ -271,7 +268,7 @@ extension HomeViewModel: DataProviderProtocol {
             await mediaDidLoad()
             await topSearchesDidLoad()
             
-            dataDidDownload()
+            dataDidLoad()
         }
     }
     

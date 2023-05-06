@@ -44,7 +44,7 @@ extension SearchCollectionViewDataSource: UICollectionViewDelegate, UICollection
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        guard let controller = Application.app.coordinator.tabCoordinator.home?.viewControllers.first as? HomeViewController,
+        guard let controller = Application.app.coordinator.tabCoordinator.viewController?.homeViewController,
               let homeViewModel = controller.viewModel,
               let coordinator = homeViewModel.coordinator
         else { return }

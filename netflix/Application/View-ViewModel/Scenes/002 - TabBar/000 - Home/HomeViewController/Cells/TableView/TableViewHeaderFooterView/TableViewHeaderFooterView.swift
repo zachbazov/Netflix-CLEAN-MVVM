@@ -29,9 +29,14 @@ final class TableViewHeaderFooterView: TableViewHeaderView<TableViewHeaderFooter
     static func create(on tableView: UITableView,
                        for section: Int,
                        with viewModel: HomeViewModel) -> TableViewHeaderFooterView {
-        guard let cell = tableView.dequeueReusableHeaderFooterView(withIdentifier: reuseIdentifier) as? TableViewHeaderFooterView else { fatalError() }
+        guard let cell = tableView.dequeueReusableHeaderFooterView(
+            withIdentifier: reuseIdentifier) as? TableViewHeaderFooterView
+        else { fatalError() }
+        
         cell.viewModel = TableViewHeaderFooterViewViewModel()
+        
         cell.viewDidConfigure(at: section, with: viewModel)
+        
         return cell
     }
     

@@ -60,18 +60,13 @@ final class HomeViewController: Controller<HomeViewModel> {
         createBrowseOverlay()
     }
     
-    override func viewDidConfigure() {
-        guard let viewModel = viewModel else { return }
-        
-        viewModel.dataSourceState.value = .all
-    }
-    
     override func viewDidBindObservers() {
         guard let viewModel = viewModel else { return }
         
         viewModel.dataSourceState.observe(on: self) { [weak self] state in
             guard let self = self else { return }
-            self.dataSource?.dataSourceDidChange()
+            
+            self.dataSource?.dataSourceWillChange()
         }
     }
     

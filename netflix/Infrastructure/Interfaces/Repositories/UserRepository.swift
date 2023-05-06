@@ -207,7 +207,6 @@ extension UserRepository: UserRepositoryProtocol {
     
     func signIn(request: UserHTTPDTO.Request) async -> UserHTTPDTO.Response? {
         guard let cached = await userResponses.getResponse(for: request) else {
-            let authService = Application.app.services.authentication
             let endpoint = APIEndpoint.signIn(with: request)
             let result = await dataTransferService.request(with: endpoint)
             

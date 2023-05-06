@@ -14,12 +14,16 @@ protocol ViewModel {
     associatedtype Output
     
     func transform(input: Input) -> Output
+    
     func viewDidLoad()
-    func dataDidDownload()
+    func dataWillLoad()
+    func dataDidLoad()
 }
 
 extension ViewModel {
     func transform(input: Void) {}
+    
     func viewDidLoad() {}
-    func dataDidDownload() {}
+    func dataWillLoad() {}
+    func dataDidLoad() {}
 }

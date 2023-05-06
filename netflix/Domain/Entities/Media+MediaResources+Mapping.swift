@@ -71,6 +71,15 @@ extension Media: Hashable {
     func hash(into hasher: inout Hasher) { hasher.combine(id) }
 }
 
+// MARK: - MediaType Type
+
+extension Media {
+    enum MediaType: String {
+        case series
+        case film
+    }
+}
+
 // MARK: - Mapping
 
 extension Media {
@@ -118,5 +127,46 @@ extension MediaResources {
 extension Array where Element == Media {
     func toDTO() -> [MediaDTO] {
         return map { $0.toDTO() }
+    }
+}
+
+// MARK: - Vacant Value
+
+extension Media {
+    static var vacantValue: Media {
+        let resources = MediaResources(
+            posters: [],
+            logos: [],
+            trailers: [],
+            displayPoster: .toBlank(),
+            previewPoster: .toBlank(),
+            previewUrl: .toBlank(),
+            presentedPoster: .toBlank(),
+            presentedLogo: .toBlank(),
+            presentedDisplayLogo: .toBlank(),
+            presentedLogoAlignment: .toBlank(),
+            presentedSearchLogo: .toBlank(),
+            presentedSearchLogoAlignment: .toBlank())
+        return Media(
+            id: .toBlank(),
+            type: .toBlank(),
+            title: .toBlank(),
+            slug: .toBlank(),
+            createdAt: .toBlank(),
+            rating: .zero,
+            description: .toBlank(),
+            cast: .toBlank(),
+            writers: .toBlank(),
+            duration: .toBlank(),
+            length: .toBlank(),
+            genres: [],
+            hasWatched: false,
+            isHD: false,
+            isExclusive: false,
+            isNewRelease: false,
+            isSecret: false,
+            resources: resources,
+            seasons: [],
+            timesSearched: .zero)
     }
 }

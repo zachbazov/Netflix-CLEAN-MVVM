@@ -51,9 +51,6 @@ final class HomeCollectionViewDataSource<Cell>: NSObject,
     
     deinit {
         print("deinit \(Self.self)")
-        
-        collectionView?.removeFromSuperview()
-        collectionView = nil
     }
     
     // MARK: UICollectionViewDelegate & UICollectionViewDataSource & UICollectionViewDataSourcePrefetching Implementation

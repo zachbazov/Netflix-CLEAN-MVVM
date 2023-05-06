@@ -36,12 +36,17 @@ final class SearchViewModel {
     fileprivate let useCase = MediaUseCase()
     
     let items: Observable<[SearchCollectionViewCellViewModel]> = Observable([])
+    
     let query: Observable<String> = Observable("")
+    
     fileprivate let error: Observable<String> = Observable("")
+    
     fileprivate var isEmpty: Bool { return items.value.isEmpty }
+    
     var topSearches: [Media] {
-        let homeViewController = Application.app.coordinator.tabCoordinator.home.viewControllers.first as! HomeViewController
-        return homeViewController.viewModel.topSearches
+        guard let controller = Application.app.coordinator.tabCoordinator.viewController?.homeViewController else { fatalError("Unexpected controller \(HomeViewController.self) value.") }
+        
+        return controller.viewModel.topSearches
     }
 }
 

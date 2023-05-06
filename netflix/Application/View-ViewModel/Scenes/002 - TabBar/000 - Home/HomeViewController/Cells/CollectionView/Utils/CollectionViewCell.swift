@@ -60,6 +60,7 @@ class CollectionViewCell: UICollectionViewCell {
     }
     
     deinit {
+        print("deinit \(Self.self)")
         representedIdentifier = nil
         viewModel = nil
     }

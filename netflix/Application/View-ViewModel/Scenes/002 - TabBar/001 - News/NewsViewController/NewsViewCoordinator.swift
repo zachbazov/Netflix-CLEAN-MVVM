@@ -32,22 +32,21 @@ final class NewsViewCoordinator {
 extension NewsViewCoordinator: CoordinatorProtocol {
     fileprivate func createDetailController() {
         guard let section = section, let media = media else { return }
-        // An `HomeViewModel` reference is needed to gain access to the sections data.
-        let homeNavigation = Application.app.coordinator.tabCoordinator.home!
-        // Extract home's view model reference.
-        let homeController = homeNavigation.viewControllers.first! as! HomeViewController
-        let homeViewModel = homeController.viewModel!
-        // Allocate the detail controller and it's dependencies.
+        
+        guard let homeController = Application.app.coordinator.tabCoordinator.viewController?.homeViewController,
+              let homeViewModel = homeController.viewModel
+        else { return }
+        
         let controller = DetailViewController()
         let viewModel = DetailViewModel(section: section, media: media, with: homeViewModel)
         controller.viewModel = viewModel
         controller.viewModel.coordinator = DetailViewCoordinator()
         controller.viewModel.coordinator?.viewController = controller
         controller.viewModel.isRotated = shouldScreenRotate
-        // Wrap the controller with a navigation controller.
+        
         let navigation = UINavigationController(rootViewController: controller)
         navigation.setNavigationBarHidden(true, animated: false)
-        // Present the navigation controller.
+        
         viewController?.present(navigation, animated: true)
     }
 }

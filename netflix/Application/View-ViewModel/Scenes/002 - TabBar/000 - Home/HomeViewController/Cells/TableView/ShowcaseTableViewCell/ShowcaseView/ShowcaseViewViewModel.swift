@@ -19,13 +19,15 @@ private protocol ViewModelProtocol {
     var logoImageIdentifier: NSString { get }
     var logoImageURL: URL! { get }
     var attributedGenres: NSMutableAttributedString { get }
-    var typeImagePath: String? { get }
+    var typeImagePath: String { get }
+    
+    mutating func setMediaTypeImage(for media: Media)
 }
 
 // MARK: - ShowcaseViewViewModel Type
 
 struct ShowcaseViewViewModel {
-    let coordinator: HomeViewCoordinator?
+    let coordinator: HomeViewCoordinator
     
     let slug: String
     let genres: [String]
@@ -36,34 +38,30 @@ struct ShowcaseViewViewModel {
     let logoImageIdentifier: NSString
     let logoImageURL: URL!
     var attributedGenres: NSMutableAttributedString
-    let typeImagePath: String?
+    var typeImagePath: String
     
     /// Create a view model based on a media object.
     /// - Parameter media: The media object represented on the display view.
     init?(media: Media?, with viewModel: HomeViewModel?) {
-        self.coordinator = viewModel?.coordinator
+        guard let coordinator = viewModel?.coordinator else { return nil }
+        self.coordinator = coordinator
         
         guard let media = media else { return nil }
         
         self.slug = media.slug
-        self.posterImagePath = media.path(forResourceOfType: PresentedPoster.self) ?? ""
+        self.posterImagePath = media.path(forResourceOfType: PresentedPoster.self) ?? .toBlank()
         self.logoImagePath = .toBlank()
         self.genres = media.genres
         self.attributedGenres = .init()
         self.posterImageIdentifier = .init(string: "poster_\(media.slug)")
         self.logoImageIdentifier = .init(string: "display-logo_\(media.slug)")
-        self.logoImagePath = media.path(forResourceOfType: PresentedDisplayLogo.self) ?? ""
+        self.logoImagePath = media.path(forResourceOfType: PresentedDisplayLogo.self) ?? .toBlank()
         self.posterImageURL = .init(string: self.posterImagePath)
         self.logoImageURL = .init(string: self.logoImagePath)
         self.attributedGenres = media.attributedString(for: .display)
+        self.typeImagePath = .toBlank()
         
-        if media.type == "series" && media.isExclusive {
-            self.typeImagePath = "netflix-series"
-        } else if media.type == "film" && media.isExclusive {
-            self.typeImagePath = "netflix-film"
-        } else {
-            self.typeImagePath = .toBlank()
-        }
+        self.setMediaTypeImage(for: media)
     }
 }
 
@@ -73,4 +71,19 @@ extension ShowcaseViewViewModel: ViewModel {}
 
 // MARK: - ViewModelProtocol Implementation
 
-extension ShowcaseViewViewModel: ViewModelProtocol {}
+extension ShowcaseViewViewModel: ViewModelProtocol {
+    fileprivate mutating func setMediaTypeImage(for media: Media) {
+        guard let type = Media.MediaType(rawValue: media.type) else {
+            typeImagePath = .toBlank()
+            
+            return
+        }
+        
+        switch type {
+        case .series:
+            typeImagePath = "netflix-series"
+        case .film:
+            typeImagePath = "netflix-film"
+        }
+    }
+}

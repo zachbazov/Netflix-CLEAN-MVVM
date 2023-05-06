@@ -10,7 +10,7 @@ import Foundation
 // MARK: - ViewModelProtocol Type
 
 private protocol ViewModelProtocol {
-    var presentedMedia: Media? { get }
+    var media: Media? { get }
     var myList: MyList { get }
     var sectionAt: (HomeTableViewDataSource.Index) -> Section { get }
 }
@@ -18,17 +18,18 @@ private protocol ViewModelProtocol {
 // MARK: - ShowcaseTableViewCellViewModel Type
 
 struct ShowcaseTableViewCellViewModel {
-    var coordinator: HomeViewCoordinator?
+    let coordinator: HomeViewCoordinator
     
-    let presentedMedia: Media?
+    let media: Media?
     let myList: MyList
     let sectionAt: (HomeTableViewDataSource.Index) -> Section
     
     /// Create a display table view cell view model.
     /// - Parameter viewModel: Coordinating view model.
     init(with viewModel: HomeViewModel) {
-        self.coordinator = viewModel.coordinator!
-        self.presentedMedia = viewModel.showcases[viewModel.dataSourceState.value ?? .all]
+        guard let coordinator = viewModel.coordinator else { fatalError("Unexpected coordinator \(HomeViewCoordinator.self) value.") }
+        self.coordinator = coordinator
+        self.media = viewModel.showcases[viewModel.dataSourceState.value]
         self.myList = viewModel.myList
         self.sectionAt = viewModel.section(at:)
     }

@@ -35,7 +35,7 @@ final class DetailCollectionView: View<DetailViewModel> {
         self.viewModel = viewModel
         self.constraintToSuperview(parent)
         self.collectionView.constraintToSuperview(self)
-        self.dataDidDownload()
+        self.dataWillLoad()
     }
     
     required init?(coder: NSCoder) { fatalError() }
@@ -45,7 +45,7 @@ final class DetailCollectionView: View<DetailViewModel> {
         dataSource = nil
     }
     
-    override func dataDidDownload() {
+    override func dataWillLoad() {
         if viewModel.navigationViewState.value == .episodes {
             let cellViewModel = EpisodeCollectionViewCellViewModel(with: viewModel)
             let requestDTO = SeasonHTTPDTO.Request(slug: cellViewModel.media.slug, season: 1)

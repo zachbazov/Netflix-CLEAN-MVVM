@@ -23,8 +23,9 @@ final class AccountViewModel {
     private(set) var profileItems = [ProfileItem]()
     
     private func createMenuItems() -> [AccountMenuItem] {
-        let homeViewController = Application.app.coordinator.tabCoordinator.home.viewControllers.first as? HomeViewController
-        let media = homeViewController!.viewModel.myList.viewModel.list.toArray()
+        guard let homeViewController = Application.app.coordinator.tabCoordinator.viewController?.homeViewController else { fatalError("Unexpected controller of type: \(HomeViewController.self).") }
+        
+        let media = homeViewController.viewModel.myList.viewModel.list.toArray()
         
         let notifications = AccountMenuItem(image: "bell", title: "Notifications", options: media, isExpanded: false)
         let myList = AccountMenuItem(image: "checkmark", title: "My List")

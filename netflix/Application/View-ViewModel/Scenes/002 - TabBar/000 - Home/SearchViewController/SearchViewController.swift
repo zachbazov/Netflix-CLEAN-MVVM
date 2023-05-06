@@ -106,9 +106,9 @@ extension SearchViewController: ControllerProtocol {
     
     @objc
     fileprivate func backButtonDidTap() {
-        guard let homeViewController = Application.app.coordinator.tabCoordinator.home.viewControllers.first as? HomeViewController,
-            let searchNavigationController = homeViewController.viewModel.coordinator?.search as? UINavigationController,
-            let searchViewController = homeViewController.viewModel.coordinator?.search?.viewControllers.first as? SearchViewController
+        guard let homeController = Application.app.coordinator.tabCoordinator.viewController?.homeViewController,
+              let searchNavigation = homeController.viewModel.coordinator?.search,
+              let searchController = searchNavigation.viewControllers.first as? SearchViewController
         else { return }
         
         UIView.animate(
@@ -116,32 +116,33 @@ extension SearchViewController: ControllerProtocol {
             delay: 0,
             options: .curveEaseInOut,
             animations: {
-                searchNavigationController.view.transform = CGAffineTransform(translationX: searchNavigationController.view.bounds.width, y: .zero)
-                searchNavigationController.view.alpha = .zero
+                searchController.view.transform = CGAffineTransform(translationX: searchController.view.bounds.width, y: .zero)
+                searchController.view.alpha = .zero
             },
             completion: { _ in
-                homeViewController.viewModel.coordinator?.search?.remove()
-                searchViewController.viewModel = nil
-                searchViewController.dataSource = nil
-                homeViewController.viewModel.coordinator?.search = nil
+                homeController.viewModel.coordinator?.search?.remove()
+                searchController.viewModel = nil
+                searchController.dataSource = nil
+                homeController.viewModel.coordinator?.search = nil
             }
         )
     }
     
     func present() {
-        let homeViewController = Application.app.coordinator.tabCoordinator.home.viewControllers.first! as! HomeViewController
-        let searchNavigationController = homeViewController.viewModel.coordinator!.search!
+        guard let homeController = Application.app.coordinator.tabCoordinator.viewController?.homeViewController,
+              let searchNavigation = homeController.viewModel.coordinator?.search
+        else { return }
         
-        searchNavigationController.view.alpha = .zero
-        searchNavigationController.view.transform = CGAffineTransform(translationX: searchNavigationController.view.bounds.width, y: .zero)
+        searchNavigation.view.alpha = .zero
+        searchNavigation.view.transform = CGAffineTransform(translationX: searchNavigation.view.bounds.width, y: .zero)
         
         UIView.animate(
             withDuration: 0.25,
             delay: 0,
             options: .curveEaseInOut,
             animations: {
-                searchNavigationController.view.transform = .identity
-                searchNavigationController.view.alpha = 1.0
+                searchNavigation.view.transform = .identity
+                searchNavigation.view.alpha = 1.0
             }
         )
     }

@@ -36,13 +36,18 @@ final class NotificationCollectionViewCell: UICollectionViewCell {
         guard let view = collectionView.dequeueReusableCell(
             withReuseIdentifier: NotificationCollectionViewCell.reuseIdentifier,
             for: indexPath) as? NotificationCollectionViewCell else { fatalError() }
-        guard let homeViewController = Application.app.coordinator.tabCoordinator.home.viewControllers.first as? HomeViewController else { fatalError() }
-        let myList = homeViewController.viewModel.myList.viewModel.list.toArray()
+        
+        guard let homeController = Application.app.coordinator.tabCoordinator.viewController?.homeViewController else { fatalError() }
+        
+        let myList = homeController.viewModel.myList.viewModel.list.toArray()
         let model = myList[indexPath.row]
         let cellViewModel = NotificationCollectionViewCellViewModel(media: model)
+        
         view.representedIdentifier = cellViewModel.slug as NSString
+        
         view.viewDidConfigure()
         view.viewDidConfigure(with: cellViewModel)
+        
         return view
     }
     

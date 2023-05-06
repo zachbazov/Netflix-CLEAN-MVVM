@@ -26,18 +26,35 @@ protocol ViewModeling {
 class View<T>: UIView where T: ViewModel {
     var viewModel: T!
     
-    func dataDidDownload() {}
+    func dataWillLoad() {}
+    func dataDidLoad() {}
     
+    func viewWillLoad() {}
     func viewDidLoad() {}
+    func viewWillLoadBehaviors() {}
+    func viewDidLoadBehaviors() {}
+    func viewWillDeploySubviews() {}
     func viewDidDeploySubviews() {}
+    func viewHierarchyWillConfigure() {}
     func viewHierarchyDidConfigure() {}
+    func viewWillConfigure() {}
     func viewDidConfigure() {}
+    func viewWillTargetSubviews() {}
     func viewDidTargetSubviews() {}
     func viewWillAppear() {}
+    func viewDidAppear() {}
     func viewWillDisappear() {}
+    func viewDidDisappear() {}
+    func viewWillDeallocate() {}
+    func viewDidDeallocate() {}
     
+    func viewWillBindObservers() {}
     func viewDidBindObservers() {}
+    func viewWillUnbindObservers() {}
     func viewDidUnbindObservers() {}
+    
+    func viewWillConstraint() {}
+    func viewDidConstraint() {}
     
     func viewWillAnimateAppearance() {}
     func viewWillAnimateDisappearance() {}
@@ -46,9 +63,6 @@ class View<T>: UIView where T: ViewModel {
         
         self.viewWillAnimateAppearance()
     }
-    
-    func viewWillDeallocate() {}
-    func viewDidDeallocate() {}
     
     func prepareForReuse() {}
 }

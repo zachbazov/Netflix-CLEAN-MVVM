@@ -12,6 +12,10 @@ import UIKit
 private protocol ViewProtocol {
     var panelView: PanelView? { get }
     var gradient: GradientView? { get }
+    var cellViewModel: ShowcaseTableViewCellViewModel { get }
+    
+    func createViewModel()
+    func createPanelView()
     
     func didTap()
     
@@ -19,7 +23,6 @@ private protocol ViewProtocol {
     func setDarkBottomGradient()
     func setGradient(for image: UIImage)
     func setPosterShadow(for color: UIColor)
-    func setBackgroundColor()
     func setPosterStroke()
     func setGenres(attributed string: NSMutableAttributedString)
     func setMediaType()
@@ -45,26 +48,16 @@ final class ShowcaseView: View<ShowcaseViewViewModel> {
     private(set) var panelView: PanelView?
     private(set) var gradient: GradientView?
     
+    fileprivate let cellViewModel: ShowcaseTableViewCellViewModel
+    
     init(on parent: UIView, with viewModel: ShowcaseTableViewCellViewModel?) {
+        guard let viewModel = viewModel else { fatalError("Unexpected \(ShowcaseTableViewCellViewModel.self) value.") }
+        self.cellViewModel = viewModel
+        
         super.init(frame: .zero)
         
         self.nibDidLoad()
-        
-        let homeViewModel = viewModel?.coordinator?.viewController?.viewModel
-        let state = homeViewModel?.dataSourceState.value ?? .all
-        let media = homeViewModel?.showcases[state]
-        
-        self.viewModel = ShowcaseViewViewModel(media: media, with: homeViewModel)
-        self.panelView = PanelView(on: panelViewContainer, with: viewModel)
-        
-//        guard let parent = parent as? ShowcaseTableViewCell else { return }
-        
-//        parent.contentView.addSubview(cell.showcaseView ?? .init(with: nil))
-//        parent.contentView.showcaseView?.constraintToSuperview(parent)
-        
-        self.viewDidDeploySubviews()
-        
-        self.contentView.constraintToSuperview(self)
+        self.viewDidLoad()
     }
     
     required init?(coder: NSCoder) { fatalError() }
@@ -72,23 +65,38 @@ final class ShowcaseView: View<ShowcaseViewViewModel> {
     deinit {
         print("deinit \(Self.self)")
         
-        viewDidDeallocate()
-        
-        panelView = nil
-        gradient = nil
+        viewWillDeallocate()
     }
     
-    override func viewDidDeploySubviews() {
+    override func dataWillLoad() {
+        loadResources()
+    }
+    
+    override func viewDidLoad() {
+        viewWillDeploySubviews()
+        viewWillConfigure()
+        viewWillConstraint()
+        dataWillLoad()
+    }
+    
+    override func viewWillDeploySubviews() {
+        createViewModel()
+        createPanelView()
+    }
+    
+    override func viewWillConfigure() {
         guard let viewModel = viewModel else { return }
         
         setDarkBottomGradient()
-        setBackgroundColor()
+        setBackgroundColor(.clear)
         setPosterStroke()
         setGenres(attributed: viewModel.attributedGenres)
         setMediaType()
         setGestures()
-        
-        loadResources()
+    }
+    
+    override func viewWillConstraint() {
+        contentView.constraintToSuperview(self)
     }
     
     override func prepareForReuse() {
@@ -97,11 +105,17 @@ final class ShowcaseView: View<ShowcaseViewViewModel> {
         genresLabel.attributedText = nil
     }
     
-    override func viewDidDeallocate() {
-        panelView?.viewDidUnbindObservers()
+    override func viewWillDeallocate() {
         panelView?.removeFromSuperview()
+        panelView = nil
         
+        gradient?.layer.removeFromSuperlayer()
         gradient?.removeFromSuperview()
+        gradient = nil
+        
+        viewModel = nil
+        
+        removeFromSuperview()
     }
 }
 
@@ -112,14 +126,29 @@ extension ShowcaseView: ViewInstantiable {}
 // MARK: - ViewProtocol Implementation
 
 extension ShowcaseView: ViewProtocol {
+    fileprivate func createViewModel() {
+        guard let controller = cellViewModel.coordinator.viewController,
+              let homeViewModel = controller.viewModel
+        else { return }
+        
+        let state = homeViewModel.dataSourceState.value
+        let media = homeViewModel.showcases[state]
+        
+        self.viewModel = ShowcaseViewViewModel(media: media, with: homeViewModel)
+    }
+    
+    fileprivate func createPanelView() {
+        panelView = PanelView(on: panelViewContainer, with: cellViewModel)
+    }
+    
     @objc
     func didTap() {
-        guard let controller = viewModel.coordinator?.viewController,
+        guard let controller = viewModel?.coordinator.viewController,
               let homeViewModel = controller.viewModel,
               let coordinator = homeViewModel.coordinator
         else { return }
         
-        let state = homeViewModel.dataSourceState.value ?? .all
+        let state = homeViewModel.dataSourceState.value
         let section = homeViewModel.section(at: .resumable)
         let media = homeViewModel.showcases[HomeTableViewDataSource.State(rawValue: state.rawValue)!]
         let rotated = false
@@ -131,11 +160,6 @@ extension ShowcaseView: ViewProtocol {
         coordinator.coordinate(to: .detail)
     }
     
-    func setDarkBottomGradient() {
-        bottomGradientView.addGradientLayer(colors: [.clear, .black.withAlphaComponent(0.66)],
-                                            locations: [0.0, 0.66])
-    }
-    
     fileprivate func analyzeColors(for image: UIImage) -> [UIColor] {
         let c1 = image.averageColor!
         let c2 = image.areaAverage().darkerColor(for: c1)
@@ -145,7 +169,7 @@ extension ShowcaseView: ViewProtocol {
     }
     
     fileprivate func setGradient(for image: UIImage) {
-        guard let controller = viewModel.coordinator?.viewController else { return }
+        guard let controller = viewModel?.coordinator.viewController else { return }
         
         let colors = analyzeColors(for: image)
         
@@ -160,43 +184,19 @@ extension ShowcaseView: ViewProtocol {
         contentView.layer.shadow(color, radius: 24.0, opacity: 1.0)
     }
     
-    fileprivate func setBackgroundColor() {
-        backgroundColor = .clear
+    func setDarkBottomGradient() {
+        bottomGradientView.addGradientLayer(colors: [.clear, .black.withAlphaComponent(0.66)],
+                                            locations: [0.0, 0.66])
     }
     
     fileprivate func setPosterStroke() {
         let gradient = UIImage.fillGradientStroke(bounds: posterImageView.bounds,
                                                   colors: [.white.withAlphaComponent(0.5), .clear])
         let color = UIColor(patternImage: gradient).cgColor
-        posterImageView.layer.borderColor = color
-        posterImageView.layer.borderWidth = 1.5
+        
+        posterImageView?.layer.borderColor = color
+        posterImageView?.layer.borderWidth = 1.5
         posterImageView?.layer.cornerRadius = 12.0
-    }
-    
-    fileprivate func loadResources() {
-        prepareForReuse()
-        
-        AsyncImageService.shared.load(
-            url: viewModel.posterImageURL,
-            identifier: viewModel.posterImageIdentifier) { [weak self] image in
-                guard let self = self, let image = image else { return }
-                
-                mainQueueDispatch {
-                    self.setPoster(image: image)
-                    
-                    self.setGradient(for: image)
-                }
-            }
-        
-        AsyncImageService.shared.load(
-            url: viewModel.logoImageURL,
-            identifier: viewModel.logoImageIdentifier) { [weak self] image in
-                guard let self = self, let image = image else { return }
-                
-                mainQueueDispatch {
-                    self.setLogo(image: image)
-                }
-            }
     }
     
     fileprivate func setPoster(image: UIImage) {
@@ -217,7 +217,33 @@ extension ShowcaseView: ViewProtocol {
     }
     
     fileprivate func setMediaType() {
-        guard let typeImagePath = viewModel.typeImagePath, typeImagePath.isNotEmpty else { return }
-        typeImageView.image = UIImage(named: typeImagePath)
+        guard let viewModel = viewModel, viewModel.typeImagePath.isNotEmpty else { return }
+        
+        typeImageView.image = UIImage(named: viewModel.typeImagePath)
+    }
+    
+    fileprivate func loadResources() {
+        prepareForReuse()
+        
+        AsyncImageService.shared.load(
+            url: viewModel.posterImageURL,
+            identifier: viewModel.posterImageIdentifier) { [weak self] image in
+                guard let self = self, let image = image else { return }
+                
+                mainQueueDispatch {
+                    self.setPoster(image: image)
+                    self.setGradient(for: image)
+                }
+            }
+        
+        AsyncImageService.shared.load(
+            url: viewModel.logoImageURL,
+            identifier: viewModel.logoImageIdentifier) { [weak self] image in
+                guard let self = self, let image = image else { return }
+                
+                mainQueueDispatch {
+                    self.setLogo(image: image)
+                }
+            }
     }
 }

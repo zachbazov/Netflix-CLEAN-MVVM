@@ -56,17 +56,20 @@ extension NewsCollectionViewDataSource: UICollectionViewDelegate, UICollectionVi
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         guard let row = indexPath.row as Int?, row >= 0, row <= viewModel.items.value.count - 1 else { return }
-        let homeNavigation = Application.app.coordinator.tabCoordinator.home!
-        let newsNavigation = Application.app.coordinator.tabCoordinator.news!
-        let homeController = homeNavigation.viewControllers.first! as! HomeViewController
-        let homeViewModel = homeController.viewModel
-        let newsController = newsNavigation.viewControllers.first! as! NewsViewController
-        let newsCoordinator = newsController.viewModel.coordinator!
+        
+        let tabCoordinator = Application.app.coordinator.tabCoordinator
+        
+        guard let homeController = tabCoordinator.viewController?.homeViewController,
+              let newsController = tabCoordinator.viewController?.newsViewController
+        else { return }
+        
         let cellViewModel = viewModel.items.value[row]
-        let section = homeViewModel?.section(at: .resumable)
-        newsCoordinator.section = section
-        newsCoordinator.media = cellViewModel.media
-        newsCoordinator.shouldScreenRotate = false
-        newsCoordinator.coordinate(to: .detail)
+        let section = homeController.viewModel?.section(at: .resumable)
+        
+        newsController.viewModel.coordinator?.section = section
+        newsController.viewModel.coordinator?.media = cellViewModel.media
+        newsController.viewModel.coordinator?.shouldScreenRotate = false
+        
+        newsController.viewModel.coordinator?.coordinate(to: .detail)
     }
 }

@@ -110,10 +110,10 @@ private protocol DataSourceProtocol {
     var initialOffsetY: CGFloat { get }
     
     func didLoad()
-    func cellsDidRegister()
-    func dataSourceDidChange()
-    func sectionsDidFilter()
-    func contentDidInset()
+    func cellsWillRegister()
+    func dataSourceWillChange()
+    func sectionsWillFilter()
+    func contentWillInset()
 }
 
 // MARK: - HomeTableViewDataSource Type
@@ -135,14 +135,18 @@ final class HomeTableViewDataSource: NSObject {
         self.tableView = tableView
         self.viewModel = viewModel
         self.style = HomeTableViewDataSourceStyle(viewModel: viewModel)
+        
         super.init()
+        
         self.didLoad()
     }
     
     deinit {
         print("deinit \(Self.self)")
+        
         tableView.removeFromSuperview()
         tableView = nil
+        
         viewModel.coordinator = nil
         viewModel = nil
     }
@@ -153,14 +157,13 @@ final class HomeTableViewDataSource: NSObject {
 extension HomeTableViewDataSource: DataSourceProtocol {
     
     fileprivate func didLoad() {
-        cellsDidRegister()
-        
-        contentDidInset()
+        cellsWillRegister()
+        contentWillInset()
         
         style.apply(.gradient)
     }
     
-    fileprivate func cellsDidRegister() {
+    fileprivate func cellsWillRegister() {
         tableView.register(headerFooter: TableViewHeaderFooterView.self)
         tableView.register(class: ShowcaseTableViewCell.self)
         tableView.register(class: RatedTableViewCell.self)
@@ -169,21 +172,21 @@ extension HomeTableViewDataSource: DataSourceProtocol {
         tableView.register(class: BlockbusterTableViewCell.self)
     }
     
-    func dataSourceDidChange() {
-        sectionsDidFilter()
+    func dataSourceWillChange() {
+        sectionsWillFilter()
         
         tableView.delegate = self
         tableView.dataSource = self
         tableView.reloadData()
     }
     
-    fileprivate func sectionsDidFilter() {
+    fileprivate func sectionsWillFilter() {
         guard let viewModel = viewModel else { return }
         
         viewModel.filter(sections: viewModel.sections)
     }
     
-    fileprivate func contentDidInset() {
+    fileprivate func contentWillInset() {
         guard let controller = viewModel.coordinator?.viewController,
               let window = UIApplication.shared.windows.first
         else { return }

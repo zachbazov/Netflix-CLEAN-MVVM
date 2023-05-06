@@ -13,14 +13,15 @@ private protocol ViewProtocol {
     var showcaseView: ShowcaseView? { get }
     var viewModel: ShowcaseTableViewCellViewModel? { get }
     
+    func createViewModel() -> ShowcaseTableViewCellViewModel?
     func createShowcaseView()
 }
 
 // MARK: - ShowcaseTableViewCell Type
 
 final class ShowcaseTableViewCell: UITableViewCell {
+    fileprivate lazy var viewModel: ShowcaseTableViewCellViewModel? = createViewModel()
     fileprivate var showcaseView: ShowcaseView?
-    fileprivate var viewModel: ShowcaseTableViewCellViewModel?
     
     /// Create a display table view cell object.
     /// - Parameters:
@@ -37,8 +38,6 @@ final class ShowcaseTableViewCell: UITableViewCell {
             fatalError()
         }
         
-        cell.viewModel = ShowcaseTableViewCellViewModel(with: viewModel)
-        
         cell.viewDidLoad()
         
         return cell
@@ -47,39 +46,43 @@ final class ShowcaseTableViewCell: UITableViewCell {
     deinit {
         print("deinit \(Self.self)")
         
-        showcaseView?.gradient?.layer.removeFromSuperlayer()
-        showcaseView?.gradient?.removeFromSuperview()
-        showcaseView?.removeFromSuperview()
-        showcaseView = nil
+        showcaseView?.viewWillDeallocate()
         
-        viewModel?.coordinator = nil
-        viewModel = nil
+        viewWillDeallocate()
     }
     
     override func prepareForReuse() {
+        showcaseView?.viewWillDeallocate()
+        
         super.prepareForReuse()
         
         showcaseView?.setDarkBottomGradient()
     }
     
     func viewDidLoad() {
-        viewDidConfigure()
-        viewDidDeploySubviews()
-        viewHierarchyDidConfigure()
+        viewWillConfigure()
+        viewWillDeploySubviews()
+        viewHierarchyWillConfigure()
     }
     
-    func viewDidDeploySubviews() {
+    func viewWillDeploySubviews() {
         createShowcaseView()
     }
     
-    func viewHierarchyDidConfigure() {
+    func viewHierarchyWillConfigure() {
         showcaseView?
             .addToHierarchy(on: contentView)
             .constraintToSuperview(contentView)
     }
     
-    func viewDidConfigure() {
+    func viewWillConfigure() {
         setBackgroundColor(.clear)
+    }
+    
+    func viewWillDeallocate() {
+        showcaseView = nil
+        
+        viewModel = nil
     }
 }
 
@@ -90,6 +93,12 @@ extension ShowcaseTableViewCell: ViewLifecycleBehavior {}
 // MARK: - ViewProtocol Implementation
 
 extension ShowcaseTableViewCell: ViewProtocol {
+    fileprivate func createViewModel() -> ShowcaseTableViewCellViewModel? {
+        guard let controller = Application.app.coordinator.tabCoordinator.viewController?.homeViewController else { return nil }
+        
+        return ShowcaseTableViewCellViewModel(with: controller.viewModel)
+    }
+    
     fileprivate func createShowcaseView() {
         showcaseView = ShowcaseView(on: contentView, with: viewModel)
     }
