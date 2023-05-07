@@ -10,9 +10,10 @@ import UIKit
 // MARK: - ViewProtocol Type
 
 private protocol ViewProtocol {
+    var cellViewModel: ShowcaseTableViewCellViewModel { get }
+    
     var panelView: PanelView? { get }
     var gradient: GradientView? { get }
-    var cellViewModel: ShowcaseTableViewCellViewModel { get }
     
     func createViewModel()
     func createPanelView()
@@ -45,10 +46,10 @@ final class ShowcaseView: View<ShowcaseViewViewModel> {
     @IBOutlet private weak var typeImageView: UIImageView!
     @IBOutlet private(set) weak var panelViewContainer: UIView!
     
+    fileprivate let cellViewModel: ShowcaseTableViewCellViewModel
+    
     private(set) var panelView: PanelView?
     private(set) var gradient: GradientView?
-    
-    fileprivate let cellViewModel: ShowcaseTableViewCellViewModel
     
     init(on parent: UIView, with viewModel: ShowcaseTableViewCellViewModel?) {
         guard let viewModel = viewModel else { fatalError("Unexpected \(ShowcaseTableViewCellViewModel.self) value.") }
@@ -134,7 +135,7 @@ extension ShowcaseView: ViewProtocol {
         let state = homeViewModel.dataSourceState.value
         let media = homeViewModel.showcases[state]
         
-        self.viewModel = ShowcaseViewViewModel(media: media, with: homeViewModel)
+        viewModel = ShowcaseViewViewModel(media: media, with: homeViewModel)
     }
     
     fileprivate func createPanelView() {
@@ -149,7 +150,7 @@ extension ShowcaseView: ViewProtocol {
         else { return }
         
         let state = homeViewModel.dataSourceState.value
-        let section = homeViewModel.section(at: .resumable)
+        let section = controller.navigationOverlay?.viewModel?.category.toSection()
         let media = homeViewModel.showcases[HomeTableViewDataSource.State(rawValue: state.rawValue)!]
         let rotated = false
         
@@ -173,11 +174,28 @@ extension ShowcaseView: ViewProtocol {
         
         let colors = analyzeColors(for: image)
         
+        if !controller.browseOverlayView!.viewModel!.isPresented.value {
+            controller.navigationView?.style.setColors(colors)
+            controller.navigationView?.style.apply(.gradient)
+        }
+        
         gradient = GradientView(on: contentView).applyGradient(with: colors)
         
-        controller.dataSource?.style.update(colors: colors)
-        
         setPosterShadow(for: colors[2])
+    }
+    
+    func setGradient() {
+        print("setGradient")
+        gradient?.remove()
+        
+        guard let controller = viewModel?.coordinator.viewController else { return }
+        
+        guard let colors = controller.navigationView?.style.colors else { return }
+        
+        controller.navigationView?.style.colors = colors
+        controller.navigationView?.style.apply(.gradient)
+        
+        gradient = GradientView(on: contentView).applyGradient(with: colors)
     }
     
     fileprivate func setPosterShadow(for color: UIColor) {

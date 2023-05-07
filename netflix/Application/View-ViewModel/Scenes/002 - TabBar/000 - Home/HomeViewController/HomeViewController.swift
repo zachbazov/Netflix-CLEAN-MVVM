@@ -11,13 +11,12 @@ import UIKit
 
 private protocol ViewControllerProtocol {
     var dataSource: HomeTableViewDataSource? { get }
-    var navigationBar: NavigationBarView? { get }
+    var navigationView: NavigationView? { get }
     var navigationOverlay: NavigationOverlayView? { get }
     var browseOverlayView: BrowseOverlayView? { get }
     
     func createDataSource()
-    func createNavigationBar()
-    func createSegmentControl()
+    func createNavigationView()
     func createNavigationOverlay()
     func createBrowseOverlay()
 }
@@ -26,41 +25,37 @@ private protocol ViewControllerProtocol {
 
 final class HomeViewController: Controller<HomeViewModel> {
     @IBOutlet private(set) var tableView: UITableView!
-    @IBOutlet private(set) var topContainer: UIView!
-    @IBOutlet private(set) var navigationBarContainer: UIView!
-    @IBOutlet private var segmentControlContainer: UIView!
-    @IBOutlet private(set) var navigationOverlayContainer: UIView!
+    @IBOutlet private(set) var navigationViewContainer: UIView!
+    @IBOutlet private(set) var navigationOverlayViewContainer: UIView!
     @IBOutlet private(set) var browseOverlayViewContainer: UIView!
-    @IBOutlet private(set) var topContainerHeight: NSLayoutConstraint!
+    @IBOutlet private(set) var navigationViewContainerHeight: NSLayoutConstraint!
     
     private(set) var dataSource: HomeTableViewDataSource?
-    private(set) var navigationBar: NavigationBarView?
-    private(set) var segmentControl: SegmentControlView?
+    private(set) var navigationView: NavigationView?
     private(set) var navigationOverlay: NavigationOverlayView?
     private(set) var browseOverlayView: BrowseOverlayView?
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        super.viewDidLoadBehaviors()
-        viewDidBindObservers()
-        viewDidDeploySubviews()
+        super.viewWillLoadBehaviors()
+        viewWillBindObservers()
+        viewWillDeploySubviews()
         viewModel.viewDidLoad()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        super.didLockDeviceOrientation(.portrait)
+        super.lockDeviceOrientation(.portrait)
     }
     
-    override func viewDidDeploySubviews() {
+    override func viewWillDeploySubviews() {
         createDataSource()
-        createNavigationBar()
-        createSegmentControl()
+        createNavigationView()
         createNavigationOverlay()
         createBrowseOverlay()
     }
     
-    override func viewDidBindObservers() {
+    override func viewWillBindObservers() {
         guard let viewModel = viewModel else { return }
         
         viewModel.dataSourceState.observe(on: self) { [weak self] state in
@@ -70,7 +65,7 @@ final class HomeViewController: Controller<HomeViewModel> {
         }
     }
     
-    override func viewDidUnbindObservers() {
+    override func viewWillUnbindObservers() {
         guard let viewModel = viewModel else { return }
         
         viewModel.dataSourceState.remove(observer: self)
@@ -86,16 +81,12 @@ extension HomeViewController: ViewControllerProtocol {
         dataSource = HomeTableViewDataSource(tableView: tableView, viewModel: viewModel)
     }
     
-    fileprivate func createNavigationBar() {
-        navigationBar = NavigationBarView(on: navigationBarContainer, with: viewModel)
-    }
-    
-    fileprivate func createSegmentControl() {
-        segmentControl = SegmentControlView(on: segmentControlContainer, with: viewModel)
+    fileprivate func createNavigationView() {
+        navigationView = NavigationView(on: navigationViewContainer, with: viewModel)
     }
     
     fileprivate func createNavigationOverlay() {
-        navigationOverlay = NavigationOverlayView(on: navigationOverlayContainer, with: viewModel)
+        navigationOverlay = NavigationOverlayView(on: navigationOverlayViewContainer, with: viewModel)
     }
     
     fileprivate func createBrowseOverlay() {

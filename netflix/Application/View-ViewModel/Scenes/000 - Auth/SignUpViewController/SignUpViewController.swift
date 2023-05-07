@@ -35,7 +35,7 @@ final class SignUpViewController: Controller<SignUpViewModel> {
         
         signUpButton.border(.black, width: 1.5)
         
-        didConfigureTitleView()
+        titleViewWillConfigure()
     }
     
     override func viewDidTargetSubviews() {

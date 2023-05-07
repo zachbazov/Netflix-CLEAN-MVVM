@@ -10,7 +10,7 @@ import UIKit
 // MARK: - NavigationControllerStyling Type
 
 protocol NavigationControllerStyling {
-    func didConfigureTitleView(withAssetNamed asset: String)
+    func titleViewWillConfigure(withAssetNamed asset: String)
 }
 
 // MARK: - NavigationProtocol Type
@@ -18,7 +18,7 @@ protocol NavigationControllerStyling {
 private protocol NavigationProtocol {
     var isHidden: Bool { get }
     
-    func viewDidConfigure()
+    func viewWillConfigure()
 }
 
 // MARK: - NavigationController Type
@@ -26,7 +26,8 @@ private protocol NavigationProtocol {
 class NavigationController: UINavigationController {
     override init(rootViewController: UIViewController) {
         super.init(rootViewController: rootViewController)
-        self.viewDidConfigure()
+        
+        self.viewWillConfigure()
     }
     
     required init?(coder aDecoder: NSCoder) { fatalError() }
@@ -40,7 +41,7 @@ extension NavigationController: NavigationProtocol {
         set { setNavigationBarHidden(newValue, animated: false) }
     }
     
-    func viewDidConfigure() {
+    func viewWillConfigure() {
         modalPresentationStyle = .fullScreen
         isHidden = false
         

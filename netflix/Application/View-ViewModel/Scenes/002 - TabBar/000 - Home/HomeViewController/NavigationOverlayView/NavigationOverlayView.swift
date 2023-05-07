@@ -20,6 +20,8 @@ private protocol ViewProtocol {
     func setupViewModel(with viewModel: HomeViewModel) -> NavigationOverlayViewModel
     func createOpaqueView() -> OpaqueView
     func createFooterView() -> NavigationOverlayFooterView?
+    
+    func presentOverlayIfNeeded(_ condition: Bool)
 }
 
 // MARK: - NavigationOverlayView Type
@@ -41,15 +43,7 @@ final class NavigationOverlayView: View<NavigationOverlayViewModel> {
         
         self.viewModel = setupViewModel(with: viewModel)
         
-        parent.addSubview(self)
-        parent.addSubview(self.footerView!)
-        
-        self.addSubview(self.tableView)
-        
-        self.constraintToSuperview(parent)
-        self.tableView.constraintToSuperview(parent)
-        
-        self.viewDidBindObservers()
+        self.viewDidLoad()
     }
     
     required init?(coder: NSCoder) { fatalError() }
@@ -57,17 +51,27 @@ final class NavigationOverlayView: View<NavigationOverlayViewModel> {
     deinit {
         print("deinit \(Self.self)")
         
-        viewDidUnbindObservers()
-        
-        tableView.removeFromSuperview()
-        footerView?.removeFromSuperview()
-        
-        viewModel = nil
-        
-        removeFromSuperview()
+        viewWillDeallocate()
     }
     
-    override func viewDidBindObservers() {
+    override func viewDidLoad() {
+        viewHierarchyWillConfigure()
+        viewWillBindObservers()
+    }
+    
+    override func viewHierarchyWillConfigure() {
+        self.addToHierarchy(on: parent)
+            .constraintToSuperview(parent)
+        
+        self.footerView?
+            .addToHierarchy(on: parent)
+        
+        tableView
+            .addToHierarchy(on: self)
+            .constraintToSuperview(parent)
+    }
+    
+    override func viewWillBindObservers() {
         viewModel?.isPresented.observe(on: self) { [weak self] presented in
             guard let self = self else { return }
                 
@@ -82,7 +86,7 @@ final class NavigationOverlayView: View<NavigationOverlayViewModel> {
         }
     }
     
-    override func viewDidUnbindObservers() {
+    override func viewWillUnbindObservers() {
         guard let viewModel = viewModel else { return }
         
         viewModel.isPresented.remove(observer: self)
@@ -133,6 +137,17 @@ final class NavigationOverlayView: View<NavigationOverlayViewModel> {
                 self.parent.isHidden(true)
             })
     }
+    
+    override func viewWillDeallocate() {
+        viewWillUnbindObservers()
+        
+        tableView.removeFromSuperview()
+        footerView?.removeFromSuperview()
+        
+        viewModel = nil
+        
+        removeFromSuperview()
+    }
 }
 
 // MARK: - ViewProtocol Implementation
@@ -167,6 +182,13 @@ extension NavigationOverlayView: ViewProtocol {
     fileprivate func createFooterView() -> NavigationOverlayFooterView? {
         guard let controller = viewModel.coordinator.viewController else { return nil }
         return NavigationOverlayFooterView(parent: controller.view, viewModel: viewModel)
+    }
+    
+    func presentOverlayIfNeeded(_ condition: Bool) {
+        guard condition else { return }
+        
+        viewModel?.isPresented.value = true
+        viewModel?.state.value = .main
     }
 }
 

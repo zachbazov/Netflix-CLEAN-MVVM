@@ -50,7 +50,7 @@ extension NavigationBarViewModel: ViewModelProtocol {
                 switch result {
                 case .success(let response):
                     let x = response.data.toDomain().first(where: { user.selectedProfile == $0._id })
-                    self.coordinator.viewController?.navigationBar?.profileLabel.text = x?.name ?? "N/A"
+                    self.coordinator.viewController?.navigationView?.navigationBar?.profileLabel.text = x?.name ?? "N/A"
                 case .failure(let error):
                     printIfDebug(.error, "\(error)")
                 }
@@ -63,7 +63,7 @@ extension NavigationBarViewModel: ViewModelProtocol {
         switch state {
         case .airPlay:
             guard let controller = coordinator.viewController,
-                  let navigation = controller.navigationBar
+                  let navigation = controller.navigationView?.navigationBar
             else { return }
             navigation.airPlayButton.asRoutePickerView()
         case .search:

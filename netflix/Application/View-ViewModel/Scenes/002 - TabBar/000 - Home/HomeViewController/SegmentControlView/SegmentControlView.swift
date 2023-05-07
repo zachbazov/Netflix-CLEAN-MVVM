@@ -13,8 +13,6 @@ private protocol ViewProtocol {
     func buttonDidTap(_ sender: UIButton)
     func leadingConstraintDidUpdate(for state: SegmentControlView.State)
     func buttonsDidChange(for state: SegmentControlView.State)
-    
-    func presentNavigationOverlayIfNeeded()
 }
 
 // MARK: - SegmentControlView Type
@@ -28,17 +26,18 @@ final class SegmentControlView: View<SegmentControlViewModel> {
     @IBOutlet private weak var categoriesButton: UIButton!
     @IBOutlet private weak var stackViewLeadingConstraint: NSLayoutConstraint!
     
+    private let parent: UIView
+    
     /// Create a navigation view object.
     /// - Parameters:
     ///   - parent: Instantiating view.
     ///   - viewModel: Coordinating view model.
     init(on parent: UIView, with viewModel: HomeViewModel) {
+        self.parent = parent
+        
         super.init(frame: parent.bounds)
         
         self.nibDidLoad()
-        
-        parent.addSubview(self)
-        self.constraintToSuperview(parent)
         
         self.viewModel = SegmentControlViewModel(with: viewModel)
         
@@ -50,21 +49,25 @@ final class SegmentControlView: View<SegmentControlViewModel> {
     deinit {
         print("deinit \(Self.self)")
         
-        viewDidUnbindObservers()
-        
-        viewModel = nil
+        viewWillDeallocate()
     }
     
     override func viewDidLoad() {
-        viewDidBindObservers()
-        viewDidDeploySubviews()
+        viewHierarchyWillConfigure()
+        viewWillBindObservers()
+        viewWillDeploySubviews()
     }
     
-    override func viewDidDeploySubviews() {
-        setupButtons()
+    override func viewHierarchyWillConfigure() {
+        self.addToHierarchy(on: parent)
+            .constraintToSuperview(parent)
     }
     
-    override func viewDidBindObservers() {
+    override func viewWillDeploySubviews() {
+        configureButtons()
+    }
+    
+    override func viewWillBindObservers() {
         viewModel?.state.observe(on: self) { [weak self] state in
             guard let self = self else { return }
             
@@ -75,12 +78,20 @@ final class SegmentControlView: View<SegmentControlViewModel> {
         }
     }
     
-    override func viewDidUnbindObservers() {
+    override func viewWillUnbindObservers() {
         guard let viewModel = viewModel else { return }
         
         viewModel.state.remove(observer: self)
         
         printIfDebug(.success, "Removed `\(Self.self)` observers.")
+    }
+    
+    override func viewWillDeallocate() {
+        viewWillUnbindObservers()
+        
+        viewModel = nil
+        
+        removeFromSuperview()
     }
 }
 
@@ -146,23 +157,12 @@ extension SegmentControlView: ViewProtocol {
             break
         }
     }
-    
-    func presentNavigationOverlayIfNeeded() {
-        guard let controller = viewModel.coordinator.viewController,
-              let navigationOverlay = controller.navigationOverlay
-        else { return }
-        
-        guard viewModel.isSegmentSelected else { return }
-        
-        navigationOverlay.viewModel?.isPresented.value = true
-        navigationOverlay.viewModel?.state.value = .main
-    }
 }
 
-// MARK: - Private UI Implementation
+// MARK: - Private Presentation Implementation
 
 extension SegmentControlView {
-    private func setupButtons() {
+    private func configureButtons() {
         allButton
             .border(.white.withAlphaComponent(0.3), width: 1.5)
             .round()

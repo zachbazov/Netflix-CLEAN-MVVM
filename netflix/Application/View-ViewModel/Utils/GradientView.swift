@@ -16,6 +16,11 @@ final class GradientView: UIView {
     
     deinit {
         print("deinit GradientView")
+        
+        gradientLayer.removeFromSuperlayer()
+        
+        view?.removeFromSuperview()
+        view = nil
     }
     
     init(on parent: UIView) {
@@ -39,7 +44,7 @@ final class GradientView: UIView {
         
         gradientLayer.frame = view!.bounds
         gradientLayer.colors = colors.map { $0.cgColor }
-        gradientLayer.locations = [0.0, 0.3, 0.7, 1.0]
+        gradientLayer.locations = [0.0, 0.3, 0.6, 1.0]
         
         view?.layer.addSublayer(gradientLayer)
         parent.insertSubview(view!, at: .zero)

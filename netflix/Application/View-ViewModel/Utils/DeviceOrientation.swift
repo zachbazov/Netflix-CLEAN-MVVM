@@ -10,7 +10,7 @@ import UIKit
 // MARK: - DeviceOrienting Type
 
 protocol DeviceOrienting {
-    func didLockDeviceOrientation(_ mask: UIInterfaceOrientationMask)
+    func lockDeviceOrientation(_ mask: UIInterfaceOrientationMask)
 }
 
 // MARK: - OrientationProtocol Type
@@ -70,40 +70,3 @@ extension DeviceOrientation: OrientationProtocol {
         }
     }
 }
-
-//class RotationManager: NSObject {
-//    override init() {
-//        super.init()
-//        UIDevice.current.beginGeneratingDeviceOrientationNotifications()
-//        NotificationCenter.default.addObserver(self, selector: #selector(deviceOrientationDidChange), name: UIDevice.orientationDidChangeNotification, object: nil)
-//    }
-//
-//    @objc func deviceOrientationDidChange() {
-//        switch UIDevice.current.orientation {
-//        case .portrait:
-//            // Set interface to portrait mode
-//            printIfDebug(.debug, "port")
-//            break
-//        case .portraitUpsideDown:
-//            // Set interface to upside down portrait mode
-//            printIfDebug(.debug, "portUpsideDown")
-//            break
-//        case .landscapeLeft:
-//            // Set interface to landscape left mode
-//            printIfDebug(.debug, "landLeft")
-//            break
-//        case .landscapeRight:
-//            // Set interface to landscape right mode
-//            printIfDebug(.debug, "landRight")
-//            break
-//        default:
-//            printIfDebug(.debug, "def")
-//            break
-//        }
-//    }
-//
-//    deinit {
-//        UIDevice.current.endGeneratingDeviceOrientationNotifications()
-//        NotificationCenter.default.removeObserver(self)
-//    }
-//}

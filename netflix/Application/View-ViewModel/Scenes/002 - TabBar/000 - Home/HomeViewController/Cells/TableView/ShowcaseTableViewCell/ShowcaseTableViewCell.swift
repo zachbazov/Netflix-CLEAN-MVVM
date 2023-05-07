@@ -21,7 +21,7 @@ private protocol ViewProtocol {
 
 final class ShowcaseTableViewCell: UITableViewCell {
     fileprivate lazy var viewModel: ShowcaseTableViewCellViewModel? = createViewModel()
-    fileprivate var showcaseView: ShowcaseView?
+    fileprivate(set) var showcaseView: ShowcaseView?
     
     /// Create a display table view cell object.
     /// - Parameters:

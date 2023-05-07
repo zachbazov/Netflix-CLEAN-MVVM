@@ -10,6 +10,7 @@ import AVKit
 // MARK: - UIView + Hierarchy
 
 extension UIView {
+    @discardableResult
     func addToHierarchy(on view: UIView) -> UIView {
         view.addSubview(self)
         return self

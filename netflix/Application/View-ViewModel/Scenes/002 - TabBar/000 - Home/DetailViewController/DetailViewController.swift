@@ -35,7 +35,7 @@ final class DetailViewController: Controller<DetailViewModel> {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        didLockDeviceOrientation(.all)
+        lockDeviceOrientation(.all)
         viewDidDeploySubviews()
         viewDidBindObservers()
     }

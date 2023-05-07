@@ -32,7 +32,7 @@ final class SignInViewController: Controller<SignInViewModel> {
         
         signInButton.border(.black, width: 1.5)
         
-        didConfigureTitleView()
+        titleViewWillConfigure()
     }
     
     override func viewDidTargetSubviews() {

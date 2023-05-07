@@ -22,16 +22,23 @@ class Controller<T>: UIViewController where T: ViewModel {
     
     var viewModel: T!
     
-    func viewDidLoadBehaviors() {
+    func viewWillLoadBehaviors() {
         addBehaviors([BackButtonEmptyTitleNavigationBarBehavior(),
                       BlackStyleNavigationBarBehavior()])
     }
+    func viewDidLoadBehaviors() {}
     
+    func viewWillDeploySubviews() {}
     func viewDidDeploySubviews() {}
+    func viewWillConfigure() {}
     func viewDidConfigure() {}
+    func viewWillTargetSubviews() {}
     func viewDidTargetSubviews() {}
+    func viewWillBindObservers() {}
     func viewDidBindObservers() {}
+    func viewWillUnbindObservers() {}
     func viewDidUnbindObservers() {}
+    func viewWillDeallocate() {}
     func viewDidDeallocate() {}
     
     func viewWillAnimateAppearance() {
@@ -86,7 +93,7 @@ extension Controller: ViewAnimating {}
 // MARK: - DeviceOrienting Implementation
 
 extension Controller: DeviceOrienting {
-    func didLockDeviceOrientation(_ mask: UIInterfaceOrientationMask = .portrait) {
+    func lockDeviceOrientation(_ mask: UIInterfaceOrientationMask = .portrait) {
         let orientation = DeviceOrientation.shared
         orientation.setLock(orientation: mask)
     }
@@ -95,7 +102,7 @@ extension Controller: DeviceOrienting {
 // MARK: - NavigationControllerStyling Implementation
 
 extension Controller: NavigationControllerStyling {
-    func didConfigureTitleView(withAssetNamed asset: String = "netflix-logo-2") {
+    func titleViewWillConfigure(withAssetNamed asset: String = "netflix-logo-2") {
         let point = CGPoint(x: 0.0, y: 0.0)
         let size = CGSize(width: 80.0, height: 24.0)
         let rect = CGRect(origin: point, size: size)

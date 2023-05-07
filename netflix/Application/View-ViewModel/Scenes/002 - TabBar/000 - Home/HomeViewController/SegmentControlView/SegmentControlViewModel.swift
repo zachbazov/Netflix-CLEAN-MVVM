@@ -56,12 +56,14 @@ extension SegmentControlViewModel: ViewModelProtocol {
     func stateDidChange(_ state: SegmentControlView.State) {
         guard let controller = coordinator.viewController,
               let homeViewModel = controller.viewModel,
-              let segmentControl = controller.segmentControl,
               let navigationOverlay = controller.navigationOverlay,
               let browseOverlay = controller.browseOverlayView
         else { return }
         
         guard let section = navigationOverlay.viewModel?.category.toSection() else { return }
+        
+        controller.navigationView?.style.removeGradient()
+        controller.dataSource?.cell.showcaseView?.gradient?.remove()
         
         switch state {
         case .main:
@@ -71,9 +73,8 @@ extension SegmentControlViewModel: ViewModelProtocol {
             homeViewModel.dataSourceStateWillChange(.all)
             navigationOverlay.viewModel?.stateWillChange(.main)
             browseOverlay.viewModel?.isPresentedWillChange(false)
-            controller.dataSource?.style.addGradient()
         case .all:
-            segmentControl.presentNavigationOverlayIfNeeded()
+            navigationOverlay.presentOverlayIfNeeded(isSegmentSelected)
             
             isSegmentSelected = true
             setSegment(state)
@@ -81,7 +82,7 @@ extension SegmentControlViewModel: ViewModelProtocol {
             homeViewModel.changeDataSourceStateIfNeeded(.all)
             browseOverlay.viewModel?.sectionWillChange(section)
         case .tvShows:
-            segmentControl.presentNavigationOverlayIfNeeded()
+            navigationOverlay.presentOverlayIfNeeded(isSegmentSelected)
             
             isSegmentSelected = true
             setSegment(state)
@@ -89,7 +90,7 @@ extension SegmentControlViewModel: ViewModelProtocol {
             homeViewModel.changeDataSourceStateIfNeeded(.tvShows)
             browseOverlay.viewModel?.sectionWillChange(section)
         case .movies:
-            segmentControl.presentNavigationOverlayIfNeeded()
+            navigationOverlay.presentOverlayIfNeeded(isSegmentSelected)
             
             isSegmentSelected = true
             setSegment(state)

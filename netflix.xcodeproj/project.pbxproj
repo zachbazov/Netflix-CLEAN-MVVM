@@ -223,6 +223,8 @@
 		A1B2BADA29FC0BB0004B612A /* CGRect+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2BAD929FC0BB0004B612A /* CGRect+Extension.swift */; };
 		A1B2BAE32A0401F2004B612A /* TableViewCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2BAE22A0401F2004B612A /* TableViewCellViewModel.swift */; };
 		A1B2BAE52A066B21004B612A /* PanelViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2BAE42A066B20004B612A /* PanelViewModel.swift */; };
+		A1B2BAE82A0688D1004B612A /* NavigationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2BAE72A0688D1004B612A /* NavigationView.swift */; };
+		A1B2BAEA2A0689AB004B612A /* NavigationView.xib in Resources */ = {isa = PBXBuildFile; fileRef = A1B2BAE92A0689AB004B612A /* NavigationView.xib */; };
 		A1B3F98A28C54F510042DE9F /* UserRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B3F98928C54F510042DE9F /* UserRepository.swift */; };
 		A1B3F98C28C55B500042DE9F /* HomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B3F98B28C55B500042DE9F /* HomeViewModel.swift */; };
 		A1B3F99428C575A30042DE9F /* AuthViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B3F99328C575A30042DE9F /* AuthViewModel.swift */; };
@@ -544,6 +546,8 @@
 		A1B2BAD929FC0BB0004B612A /* CGRect+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CGRect+Extension.swift"; sourceTree = "<group>"; };
 		A1B2BAE22A0401F2004B612A /* TableViewCellViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TableViewCellViewModel.swift; sourceTree = "<group>"; };
 		A1B2BAE42A066B20004B612A /* PanelViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PanelViewModel.swift; sourceTree = "<group>"; };
+		A1B2BAE72A0688D1004B612A /* NavigationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationView.swift; sourceTree = "<group>"; };
+		A1B2BAE92A0689AB004B612A /* NavigationView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = NavigationView.xib; sourceTree = "<group>"; };
 		A1B3F98928C54F510042DE9F /* UserRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserRepository.swift; sourceTree = "<group>"; };
 		A1B3F98B28C55B500042DE9F /* HomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModel.swift; sourceTree = "<group>"; };
 		A1B3F99328C575A30042DE9F /* AuthViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthViewModel.swift; sourceTree = "<group>"; };
@@ -1077,6 +1081,7 @@
 				A18B992528BEC7920077A5A6 /* HomeViewController.swift */,
 				A1B70A80293D8E7300C718C6 /* HomeViewController.xib */,
 				A1E81D1028CFE2B300D044EA /* Cells */,
+				A1B2BAE62A0688B2004B612A /* NavigationView */,
 				A1AD25C328D4D25400F793B3 /* NavigationBarView */,
 				A1183FCA29D11C0600D76759 /* SegmentControlView */,
 				A1BA1DAA28D9D3D500730EA8 /* NavigationOverlayView */,
@@ -1766,6 +1771,15 @@
 			path = Services;
 			sourceTree = "<group>";
 		};
+		A1B2BAE62A0688B2004B612A /* NavigationView */ = {
+			isa = PBXGroup;
+			children = (
+				A1B2BAE72A0688D1004B612A /* NavigationView.swift */,
+				A1B2BAE92A0689AB004B612A /* NavigationView.xib */,
+			);
+			path = NavigationView;
+			sourceTree = "<group>";
+		};
 		A1B3F98828C54F160042DE9F /* Repositories */ = {
 			isa = PBXGroup;
 			children = (
@@ -2165,6 +2179,7 @@
 				A1AA28EF28F71F410011EE9D /* TrailerCollectionViewCell.xib in Resources */,
 				A14E0CC729BB983C00F55500 /* NotificationCollectionViewCell.xib in Resources */,
 				A130BC9A294CE0B80070EA5E /* SearchViewController.xib in Resources */,
+				A1B2BAEA2A0689AB004B612A /* NavigationView.xib in Resources */,
 				A1AC9FB829A65E5300DAD66D /* AlertView.xib in Resources */,
 				A130BCBF29510CA80070EA5E /* DownloadsViewController.xib in Resources */,
 				A1E81D3428CFF95300D044EA /* StandardCollectionViewCell.xib in Resources */,
@@ -2287,6 +2302,7 @@
 				A18B997A28C0244D0077A5A6 /* Endpoint.swift in Sources */,
 				A1B93C812900CF2900AF2C7F /* UserHTTPRequestEntity+Mapping.swift in Sources */,
 				A1AC9FA529A24D1600DAD66D /* NetworkHosting.swift in Sources */,
+				A1B2BAE82A0688D1004B612A /* NavigationView.swift in Sources */,
 				A1741D2228E67CE200F3C46B /* DetailInfoView.swift in Sources */,
 				A1AD25A228D29A1000F793B3 /* ShowcaseView.swift in Sources */,
 				A1AD25C228D4C61300F793B3 /* ShowcaseViewViewModel.swift in Sources */,
