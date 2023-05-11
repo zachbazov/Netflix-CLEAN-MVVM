@@ -50,12 +50,22 @@ final class BrowseOverlayView: View<BrowseOverlayViewModel> {
     override func viewDidLoad() {
         viewDidBindObservers()
     }
-    
+    var darkLayer: CALayer?
     override func viewDidBindObservers() {
         viewModel?.isPresented.observe(on: self) { [weak self] presented in
             guard let self = self else { return }
             
             self.viewShouldAppear(presented)
+            
+            guard let controller = self.viewModel.coordinator.viewController else { return }
+            if presented {
+                controller.navigationView?.removeGradient()
+                print("rem")
+            } else {
+                guard let colors = controller.navigationView?.colors else { return }
+                controller.navigationView?.addGradient(with: colors)
+                print("add")
+            }
         }
         
         viewModel?.section.observe(on: self) { [weak self] section in

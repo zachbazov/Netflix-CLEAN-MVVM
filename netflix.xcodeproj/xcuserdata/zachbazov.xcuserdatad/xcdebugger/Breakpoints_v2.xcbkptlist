@@ -3,22 +3,4 @@
    uuid = "C3B12F22-2E17-4B56-A317-0AEE8FCE49DA"
    type = "1"
    version = "2.0">
-   <Breakpoints>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "11425E0D-B359-4486-9611-909B31B99FAA"
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "netflix/Application/View-ViewModel/Scenes/002 - TabBar/000 - Home/HomeViewController/Cells/TableView/ShowcaseTableViewCell/ShowcaseView/ShowcaseView.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "187"
-            endingLineNumber = "187"
-            landmarkName = "setGradient()"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-   </Breakpoints>
 </Bucket>

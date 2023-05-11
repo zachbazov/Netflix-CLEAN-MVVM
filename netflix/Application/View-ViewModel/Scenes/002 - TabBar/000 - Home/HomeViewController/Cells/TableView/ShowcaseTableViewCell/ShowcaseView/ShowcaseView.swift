@@ -20,10 +20,10 @@ private protocol ViewProtocol {
     
     func didTap()
     
-    func analyzeColors(for image: UIImage) -> [UIColor]
     func setDarkBottomGradient()
+//    func updatePalette(for image: UIImage)
     func setGradient(for image: UIImage)
-    func setPosterShadow(for color: UIColor)
+//    func setPosterShadow(for color: UIColor)
     func setPosterStroke()
     func setGenres(attributed string: NSMutableAttributedString)
     func setMediaType()
@@ -110,11 +110,9 @@ final class ShowcaseView: View<ShowcaseViewViewModel> {
         panelView?.removeFromSuperview()
         panelView = nil
         
-        gradient?.layer.removeFromSuperlayer()
-        gradient?.removeFromSuperview()
-        gradient = nil
-        
-        viewModel = nil
+        guard let controller = viewModel.coordinator.viewController else { return }
+        controller.navigationView?.colors = []
+        controller.navigationView?.gradient?.remove()
         
         removeFromSuperview()
     }
@@ -151,7 +149,8 @@ extension ShowcaseView: ViewProtocol {
         
         let state = homeViewModel.dataSourceState.value
         let section = controller.navigationOverlay?.viewModel?.category.toSection()
-        let media = homeViewModel.showcases[HomeTableViewDataSource.State(rawValue: state.rawValue)!]
+        let index = HomeTableViewDataSource.State(rawValue: state.rawValue)!
+        let media = homeViewModel.showcases[index]
         let rotated = false
         
         homeViewModel.detailSection = section
@@ -159,47 +158,6 @@ extension ShowcaseView: ViewProtocol {
         homeViewModel.shouldScreenRotate = rotated
         
         coordinator.coordinate(to: .detail)
-    }
-    
-    fileprivate func analyzeColors(for image: UIImage) -> [UIColor] {
-        let c1 = image.averageColor!
-        let c2 = image.areaAverage().darkerColor(for: c1)
-        let c3 = c2.darkerColor(for: c2)
-        let c4 = UIColor.black
-        return [c1, c2, c3, c4]
-    }
-    
-    fileprivate func setGradient(for image: UIImage) {
-        guard let controller = viewModel?.coordinator.viewController else { return }
-        
-        let colors = analyzeColors(for: image)
-        
-        if !controller.browseOverlayView!.viewModel!.isPresented.value {
-            controller.navigationView?.style.setColors(colors)
-            controller.navigationView?.style.apply(.gradient)
-        }
-        
-        gradient = GradientView(on: contentView).applyGradient(with: colors)
-        
-        setPosterShadow(for: colors[2])
-    }
-    
-    func setGradient() {
-        print("setGradient")
-        gradient?.remove()
-        
-        guard let controller = viewModel?.coordinator.viewController else { return }
-        
-        guard let colors = controller.navigationView?.style.colors else { return }
-        
-        controller.navigationView?.style.colors = colors
-        controller.navigationView?.style.apply(.gradient)
-        
-        gradient = GradientView(on: contentView).applyGradient(with: colors)
-    }
-    
-    fileprivate func setPosterShadow(for color: UIColor) {
-        contentView.layer.shadow(color, radius: 24.0, opacity: 1.0)
     }
     
     func setDarkBottomGradient() {
@@ -215,6 +173,23 @@ extension ShowcaseView: ViewProtocol {
         posterImageView?.layer.borderColor = color
         posterImageView?.layer.borderWidth = 1.5
         posterImageView?.layer.cornerRadius = 12.0
+    }
+    
+    fileprivate func setGradient(for image: UIImage) {
+        guard let controller = viewModel?.coordinator.viewController,
+              let browseOverlay = controller.browseOverlayView
+        else { return }
+        
+        let colors = image.averageColorPalette()
+        
+        controller.navigationView?.colors = colors
+        if browseOverlay.viewModel.isPresented.value {
+            return
+        } else {
+            controller.navigationView?.addGradient(with: colors)
+        }
+        
+        gradient = GradientView(on: contentView).applyGradient(with: colors)
     }
     
     fileprivate func setPoster(image: UIImage) {
@@ -235,9 +210,11 @@ extension ShowcaseView: ViewProtocol {
     }
     
     fileprivate func setMediaType() {
-        guard let viewModel = viewModel, viewModel.typeImagePath.isNotEmpty else { return }
+        guard let viewModel = viewModel,
+              let typeImagePath = viewModel.typeImagePath
+        else { return }
         
-        typeImageView.image = UIImage(named: viewModel.typeImagePath)
+        typeImageView.image = UIImage(named: typeImagePath)
     }
     
     fileprivate func loadResources() {
@@ -249,8 +226,8 @@ extension ShowcaseView: ViewProtocol {
                 guard let self = self, let image = image else { return }
                 
                 mainQueueDispatch {
-                    self.setPoster(image: image)
                     self.setGradient(for: image)
+                    self.setPoster(image: image)
                 }
             }
         

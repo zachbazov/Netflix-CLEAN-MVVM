@@ -62,9 +62,6 @@ extension SegmentControlViewModel: ViewModelProtocol {
         
         guard let section = navigationOverlay.viewModel?.category.toSection() else { return }
         
-        controller.navigationView?.style.removeGradient()
-        controller.dataSource?.cell.showcaseView?.gradient?.remove()
-        
         switch state {
         case .main:
             isSegmentSelected = false

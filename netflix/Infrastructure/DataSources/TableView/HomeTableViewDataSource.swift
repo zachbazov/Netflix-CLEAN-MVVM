@@ -197,13 +197,13 @@ extension HomeTableViewDataSource: UITableViewDelegate, UITableViewDataSource {
                     controller.navigationView?.segmentControl?.alpha = condition ? 1.0 - (segmentMaxY / segmentHeight) : 1.0
                     
                     if primaryOffsetY <= segmentHeight {
-                        controller.navigationView?.style.apply(.gradient)
+                        controller.navigationView?.apply(.gradient)
                     } else {
-                        controller.navigationView?.style.apply(.blur)
+                        controller.navigationView?.apply(.blur)
                     }
                     
                     if primaryOffsetY <= .zero {
-                        controller.navigationView?.style.apply(.gradient)
+                        controller.navigationView?.apply(.gradient)
                     }
                 } else {
                     controller.navigationViewContainerHeight.constant = heightLimit + -segmentMaxY
@@ -211,9 +211,9 @@ extension HomeTableViewDataSource: UITableViewDelegate, UITableViewDataSource {
                     controller.navigationView?.segmentControl?.alpha = 1.0 - (segmentMaxY / segmentHeight)
                     
                     if primaryOffsetY >= .zero {
-                        controller.navigationView?.style.apply(.blur)
+                        controller.navigationView?.apply(.blur)
                     } else {
-                        controller.navigationView?.style.apply(.gradient)
+                        controller.navigationView?.apply(.gradient)
                     }
                 }
             })

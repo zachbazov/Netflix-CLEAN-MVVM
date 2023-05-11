@@ -15,12 +15,14 @@ final class GradientView: UIView {
     let gradientLayer = CAGradientLayer()
     
     deinit {
-        print("deinit GradientView")
+//        print("deinit GradientView")
         
         gradientLayer.removeFromSuperlayer()
         
         view?.removeFromSuperview()
         view = nil
+        
+        removeFromSuperview()
     }
     
     init(on parent: UIView) {
@@ -28,6 +30,8 @@ final class GradientView: UIView {
         self.view = UIView(frame: .zero)
         
         super.init(frame: .zero)
+        
+        view = UIView(frame: parent.bounds)
     }
     
     required init?(coder: NSCoder) {
@@ -36,11 +40,10 @@ final class GradientView: UIView {
     
     @discardableResult
     func applyGradient(with colors: [UIColor]) -> Self {
-        view?.layer.removeFromSuperlayer()
+//        gradientLayer.removeFromSuperlayer()
+//        view?.layer.removeFromSuperlayer()
         
         guard !colors.isEmpty else { return self }
-        
-        view = UIView(frame: parent.bounds)
         
         gradientLayer.frame = view!.bounds
         gradientLayer.colors = colors.map { $0.cgColor }
@@ -55,6 +58,9 @@ final class GradientView: UIView {
     func remove() {
         guard let view = view else { return }
         
+        gradientLayer.removeFromSuperlayer()
         view.removeFromSuperview()
+        removeFromSuperview()
+        print("removeGradient")
     }
 }

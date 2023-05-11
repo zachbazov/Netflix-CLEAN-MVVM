@@ -7,6 +7,18 @@
 
 import UIKit
 
+// MARK: - Color Palette
+
+extension UIImage {
+    func averageColorPalette() -> [UIColor] {
+        let c1 = averageColor!
+        let c2 = areaAverage().darkerColor(for: c1)
+        let c3 = c2.darkerColor(for: c2)
+        let c4 = UIColor.black
+        return [c1, c2, c3, c4]
+    }
+}
+
 // MARK: - Average Color
 
 extension UIImage {

@@ -19,7 +19,7 @@ private protocol ViewModelProtocol {
     var logoImageIdentifier: NSString { get }
     var logoImageURL: URL! { get }
     var attributedGenres: NSMutableAttributedString { get }
-    var typeImagePath: String { get }
+    var typeImagePath: String? { get }
     
     mutating func setMediaTypeImage(for media: Media)
 }
@@ -38,7 +38,7 @@ struct ShowcaseViewViewModel {
     let logoImageIdentifier: NSString
     let logoImageURL: URL!
     var attributedGenres: NSMutableAttributedString
-    var typeImagePath: String
+    var typeImagePath: String?
     
     /// Create a view model based on a media object.
     /// - Parameter media: The media object represented on the display view.
@@ -59,7 +59,6 @@ struct ShowcaseViewViewModel {
         self.posterImageURL = .init(string: self.posterImagePath)
         self.logoImageURL = .init(string: self.logoImagePath)
         self.attributedGenres = media.attributedString(for: .display)
-        self.typeImagePath = .toBlank()
         
         self.setMediaTypeImage(for: media)
     }
@@ -74,16 +73,18 @@ extension ShowcaseViewViewModel: ViewModel {}
 extension ShowcaseViewViewModel: ViewModelProtocol {
     fileprivate mutating func setMediaTypeImage(for media: Media) {
         guard let type = Media.MediaType(rawValue: media.type) else {
-            typeImagePath = .toBlank()
+            typeImagePath = nil
             
             return
         }
         
         switch type {
-        case .series:
+        case .series where media.isExclusive:
             typeImagePath = "netflix-series"
-        case .film:
+        case .film where media.isExclusive:
             typeImagePath = "netflix-film"
+        default:
+            typeImagePath = nil
         }
     }
 }

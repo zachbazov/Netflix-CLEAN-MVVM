@@ -75,6 +75,7 @@ extension Media: Hashable {
 
 extension Media {
     enum MediaType: String {
+        case none = ""
         case series
         case film
     }

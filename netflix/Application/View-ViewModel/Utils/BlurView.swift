@@ -11,25 +11,37 @@ import UIKit
 
 final class BlurView: UIView {
     let effect: UIBlurEffect
-    let view: UIVisualEffectView
+    var view: UIVisualEffectView?
+    
+    private let parent: UIView
     
     deinit {
-        print("deinit BlurView")
-        view.removeFromSuperview()
+//        print("deinit BlurView")
+        
+        view?.removeFromSuperview()
+        
+        removeFromSuperview()
     }
     
     init(on parent: UIView, effect: UIBlurEffect) {
+        self.parent = parent
         self.effect = effect
-        self.view = UIVisualEffectView(effect: effect)
         
         super.init(frame: .zero)
         
+        self.view = UIVisualEffectView(effect: effect)
+    }
+    
+    required init?(coder: NSCoder) { fatalError() }
+    
+    func add() {
         parent.backgroundColor = .clear
+        guard let view = view else { return }
         parent.insertSubview(view, at: .zero)
         view.constraintToSuperview(parent)
     }
     
-    required init?(coder: NSCoder) {
-        fatalError()
+    func remove() {
+        view?.removeFromSuperview()
     }
 }
