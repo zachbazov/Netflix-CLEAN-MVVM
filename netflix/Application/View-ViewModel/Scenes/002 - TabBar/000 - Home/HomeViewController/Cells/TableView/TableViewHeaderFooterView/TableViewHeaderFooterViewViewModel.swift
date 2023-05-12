@@ -7,6 +7,12 @@
 
 import Foundation
 
+// MARK: - ViewModelProtocol Type
+
+private protocol ViewModelProtocol {
+    func title(_ sections: [Section], forHeaderAt index: Int) -> String
+}
+
 // MARK: - TableViewHeaderFooterViewViewModel Type
 
 struct TableViewHeaderFooterViewViewModel {
@@ -18,3 +24,7 @@ struct TableViewHeaderFooterViewViewModel {
 // MARK: - ViewModel Implementation
 
 extension TableViewHeaderFooterViewViewModel: ViewModel {}
+
+// MARK: - ViewModelProtocol Implementation
+
+extension TableViewHeaderFooterViewViewModel: ViewModelProtocol {}

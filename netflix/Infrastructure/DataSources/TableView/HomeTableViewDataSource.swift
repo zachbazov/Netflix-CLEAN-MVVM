@@ -14,12 +14,14 @@ private protocol DataSourceProtocol {
     var viewModel: HomeViewModel! { get }
     var numberOfRows: Int { get }
     var initialOffsetY: CGFloat { get }
+    var primaryOffsetY: CGFloat { get }
     
     func didLoad()
     func cellsWillRegister()
     func dataSourceWillChange()
     func sectionsWillFilter()
     func contentWillInset()
+    func applyStyleChanges(_ condition: Bool, limit: CGFloat)
 }
 
 // MARK: - HomeTableViewDataSource Type
@@ -30,8 +32,7 @@ final class HomeTableViewDataSource: NSObject {
     
     fileprivate let numberOfRows: Int = 1
     fileprivate var initialOffsetY: CGFloat = .zero
-    
-    var cell: ShowcaseTableViewCell!
+    fileprivate(set) var primaryOffsetY: CGFloat = .zero
     
     /// Create an home's table view data source object.
     /// - Parameters:
@@ -60,7 +61,6 @@ final class HomeTableViewDataSource: NSObject {
 // MARK: - DataSourceProtocol Implementation
 
 extension HomeTableViewDataSource: DataSourceProtocol {
-    
     fileprivate func didLoad() {
         cellsWillRegister()
         contentWillInset()
@@ -119,8 +119,7 @@ extension HomeTableViewDataSource: UITableViewDelegate, UITableViewDataSource {
         guard let index = Index(rawValue: indexPath.section) else { fatalError() }
         switch index {
         case .display:
-            cell = ShowcaseTableViewCell.create(on: tableView, for: indexPath, with: viewModel)
-            return cell
+            return ShowcaseTableViewCell.create(on: tableView, for: indexPath, with: viewModel)
         case .rated:
             return RatedTableViewCell.create(on: tableView, for: indexPath, with: viewModel)
         case .resumable:
@@ -174,7 +173,7 @@ extension HomeTableViewDataSource: UITableViewDelegate, UITableViewDataSource {
         
         let segmentY = -scrollView.contentOffset.y - controller.navigationViewContainer.bounds.height
         var segmentMaxY = max(.zero, -segmentY)
-        var primaryOffsetY = min(.zero, -scrollView.contentOffset.y - controller.navigationViewContainer.bounds.height)
+        primaryOffsetY = min(.zero, -scrollView.contentOffset.y - controller.navigationViewContainer.bounds.height)
         
         let segmentHeight = controller.navigationView?.segmentControl?.bounds.size.height ?? .zero
         let statusBarHeight = window.windowScene?.statusBarManager?.statusBarFrame.height ?? .zero
@@ -188,35 +187,56 @@ extension HomeTableViewDataSource: UITableViewDelegate, UITableViewDataSource {
             withDuration: 0.25,
             delay: .zero,
             options: .curveEaseInOut,
-            animations: {
+            animations: { [weak self] in
+                guard let self = self else { return }
+                
                 if isScrollingUp {
-                    let condition = primaryOffsetY <= segmentHeight
+                    let condition = self.primaryOffsetY <= segmentHeight
                     
-                    controller.navigationViewContainerHeight.constant = condition ? heightLimit + (-segmentMaxY * 2) : heightLimit
-                    controller.navigationView?.segmentControl?.origin(y: condition ? -segmentMaxY : -segmentMaxY + segmentHeight)
-                    controller.navigationView?.segmentControl?.alpha = condition ? 1.0 - (segmentMaxY / segmentHeight) : 1.0
+                    controller.navigationViewContainerHeight.constant = condition
+                        ? heightLimit + (-segmentMaxY * 2)
+                        : heightLimit
                     
-                    if primaryOffsetY <= segmentHeight {
-                        controller.navigationView?.apply(.gradient)
-                    } else {
-                        controller.navigationView?.apply(.blur)
-                    }
+                    controller.navigationView?.segmentControl?.origin(
+                        y: condition
+                            ? -segmentMaxY
+                            : -segmentMaxY + segmentHeight)
                     
-                    if primaryOffsetY <= .zero {
-                        controller.navigationView?.apply(.gradient)
-                    }
+                    controller.navigationView?.segmentControl?.alpha = condition
+                        ? 1.0 - (segmentMaxY / segmentHeight)
+                        : 1.0
                 } else {
                     controller.navigationViewContainerHeight.constant = heightLimit + -segmentMaxY
                     controller.navigationView?.segmentControl?.origin(y: -segmentMaxY)
                     controller.navigationView?.segmentControl?.alpha = 1.0 - (segmentMaxY / segmentHeight)
-                    
-                    if primaryOffsetY >= .zero {
-                        controller.navigationView?.apply(.blur)
-                    } else {
-                        controller.navigationView?.apply(.gradient)
-                    }
                 }
+                
+                self.applyStyleChanges(isScrollingUp, limit: segmentHeight)
             })
+    }
+    
+    fileprivate func applyStyleChanges(_ condition: Bool, limit: CGFloat) {
+        guard let controller = viewModel?.coordinator?.viewController else { return }
+        
+        if condition {
+            if self.primaryOffsetY <= limit {
+                controller.navigationView?.apply(.gradient)
+            } else {
+                controller.navigationView?.apply(.blur)
+            }
+            
+            if self.primaryOffsetY <= .zero {
+                controller.navigationView?.apply(.gradient)
+            }
+        } else {
+            guard self.primaryOffsetY >= .zero else {
+                controller.navigationView?.apply(.gradient)
+                
+                return
+            }
+            
+            controller.navigationView?.apply(.blur)
+        }
     }
 }
 

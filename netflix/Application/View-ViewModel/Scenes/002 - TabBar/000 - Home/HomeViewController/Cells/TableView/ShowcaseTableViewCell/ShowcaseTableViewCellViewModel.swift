@@ -27,7 +27,9 @@ struct ShowcaseTableViewCellViewModel {
     /// Create a display table view cell view model.
     /// - Parameter viewModel: Coordinating view model.
     init(with viewModel: HomeViewModel) {
-        guard let coordinator = viewModel.coordinator else { fatalError("Unexpected coordinator \(HomeViewCoordinator.self) value.") }
+        guard let coordinator = viewModel.coordinator else {
+            fatalError("Unexpected coordinator \(HomeViewCoordinator.self) value.")
+        }
         self.coordinator = coordinator
         self.media = viewModel.showcases[viewModel.dataSourceState.value]
         self.myList = viewModel.myList

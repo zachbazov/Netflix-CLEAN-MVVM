@@ -12,7 +12,7 @@ import UIKit
 class TableViewHeaderView<T>: UITableViewHeaderFooterView where T: ViewModel {
     var viewModel: T!
     
-    func viewDidConfigure(at index: Int, with homeViewModel: HomeViewModel) {}
+    func viewWillConfigure(at index: Int, with homeViewModel: HomeViewModel) {}
 }
 
 // MARK: - ViewLifecycleBehavior Implementation

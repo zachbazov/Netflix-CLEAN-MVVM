@@ -16,7 +16,8 @@ private protocol ViewProtocol {
     func createCollectionView() -> UICollectionView
     func createDataSource() -> BrowseOverlayCollectionViewDataSource?
     
-    func drawGradientIfNeeded(_ condition: Bool)
+    func drawNavigationGradientIfNeeded(_ condition: Bool)
+    func drawNavigationBlurIfNeeded(_ condition: Bool)
     func reloadData()
 }
 
@@ -64,7 +65,8 @@ final class BrowseOverlayView: View<BrowseOverlayViewModel> {
             
             self.viewShouldAppear(presented)
             
-            self.drawGradientIfNeeded(presented)
+            self.drawNavigationGradientIfNeeded(presented)
+            self.drawNavigationBlurIfNeeded(presented)
         }
         
         viewModel?.section.observe(on: self) { [weak self] section in
@@ -152,7 +154,7 @@ extension BrowseOverlayView: ViewProtocol {
         return dataSource
     }
     
-    fileprivate func drawGradientIfNeeded(_ condition: Bool) {
+    fileprivate func drawNavigationGradientIfNeeded(_ condition: Bool) {
         guard let controller = viewModel?.coordinator.viewController,
               let navigation = controller.navigationView
         else { return }
@@ -164,6 +166,28 @@ extension BrowseOverlayView: ViewProtocol {
         }
         
         navigation.removeGradient()
+    }
+    
+    fileprivate func drawNavigationBlurIfNeeded(_ condition: Bool) {
+        guard let controller = viewModel?.coordinator.viewController,
+              let navigation = controller.navigationView
+        else { return }
+        
+        guard controller.dataSource!.primaryOffsetY == .zero else {
+            guard condition else {
+                navigation.setBackgroundColor(.clear)
+                navigation.apply(.blur)
+                
+                return
+            }
+            
+            navigation.removeBlur()
+            navigation.setBackgroundColor(.black)
+            
+            return
+        }
+        
+        drawNavigationGradientIfNeeded(condition)
     }
     
     func reloadData() {

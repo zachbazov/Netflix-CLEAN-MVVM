@@ -107,7 +107,7 @@ extension NavigationView: ViewProtocol {
             .draw()
     }
     
-    fileprivate func removeBlur() {
+    func removeBlur() {
         guard let blur = blur else { return }
         
         blur.remove()

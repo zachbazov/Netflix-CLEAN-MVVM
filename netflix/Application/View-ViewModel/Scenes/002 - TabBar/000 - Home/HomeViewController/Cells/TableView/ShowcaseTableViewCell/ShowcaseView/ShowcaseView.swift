@@ -21,7 +21,9 @@ private protocol ViewProtocol {
     func didTap()
     func removeNavigationGradientFromSuperview()
     func updateColors(_ colors: [Color])
-    func drawGradientIfNeeded(_ condition: Bool)
+    func drawNavigationGradientIfNeeded(_ condition: Bool)
+    func drawNavigationBlurIfNeeded(_ condition: Bool)
+    func shouldDrawGradientOrBlurIfNeeded()
     
     func setDarkBottomGradient()
     func setPosterStroke()
@@ -76,14 +78,18 @@ final class ShowcaseView: View<ShowcaseViewViewModel> {
     
     override func viewDidLoad() {
         viewWillDeploySubviews()
+        viewHierarchyWillConfigure()
         viewWillConfigure()
-        viewWillConstraint()
         dataWillLoad()
     }
     
     override func viewWillDeploySubviews() {
         createViewModel()
         createPanelView()
+    }
+    
+    override func viewHierarchyWillConfigure() {
+        contentView.constraintToSuperview(self)
     }
     
     override func viewWillConfigure() {
@@ -95,10 +101,6 @@ final class ShowcaseView: View<ShowcaseViewViewModel> {
         setGenres(attributed: viewModel.attributedGenres)
         setMediaType()
         setGestures()
-    }
-    
-    override func viewWillConstraint() {
-        contentView.constraintToSuperview(self)
     }
     
     override func prepareForReuse() {
@@ -173,7 +175,7 @@ extension ShowcaseView: ViewProtocol {
         navigation.viewModel?.setColors(colors)
     }
     
-    fileprivate func drawGradientIfNeeded(_ condition: Bool) {
+    fileprivate func drawNavigationGradientIfNeeded(_ condition: Bool) {
         guard let controller = viewModel?.coordinator.viewController,
               let navigation = controller.navigationView
         else { return }
@@ -181,6 +183,35 @@ extension ShowcaseView: ViewProtocol {
         guard condition else { return }
         
         navigation.apply(.gradient)
+    }
+    
+    fileprivate func drawNavigationBlurIfNeeded(_ condition: Bool) {
+        guard let controller = viewModel?.coordinator.viewController,
+              let navigation = controller.navigationView
+        else { return }
+        
+        guard condition else {
+            navigation.apply(.blur)
+            
+            return
+        }
+        
+        navigation.removeBlur()
+    }
+    
+    fileprivate func shouldDrawGradientOrBlurIfNeeded() {
+        guard let controller = viewModel?.coordinator.viewController,
+              let browseOverlay = controller.browseOverlayView
+        else { return }
+        
+        let condition = browseOverlay.viewModel.isPresented.value
+        let isOffsetEqualsZero = controller.dataSource?.primaryOffsetY == .zero
+        
+        if isOffsetEqualsZero {
+            drawNavigationGradientIfNeeded(!condition)
+        } else {
+            drawNavigationBlurIfNeeded(condition)
+        }
     }
     
     func setDarkBottomGradient() {
@@ -201,15 +232,10 @@ extension ShowcaseView: ViewProtocol {
     fileprivate func setGradient(for image: UIImage) {
         guard gradient == nil else { return }
         
-        guard let controller = viewModel?.coordinator.viewController,
-              let browseOverlay = controller.browseOverlayView
-        else { return }
-        
         let colors = image.averageColorPalette()
         updateColors(colors.toColorArray())
         
-        let condition = !browseOverlay.viewModel.isPresented.value
-        drawGradientIfNeeded(condition)
+        shouldDrawGradientOrBlurIfNeeded()
         
         gradient = GradientView(on: contentView)
             .draw(with: colors)

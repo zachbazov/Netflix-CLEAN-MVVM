@@ -35,7 +35,7 @@ final class TableViewHeaderFooterView: TableViewHeaderView<TableViewHeaderFooter
         
         cell.viewModel = TableViewHeaderFooterViewViewModel()
         
-        cell.viewDidConfigure(at: section, with: viewModel)
+        cell.viewWillConfigure(at: section, with: viewModel)
         
         return cell
     }
@@ -46,9 +46,9 @@ final class TableViewHeaderFooterView: TableViewHeaderView<TableViewHeaderFooter
     
     required init?(coder: NSCoder) { fatalError() }
     
-    override func viewDidConfigure(at index: Int, with homeViewModel: HomeViewModel) {
+    override func viewWillConfigure(at index: Int, with homeViewModel: HomeViewModel) {
         backgroundView = .init()
-        backgroundView?.backgroundColor = .clear
+        backgroundView?.setBackgroundColor(.clear)
         backgroundView?.constraintToSuperview(contentView)
         
         titleLabel.text = viewModel.title(homeViewModel.sections, forHeaderAt: index)
