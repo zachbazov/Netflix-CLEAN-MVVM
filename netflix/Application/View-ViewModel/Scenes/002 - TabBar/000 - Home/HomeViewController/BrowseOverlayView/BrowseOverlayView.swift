@@ -84,7 +84,7 @@ final class BrowseOverlayView: View<BrowseOverlayViewModel> {
         viewModel.isPresented.remove(observer: self)
         viewModel.section.remove(observer: self)
         
-        printIfDebug(.debug, "Removed \(Self.self) observers.")
+        printIfDebug(.success, "Removed \(Self.self) observers.")
     }
     
     override func viewWillAnimateAppearance() {

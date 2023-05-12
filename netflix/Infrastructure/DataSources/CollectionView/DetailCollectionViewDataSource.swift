@@ -68,7 +68,7 @@ final class DetailCollectionViewDataSource<T>: NSObject, UICollectionViewDelegat
             ///
         } else {
             let media = items[indexPath.row] as! Media
-            coordinator.media = media
+            coordinator.viewController?.viewModel.media = media
             coordinator.coordinate(to: .detail)
         }
     }

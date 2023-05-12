@@ -29,7 +29,6 @@ final class HomeViewCoordinator {
     fileprivate weak var detail: UINavigationController?
     weak var search: UINavigationController?
     weak var account: UINavigationController?
-    weak var browse: UINavigationController?
 }
 
 // MARK: - CoordinatorProtocol Implementation
@@ -38,7 +37,9 @@ extension HomeViewCoordinator: CoordinatorProtocol {
     fileprivate func createDetailNavigationController() -> UINavigationController? {
         guard let homeViewModel = viewController?.viewModel else { return nil }
         
-        guard let section = homeViewModel.detailSection, let media = homeViewModel.detailMedia else { return nil }
+        guard let section = homeViewModel.detailSection,
+              let media = homeViewModel.detailMedia
+        else { return nil }
         
         // Allocate the controller and it's dependencies.
         let controller = DetailViewController()
@@ -91,6 +92,7 @@ extension HomeViewCoordinator: CoordinatorProtocol {
         switch screen {
         case .detail:
             guard let navigation = detail else { return }
+            
             viewController?.present(navigation, animated: true)
         case .search:
             guard let navigation = search, let view = viewController?.view else { return }
@@ -107,7 +109,7 @@ extension HomeViewCoordinator: CoordinatorProtocol {
         case .browse:
             guard let controller = viewController else { return }
             
-            controller.browseOverlayView?.viewModel.isPresented.value = true
+            controller.browseOverlayView?.viewModel.isPresentedWillChange(true)
         }
     }
 }

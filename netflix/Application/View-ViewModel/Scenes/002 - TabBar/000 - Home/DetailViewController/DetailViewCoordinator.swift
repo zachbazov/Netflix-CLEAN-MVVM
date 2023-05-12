@@ -10,8 +10,6 @@ import UIKit
 // MARK: - CoordinatorProtocol Type
 
 private protocol CoordinatorProtocol {
-    var media: Media? { get }
-    
     func createDetailController()
 }
 
@@ -19,8 +17,6 @@ private protocol CoordinatorProtocol {
 
 final class DetailViewCoordinator {
     weak var viewController: DetailViewController?
-    
-    var media: Media?
 }
 
 // MARK: - CoordinatorProtocol Implementation
@@ -32,21 +28,20 @@ extension DetailViewCoordinator: CoordinatorProtocol {
         let navigation = viewController?.navigationController
         let controller = DetailViewController()
         let viewModel = viewController?.viewModel
-        // Stop playing the player.
+        
         if let mediaPlayerView = viewController?.previewView?.mediaPlayerView {
             mediaPlayerView.delegate?.playerDidStop(mediaPlayerView.mediaPlayer)
         }
-        // Deallocate the current controller.
+        
         viewController = nil
         navigation?.viewControllers.removeAll()
-        // Allocate the new controller.
+        
         controller.viewModel = viewModel
         controller.viewModel.isRotated = false
         controller.viewModel.orientation.orientation = false ? .landscapeLeft : .portrait
-        // Depend on the new media object.
-        controller.viewModel.media = media!
+        
         viewController = controller
-        // Reallocate the navigation stack.
+        
         navigation?.pushViewController(controller, animated: true)
     }
 }
