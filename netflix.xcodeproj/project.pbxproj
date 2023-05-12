@@ -254,6 +254,7 @@
 		A1B70A9E293EC5D600C718C6 /* AuthController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B70A9D293EC5D600C718C6 /* AuthController.swift */; };
 		A1B70AA529400ACE00C718C6 /* SignInViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B70AA429400ACD00C718C6 /* SignInViewModel.swift */; };
 		A1B70AA729400B0E00C718C6 /* SignUpViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B70AA629400B0E00C718C6 /* SignUpViewModel.swift */; };
+		A1B779122A0E6207009014FD /* Color.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B779112A0E6207009014FD /* Color.swift */; };
 		A1B93C7228FF329800AF2C7F /* Array+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B93C7128FF329800AF2C7F /* Array+Extension.swift */; };
 		A1B93C7A28FF921000AF2C7F /* MediaHTTPResponseStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B93C7928FF921000AF2C7F /* MediaHTTPResponseStore.swift */; };
 		A1B93C7F2900B69B00AF2C7F /* MediaResponseEntity+Mapping.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B93C7E2900B69B00AF2C7F /* MediaResponseEntity+Mapping.swift */; };
@@ -578,6 +579,7 @@
 		A1B70A9D293EC5D600C718C6 /* AuthController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthController.swift; sourceTree = "<group>"; };
 		A1B70AA429400ACD00C718C6 /* SignInViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInViewModel.swift; sourceTree = "<group>"; };
 		A1B70AA629400B0E00C718C6 /* SignUpViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpViewModel.swift; sourceTree = "<group>"; };
+		A1B779112A0E6207009014FD /* Color.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Color.swift; sourceTree = "<group>"; };
 		A1B93C7128FF329800AF2C7F /* Array+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+Extension.swift"; sourceTree = "<group>"; };
 		A1B93C7928FF921000AF2C7F /* MediaHTTPResponseStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaHTTPResponseStore.swift; sourceTree = "<group>"; };
 		A1B93C7E2900B69B00AF2C7F /* MediaResponseEntity+Mapping.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MediaResponseEntity+Mapping.swift"; sourceTree = "<group>"; };
@@ -1221,6 +1223,7 @@
 				A130BCA1294FA48E0070EA5E /* ActivityIndicatorView.swift */,
 				A1E3706229B5DAE900CFEE9C /* TextFieldActivityIndicatorView.swift */,
 				A1BD20E129E5B9CC0093749E /* BlurView.swift */,
+				A1B779112A0E6207009014FD /* Color.swift */,
 				A1E81D0E28CFE21300D044EA /* CollectionViewLayout.swift */,
 				A1AE02D0293BA29A00AF0BD6 /* DeviceOrientation.swift */,
 				A1BD20E329E5B9E70093749E /* GradientView.swift */,
@@ -2238,6 +2241,7 @@
 				A1B1B0C7299B8C1D0070AD29 /* UserUseCase.swift in Sources */,
 				A1741D4E28EC74D100F3C46B /* DetailPanelViewItemViewModel.swift in Sources */,
 				A18691BE28C764600087DE3B /* UIBarButtonItem+Extension.swift in Sources */,
+				A1B779122A0E6207009014FD /* Color.swift in Sources */,
 				A18D852029403D5D00840045 /* BrowseOverlayViewModel.swift in Sources */,
 				A18B998428C03E1C0077A5A6 /* CoreDataStorage.swift in Sources */,
 				A18B997E28C03BB10077A5A6 /* Observable.swift in Sources */,

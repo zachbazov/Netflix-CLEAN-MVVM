@@ -63,19 +63,6 @@ final class HomeViewController: Controller<HomeViewModel> {
             
             self.dataSource?.dataSourceWillChange()
         }
-        
-//        viewModel.colorPalette?.colors.remove(observer: self)
-//        viewModel.colorPalette?.colors.observe(on: self) { [weak self] colors in
-//            self?.navigationView?.removeGradient()
-//            guard let self = self, colors != self.viewModel.colorPalette?.colors.value else { return }
-//            
-//            
-//            guard let showcase = self.dataSource?.cell.showcaseView else { return }
-//            showcase.setGradient(with: colors)
-//            self.navigationView?.addGradient(with: colors)
-////            self.navigationView?.drawGradientIfNeeded(colors)
-////            self.dataSource?.cell.showcaseView?.setGradient(with: colors)
-//        }
     }
     
     override func viewWillUnbindObservers() {

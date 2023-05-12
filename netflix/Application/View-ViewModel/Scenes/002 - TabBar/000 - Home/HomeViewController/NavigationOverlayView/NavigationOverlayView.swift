@@ -187,11 +187,8 @@ extension NavigationOverlayView: ViewProtocol {
     func presentOverlayIfNeeded(_ condition: Bool) {
         guard condition else { return }
         
-//        self.viewShouldAppear(condition)
-//        viewModel?.stateWillChange(.main)
-//        viewModel?.isPresentedWillChange(true)
-        viewModel?.isPresented.value = true
-        viewModel?.state.value = .main
+        viewShouldAppear(condition)
+        viewModel?.stateWillChange(.main)
     }
 }
 

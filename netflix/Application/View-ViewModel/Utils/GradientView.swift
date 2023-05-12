@@ -7,60 +7,59 @@
 
 import UIKit
 
+// MARK: - ViewProtocol Type
+
+private protocol ViewProtocol {
+    var view: UIView { get }
+    var gradientLayer: CAGradientLayer { get }
+    
+    func configureLayer(with colors: [UIColor])
+    func draw(with colors: [UIColor]) -> Self
+    func remove()
+}
+
 // MARK: - GradientView Type
 
 final class GradientView: UIView {
-    let parent: UIView
-    var view: UIView?
-    let gradientLayer = CAGradientLayer()
+    fileprivate let view: UIView
+    fileprivate let gradientLayer = CAGradientLayer()
     
-    deinit {
-//        print("deinit GradientView")
-        
-        gradientLayer.removeFromSuperlayer()
-        
-        view?.removeFromSuperview()
-        view = nil
-        
-        removeFromSuperview()
-    }
+    private let parent: UIView
     
     init(on parent: UIView) {
         self.parent = parent
-        self.view = UIView(frame: .zero)
+        self.view = UIView(frame: parent.bounds)
         
         super.init(frame: .zero)
-        
-        view = UIView(frame: parent.bounds)
     }
     
-    required init?(coder: NSCoder) {
-        fatalError()
+    required init?(coder: NSCoder) { fatalError() }
+}
+
+// MARK: - ViewProtocol Implementation
+
+extension GradientView: ViewProtocol {
+    func configureLayer(with colors: [UIColor]) {
+        gradientLayer.frame = view.bounds
+        gradientLayer.colors = colors.map { $0.cgColor }
+        gradientLayer.locations = [0.0, 0.3, 0.6, 1.0]
     }
     
     @discardableResult
-    func applyGradient(with colors: [UIColor]) -> Self {
-//        gradientLayer.removeFromSuperlayer()
-//        view?.layer.removeFromSuperlayer()
+    func draw(with colors: [UIColor]) -> Self {
+        configureLayer(with: colors)
         
-        guard !colors.isEmpty else { return self }
-        
-        gradientLayer.frame = view!.bounds
-        gradientLayer.colors = colors.map { $0.cgColor }
-        gradientLayer.locations = [0.0, 0.3, 0.6, 1.0]
-        
-        view?.layer.addSublayer(gradientLayer)
-        parent.insertSubview(view!, at: .zero)
+        view.layer.addSublayer(gradientLayer)
+        parent.insertSubview(view, at: .zero)
         
         return self
     }
     
     func remove() {
-        guard let view = view else { return }
-        
         gradientLayer.removeFromSuperlayer()
+        
         view.removeFromSuperview()
+        
         removeFromSuperview()
-        print("removeGradient")
     }
 }

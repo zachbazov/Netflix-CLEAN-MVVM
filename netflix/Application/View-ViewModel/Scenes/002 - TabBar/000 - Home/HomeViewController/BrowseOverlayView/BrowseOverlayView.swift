@@ -15,6 +15,8 @@ private protocol ViewProtocol {
     
     func createCollectionView() -> UICollectionView
     func createDataSource() -> BrowseOverlayCollectionViewDataSource?
+    
+    func drawGradientIfNeeded(_ condition: Bool)
     func reloadData()
 }
 
@@ -24,48 +26,45 @@ final class BrowseOverlayView: View<BrowseOverlayViewModel> {
     private(set) lazy var collectionView: UICollectionView = createCollectionView()
     private(set) lazy var dataSource: BrowseOverlayCollectionViewDataSource? = createDataSource()
     
+    private let parent: UIView
+    
+    deinit {
+        print("deinit \(Self.self)")
+        
+        viewWillDeallocate()
+    }
+    
     init(on parent: UIView, with viewModel: HomeViewModel) {
+        self.parent = parent
+        
         super.init(frame: parent.bounds)
         
         self.viewModel = BrowseOverlayViewModel(with: viewModel)
-        
-        parent.addSubview(self)
-        self.constraintToSuperview(parent)
-        
-        self.collectionView.constraintToSuperview(parent)
         
         self.viewDidLoad()
     }
     
     required init?(coder: NSCoder) { fatalError() }
     
-    deinit {
-        print("deinit \(Self.self)")
-        
-        viewDidUnbindObservers()
-        
-        viewModel = nil
+    override func viewDidLoad() {
+        viewHierarchyWillConfigure()
+        viewWillBindObservers()
     }
     
-    override func viewDidLoad() {
-        viewDidBindObservers()
+    override func viewHierarchyWillConfigure() {
+        self.addToHierarchy(on: parent)
+            .constraintToSuperview(parent)
+        
+        collectionView.constraintToSuperview(parent)
     }
-    var darkLayer: CALayer?
-    override func viewDidBindObservers() {
+    
+    override func viewWillBindObservers() {
         viewModel?.isPresented.observe(on: self) { [weak self] presented in
             guard let self = self else { return }
             
             self.viewShouldAppear(presented)
             
-            guard let controller = self.viewModel.coordinator.viewController else { return }
-            if presented {
-                controller.navigationView?.removeGradient()
-                print("rem")
-            } else {
-                guard let colors = controller.navigationView?.colors else { return }
-                controller.navigationView?.addGradient(with: colors)
-                print("add")
-            }
+            self.drawGradientIfNeeded(presented)
         }
         
         viewModel?.section.observe(on: self) { [weak self] section in
@@ -73,11 +72,11 @@ final class BrowseOverlayView: View<BrowseOverlayViewModel> {
             
             self.viewModel?.sectionDidChange(section)
             
-            self.collectionView.reloadData()
+            self.reloadData()
         }
     }
     
-    override func viewDidUnbindObservers() {
+    override func viewWillUnbindObservers() {
         guard let viewModel = viewModel else { return }
         
         viewModel.isPresented.remove(observer: self)
@@ -113,14 +112,13 @@ final class BrowseOverlayView: View<BrowseOverlayViewModel> {
     }
     
     override func viewWillDeallocate() {
-        viewDidUnbindObservers()
+        viewWillUnbindObservers()
         
         collectionView.dataSource = nil
         collectionView.delegate = nil
         collectionView.removeFromSuperview()
         
         dataSource = nil
-        
         viewModel = nil
         
         removeFromSuperview()
@@ -152,6 +150,20 @@ extension BrowseOverlayView: ViewProtocol {
         collectionView.dataSource = dataSource
         
         return dataSource
+    }
+    
+    fileprivate func drawGradientIfNeeded(_ condition: Bool) {
+        guard let controller = viewModel?.coordinator.viewController,
+              let navigation = controller.navigationView
+        else { return }
+        
+        guard condition else {
+            navigation.apply(.gradient)
+            
+            return
+        }
+        
+        navigation.removeGradient()
     }
     
     func reloadData() {

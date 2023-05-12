@@ -19,15 +19,16 @@ private protocol ViewProtocol {
     func createPanelView()
     
     func didTap()
+    func removeNavigationGradientFromSuperview()
+    func updateColors(_ colors: [Color])
+    func drawGradientIfNeeded(_ condition: Bool)
     
     func setDarkBottomGradient()
-//    func updatePalette(for image: UIImage)
-    func setGradient(for image: UIImage)
-//    func setPosterShadow(for color: UIColor)
     func setPosterStroke()
     func setGenres(attributed string: NSMutableAttributedString)
     func setMediaType()
     func setGestures()
+    func setGradient(for image: UIImage)
     func setLogo(image: UIImage)
     func setPoster(image: UIImage)
     
@@ -110,9 +111,7 @@ final class ShowcaseView: View<ShowcaseViewViewModel> {
         panelView?.removeFromSuperview()
         panelView = nil
         
-        guard let controller = viewModel.coordinator.viewController else { return }
-        controller.navigationView?.colors = []
-        controller.navigationView?.gradient?.remove()
+        removeNavigationGradientFromSuperview()
         
         removeFromSuperview()
     }
@@ -160,6 +159,30 @@ extension ShowcaseView: ViewProtocol {
         coordinator.coordinate(to: .detail)
     }
     
+    fileprivate func removeNavigationGradientFromSuperview() {
+        guard let controller = viewModel.coordinator.viewController else { return }
+        
+        controller.navigationView?.removeGradient()
+    }
+    
+    fileprivate func updateColors(_ colors: [Color]) {
+        guard let controller = viewModel?.coordinator.viewController,
+              let navigation = controller.navigationView
+        else { return }
+        
+        navigation.viewModel?.setColors(colors)
+    }
+    
+    fileprivate func drawGradientIfNeeded(_ condition: Bool) {
+        guard let controller = viewModel?.coordinator.viewController,
+              let navigation = controller.navigationView
+        else { return }
+        
+        guard condition else { return }
+        
+        navigation.apply(.gradient)
+    }
+    
     func setDarkBottomGradient() {
         bottomGradientView.addGradientLayer(colors: [.clear, .black.withAlphaComponent(0.66)],
                                             locations: [0.0, 0.66])
@@ -176,20 +199,20 @@ extension ShowcaseView: ViewProtocol {
     }
     
     fileprivate func setGradient(for image: UIImage) {
+        guard gradient == nil else { return }
+        
         guard let controller = viewModel?.coordinator.viewController,
               let browseOverlay = controller.browseOverlayView
         else { return }
         
         let colors = image.averageColorPalette()
+        updateColors(colors.toColorArray())
         
-        controller.navigationView?.colors = colors
-        if browseOverlay.viewModel.isPresented.value {
-            return
-        } else {
-            controller.navigationView?.addGradient(with: colors)
-        }
+        let condition = !browseOverlay.viewModel.isPresented.value
+        drawGradientIfNeeded(condition)
         
-        gradient = GradientView(on: contentView).applyGradient(with: colors)
+        gradient = GradientView(on: contentView)
+            .draw(with: colors)
     }
     
     fileprivate func setPoster(image: UIImage) {

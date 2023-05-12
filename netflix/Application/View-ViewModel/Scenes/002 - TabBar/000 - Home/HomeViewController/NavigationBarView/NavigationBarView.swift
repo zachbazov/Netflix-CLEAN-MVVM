@@ -11,6 +11,7 @@ import UIKit
 
 private protocol ViewProtocol {
     func buttonDidTap(_ sender: UIButton)
+    func configureProfileLabel()
 }
 
 // MARK: - NavigationBarView Type
@@ -19,33 +20,48 @@ final class NavigationBarView: View<NavigationBarViewModel> {
     @IBOutlet private(set) weak var airPlayButton: UIButton!
     @IBOutlet private(set) weak var profileLabel: UILabel!
     
+    private let parent: UIView
+    
+    deinit {
+        print("deinit \(Self.self)")
+        
+        viewWillDeallocate()
+    }
+    
     /// Create a navigation view object.
     /// - Parameters:
     ///   - parent: Instantiating view.
     ///   - viewModel: Coordinating view model.
     init(on parent: UIView, with viewModel: HomeViewModel) {
+        self.parent = parent
+        
         super.init(frame: parent.bounds)
         
         self.nibDidLoad()
         
         self.viewModel = NavigationBarViewModel(with: viewModel)
         
-        parent.addSubview(self)
-        self.constraintToSuperview(parent)
-        
         self.viewDidLoad()
     }
     
     required init?(coder: NSCoder) { fatalError() }
     
-    deinit {
-        print("deinit \(Self.self)")
-        
-        viewModel = nil
+    override func viewDidLoad() {
+        viewWillDeploySubviews()
+        viewHierarchyWillConfigure()
     }
     
-    override func viewDidLoad() {
-        viewModel?.getUserProfiles()
+    override func viewWillDeploySubviews() {
+        configureProfileLabel()
+    }
+    
+    override func viewHierarchyWillConfigure() {
+        self.addToHierarchy(on: parent)
+            .constraintToSuperview(parent)
+    }
+    
+    override func viewWillDeallocate() {
+        viewModel = nil
     }
 }
 
@@ -60,6 +76,14 @@ extension NavigationBarView: ViewProtocol {
         guard let state = NavigationBarView.State(rawValue: sender.tag) else { return }
         
         viewModel?.stateDidChange(state)
+    }
+    
+    fileprivate func configureProfileLabel() {
+        viewModel?.getUserProfiles() { [weak self] profile in
+            guard let self = self, let profile = profile else { return }
+            
+            self.profileLabel.text = profile.name
+        }
     }
 }
 

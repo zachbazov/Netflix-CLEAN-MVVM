@@ -60,6 +60,8 @@ final class HomeViewModel {
     var shouldScreenRotate: Bool = false
     
     deinit {
+        print("deinit \(Self.self)")
+        
         coordinator = nil
     }
 }
