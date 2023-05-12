@@ -29,23 +29,28 @@ final class RatedCollectionViewCell: CollectionViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
+        
         viewDidLoad()
     }
     
     override func prepareForReuse() {
         super.prepareForReuse()
+        
         textLayer.string = nil
     }
     
     override func viewDidLoad() {
-        // Add the view to the hierarchy.
-        contentView.addSubview(layerView)
-        // Constraint the view.
-        layerView.constraintBottom(toParent: self.contentView, withHeightAnchor: bounds.height / 2)
+        viewHierarchyWillConfigure()
     }
     
-    override func viewDidConfigure(with viewModel: CollectionViewCellViewModel) {
-        super.viewDidConfigure(with: viewModel)
+    override func viewHierarchyWillConfigure() {
+        layerView
+            .addToHierarchy(on: contentView)
+            .constraintBottom(toParent: contentView, withHeightAnchor: bounds.height / 2)
+    }
+    
+    override func viewWillConfigure(with viewModel: CollectionViewCellViewModel) {
+        super.viewWillConfigure(with: viewModel)
         
         guard let indexPath = viewModel.indexPath as IndexPath? else { return }
         // In-case of first cell index, do nothing.

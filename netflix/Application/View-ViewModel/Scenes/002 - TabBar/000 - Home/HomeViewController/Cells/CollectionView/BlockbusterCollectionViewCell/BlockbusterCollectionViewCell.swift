@@ -9,20 +9,4 @@ import UIKit
 
 // MARK: - BlockbusterCollectionViewCell Type
 
-final class BlockbusterCollectionViewCell: CollectionViewCell {
-    
-    override func awakeFromNib() {
-        super.awakeFromNib()
-        viewDidDeploySubviews()
-    }
-    
-    override func viewDidDeploySubviews() {
-        
-    }
-}
-
-// MARK: - Private UI Implementation
-
-extension BlockbusterCollectionViewCell {
-    
-}
+final class BlockbusterCollectionViewCell: CollectionViewCell {}
