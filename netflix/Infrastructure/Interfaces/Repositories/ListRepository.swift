@@ -24,18 +24,11 @@ final class ListRepository: Repository {
 // MARK: - ListRepositoryProtocol Implementation
 
 extension ListRepository {
-    func getAll<T>(cached: @escaping (T?) -> Void, completion: @escaping (Result<T, Error>) -> Void) -> Cancellable? where T: Decodable {
-        return nil
-    }
-    
-    func getAll<T>() async -> T? where T: Decodable {
-        return nil
-    }
-    
     func getOne<T, U>(request: U,
                       cached: @escaping (T?) -> Void,
                       completion: @escaping (Result<T, Error>) -> Void) -> Cancellable? where T: Decodable, U: Decodable {
         guard let request = request as? ListHTTPDTO.GET.Request else { return nil }
+        
         let requestDTO = ListHTTPDTO.GET.Request(user: request.user)
         let task = RepositoryTask()
         
@@ -54,8 +47,10 @@ extension ListRepository {
         return task
     }
     
-    func updateOne(request: ListHTTPDTO.PATCH.Request,
-                   completion: @escaping (Result<ListHTTPDTO.PATCH.Response, Error>) -> Void) -> Cancellable? {
+    func updateOne<T, U>(request: U,
+                         completion: @escaping (Result<T, Error>) -> Void) -> Cancellable? where T: Decodable, U: Decodable {
+        guard let request = request as? ListHTTPDTO.PATCH.Request else { return nil }
+        
         let task = RepositoryTask()
         
         guard !task.isCancelled else { return nil }
@@ -66,12 +61,38 @@ extension ListRepository {
             completion: { result in
                 switch result {
                 case .success(let response):
-                    completion(.success(response))
+                    completion(.success(response as! T))
                 case .failure(let error):
                     completion(.failure(error))
                 }
             })
         
         return task
+    }
+    
+    func getOne<T, U>(request: U) async -> T? where T: Decodable, U: Decodable {
+        guard let request = request as? ListHTTPDTO.GET.Request else { return nil }
+        
+        let endpoint = APIEndpoint.getMyList(with: request)
+        let result = await dataTransferService.request(with: endpoint)
+        
+        if case let .success(response) = result {
+            return response as? T
+        }
+        
+        return nil
+    }
+    
+    func updateOne<T, U>(request: U) async -> T? where T: Decodable, U: Decodable {
+        guard let request = request as? ListHTTPDTO.PATCH.Request else { return nil }
+        
+        let endpoint = APIEndpoint.updateMyList(with: request)
+        let result = await dataTransferService.request(with: endpoint)
+        
+        if case let .success(response) = result {
+            return response as? T
+        }
+        
+        return nil
     }
 }

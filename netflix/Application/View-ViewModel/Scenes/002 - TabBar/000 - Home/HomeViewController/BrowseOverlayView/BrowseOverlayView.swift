@@ -69,13 +69,7 @@ final class BrowseOverlayView: View<BrowseOverlayViewModel> {
             self.drawNavigationBlurIfNeeded(presented)
         }
         
-        viewModel?.section.observe(on: self) { [weak self] section in
-            guard let self = self else { return }
-            
-            self.viewModel?.sectionDidChange(section)
-            
-            self.reloadData()
-        }
+        viewModel?.section.observe(on: self) { [weak self] _ in self?.reloadData() }
     }
     
     override func viewWillUnbindObservers() {
@@ -144,14 +138,7 @@ extension BrowseOverlayView: ViewProtocol {
     }
     
     fileprivate func createDataSource() -> BrowseOverlayCollectionViewDataSource? {
-        guard let viewModel = viewModel?.coordinator.viewController?.viewModel else { return nil }
-        
-        let dataSource = BrowseOverlayCollectionViewDataSource(with: viewModel)
-        
-        collectionView.delegate = dataSource
-        collectionView.dataSource = dataSource
-        
-        return dataSource
+        return BrowseOverlayCollectionViewDataSource(viewModel: viewModel)
     }
     
     fileprivate func drawNavigationGradientIfNeeded(_ condition: Bool) {
@@ -191,6 +178,9 @@ extension BrowseOverlayView: ViewProtocol {
     }
     
     func reloadData() {
+        collectionView.delegate = dataSource
+        collectionView.dataSource = dataSource
+        
         collectionView.reloadData()
     }
 }

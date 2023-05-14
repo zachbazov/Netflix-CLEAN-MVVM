@@ -10,7 +10,7 @@ import Foundation
 // MARK: - ViewModelProtocol Type
 
 private protocol ViewModelProtocol {
-    var state: HomeTableViewDataSource.State { get }
+//    var state: HomeTableViewDataSource.State { get }
     var mediaType: String { get }
     var title: String { get }
     var downloadButtonTitle: String { get }
@@ -22,7 +22,7 @@ private protocol ViewModelProtocol {
 // MARK: - DetailInfoViewViewModel Type
 
 struct DetailInfoViewViewModel {
-    let state: HomeTableViewDataSource.State
+//    let state: HomeTableViewDataSource.State
     let mediaType: String
     let title: String
     let downloadButtonTitle: String
@@ -33,9 +33,9 @@ struct DetailInfoViewViewModel {
     /// Create a info view view model object.
     /// - Parameter viewModel: Coordinating view model.
     init(with viewModel: DetailViewModel) {
-        self.state = viewModel.homeDataSourceState
+//        self.state = viewModel.homeDataSourceState
         
-        let media = viewModel.media
+        guard let media = viewModel.media else { fatalError() }
         
         self.mediaType = media.type == "series"
             ? "S E R I E" : "F I L M"

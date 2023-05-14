@@ -24,21 +24,26 @@ private protocol ConfigurationProtocol {
 
 final class DetailPanelViewItemConfiguration {
     fileprivate weak var view: DetailPanelViewItem!
-    fileprivate let myList: MyList
+    fileprivate let myList = MyList.shared
     fileprivate let section: Section
+    
+    deinit {
+        view?.removeFromSuperview()
+        view = nil
+    }
+    
     /// Create a panel view item configuration object.
     /// - Parameters:
     ///   - view: Corresponding view.
     ///   - viewModel: Coordinating view model.
     init(view: DetailPanelViewItem, with viewModel: DetailViewModel) {
         self.view = view
-        self.myList = viewModel.myList
-        self.section = viewModel.myListSection
+        
+        self.section = myList.viewModel.section
+        
         self.viewDidConfigure()
         self.viewDidRegisterRecognizers()
     }
-    
-    deinit { view = nil }
 }
 
 // MARK: - ConfigurationProtocol Implementation
@@ -48,13 +53,16 @@ extension DetailPanelViewItemConfiguration: ConfigurationProtocol {
         let tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(viewDidTap))
         view.addGestureRecognizer(tapRecognizer)
     }
+    
     /// Change the view to `selected` state.
     /// Occurs while the `DisplayView` presenting media is contained in the user's list.
     fileprivate func selectIfNeeded() {
         guard let tag = Item(rawValue: view.tag) else { return }
         guard let viewModel = view.viewModel else { return }
+        
         if case .myList = tag {
-            viewModel.isSelected.value = myList.viewModel.contains(viewModel.media, in: section.media)
+            let contains = myList.viewModel.contains(viewModel.media, in: section.media)
+            viewModel.isSelected.value = contains
         }
     }
     
@@ -75,10 +83,11 @@ extension DetailPanelViewItemConfiguration: ConfigurationProtocol {
             let media = viewModel.media!
             myList.viewModel.shouldAddOrRemove(media, uponSelection: viewModel.isSelected.value)
             // Reload browse overlay's collection data.
-            myList.viewModel.coordinator?.viewController?.browseOverlayView?.collectionView.reloadData()
+            myList.viewModel.coordinator.viewController?.browseOverlayView?.collectionView.reloadData()
         case .rate: printIfDebug(.debug, "rate")
         case .share: printIfDebug(.debug, "share")
         }
+        
         // Animate alpha effect.
         view.setAlphaAnimation(using: view.gestureRecognizers!.first) {
             viewModel.isSelected.value.toggle()

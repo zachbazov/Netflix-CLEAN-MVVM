@@ -21,7 +21,7 @@ struct ShowcaseTableViewCellViewModel {
     let coordinator: HomeViewCoordinator
     
     let media: Media?
-    let myList: MyList
+    let myList = MyList.shared
     let sectionAt: (HomeTableViewDataSource.Index) -> Section
     
     /// Create a display table view cell view model.
@@ -32,7 +32,6 @@ struct ShowcaseTableViewCellViewModel {
         }
         self.coordinator = coordinator
         self.media = viewModel.showcases[viewModel.dataSourceState.value]
-        self.myList = viewModel.myList
         self.sectionAt = viewModel.section(at:)
     }
 }

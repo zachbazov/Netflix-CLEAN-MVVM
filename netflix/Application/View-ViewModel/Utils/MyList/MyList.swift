@@ -12,24 +12,47 @@ import UIKit
 private protocol ListProtocol {
     var viewModel: MyListViewModel { get }
     
-    func viewDidLoad()
+    func createViewModel() -> MyListViewModel
 }
 
 // MARK: - MyList Type
 
 final class MyList {
-    let viewModel: MyListViewModel
+    static var shared: MyList = MyList()
     
-    init(with viewModel: HomeViewModel) {
-        self.viewModel = MyListViewModel(with: viewModel)
-        self.viewDidLoad()
-    }
+    private(set) lazy var viewModel: MyListViewModel = createViewModel()
+    
+    private init() {}
 }
 
 // MARK: - ListProtocol Implementation
 
 extension MyList: ListProtocol {
-    fileprivate func viewDidLoad() {
-        viewModel.fetchList()
+    fileprivate func createViewModel() -> MyListViewModel {
+        return MyListViewModel()
+    }
+    
+    func dataWillLoad() {
+        if #available(iOS 13.0, *) {
+            Task {
+                await loadUsingAsyncAwait()
+            }
+            
+            return
+        }
+        
+        loadAsync()
+    }
+    
+    fileprivate func loadUsingAsyncAwait() async {
+        mainQueueDispatch { [weak self] in
+            self?.viewModel.listWillLoad()
+        }
+    }
+    
+    fileprivate func loadAsync() {
+        mainQueueDispatch { [weak self] in
+            self?.viewModel.listWillLoad()
+        }
     }
 }

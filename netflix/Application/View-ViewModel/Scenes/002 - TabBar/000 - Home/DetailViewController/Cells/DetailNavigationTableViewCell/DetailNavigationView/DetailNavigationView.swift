@@ -63,7 +63,7 @@ final class DetailNavigationView: View<DetailViewModel> {
     }
     
     override func viewDidConfigure() {
-        if viewModel.media.type == "series" {
+        if viewModel.media?.type == "series" {
             viewModel.navigationViewState.value = .episodes
             leadingViewContainer.isHidden(false)
             centerViewContainer.isHidden(true)

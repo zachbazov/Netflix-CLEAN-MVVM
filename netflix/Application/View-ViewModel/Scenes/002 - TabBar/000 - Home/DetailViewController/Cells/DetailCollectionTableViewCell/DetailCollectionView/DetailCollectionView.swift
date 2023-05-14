@@ -49,7 +49,8 @@ final class DetailCollectionView: View<DetailViewModel> {
         if viewModel.navigationViewState.value == .episodes {
             let cellViewModel = EpisodeCollectionViewCellViewModel(with: viewModel)
             let requestDTO = SeasonHTTPDTO.Request(slug: cellViewModel.media.slug, season: 1)
-            viewModel.getSeason(with: requestDTO) { [weak self] in
+            
+            viewModel.seasonDidLoad(request: requestDTO) { [weak self] in
                 self?.dataSourceDidChange()
             }
         }
@@ -80,17 +81,17 @@ extension DetailCollectionView: ViewProtocol {
         
         switch viewModel.navigationViewState.value {
         case .episodes:
-            guard let episodes = viewModel.season?.value?.episodes else { return }
+            guard let episodes = viewModel.season.value?.episodes else { return }
             dataSource = DetailCollectionViewDataSource(collectionView: collectionView, items: episodes, with: viewModel)
             layout = CollectionViewLayout(layout: .descriptive, scrollDirection: .vertical)
             collectionView.setCollectionViewLayout(layout, animated: false)
         case .trailers:
-            guard let trailers = viewModel.media.resources.trailers.toDomain() as [Trailer]? else { return }
+            guard let trailers = viewModel.media?.resources.trailers.toDomain() as [Trailer]? else { return }
             dataSource = DetailCollectionViewDataSource(collectionView: collectionView, items: trailers, with: viewModel)
             layout = CollectionViewLayout(layout: .trailer, scrollDirection: .vertical)
             collectionView.setCollectionViewLayout(layout, animated: false)
         default:
-            guard let media = viewModel.section.media as [Media]? else { return }
+            guard let media = viewModel.section?.media as [Media]? else { return }
             dataSource = DetailCollectionViewDataSource(collectionView: collectionView, items: media, with: viewModel)
             layout = CollectionViewLayout(layout: .detail, scrollDirection: .vertical)
             collectionView.setCollectionViewLayout(layout, animated: false)

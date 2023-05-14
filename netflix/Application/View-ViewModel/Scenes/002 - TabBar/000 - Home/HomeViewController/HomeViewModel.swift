@@ -14,6 +14,7 @@ private protocol ViewModelProtocol {
     var mediaUseCase: MediaUseCase { get }
     
     var orientation: DeviceOrientation { get }
+    var myList: MyList { get }
     
     var sections: [Section] { get }
     var media: [Media] { get }
@@ -22,16 +23,16 @@ private protocol ViewModelProtocol {
     var dataSourceState: Observable<HomeTableViewDataSource.State> { get }
     var showcases: [HomeTableViewDataSource.State: Media] { get }
     
-    var myList: MyList { get }
-    
     var isSectionsEmpty: Bool { get }
     
-    func section(at index: HomeTableViewDataSource.Index) -> Section
-    func filter(sections: [Section])
-    func filter(at index: HomeTableViewDataSource.Index) -> [Media]
-    func filterShowcases()
     func changeDataSourceStateIfNeeded(_ state: HomeTableViewDataSource.State)
     func dataSourceStateWillChange(_ state: HomeTableViewDataSource.State)
+    
+    func section(at index: HomeTableViewDataSource.Index) -> Section
+    func filter(at index: HomeTableViewDataSource.Index) -> [Media]
+    func filter(at state: HomeTableViewDataSource.State) -> Media?
+    func sectionsWillFilter()
+    func showcasesWillFilter()
 }
 
 // MARK: - HomeViewModel Type
@@ -43,21 +44,16 @@ final class HomeViewModel {
     fileprivate lazy var mediaUseCase = MediaUseCase()
     
     fileprivate let orientation = DeviceOrientation.shared
+    fileprivate let myList = MyList.shared
     
-    fileprivate(set) lazy var sections = [Section]()
-    fileprivate(set) lazy var media = [Media]()
-    fileprivate(set) lazy var topSearches = [Media]()
+    private(set) lazy var sections = [Section]()
+    private(set) lazy var media = [Media]()
+    private(set) lazy var topSearches = [Media]()
     
     let dataSourceState: Observable<HomeTableViewDataSource.State> = Observable(.all)
-    lazy var showcases = [HomeTableViewDataSource.State: Media]()
-    
-    fileprivate(set) lazy var myList = MyList(with: self)
+    private(set) lazy var showcases = [HomeTableViewDataSource.State: Media]()
     
     var isSectionsEmpty: Bool { return sections.isEmpty }
-    
-    var detailSection: Section?
-    var detailMedia: Media?
-    var shouldScreenRotate: Bool = false
     
     deinit {
         print("deinit \(Self.self)")
@@ -71,18 +67,24 @@ final class HomeViewModel {
 extension HomeViewModel: ViewModel {
     func viewDidLoad() {
         dataWillLoad()
+        
+        myList.dataWillLoad()
     }
     
     func dataWillLoad() {
-        ActivityIndicatorView.viewDidShow()
+        ActivityIndicatorView.present()
         
-        loadData()
+        if #available(iOS 13.0, *) {
+            return loadUsingAsyncAwait()
+        }
+        
+        loadUsingDispatchGroup()
     }
     
     func dataDidLoad() {
-        ActivityIndicatorView.viewDidHide()
+        ActivityIndicatorView.remove()
         
-        filterShowcases()
+        showcasesWillFilter()
         
         dataSourceStateWillChange(.all)
     }
@@ -95,6 +97,16 @@ extension HomeViewModel: Coordinable {}
 // MARK: - ViewModelProtocol Implementation
 
 extension HomeViewModel: ViewModelProtocol {
+    func dataSourceStateWillChange(_ state: HomeTableViewDataSource.State) {
+        dataSourceState.value = state
+    }
+    
+    func changeDataSourceStateIfNeeded(_ state: HomeTableViewDataSource.State) {
+        guard dataSourceState.value != state else { return }
+        
+        dataSourceState.value = state
+    }
+    
     /// Given a specific index, returns a section object.
     /// - Parameter index: A representation of the section's index.
     /// - Returns: A section.
@@ -104,7 +116,7 @@ extension HomeViewModel: ViewModelProtocol {
     
     /// Filter all the sections based on the state of the table view data source.
     /// - Parameter sections: The sections to be filtered.
-    func filter(sections: [Section]) {
+    func sectionsWillFilter() {
         guard !isSectionsEmpty else { return }
         
         HomeTableViewDataSource.Index.allCases.forEach {
@@ -112,10 +124,29 @@ extension HomeViewModel: ViewModelProtocol {
         }
     }
     
+    fileprivate func showcasesWillFilter() {
+        HomeTableViewDataSource.State.allCases.forEach {
+            showcases[$0] = filter(at: $0)
+        }
+    }
+    
+    fileprivate func filter(at state: HomeTableViewDataSource.State) -> Media? {
+        guard showcases[state] == nil else { return nil }
+        
+        switch state {
+        case .all:
+            return media.randomElement()
+        case .tvShows:
+            return media.filter { $0.type == "series" }.randomElement()
+        case .movies:
+            return media.filter { $0.type == "film" }.randomElement()
+        }
+    }
+    
     /// Filter a section based on an index of the table view data source.
     /// - Parameter index: Representation of the section's index.
     /// - Returns: Filtered media array.
-    func filter(at index: HomeTableViewDataSource.Index) -> [Media] {
+    fileprivate func filter(at index: HomeTableViewDataSource.Index) -> [Media] {
         switch index {
         case .newRelease:
             switch dataSourceState.value {
@@ -157,6 +188,7 @@ extension HomeViewModel: ViewModelProtocol {
             }
         case .myList:
             let media = myList.viewModel.list
+            
             switch dataSourceState.value {
             case .all:
                 return media.shuffled()
@@ -167,6 +199,7 @@ extension HomeViewModel: ViewModelProtocol {
             }
         case .blockbuster:
             let value = Float(7.5)
+            
             switch dataSourceState.value {
             case .all:
                 return media.filter { $0.rating > value }
@@ -194,35 +227,11 @@ extension HomeViewModel: ViewModelProtocol {
             }
         }
     }
-    
-    fileprivate func filterShowcases() {
-        HomeTableViewDataSource.State.allCases.forEach {
-            guard showcases[$0] == nil else { return }
-            switch $0 {
-            case .all:
-                showcases[$0] = media.randomElement()
-            case .tvShows:
-                showcases[$0] = media.filter { $0.type == "series" }.randomElement()!
-            case .movies:
-                showcases[$0] = media.filter { $0.type == "film" }.randomElement()!
-            }
-        }
-    }
-    
-    func dataSourceStateWillChange(_ state: HomeTableViewDataSource.State) {
-        dataSourceState.value = state
-    }
-    
-    func changeDataSourceStateIfNeeded(_ state: HomeTableViewDataSource.State) {
-        guard dataSourceState.value != state else { return }
-        
-        dataSourceState.value = state
-    }
 }
 
 // MARK: - DataProviderProtocol Type
 
-private protocol DataProviderInput {
+private protocol DataProviderProtocol {
     func sectionsDidLoad(_ completion: @escaping () -> Void)
     func mediaDidLoad(_ completion: @escaping () -> Void)
     func topSearchesDidLoad(_ completion: @escaping () -> Void)
@@ -230,28 +239,15 @@ private protocol DataProviderInput {
     func sectionsDidLoad() async
     func mediaDidLoad() async
     func topSearchesDidLoad() async
+    
+    func loadUsingAsyncAwait()
+    func loadUsingDispatchGroup()
 }
-
-private protocol DataProviderOutput {
-    func loadData()
-    func awaitLoading()
-    func dispatchGroupLoading()
-}
-
-private typealias DataProviderProtocol = DataProviderInput & DataProviderOutput
 
 // MARK: - DataProviderProtocol Implementation
 
 extension HomeViewModel: DataProviderProtocol {
-    func loadData() {
-        if #available(iOS 13.0, *) {
-            return awaitLoading()
-        }
-        
-        dispatchGroupLoading()
-    }
-    
-    fileprivate func dispatchGroupLoading() {
+    fileprivate func loadUsingDispatchGroup() {
         let group = DispatchGroup()
         
         group.enter()
@@ -264,7 +260,7 @@ extension HomeViewModel: DataProviderProtocol {
         group.notify(queue: .main) { [weak self] in self?.dataDidLoad() }
     }
     
-    fileprivate func awaitLoading() {
+    fileprivate func loadUsingAsyncAwait() {
         Task {
             await sectionsDidLoad()
             await mediaDidLoad()
@@ -347,19 +343,25 @@ extension HomeViewModel: DataProviderProtocol {
     
     fileprivate func sectionsDidLoad() async {
         let response = await sectionUseCase.request(endpoint: .getSections, for: SectionHTTPDTO.Response.self)
+        
         guard let sections = response?.data.toDomain() else { return }
+        
         self.sections = sections
     }
     
     fileprivate func mediaDidLoad() async {
         let response = await mediaUseCase.request(endpoint: .getAllMedia, for: MediaHTTPDTO.Response.self)
+        
         guard let media = response?.data.toDomain() else { return }
+        
         self.media = media
     }
     
     fileprivate func topSearchesDidLoad() async {
         let response = await mediaUseCase.request(endpoint: .getTopSearches, for: SearchHTTPDTO.Response.self)
+        
         guard let media = response?.data.toDomain() else { return }
+        
         self.topSearches = media
     }
 }

@@ -51,14 +51,22 @@ extension SearchCollectionViewDataSource: UICollectionViewDelegate, UICollection
         
         guard let row = indexPath.row as Int?, row >= 0, row <= viewModel.items.value.count - 1 else { return }
         
-        let section = controller.viewModel.section(at: .rated)
         let cellViewModel = viewModel.items.value[row]
         
-        homeViewModel.detailSection = section
-        homeViewModel.detailMedia = cellViewModel.media
-        homeViewModel.shouldScreenRotate = false
+        guard let media = cellViewModel.media else { return }
+        
+        let state = homeViewModel.dataSourceState.value
+        let section = controller.navigationOverlay?.viewModel?.category.toSection()
+        let index = HomeTableViewDataSource.State(rawValue: state.rawValue)!
+        let rotated = false
         
         coordinator.coordinate(to: .detail)
+        
+        guard let controller = coordinator.detail?.viewControllers.first as? DetailViewController else { return }
+        
+        controller.viewModel.media = media
+        controller.viewModel.section = section
+        controller.viewModel.isRotated = rotated
     }
     
     func collectionView(_ collectionView: UICollectionView,

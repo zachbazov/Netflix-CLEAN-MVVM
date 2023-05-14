@@ -12,8 +12,8 @@ import UIKit
 private protocol IndicatorProtocol {
     static var indicator: UIActivityIndicatorView? { get }
     
-    static func viewDidShow()
-    static func viewDidHide()
+    static func present()
+    static func remove()
     static func viewDidUpdate()
 }
 
@@ -26,7 +26,7 @@ final class ActivityIndicatorView {
 // MARK: - IndicatorProtocol Implementation
 
 extension ActivityIndicatorView: IndicatorProtocol {
-    static func viewDidShow() {
+    static func present() {
         mainQueueDispatch {
             NotificationCenter.default.addObserver(self,
                                                    selector: #selector(viewDidUpdate),
@@ -46,7 +46,7 @@ extension ActivityIndicatorView: IndicatorProtocol {
         }
     }
 
-    static func viewDidHide() {
+    static func remove() {
         mainQueueDispatch {
             guard let spinner = indicator else { return }
             spinner.stopAnimating()
@@ -59,8 +59,8 @@ extension ActivityIndicatorView: IndicatorProtocol {
     static func viewDidUpdate() {
         mainQueueDispatch {
             if indicator != nil {
-                viewDidHide()
-                viewDidShow()
+                remove()
+                present()
             }
         }
     }

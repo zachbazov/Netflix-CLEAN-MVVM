@@ -77,7 +77,7 @@ extension SignUpViewModel: ViewModelProtocol {
               password.isNotEmpty,
               passwordConfirm.isNotEmpty else { return }
         
-        ActivityIndicatorView.viewDidShow()
+        ActivityIndicatorView.present()
         
         let userDTO = UserDTO(name: name,
                               email: email,
@@ -102,7 +102,7 @@ extension SignUpViewModel: ViewModelProtocol {
     }
     
     private func didFinish(with status: Bool) {
-        ActivityIndicatorView.viewDidHide()
+        ActivityIndicatorView.remove()
         
         mainQueueDispatch { [weak self] in
             guard let self = self else { return }

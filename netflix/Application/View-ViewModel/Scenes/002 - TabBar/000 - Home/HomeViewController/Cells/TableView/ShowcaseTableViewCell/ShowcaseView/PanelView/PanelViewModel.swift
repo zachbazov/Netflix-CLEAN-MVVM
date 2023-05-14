@@ -22,7 +22,7 @@ final class PanelViewModel {
     
     var media: Media?
     let sectionAt: (HomeTableViewDataSource.Index) -> Section
-    let myList: MyList
+    let myList = MyList.shared
     
     init(with viewModel: ShowcaseTableViewCellViewModel) {
         self.coordinator = viewModel.coordinator
@@ -35,7 +35,6 @@ final class PanelViewModel {
         
         self.media = showcase
         self.sectionAt = homeViewModel.section(at:)
-        self.myList = homeViewModel.myList
     }
 }
 

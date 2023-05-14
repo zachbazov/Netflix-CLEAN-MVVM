@@ -14,7 +14,7 @@ final class TabBarController: TabController {
     
     var homeViewController: HomeViewController! {
         guard let coordinator = viewModel.coordinator,
-              let controller = coordinator.home.viewControllers.first as? HomeViewController
+              let controller = coordinator.home?.viewControllers.first as? HomeViewController
         else { fatalError("Unexpected controller \(HomeViewController.self) value.") }
         return controller
     }

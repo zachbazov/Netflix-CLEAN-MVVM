@@ -93,7 +93,7 @@ extension AccountViewController: ViewControllerProtocol {
         let authService = Application.app.services.authentication
         let coordinator = Application.app.coordinator
         
-        ActivityIndicatorView.viewDidShow()
+        ActivityIndicatorView.present()
         
         if #available(iOS 13, *) {
             Task {
@@ -104,7 +104,7 @@ extension AccountViewController: ViewControllerProtocol {
                 
                 guard status else { return }
                 
-                ActivityIndicatorView.viewDidHide()
+                ActivityIndicatorView.remove()
                 
                 backButtonDidTap()
                 

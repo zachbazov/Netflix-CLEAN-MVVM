@@ -208,7 +208,7 @@ extension AuthService: AuthServiceProtocol {
         }
         
         group.notify(queue: .main) {
-            ActivityIndicatorView.viewDidHide()
+            ActivityIndicatorView.remove()
             
             coordinator.coordinate(to: .auth)
         }

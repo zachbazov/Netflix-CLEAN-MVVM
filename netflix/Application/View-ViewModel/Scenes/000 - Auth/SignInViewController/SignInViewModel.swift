@@ -63,7 +63,7 @@ extension SignInViewModel: ViewModelProtocol {
         
         guard email.isNotEmpty, password.isNotEmpty else { return }
         
-        ActivityIndicatorView.viewDidShow()
+        ActivityIndicatorView.present()
         
         let userDTO = UserDTO(email: email, password: password)
         let requestDTO = UserHTTPDTO.Request(user: userDTO, selectedProfile: nil)
@@ -86,7 +86,7 @@ extension SignInViewModel: ViewModelProtocol {
     }
     
     fileprivate func didFinish(with user: UserDTO?) {
-        ActivityIndicatorView.viewDidHide()
+        ActivityIndicatorView.remove()
         
         mainQueueDispatch { [weak self] in
             guard let self = self else { return }

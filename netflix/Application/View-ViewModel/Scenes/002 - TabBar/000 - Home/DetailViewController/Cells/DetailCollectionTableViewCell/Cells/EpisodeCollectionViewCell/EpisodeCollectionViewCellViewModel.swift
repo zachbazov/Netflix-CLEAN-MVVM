@@ -29,7 +29,8 @@ struct EpisodeCollectionViewCellViewModel {
     /// Create an episode collection view cell view model object.
     /// - Parameter viewModel: Coordinating view model.
     init(with viewModel: DetailViewModel) {
-        self.media = viewModel.media
+        guard let media = viewModel.media else { fatalError() }
+        self.media = media
         self.posterImagePath = self.media.resources.previewPoster
         self.posterImageIdentifier = .init(string: "detail-poster_\(self.media.slug)")
         self.posterImageURL = .init(string: self.posterImagePath)

@@ -23,8 +23,9 @@ struct MediaPlayerViewViewModel {
     var isPlaying: Bool
     
     init(with viewModel: DetailViewModel) {
-        self.media = viewModel.media
-        self.item = .init(with: self.media)
+        guard let media = viewModel.media else { fatalError() }
+        self.media = media
+        self.item = .init(with: media)
         self.isPlaying = false
     }
 }

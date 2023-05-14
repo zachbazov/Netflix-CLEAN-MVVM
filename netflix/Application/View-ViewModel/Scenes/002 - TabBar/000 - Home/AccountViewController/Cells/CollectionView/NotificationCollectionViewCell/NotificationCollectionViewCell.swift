@@ -37,10 +37,9 @@ final class NotificationCollectionViewCell: UICollectionViewCell {
             withReuseIdentifier: NotificationCollectionViewCell.reuseIdentifier,
             for: indexPath) as? NotificationCollectionViewCell else { fatalError() }
         
-        guard let homeController = Application.app.coordinator.tabCoordinator.viewController?.homeViewController else { fatalError() }
-        
-        let myList = homeController.viewModel.myList.viewModel.list.toArray()
-        let model = myList[indexPath.row]
+        let myList = MyList.shared
+        let media = myList.viewModel.list.toArray()
+        let model = media[indexPath.row]
         let cellViewModel = NotificationCollectionViewCellViewModel(media: model)
         
         view.representedIdentifier = cellViewModel.slug as NSString

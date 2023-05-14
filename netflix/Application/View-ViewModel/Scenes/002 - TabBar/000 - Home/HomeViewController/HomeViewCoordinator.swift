@@ -26,7 +26,7 @@ private protocol CoordinatorProtocol {
 final class HomeViewCoordinator {
     var viewController: HomeViewController?
     
-    fileprivate weak var detail: UINavigationController?
+    weak var detail: UINavigationController?
     weak var search: UINavigationController?
     weak var account: UINavigationController?
 }
@@ -35,24 +35,14 @@ final class HomeViewCoordinator {
 
 extension HomeViewCoordinator: CoordinatorProtocol {
     fileprivate func createDetailNavigationController() -> UINavigationController? {
-        guard let homeViewModel = viewController?.viewModel else { return nil }
-        
-        guard let section = homeViewModel.detailSection,
-              let media = homeViewModel.detailMedia
-        else { return nil }
-        
-        // Allocate the controller and it's dependencies.
+        let coordinator = DetailViewCoordinator()
         let controller = DetailViewController()
-        let viewModel = DetailViewModel(section: section, media: media, with: homeViewModel)
+        let viewModel = DetailViewModel()
         
-        // Allocate controller dependencies.
         controller.viewModel = viewModel
-        controller.viewModel.coordinator = DetailViewCoordinator()
-        controller.viewModel.coordinator?.viewController = controller
-        controller.viewModel.isRotated = homeViewModel.shouldScreenRotate
-        controller.viewModel.orientation.orientation = homeViewModel.shouldScreenRotate ? .landscapeLeft : .portrait
+        controller.viewModel?.coordinator = coordinator
+        coordinator.viewController = controller
         
-        // Wrap the controller with a navigation controller.
         let navigation = UINavigationController(rootViewController: controller)
         navigation.setNavigationBarHidden(true, animated: false)
         navigation.view.backgroundColor = .black

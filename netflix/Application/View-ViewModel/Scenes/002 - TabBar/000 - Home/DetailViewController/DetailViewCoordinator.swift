@@ -25,7 +25,8 @@ extension DetailViewCoordinator: CoordinatorProtocol {
     /// Create a new detail controller upon existed detail controller.
     /// - Parameter media: Corresponding media object.
     func createDetailController() {
-        let navigation = viewController?.navigationController
+        guard let navigation = viewController?.navigationController else { return }
+        
         let controller = DetailViewController()
         let viewModel = viewController?.viewModel
         
@@ -34,7 +35,7 @@ extension DetailViewCoordinator: CoordinatorProtocol {
         }
         
         viewController = nil
-        navigation?.viewControllers.removeAll()
+        navigation.viewControllers.removeAll()
         
         controller.viewModel = viewModel
         controller.viewModel.isRotated = false
@@ -42,7 +43,7 @@ extension DetailViewCoordinator: CoordinatorProtocol {
         
         viewController = controller
         
-        navigation?.pushViewController(controller, animated: true)
+        navigation.pushViewController(controller, animated: true)
     }
 }
 

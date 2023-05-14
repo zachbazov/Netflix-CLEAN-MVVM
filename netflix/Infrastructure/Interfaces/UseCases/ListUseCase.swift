@@ -33,6 +33,19 @@ extension ListUseCase: UseCase {
             return repository.updateOne(request: request, completion: completion)
         }
     }
+    
+    func request<T, U>(endpoint: Endpoints,
+                       for response: T.Type,
+                       request: U) async -> T? where T : Decodable {
+        switch endpoint {
+        case .getList:
+            guard let request = request as? ListHTTPDTO.GET.Request else { return nil }
+            return await repository.getOne(request: request)
+        case .updateList:
+            guard let request = request as? ListHTTPDTO.PATCH.Request else { return nil }
+            return await repository.updateOne(request: request)
+        }
+    }
 }
 
 // MARK: - Endpoints Type

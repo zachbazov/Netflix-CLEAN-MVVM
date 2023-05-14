@@ -62,9 +62,13 @@ extension DeviceOrientation: OrientationProtocol {
     
     func rotate() {
         if orientation == .landscapeLeft {
+            print(1)
             orientation = .portrait
+            
             return
         }
+        
+        print(2)
         if orientation == .portrait {
             orientation = .landscapeLeft
         }

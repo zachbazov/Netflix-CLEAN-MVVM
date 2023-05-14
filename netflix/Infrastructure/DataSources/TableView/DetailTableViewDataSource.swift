@@ -74,7 +74,7 @@ extension DetailTableViewDataSource: DataSourceProtocol {
             let value = cellHeight * itemsCount + (lineSpacing * itemsCount)
             return Float(value)
         case .trailers:
-            guard let trailers = viewModel.media.resources.trailers as [String]? else { return .zero }
+            guard let trailers = viewModel.media?.resources.trailers as [String]? else { return .zero }
             let cellHeight = Float(224.0)
             let lineSpacing = Float(8.0)
             let itemsCount = Float(trailers.count)
@@ -85,7 +85,7 @@ extension DetailTableViewDataSource: DataSourceProtocol {
             let lineSpacing = Float(8.0)
             let itemsPerLine = Float(3.0)
             let topContentInset = Float(16.0)
-            let itemsCount = Float(viewModel.section.media.count)
+            let itemsCount = Float(viewModel.section?.media.count ?? .zero)
             let roundedItemsOutput = (itemsCount / itemsPerLine).rounded(.awayFromZero)
             let value =
                 roundedItemsOutput * cellHeight

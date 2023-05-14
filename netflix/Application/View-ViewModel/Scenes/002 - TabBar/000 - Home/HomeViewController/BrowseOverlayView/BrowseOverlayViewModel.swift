@@ -15,7 +15,8 @@ private protocol ViewModelProtocol {
     
     func isPresentedWillChange(_ presented: Bool)
     func sectionWillChange(_ section: Section)
-    func sectionDidChange(_ section: Section)
+    
+    func didSelect(at indexPath: IndexPath)
 }
 
 // MARK: - BrowseOverlayViewModel Type
@@ -46,11 +47,16 @@ extension BrowseOverlayViewModel: ViewModelProtocol {
         self.section.value = section
     }
     
-    func sectionDidChange(_ section: Section) {
-        guard let controller = coordinator.viewController,
-              let browseOverlay = controller.browseOverlayView
-        else { return }
+    func didSelect(at indexPath: IndexPath) {
+        coordinator.coordinate(to: .detail)
         
-        browseOverlay.dataSource?.section = section
+        guard let controller = coordinator.detail?.viewControllers.first as? DetailViewController else { return }
+        
+        let section = section.value
+        let media = section.media[indexPath.row]
+        
+        controller.viewModel.section = section
+        controller.viewModel.media = media
+        controller.viewModel.isRotated = false
     }
 }

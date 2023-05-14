@@ -152,13 +152,14 @@ extension ShowcaseView: ViewProtocol {
         let section = controller.navigationOverlay?.viewModel?.category.toSection()
         let index = HomeTableViewDataSource.State(rawValue: state.rawValue)!
         let media = homeViewModel.showcases[index]
-        let rotated = false
-        
-        homeViewModel.detailSection = section
-        homeViewModel.detailMedia = media
-        homeViewModel.shouldScreenRotate = rotated
         
         coordinator.coordinate(to: .detail)
+        
+        guard let controller = coordinator.detail?.viewControllers.first as? DetailViewController else { return }
+        
+        controller.viewModel.media = media
+        controller.viewModel.section = section
+        controller.viewModel.isRotated = false
     }
     
     fileprivate func removeNavigationGradientFromSuperview() {

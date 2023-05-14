@@ -23,6 +23,7 @@ final class PanelView: View<PanelViewModel> {
     @IBOutlet private weak var myListButton: UIButton!
     
     private let parent: UIView
+    private let myList = MyList.shared
     
     /// Create a panel view object.
     /// - Parameters:
@@ -84,27 +85,25 @@ extension PanelView: ViewInstantiable {}
 extension PanelView: ViewProtocol {
     @objc
     fileprivate func playDidTap() {
-        guard let controller = viewModel?.coordinator.viewController,
-              let homeViewModel = controller.viewModel,
-              let coordinator = viewModel?.coordinator
-        else { return }
-        
-        let section = viewModel?.sectionAt(.resumable)
-        let showcase = viewModel?.media
-        let rotated = true
-        
-        homeViewModel.detailSection = section
-        homeViewModel.detailMedia = showcase
-        homeViewModel.shouldScreenRotate = rotated
+        let coordinator = viewModel.coordinator
         
         coordinator.coordinate(to: .detail)
+        
+        guard let controller = coordinator.detail?.viewControllers.first as? DetailViewController else { return }
+        
+        let media = viewModel?.media
+        let section = viewModel?.sectionAt(.resumable)
+        
+        controller.viewModel.media = media
+        controller.viewModel.section = section
+        controller.viewModel.isRotated = true
+        controller.viewModel.orientation.orientation = true ? .landscapeLeft : .portrait
     }
     
     @objc
     fileprivate func myListDidTap() {
         guard let controller = viewModel?.coordinator.viewController,
-              let showcase = viewModel?.media,
-              let myList = viewModel?.myList
+              let showcase = viewModel?.media
         else { return }
         
         myList.viewModel.shouldAddOrRemove(showcase, uponSelection: myListButton.isSelected)
@@ -120,9 +119,7 @@ extension PanelView: ViewProtocol {
     }
     
     fileprivate func selectIfNeeded() {
-        guard let showcase = viewModel?.media,
-              let myList = viewModel?.myList
-        else { return }
+        guard let showcase = viewModel?.media else { return }
         
         let media = viewModel.sectionAt(.myList).media
         let contains = myList.viewModel.contains(showcase, in: media)

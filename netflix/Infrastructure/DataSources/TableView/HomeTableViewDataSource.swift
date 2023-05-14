@@ -10,8 +10,8 @@ import UIKit
 // MARK: - DataSourceProtocol Type
 
 private protocol DataSourceProtocol {
-    var tableView: UITableView! { get }
-    var viewModel: HomeViewModel! { get }
+    var tableView: UITableView? { get }
+    var viewModel: HomeViewModel { get }
     var numberOfRows: Int { get }
     var initialOffsetY: CGFloat { get }
     var primaryOffsetY: CGFloat { get }
@@ -19,7 +19,6 @@ private protocol DataSourceProtocol {
     func didLoad()
     func cellsWillRegister()
     func dataSourceWillChange()
-    func sectionsWillFilter()
     func contentWillInset()
     func applyStyleChanges(_ condition: Bool, limit: CGFloat)
 }
@@ -27,8 +26,8 @@ private protocol DataSourceProtocol {
 // MARK: - HomeTableViewDataSource Type
 
 final class HomeTableViewDataSource: NSObject {
-    fileprivate weak var tableView: UITableView!
-    fileprivate weak var viewModel: HomeViewModel!
+    fileprivate weak var tableView: UITableView?
+    fileprivate let viewModel: HomeViewModel
     
     fileprivate let numberOfRows: Int = 1
     fileprivate var initialOffsetY: CGFloat = .zero
@@ -50,11 +49,10 @@ final class HomeTableViewDataSource: NSObject {
     deinit {
         print("deinit \(Self.self)")
         
-        tableView.removeFromSuperview()
+        tableView?.removeFromSuperview()
         tableView = nil
         
         viewModel.coordinator = nil
-        viewModel = nil
     }
 }
 
@@ -67,26 +65,20 @@ extension HomeTableViewDataSource: DataSourceProtocol {
     }
     
     fileprivate func cellsWillRegister() {
-        tableView.register(headerFooter: TableViewHeaderFooterView.self)
-        tableView.register(class: ShowcaseTableViewCell.self)
-        tableView.register(class: RatedTableViewCell.self)
-        tableView.register(class: ResumableTableViewCell.self)
-        tableView.register(class: StandardTableViewCell.self)
-        tableView.register(class: BlockbusterTableViewCell.self)
+        tableView?.register(headerFooter: TableViewHeaderFooterView.self)
+        tableView?.register(class: ShowcaseTableViewCell.self)
+        tableView?.register(class: RatedTableViewCell.self)
+        tableView?.register(class: ResumableTableViewCell.self)
+        tableView?.register(class: StandardTableViewCell.self)
+        tableView?.register(class: BlockbusterTableViewCell.self)
     }
     
     func dataSourceWillChange() {
-        sectionsWillFilter()
+        viewModel.sectionsWillFilter()
         
-        tableView.delegate = self
-        tableView.dataSource = self
-        tableView.reloadData()
-    }
-    
-    fileprivate func sectionsWillFilter() {
-        guard let viewModel = viewModel else { return }
-        
-        viewModel.filter(sections: viewModel.sections)
+        tableView?.delegate = self
+        tableView?.dataSource = self
+        tableView?.reloadData()
     }
     
     fileprivate func contentWillInset() {
@@ -100,7 +92,7 @@ extension HomeTableViewDataSource: DataSourceProtocol {
         
         initialOffsetY = offset
         
-        tableView.contentInset = .init(top: initialOffsetY, left: .zero, bottom: .zero, right: .zero)
+        tableView?.contentInset = .init(top: initialOffsetY, left: .zero, bottom: .zero, right: .zero)
     }
 }
 
@@ -117,6 +109,7 @@ extension HomeTableViewDataSource: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let index = Index(rawValue: indexPath.section) else { fatalError() }
+        
         switch index {
         case .display:
             return ShowcaseTableViewCell.create(on: tableView, for: indexPath, with: viewModel)
@@ -135,6 +128,7 @@ extension HomeTableViewDataSource: UITableViewDelegate, UITableViewDataSource {
         guard let index = HomeTableViewDataSource.Index(rawValue: indexPath.section),
               let view = viewModel.coordinator?.viewController?.view
         else { return .zero }
+        
         switch index {
         case .display: return view.bounds.height * 0.710 - 96.0
         case .blockbuster: return view.bounds.height * 0.375
@@ -144,6 +138,7 @@ extension HomeTableViewDataSource: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         guard let index = Index(rawValue: section) else { return nil }
+        
         switch index {
         default:
             return TableViewHeaderFooterView.create(on: tableView, for: section, with: viewModel)
@@ -216,7 +211,7 @@ extension HomeTableViewDataSource: UITableViewDelegate, UITableViewDataSource {
     }
     
     fileprivate func applyStyleChanges(_ condition: Bool, limit: CGFloat) {
-        guard let controller = viewModel?.coordinator?.viewController else { return }
+        guard let controller = viewModel.coordinator?.viewController else { return }
         
         if condition {
             if self.primaryOffsetY <= limit {

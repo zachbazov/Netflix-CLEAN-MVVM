@@ -28,7 +28,8 @@ struct PreviewViewViewModel {
     
     /// Create a preview view view model object.
     /// - Parameter media: Corresponding media object.
-    init(with media: Media) {
+    init(with media: Media?) {
+        guard let media = media else { fatalError() }
         self.title = media.title
         self.slug = media.slug
         self.posterImagePath = media.resources.previewPoster

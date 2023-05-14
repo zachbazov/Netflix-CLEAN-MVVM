@@ -38,11 +38,11 @@ extension NewsViewCoordinator: CoordinatorProtocol {
         else { return }
         
         let controller = DetailViewController()
-        let viewModel = DetailViewModel(section: section, media: media, with: homeViewModel)
-        controller.viewModel = viewModel
-        controller.viewModel.coordinator = DetailViewCoordinator()
-        controller.viewModel.coordinator?.viewController = controller
-        controller.viewModel.isRotated = shouldScreenRotate
+//        let viewModel = DetailViewModel(section: section, media: media, with: homeViewModel)
+//        controller.viewModel = viewModel
+//        controller.viewModel.coordinator = DetailViewCoordinator()
+//        controller.viewModel.coordinator?.viewController = controller
+//        controller.viewModel.isRotated = shouldScreenRotate
         
         let navigation = UINavigationController(rootViewController: controller)
         navigation.setNavigationBarHidden(true, animated: false)

@@ -67,15 +67,15 @@ final class HomeCollectionViewDataSource<Cell>: NSObject,
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        guard let homeViewModel = coordinator.viewController?.viewModel else { return }
+        coordinator.coordinate(to: .detail)
+        
+        guard let controller = coordinator.detail?.viewControllers.first as? DetailViewController else { return }
         
         let media = section.media[indexPath.row]
         
-        homeViewModel.detailSection = section
-        homeViewModel.detailMedia = media
-        homeViewModel.shouldScreenRotate = false
-        
-        coordinator.coordinate(to: .detail)
+        controller.viewModel.media = media
+        controller.viewModel.section = section
+        controller.viewModel.isRotated = false
     }
     
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
