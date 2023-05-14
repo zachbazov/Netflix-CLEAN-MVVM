@@ -31,7 +31,9 @@ extension DetailViewCoordinator: CoordinatorProtocol {
         let viewModel = viewController?.viewModel
         
         if let mediaPlayerView = viewController?.previewView?.mediaPlayerView {
-            mediaPlayerView.delegate?.playerDidStop(mediaPlayerView.mediaPlayer)
+            guard let mediaPlayer = mediaPlayerView.mediaPlayer else { return }
+            
+            mediaPlayerView.delegate?.playerDidStop(mediaPlayer)
         }
         
         viewController = nil

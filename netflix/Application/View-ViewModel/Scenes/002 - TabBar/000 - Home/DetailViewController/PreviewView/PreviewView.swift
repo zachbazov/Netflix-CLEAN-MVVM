@@ -14,9 +14,11 @@ private protocol ViewProtocol {
     var imageView: UIImageView { get }
     
     func createImageView() -> UIImageView
-    func createMediaPlayer(on parent: UIView,
-                           view: PreviewView,
-                           with viewModel: DetailViewModel) -> MediaPlayerView
+    func createMediaPlayer(
+        on parent: UIView,
+        view: PreviewView,
+        with viewModel: DetailViewModel) -> MediaPlayerView
+    func prepareForPlay(_ played: Bool)
 }
 
 // MARK: - PreviewView Type
@@ -102,22 +104,36 @@ extension PreviewView: ViewProtocol {
         return imageView
     }
     
-    fileprivate func createMediaPlayer(on parent: UIView,
-                                       view: PreviewView,
-                                       with viewModel: DetailViewModel) -> MediaPlayerView {
-        let mediaPlayerView = MediaPlayerView(on: view, with: viewModel)
-        
-        mediaPlayerView.prepareToPlay = { [weak self] isPlaying in
-            isPlaying ? self?.imageView.isHidden(true) : self?.imageView.isHidden(false)
+    fileprivate func createMediaPlayer(
+        on parent: UIView,
+        view: PreviewView,
+        with viewModel: DetailViewModel) -> MediaPlayerView {
+            let mediaPlayerView = MediaPlayerView(on: view, with: viewModel)
+            
+            guard let mediaPlayer = mediaPlayerView.mediaPlayer else { fatalError() }
+            
+            mediaPlayerView.prepareToPlay = { [weak self] isPlaying in self?.prepareForPlay(isPlaying) }
+            
+            mediaPlayerView
+                .delegate?
+                .player(mediaPlayer, willReplaceItem: mediaPlayerView.viewModel.item)
+            
+            mediaPlayerView
+                .delegate?
+                .playerDidPlay(mediaPlayer)
+            
+            mediaPlayerView
+                .addToHierarchy(on: parent)
+                .constraintToSuperview(parent)
+            
+            return mediaPlayerView
         }
-        
-        mediaPlayerView.delegate?.player(mediaPlayerView.mediaPlayer,
-                                         willReplaceItem: mediaPlayerView.viewModel.item)
-        mediaPlayerView.delegate?.playerDidPlay(mediaPlayerView.mediaPlayer)
-        
-        parent.addSubview(mediaPlayerView)
-        mediaPlayerView.constraintToSuperview(parent)
-        
-        return mediaPlayerView
+    
+    fileprivate func prepareForPlay(_ played: Bool) {
+        mainQueueDispatch(delayInSeconds: 1) { [ weak self] in
+            guard let self = self else { return }
+            
+            played ? self.imageView.isHidden(true) : self.imageView.isHidden(false)
+        }
     }
 }

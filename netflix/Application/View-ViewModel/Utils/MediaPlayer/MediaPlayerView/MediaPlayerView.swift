@@ -10,75 +10,104 @@ import AVKit
 // MARK: - ViewProtocol Type
 
 private protocol ViewProtocol {
-    var mediaPlayer: MediaPlayer! { get }
-    var overlayView: MediaPlayerOverlayView! { get }
+    var mediaPlayer: MediaPlayer? { get }
+    var overlayView: MediaPlayerOverlayView? { get }
     var prepareToPlay: ((Bool) -> Void)? { get }
+    var delegate: MediaPlayerDelegate? { get }
+    
+    func createMediaPlayer()
+    func createMediaPlayerOverlay()
 }
 
 // MARK: - MediaPlayerView Type
 
 final class MediaPlayerView: View<MediaPlayerViewViewModel> {
-    var mediaPlayer: MediaPlayer!
-    var overlayView: MediaPlayerOverlayView!
+    var mediaPlayer: MediaPlayer?
+    var overlayView: MediaPlayerOverlayView?
     
     var prepareToPlay: ((Bool) -> Void)?
     
     weak var delegate: MediaPlayerDelegate?
     
+    deinit {
+        print("deinit \(Self.self)")
+        
+        viewWillDeallocate()
+    }
+    
     init(on parent: UIView, with viewModel: DetailViewModel) {
         super.init(frame: parent.bounds)
+        
         self.delegate = self
         self.viewModel = MediaPlayerViewViewModel(with: viewModel)
-        self.mediaPlayer = MediaPlayer(on: self)
-        self.overlayView = MediaPlayerOverlayView(on: self)
-        self.addSubview(self.overlayView)
-        self.viewDidTargetSubviews()
-        self.overlayView.constraintToSuperview(self)
+        
+        self.viewDidLoad()
     }
     
     required init?(coder: NSCoder) { fatalError() }
     
-    deinit {
-        viewDidUnbindObservers()
+    override func viewDidLoad() {
+        viewWillDeploySubviews()
+        viewHierarchyWillConfigure()
+        viewWillTargetSubviews()
+    }
+    
+    override func viewWillDeploySubviews() {
+        createMediaPlayer()
+        createMediaPlayerOverlay()
+    }
+    
+    override func viewHierarchyWillConfigure() {
+        overlayView?
+            .addToHierarchy(on: self)
+            .constraintToSuperview(self)
+    }
+    
+    override func viewWillTargetSubviews() {
+        let tapRecognizer = UITapGestureRecognizer(target: overlayView, action: #selector(overlayView?.didSelect))
+        addGestureRecognizer(tapRecognizer)
+    }
+    
+    override func viewWillUnbindObservers() {
+        guard let observers = overlayView?.configuration.observers else { return }
+        
+        mediaPlayer?.player.removeTimeObserver(observers.timeObserverToken as Any)
+        
+        printIfDebug(.success, "Removed `MediaPlayerView` observers.")
+    }
+    
+    override func viewWillDeallocate() {
+        viewWillUnbindObservers()
+        
         mediaPlayer = nil
         overlayView = nil
         prepareToPlay = nil
         delegate = nil
     }
-    
-    override func viewDidConfigure() {
-        mediaPlayer.layer.playerLayer.frame = mediaPlayer.layer.bounds
-        mediaPlayer.layer.playerLayer.videoGravity = .resizeAspectFill
-    }
-    
-    override func viewDidTargetSubviews() {
-        let tapRecognizer = UITapGestureRecognizer(target: overlayView, action: #selector(overlayView.didSelect))
-        addGestureRecognizer(tapRecognizer)
-    }
-    
-    override func viewDidUnbindObservers() {
-        if let timeObserverToken = overlayView?.configuration.observers.timeObserverToken {
-            printIfDebug(.success, "Removed `MediaPlayerView` observers.")
-            mediaPlayer?.player.removeTimeObserver(timeObserverToken)
-        }
-    }
 }
 
 // MARK: - ViewProtocol Implementation
 
-extension MediaPlayerView: ViewProtocol {}
+extension MediaPlayerView: ViewProtocol {
+    fileprivate func createMediaPlayer() {
+        mediaPlayer = MediaPlayer(on: self)
+    }
+    
+    fileprivate func createMediaPlayerOverlay() {
+        overlayView = MediaPlayerOverlayView(on: self)
+    }
+}
 
 // MARK: - MediaPlayerDelegate Implementation
 
 extension MediaPlayerView: MediaPlayerDelegate {
     func playerDidPlay(_ mediaPlayer: MediaPlayer) {
-        viewModel.isPlaying = true
-        prepareToPlay?(viewModel.isPlaying)
+        prepareToPlay?(true)
+        
         mediaPlayer.player.play()
     }
     
     func playerDidStop(_ mediaPlayer: MediaPlayer) {
-        viewModel.isPlaying = false
         mediaPlayer.player.replaceCurrentItem(with: nil)
     }
     

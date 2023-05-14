@@ -12,7 +12,6 @@ import Foundation
 private protocol ViewModelProtocol {
     var media: Media { get }
     var item: MediaPlayerViewItem? { get }
-    var isPlaying: Bool { get }
 }
 
 // MARK: - MediaPlayerViewViewModel Type
@@ -20,16 +19,19 @@ private protocol ViewModelProtocol {
 struct MediaPlayerViewViewModel {
     let media: Media
     let item: MediaPlayerViewItem?
-    var isPlaying: Bool
     
     init(with viewModel: DetailViewModel) {
         guard let media = viewModel.media else { fatalError() }
+        
         self.media = media
-        self.item = .init(with: media)
-        self.isPlaying = false
+        self.item = MediaPlayerViewItem(with: media)
     }
 }
 
+// MARK: - ViewModel Implementation
+
 extension MediaPlayerViewViewModel: ViewModel {}
+
+// MARK: - ViewModelProtocol Implementation
 
 extension MediaPlayerViewViewModel: ViewModelProtocol {}

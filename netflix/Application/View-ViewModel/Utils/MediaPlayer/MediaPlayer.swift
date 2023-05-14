@@ -19,24 +19,35 @@ protocol MediaPlayerDelegate: AnyObject {
 // MARK: - PlayerProtocol Type
 
 private protocol PlayerProtocol {
-    var player: AVPlayer { get }
     var layer: MediaPlayerLayer { get }
+    var player: AVPlayer { get }
+    
+    func didLoad()
+    func configurePlayer()
 }
 
 // MARK: - MediaPlayer Type
 
 struct MediaPlayer {
+    fileprivate let layer: MediaPlayerLayer
+    
     let player = AVPlayer()
-    let layer: MediaPlayerLayer
     
     init(on parent: UIView) {
-        self.layer = MediaPlayerLayer(frame: parent.bounds)
-        parent.addSubview(self.layer)
-        self.layer.constraintToSuperview(parent)
-        self.layer.player = self.player
+        self.layer = MediaPlayerLayer(on: parent)
+        
+        didLoad()
     }
 }
 
 // MARK: - PlayerProtocol Implementation
 
-extension MediaPlayer: PlayerProtocol {}
+extension MediaPlayer: PlayerProtocol {
+    fileprivate func didLoad() {
+        configurePlayer()
+    }
+    
+    fileprivate func configurePlayer() {
+        layer.setPlayer(player)
+    }
+}

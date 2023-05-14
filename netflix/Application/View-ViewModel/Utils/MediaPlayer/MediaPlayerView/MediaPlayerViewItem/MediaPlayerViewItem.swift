@@ -15,11 +15,14 @@ final class MediaPlayerViewItem: AVPlayerItem {
     }
     
     convenience init?(with media: Media) {
-        let string = "https://file-examples.com/wp-content/uploads/2018/04/file_example_MOV_1920_2_2MB.mov"
-        let url = URL(string: media.type == "film"
-                      ? media.resources.previewUrl
-                      : (media.resources.trailers.first ?? string))
-        self.init(asset: AVAsset(url: url ?? URL(string: string)!),
-                  automaticallyLoadedAssetKeys: nil)
+        guard let path = media.type == Media.MediaType.film.rawValue
+                ? media.resources.previewUrl
+                : media.resources.trailers.first,
+              let url = URL(string: path)
+        else { return nil }
+        
+        let asset = AVAsset(url: url)
+        
+        self.init(asset: asset, automaticallyLoadedAssetKeys: nil)
     }
 }
