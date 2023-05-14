@@ -10,8 +10,11 @@ import AVKit
 // MARK: - ControllerProtocol Type
 
 private protocol ControllerProtocol {
-    var previewView: PreviewView! { get }
-    var dataSource: DetailTableViewDataSource! { get }
+    var previewView: PreviewView? { get }
+    var dataSource: DetailTableViewDataSource? { get }
+    
+    func createPreviewView()
+    func createDataSource()
 }
 
 // MARK: - DetailViewController Type
@@ -20,62 +23,74 @@ final class DetailViewController: Controller<DetailViewModel> {
     @IBOutlet private(set) weak var tableView: UITableView!
     @IBOutlet private(set) weak var previewContainer: UIView!
     
-    private(set) var previewView: PreviewView!
-    private(set) var dataSource: DetailTableViewDataSource!
+    private(set) var previewView: PreviewView?
+    private(set) var dataSource: DetailTableViewDataSource?
     
     deinit {
         print("deinit \(Self.self)")
-        viewModel?.resetOrientation()
-        viewDidUnbindObservers()
+        
+        viewWillDeallocate()
+    }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        deviceWillLockOrientation(.all)
+        
+        viewWillDeploySubviews()
+        viewWillBindObservers()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        viewModel?.shouldScreenRotate()
+    }
+    
+    override func viewWillDeploySubviews() {
+        createPreviewView()
+        createDataSource()
+    }
+    
+    override func viewWillBindObservers() {
+        viewModel.navigationViewState.observe(on: self) { [weak self] state in
+            self?.dataSource?.reloadData(at: .collection)
+        }
+        
+        viewModel.season.observe(on: self) { [weak self] season in
+            self?.dataSource?.reloadData(at: .collection)
+        }
+    }
+    
+    override func viewWillUnbindObservers() {
+        guard let viewModel = viewModel else { return }
+        
+        viewModel.navigationViewState.remove(observer: self)
+        viewModel.season.remove(observer: self)
+        
+        printIfDebug(.success, "Removed `\(Self.self)` observers.")
+    }
+    
+    override func viewWillDeallocate() {
+        deviceWillLockOrientation(.portrait)
+        
+        viewWillUnbindObservers()
+        
         previewView = nil
         dataSource = nil
         viewModel = nil
         tableView = nil
     }
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        lockDeviceOrientation(.all)
-        viewDidDeploySubviews()
-        viewDidBindObservers()
-    }
-    
-    override func viewDidDeploySubviews() {
-        setupPreviewView()
-        setupDataSource()
-    }
-    
-    override func viewDidBindObservers() {
-        viewModel.navigationViewState.observe(on: self) { [weak self] state in
-            self?.dataSource.reloadData(at: .collection)
-        }
-        
-        viewModel.season.observe(on: self) { [weak self] season in
-            self?.dataSource.reloadData(at: .collection)
-        }
-    }
-    
-    override func viewDidUnbindObservers() {
-        if let viewModel = viewModel {
-            printIfDebug(.success, "Removed `DetailViewModel` observers.")
-            viewModel.navigationViewState.remove(observer: self)
-            viewModel.season.remove(observer: self)
-        }
-    }
 }
 
 // MARK: - ControllerProtocol Implementation
 
-extension DetailViewController: ControllerProtocol {}
-
-// MARK: - Private UI Implementation
-
-extension DetailViewController {
-    private func setupPreviewView() {
+extension DetailViewController: ControllerProtocol {
+    fileprivate func createPreviewView() {
         previewView = PreviewView(on: previewContainer, with: viewModel)
     }
     
-    private func setupDataSource() {
+    fileprivate func createDataSource() {
         dataSource = DetailTableViewDataSource(on: tableView, with: viewModel)
     }
 }

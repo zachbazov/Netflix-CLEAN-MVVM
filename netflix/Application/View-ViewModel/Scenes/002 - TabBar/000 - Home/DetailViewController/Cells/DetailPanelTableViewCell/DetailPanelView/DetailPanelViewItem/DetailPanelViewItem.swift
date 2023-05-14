@@ -81,8 +81,9 @@ extension DetailPanelViewItemConfiguration: ConfigurationProtocol {
         switch tag {
         case .myList:
             let media = viewModel.media!
+            
             myList.viewModel.shouldAddOrRemove(media, uponSelection: viewModel.isSelected.value)
-            // Reload browse overlay's collection data.
+            
             myList.viewModel.coordinator.viewController?.browseOverlayView?.collectionView.reloadData()
         case .rate: printIfDebug(.debug, "rate")
         case .share: printIfDebug(.debug, "share")

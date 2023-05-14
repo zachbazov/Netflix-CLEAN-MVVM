@@ -93,7 +93,7 @@ extension Controller: ViewAnimating {}
 // MARK: - DeviceOrienting Implementation
 
 extension Controller: DeviceOrienting {
-    func lockDeviceOrientation(_ mask: UIInterfaceOrientationMask = .portrait) {
+    func deviceWillLockOrientation(_ mask: UIInterfaceOrientationMask = .portrait) {
         let orientation = DeviceOrientation.shared
         orientation.setLock(orientation: mask)
     }

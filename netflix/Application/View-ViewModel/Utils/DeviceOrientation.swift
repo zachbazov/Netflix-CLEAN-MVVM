@@ -10,7 +10,7 @@ import UIKit
 // MARK: - DeviceOrienting Type
 
 protocol DeviceOrienting {
-    func lockDeviceOrientation(_ mask: UIInterfaceOrientationMask)
+    func deviceWillLockOrientation(_ mask: UIInterfaceOrientationMask)
 }
 
 // MARK: - OrientationProtocol Type

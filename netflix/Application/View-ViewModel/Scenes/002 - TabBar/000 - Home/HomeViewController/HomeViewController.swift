@@ -45,7 +45,7 @@ final class HomeViewController: Controller<HomeViewModel> {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        super.lockDeviceOrientation(.portrait)
+        super.deviceWillLockOrientation(.portrait)
     }
     
     override func viewWillDeploySubviews() {

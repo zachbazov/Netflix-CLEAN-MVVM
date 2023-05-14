@@ -22,7 +22,6 @@ private protocol ViewModelProtocol {
     var season: Observable<Season?> { get }
     
     func shouldScreenRotate()
-    func resetOrientation()
 }
 
 // MARK: - DetailViewModel Type
@@ -36,9 +35,7 @@ final class DetailViewModel {
     
     var section: Section?
     var media: Media?
-    var isRotated: Bool = false {
-        didSet { shouldScreenRotate() }
-    }
+    var isRotated: Bool = false
     
     fileprivate(set) var navigationViewState: Observable<DetailNavigationView.State> = Observable(.episodes)
     fileprivate(set) var season: Observable<Season?> = Observable(nil)
@@ -57,18 +54,12 @@ extension DetailViewModel: ViewModel {}
 // MARK: - ViewModelProtocol Implementation
 
 extension DetailViewModel: ViewModelProtocol {
-    fileprivate func shouldScreenRotate() {
-        orientation.setLock(orientation: .all)
-        
+    func shouldScreenRotate() {
         mainQueueDispatch(delayInSeconds: 1) { [weak self] in
             guard let self = self else { return }
             
             self.orientation.set(orientation: self.isRotated ? .landscapeLeft : .portrait)
         }
-    }
-    
-    func resetOrientation() {
-        orientation.setLock(orientation: .portrait)
     }
 }
 

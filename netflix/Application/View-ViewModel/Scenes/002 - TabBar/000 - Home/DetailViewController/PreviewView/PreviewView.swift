@@ -10,7 +10,7 @@ import UIKit
 // MARK: - ViewProtocol Type
 
 private protocol ViewProtocol {
-    var mediaPlayerView: MediaPlayerView! { get }
+    var mediaPlayerView: MediaPlayerView? { get }
     var imageView: UIImageView { get }
     
     func createImageView() -> UIImageView
@@ -22,36 +22,73 @@ private protocol ViewProtocol {
 // MARK: - PreviewView Type
 
 final class PreviewView: View<PreviewViewViewModel> {
-    private(set) var mediaPlayerView: MediaPlayerView!
+    private(set) var mediaPlayerView: MediaPlayerView?
     private(set) lazy var imageView = createImageView()
+    
+    private weak var parent: UIView?
+    private weak var detailViewModel: DetailViewModel?
     
     /// Create a preview view object.
     /// - Parameters:
     ///   - parent: Instantiating view.
     ///   - viewModel: Coordinating view model.
     init(on parent: UIView, with viewModel: DetailViewModel) {
+        self.parent = parent
+        self.detailViewModel = viewModel
+        
         super.init(frame: .zero)
-        parent.addSubview(self)
-        self.constraintToSuperview(parent)
-        self.viewModel = .init(with: viewModel.media)
-        self.viewDidConfigure()
-        self.mediaPlayerView = createMediaPlayer(on: parent, view: self, with: viewModel)
+        
+        self.viewDidLoad()
     }
     
     required init?(coder: NSCoder) { fatalError() }
     
     deinit {
-        mediaPlayerView = nil
-        viewModel = nil
-        mediaPlayerView = nil
+        print("deinit \(Self.self)")
+        
+        viewWillDeallocate()
     }
     
-    override func viewDidConfigure() {
+    override func viewDidLoad() {
+        viewHierarchyWillConfigure()
+        viewWillDeploySubviews()
+        dataWillLoad()
+    }
+    
+    override func viewHierarchyWillConfigure() {
+        self.addToHierarchy(on: parent!)
+            .constraintToSuperview(parent!)
+    }
+    
+    override func viewWillDeploySubviews() {
+        viewModel = PreviewViewViewModel(with: detailViewModel!.media!)
+        mediaPlayerView = createMediaPlayer(on: parent!, view: self, with: detailViewModel!)
+    }
+    
+    override func dataWillLoad() {
+        loadResources()
+    }
+    
+    override func viewWillDeallocate() {
+        mediaPlayerView = nil
+        
+        viewModel = nil
+    }
+    
+    func loadResources() {
         AsyncImageService.shared.load(
             url: viewModel.url,
             identifier: viewModel.identifier) { [weak self] image in
-                mainQueueDispatch { self?.imageView.image = image }
+                guard let self = self, let image = image else { return }
+                
+                mainQueueDispatch {
+                    self.setImage(image)
+                }
             }
+    }
+    
+    func setImage(_ image: UIImage) {
+        self.imageView.image = image
     }
 }
 

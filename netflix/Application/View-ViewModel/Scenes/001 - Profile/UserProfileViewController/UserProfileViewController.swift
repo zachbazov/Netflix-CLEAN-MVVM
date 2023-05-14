@@ -41,7 +41,7 @@ final class UserProfileViewController: Controller<ProfileViewModel> {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        super.lockDeviceOrientation(.portrait)
+        super.deviceWillLockOrientation(.portrait)
     }
     
     override func viewDidDeploySubviews() {

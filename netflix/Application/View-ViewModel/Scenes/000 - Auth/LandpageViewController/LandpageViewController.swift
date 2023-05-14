@@ -45,7 +45,7 @@ final class LandpageViewController: Controller<AuthViewModel> {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        super.lockDeviceOrientation(.portrait)
+        super.deviceWillLockOrientation(.portrait)
         animateView()
     }
     
