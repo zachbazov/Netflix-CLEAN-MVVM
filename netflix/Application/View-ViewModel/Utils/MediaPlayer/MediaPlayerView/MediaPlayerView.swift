@@ -35,8 +35,8 @@ final class MediaPlayerView: View<MediaPlayerViewViewModel> {
         viewWillDeallocate()
     }
     
-    init(on parent: UIView, with viewModel: DetailViewModel) {
-        super.init(frame: parent.bounds)
+    init(with viewModel: DetailViewModel) {
+        super.init(frame: .zero)
         
         self.delegate = self
         self.viewModel = MediaPlayerViewViewModel(with: viewModel)
@@ -58,6 +58,11 @@ final class MediaPlayerView: View<MediaPlayerViewViewModel> {
     }
     
     override func viewHierarchyWillConfigure() {
+        guard let container = viewModel.coordinator.viewController?.previewContainer else { return }
+        
+        self.addToHierarchy(on: container)
+            .constraintToSuperview(container)
+        
         overlay?
             .addToHierarchy(on: self)
             .constraintToSuperview(self)

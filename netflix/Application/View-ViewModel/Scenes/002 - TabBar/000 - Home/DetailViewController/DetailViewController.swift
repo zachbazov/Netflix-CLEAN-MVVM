@@ -87,7 +87,7 @@ final class DetailViewController: Controller<DetailViewModel> {
 
 extension DetailViewController: ControllerProtocol {
     fileprivate func createPreviewView() {
-        previewView = PreviewView(on: previewContainer, with: viewModel)
+        previewView = PreviewView(with: viewModel)
     }
     
     fileprivate func createDataSource() {

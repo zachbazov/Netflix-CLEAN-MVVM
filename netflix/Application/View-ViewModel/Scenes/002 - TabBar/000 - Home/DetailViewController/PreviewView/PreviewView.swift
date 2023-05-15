@@ -14,14 +14,12 @@ private protocol ViewProtocol {
     var imageView: UIImageView { get }
     
     func createImageView() -> UIImageView
-    func createMediaPlayer(
-        on parent: UIView,
-        view: PreviewView,
-        with viewModel: DetailViewModel) -> MediaPlayerView
+    func createMediaPlayer()
+    
+    func viewWillPrepareForPlaying(_ played: Bool)
+    func setImage(_ image: UIImage)
     
     func loadResources()
-    func prepareForPlay(_ played: Bool)
-    func setImage(_ image: UIImage)
 }
 
 // MARK: - PreviewView Type
@@ -30,18 +28,14 @@ final class PreviewView: View<PreviewViewViewModel> {
     private(set) var mediaPlayerView: MediaPlayerView?
     private(set) lazy var imageView = createImageView()
     
-    private weak var parent: UIView?
-    private weak var detailViewModel: DetailViewModel?
-    
     /// Create a preview view object.
     /// - Parameters:
     ///   - parent: Instantiating view.
     ///   - viewModel: Coordinating view model.
-    init(on parent: UIView, with viewModel: DetailViewModel) {
-        self.parent = parent
-        self.detailViewModel = viewModel
-        
+    init(with viewModel: DetailViewModel) {
         super.init(frame: .zero)
+        
+        self.viewModel = PreviewViewViewModel(with: viewModel)
         
         self.viewDidLoad()
     }
@@ -61,22 +55,27 @@ final class PreviewView: View<PreviewViewViewModel> {
     override func viewDidLoad() {
         viewHierarchyWillConfigure()
         viewWillDeploySubviews()
+        viewWillConfigure()
         dataWillLoad()
     }
     
     override func viewHierarchyWillConfigure() {
-        self.addToHierarchy(on: parent!)
-            .constraintToSuperview(parent!)
+        guard let container = viewModel.coordinator.viewController?.previewContainer else { return }
+        
+        self.addToHierarchy(on: container)
+            .constraintToSuperview(container)
     }
     
     override func viewWillDeploySubviews() {
-        viewModel = PreviewViewViewModel(with: detailViewModel!.media!)
-        mediaPlayerView = createMediaPlayer(on: parent!, view: self, with: detailViewModel!)
+        createMediaPlayer()
+    }
+    
+    override func viewWillConfigure() {
+        configureMediaPlayer()
     }
     
     override func viewWillDeallocate() {
         mediaPlayerView = nil
-        parent = nil
         viewModel = nil
         
         removeFromSuperview()
@@ -93,36 +92,17 @@ extension PreviewView: ViewProtocol {
         return imageView
     }
     
-    fileprivate func createMediaPlayer(
-        on parent: UIView,
-        view: PreviewView,
-        with viewModel: DetailViewModel) -> MediaPlayerView {
-            let mediaPlayerView = MediaPlayerView(on: view, with: viewModel)
-            
-            guard let mediaPlayer = mediaPlayerView.mediaPlayer else { fatalError() }
-            
-            mediaPlayerView.prepareToPlay = { [weak self] isPlaying in self?.prepareForPlay(isPlaying) }
-            
-            mediaPlayerView
-                .delegate?
-                .player(mediaPlayer, willReplaceItem: mediaPlayerView.viewModel.item)
-            
-            mediaPlayerView
-                .delegate?
-                .playerDidPlay(mediaPlayer)
-            
-            mediaPlayerView
-                .addToHierarchy(on: parent)
-                .constraintToSuperview(parent)
-            
-            return mediaPlayerView
-        }
+    fileprivate func createMediaPlayer() {
+        guard let viewModel = viewModel.coordinator.viewController?.viewModel else { return }
+        
+        mediaPlayerView = MediaPlayerView(with: viewModel)
+    }
     
-    fileprivate func prepareForPlay(_ played: Bool) {
+    fileprivate func viewWillPrepareForPlaying(_ played: Bool) {
         mainQueueDispatch(delayInSeconds: 1) { [ weak self] in
             guard let self = self else { return }
             
-            played ? self.imageView.isHidden(true) : self.imageView.isHidden(false)
+            self.imageView.isHidden(played ? true : false)
         }
     }
     
@@ -140,5 +120,25 @@ extension PreviewView: ViewProtocol {
     
     fileprivate func setImage(_ image: UIImage) {
         imageView.image = image
+    }
+}
+
+// MARK: - Private Presentation Logic
+
+extension PreviewView {
+    private func configureMediaPlayer() {
+        guard let mediaPlayer = mediaPlayerView?.mediaPlayer else { fatalError() }
+        
+        mediaPlayerView?.prepareToPlay = { [weak self] isPlaying in
+            self?.viewWillPrepareForPlaying(isPlaying)
+        }
+        
+        mediaPlayerView?
+            .delegate?
+            .player(mediaPlayer, willReplaceItem: mediaPlayerView?.viewModel.item)
+        
+        mediaPlayerView?
+            .delegate?
+            .playerDidPlay(mediaPlayer)
     }
 }

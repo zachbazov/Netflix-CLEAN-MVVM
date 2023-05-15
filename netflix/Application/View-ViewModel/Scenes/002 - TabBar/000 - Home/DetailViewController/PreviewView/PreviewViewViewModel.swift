@@ -20,6 +20,8 @@ private protocol ViewModelProtocol {
 // MARK: - PreviewViewViewModel Type
 
 struct PreviewViewViewModel {
+    let coordinator: DetailViewCoordinator
+    
     let title: String
     let slug: String
     let posterImagePath: String
@@ -28,8 +30,12 @@ struct PreviewViewViewModel {
     
     /// Create a preview view view model object.
     /// - Parameter media: Corresponding media object.
-    init(with media: Media?) {
-        guard let media = media else { fatalError() }
+    init(with viewModel: DetailViewModel) {
+        guard let coordinator = viewModel.coordinator else { fatalError() }
+        self.coordinator = coordinator
+        
+        guard let media = viewModel.media else { fatalError() }
+        
         self.title = media.title
         self.slug = media.slug
         self.posterImagePath = media.resources.previewPoster

@@ -17,10 +17,15 @@ private protocol ViewModelProtocol {
 // MARK: - MediaPlayerViewViewModel Type
 
 struct MediaPlayerViewViewModel {
+    let coordinator: DetailViewCoordinator
+    
     let media: Media
     let item: MediaPlayerViewItem?
     
     init(with viewModel: DetailViewModel) {
+        guard let coordinator = viewModel.coordinator else { fatalError() }
+        self.coordinator = coordinator
+        
         guard let media = viewModel.media else { fatalError() }
         
         self.media = media
