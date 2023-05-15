@@ -20,7 +20,7 @@
             <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Ps3-V2-CVp" userLabel="Detail Preview View">
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Ps3-V2-CVp" userLabel="Detail Preview View Container">
                     <rect key="frame" x="0.0" y="59" width="393" height="221"/>
                     <constraints>
                         <constraint firstAttribute="width" secondItem="Ps3-V2-CVp" secondAttribute="height" multiplier="16:9" id="Hgh-x0-xeR"/>

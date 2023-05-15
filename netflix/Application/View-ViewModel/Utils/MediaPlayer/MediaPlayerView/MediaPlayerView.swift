@@ -11,7 +11,7 @@ import AVKit
 
 private protocol ViewProtocol {
     var mediaPlayer: MediaPlayer? { get }
-    var overlayView: MediaPlayerOverlayView? { get }
+    var overlay: MediaPlayerOverlayView? { get }
     var prepareToPlay: ((Bool) -> Void)? { get }
     var delegate: MediaPlayerDelegate? { get }
     
@@ -23,7 +23,7 @@ private protocol ViewProtocol {
 
 final class MediaPlayerView: View<MediaPlayerViewViewModel> {
     var mediaPlayer: MediaPlayer?
-    var overlayView: MediaPlayerOverlayView?
+    var overlay: MediaPlayerOverlayView?
     
     var prepareToPlay: ((Bool) -> Void)?
     
@@ -58,31 +58,33 @@ final class MediaPlayerView: View<MediaPlayerViewViewModel> {
     }
     
     override func viewHierarchyWillConfigure() {
-        overlayView?
+        overlay?
             .addToHierarchy(on: self)
             .constraintToSuperview(self)
     }
     
     override func viewWillTargetSubviews() {
-        let tapRecognizer = UITapGestureRecognizer(target: overlayView, action: #selector(overlayView?.didSelect))
+        let tapRecognizer = UITapGestureRecognizer(target: overlay, action: #selector(overlay?.didSelect))
         addGestureRecognizer(tapRecognizer)
     }
     
     override func viewWillUnbindObservers() {
-        guard let observers = overlayView?.configuration.observers else { return }
+        guard let observers = overlay?.observers else { return }
         
         mediaPlayer?.player.removeTimeObserver(observers.timeObserverToken as Any)
         
-        printIfDebug(.success, "Removed `MediaPlayerView` observers.")
+        printIfDebug(.success, "Removed `\(Self.self)` observers.")
     }
     
     override func viewWillDeallocate() {
         viewWillUnbindObservers()
         
         mediaPlayer = nil
-        overlayView = nil
+        overlay = nil
         prepareToPlay = nil
         delegate = nil
+        
+        removeFromSuperview()
     }
 }
 
@@ -94,7 +96,7 @@ extension MediaPlayerView: ViewProtocol {
     }
     
     fileprivate func createMediaPlayerOverlay() {
-        overlayView = MediaPlayerOverlayView(on: self)
+        overlay = MediaPlayerOverlayView(on: self)
     }
 }
 

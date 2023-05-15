@@ -18,7 +18,10 @@ private protocol ViewProtocol {
         on parent: UIView,
         view: PreviewView,
         with viewModel: DetailViewModel) -> MediaPlayerView
+    
+    func loadResources()
     func prepareForPlay(_ played: Bool)
+    func setImage(_ image: UIImage)
 }
 
 // MARK: - PreviewView Type
@@ -51,6 +54,10 @@ final class PreviewView: View<PreviewViewViewModel> {
         viewWillDeallocate()
     }
     
+    override func dataWillLoad() {
+        loadResources()
+    }
+    
     override func viewDidLoad() {
         viewHierarchyWillConfigure()
         viewWillDeploySubviews()
@@ -67,30 +74,12 @@ final class PreviewView: View<PreviewViewViewModel> {
         mediaPlayerView = createMediaPlayer(on: parent!, view: self, with: detailViewModel!)
     }
     
-    override func dataWillLoad() {
-        loadResources()
-    }
-    
     override func viewWillDeallocate() {
         mediaPlayerView = nil
-        
+        parent = nil
         viewModel = nil
-    }
-    
-    func loadResources() {
-        AsyncImageService.shared.load(
-            url: viewModel.url,
-            identifier: viewModel.identifier) { [weak self] image in
-                guard let self = self, let image = image else { return }
-                
-                mainQueueDispatch {
-                    self.setImage(image)
-                }
-            }
-    }
-    
-    func setImage(_ image: UIImage) {
-        self.imageView.image = image
+        
+        removeFromSuperview()
     }
 }
 
@@ -135,5 +124,21 @@ extension PreviewView: ViewProtocol {
             
             played ? self.imageView.isHidden(true) : self.imageView.isHidden(false)
         }
+    }
+    
+    fileprivate func loadResources() {
+        AsyncImageService.shared.load(
+            url: viewModel.url,
+            identifier: viewModel.identifier) { [weak self] image in
+                guard let self = self, let image = image else { return }
+                
+                mainQueueDispatch {
+                    self.setImage(image)
+                }
+            }
+    }
+    
+    fileprivate func setImage(_ image: UIImage) {
+        imageView.image = image
     }
 }
