@@ -19,7 +19,8 @@ private protocol ViewModelProtocol {
 
 final class DetailNavigationViewItemViewModel {
     fileprivate let tag: Int
-    fileprivate var isSelected: Bool
+    
+    var isSelected: Bool = false
     
     var title: String {
         guard let tag = DetailNavigationView.State(rawValue: tag) else { fatalError() }
@@ -34,7 +35,6 @@ final class DetailNavigationViewItemViewModel {
     /// - Parameter item: Corresponding item object.
     init(with item: DetailNavigationViewItem) {
         self.tag = item.tag
-        self.isSelected = item.isSelected
     }
 }
 

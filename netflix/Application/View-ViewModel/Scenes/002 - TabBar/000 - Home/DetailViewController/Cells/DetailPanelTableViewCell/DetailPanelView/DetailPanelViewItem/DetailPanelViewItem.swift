@@ -7,162 +7,97 @@
 
 import UIKit
 
-// MARK: - ConfigurationProtocol Type
-
-private protocol ConfigurationProtocol {
-    var view: DetailPanelViewItem! { get }
-    var myList: MyList { get }
-    var section: Section { get }
-    
-    func viewDidRegisterRecognizers()
-    func viewDidConfigure()
-    func selectIfNeeded()
-    func viewDidTap()
-}
-
-// MARK: - DetailPanelViewItemConfiguration Type
-
-final class DetailPanelViewItemConfiguration {
-    fileprivate weak var view: DetailPanelViewItem!
-    fileprivate let myList = MyList.shared
-    fileprivate let section: Section
-    
-    deinit {
-        view?.removeFromSuperview()
-        view = nil
-    }
-    
-    /// Create a panel view item configuration object.
-    /// - Parameters:
-    ///   - view: Corresponding view.
-    ///   - viewModel: Coordinating view model.
-    init(view: DetailPanelViewItem, with viewModel: DetailViewModel) {
-        self.view = view
-        
-        self.section = myList.viewModel.section
-        
-        self.viewDidConfigure()
-        self.viewDidRegisterRecognizers()
-    }
-}
-
-// MARK: - ConfigurationProtocol Implementation
-
-extension DetailPanelViewItemConfiguration: ConfigurationProtocol {
-    fileprivate func viewDidRegisterRecognizers() {
-        let tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(viewDidTap))
-        view.addGestureRecognizer(tapRecognizer)
-    }
-    
-    /// Change the view to `selected` state.
-    /// Occurs while the `DisplayView` presenting media is contained in the user's list.
-    fileprivate func selectIfNeeded() {
-        guard let tag = Item(rawValue: view.tag) else { return }
-        guard let viewModel = view.viewModel else { return }
-        
-        if case .myList = tag {
-            let contains = myList.viewModel.contains(viewModel.media, in: section.media)
-            viewModel.isSelected.value = contains
-        }
-    }
-    
-    func viewDidConfigure() {
-        guard let viewModel = view.viewModel else { return }
-        view.imageView.image = UIImage(systemName: viewModel.systemImage)?.whiteRendering()
-        view.label.text = viewModel.title
-        
-        selectIfNeeded()
-    }
-    
-    @objc
-    func viewDidTap() {
-        guard let tag = Item(rawValue: view.tag) else { return }
-        guard let viewModel = view.viewModel else { return }
-        switch tag {
-        case .myList:
-            let media = viewModel.media!
-            
-            myList.viewModel.shouldAddOrRemove(media, uponSelection: viewModel.isSelected.value)
-            
-            myList.viewModel.coordinator.viewController?.browseOverlayView?.collectionView.reloadData()
-        case .rate: printIfDebug(.debug, "rate")
-        case .share: printIfDebug(.debug, "share")
-        }
-        
-        // Animate alpha effect.
-        view.setAlphaAnimation(using: view.gestureRecognizers!.first) {
-            viewModel.isSelected.value.toggle()
-        }
-    }
-}
-
-// MARK: - DetailPanelViewItemConfiguration.Item Type
-
-extension DetailPanelViewItemConfiguration {
-    /// Item representation type.
-    enum Item: Int {
-        case myList
-        case rate
-        case share
-    }
-}
-
 // MARK: - ViewProtocol Type
 
 private protocol ViewProtocol {
-    var configuration: DetailPanelViewItemConfiguration! { get }
+    var myList: MyList { get }
     
     var imageView: UIImageView { get }
     var label: UILabel { get }
     
-    var isSelected: Bool { get }
-    
     func createLabel() -> UILabel
     func createImageView() -> UIImageView
+    
+    func selectIfNeeded()
+    func viewDidTap()
+    
+    func setTitle(_ title: String)
+    func setImage(_ systemImage: String)
 }
 
 // MARK: - DetailPanelViewItem Type
 
 final class DetailPanelViewItem: View<DetailPanelViewItemViewModel> {
-    fileprivate(set) var configuration: DetailPanelViewItemConfiguration!
+    fileprivate let myList = MyList.shared
     
     fileprivate lazy var imageView = createImageView()
     fileprivate lazy var label = createLabel()
     
-    var isSelected = false
+    private weak var parent: UIView?
+    
     /// Create a panel view item object.
     /// - Parameters:
     ///   - parent: Instantiating view.
     ///   - viewModel: Coordinating view model.
     init(on parent: UIView, with viewModel: DetailViewModel) {
+        self.parent = parent
+        
         super.init(frame: parent.bounds)
+        
         self.tag = parent.tag
-        parent.addSubview(self)
-        self.chainConstraintToCenter(linking: self.imageView, to: self.label)
+        
         self.viewModel = DetailPanelViewItemViewModel(item: self, with: viewModel)
-        self.configuration = DetailPanelViewItemConfiguration(view: self, with: viewModel)
-        self.viewDidBindObservers()
+        
+        self.viewDidLoad()
     }
     
     required init?(coder: NSCoder) { fatalError() }
     
     deinit {
-        viewDidUnbindObservers()
-        configuration = nil
-        viewModel = nil
+        viewWillDeallocate()
     }
     
-    override func viewDidBindObservers() {
+    override func viewDidLoad() {
+        viewHierarchyWillConfigure()
+        viewWillTargetSubviews()
+        viewWillBindObservers()
+    }
+    
+    override func viewHierarchyWillConfigure() {
+        guard let parent = parent else { return }
+        
+        self.addToHierarchy(on: parent)
+            .chainConstraintToCenter(linking: imageView, to: label)
+    }
+    
+    override func viewWillTargetSubviews() {
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(viewDidTap))
+        addGestureRecognizer(tapGesture)
+    }
+    
+    override func viewWillBindObservers() {
         viewModel.isSelected.observe(on: self) { [weak self] _ in
-            guard let self = self else { return }
-            self.configuration?.viewDidConfigure()
+            guard let self = self, let viewModel = self.viewModel else { return }
+            
+            self.setTitle(viewModel.title)
+            self.setImage(viewModel.systemImage)
+            self.selectIfNeeded()
         }
     }
     
-    override func viewDidUnbindObservers() {
-        if let viewModel = viewModel {
-            viewModel.isSelected.remove(observer: self)
-        }
+    override func viewWillUnbindObservers() {
+        guard let viewModel = viewModel else { return }
+        
+        viewModel.isSelected.remove(observer: self)
+    }
+    
+    override func viewWillDeallocate() {
+        viewWillUnbindObservers()
+        
+        parent = nil
+        viewModel = nil
+        
+        removeFromSuperview()
     }
 }
 
@@ -184,5 +119,65 @@ extension DetailPanelViewItem: ViewProtocol {
         imageView.image = image.whiteRendering()
         addSubview(imageView)
         return imageView
+    }
+    
+    /// Change the view to `selected` state.
+    /// Occurs while the `DisplayView` presenting media is contained in the user's list.
+    fileprivate func selectIfNeeded() {
+        guard let tag = Item(rawValue: tag),
+              let viewModel = viewModel
+        else { return }
+        
+        if case .myList = tag {
+            let media = myList.viewModel.section.media
+            let contains = myList.viewModel.contains(viewModel.media, in: media)
+            
+            viewModel.isSelectedWillChange(contains)
+        }
+    }
+    
+    @objc
+    func viewDidTap() {
+        guard let tag = Item(rawValue: tag),
+              let viewModel = viewModel,
+              let homeController = myList.viewModel.coordinator.viewController
+        else { return }
+        
+        switch tag {
+        case .myList:
+            let media = viewModel.media
+            
+            myList.viewModel.shouldAddOrRemove(media, uponSelection: viewModel.isSelected.value)
+            
+            homeController.browseOverlayView?.reloadData()
+            homeController.tableView.reloadSection(at: .display)
+        case .rate:
+            printIfDebug(.debug, "rate")
+        case .share:
+            printIfDebug(.debug, "share")
+        }
+        
+        setAlphaAnimation(using: gestureRecognizers!.first) {
+            viewModel.isSelectedWillChange(!viewModel.isSelected.value)
+        }
+    }
+    
+    fileprivate func setTitle(_ title: String) {
+        label.text = title
+    }
+    
+    fileprivate func setImage(_ systemImage: String) {
+        imageView.image = UIImage(systemName: systemImage)?.whiteRendering()
+    }
+}
+
+// MARK: - Item Type
+
+extension DetailPanelViewItem {
+    /// Item representation type.
+    enum Item: Int {
+        case myList
+        case rate
+        case share
     }
 }

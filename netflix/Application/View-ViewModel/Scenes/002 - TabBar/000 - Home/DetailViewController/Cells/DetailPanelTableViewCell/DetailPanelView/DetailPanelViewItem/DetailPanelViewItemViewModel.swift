@@ -12,21 +12,25 @@ import Foundation
 private protocol ViewModelProtocol {
     var tag: Int { get }
     var isSelected: Observable<Bool> { get }
-    var media: Media! { get }
+    var media: Media { get }
     
     var systemImage: String { get }
     var title: String { get }
+    
+    func isSelectedWillChange(_ selected: Bool)
 }
 
 // MARK: - DetailPanelViewItemViewModel Type
 
 final class DetailPanelViewItemViewModel {
+    let coordinator: DetailViewCoordinator
+    
     let tag: Int
     let isSelected: Observable<Bool>
-    var media: Media!
+    let media: Media
     
     var systemImage: String {
-        guard let tag = DetailPanelViewItemConfiguration.Item(rawValue: tag) else { fatalError() }
+        guard let tag = DetailPanelViewItem.Item(rawValue: tag) else { fatalError() }
         switch tag {
         case .myList: return isSelected.value ? "checkmark" : "plus"
         case .rate: return isSelected.value ? "hand.thumbsup.fill" : "hand.thumbsup"
@@ -35,7 +39,7 @@ final class DetailPanelViewItemViewModel {
     }
     
     var title: String {
-        guard let tag = DetailPanelViewItemConfiguration.Item(rawValue: tag) else { fatalError() }
+        guard let tag = DetailPanelViewItem.Item(rawValue: tag) else { fatalError() }
         switch tag {
         case .myList: return Localization.TabBar.Detail.Panel().leadingItem
         case .rate: return Localization.TabBar.Detail.Panel().centerItem
@@ -48,14 +52,25 @@ final class DetailPanelViewItemViewModel {
     ///   - item: Corresponding view.
     ///   - viewModel: Coordinating view model.
     init(item: DetailPanelViewItem, with viewModel: DetailViewModel) {
+        guard let coordinator = viewModel.coordinator else { fatalError() }
+        self.coordinator = coordinator
+        
         self.tag = item.tag
-        self.isSelected = Observable(item.isSelected)
-        self.media = viewModel.media
+        self.isSelected = Observable(false)
+        
+        guard let media = viewModel.media else { fatalError() }
+        self.media = media
     }
-    
-    deinit { media = nil }
 }
 
 // MARK: - ViewModel Implementation
 
 extension DetailPanelViewItemViewModel: ViewModel {}
+
+// MARK: - ViewModelProtocol Implementation
+
+extension DetailPanelViewItemViewModel: ViewModelProtocol {
+    func isSelectedWillChange(_ selected: Bool) {
+        isSelected.value = selected
+    }
+}

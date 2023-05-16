@@ -7,18 +7,9 @@
 
 import UIKit
 
-// MARK: - ViewProtocol Type
-
-private protocol ViewProtocol {
-    var infoView: DetailInfoView! { get }
-    
-    func viewDidConfigure()
-}
-
 // MARK: - DetailInfoTableViewCell Type
 
 final class DetailInfoTableViewCell: UITableViewCell {
-    fileprivate var infoView: DetailInfoView!
     /// Create a detail info table view cell object.
     /// - Parameters:
     ///   - tableView: Corresponding table view.
@@ -30,29 +21,31 @@ final class DetailInfoTableViewCell: UITableViewCell {
                        with viewModel: DetailViewModel) -> DetailInfoTableViewCell {
         guard let cell = tableView.dequeueReusableCell(
             withIdentifier: DetailInfoTableViewCell.reuseIdentifier,
-            for: indexPath) as? DetailInfoTableViewCell else {
-            fatalError()
-        }
-        let viewModel = DetailInfoViewViewModel(with: viewModel)
-        cell.infoView = DetailInfoView(on: cell.contentView, with: viewModel)
-        cell.contentView.addSubview(cell.infoView)
-        cell.infoView.constraintToSuperview(cell.contentView)
+            for: indexPath) as? DetailInfoTableViewCell
+        else { fatalError() }
+        
+        cell.createInfo(with: viewModel)
+        
         return cell
     }
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        self.viewDidConfigure()
+        self.selectionStyle = .none
+        self.setBackgroundColor(.black)
     }
     
     required init?(coder: NSCoder) { fatalError() }
 }
 
-// MARK: - ViewProtocol Implementation
+// MARK: - Private Presentation Implementation
 
-extension DetailInfoTableViewCell: ViewProtocol {
-    fileprivate func viewDidConfigure() {
-        backgroundColor = .black
-        selectionStyle = .none
+extension DetailInfoTableViewCell {
+    private func createInfo(with viewModel: DetailViewModel) {
+        let viewModel = DetailInfoViewViewModel(with: viewModel)
+        let view = DetailInfoView(on: contentView, with: viewModel)
+        
+        view.addToHierarchy(on: contentView)
+            .constraintToSuperview(contentView)
     }
 }

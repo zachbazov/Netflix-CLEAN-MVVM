@@ -26,6 +26,7 @@ struct DetailDescriptionViewViewModel {
     /// - Parameter media: Corresponding media object.
     init(with media: Media?) {
         guard let media = media else { fatalError() }
+        
         self.description = media.description
         self.cast = media.cast
         self.writers = media.writers

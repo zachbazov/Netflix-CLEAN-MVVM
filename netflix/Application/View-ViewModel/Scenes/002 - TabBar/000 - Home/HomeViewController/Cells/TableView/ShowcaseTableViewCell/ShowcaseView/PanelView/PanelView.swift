@@ -12,7 +12,6 @@ import UIKit
 private protocol ViewProtocol {
     func playDidTap()
     func myListDidTap()
-    func buttonsDidConfigure()
     func selectIfNeeded()
 }
 
@@ -43,8 +42,6 @@ final class PanelView: View<PanelViewModel> {
     required init?(coder: NSCoder) { fatalError() }
     
     deinit {
-        print("deinit \(Self.self)")
-        
         viewWillDeallocate()
     }
     
@@ -60,7 +57,8 @@ final class PanelView: View<PanelViewModel> {
     }
     
     override func viewWillConfigure() {
-        buttonsDidConfigure()
+        configurePlayButton()
+        configureMyListButton()
         selectIfNeeded()
     }
     
@@ -113,11 +111,6 @@ extension PanelView: ViewProtocol {
         myListButton.toggle()
     }
     
-    fileprivate func buttonsDidConfigure() {
-        playButtonDidConfigure()
-        myListButtonDidConfigure()
-    }
-    
     fileprivate func selectIfNeeded() {
         guard let showcase = viewModel?.media else { return }
         
@@ -131,11 +124,11 @@ extension PanelView: ViewProtocol {
 // MARK: - Private Presentation Logic
 
 extension PanelView {
-    private func playButtonDidConfigure() {
+    private func configurePlayButton() {
         playButton.cornerRadius(6.0)
     }
     
-    private func myListButtonDidConfigure() {
+    private func configureMyListButton() {
         let symbolConfiguration = UIImage.SymbolConfiguration(pointSize: 15.0)
         let plus = UIImage(systemName: "plus")!.whiteRendering(with: symbolConfiguration)
         let checkmark = UIImage(systemName: "checkmark")!.whiteRendering(with: symbolConfiguration)

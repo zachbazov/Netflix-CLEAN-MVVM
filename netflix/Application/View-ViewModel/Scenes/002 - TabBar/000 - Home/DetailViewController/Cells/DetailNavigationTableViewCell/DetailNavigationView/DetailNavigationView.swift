@@ -10,68 +10,76 @@ import UIKit
 // MARK: - ViewProtocol Type
 
 private protocol ViewProtocol {
-    var leadingItem: DetailNavigationViewItem! { get }
-    var centerItem: DetailNavigationViewItem! { get }
-    var trailingItem: DetailNavigationViewItem! { get }
+    var leadingItem: DetailNavigationViewItem? { get }
+    var centerItem: DetailNavigationViewItem? { get }
+    var trailingItem: DetailNavigationViewItem? { get }
     
-    func stateDidChange(view: DetailNavigationViewItem)
-    func didSelectItem(view: DetailNavigationViewItem)
-    func redMarkerConstraintValueDidChange(for state: DetailNavigationView.State)
+    func didSelect(_ view: DetailNavigationViewItem)
+    func setIndicator(for state: DetailNavigationView.State)
 }
 
 // MARK: - DetailNavigationView Type
 
-final class DetailNavigationView: View<DetailViewModel> {
+final class DetailNavigationView: View<DetailNavigationViewModel> {
     @IBOutlet private(set) weak var leadingViewContainer: UIView!
     @IBOutlet private(set) weak var centerViewContainer: UIView!
     @IBOutlet private(set) weak var trailingViewContrainer: UIView!
     
-    fileprivate(set) var leadingItem: DetailNavigationViewItem!
-    fileprivate(set) var centerItem: DetailNavigationViewItem!
-    fileprivate(set) var trailingItem: DetailNavigationViewItem!
+    fileprivate(set) var leadingItem: DetailNavigationViewItem?
+    fileprivate(set) var centerItem: DetailNavigationViewItem?
+    fileprivate(set) var trailingItem: DetailNavigationViewItem?
     
     /// Create a navigation view object.
     /// - Parameters:
     ///   - parent: Instantiating view.
     ///   - viewModel: Coordinating view model.
-    init(on parent: UIView, with viewModel: DetailViewModel) {
+    init(with viewModel: DetailViewModel) {
         super.init(frame: .zero)
+        
         self.nibDidLoad()
-        parent.addSubview(self)
-        self.constraintToSuperview(parent)
-        self.viewModel = viewModel
-        self.leadingItem = DetailNavigationViewItem(navigationView: self, on: self.leadingViewContainer, with: viewModel)
-        self.centerItem = DetailNavigationViewItem(navigationView: self, on: self.centerViewContainer, with: viewModel)
-        self.trailingItem = DetailNavigationViewItem(navigationView: self, on: self.trailingViewContrainer, with: viewModel)
+        
+        self.viewModel = DetailNavigationViewModel(with: viewModel)
+        
         self.viewDidLoad()
     }
     
     required init?(coder: NSCoder) { fatalError() }
     
     deinit {
-        leadingItem = nil
-        centerItem = nil
-        trailingItem = nil
+        viewWillDeallocate()
     }
     
     override func viewDidLoad() {
-        backgroundColor = .black
-        
-        // Initial settings based on the navigation view state.
-        viewDidConfigure()
-        stateDidChange(view: viewModel.navigationViewState.value == .episodes ? leadingItem : centerItem)
+        viewWillDeploySubviews()
+        viewWillConfigure()
     }
     
-    override func viewDidConfigure() {
-        if viewModel.media?.type == "series" {
-            viewModel.navigationViewState.value = .episodes
-            leadingViewContainer.isHidden(false)
-            centerViewContainer.isHidden(true)
-        } else {
-            viewModel.navigationViewState.value = .trailers
-            leadingViewContainer.isHidden(true)
-            centerViewContainer.isHidden(false)
-        }
+    override func viewWillDeploySubviews() {
+        guard let viewModel = viewModel.coordinator.viewController?.viewModel else { return }
+        
+        leadingItem = DetailNavigationViewItem(on: leadingViewContainer, with: viewModel)
+        centerItem = DetailNavigationViewItem(on: centerViewContainer, with: viewModel)
+        trailingItem = DetailNavigationViewItem(on: trailingViewContrainer, with: viewModel)
+    }
+    
+    override func viewWillConfigure() {
+        setBackgroundColor(.black)
+        
+        configureItems()
+        configureStateForMediaType()
+        configureInitialState()
+    }
+    
+    override func viewWillDeallocate() {
+        leadingItem?.removeFromSuperview()
+        centerItem?.removeFromSuperview()
+        trailingItem?.removeFromSuperview()
+        
+        leadingItem = nil
+        centerItem = nil
+        trailingItem = nil
+        
+        viewModel = nil
     }
 }
 
@@ -82,36 +90,30 @@ extension DetailNavigationView: ViewInstantiable {}
 // MARK: - ViewProtocol Implementation
 
 extension DetailNavigationView: ViewProtocol {
-    func stateDidChange(view: DetailNavigationViewItem) {
+    func didSelect(_ view: DetailNavigationViewItem) {
         guard let state = State(rawValue: view.tag) else { return }
-        viewModel.navigationViewState.value = state
         
-        didSelectItem(view: view)
-    }
-    
-    func didSelectItem(view: DetailNavigationViewItem) {
-        guard let state = State(rawValue: view.tag) else { return }
-        // Release changes for the navigation red marker indicator view.
-        redMarkerConstraintValueDidChange(for: state)
-        // Animate the view changes.
+        viewModel?.stateWillChange(state)
+        
+        setIndicator(for: state)
+        
         animateUsingSpring(withDuration: 0.5, withDamping: 1.0, initialSpringVelocity: 1.0)
     }
     
-    func redMarkerConstraintValueDidChange(for state: DetailNavigationView.State) {
-        if case .episodes = state {
-            leadingItem.widthConstraint.constant = leadingItem.bounds.width
-            centerItem.widthConstraint.constant = .zero
-            trailingItem.widthConstraint.constant = .zero
-        }
-        if case .trailers = state {
-            leadingItem.widthConstraint.constant = .zero
-            centerItem.widthConstraint.constant = centerItem.bounds.width
-            trailingItem.widthConstraint.constant = .zero
-        }
-        if case .similarContent = state {
-            leadingItem.widthConstraint.constant = .zero
-            centerItem.widthConstraint.constant = .zero
-            trailingItem.widthConstraint.constant = trailingItem.bounds.width
+    fileprivate func setIndicator(for state: DetailNavigationView.State) {
+        switch state {
+        case .episodes:
+            leadingItem?.widthConstraint?.constant = leadingItem?.bounds.width ?? .zero
+            centerItem?.widthConstraint?.constant = .zero
+            trailingItem?.widthConstraint?.constant = .zero
+        case .trailers:
+            leadingItem?.widthConstraint?.constant = .zero
+            centerItem?.widthConstraint?.constant = centerItem?.bounds.width ?? .zero
+            trailingItem?.widthConstraint?.constant = .zero
+        case .similarContent:
+            leadingItem?.widthConstraint?.constant = .zero
+            centerItem?.widthConstraint?.constant = .zero
+            trailingItem?.widthConstraint?.constant = trailingItem?.bounds.width ?? .zero
         }
     }
 }
@@ -124,5 +126,39 @@ extension DetailNavigationView {
         case episodes
         case trailers
         case similarContent
+    }
+}
+
+// MARK: - Private Presentation Implementation
+
+extension DetailNavigationView {
+    private func configureItems() {
+        leadingItem?.navigationView = self
+        centerItem?.navigationView = self
+        trailingItem?.navigationView = self
+    }
+    
+    private func configureStateForMediaType() {
+        guard let type = Media.MediaType(rawValue: viewModel.media.type) else { return }
+        
+        switch type {
+        case .series:
+            viewModel.state = .episodes
+            
+            leadingViewContainer.isHidden(false)
+            centerViewContainer.isHidden(true)
+        case .film:
+            viewModel.state = .trailers
+            
+            leadingViewContainer.isHidden(true)
+            centerViewContainer.isHidden(false)
+        default: return
+        }
+    }
+    
+    private func configureInitialState() {
+        guard let view = viewModel.state == .episodes ? leadingItem : centerItem else { return }
+        
+        didSelect(view)
     }
 }

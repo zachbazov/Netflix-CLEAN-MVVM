@@ -23,7 +23,7 @@ private protocol PlayerProtocol {
     var player: AVPlayer { get }
     
     func didLoad()
-    func configurePlayer()
+    func willConfigure()
 }
 
 // MARK: - MediaPlayer Type
@@ -44,10 +44,10 @@ struct MediaPlayer {
 
 extension MediaPlayer: PlayerProtocol {
     fileprivate func didLoad() {
-        configurePlayer()
+        willConfigure()
     }
     
-    fileprivate func configurePlayer() {
+    fileprivate func willConfigure() {
         layer.setPlayer(player)
     }
 }

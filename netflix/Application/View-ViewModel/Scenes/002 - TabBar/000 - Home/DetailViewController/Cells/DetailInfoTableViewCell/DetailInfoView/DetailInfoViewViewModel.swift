@@ -10,7 +10,6 @@ import Foundation
 // MARK: - ViewModelProtocol Type
 
 private protocol ViewModelProtocol {
-//    var state: HomeTableViewDataSource.State { get }
     var mediaType: String { get }
     var title: String { get }
     var downloadButtonTitle: String { get }
@@ -22,7 +21,6 @@ private protocol ViewModelProtocol {
 // MARK: - DetailInfoViewViewModel Type
 
 struct DetailInfoViewViewModel {
-//    let state: HomeTableViewDataSource.State
     let mediaType: String
     let title: String
     let downloadButtonTitle: String
@@ -33,25 +31,27 @@ struct DetailInfoViewViewModel {
     /// Create a info view view model object.
     /// - Parameter viewModel: Coordinating view model.
     init(with viewModel: DetailViewModel) {
-//        self.state = viewModel.homeDataSourceState
-        
         guard let media = viewModel.media else { fatalError() }
         
-        self.mediaType = media.type == "series"
-            ? "S E R I E" : "F I L M"
+        guard let type = Media.MediaType(rawValue: media.type) else { fatalError() }
+        
+        self.mediaType = type == .series ? "S E R I E" : "F I L M"
         
         self.title = media.title
         self.downloadButtonTitle = "Download \(self.title)"
         
-        if media.type == "series" {
+        switch type {
+        case .series:
             let numberOfSeasons = Int(media.seasons?.count ?? 1)
             self.duration = String(describing: media.duration)
             self.length = String(describing: numberOfSeasons > 1
                                  ? "\(numberOfSeasons) Seasons"
                                  : "\(numberOfSeasons) Season")
-        } else {
+        case .film:
             self.duration = media.duration
             self.length = media.length
+        default:
+            fatalError()
         }
         
         self.isHD = media.isHD

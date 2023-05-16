@@ -10,8 +10,19 @@ import UIKit
 // MARK: - ViewObserving Type
 
 protocol ViewObserving {
+    func viewWillBindObservers()
     func viewDidBindObservers()
+    func viewWillUnbindObservers()
     func viewDidUnbindObservers()
+}
+
+// MARK: - ViewObserving Default Implementation
+
+extension ViewObserving {
+    func viewWillBindObservers() {}
+    func viewDidBindObservers() {}
+    func viewWillUnbindObservers() {}
+    func viewDidUnbindObservers() {}
 }
 
 // MARK: - ViewModeling Type

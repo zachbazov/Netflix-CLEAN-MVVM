@@ -7,19 +7,9 @@
 
 import UIKit
 
-// MARK: - ViewProtocol Type
-
-private protocol ViewProtocol {
-    var descriptionView: DetailDescriptionView! { get }
-    
-    func viewDidConfigure()
-}
-
 // MARK: - DetailDescriptionTableViewCell Type
 
 final class DetailDescriptionTableViewCell: UITableViewCell {
-    fileprivate var descriptionView: DetailDescriptionView!
-    
     /// Create a detail description table view cell object.
     /// - Parameters:
     ///   - tableView: Corresponding table view.
@@ -31,29 +21,31 @@ final class DetailDescriptionTableViewCell: UITableViewCell {
                        with viewModel: DetailViewModel) -> DetailDescriptionTableViewCell {
         guard let cell = tableView.dequeueReusableCell(
             withIdentifier: DetailDescriptionTableViewCell.reuseIdentifier,
-            for: indexPath) as? DetailDescriptionTableViewCell else {
-            fatalError()
-        }
-        let viewModel = DetailDescriptionViewViewModel(with: viewModel.media)
-        cell.descriptionView = DetailDescriptionView(on: cell.contentView, with: viewModel)
-        cell.contentView.addSubview(cell.descriptionView)
-        cell.descriptionView.constraintToSuperview(cell.contentView)
+            for: indexPath) as? DetailDescriptionTableViewCell
+        else { fatalError() }
+        
+        cell.createDescription(with: viewModel)
+        
         return cell
     }
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        self.viewDidConfigure()
+        self.selectionStyle = .none
+        self.setBackgroundColor(.black)
     }
     
     required init?(coder: NSCoder) { fatalError() }
 }
 
-// MARK: - ViewProtocol Implementation
+// MARK: - Private Presentation Logic
 
-extension DetailDescriptionTableViewCell: ViewProtocol {
-    fileprivate func viewDidConfigure() {
-        backgroundColor = .black
-        selectionStyle = .none
+extension DetailDescriptionTableViewCell {
+    private func createDescription(with viewModel: DetailViewModel) {
+        let viewModel = DetailDescriptionViewViewModel(with: viewModel.media)
+        let view = DetailDescriptionView(on: contentView, with: viewModel)
+        
+        view.addToHierarchy(on: contentView)
+            .constraintToSuperview(contentView)
     }
 }

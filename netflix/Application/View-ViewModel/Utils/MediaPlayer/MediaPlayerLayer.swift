@@ -11,11 +11,11 @@ import AVKit
 
 private protocol LayerProtocol {
     var playerLayer: AVPlayerLayer { get }
-    var player: AVPlayer? { get }
+    var player: AVPlayer { get }
     
-    func didLoad()
-    func hierarchyWillConfigure()
-    func willDeallocate()
+    func didLoad(on parent: UIView)
+    func hierarchyWillConfigure(on parent: UIView)
+    
     func setVideoGravity()
     func setPlayer(_ player: AVPlayer)
 }
@@ -25,26 +25,19 @@ private protocol LayerProtocol {
 final class MediaPlayerLayer: UIView {
     override class var layerClass: AnyClass { AVPlayerLayer.self }
     
-    var playerLayer: AVPlayerLayer { layer as! AVPlayerLayer }
-    var player: AVPlayer? {
-        get { playerLayer.player }
+    fileprivate var playerLayer: AVPlayerLayer { layer as! AVPlayerLayer }
+    fileprivate var player: AVPlayer {
+        get {
+            guard let player = playerLayer.player else { fatalError() }
+            return player
+        }
         set { playerLayer.player = newValue }
     }
     
-    private weak var parent: UIView?
-    
-    deinit {
-        print("deinit \(Self.self)")
-        
-        willDeallocate()
-    }
-    
     init(on parent: UIView) {
-        self.parent = parent
-        
         super.init(frame: .zero)
         
-        self.didLoad()
+        self.didLoad(on: parent)
     }
     
     required init?(coder: NSCoder) { fatalError() }
@@ -53,24 +46,17 @@ final class MediaPlayerLayer: UIView {
 // MARK: - LayerProtocol Implementation
 
 extension MediaPlayerLayer: LayerProtocol {
-    fileprivate func didLoad() {
-        hierarchyWillConfigure()
-        configureLayer()
+    fileprivate func didLoad(on parent: UIView) {
+        hierarchyWillConfigure(on: parent)
+        willConfigure()
     }
     
-    fileprivate func hierarchyWillConfigure() {
-        guard let parent = parent else { return }
-        
+    fileprivate func hierarchyWillConfigure(on parent: UIView) {
         self.addToHierarchy(on: parent)
             .constraintToSuperview(parent)
     }
     
-    fileprivate func willDeallocate() {
-        player = nil
-        parent = nil
-    }
-    
-    fileprivate func configureLayer() {
+    fileprivate func willConfigure() {
         setVideoGravity()
     }
     

@@ -12,8 +12,9 @@ import AVKit
 private protocol ViewProtocol {
     var mediaPlayer: MediaPlayer? { get }
     var overlay: MediaPlayerOverlayView? { get }
-    var prepareToPlay: ((Bool) -> Void)? { get }
     var delegate: MediaPlayerDelegate? { get }
+    
+    var prepareToPlay: ((Bool) -> Void)? { get }
     
     func createMediaPlayer()
     func createMediaPlayerOverlay()
@@ -25,20 +26,13 @@ final class MediaPlayerView: View<MediaPlayerViewViewModel> {
     var mediaPlayer: MediaPlayer?
     var overlay: MediaPlayerOverlayView?
     
-    var prepareToPlay: ((Bool) -> Void)?
-    
     weak var delegate: MediaPlayerDelegate?
     
-    deinit {
-        print("deinit \(Self.self)")
-        
-        viewWillDeallocate()
-    }
+    var prepareToPlay: ((Bool) -> Void)?
     
     init(with viewModel: DetailViewModel) {
         super.init(frame: .zero)
         
-        self.delegate = self
         self.viewModel = MediaPlayerViewViewModel(with: viewModel)
         
         self.viewDidLoad()
@@ -46,9 +40,14 @@ final class MediaPlayerView: View<MediaPlayerViewViewModel> {
     
     required init?(coder: NSCoder) { fatalError() }
     
+    deinit {
+        viewWillDeallocate()
+    }
+    
     override func viewDidLoad() {
         viewWillDeploySubviews()
         viewHierarchyWillConfigure()
+        viewWillConfigure()
         viewWillTargetSubviews()
     }
     
@@ -66,6 +65,10 @@ final class MediaPlayerView: View<MediaPlayerViewViewModel> {
         overlay?
             .addToHierarchy(on: self)
             .constraintToSuperview(self)
+    }
+    
+    override func viewWillConfigure() {
+        setMediaPlayerDelegate()
     }
     
     override func viewWillTargetSubviews() {
@@ -88,6 +91,7 @@ final class MediaPlayerView: View<MediaPlayerViewViewModel> {
         overlay = nil
         prepareToPlay = nil
         delegate = nil
+        viewModel = nil
         
         removeFromSuperview()
     }
@@ -124,5 +128,13 @@ extension MediaPlayerView: MediaPlayerDelegate {
     
     func player(_ mediaPlayer: MediaPlayer, canOpenURL url: URL) -> Bool {
         return UIApplication.shared.canOpenURL(url)
+    }
+}
+
+// MARK: - Private Presentation Logic
+
+extension MediaPlayerView {
+    private func setMediaPlayerDelegate() {
+        delegate = self
     }
 }

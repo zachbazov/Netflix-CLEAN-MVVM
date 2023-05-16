@@ -43,8 +43,6 @@ final class PreviewView: View<PreviewViewViewModel> {
     required init?(coder: NSCoder) { fatalError() }
     
     deinit {
-        print("deinit \(Self.self)")
-        
         viewWillDeallocate()
     }
     

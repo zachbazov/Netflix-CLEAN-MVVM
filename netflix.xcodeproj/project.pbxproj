@@ -225,6 +225,8 @@
 		A1B2BAE52A066B21004B612A /* PanelViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2BAE42A066B20004B612A /* PanelViewModel.swift */; };
 		A1B2BAE82A0688D1004B612A /* NavigationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2BAE72A0688D1004B612A /* NavigationView.swift */; };
 		A1B2BAEA2A0689AB004B612A /* NavigationView.xib in Resources */ = {isa = PBXBuildFile; fileRef = A1B2BAE92A0689AB004B612A /* NavigationView.xib */; };
+		A1B349F02A139584002AFE9E /* UITableView+ReloadSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B349EF2A139584002AFE9E /* UITableView+ReloadSection.swift */; };
+		A1B349F22A13C59B002AFE9E /* DetailNavigationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B349F12A13C59B002AFE9E /* DetailNavigationViewModel.swift */; };
 		A1B3F98A28C54F510042DE9F /* UserRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B3F98928C54F510042DE9F /* UserRepository.swift */; };
 		A1B3F98C28C55B500042DE9F /* HomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B3F98B28C55B500042DE9F /* HomeViewModel.swift */; };
 		A1B3F99428C575A30042DE9F /* AuthViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B3F99328C575A30042DE9F /* AuthViewModel.swift */; };
@@ -550,6 +552,8 @@
 		A1B2BAE42A066B20004B612A /* PanelViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PanelViewModel.swift; sourceTree = "<group>"; };
 		A1B2BAE72A0688D1004B612A /* NavigationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationView.swift; sourceTree = "<group>"; };
 		A1B2BAE92A0689AB004B612A /* NavigationView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = NavigationView.xib; sourceTree = "<group>"; };
+		A1B349EF2A139584002AFE9E /* UITableView+ReloadSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITableView+ReloadSection.swift"; sourceTree = "<group>"; };
+		A1B349F12A13C59B002AFE9E /* DetailNavigationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailNavigationViewModel.swift; sourceTree = "<group>"; };
 		A1B3F98928C54F510042DE9F /* UserRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserRepository.swift; sourceTree = "<group>"; };
 		A1B3F98B28C55B500042DE9F /* HomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModel.swift; sourceTree = "<group>"; };
 		A1B3F99328C575A30042DE9F /* AuthViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthViewModel.swift; sourceTree = "<group>"; };
@@ -1007,6 +1011,7 @@
 			isa = PBXGroup;
 			children = (
 				A1741D2728E67CF800F3C46B /* DetailNavigationView.swift */,
+				A1B349F12A13C59B002AFE9E /* DetailNavigationViewModel.swift */,
 				A1741D3328E6981B00F3C46B /* DetailNavigationView.xib */,
 				A1741D4C28EC5B3D00F3C46B /* DetailNavigationViewItem */,
 			);
@@ -1712,6 +1717,7 @@
 			children = (
 				A1AD25BF28D3FC9600F793B3 /* UITableView+Register.swift */,
 				A1B0DE552954590E00307866 /* UITableView+ContentInset.swift */,
+				A1B349EF2A139584002AFE9E /* UITableView+ReloadSection.swift */,
 			);
 			path = UITableView;
 			sourceTree = "<group>";
@@ -2368,6 +2374,7 @@
 				A1E81D4328D1600100D044EA /* UIColor+Extension.swift in Sources */,
 				A14E0CE529C116C900F55500 /* UserProfileHTTPDTO+Mapping.swift in Sources */,
 				A1741D0928E679A400F3C46B /* DetailInfoTableViewCell.swift in Sources */,
+				A1B349F02A139584002AFE9E /* UITableView+ReloadSection.swift in Sources */,
 				A18B997628C0119A0077A5A6 /* NetworkConfig.swift in Sources */,
 				A1B3F99828C6278A0042DE9F /* SignUpViewController.swift in Sources */,
 				A1B0DE5A29560F5900307866 /* UINavigationController+Identifier.swift in Sources */,
@@ -2425,6 +2432,7 @@
 				A1B70A9E293EC5D600C718C6 /* AuthController.swift in Sources */,
 				A1E81D2028CFE47B00D044EA /* ResumableCollectionViewCell.swift in Sources */,
 				A1741D0B28E679A900F3C46B /* DetailDescriptionTableViewCell.swift in Sources */,
+				A1B349F22A13C59B002AFE9E /* DetailNavigationViewModel.swift in Sources */,
 				A1AA28E228F60ABE0011EE9D /* TrailerCollectionViewCellViewModel.swift in Sources */,
 				A1BD20E429E5B9E70093749E /* GradientView.swift in Sources */,
 				A14E0CD429BE81F200F55500 /* NotificationCollectionViewDataSource.swift in Sources */,

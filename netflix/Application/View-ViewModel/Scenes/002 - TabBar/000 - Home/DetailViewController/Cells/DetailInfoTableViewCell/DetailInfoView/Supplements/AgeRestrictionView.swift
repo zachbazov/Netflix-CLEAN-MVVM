@@ -13,7 +13,6 @@ private protocol ViewProtocol {
     var label: UILabel { get }
     
     func createLabel() -> UILabel
-    func viewDidConfigure()
 }
 
 // MARK: - AgeRestrictionView Type
@@ -24,23 +23,40 @@ final class AgeRestrictionView: UIView {
     /// Create an age restriction view object.
     /// - Parameter parent: Instantiating view.
     init(on parent: UIView) {
-        super.init(frame: parent.bounds)
-        parent.addSubview(self)
-        self.addSubview(self.label)
-        self.viewDidConfigure()
+        super.init(frame: .zero)
+        
+        self.viewDidLoad(on: parent)
     }
     
     required init?(coder: NSCoder) { fatalError() }
+    
+    func viewDidLoad(on parent: UIView) {
+        viewHierarchyWillConfigure(on: parent)
+        viewWillConfigure()
+    }
+    
+    func viewHierarchyWillConfigure(on parent: UIView) {
+        self.addToHierarchy(on: parent)
+            .constraintToSuperview(parent)
+        
+        label
+            .addToHierarchy(on: self)
+            .constraintToSuperview(self)
+    }
+    
+    func viewWillConfigure() {
+        layer.cornerRadius = 2.0
+        setBackgroundColor(.hexColor("#535353"))
+    }
 }
+
+// MARK: - ViewLifecycleBehavior Implementation
+
+extension AgeRestrictionView: ViewLifecycleBehavior {}
 
 // MARK: - ViewProtocol Implementation
 
 extension AgeRestrictionView: ViewProtocol {
-    fileprivate func viewDidConfigure() {
-        layer.cornerRadius = 2.0
-        backgroundColor = .hexColor("#535353")
-    }
-    
     fileprivate func createLabel() -> UILabel {
         let label = UILabel(frame: bounds)
         label.font = UIFont.systemFont(ofSize: 11.0, weight: .heavy)

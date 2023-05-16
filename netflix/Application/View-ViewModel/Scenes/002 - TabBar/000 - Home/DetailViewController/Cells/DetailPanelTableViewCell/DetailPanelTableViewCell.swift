@@ -7,19 +7,9 @@
 
 import UIKit
 
-// MARK: - ViewProtocol Type
-
-private protocol ViewProtocol {
-    var panelView: DetailPanelView! { get }
-    
-    func viewDidConfigure()
-}
-
 // MARK: - DetailPanelTableViewCell Type
 
 final class DetailPanelTableViewCell: UITableViewCell {
-    private(set) var panelView: DetailPanelView!
-    
     /// Create a detail panel table view cell object.
     /// - Parameters:
     ///   - tableView: Corresponding table view.
@@ -31,27 +21,28 @@ final class DetailPanelTableViewCell: UITableViewCell {
                        with viewModel: DetailViewModel) -> DetailPanelTableViewCell {
         guard let cell = tableView.dequeueReusableCell(
             withIdentifier: DetailPanelTableViewCell.reuseIdentifier,
-            for: indexPath) as? DetailPanelTableViewCell else {
-            fatalError()
-        }
-        cell.panelView = DetailPanelView(on: cell.contentView, with: viewModel)
-        cell.contentView.addSubview(cell.panelView)
+            for: indexPath) as? DetailPanelTableViewCell
+        else { fatalError() }
+        
+        cell.createPanelView(with: viewModel)
+        
         return cell
     }
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        self.viewDidConfigure()
+        self.selectionStyle = .none
+        self.setBackgroundColor(.black)
     }
     
     required init?(coder: NSCoder) { fatalError() }
 }
 
-// MARK: - ViewProtocol Implementation
+// MARK: - Private Presentation Logic
 
-extension DetailPanelTableViewCell: ViewProtocol {
-    fileprivate func viewDidConfigure() {
-        backgroundColor = .black
-        selectionStyle = .none
+extension DetailPanelTableViewCell {
+    private func createPanelView(with viewModel: DetailViewModel) {
+        let panelView = DetailPanelView(on: contentView, with: viewModel)
+        panelView.addToHierarchy(on: contentView)
     }
 }

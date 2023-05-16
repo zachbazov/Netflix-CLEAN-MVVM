@@ -7,19 +7,9 @@
 
 import UIKit
 
-// MARK: - ViewProtocol Type
-
-private protocol ViewProtocol {
-    var navigationView: DetailNavigationView! { get }
-    
-    func viewDidConfigure()
-}
-
 // MARK: - DetailNavigationTableViewCell Type
 
 final class DetailNavigationTableViewCell: UITableViewCell {
-    fileprivate var navigationView: DetailNavigationView!
-    
     /// Create a detail navigation table view cell object.
     /// - Parameters:
     ///   - tableView: Corresponding table view.
@@ -31,16 +21,18 @@ final class DetailNavigationTableViewCell: UITableViewCell {
                        with viewModel: DetailViewModel) -> DetailNavigationTableViewCell {
         guard let cell = tableView.dequeueReusableCell(
             withIdentifier: DetailNavigationTableViewCell.reuseIdentifier,
-            for: indexPath) as? DetailNavigationTableViewCell else {
-            fatalError()
-        }
-        cell.navigationView = DetailNavigationView(on: cell.contentView, with: viewModel)
+            for: indexPath) as? DetailNavigationTableViewCell
+        else { fatalError() }
+        
+        cell.createNavigation(with: viewModel)
+        
         return cell
     }
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        self.viewDidConfigure()
+        self.selectionStyle = .none
+        self.setBackgroundColor(.black)
     }
     
     required init?(coder: NSCoder) { fatalError() }
@@ -48,9 +40,11 @@ final class DetailNavigationTableViewCell: UITableViewCell {
 
 // MARK: - ViewProtocol Implementation
 
-extension DetailNavigationTableViewCell: ViewProtocol {
-    fileprivate func viewDidConfigure() {
-        backgroundColor = .black
-        selectionStyle = .none
+extension DetailNavigationTableViewCell {
+    private func createNavigation(with viewModel: DetailViewModel) {
+        let view = DetailNavigationView(with: viewModel)
+        
+        view.addToHierarchy(on: contentView)
+            .constraintToSuperview(contentView)
     }
 }

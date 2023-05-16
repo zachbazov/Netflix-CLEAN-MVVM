@@ -7,6 +7,14 @@
 
 import UIKit
 
+// MARK: - ViewProtocol Type
+
+private protocol ViewProtocol {
+    func setDescription(_ string: String)
+    func setCast(_ string: String)
+    func setWriters(_ string: String)
+}
+
 // MARK: - DetailDescriptionView Type
 
 final class DetailDescriptionView: View<DetailDescriptionViewViewModel> {
@@ -20,22 +28,44 @@ final class DetailDescriptionView: View<DetailDescriptionViewViewModel> {
     ///   - viewModel: Coordinating view model.
     init(on parent: UIView, with viewModel: DetailDescriptionViewViewModel) {
         super.init(frame: parent.bounds)
+        
         self.nibDidLoad()
+        
         self.viewModel = viewModel
-        self.viewDidConfigure()
+        
+        self.viewDidLoad()
     }
     
     required init?(coder: NSCoder) { fatalError() }
     
-    override func viewDidConfigure() {
-        backgroundColor = .black
-        
-        descriptionTextView.text = viewModel.description
-        castLabel.text = viewModel.cast
-        writersLabel.text = viewModel.writers
+    override func viewDidLoad() {
+        viewWillConfigure()
+    }
+    
+    override func viewWillConfigure() {
+        setBackgroundColor(.black)
+        setDescription(viewModel.description)
+        setCast(viewModel.cast)
+        setWriters(viewModel.writers)
     }
 }
 
 // MARK: - ViewInstantiable Implementation
 
 extension DetailDescriptionView: ViewInstantiable {}
+
+// MARK: - ViewProtocol Implementation
+
+extension DetailDescriptionView: ViewProtocol {
+    fileprivate func setDescription(_ string: String) {
+        descriptionTextView.text = string
+    }
+    
+    fileprivate func setCast(_ string: String) {
+        castLabel.text = string
+    }
+    
+    fileprivate func setWriters(_ string: String) {
+        writersLabel.text = string
+    }
+}
