@@ -106,7 +106,10 @@ extension DetailTableViewDataSource: DataSourceProtocol {
     }
     
     func reloadData(at index: DetailTableViewDataSource.Index) {
-        if case .collection = index { collectionCell?.detailCollectionView?.dataSourceDidChange() }
+        if case .collection = index {
+            collectionCell?.detailCollectionView?.dataSourceDidChange()
+        }
+        
         heightForRow(at: index)
         reloadRow(at: index)
     }

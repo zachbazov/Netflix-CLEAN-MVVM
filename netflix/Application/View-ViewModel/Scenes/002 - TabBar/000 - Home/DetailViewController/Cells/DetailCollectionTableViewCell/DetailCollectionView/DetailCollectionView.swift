@@ -11,49 +11,68 @@ import UIKit
 
 private protocol ViewProtocol {
     var collectionView: UICollectionView { get }
-    var dataSource: DetailCollectionViewDataSource<Mediable>! { get }
-    var layout: CollectionViewLayout! { get }
+    var dataSource: DetailCollectionViewDataSource<Mediable>? { get }
     
     func createCollectionView() -> UICollectionView
+    func createLayout(for state: DetailNavigationView.State) -> CollectionViewLayout
+    func createDataSource(for state: DetailNavigationView.State) -> DetailCollectionViewDataSource<Mediable>?
+    
     func dataSourceDidChange()
 }
 
 // MARK: - DetailCollectionView Type
 
-final class DetailCollectionView: View<DetailViewModel> {
+final class DetailCollectionView: View<DetailCollectionViewModel> {
     fileprivate lazy var collectionView: UICollectionView = createCollectionView()
-    fileprivate var dataSource: DetailCollectionViewDataSource<Mediable>!
-    fileprivate var layout: CollectionViewLayout!
+    fileprivate var dataSource: DetailCollectionViewDataSource<Mediable>?
+    
+    private weak var parent: UIView?
     
     /// Create a detail collection view object.
     /// - Parameters:
     ///   - parent: Instantiating view.
     ///   - viewModel: Coordinating view model.
     init(on parent: UIView, with viewModel: DetailViewModel) {
+        self.parent = parent
+        
         super.init(frame: .zero)
-        parent.addSubview(self)
-        self.viewModel = viewModel
-        self.constraintToSuperview(parent)
-        self.collectionView.constraintToSuperview(self)
-        self.dataWillLoad()
+        
+        self.viewModel = DetailCollectionViewModel(with: viewModel)
+        
+        self.viewDidLoad()
     }
     
     required init?(coder: NSCoder) { fatalError() }
     
     deinit {
-        layout = nil
-        dataSource = nil
+        viewWillDeallocate()
     }
     
     override func dataWillLoad() {
-        if viewModel.navigationViewState.value == .episodes {
-            let cellViewModel = EpisodeCollectionViewCellViewModel(with: viewModel)
-            let requestDTO = SeasonHTTPDTO.Request(slug: cellViewModel.media.slug, season: 1)
-            
-            viewModel.seasonDidLoad(request: requestDTO) { [weak self] in
-                self?.dataSourceDidChange()
-            }
-        }
+        loadEpisodes()
+    }
+    
+    override func viewDidLoad() {
+        viewHierarchyWillConfigure()
+        dataWillLoad()
+    }
+    
+    override func viewHierarchyWillConfigure() {
+        guard let parent = parent else { return }
+        
+        self.addToHierarchy(on: parent)
+            .constraintToSuperview(parent)
+        
+        collectionView
+            .addToHierarchy(on: self)
+            .constraintToSuperview(self)
+    }
+    
+    override func viewWillDeallocate() {
+        dataSource = nil
+        viewModel = nil
+        
+        removeFromSuperview()
     }
 }
 
@@ -70,35 +89,75 @@ extension DetailCollectionView: ViewProtocol {
         collectionView.showsVerticalScrollIndicator = false
         collectionView.showsHorizontalScrollIndicator = false
         collectionView.contentInset = .init(top: 16.0, left: .zero, bottom: .zero, right: .zero)
-        addSubview(collectionView)
         return collectionView
     }
     
     func dataSourceDidChange() {
-        layout = nil
-        collectionView.delegate = nil
-        collectionView.dataSource = nil
+        guard let viewModel = viewModel.coordinator.viewController?.viewModel else { return }
         
-        switch viewModel.navigationViewState.value {
-        case .episodes:
-            guard let episodes = viewModel.season.value?.episodes else { return }
-            dataSource = DetailCollectionViewDataSource(collectionView: collectionView, items: episodes, with: viewModel)
-            layout = CollectionViewLayout(layout: .descriptive, scrollDirection: .vertical)
-            collectionView.setCollectionViewLayout(layout, animated: false)
-        case .trailers:
-            guard let trailers = viewModel.media?.resources.trailers.toDomain() as [Trailer]? else { return }
-            dataSource = DetailCollectionViewDataSource(collectionView: collectionView, items: trailers, with: viewModel)
-            layout = CollectionViewLayout(layout: .trailer, scrollDirection: .vertical)
-            collectionView.setCollectionViewLayout(layout, animated: false)
-        default:
-            guard let media = viewModel.section?.media as [Media]? else { return }
-            dataSource = DetailCollectionViewDataSource(collectionView: collectionView, items: media, with: viewModel)
-            layout = CollectionViewLayout(layout: .detail, scrollDirection: .vertical)
-            collectionView.setCollectionViewLayout(layout, animated: false)
-        }
+        let layout = createLayout(for: viewModel.navigationViewState.value)
+        let dataSource = createDataSource(for: viewModel.navigationViewState.value)
         
+        self.dataSource = dataSource
+        
+        collectionView.setCollectionViewLayout(layout, animated: false)
         collectionView.delegate = dataSource
         collectionView.dataSource = dataSource
         collectionView.reloadData()
+    }
+    
+    fileprivate func createLayout(for state: DetailNavigationView.State) -> CollectionViewLayout {
+        switch state {
+        case .episodes:
+            return CollectionViewLayout(layout: .descriptive, scrollDirection: .vertical)
+        case .trailers:
+            return CollectionViewLayout(layout: .trailer, scrollDirection: .vertical)
+        case .similarContent:
+            return CollectionViewLayout(layout: .detail, scrollDirection: .vertical)
+        }
+    }
+    
+    fileprivate func createDataSource(for state: DetailNavigationView.State) -> DetailCollectionViewDataSource<Mediable>? {
+        guard let viewModel = viewModel.coordinator.viewController?.viewModel else { fatalError() }
+        
+        switch state {
+        case .episodes:
+            let episodes = viewModel.season.value.episodes
+            return DetailCollectionViewDataSource(collectionView: collectionView, items: episodes, with: viewModel)
+        case .trailers:
+            guard let trailers = viewModel.media?.resources.trailers.toDomain() else { fatalError() }
+            return DetailCollectionViewDataSource(collectionView: collectionView, items: trailers, with: viewModel)
+        case .similarContent:
+            guard let media = viewModel.section?.media else { fatalError() }
+            return DetailCollectionViewDataSource(collectionView: collectionView, items: media, with: viewModel)
+        }
+    }
+}
+
+// MARK: - State Type
+
+extension DetailCollectionView {
+    enum State {
+        case series
+        case film
+    }
+}
+
+// MARK: - Private Presentation Implementation
+
+extension DetailCollectionView {
+    private func loadEpisodes() {
+        guard let viewModel = viewModel.coordinator.viewController?.viewModel else { return }
+        
+        if case .episodes = viewModel.navigationViewState.value {
+            let cellViewModel = EpisodeCollectionViewCellViewModel(with: viewModel)
+            let requestDTO = SeasonHTTPDTO.Request(slug: cellViewModel.media.slug, season: 1)
+            
+            viewModel.seasonDidLoad(request: requestDTO) { [weak self] in
+                guard let self = self else { return }
+                
+                self.dataSourceDidChange()
+            }
+        }
     }
 }

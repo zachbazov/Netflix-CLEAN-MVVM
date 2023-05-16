@@ -10,15 +10,13 @@ import UIKit
 // MARK: - ViewProtocol Type
 
 private protocol ViewProtocol {
-    var detailCollectionView: DetailCollectionView! { get }
-    
-    func viewDidConfigure()
+    var detailCollectionView: DetailCollectionView? { get }
 }
 
 // MARK: - DetailCollectionTableViewCell Type
 
 final class DetailCollectionTableViewCell: UITableViewCell {
-    private(set) var detailCollectionView: DetailCollectionView!
+    private(set) var detailCollectionView: DetailCollectionView?
     
     /// Create a detail collection table view cell object.
     /// - Parameters:
@@ -31,16 +29,18 @@ final class DetailCollectionTableViewCell: UITableViewCell {
                        with viewModel: DetailViewModel) -> DetailCollectionTableViewCell {
         guard let cell = tableView.dequeueReusableCell(
             withIdentifier: DetailCollectionTableViewCell.reuseIdentifier,
-            for: indexPath) as? DetailCollectionTableViewCell else {
-            fatalError()
-        }
-        cell.detailCollectionView = DetailCollectionView(on: cell.contentView, with: viewModel)
+            for: indexPath) as? DetailCollectionTableViewCell
+        else { fatalError() }
+        
+        cell.createCollection(with: viewModel)
+        
         return cell
     }
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        self.viewDidConfigure()
+        self.selectionStyle = .none
+        self.setBackgroundColor(.black)
     }
     
     required init?(coder: NSCoder) { fatalError() }
@@ -48,9 +48,12 @@ final class DetailCollectionTableViewCell: UITableViewCell {
 
 // MARK: - ViewProtocol Implementation
 
-extension DetailCollectionTableViewCell: ViewProtocol {
-    fileprivate func viewDidConfigure() {
-        backgroundColor = .black
-        selectionStyle = .none
+extension DetailCollectionTableViewCell: ViewProtocol {}
+
+// MARK: - Private Presentation Implementation
+
+extension DetailCollectionTableViewCell {
+    private func createCollection(with viewModel: DetailViewModel) {
+        detailCollectionView = DetailCollectionView(on: contentView, with: viewModel)
     }
 }

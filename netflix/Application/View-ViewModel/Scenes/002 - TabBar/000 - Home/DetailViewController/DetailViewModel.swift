@@ -19,7 +19,8 @@ private protocol ViewModelProtocol {
     var isRotated: Bool { get }
     
     var navigationViewState: Observable<DetailNavigationView.State> { get }
-    var season: Observable<Season?> { get }
+    var season: Observable<Season> { get }
+    var collectionMedia: Observable<[Mediable]> { get }
     
     func shouldScreenRotate()
 }
@@ -37,8 +38,9 @@ final class DetailViewModel {
     var media: Media?
     var isRotated: Bool = false
     
-    fileprivate(set) var navigationViewState: Observable<DetailNavigationView.State> = Observable(.episodes)
-    fileprivate(set) var season: Observable<Season?> = Observable(nil)
+    let navigationViewState: Observable<DetailNavigationView.State> = Observable(.episodes)
+    let season: Observable<Season> = Observable(.vacantValue)
+    let collectionMedia: Observable<[Mediable]> = Observable([])
     
     deinit {
         media = nil
@@ -83,7 +85,9 @@ extension DetailViewModel: DataProviderProtocol {
             completion: { [weak self] result in
                 if case let .success(responseDTO) = result {
                     guard var season = responseDTO.data.first else { return }
+                    
                     season.episodes = season.episodes.sorted { $0.episode < $1.episode }
+                    
                     self?.season.value = season.toDomain()
                     
                     completion()

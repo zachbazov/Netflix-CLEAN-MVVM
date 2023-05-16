@@ -16,3 +16,11 @@ struct Season {
     var season: Int
     var episodes: [Episode]
 }
+
+// MARK: - Vacant Value
+
+extension Season {
+    static var vacantValue: Season {
+        return Season(mediaId: .toBlank(), title: .toBlank(), slug: .toBlank(), season: .zero, episodes: [])
+    }
+}
