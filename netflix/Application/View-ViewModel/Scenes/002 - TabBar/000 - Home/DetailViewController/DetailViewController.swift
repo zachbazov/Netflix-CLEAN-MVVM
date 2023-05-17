@@ -53,9 +53,9 @@ final class DetailViewController: Controller<DetailViewModel> {
     }
     
     override func viewWillBindObservers() {
-        viewModel.navigationViewState.observe(on: self) { [weak self] state in
-            self?.dataSource?.reloadData(at: .collection)
-        }
+//        viewModel.navigationViewState.observe(on: self) { [weak self] state in
+//            self?.dataSource?.reloadData(at: .collection)
+//        }
         
         viewModel.season.observe(on: self) { [weak self] season in
             self?.dataSource?.reloadData(at: .collection)
@@ -65,7 +65,7 @@ final class DetailViewController: Controller<DetailViewModel> {
     override func viewWillUnbindObservers() {
         guard let viewModel = viewModel else { return }
         
-        viewModel.navigationViewState.remove(observer: self)
+//        viewModel.navigationViewState.remove(observer: self)
         viewModel.season.remove(observer: self)
         
         printIfDebug(.success, "Removed `\(Self.self)` observers.")

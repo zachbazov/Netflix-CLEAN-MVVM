@@ -51,7 +51,9 @@ final class DetailNavigationView: View<DetailNavigationViewModel> {
     
     override func viewDidLoad() {
         viewWillDeploySubviews()
+        viewHierarchyWillConfigure()
         viewWillConfigure()
+        viewWillBindObservers()
     }
     
     override func viewWillDeploySubviews() {
@@ -62,15 +64,59 @@ final class DetailNavigationView: View<DetailNavigationViewModel> {
         trailingItem = DetailNavigationViewItem(on: trailingViewContrainer, with: viewModel)
     }
     
+    override func viewHierarchyWillConfigure() {
+        leadingItem?
+            .addToHierarchy(on: leadingViewContainer)
+            .constraintToSuperview(leadingViewContainer)
+        
+        centerItem?
+            .addToHierarchy(on: centerViewContainer)
+            .constraintToSuperview(centerViewContainer)
+        
+        trailingItem?
+            .addToHierarchy(on: trailingViewContrainer)
+            .constraintToSuperview(trailingViewContrainer)
+    }
+    
     override func viewWillConfigure() {
         setBackgroundColor(.black)
         
-        configureItems()
         configureStateForMediaType()
         configureInitialState()
     }
     
+    override func viewWillBindObservers() {
+        viewModel?.state.observe(on: self) { [weak self] state in
+            guard let self = self else { return }
+            
+            switch state {
+            case .episodes:
+                self.didSelect(self.leadingItem!)
+            case .trailers:
+                self.didSelect(self.centerItem!)
+            case .similarContent:
+                self.didSelect(self.trailingItem!)
+            }
+            
+            guard let ds = self.viewModel.coordinator.viewController?.dataSource else { return }
+            mainQueueDispatch {
+                ds.collectionCell?.detailCollectionView?.dataSourceDidChange()
+                ds.reloadData(at: .collection)
+            }
+        }
+    }
+    
+    override func viewWillUnbindObservers() {
+        guard let viewModel = viewModel else { return }
+        
+        viewModel.state.remove(observer: self)
+        
+        printIfDebug(.success, "Removed `\(Self.self)` observers.")
+    }
+    
     override func viewWillDeallocate() {
+        viewWillUnbindObservers()
+        
         leadingItem?.removeFromSuperview()
         centerItem?.removeFromSuperview()
         trailingItem?.removeFromSuperview()
@@ -93,7 +139,7 @@ extension DetailNavigationView: ViewProtocol {
     func didSelect(_ view: DetailNavigationViewItem) {
         guard let state = State(rawValue: view.tag) else { return }
         
-        viewModel?.stateWillChange(state)
+//        configureStateForMediaType()
         
         setIndicator(for: state)
         
@@ -103,17 +149,17 @@ extension DetailNavigationView: ViewProtocol {
     fileprivate func setIndicator(for state: DetailNavigationView.State) {
         switch state {
         case .episodes:
-            leadingItem?.widthConstraint?.constant = leadingItem?.bounds.width ?? .zero
-            centerItem?.widthConstraint?.constant = .zero
-            trailingItem?.widthConstraint?.constant = .zero
+            leadingItem?.indicatorWidth.constant = leadingItem?.bounds.width ?? .zero
+            centerItem?.indicatorWidth.constant = .zero
+            trailingItem?.indicatorWidth.constant = .zero
         case .trailers:
-            leadingItem?.widthConstraint?.constant = .zero
-            centerItem?.widthConstraint?.constant = centerItem?.bounds.width ?? .zero
-            trailingItem?.widthConstraint?.constant = .zero
+            leadingItem?.indicatorWidth.constant = .zero
+            centerItem?.indicatorWidth.constant = centerItem?.bounds.width ?? .zero
+            trailingItem?.indicatorWidth.constant = .zero
         case .similarContent:
-            leadingItem?.widthConstraint?.constant = .zero
-            centerItem?.widthConstraint?.constant = .zero
-            trailingItem?.widthConstraint?.constant = trailingItem?.bounds.width ?? .zero
+            leadingItem?.indicatorWidth.constant = .zero
+            centerItem?.indicatorWidth.constant = .zero
+            trailingItem?.indicatorWidth.constant = trailingItem?.bounds.width ?? .zero
         }
     }
 }
@@ -132,23 +178,17 @@ extension DetailNavigationView {
 // MARK: - Private Presentation Implementation
 
 extension DetailNavigationView {
-    private func configureItems() {
-        leadingItem?.navigationView = self
-        centerItem?.navigationView = self
-        trailingItem?.navigationView = self
-    }
-    
     private func configureStateForMediaType() {
         guard let type = Media.MediaType(rawValue: viewModel.media.type) else { return }
         
         switch type {
         case .series:
-            viewModel.state = .episodes
+            viewModel.state.value = .episodes
             
             leadingViewContainer.isHidden(false)
             centerViewContainer.isHidden(true)
         case .film:
-            viewModel.state = .trailers
+            viewModel.state.value = .trailers
             
             leadingViewContainer.isHidden(true)
             centerViewContainer.isHidden(false)
@@ -157,7 +197,7 @@ extension DetailNavigationView {
     }
     
     private func configureInitialState() {
-        guard let view = viewModel.state == .episodes ? leadingItem : centerItem else { return }
+        guard let view = viewModel.state.value == .episodes ? leadingItem : centerItem else { return }
         
         didSelect(view)
     }

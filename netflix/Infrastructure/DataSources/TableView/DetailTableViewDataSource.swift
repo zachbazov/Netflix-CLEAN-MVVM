@@ -172,7 +172,12 @@ extension DetailTableViewDataSource: UITableViewDelegate, UITableViewDataSource 
         case .description: return view.bounds.height * 0.135
         case .panel: return view.bounds.height * 0.0764
         case .navigation: return view.bounds.height * 0.0764
-        case .collection: return CGFloat(contentSize(with: viewModel.navigationViewState.value))
+        case .collection:
+            guard let viewModel = viewModel.coordinator?.viewController?.viewModel,
+                  let ds = viewModel.coordinator?.viewController?.dataSource,
+                  let state = ds.navigationCell?.navigationView?.viewModel.state.value
+            else { return .zero }
+            return CGFloat(contentSize(with: state))
         }
     }
 }

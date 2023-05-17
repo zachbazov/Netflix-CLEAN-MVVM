@@ -18,6 +18,8 @@ private protocol ViewModelProtocol {
 // MARK: - DetailNavigationViewItemViewModel Type
 
 final class DetailNavigationViewItemViewModel {
+    let coordinator: DetailViewCoordinator
+    
     fileprivate let tag: Int
     
     var isSelected: Bool = false
@@ -33,7 +35,10 @@ final class DetailNavigationViewItemViewModel {
     
     /// Create a navigation view item view model object.
     /// - Parameter item: Corresponding item object.
-    init(with item: DetailNavigationViewItem) {
+    init(item: DetailNavigationViewItem, with viewModel: DetailViewModel) {
+        guard let coordinator = viewModel.coordinator else { fatalError() }
+        self.coordinator = coordinator
+        
         self.tag = item.tag
     }
 }

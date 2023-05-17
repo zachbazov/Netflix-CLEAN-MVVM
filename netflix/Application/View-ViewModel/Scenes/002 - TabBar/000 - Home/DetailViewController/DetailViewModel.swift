@@ -18,7 +18,7 @@ private protocol ViewModelProtocol {
     var media: Media? { get }
     var isRotated: Bool { get }
     
-    var navigationViewState: Observable<DetailNavigationView.State> { get }
+//    var navigationViewState: Observable<DetailNavigationView.State> { get }
     var season: Observable<Season> { get }
     var collectionMedia: Observable<[Mediable]> { get }
     
@@ -38,7 +38,7 @@ final class DetailViewModel {
     var media: Media?
     var isRotated: Bool = false
     
-    let navigationViewState: Observable<DetailNavigationView.State> = Observable(.episodes)
+//    let navigationViewState: Observable<DetailNavigationView.State> = Observable(.episodes)
     let season: Observable<Season> = Observable(.vacantValue)
     let collectionMedia: Observable<[Mediable]> = Observable([])
     

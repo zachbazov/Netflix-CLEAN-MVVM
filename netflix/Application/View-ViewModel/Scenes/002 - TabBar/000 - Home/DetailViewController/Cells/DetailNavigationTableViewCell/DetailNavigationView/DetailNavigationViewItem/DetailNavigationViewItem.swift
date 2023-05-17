@@ -11,43 +11,34 @@ import UIKit
 
 private protocol ViewProtocol {
     var indicatorView: UIView { get }
+    var indicatorWidth: NSLayoutConstraint { get }
     var button: UIButton { get }
     
-    var navigationView: DetailNavigationView? { get }
-    
-    var widthConstraint: NSLayoutConstraint? { get }
-    
     func createIndicatorView() -> UIView
+    func createIndicatorConstraint() -> NSLayoutConstraint
     func createButton() -> UIButton
     
-    func viewDidTap()
+    func willSelect()
 }
 
 // MARK: - DetailNavigationViewItem Type
 
 final class DetailNavigationViewItem: View<DetailNavigationViewItemViewModel> {
     fileprivate lazy var indicatorView: UIView = createIndicatorView()
+    fileprivate(set) lazy var indicatorWidth: NSLayoutConstraint = createIndicatorConstraint()
     fileprivate lazy var button = createButton()
-    
-    weak var navigationView: DetailNavigationView?
-    
-    fileprivate(set) var widthConstraint: NSLayoutConstraint?
     
     /// Create a navigation view item object.
     /// - Parameters:
     ///   - navigationView: Root navigation view object.
     ///   - parent: Instantiating view.
     ///   - viewModel: Coordinating view model.
-    init(on parent: UIView,
-         with viewModel: DetailViewModel) {
-        super.init(frame: parent.bounds)
+    init(on parent: UIView, with viewModel: DetailViewModel) {
+        super.init(frame: .zero)
         
         self.tag = parent.tag
         
-        self.viewModel = DetailNavigationViewItemViewModel(with: self)
-        
-        self.addToHierarchy(on: parent)
-            .constraintToSuperview(parent)
+        self.viewModel = DetailNavigationViewItemViewModel(item: self, with: viewModel)
         
         self.viewDidLoad()
     }
@@ -59,21 +50,24 @@ final class DetailNavigationViewItem: View<DetailNavigationViewItemViewModel> {
     }
     
     override func viewDidLoad() {
-        viewWillConfigure()
+        viewHierarchyWillConfigure()
         viewWillTargetSubviews()
     }
     
-    override func viewWillConfigure() {
-        configureConstraint()
+    override func viewHierarchyWillConfigure() {
+        indicatorView.addToHierarchy(on: self)
+        button.addToHierarchy(on: self)
+        
+        self.chainConstraintToSuperview(linking: indicatorView,
+                                        to: button,
+                                        withWidthAnchor: indicatorWidth)
     }
     
     override func viewWillTargetSubviews() {
-        button.addTarget(self, action: #selector(viewDidTap), for: .touchUpInside)
+        button.addTarget(self, action: #selector(willSelect), for: .touchUpInside)
     }
     
     override func viewWillDeallocate() {
-        widthConstraint = nil
-        navigationView = nil
         viewModel = nil
         
         removeFromSuperview()
@@ -86,7 +80,6 @@ extension DetailNavigationViewItem: ViewProtocol {
     fileprivate func createIndicatorView() -> UIView {
         let view = UIView()
         view.backgroundColor = .systemRed
-        addSubview(view)
         return view
     }
     
@@ -95,25 +88,23 @@ extension DetailNavigationViewItem: ViewProtocol {
         view.setTitle(viewModel.title, for: .normal)
         view.setTitleColor(.white, for: .normal)
         view.titleLabel?.font = UIFont.systemFont(ofSize: 15.0, weight: .bold)
-        addSubview(view)
         return view
     }
     
+    fileprivate func createIndicatorConstraint() -> NSLayoutConstraint {
+        return indicatorView.widthAnchor.constraint(equalToConstant: bounds.width)
+    }
+    
     @objc
-    func viewDidTap() {
+    func willSelect() {
+        guard let controller = viewModel?.coordinator.viewController,
+              let dataSource = controller.dataSource,
+              let navigation = dataSource.navigationCell?.navigationView,
+              let state = DetailNavigationView.State(rawValue: tag)
+        else { return }
+        
         viewModel?.isSelected.toggle()
         
-        navigationView?.didSelect(self)
-    }
-}
-
-// MARK: - Private Presentation Implementation
-
-extension DetailNavigationViewItem {
-    private func configureConstraint() {
-        widthConstraint = indicatorView.widthAnchor.constraint(equalToConstant: bounds.width)
-        
-        guard let constraint = widthConstraint else { return }
-        self.chainConstraintToSuperview(linking: indicatorView, to: button, withWidthAnchor: constraint)
+        navigation.viewModel?.stateWillChange(state)
     }
 }

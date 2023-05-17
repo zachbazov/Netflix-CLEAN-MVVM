@@ -11,9 +11,7 @@ import Foundation
 
 private protocol ViewModelProtocol {
     var media: Media { get }
-    var state: DetailNavigationView.State { get }
-    
-//    var state: Observable<DetailNavigationView.State> { get }
+    var state: Observable<DetailNavigationView.State> { get }
 }
 
 // MARK: - DetailNavigationViewModel Type
@@ -22,7 +20,7 @@ final class DetailNavigationViewModel {
     let coordinator: DetailViewCoordinator
     
     let media: Media
-    var state: DetailNavigationView.State
+    let state: Observable<DetailNavigationView.State> = Observable(.episodes)
     
     init(with viewModel: DetailViewModel) {
         guard let coordinator = viewModel.coordinator else { fatalError() }
@@ -31,8 +29,6 @@ final class DetailNavigationViewModel {
         guard let media = viewModel.media else { fatalError() }
         
         self.media = media
-        
-        self.state = viewModel.navigationViewState.value
     }
 }
 
@@ -44,8 +40,6 @@ extension DetailNavigationViewModel: ViewModel {}
 
 extension DetailNavigationViewModel: ViewModelProtocol {
     func stateWillChange(_ state: DetailNavigationView.State) {
-        guard let viewModel = coordinator.viewController?.viewModel else { return }
-        
-        viewModel.navigationViewState.value = state
+        self.state.value = state
     }
 }

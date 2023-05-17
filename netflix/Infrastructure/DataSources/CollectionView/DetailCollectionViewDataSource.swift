@@ -48,9 +48,13 @@ final class DetailCollectionViewDataSource<T>: NSObject, UICollectionViewDelegat
     
     func collectionView(_ collectionView: UICollectionView,
                         cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        if case .episodes = viewModel.navigationViewState.value {
+        guard let viewModel = viewModel.coordinator?.viewController?.viewModel,
+              let ds = viewModel.coordinator?.viewController?.dataSource,
+              let state = ds.navigationCell?.navigationView?.viewModel.state.value
+        else { fatalError() }
+        if case .episodes = state {
             return EpisodeCollectionViewCell.create(on: collectionView, for: indexPath, with: viewModel)
-        } else if case .trailers = viewModel.navigationViewState.value {
+        } else if case .trailers = state {
             return TrailerCollectionViewCell.create(on: collectionView, for: indexPath, with: viewModel)
         } else {
             return CollectionViewCell.create(on: collectionView,
@@ -61,10 +65,14 @@ final class DetailCollectionViewDataSource<T>: NSObject, UICollectionViewDelegat
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        guard let viewModel = viewModel.coordinator?.viewController?.viewModel,
+              let ds = viewModel.coordinator?.viewController?.dataSource,
+              let state = ds.navigationCell?.navigationView?.viewModel.state.value
+        else { return }
         let coordinator = viewModel.coordinator!
-        if case .episodes = viewModel.navigationViewState.value {
+        if case .episodes = state {
             ///
-        } else if case .trailers = viewModel.navigationViewState.value {
+        } else if case .trailers = state {
             ///
         } else {
             let media = items[indexPath.row] as! Media

@@ -67,8 +67,6 @@ final class HomeViewModel {
 extension HomeViewModel: ViewModel {
     func viewDidLoad() {
         dataWillLoad()
-        
-        myList.dataWillLoad()
     }
     
     func dataWillLoad() {
@@ -83,6 +81,8 @@ extension HomeViewModel: ViewModel {
     
     func dataDidLoad() {
         ActivityIndicatorView.remove()
+        
+        myList.dataWillLoad()
         
         showcasesWillFilter()
         

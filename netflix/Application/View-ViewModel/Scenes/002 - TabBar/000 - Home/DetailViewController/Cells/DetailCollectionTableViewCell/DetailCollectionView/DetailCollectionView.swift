@@ -122,10 +122,13 @@ extension DetailCollectionView: ViewProtocol {
     
     func dataSourceDidChange() {
         printIfDebug(.success, "dataSourceDidChange")
-        guard let viewModel = viewModel.coordinator.viewController?.viewModel else { return }
+        guard let viewModel = viewModel.coordinator.viewController?.viewModel,
+              let ds = viewModel.coordinator?.viewController?.dataSource,
+              let state = ds.navigationCell?.navigationView?.viewModel.state.value
+        else { return }
         
-        let layout = createLayout(for: viewModel.navigationViewState.value)
-        let dataSource = createDataSource(for: viewModel.navigationViewState.value)
+        let layout = createLayout(for: state)
+        let dataSource = createDataSource(for: state)
         
         self.dataSource = dataSource
         
@@ -149,9 +152,12 @@ extension DetailCollectionView {
 
 extension DetailCollectionView {
     private func loadEpisodes() {
-        guard let viewModel = viewModel.coordinator.viewController?.viewModel else { return }
+        guard let viewModel = viewModel.coordinator.viewController?.viewModel,
+              let ds = viewModel.coordinator?.viewController?.dataSource,
+              let state = ds.navigationCell?.navigationView?.viewModel.state.value
+        else { return }
         
-        if case .episodes = viewModel.navigationViewState.value {
+        if case .episodes = state {
             let cellViewModel = EpisodeCollectionViewCellViewModel(with: viewModel)
             let requestDTO = SeasonHTTPDTO.Request(slug: cellViewModel.media.slug, season: 1)
             
