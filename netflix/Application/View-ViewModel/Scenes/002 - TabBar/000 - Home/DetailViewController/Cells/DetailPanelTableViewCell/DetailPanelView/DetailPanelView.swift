@@ -56,28 +56,15 @@ final class DetailPanelView: UIView {
         setBackgroundColor(.black)
     }
     
-    func viewWillUnbindObservers() {
-        guard let leadingItem = leadingItem,
-              let centerItem = centerItem,
-              let trailingItem = trailingItem
-        else { return }
-        
-        leadingItem.viewWillUnbindObservers()
-        centerItem.viewWillUnbindObservers()
-        trailingItem.viewWillUnbindObservers()
-        
-        printIfDebug(.success, "Removed `\(Self.self)` observers.")
-    }
-    
     func viewWillDeallocate() {
-        viewWillUnbindObservers()
-        
         leadingItem?.viewModel = nil
         centerItem?.viewModel = nil
         trailingItem?.viewModel = nil
         leadingItem = nil
         centerItem = nil
         trailingItem = nil
+        
+        printIfDebug(.success, "Removed `\(Self.self)` observers.")
     }
 }
 

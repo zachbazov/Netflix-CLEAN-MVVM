@@ -7,9 +7,17 @@
 
 import UIKit
 
+// MARK: - ViewProtocol Type
+
+private protocol ViewProtocol {
+    var navigationView: DetailNavigationView? { get }
+}
+
 // MARK: - DetailNavigationTableViewCell Type
 
 final class DetailNavigationTableViewCell: UITableViewCell {
+    fileprivate(set) var navigationView: DetailNavigationView?
+    
     /// Create a detail navigation table view cell object.
     /// - Parameters:
     ///   - tableView: Corresponding table view.
@@ -40,11 +48,16 @@ final class DetailNavigationTableViewCell: UITableViewCell {
 
 // MARK: - ViewProtocol Implementation
 
+extension DetailNavigationTableViewCell: ViewProtocol {}
+
+// MARK: - Private Presentation Implementation
+
 extension DetailNavigationTableViewCell {
     private func createNavigation(with viewModel: DetailViewModel) {
-        let view = DetailNavigationView(with: viewModel)
+        navigationView = DetailNavigationView(with: viewModel)
         
-        view.addToHierarchy(on: contentView)
+        navigationView?
+            .addToHierarchy(on: contentView)
             .constraintToSuperview(contentView)
     }
 }

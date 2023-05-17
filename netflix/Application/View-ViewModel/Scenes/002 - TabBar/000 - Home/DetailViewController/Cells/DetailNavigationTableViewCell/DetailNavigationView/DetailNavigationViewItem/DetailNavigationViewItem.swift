@@ -29,9 +29,9 @@ final class DetailNavigationViewItem: View<DetailNavigationViewItemViewModel> {
     fileprivate lazy var indicatorView: UIView = createIndicatorView()
     fileprivate lazy var button = createButton()
     
-    fileprivate(set) var widthConstraint: NSLayoutConstraint?
-    
     weak var navigationView: DetailNavigationView?
+    
+    fileprivate(set) var widthConstraint: NSLayoutConstraint?
     
     /// Create a navigation view item object.
     /// - Parameters:
@@ -100,7 +100,7 @@ extension DetailNavigationViewItem: ViewProtocol {
     }
     
     @objc
-    fileprivate func viewDidTap() {
+    func viewDidTap() {
         viewModel?.isSelected.toggle()
         
         navigationView?.didSelect(self)

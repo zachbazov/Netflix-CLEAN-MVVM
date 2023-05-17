@@ -71,6 +71,7 @@ final class DetailCollectionView: View<DetailCollectionViewModel> {
     override func viewWillDeallocate() {
         dataSource = nil
         viewModel = nil
+        parent = nil
         
         removeFromSuperview()
     }
@@ -90,20 +91,6 @@ extension DetailCollectionView: ViewProtocol {
         collectionView.showsHorizontalScrollIndicator = false
         collectionView.contentInset = .init(top: 16.0, left: .zero, bottom: .zero, right: .zero)
         return collectionView
-    }
-    
-    func dataSourceDidChange() {
-        guard let viewModel = viewModel.coordinator.viewController?.viewModel else { return }
-        
-        let layout = createLayout(for: viewModel.navigationViewState.value)
-        let dataSource = createDataSource(for: viewModel.navigationViewState.value)
-        
-        self.dataSource = dataSource
-        
-        collectionView.setCollectionViewLayout(layout, animated: false)
-        collectionView.delegate = dataSource
-        collectionView.dataSource = dataSource
-        collectionView.reloadData()
     }
     
     fileprivate func createLayout(for state: DetailNavigationView.State) -> CollectionViewLayout {
@@ -132,6 +119,21 @@ extension DetailCollectionView: ViewProtocol {
             return DetailCollectionViewDataSource(collectionView: collectionView, items: media, with: viewModel)
         }
     }
+    
+    func dataSourceDidChange() {
+        printIfDebug(.success, "dataSourceDidChange")
+        guard let viewModel = viewModel.coordinator.viewController?.viewModel else { return }
+        
+        let layout = createLayout(for: viewModel.navigationViewState.value)
+        let dataSource = createDataSource(for: viewModel.navigationViewState.value)
+        
+        self.dataSource = dataSource
+        
+        collectionView.setCollectionViewLayout(layout, animated: false)
+        collectionView.delegate = dataSource
+        collectionView.dataSource = dataSource
+        collectionView.reloadData()
+    }
 }
 
 // MARK: - State Type
@@ -153,11 +155,7 @@ extension DetailCollectionView {
             let cellViewModel = EpisodeCollectionViewCellViewModel(with: viewModel)
             let requestDTO = SeasonHTTPDTO.Request(slug: cellViewModel.media.slug, season: 1)
             
-            viewModel.seasonDidLoad(request: requestDTO) { [weak self] in
-                guard let self = self else { return }
-                
-                self.dataSourceDidChange()
-            }
+            viewModel.seasonDidLoad(request: requestDTO) {}
         }
     }
 }

@@ -12,6 +12,8 @@ import Foundation
 private protocol ViewModelProtocol {
     var media: Media { get }
     var state: DetailNavigationView.State { get }
+    
+//    var state: Observable<DetailNavigationView.State> { get }
 }
 
 // MARK: - DetailNavigationViewModel Type

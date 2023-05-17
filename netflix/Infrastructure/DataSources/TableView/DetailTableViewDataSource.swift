@@ -14,7 +14,9 @@ private protocol DataSourceProtocol {
     var tableView: UITableView { get }
     var numberOfRows: Int { get }
     var numberOfSections: Int { get }
-    var collectionCell: DetailCollectionTableViewCell! { get }
+    
+    var collectionCell: DetailCollectionTableViewCell? { get }
+    var navigationCell: DetailNavigationTableViewCell? { get }
     
     func viewsDidRegister()
     func dataSourceDidChange()
@@ -32,7 +34,9 @@ final class DetailTableViewDataSource: NSObject {
     fileprivate let tableView: UITableView
     fileprivate let numberOfRows: Int = 1
     fileprivate let numberOfSections = Index.allCases.count
-    fileprivate(set) var collectionCell: DetailCollectionTableViewCell!
+    
+    fileprivate(set) var navigationCell: DetailNavigationTableViewCell?
+    fileprivate(set) var collectionCell: DetailCollectionTableViewCell?
     
     /// Create a detail table view data source object.
     /// - Parameters:
@@ -41,9 +45,21 @@ final class DetailTableViewDataSource: NSObject {
     init(on tableView: UITableView, with viewModel: DetailViewModel) {
         self.tableView = tableView
         self.viewModel = viewModel
+        
         super.init()
+        
         self.viewsDidRegister()
         self.dataSourceDidChange()
+    }
+    
+    deinit {
+        print("deinit \(Self.self)")
+        
+        collectionCell?.removeFromSuperview()
+        collectionCell = nil
+        
+        navigationCell?.removeFromSuperview()
+        navigationCell = nil
     }
 }
 
@@ -128,17 +144,20 @@ extension DetailTableViewDataSource: UITableViewDelegate, UITableViewDataSource 
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let index = Index(rawValue: indexPath.section) else { fatalError() }
-        if case .info = index {
+        
+        switch index {
+        case .info:
             return DetailInfoTableViewCell.create(on: tableView, for: indexPath, with: viewModel)
-        } else if case .description = index {
+        case .description:
             return DetailDescriptionTableViewCell.create(on: tableView, for: indexPath, with: viewModel)
-        } else if case .panel = index {
+        case .panel:
             return DetailPanelTableViewCell.create(on: tableView, for: indexPath, with: viewModel)
-        } else if case .navigation = index {
-            return DetailNavigationTableViewCell.create(on: tableView, for: indexPath, with: viewModel)
-        } else {
+        case .navigation:
+            navigationCell = DetailNavigationTableViewCell.create(on: tableView, for: indexPath, with: viewModel)
+            return navigationCell!
+        case .collection:
             collectionCell = DetailCollectionTableViewCell.create(on: tableView, for: indexPath, with: viewModel)
-            return collectionCell
+            return collectionCell!
         }
     }
     
