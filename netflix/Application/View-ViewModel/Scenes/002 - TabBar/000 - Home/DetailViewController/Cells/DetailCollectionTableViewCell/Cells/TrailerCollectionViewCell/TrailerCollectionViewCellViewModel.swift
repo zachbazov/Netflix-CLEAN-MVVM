@@ -28,6 +28,7 @@ struct TrailerCollectionViewCellViewModel {
     /// - Parameter media: Corresponding media object.
     init(with media: Media?) {
         guard let media = media else { fatalError() }
+        
         self.title = media.title
         self.posterImagePath = media.resources.previewPoster
         self.posterImageIdentifier = .init(string: "detail-poster_\(media.slug)")

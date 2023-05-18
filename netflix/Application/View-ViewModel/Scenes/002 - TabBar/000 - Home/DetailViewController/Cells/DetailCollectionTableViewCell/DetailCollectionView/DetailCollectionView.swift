@@ -18,6 +18,7 @@ private protocol ViewProtocol {
     func createDataSource(for state: DetailNavigationView.State) -> DetailCollectionViewDataSource<Mediable>?
     
     func dataSourceDidChange()
+    func reload()
 }
 
 // MARK: - DetailCollectionView Type
@@ -26,15 +27,11 @@ final class DetailCollectionView: View<DetailCollectionViewModel> {
     fileprivate lazy var collectionView: UICollectionView = createCollectionView()
     fileprivate var dataSource: DetailCollectionViewDataSource<Mediable>?
     
-    private weak var parent: UIView?
-    
     /// Create a detail collection view object.
     /// - Parameters:
     ///   - parent: Instantiating view.
     ///   - viewModel: Coordinating view model.
-    init(on parent: UIView, with viewModel: DetailViewModel) {
-        self.parent = parent
-        
+    init(with viewModel: DetailViewModel) {
         super.init(frame: .zero)
         
         self.viewModel = DetailCollectionViewModel(with: viewModel)
@@ -54,24 +51,44 @@ final class DetailCollectionView: View<DetailCollectionViewModel> {
     
     override func viewDidLoad() {
         viewHierarchyWillConfigure()
+        viewWillBindObservers()
         dataWillLoad()
     }
     
     override func viewHierarchyWillConfigure() {
-        guard let parent = parent else { return }
-        
-        self.addToHierarchy(on: parent)
-            .constraintToSuperview(parent)
-        
         collectionView
             .addToHierarchy(on: self)
             .constraintToSuperview(self)
     }
     
+    override func viewWillBindObservers() {
+        viewModel?.season.observe(on: self) { [weak self] season in
+            guard let self = self else { return }
+            
+            self.reload()
+        }
+        
+        viewModel?.state.observe(on: self) { [weak self] state in
+            guard let self = self else { return }
+            
+            self.reload()
+        }
+    }
+    
+    override func viewWillUnbindObservers() {
+        guard let viewModel = viewModel else { return }
+        
+        viewModel.season.remove(observer: self)
+        viewModel.state.remove(observer: self)
+        
+        printIfDebug(.success, "Removed `\(Self.self)` observers.")
+    }
+    
     override func viewWillDeallocate() {
+        viewWillUnbindObservers()
+        
         dataSource = nil
         viewModel = nil
-        parent = nil
         
         removeFromSuperview()
     }
@@ -109,7 +126,7 @@ extension DetailCollectionView: ViewProtocol {
         
         switch state {
         case .episodes:
-            let episodes = viewModel.season.value.episodes
+            let episodes = self.viewModel.season.value.episodes
             return DetailCollectionViewDataSource(collectionView: collectionView, items: episodes, with: viewModel)
         case .trailers:
             guard let trailers = viewModel.media?.resources.trailers.toDomain() else { fatalError() }
@@ -121,10 +138,9 @@ extension DetailCollectionView: ViewProtocol {
     }
     
     func dataSourceDidChange() {
-        printIfDebug(.success, "dataSourceDidChange")
         guard let viewModel = viewModel.coordinator.viewController?.viewModel,
-              let ds = viewModel.coordinator?.viewController?.dataSource,
-              let state = ds.navigationCell?.navigationView?.viewModel.state.value
+              let controller = viewModel.coordinator?.viewController,
+              let state = controller.dataSource?.navigationCell?.navigationView?.viewModel.state.value
         else { return }
         
         let layout = createLayout(for: state)
@@ -137,6 +153,16 @@ extension DetailCollectionView: ViewProtocol {
         collectionView.dataSource = dataSource
         collectionView.reloadData()
     }
+    
+    fileprivate func reload() {
+        guard let controller = self.viewModel?.coordinator.viewController,
+              let dataSource = controller.dataSource
+        else { return }
+        
+        mainQueueDispatch {
+            dataSource.reloadData(at: .collection)
+        }
+    }
 }
 
 // MARK: - State Type
@@ -145,6 +171,7 @@ extension DetailCollectionView {
     enum State {
         case series
         case film
+        case similarContent
     }
 }
 
@@ -153,15 +180,15 @@ extension DetailCollectionView {
 extension DetailCollectionView {
     private func loadEpisodes() {
         guard let viewModel = viewModel.coordinator.viewController?.viewModel,
-              let ds = viewModel.coordinator?.viewController?.dataSource,
-              let state = ds.navigationCell?.navigationView?.viewModel.state.value
+              let dataSource = viewModel.coordinator?.viewController?.dataSource,
+              let state = dataSource.navigationCell?.navigationView?.viewModel.state.value
         else { return }
         
         if case .episodes = state {
             let cellViewModel = EpisodeCollectionViewCellViewModel(with: viewModel)
             let requestDTO = SeasonHTTPDTO.Request(slug: cellViewModel.media.slug, season: 1)
             
-            viewModel.seasonDidLoad(request: requestDTO) {}
+            self.viewModel?.seasonDidLoad(request: requestDTO) {}
         }
     }
 }

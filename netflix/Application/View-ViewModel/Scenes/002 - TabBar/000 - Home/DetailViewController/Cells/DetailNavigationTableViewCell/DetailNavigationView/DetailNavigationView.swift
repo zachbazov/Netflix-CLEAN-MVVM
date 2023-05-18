@@ -18,7 +18,7 @@ private protocol ViewProtocol {
     func stateDidChange(_ state: DetailNavigationView.State)
     func indicatorValueWillChange(for state: DetailNavigationView.State)
     func buttonAppearanceWillChange(for state: DetailNavigationView.State)
-    func collectionCellWillReload()
+    func collectionStateWillChange(for state: DetailNavigationView.State)
 }
 
 // MARK: - DetailNavigationView Type
@@ -88,7 +88,7 @@ final class DetailNavigationView: View<DetailNavigationViewModel> {
     override func viewWillBindObservers() {
         viewModel?.state.observe(on: self) { [weak self] state in
             guard let self = self else { return }
-            printIfDebug(.success, "\(state)")
+            
             switch state {
             case .episodes:
                 self.didSelect(self.leadingItem!)
@@ -134,6 +134,8 @@ extension DetailNavigationView: ViewProtocol {
         guard let state = State(rawValue: view.tag) else { return }
         
         stateDidChange(state)
+        
+        collectionStateWillChange(for: state)
     }
     
     fileprivate func stateDidChange(_ state: DetailNavigationView.State) {
@@ -141,8 +143,6 @@ extension DetailNavigationView: ViewProtocol {
         indicatorValueWillChange(for: state)
         
         animateUsingSpring(withDuration: 0.5, withDamping: 1.0, initialSpringVelocity: 1.0)
-        
-//        collectionCellWillReload()
     }
     
     fileprivate func indicatorValueWillChange(for state: DetailNavigationView.State) {
@@ -174,15 +174,18 @@ extension DetailNavigationView: ViewProtocol {
         }
     }
     
-    fileprivate func collectionCellWillReload() {
+    fileprivate func collectionStateWillChange(for state: DetailNavigationView.State) {
         guard let controller = viewModel?.coordinator.viewController,
               let collection = controller.dataSource?.collectionCell?.detailCollectionView
         else { return }
         
-        mainQueueDispatch {
-            collection.dataSourceDidChange()
-            
-            controller.dataSource?.reloadData(at: .collection)
+        switch state {
+        case .episodes:
+            collection.viewModel?.stateWillChange(.series)
+        case .trailers:
+            collection.viewModel?.stateWillChange(.film)
+        case .similarContent:
+            collection.viewModel?.stateWillChange(.similarContent)
         }
     }
 }

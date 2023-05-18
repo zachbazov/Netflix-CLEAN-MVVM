@@ -39,9 +39,13 @@ final class EpisodeCollectionViewCell: UICollectionViewCell {
                        with viewModel: DetailViewModel) -> EpisodeCollectionViewCell {
         guard let view = collectionView.dequeueReusableCell(
             withReuseIdentifier: EpisodeCollectionViewCell.reuseIdentifier,
-            for: indexPath) as? EpisodeCollectionViewCell else { fatalError() }
+            for: indexPath) as? EpisodeCollectionViewCell
+        else { fatalError() }
+        
         let cellViewModel = EpisodeCollectionViewCellViewModel(with: viewModel)
+        
         view.viewDidLoad(at: indexPath, with: cellViewModel)
+        
         return view
     }
 }

@@ -38,7 +38,6 @@ final class DetailViewController: Controller<DetailViewModel> {
         deviceWillLockOrientation(.all)
         
         viewWillDeploySubviews()
-        viewWillBindObservers()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -52,29 +51,8 @@ final class DetailViewController: Controller<DetailViewModel> {
         createDataSource()
     }
     
-    override func viewWillBindObservers() {
-//        viewModel.navigationViewState.observe(on: self) { [weak self] state in
-//            self?.dataSource?.reloadData(at: .collection)
-//        }
-        
-        viewModel.season.observe(on: self) { [weak self] season in
-            self?.dataSource?.reloadData(at: .collection)
-        }
-    }
-    
-    override func viewWillUnbindObservers() {
-        guard let viewModel = viewModel else { return }
-        
-//        viewModel.navigationViewState.remove(observer: self)
-        viewModel.season.remove(observer: self)
-        
-        printIfDebug(.success, "Removed `\(Self.self)` observers.")
-    }
-    
     override func viewWillDeallocate() {
         deviceWillLockOrientation(.portrait)
-        
-        viewWillUnbindObservers()
         
         previewView = nil
         dataSource = nil

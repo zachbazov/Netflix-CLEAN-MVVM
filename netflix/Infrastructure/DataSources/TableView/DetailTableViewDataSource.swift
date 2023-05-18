@@ -83,7 +83,7 @@ extension DetailTableViewDataSource: DataSourceProtocol {
     func contentSize(with state: DetailNavigationView.State) -> Float {
         switch state {
         case .episodes:
-            guard let season = viewModel.season.value as Season? else { return .zero }
+            guard let season = collectionCell?.detailCollectionView?.viewModel.season.value else { return . zero }
             let cellHeight = Float(156.0)
             let lineSpacing = Float(8.0)
             let itemsCount = Float(season.episodes.count)

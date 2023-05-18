@@ -54,6 +54,10 @@ extension DetailCollectionTableViewCell: ViewProtocol {}
 
 extension DetailCollectionTableViewCell {
     private func createCollection(with viewModel: DetailViewModel) {
-        detailCollectionView = DetailCollectionView(on: contentView, with: viewModel)
+        detailCollectionView = DetailCollectionView(with: viewModel)
+        
+        detailCollectionView?
+            .addToHierarchy(on: contentView)
+            .constraintToSuperview(contentView)
     }
 }
