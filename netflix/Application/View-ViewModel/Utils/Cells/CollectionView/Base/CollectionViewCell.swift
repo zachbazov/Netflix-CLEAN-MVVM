@@ -28,9 +28,7 @@ class CollectionViewCell<T>: UICollectionViewCell where T: ViewModel {
         
         cell.viewModel = cellViewModel
         cell.indexPath = indexPath
-        cell.representedIdentifier = media.slug as NSString
-        
-        cell.viewDidLoad(media: media, with: cellViewModel)
+        cell.viewDidLoad()
         
         return cell
     }
@@ -40,12 +38,12 @@ class CollectionViewCell<T>: UICollectionViewCell where T: ViewModel {
         on collectionView: UICollectionView,
         for indexPath: IndexPath,
         with viewModel: DetailViewModel) -> U {
-            guard let view = collectionView.dequeueReusableCell(
+            guard let cell = collectionView.dequeueReusableCell(
                 withReuseIdentifier: String(describing: type),
                 for: indexPath) as? U
             else { fatalError() }
             
-            switch view {
+            switch cell {
             case let cell as EpisodeCollectionViewCell:
                 cell.viewModel = cell.createViewModel(for: cell, with: viewModel)
                 cell.indexPath = indexPath
@@ -57,7 +55,7 @@ class CollectionViewCell<T>: UICollectionViewCell where T: ViewModel {
             default: break
             }
             
-            return view
+            return cell
         }
     
     deinit {
@@ -66,6 +64,14 @@ class CollectionViewCell<T>: UICollectionViewCell where T: ViewModel {
         viewModel = nil
         
         removeFromSuperview()
+    }
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        
+        indexPath = nil
+        representedIdentifier = nil
+        viewModel = nil
     }
     
     func createViewModel<U>(for type: U, with viewModel: DetailViewModel) -> T? {
@@ -78,8 +84,6 @@ class CollectionViewCell<T>: UICollectionViewCell where T: ViewModel {
             return nil
         }
     }
-    
-    // MARK: ViewLifecycleBehavior Overridable
     
     func viewDidLoad() {}
     func viewWillDeploySubviews() {}

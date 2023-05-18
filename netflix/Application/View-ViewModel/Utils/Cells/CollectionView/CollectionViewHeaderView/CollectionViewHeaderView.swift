@@ -18,12 +18,16 @@ private protocol ViewProtocol {
 final class CollectionViewHeaderView: UICollectionReusableView {
     fileprivate(set) var titleLabel = UILabel(frame: .zero)
     
-    static func create(in collectionView: UICollectionView, at indexPath: IndexPath) -> CollectionViewHeaderView {
+    static func create(in collectionView: UICollectionView,
+                       at indexPath: IndexPath) -> CollectionViewHeaderView {
         guard let cell = collectionView.dequeueReusableSupplementaryView(
             ofKind: UICollectionView.elementKindSectionHeader,
             withReuseIdentifier: reuseIdentifier,
-            for: indexPath) as? CollectionViewHeaderView else { fatalError() }
+            for: indexPath) as? CollectionViewHeaderView
+        else { fatalError() }
+        
         cell.viewDidConfigure()
+        
         return cell
     }
     
@@ -44,7 +48,7 @@ extension CollectionViewHeaderView: ViewLifecycleBehavior {}
 
 extension CollectionViewHeaderView: ViewProtocol {}
 
-// MARK: - Private UI Implementation
+// MARK: - Private Presentation Implementation
 
 extension CollectionViewHeaderView {
     private func createTitleLabel() {

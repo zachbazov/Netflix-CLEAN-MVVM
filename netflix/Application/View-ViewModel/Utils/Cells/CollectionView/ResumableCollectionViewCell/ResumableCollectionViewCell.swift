@@ -21,10 +21,10 @@ final class ResumableCollectionViewCell: PosterCollectionViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         
-        viewWillDeploySubviews()
+        viewDidConfigure()
     }
     
-    override func viewWillDeploySubviews() {
+    override func viewDidConfigure() {
         configurePlayButton()
         configureProgressView()
         configureGradients()

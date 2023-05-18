@@ -25,21 +25,17 @@ final class RatedCollectionViewCell: PosterCollectionViewCell {
     deinit {
         textLayer.removeFromSuperlayer()
         layerView.removeFromSuperview()
+        
+        removeFromSuperview()
     }
     
     override func awakeFromNib() {
         super.awakeFromNib()
         
-        viewDidLoad()
+        viewDidConfigure()
     }
     
-    override func prepareForReuse() {
-        super.prepareForReuse()
-        
-        textLayer.string = nil
-    }
-    
-    override func viewDidLoad() {
+    override func viewDidConfigure() {
         viewHierarchyWillConfigure()
     }
     
@@ -49,8 +45,8 @@ final class RatedCollectionViewCell: PosterCollectionViewCell {
             .constraintBottom(toParent: contentView, withHeightAnchor: bounds.height / 2)
     }
     
-    override func viewWillConfigure(with viewModel: PosterCollectionViewCellViewModel) {
-        super.viewWillConfigure(with: viewModel)
+    override func viewWillConfigure() {
+        super.viewWillConfigure()
         
         // In-case of first cell index, do nothing.
         if indexPath.row == .zero {
@@ -61,6 +57,7 @@ final class RatedCollectionViewCell: PosterCollectionViewCell {
             textLayer.frame = CGRect(x: -8.0, y: -8.0, width: bounds.width, height: 144.0)
             layerView.transform = CGAffineTransform(translationX: -8.0, y: .zero)
         }
+        
         // Increase the index path by one, start indexing from 1.
         let index = String(describing: indexPath.row + 1)
         let attributedString = NSAttributedString(
@@ -69,10 +66,16 @@ final class RatedCollectionViewCell: PosterCollectionViewCell {
                          .strokeColor: UIColor.white,
                          .strokeWidth: -2.5,
                          .foregroundColor: UIColor.black.cgColor])
-        // Add the layer to the view hierarchy.
+        
         layerView.layer.insertSublayer(textLayer, at: 1)
-        // Set the text value.
+        
         textLayer.string = attributedString
+    }
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        
+        textLayer.string = nil
     }
 }
 
@@ -88,7 +91,9 @@ extension RatedCollectionViewCell {
         override func draw(in ctx: CGContext) {
             ctx.saveGState()
             ctx.translateBy(x: .zero, y: .zero)
+            
             super.draw(in: ctx)
+            
             ctx.restoreGState()
         }
     }
