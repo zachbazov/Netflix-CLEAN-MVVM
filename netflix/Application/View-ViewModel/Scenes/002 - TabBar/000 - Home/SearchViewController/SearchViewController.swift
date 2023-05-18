@@ -239,9 +239,9 @@ extension SearchViewController {
     private func createCollectionView() -> UICollectionView {
         let layout = CollectionViewLayout(layout: .search, scrollDirection: .vertical)
         let collectionView = UICollectionView(frame: contentContainer.bounds, collectionViewLayout: layout)
-        collectionView.register(CollectionViewHeaderView.self,
+        collectionView.register(LabeledCollectionHeaderView.self,
                                 forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
-                                withReuseIdentifier: CollectionViewHeaderView.reuseIdentifier)
+                                withReuseIdentifier: LabeledCollectionHeaderView.reuseIdentifier)
         collectionView.register(SearchCollectionViewCell.nib,
                                 forCellWithReuseIdentifier: SearchCollectionViewCell.reuseIdentifier)
         collectionView.backgroundColor = .black

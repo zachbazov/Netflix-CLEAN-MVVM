@@ -208,7 +208,7 @@
 		A1B0D42E29AE6FCC009977AB /* FastLaughsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B0D42D29AE6FCC009977AB /* FastLaughsViewModel.swift */; };
 		A1B0D43029AE6FD4009977AB /* FastLaughsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B0D42F29AE6FD4009977AB /* FastLaughsViewController.swift */; };
 		A1B0D43229AE6FD8009977AB /* FastLaughsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = A1B0D43129AE6FD8009977AB /* FastLaughsViewController.xib */; };
-		A1B0D43629B20E0F009977AB /* CollectionViewHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B0D43529B20E0F009977AB /* CollectionViewHeaderView.swift */; };
+		A1B0D43629B20E0F009977AB /* LabeledCollectionHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B0D43529B20E0F009977AB /* LabeledCollectionHeaderView.swift */; };
 		A1B0DE562954590E00307866 /* UITableView+ContentInset.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B0DE552954590E00307866 /* UITableView+ContentInset.swift */; };
 		A1B0DE5A29560F5900307866 /* UINavigationController+Identifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B0DE5929560F5900307866 /* UINavigationController+Identifier.swift */; };
 		A1B1B0A8299AEDDE0070AD29 /* Services.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B1B0A7299AEDDE0070AD29 /* Services.swift */; };
@@ -229,6 +229,7 @@
 		A1B349F22A13C59B002AFE9E /* DetailNavigationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B349F12A13C59B002AFE9E /* DetailNavigationViewModel.swift */; };
 		A1B349F62A142560002AFE9E /* DetailCollectionViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B349F52A142560002AFE9E /* DetailCollectionViewModel.swift */; };
 		A1B349FA2A165F77002AFE9E /* CollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B349F92A165F77002AFE9E /* CollectionViewCell.swift */; };
+		A1B34A042A169127002AFE9E /* CollectionReusableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B34A032A169127002AFE9E /* CollectionReusableView.swift */; };
 		A1B3F98A28C54F510042DE9F /* UserRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B3F98928C54F510042DE9F /* UserRepository.swift */; };
 		A1B3F98C28C55B500042DE9F /* HomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B3F98B28C55B500042DE9F /* HomeViewModel.swift */; };
 		A1B3F99428C575A30042DE9F /* AuthViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B3F99328C575A30042DE9F /* AuthViewModel.swift */; };
@@ -537,7 +538,7 @@
 		A1B0D42D29AE6FCC009977AB /* FastLaughsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FastLaughsViewModel.swift; sourceTree = "<group>"; };
 		A1B0D42F29AE6FD4009977AB /* FastLaughsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FastLaughsViewController.swift; sourceTree = "<group>"; };
 		A1B0D43129AE6FD8009977AB /* FastLaughsViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = FastLaughsViewController.xib; sourceTree = "<group>"; };
-		A1B0D43529B20E0F009977AB /* CollectionViewHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionViewHeaderView.swift; sourceTree = "<group>"; };
+		A1B0D43529B20E0F009977AB /* LabeledCollectionHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LabeledCollectionHeaderView.swift; sourceTree = "<group>"; };
 		A1B0DE552954590E00307866 /* UITableView+ContentInset.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITableView+ContentInset.swift"; sourceTree = "<group>"; };
 		A1B0DE5929560F5900307866 /* UINavigationController+Identifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UINavigationController+Identifier.swift"; sourceTree = "<group>"; };
 		A1B1B0A7299AEDDE0070AD29 /* Services.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Services.swift; sourceTree = "<group>"; };
@@ -558,6 +559,7 @@
 		A1B349F12A13C59B002AFE9E /* DetailNavigationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailNavigationViewModel.swift; sourceTree = "<group>"; };
 		A1B349F52A142560002AFE9E /* DetailCollectionViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailCollectionViewModel.swift; sourceTree = "<group>"; };
 		A1B349F92A165F77002AFE9E /* CollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionViewCell.swift; sourceTree = "<group>"; };
+		A1B34A032A169127002AFE9E /* CollectionReusableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionReusableView.swift; sourceTree = "<group>"; };
 		A1B3F98928C54F510042DE9F /* UserRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserRepository.swift; sourceTree = "<group>"; };
 		A1B3F98B28C55B500042DE9F /* HomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModel.swift; sourceTree = "<group>"; };
 		A1B3F99328C575A30042DE9F /* AuthViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthViewModel.swift; sourceTree = "<group>"; };
@@ -1640,12 +1642,12 @@
 			path = SearchCollectionViewCell;
 			sourceTree = "<group>";
 		};
-		A1B0D43429B20DD2009977AB /* CollectionViewHeaderView */ = {
+		A1B0D43429B20DD2009977AB /* LabeledCollectionHeaderView */ = {
 			isa = PBXGroup;
 			children = (
-				A1B0D43529B20E0F009977AB /* CollectionViewHeaderView.swift */,
+				A1B0D43529B20E0F009977AB /* LabeledCollectionHeaderView.swift */,
 			);
-			path = CollectionViewHeaderView;
+			path = LabeledCollectionHeaderView;
 			sourceTree = "<group>";
 		};
 		A1B0DE57295459EB00307866 /* UITableView */ = {
@@ -1758,7 +1760,7 @@
 			children = (
 				A1B34A012A16805B002AFE9E /* Base */,
 				A1B349FE2A167AF0002AFE9E /* PosterCollectionViewCell */,
-				A1B0D43429B20DD2009977AB /* CollectionViewHeaderView */,
+				A1B0D43429B20DD2009977AB /* LabeledCollectionHeaderView */,
 				A1B0D43329B0F976009977AB /* SearchCollectionViewCell */,
 				A14E0CB529BB977E00F55500 /* ProfileCollectionViewCell */,
 				A14E0CC129BB980A00F55500 /* NotificationCollectionViewCell */,
@@ -1793,6 +1795,7 @@
 			isa = PBXGroup;
 			children = (
 				A1B349F92A165F77002AFE9E /* CollectionViewCell.swift */,
+				A1B34A032A169127002AFE9E /* CollectionReusableView.swift */,
 			);
 			path = Base;
 			sourceTree = "<group>";
@@ -2359,6 +2362,7 @@
 				A14E0CE529C116C900F55500 /* UserProfileHTTPDTO+Mapping.swift in Sources */,
 				A1741D0928E679A400F3C46B /* DetailInfoTableViewCell.swift in Sources */,
 				A1B349F02A139584002AFE9E /* UITableView+ReloadSection.swift in Sources */,
+				A1B34A042A169127002AFE9E /* CollectionReusableView.swift in Sources */,
 				A18B997628C0119A0077A5A6 /* NetworkConfig.swift in Sources */,
 				A1B3F99828C6278A0042DE9F /* SignUpViewController.swift in Sources */,
 				A1B0DE5A29560F5900307866 /* UINavigationController+Identifier.swift in Sources */,
@@ -2425,7 +2429,7 @@
 				A1B1B0AA299AEDE20070AD29 /* Stores.swift in Sources */,
 				A1AD25BC28D3FBDC00F793B3 /* UICollectionViewCell+Extension.swift in Sources */,
 				A1F56A5E28C679980089BD4F /* UIView+Extension.swift in Sources */,
-				A1B0D43629B20E0F009977AB /* CollectionViewHeaderView.swift in Sources */,
+				A1B0D43629B20E0F009977AB /* LabeledCollectionHeaderView.swift in Sources */,
 				A1E81D0D28CFE17100D044EA /* Reusable.swift in Sources */,
 				A18B994628BFD9D50077A5A6 /* Season.swift in Sources */,
 				A1A71AA7298B2A6C001C6AB1 /* ListHTTP.swift in Sources */,

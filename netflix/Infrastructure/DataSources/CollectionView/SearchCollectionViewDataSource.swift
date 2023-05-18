@@ -11,7 +11,7 @@ import UIKit
 
 private protocol DataSourceProtocol {
     var viewModel: SearchViewModel { get }
-    var headerView: CollectionViewHeaderView? { get }
+    var headerView: LabeledCollectionHeaderView? { get }
 }
 
 // MARK: - SearchCollectionViewDataSource Type
@@ -19,7 +19,7 @@ private protocol DataSourceProtocol {
 final class SearchCollectionViewDataSource: NSObject {
     fileprivate let viewModel: SearchViewModel
     
-    fileprivate(set) var headerView: CollectionViewHeaderView?
+    fileprivate(set) var headerView: LabeledCollectionHeaderView?
     
     /// Create a search collection view data source object.
     /// - Parameter viewModel: Coordinating view model.
@@ -74,7 +74,7 @@ extension SearchCollectionViewDataSource: UICollectionViewDelegate, UICollection
                         at indexPath: IndexPath) -> UICollectionReusableView {
         switch kind {
         case UICollectionView.elementKindSectionHeader:
-            return CollectionViewHeaderView.create(in: collectionView, at: indexPath)
+            return LabeledCollectionHeaderView.create(in: collectionView, at: indexPath)
         default: return .init()
         }
     }
