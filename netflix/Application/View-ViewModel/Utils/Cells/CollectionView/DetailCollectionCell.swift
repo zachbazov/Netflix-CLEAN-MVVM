@@ -1,5 +1,5 @@
 //
-//  Cell.swift
+//  DetailCollectionCell.swift
 //  netflix
 //
 //  Created by Zach Bazov on 18/05/2023.
@@ -7,9 +7,9 @@
 
 import UIKit
 
-// MARK: - Cell Type
+// MARK: - DetailCollectionCell Type
 
-class Cell<T>: UICollectionViewCell where T: ViewModel {
+class DetailCollectionCell<T>: UICollectionViewCell where T: ViewModel {
     var viewModel: T!
     
     var indexPath: IndexPath!
@@ -67,4 +67,4 @@ class Cell<T>: UICollectionViewCell where T: ViewModel {
 
 // MARK: - ViewLifecycleBehavior Implementation
 
-extension Cell: ViewLifecycleBehavior {}
+extension DetailCollectionCell: ViewLifecycleBehavior {}

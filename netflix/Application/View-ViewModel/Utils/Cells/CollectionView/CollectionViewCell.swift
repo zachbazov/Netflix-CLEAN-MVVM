@@ -7,57 +7,13 @@
 
 import UIKit
 
-// MARK: - ViewProtocol Type
-
-private protocol ViewProtocol {
-    associatedtype T: ViewModel
-    
-    var viewModel: T! { get }
-    var representedIdentifier: NSString? { get }
-    
-    func dataWillDownload(with viewModel: CollectionViewCellViewModel, completion: (() -> Void)?)
-    func viewDidLoad(media: Media, with viewModel: CollectionViewCellViewModel)
-    func viewWillConfigure(with viewModel: T)
-    func logoWillAlign(_ constraint: NSLayoutConstraint, with viewModel: CollectionViewCellViewModel)
-}
-
 // MARK: - CollectionViewCell Type
 
-class CollectionViewCell: UICollectionViewCell {
+class CollectionViewCell: HomeCollectionCell<CollectionViewCellViewModel> {
     @IBOutlet private weak var posterImageView: UIImageView!
     @IBOutlet private weak var logoImageView: UIImageView!
     @IBOutlet private weak var placeholderLabel: UILabel!
     @IBOutlet private weak var logoBottomConstraint: NSLayoutConstraint!
-    
-    fileprivate var viewModel: CollectionViewCellViewModel!
-    
-    fileprivate var representedIdentifier: NSString?
-    
-    /// Create a collection view cell object.
-    /// - Parameters:
-    ///   - collectionView: The referenced collection view.
-    ///   - reuseIdentifier: Cell's reuse identifier.
-    ///   - section: The section the cell represents.
-    ///   - indexPath: The index path of the cell on the collection view.
-    /// - Returns: A collection cell object.
-    static func create(on collectionView: UICollectionView,
-                       reuseIdentifier: String,
-                       section: Section?,
-                       for indexPath: IndexPath) -> CollectionViewCell {
-        guard let view = collectionView.dequeueReusableCell(
-            withReuseIdentifier: reuseIdentifier, for: indexPath) as? CollectionViewCell,
-              let section = section
-        else { fatalError() }
-        
-        let media = section.media[indexPath.row]
-        let cellViewModel = CollectionViewCellViewModel(media: media, indexPath: indexPath)
-        
-        view.viewModel = cellViewModel
-        
-        view.viewDidLoad(media: media, with: cellViewModel)
-        
-        return view
-    }
     
     deinit {
         print("deinit \(Self.self)")
@@ -168,11 +124,3 @@ class CollectionViewCell: UICollectionViewCell {
     }
     func viewDidDeallocate() {}
 }
-
-// MARK: - ViewProtocol Implementation
-
-extension CollectionViewCell: ViewProtocol {}
-
-// MARK: - ViewLifecycleBehavior Implementation
-
-extension CollectionViewCell: ViewLifecycleBehavior {}

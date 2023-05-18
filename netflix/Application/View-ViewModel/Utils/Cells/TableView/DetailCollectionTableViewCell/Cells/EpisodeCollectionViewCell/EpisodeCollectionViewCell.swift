@@ -9,7 +9,7 @@ import UIKit
 
 // MARK: - EpisodeCollectionViewCell Type
 
-final class EpisodeCollectionViewCell: Cell<EpisodeCollectionViewCellViewModel> {
+final class EpisodeCollectionViewCell: DetailCollectionCell<EpisodeCollectionViewCellViewModel> {
     @IBOutlet private weak var imageView: UIImageView!
     @IBOutlet private weak var titleLabel: UILabel!
     @IBOutlet private weak var timestampLabel: UILabel!

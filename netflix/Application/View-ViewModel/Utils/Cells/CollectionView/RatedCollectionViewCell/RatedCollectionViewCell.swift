@@ -52,7 +52,6 @@ final class RatedCollectionViewCell: CollectionViewCell {
     override func viewWillConfigure(with viewModel: CollectionViewCellViewModel) {
         super.viewWillConfigure(with: viewModel)
         
-        guard let indexPath = viewModel.indexPath as IndexPath? else { return }
         // In-case of first cell index, do nothing.
         if indexPath.row == .zero {
             textLayer.frame = CGRect(x: 8.0, y: -8.0, width: bounds.width, height: 144.0)

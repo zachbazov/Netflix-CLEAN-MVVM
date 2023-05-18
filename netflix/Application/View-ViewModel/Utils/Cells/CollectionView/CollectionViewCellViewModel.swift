@@ -10,7 +10,6 @@ import Foundation
 // MARK: - ViewModelProtocol Type
 
 private protocol ViewModelProtocol {
-    var indexPath: IndexPath { get }
     var title: String { get }
     var slug: String { get }
     var posters: [String] { get }
@@ -27,7 +26,6 @@ private protocol ViewModelProtocol {
 // MARK: - CollectionViewCellViewModel Type
 
 struct CollectionViewCellViewModel {
-    let indexPath: IndexPath
     let title: String
     let slug: String
     let posters: [String]
@@ -44,8 +42,7 @@ struct CollectionViewCellViewModel {
     /// - Parameters:
     ///   - media: Represented media object.
     ///   - indexPath: Represented index path for the object on the collection.
-    init(media: Media, indexPath: IndexPath) {
-        self.indexPath = indexPath
+    init(media: Media) {
         self.title = media.title
         self.slug = media.slug
         self.posters = media.resources.posters
