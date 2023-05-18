@@ -34,9 +34,12 @@ final class TrailerCollectionViewCell: UICollectionViewCell {
                        with viewModel: DetailViewModel) -> TrailerCollectionViewCell {
         guard let view = collectionView.dequeueReusableCell(
             withReuseIdentifier: TrailerCollectionViewCell.reuseIdentifier,
-            for: indexPath) as? TrailerCollectionViewCell else { fatalError() }
+            for: indexPath) as? TrailerCollectionViewCell
+        else { fatalError() }
+        
         let cellViewModel = TrailerCollectionViewCellViewModel(with: viewModel.media)
         view.viewDidLoad(with: cellViewModel)
+        
         return view
     }
 }
@@ -60,12 +63,16 @@ extension TrailerCollectionViewCell: ViewProtocol {
                                  completion: (() -> Void)?) {
         AsyncImageService.shared.load(
             url: viewModel.posterImageURL,
-            identifier: viewModel.posterImageIdentifier) { _ in completion?() }
+            identifier: viewModel.posterImageIdentifier) { _ in
+                completion?()
+            }
     }
     
     fileprivate func viewDidLoad(with viewModel: TrailerCollectionViewCellViewModel) {
         dataDidDownload(with: viewModel) { [weak self] in
-            DispatchQueue.main.async { self?.viewDidConfigure(with: viewModel) }
+            mainQueueDispatch {
+                self?.viewDidConfigure(with: viewModel)
+            }
         }
         
         viewDidConfigure()
@@ -73,6 +80,7 @@ extension TrailerCollectionViewCell: ViewProtocol {
     
     fileprivate func viewDidConfigure(with viewModel: TrailerCollectionViewCellViewModel) {
         let image = AsyncImageService.shared.object(for: viewModel.posterImageIdentifier)
+        
         posterImageView.image = image
         titleLabel.text = viewModel.title
     }

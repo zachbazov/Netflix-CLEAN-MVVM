@@ -24,7 +24,9 @@ final class DetailCollectionViewDataSource<T>: NSObject, UICollectionViewDelegat
     fileprivate let viewModel: DetailViewModel
     fileprivate let numberOfSections = 1
     fileprivate let collectionView: UICollectionView
+    
     let items: [T]
+    
     /// Create a generic detail collection view data source object.
     /// - Parameters:
     ///   - collectionView: Corresponding collection view.
@@ -49,14 +51,16 @@ final class DetailCollectionViewDataSource<T>: NSObject, UICollectionViewDelegat
     func collectionView(_ collectionView: UICollectionView,
                         cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let viewModel = viewModel.coordinator?.viewController?.viewModel,
-              let ds = viewModel.coordinator?.viewController?.dataSource,
-              let state = ds.navigationCell?.navigationView?.viewModel.state.value
+              let dataSource = viewModel.coordinator?.viewController?.dataSource,
+              let state = dataSource.navigationCell?.navigationView?.viewModel.state.value
         else { fatalError() }
-        if case .episodes = state {
+        
+        switch state {
+        case .episodes:
             return EpisodeCollectionViewCell.create(on: collectionView, for: indexPath, with: viewModel)
-        } else if case .trailers = state {
+        case .trailers:
             return TrailerCollectionViewCell.create(on: collectionView, for: indexPath, with: viewModel)
-        } else {
+        case .similarContent:
             return CollectionViewCell.create(on: collectionView,
                                              reuseIdentifier: StandardCollectionViewCell.reuseIdentifier,
                                              section: viewModel.section,
@@ -65,18 +69,21 @@ final class DetailCollectionViewDataSource<T>: NSObject, UICollectionViewDelegat
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        guard let viewModel = viewModel.coordinator?.viewController?.viewModel,
-              let ds = viewModel.coordinator?.viewController?.dataSource,
-              let state = ds.navigationCell?.navigationView?.viewModel.state.value
-        else { return }
-        let coordinator = viewModel.coordinator!
-        if case .episodes = state {
-            ///
-        } else if case .trailers = state {
-            ///
-        } else {
-            let media = items[indexPath.row] as! Media
-            coordinator.viewController?.viewModel.media = media
+        guard let coordinator = viewModel.coordinator,
+              let viewModel = viewModel.coordinator?.viewController?.viewModel,
+              let dataSource = viewModel.coordinator?.viewController?.dataSource,
+              let state = dataSource.navigationCell?.navigationView?.viewModel.state.value
+        else { fatalError() }
+        
+        switch state {
+        case .episodes:
+            break
+        case .trailers:
+            break
+        case .similarContent:
+            guard let media = items[indexPath.row] as? Media else { return }
+            viewModel.media = media
+            
             coordinator.coordinate(to: .detail)
         }
     }
