@@ -57,9 +57,15 @@ final class DetailCollectionViewDataSource<T>: NSObject, UICollectionViewDelegat
         
         switch state {
         case .episodes:
-            return EpisodeCollectionViewCell.create(on: collectionView, for: indexPath, with: viewModel)
+            return EpisodeCollectionViewCell.create(of: EpisodeCollectionViewCell.self,
+                                                    on: collectionView,
+                                                    for: indexPath,
+                                                    with: viewModel)
         case .trailers:
-            return TrailerCollectionViewCell.create(on: collectionView, for: indexPath, with: viewModel)
+            return TrailerCollectionViewCell.create(of: TrailerCollectionViewCell.self,
+                                                    on: collectionView,
+                                                    for: indexPath,
+                                                    with: viewModel)
         case .similarContent:
             return CollectionViewCell.create(on: collectionView,
                                              reuseIdentifier: StandardCollectionViewCell.reuseIdentifier,

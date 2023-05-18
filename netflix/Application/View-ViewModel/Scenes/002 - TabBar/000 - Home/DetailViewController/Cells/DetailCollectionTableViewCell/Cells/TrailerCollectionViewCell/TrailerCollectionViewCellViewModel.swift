@@ -36,6 +36,10 @@ struct TrailerCollectionViewCellViewModel {
     }
 }
 
+// MARK: - ViewModel Implementation
+
+extension TrailerCollectionViewCellViewModel: ViewModel {}
+
 // MARK: - ViewModelProtocol Implementation
 
 extension TrailerCollectionViewCellViewModel: ViewModelProtocol {}

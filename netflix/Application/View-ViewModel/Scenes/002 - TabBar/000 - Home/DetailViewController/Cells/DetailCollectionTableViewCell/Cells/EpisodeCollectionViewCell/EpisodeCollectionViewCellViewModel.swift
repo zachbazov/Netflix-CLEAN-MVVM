@@ -43,6 +43,10 @@ struct EpisodeCollectionViewCellViewModel {
     }
 }
 
+// MARK: - ViewModel Implementation
+
+extension EpisodeCollectionViewCellViewModel: ViewModel {}
+
 // MARK: - ViewModelProtocol Implementation
 
 extension EpisodeCollectionViewCellViewModel: ViewModelProtocol {}
