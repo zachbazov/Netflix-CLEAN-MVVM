@@ -1,5 +1,5 @@
 //
-//  CollectionViewCell.swift
+//  PosterCollectionViewCell.swift
 //  netflix
 //
 //  Created by Zach Bazov on 13/09/2022.
@@ -7,9 +7,9 @@
 
 import UIKit
 
-// MARK: - CollectionViewCell Type
+// MARK: - PosterCollectionViewCell Type
 
-class CollectionViewCell: HomeCollectionCell<CollectionViewCellViewModel> {
+class PosterCollectionViewCell: CollectionViewCell<PosterCollectionViewCellViewModel> {
     @IBOutlet private weak var posterImageView: UIImageView!
     @IBOutlet private weak var logoImageView: UIImageView!
     @IBOutlet private weak var placeholderLabel: UILabel!
@@ -38,7 +38,7 @@ class CollectionViewCell: HomeCollectionCell<CollectionViewCellViewModel> {
     /// - Parameters:
     ///   - viewModel: Coordinating view model.
     ///   - completion: Completion handler.
-    func dataWillDownload(with viewModel: CollectionViewCellViewModel,
+    func dataWillDownload(with viewModel: PosterCollectionViewCellViewModel,
                           completion: (() -> Void)?) {
         AsyncImageService.shared.load(
             url: viewModel.posterImageURL,
@@ -57,7 +57,7 @@ class CollectionViewCell: HomeCollectionCell<CollectionViewCellViewModel> {
     /// - Parameters:
     ///   - media: Corresponding media object.
     ///   - viewModel: Coordinating view model.
-    func viewDidLoad(media: Media, with viewModel: CollectionViewCellViewModel) {
+    func viewDidLoad(media: Media, with viewModel: PosterCollectionViewCellViewModel) {
         setBackgroundColor(.clear)
         
         placeholderLabel.alpha = 1.0
@@ -76,7 +76,7 @@ class CollectionViewCell: HomeCollectionCell<CollectionViewCellViewModel> {
     /// Overridable configuration operation.
     /// Configure the view based on the view model.
     /// - Parameter viewModel: Coordinating view model.
-    func viewWillConfigure(with viewModel: CollectionViewCellViewModel) {
+    func viewWillConfigure(with viewModel: PosterCollectionViewCellViewModel) {
         guard representedIdentifier == viewModel.slug as NSString? else { return }
         
         let posterImage = AsyncImageService.shared.object(for: viewModel.posterImageIdentifier)
@@ -95,7 +95,7 @@ class CollectionViewCell: HomeCollectionCell<CollectionViewCellViewModel> {
     /// - Parameters:
     ///   - constraint: The value of the bottom constraint.
     ///   - viewModel: Coordinating view model.
-    func logoWillAlign(_ constraint: NSLayoutConstraint, with viewModel: CollectionViewCellViewModel) {
+    func logoWillAlign(_ constraint: NSLayoutConstraint, with viewModel: PosterCollectionViewCellViewModel) {
         switch viewModel.presentedLogoAlignment {
         case .top: constraint.constant = bounds.maxY - logoImageView.bounds.height - 8.0
         case .midTop: constraint.constant = 64.0
@@ -104,23 +104,4 @@ class CollectionViewCell: HomeCollectionCell<CollectionViewCellViewModel> {
         case .bottom: constraint.constant = 8.0
         }
     }
-    
-    // MARK: ViewLifecycleBehavior Overridable
-    
-    func viewDidLoad() {}
-    func viewWillDeploySubviews() {}
-    func viewDidDeploySubviews() {}
-    func viewHierarchyWillConfigure() {}
-    func viewHierarchyDidConfigure() {}
-    func viewWillConfigure() {}
-    func viewDidConfigure() {}
-    
-    func viewWillDeallocate() {
-        representedIdentifier = nil
-        
-        viewModel = nil
-        
-        removeFromSuperview()
-    }
-    func viewDidDeallocate() {}
 }

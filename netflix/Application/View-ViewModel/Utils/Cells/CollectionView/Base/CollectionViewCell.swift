@@ -1,5 +1,5 @@
 //
-//  DetailCollectionCell.swift
+//  CollectionViewCell.swift
 //  netflix
 //
 //  Created by Zach Bazov on 18/05/2023.
@@ -7,12 +7,33 @@
 
 import UIKit
 
-// MARK: - DetailCollectionCell Type
+// MARK: - CollectionViewCell Type
 
-class DetailCollectionCell<T>: UICollectionViewCell where T: ViewModel {
+class CollectionViewCell<T>: UICollectionViewCell where T: ViewModel {
     var viewModel: T!
-    
+    var representedIdentifier: NSString!
     var indexPath: IndexPath!
+    
+    class func create(on collectionView: UICollectionView,
+                      reuseIdentifier: String,
+                      section: Section?,
+                      for indexPath: IndexPath) -> PosterCollectionViewCell {
+        guard let cell = collectionView.dequeueReusableCell(
+            withReuseIdentifier: reuseIdentifier, for: indexPath) as? PosterCollectionViewCell,
+              let section = section
+        else { fatalError() }
+        
+        let media = section.media[indexPath.row]
+        let cellViewModel = PosterCollectionViewCellViewModel(media: media)
+        
+        cell.viewModel = cellViewModel
+        cell.indexPath = indexPath
+        cell.representedIdentifier = media.slug as NSString
+        
+        cell.viewDidLoad(media: media, with: cellViewModel)
+        
+        return cell
+    }
     
     class func create<U>(
         of type: U.Type,
@@ -41,6 +62,7 @@ class DetailCollectionCell<T>: UICollectionViewCell where T: ViewModel {
     
     deinit {
         indexPath = nil
+        representedIdentifier = nil
         viewModel = nil
         
         removeFromSuperview()
@@ -57,9 +79,18 @@ class DetailCollectionCell<T>: UICollectionViewCell where T: ViewModel {
         }
     }
     
+    // MARK: ViewLifecycleBehavior Overridable
+    
     func viewDidLoad() {}
+    func viewWillDeploySubviews() {}
+    func viewDidDeploySubviews() {}
+    func viewHierarchyWillConfigure() {}
+    func viewHierarchyDidConfigure() {}
     func viewWillConfigure() {}
     func viewDidConfigure() {}
+    
+    func viewWillDeallocate() {}
+    func viewDidDeallocate() {}
     
     func dataWillLoad(completion: (() -> Void)?) {}
     func loadResources(_ completion: (() -> Void)?) {}
@@ -67,4 +98,4 @@ class DetailCollectionCell<T>: UICollectionViewCell where T: ViewModel {
 
 // MARK: - ViewLifecycleBehavior Implementation
 
-extension DetailCollectionCell: ViewLifecycleBehavior {}
+extension CollectionViewCell: ViewLifecycleBehavior {}

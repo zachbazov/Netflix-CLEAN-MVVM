@@ -60,7 +60,7 @@ final class HomeCollectionViewDataSource<Cell>: NSObject,
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        return CollectionViewCell.create(on: collectionView,
+        return PosterCollectionViewCell.create(on: collectionView,
                                          reuseIdentifier: Cell.reuseIdentifier,
                                          section: section,
                                          for: indexPath)

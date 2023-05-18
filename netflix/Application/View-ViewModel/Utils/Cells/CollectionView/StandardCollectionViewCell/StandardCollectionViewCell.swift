@@ -9,4 +9,4 @@ import Foundation
 
 // MARK: - StandardCollectionViewCell Type
 
-final class StandardCollectionViewCell: CollectionViewCell {}
+final class StandardCollectionViewCell: PosterCollectionViewCell {}

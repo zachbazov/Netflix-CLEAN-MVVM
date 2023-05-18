@@ -67,7 +67,7 @@ final class DetailCollectionViewDataSource<T>: NSObject, UICollectionViewDelegat
                                                     for: indexPath,
                                                     with: viewModel)
         case .similarContent:
-            return CollectionViewCell.create(on: collectionView,
+            return PosterCollectionViewCell.create(on: collectionView,
                                              reuseIdentifier: StandardCollectionViewCell.reuseIdentifier,
                                              section: viewModel.section,
                                              for: indexPath)

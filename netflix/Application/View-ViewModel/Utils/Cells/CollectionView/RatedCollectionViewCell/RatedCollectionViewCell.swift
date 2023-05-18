@@ -18,7 +18,7 @@ private protocol ViewProtocol {
 
 // MARK: - RatedCollectionViewCell Type
 
-final class RatedCollectionViewCell: CollectionViewCell {
+final class RatedCollectionViewCell: PosterCollectionViewCell {
     fileprivate let layerView = UIView()
     fileprivate let textLayer = TextLayer()
     
@@ -49,7 +49,7 @@ final class RatedCollectionViewCell: CollectionViewCell {
             .constraintBottom(toParent: contentView, withHeightAnchor: bounds.height / 2)
     }
     
-    override func viewWillConfigure(with viewModel: CollectionViewCellViewModel) {
+    override func viewWillConfigure(with viewModel: PosterCollectionViewCellViewModel) {
         super.viewWillConfigure(with: viewModel)
         
         // In-case of first cell index, do nothing.
