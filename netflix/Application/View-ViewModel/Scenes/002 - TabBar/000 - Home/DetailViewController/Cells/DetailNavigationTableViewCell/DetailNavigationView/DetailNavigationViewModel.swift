@@ -20,15 +20,17 @@ final class DetailNavigationViewModel {
     let coordinator: DetailViewCoordinator
     
     let media: Media
-    let state: Observable<DetailNavigationView.State> = Observable(.episodes)
+    let state: Observable<DetailNavigationView.State>
     
     init(with viewModel: DetailViewModel) {
         guard let coordinator = viewModel.coordinator else { fatalError() }
         self.coordinator = coordinator
         
         guard let media = viewModel.media else { fatalError() }
-        
         self.media = media
+        
+        guard let type = Media.MediaType(rawValue: media.type) else { fatalError() }
+        self.state = Observable(type == .series ? .episodes : .trailers)
     }
 }
 

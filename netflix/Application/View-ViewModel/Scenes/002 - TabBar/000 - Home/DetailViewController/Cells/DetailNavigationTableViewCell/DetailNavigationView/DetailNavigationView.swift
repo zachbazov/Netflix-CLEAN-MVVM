@@ -15,7 +15,10 @@ private protocol ViewProtocol {
     var trailingItem: DetailNavigationViewItem? { get }
     
     func didSelect(_ view: DetailNavigationViewItem)
-    func setIndicator(for state: DetailNavigationView.State)
+    func stateDidChange(_ state: DetailNavigationView.State)
+    func indicatorValueWillChange(for state: DetailNavigationView.State)
+    func buttonAppearanceWillChange(for state: DetailNavigationView.State)
+    func collectionCellWillReload()
 }
 
 // MARK: - DetailNavigationView Type
@@ -80,15 +83,12 @@ final class DetailNavigationView: View<DetailNavigationViewModel> {
     
     override func viewWillConfigure() {
         setBackgroundColor(.black)
-        
-        configureStateForMediaType()
-        configureInitialState()
     }
     
     override func viewWillBindObservers() {
         viewModel?.state.observe(on: self) { [weak self] state in
             guard let self = self else { return }
-            
+            printIfDebug(.success, "\(state)")
             switch state {
             case .episodes:
                 self.didSelect(self.leadingItem!)
@@ -96,12 +96,6 @@ final class DetailNavigationView: View<DetailNavigationViewModel> {
                 self.didSelect(self.centerItem!)
             case .similarContent:
                 self.didSelect(self.trailingItem!)
-            }
-            
-            guard let ds = self.viewModel.coordinator.viewController?.dataSource else { return }
-            mainQueueDispatch {
-                ds.collectionCell?.detailCollectionView?.dataSourceDidChange()
-                ds.reloadData(at: .collection)
             }
         }
     }
@@ -139,27 +133,56 @@ extension DetailNavigationView: ViewProtocol {
     func didSelect(_ view: DetailNavigationViewItem) {
         guard let state = State(rawValue: view.tag) else { return }
         
-//        configureStateForMediaType()
-        
-        setIndicator(for: state)
-        
-        animateUsingSpring(withDuration: 0.5, withDamping: 1.0, initialSpringVelocity: 1.0)
+        stateDidChange(state)
     }
     
-    fileprivate func setIndicator(for state: DetailNavigationView.State) {
+    fileprivate func stateDidChange(_ state: DetailNavigationView.State) {
+        buttonAppearanceWillChange(for: state)
+        indicatorValueWillChange(for: state)
+        
+        animateUsingSpring(withDuration: 0.5, withDamping: 1.0, initialSpringVelocity: 1.0)
+        
+//        collectionCellWillReload()
+    }
+    
+    fileprivate func indicatorValueWillChange(for state: DetailNavigationView.State) {
         switch state {
         case .episodes:
-            leadingItem?.indicatorWidth.constant = leadingItem?.bounds.width ?? .zero
+            leadingItem?.indicatorWidth.constant = leadingViewContainer.bounds.width
             centerItem?.indicatorWidth.constant = .zero
             trailingItem?.indicatorWidth.constant = .zero
         case .trailers:
             leadingItem?.indicatorWidth.constant = .zero
-            centerItem?.indicatorWidth.constant = centerItem?.bounds.width ?? .zero
+            centerItem?.indicatorWidth.constant = centerViewContainer.bounds.width
             trailingItem?.indicatorWidth.constant = .zero
         case .similarContent:
             leadingItem?.indicatorWidth.constant = .zero
             centerItem?.indicatorWidth.constant = .zero
-            trailingItem?.indicatorWidth.constant = trailingItem?.bounds.width ?? .zero
+            trailingItem?.indicatorWidth.constant = trailingViewContrainer.bounds.width
+        }
+    }
+    
+    fileprivate func buttonAppearanceWillChange(for state: DetailNavigationView.State) {
+        switch state {
+        case .episodes:
+            leadingViewContainer.isHidden(false)
+            centerViewContainer.isHidden(true)
+        case .trailers:
+            leadingViewContainer.isHidden(true)
+            centerViewContainer.isHidden(false)
+        default: break
+        }
+    }
+    
+    fileprivate func collectionCellWillReload() {
+        guard let controller = viewModel?.coordinator.viewController,
+              let collection = controller.dataSource?.collectionCell?.detailCollectionView
+        else { return }
+        
+        mainQueueDispatch {
+            collection.dataSourceDidChange()
+            
+            controller.dataSource?.reloadData(at: .collection)
         }
     }
 }
@@ -172,33 +195,5 @@ extension DetailNavigationView {
         case episodes
         case trailers
         case similarContent
-    }
-}
-
-// MARK: - Private Presentation Implementation
-
-extension DetailNavigationView {
-    private func configureStateForMediaType() {
-        guard let type = Media.MediaType(rawValue: viewModel.media.type) else { return }
-        
-        switch type {
-        case .series:
-            viewModel.state.value = .episodes
-            
-            leadingViewContainer.isHidden(false)
-            centerViewContainer.isHidden(true)
-        case .film:
-            viewModel.state.value = .trailers
-            
-            leadingViewContainer.isHidden(true)
-            centerViewContainer.isHidden(false)
-        default: return
-        }
-    }
-    
-    private func configureInitialState() {
-        guard let view = viewModel.state.value == .episodes ? leadingItem : centerItem else { return }
-        
-        didSelect(view)
     }
 }

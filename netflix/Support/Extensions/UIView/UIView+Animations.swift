@@ -16,7 +16,9 @@ extension UIView {
         UIView.animate(withDuration: duration,
                        delay: .zero,
                        usingSpringWithDamping: damping,
-                       initialSpringVelocity: velocity) { [unowned self] in layoutIfNeeded() }
+                       initialSpringVelocity: velocity) { [unowned self] in
+            layoutIfNeeded()
+        }
     }
     
     func animateUsingSpring(withDuration duration: TimeInterval,
