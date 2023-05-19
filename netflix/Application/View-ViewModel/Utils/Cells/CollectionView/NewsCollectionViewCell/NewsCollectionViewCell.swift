@@ -7,17 +7,9 @@
 
 import UIKit
 
-// MARK: - ViewProtocol Type
-
-private protocol ViewProtocol {
-    var representedIdentifier: String? { get }
-    
-    func viewDidConfigure(with viewModel: NewsCollectionViewCellViewModel)
-}
-
 // MARK: - NewsCollectionViewCell Type
 
-final class NewsCollectionViewCell: UICollectionViewCell {
+final class NewsCollectionViewCell: CollectionViewCell<NewsCollectionViewCellViewModel> {
     @IBOutlet private weak var previewPosterImageView: UIImageView!
     @IBOutlet private weak var ageRestrictionView: AgeRestrictionView!
     @IBOutlet private weak var monthLabel: UILabel!
@@ -33,43 +25,19 @@ final class NewsCollectionViewCell: UICollectionViewCell {
     @IBOutlet private weak var descriptionTextView: UITextView!
     @IBOutlet private weak var genresLabel: UILabel!
     
-    fileprivate var viewModel: NewsCollectionViewCellViewModel!
-    fileprivate var representedIdentifier: String?
+    override func viewDidLoad() {
+        viewWillConfigure()
+    }
     
-    static func create(in collectionView: UICollectionView,
-                       at indexPath: IndexPath,
-                       with viewModel: NewsViewModel) -> NewsCollectionViewCell {
-        guard let view = collectionView.dequeueReusableCell(
-            withReuseIdentifier: NewsCollectionViewCell.reuseIdentifier,
-            for: indexPath) as? NewsCollectionViewCell else {
-            fatalError()
-        }
-        let cellViewModel = viewModel.items.value[indexPath.row]
-        view.representedIdentifier = cellViewModel.media.slug
-        view.viewModel = NewsCollectionViewCellViewModel(with: cellViewModel.media)
-        view.viewDidConfigure()
-        view.viewDidConfigure(with: view.viewModel)
-        return view
-    }
-}
-
-// MARK: - ViewLifecycleBehavior Implementation
-
-extension NewsCollectionViewCell: ViewLifecycleBehavior {
-    func viewDidConfigure() {
-        backgroundColor = .black
-        previewPosterImageView.layer.cornerRadius = 10.0
-    }
-}
-
-// MARK: - ViewProtocol Implementation
-
-extension NewsCollectionViewCell: ViewProtocol {
-    fileprivate func viewDidConfigure(with viewModel: NewsCollectionViewCellViewModel) {
+    override func viewWillConfigure() {
+        setBackgroundColor(.black)
+        previewPosterImageView.cornerRadius(10.0)
+        
+        guard representedIdentifier == viewModel.media.slug as NSString? else { return }
+        
         AsyncImageService.shared.load(
             url: viewModel.previewPosterImageURL,
             identifier: viewModel.previewPosterImageIdentifier) { [weak self] image in
-                guard self!.representedIdentifier == viewModel.media.slug else { return }
                 mainQueueDispatch {
                     self?.previewPosterImageView.image = image
                 }
@@ -78,7 +46,6 @@ extension NewsCollectionViewCell: ViewProtocol {
         AsyncImageService.shared.load(
             url: viewModel.displayLogoImageURL,
             identifier: viewModel.displayLogoImageIdentifier) { [weak self] image in
-                guard self!.representedIdentifier == viewModel.media.slug else { return }
                 mainQueueDispatch {
                     self?.logoImageView.image = image
                 }

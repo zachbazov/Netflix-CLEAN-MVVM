@@ -13,15 +13,15 @@ struct UserProfile {
     var _id: String? = nil
     let name: String
     let image: String
-    var active: Bool
-    let user: String
+    var active: Bool?
+    let user: String?
 }
 
 // MARK: - Mapping
 
 extension UserProfile {
     func toDTO() -> UserProfileDTO {
-        return .init(_id: _id, name: name, image: image, active: active, user: user)
+        return .init(_id: _id, name: name, image: image, active: active ?? false, user: user ?? .toBlank())
     }
 }
 

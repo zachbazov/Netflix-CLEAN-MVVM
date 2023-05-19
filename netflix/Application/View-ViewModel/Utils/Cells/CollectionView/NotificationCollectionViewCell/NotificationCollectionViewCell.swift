@@ -7,18 +7,9 @@
 
 import UIKit
 
-// MARK: - ViewProtocol Type
-
-private protocol ViewProtocol {
-    var representedIdentifier: NSString? { get }
-    
-    func viewDidConfigure(with viewModel: NotificationCollectionViewCellViewModel)
-    func logoDidAlign(with viewModel: NotificationCollectionViewCellViewModel)
-}
-
 // MARK: - NotificationCollectionViewCell Type
 
-final class NotificationCollectionViewCell: UICollectionViewCell {
+final class NotificationCollectionViewCell: CollectionViewCell<NotificationCollectionViewCellViewModel> {
     @IBOutlet private weak var previewImageView: UIImageView!
     @IBOutlet private weak var logoImageView: UIImageView!
     @IBOutlet private weak var messageLabel: UILabel!
@@ -28,44 +19,15 @@ final class NotificationCollectionViewCell: UICollectionViewCell {
     @IBOutlet private weak var logoYConstraint: NSLayoutConstraint!
     @IBOutlet private weak var notificationIndicator: UIView!
     
-    fileprivate var representedIdentifier: NSString?
-    
-    static func create(in collectionView: UICollectionView,
-                       at indexPath: IndexPath,
-                       with viewModel: AccountViewModel) -> NotificationCollectionViewCell {
-        guard let view = collectionView.dequeueReusableCell(
-            withReuseIdentifier: NotificationCollectionViewCell.reuseIdentifier,
-            for: indexPath) as? NotificationCollectionViewCell else { fatalError() }
-        
-        let myList = MyList.shared
-        let media = myList.viewModel.list.toArray()
-        let model = media[indexPath.row]
-        let cellViewModel = NotificationCollectionViewCellViewModel(media: model)
-        
-        view.representedIdentifier = cellViewModel.slug as NSString
-        
-        view.viewDidConfigure()
-        view.viewDidConfigure(with: cellViewModel)
-        
-        return view
+    override func viewDidLoad() {
+        viewWillConfigure()
     }
     
-    func viewDidConfigure() {
-        backgroundColor = .hexColor("#121212")
+    override func viewWillConfigure() {
+        setBackgroundColor(.hexColor("#121212"))
+        previewImageView.cornerRadius(4.0)
+        notificationIndicator.cornerRadius(notificationIndicator.bounds.height / 2)
         
-        previewImageView.layer.cornerRadius = 4.0
-        notificationIndicator.layer.cornerRadius = notificationIndicator.bounds.height / 2
-    }
-}
-
-// MARK: - ViewLifecycleBehavior Implementation
-
-extension NotificationCollectionViewCell: ViewLifecycleBehavior {}
-
-// MARK: - ViewProtocol Implementation
-
-extension NotificationCollectionViewCell: ViewProtocol {
-    fileprivate func viewDidConfigure(with viewModel: NotificationCollectionViewCellViewModel) {
         guard representedIdentifier == viewModel.slug as NSString? else { return }
         
         subjectLabel.text = viewModel.title
@@ -73,7 +35,6 @@ extension NotificationCollectionViewCell: ViewProtocol {
         AsyncImageService.shared.load(
             url: viewModel.posterImageURL,
             identifier: viewModel.posterImageIdentifier) { [weak self] image in
-                guard self?.representedIdentifier == viewModel.slug as NSString? else { return }
                 mainQueueDispatch {
                     self?.previewImageView.image = image
                 }
@@ -82,13 +43,12 @@ extension NotificationCollectionViewCell: ViewProtocol {
         AsyncImageService.shared.load(
             url: viewModel.logoImageURL,
             identifier: viewModel.logoImageIdentifier) { [weak self] image in
-                guard self?.representedIdentifier == viewModel.slug as NSString? else { return }
                 mainQueueDispatch {
                     self?.logoImageView.image = image
                 }
             }
         
-        logoDidAlign(with: viewModel)
+        logoWillAlign()
     }
     
     /// Align the logo constraint based on `resources.presentedLogoHorizontalAlignment`
@@ -96,7 +56,7 @@ extension NotificationCollectionViewCell: ViewProtocol {
     /// - Parameters:
     ///   - constraint: The value of the leading constraint.
     ///   - viewModel: Coordinating view model.
-    fileprivate func logoDidAlign(with viewModel: NotificationCollectionViewCellViewModel) {
+    fileprivate func logoWillAlign() {
         let initial: CGFloat = 4.0
         let minX = initial
         let minY = initial

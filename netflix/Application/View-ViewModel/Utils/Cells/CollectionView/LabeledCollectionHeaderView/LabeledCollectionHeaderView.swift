@@ -38,9 +38,9 @@ extension LabeledCollectionHeaderView: ViewProtocol {}
 extension LabeledCollectionHeaderView {
     private func createTitleLabel() -> UILabel {
         let label = UILabel(frame: .zero)
-        titleLabel.text = "Searches"
-        titleLabel.font = .systemFont(ofSize: 18.0, weight: .bold)
-        titleLabel.textColor = .white
+        label.text = "Searches"
+        label.font = .systemFont(ofSize: 18.0, weight: .bold)
+        label.textColor = .white
         return label
     }
 }

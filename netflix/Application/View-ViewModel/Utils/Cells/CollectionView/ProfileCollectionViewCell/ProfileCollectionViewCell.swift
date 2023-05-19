@@ -10,65 +10,70 @@ import UIKit
 // MARK: - ViewProtocol Type
 
 private protocol ViewProtocol {
-    func viewDidConfigure(with viewModel: ProfileCollectionViewCellViewModel, at indexPath: IndexPath)
+    var accountViewModel: AccountViewModel? { get }
+    
+    func setTitle(_ string: String)
 }
 
 // MARK: - ProfileCollectionViewCell Type
 
-final class ProfileCollectionViewCell: UICollectionViewCell {
+final class ProfileCollectionViewCell: CollectionViewCell<ProfileCollectionViewCellViewModel> {
     @IBOutlet private weak var imageContainer: UIView!
     @IBOutlet private weak var layerContainer: UIView!
     @IBOutlet private weak var button: UIButton!
     @IBOutlet private weak var titleLabel: UILabel!
     
-    private var viewModel: AccountViewModel?
+    var accountViewModel: AccountViewModel?
     
     deinit {
-        print("deinit \(String(describing: Self.self))")
+        print("deinit \(Self.self)")
+        
+        accountViewModel = nil
+        
+        removeFromSuperview()
     }
     
-    static func create(in collectionView: UICollectionView,
-                       at indexPath: IndexPath,
-                       with viewModel: AccountViewModel) -> ProfileCollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(
-            withReuseIdentifier: ProfileCollectionViewCell.reuseIdentifier,
-            for: indexPath) as? ProfileCollectionViewCell else { fatalError() }
-        cell.viewModel = viewModel
-        let model = viewModel.profiles.value.toProfileItems()[indexPath.row]
-        let cellViewModel = ProfileCollectionViewCellViewModel(with: model)
-        cell.viewDidConfigure()
-        cell.viewDidConfigure(with: cellViewModel, at: indexPath)
-        return cell
+    override func viewDidLoad() {
+        viewWillConfigure()
     }
     
-    func viewDidConfigure() {
-        button.layer.cornerRadius = 4.0
+    override func viewWillConfigure() {
+        guard let profiles = accountViewModel?.profiles.value else { return }
+        
+        guard indexPath.row == profiles.count - 1 else {
+            configureProfileButtons()
+            
+            return
+        }
+        
+        configureAddProfileButton()
     }
 }
-extension Array where Element == UserProfile {
-    func toProfileItems() -> [ProfileItem] {
-        return map { ProfileItem(image: $0.image, name: $0.name) }
-    }
-}
-// MARK: - ViewLifecycleBehavior Implementation
-
-extension ProfileCollectionViewCell: ViewLifecycleBehavior {}
 
 // MARK: - ViewProtocol Implementation
 
 extension ProfileCollectionViewCell: ViewProtocol {
-    fileprivate func viewDidConfigure(with viewModel: ProfileCollectionViewCellViewModel, at indexPath: IndexPath) {
-        guard let count = self.viewModel?.profiles.value.count else { return }
+    fileprivate func setTitle(_ string: String) {
+        titleLabel.text = string
+    }
+}
+
+// MARK: - Private Presentation Implementation
+
+extension ProfileCollectionViewCell {
+    private func configureProfileButtons() {
+        let imageName = viewModel.image
+        let image = UIImage(named: imageName)
         
-        guard indexPath.row == count - 1 else {
-            let imageName = viewModel.image
-            let image = UIImage(named: imageName)
-            button.tag = count - 1
-            button.setImage(image, for: .normal)
-            button.layer.cornerRadius = 8.0
-            titleLabel.text = viewModel.name
-            return
-        }
+        button.tag = indexPath.row
+        button.setImage(image, for: .normal)
+        button.cornerRadius(8.0)
+        
+        titleLabel.text = viewModel.name
+    }
+    
+    private func configureAddProfileButton() {
+        guard let profiles = accountViewModel?.profiles.value else { return }
         
         let imageName = viewModel.image
         let imageSize: CGFloat = 40.0
@@ -77,13 +82,14 @@ extension ProfileCollectionViewCell: ViewProtocol {
             .withRenderingMode(.alwaysOriginal)
             .withTintColor(.hexColor("#cacaca"))
             .withConfiguration(symbolConfiguration)
-        button.tag = indexPath.row
-        button.setImage(image, for: .normal)
-        button.layer.cornerRadius = 8.0
-        titleLabel.text = viewModel.name
         
-        layerContainer.layer.cornerRadius = 8.0
-        layerContainer.layer.borderColor = UIColor.hexColor("#aaaaaa").cgColor
-        layerContainer.layer.borderWidth = 1.0
+        button.tag = profiles.count - 1
+        button.setImage(image, for: .normal)
+        button.cornerRadius(8.0)
+        
+        setTitle(viewModel.name)
+        
+        layerContainer.cornerRadius(8.0)
+        layerContainer.border(.hexColor("#aaaaaa"), width: 1.0)
     }
 }

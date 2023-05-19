@@ -43,12 +43,14 @@ final class NotificationCollectionViewDataSource: NSObject, UICollectionViewDele
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        return NotificationCollectionViewCell.create(in: collectionView, at: indexPath, with: viewModel)
+        return NotificationCollectionViewCell.create(
+            of: NotificationCollectionViewCell.self,
+            in: collectionView,
+            at: indexPath,
+            with: viewModel)
     }
     
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        
-    }
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {}
 }
 
 // MARK: - DataSourceProtocol Implementation

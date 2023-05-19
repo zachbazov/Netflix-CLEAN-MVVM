@@ -60,6 +60,22 @@ extension UIView {
     }
 }
 
+// MARK: - Layer
+
+extension UIView {
+    func cornerRadius(_ value: CGFloat) {
+        layer.cornerRadius = value
+    }
+    
+    @discardableResult
+    func border(_ color: UIColor, width: CGFloat) -> Self {
+        layer.borderWidth = width
+        layer.borderColor = color.cgColor
+        
+        return self
+    }
+}
+
 // MARK: - Blurness
 
 extension UIView {

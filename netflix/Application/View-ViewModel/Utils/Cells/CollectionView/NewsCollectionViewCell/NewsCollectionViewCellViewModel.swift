@@ -49,6 +49,10 @@ struct NewsCollectionViewCellViewModel {
     }
 }
 
+// MARK: - ViewModel Implementation
+
+extension NewsCollectionViewCellViewModel: ViewModel {}
+
 // MARK: - ViewModelProtocol Implementation
 
 extension NewsCollectionViewCellViewModel: ViewModelProtocol {}

@@ -63,6 +63,10 @@ struct SearchCollectionViewCellViewModel {
     }
 }
 
+// MARK: - ViewModel Implementation
+
+extension SearchCollectionViewCellViewModel: ViewModel {}
+
 // MARK: - ViewModelProtocol Implementation
 
 extension SearchCollectionViewCellViewModel: ViewModelProtocol {}

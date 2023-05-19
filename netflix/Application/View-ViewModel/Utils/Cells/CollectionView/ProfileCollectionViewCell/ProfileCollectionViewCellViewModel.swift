@@ -7,13 +7,13 @@
 
 import Foundation
 
-// MARK: - ModelProtocol Type
+// MARK: - ViewModelProtocol Type
 
-private protocol ModelProtocol {
+private protocol ViewModelProtocol {
     var image: String { get }
     var name: String { get }
     
-    init(with profile: ProfileItem)
+    init(with profile: UserProfile)
 }
 
 // MARK: - ProfileCollectionViewCellViewModel Type
@@ -22,12 +22,16 @@ struct ProfileCollectionViewCellViewModel {
     let image: String
     let name: String
     
-    init(with profile: ProfileItem) {
+    init(with profile: UserProfile) {
         self.image = profile.image
         self.name = profile.name
     }
 }
 
-// MARK: - ModelProtocol Implementation
+// MARK: - ViewModel Implementation
 
-extension ProfileCollectionViewCellViewModel: ModelProtocol {}
+extension ProfileCollectionViewCellViewModel: ViewModel {}
+
+// MARK: - ViewModelProtocol Implementation
+
+extension ProfileCollectionViewCellViewModel: ViewModelProtocol {}

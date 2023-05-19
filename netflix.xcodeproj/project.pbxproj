@@ -51,7 +51,6 @@
 		A14E0CCB29BCAB9D00F55500 /* AccountMenuTableViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = A14E0CCA29BCAB9D00F55500 /* AccountMenuTableViewDataSource.swift */; };
 		A14E0CCD29BCAC4B00F55500 /* AccountMenuTableViewCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A14E0CCC29BCAC4B00F55500 /* AccountMenuTableViewCellViewModel.swift */; };
 		A14E0CCF29BCBE6D00F55500 /* ProfileCollectionViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = A14E0CCE29BCBE6D00F55500 /* ProfileCollectionViewDataSource.swift */; };
-		A14E0CD129BCBEE900F55500 /* ProfileItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = A14E0CD029BCBEE900F55500 /* ProfileItem.swift */; };
 		A14E0CD429BE81F200F55500 /* NotificationCollectionViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = A14E0CD329BE81F200F55500 /* NotificationCollectionViewDataSource.swift */; };
 		A14E0CD729C08DC600F55500 /* ProfileCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A14E0CD629C08DC600F55500 /* ProfileCoordinator.swift */; };
 		A14E0CD929C08DCD00F55500 /* ProfileViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A14E0CD829C08DCD00F55500 /* ProfileViewModel.swift */; };
@@ -378,7 +377,6 @@
 		A14E0CCA29BCAB9D00F55500 /* AccountMenuTableViewDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountMenuTableViewDataSource.swift; sourceTree = "<group>"; };
 		A14E0CCC29BCAC4B00F55500 /* AccountMenuTableViewCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountMenuTableViewCellViewModel.swift; sourceTree = "<group>"; };
 		A14E0CCE29BCBE6D00F55500 /* ProfileCollectionViewDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileCollectionViewDataSource.swift; sourceTree = "<group>"; };
-		A14E0CD029BCBEE900F55500 /* ProfileItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileItem.swift; sourceTree = "<group>"; };
 		A14E0CD329BE81F200F55500 /* NotificationCollectionViewDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationCollectionViewDataSource.swift; sourceTree = "<group>"; };
 		A14E0CD629C08DC600F55500 /* ProfileCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileCoordinator.swift; sourceTree = "<group>"; };
 		A14E0CD829C08DCD00F55500 /* ProfileViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewModel.swift; sourceTree = "<group>"; };
@@ -795,7 +793,6 @@
 				A14E0CB629BB979000F55500 /* ProfileCollectionViewCell.swift */,
 				A14E0CB829BB979900F55500 /* ProfileCollectionViewCellViewModel.swift */,
 				A14E0CBA29BB979F00F55500 /* ProfileCollectionViewCell.xib */,
-				A1D23AB529CA185C00748029 /* ProfileItem */,
 			);
 			path = ProfileCollectionViewCell;
 			sourceTree = "<group>";
@@ -1759,8 +1756,8 @@
 			isa = PBXGroup;
 			children = (
 				A1B34A012A16805B002AFE9E /* Base */,
-				A1B349FE2A167AF0002AFE9E /* PosterCollectionViewCell */,
 				A1B0D43429B20DD2009977AB /* LabeledCollectionHeaderView */,
+				A1B349FE2A167AF0002AFE9E /* PosterCollectionViewCell */,
 				A1B0D43329B0F976009977AB /* SearchCollectionViewCell */,
 				A14E0CB529BB977E00F55500 /* ProfileCollectionViewCell */,
 				A14E0CC129BB980A00F55500 /* NotificationCollectionViewCell */,
@@ -1947,14 +1944,6 @@
 				A18D85182940382500840045 /* NavigationOverlayFooterView */,
 			);
 			path = Cells;
-			sourceTree = "<group>";
-		};
-		A1D23AB529CA185C00748029 /* ProfileItem */ = {
-			isa = PBXGroup;
-			children = (
-				A14E0CD029BCBEE900F55500 /* ProfileItem.swift */,
-			);
-			path = ProfileItem;
 			sourceTree = "<group>";
 		};
 		A1D23AB629CA195B00748029 /* AccountMenuItem */ = {
@@ -2477,7 +2466,6 @@
 				A1B2BAE32A0401F2004B612A /* TableViewCellViewModel.swift in Sources */,
 				A14E0CC929BCAB3600F55500 /* AccountMenuItem.swift in Sources */,
 				A1B98BA4298A414E001B7B62 /* HTTP.swift in Sources */,
-				A14E0CD129BCBEE900F55500 /* ProfileItem.swift in Sources */,
 				A1F3389629CCD634005629DB /* BlockbusterCollectionViewCell.swift in Sources */,
 				A1E81D3B28D15D2E00D044EA /* UITableViewCell+Extension.swift in Sources */,
 				A1B480BC293686330041418D /* StandardCollectionViewCell.swift in Sources */,

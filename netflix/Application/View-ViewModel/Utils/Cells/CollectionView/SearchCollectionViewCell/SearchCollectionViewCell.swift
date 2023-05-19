@@ -10,86 +10,63 @@ import UIKit
 // MARK: - ViewProtocol Type
 
 private protocol ViewProtocol {
-    var representedIdentifier: NSString? { get }
-    
-    func viewDidConfigure(with viewModel: SearchCollectionViewCellViewModel)
-    func logoDidAlign(with viewModel: SearchCollectionViewCellViewModel)
+    func setPoster(_ image: UIImage)
+    func setLogo(_ image: UIImage)
+    func setTitle(_ string: String)
 }
 
 // MARK: - SearchCollectionViewCell Type
 
-class SearchCollectionViewCell: UICollectionViewCell {
+final class SearchCollectionViewCell: CollectionViewCell<SearchCollectionViewCellViewModel> {
     @IBOutlet private weak var posterImageView: UIImageView!
     @IBOutlet private weak var logoImageView: UIImageView!
     @IBOutlet private weak var titleLabel: UILabel!
     @IBOutlet private weak var logoXConstraint: NSLayoutConstraint!
     @IBOutlet private weak var logoYConstraint: NSLayoutConstraint!
     
-    fileprivate var representedIdentifier: NSString?
-    
-    /// Create a search collection view cell object.
-    /// - Parameters:
-    ///   - collectionView: Corresponding collection view.
-    ///   - indexPath: The index path of the cell on the data source.
-    ///   - viewModel: Coordinating view model.
-    /// - Returns: A search collection view cell.
-    static func create(on collectionView: UICollectionView,
-                       for indexPath: IndexPath,
-                       with viewModel: SearchViewModel) -> SearchCollectionViewCell {
-        guard let view = collectionView.dequeueReusableCell(
-            withReuseIdentifier: SearchCollectionViewCell.reuseIdentifier,
-            for: indexPath) as? SearchCollectionViewCell else {
-            fatalError()
-        }
-        let media = viewModel.items.value[indexPath.row].media!
-        let cellViewModel = SearchCollectionViewCellViewModel(media: media)
-        view.representedIdentifier = cellViewModel.slug as NSString
-        view.viewDidConfigure()
-        view.viewDidConfigure(with: cellViewModel)
-        return view
-    }
-    
-    override func prepareForReuse() {
-        super.prepareForReuse()
-        posterImageView.image = nil
-        logoImageView.image = nil
-    }
-}
-
-// MARK: - ViewLifecycleBehavior Implementation
-
-extension SearchCollectionViewCell: ViewLifecycleBehavior {
-    func viewDidConfigure() {
-        posterImageView.layer.cornerRadius = 4.0
-    }
-}
-
-// MARK: - ViewProtocol Implementation
-
-extension SearchCollectionViewCell: ViewProtocol {
-    fileprivate func viewDidConfigure(with viewModel: SearchCollectionViewCellViewModel) {
+    override func dataWillLoad() {
         guard representedIdentifier == viewModel.slug as NSString? else { return }
-        titleLabel.text = viewModel.title
         
         AsyncImageService.shared.load(
             url: viewModel.posterImageURL,
             identifier: viewModel.posterImageIdentifier) { [weak self] image in
-                guard self?.representedIdentifier == viewModel.slug as NSString? else { return }
+                guard let self = self, let image = image else { return }
+                
                 mainQueueDispatch {
-                    self?.posterImageView.image = image
+                    self.setPoster(image)
                 }
             }
         
         AsyncImageService.shared.load(
             url: viewModel.logoImageURL,
             identifier: viewModel.logoImageIdentifier) { [weak self] image in
-                guard self?.representedIdentifier == viewModel.slug as NSString? else { return }
+                guard let self = self, let image = image else { return }
+                
                 mainQueueDispatch {
-                    self?.logoImageView.image = image
+                    self.setLogo(image)
                 }
             }
+    }
+    
+    override func viewDidLoad() {
+        viewWillConfigure()
+        dataWillLoad()
+    }
+    
+    override func viewWillConfigure() {
+        posterImageView.cornerRadius(4.0)
+        setTitle(viewModel.title)
+        logoWillAlign()
+    }
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
         
-        logoDidAlign(with: viewModel)
+        logoYConstraint.constant = .zero
+        logoXConstraint.constant = .zero
+        titleLabel.text = nil
+        posterImageView.image = nil
+        logoImageView.image = nil
     }
     
     /// Align the logo constraint based on `resources.presentedLogoHorizontalAlignment`
@@ -97,7 +74,7 @@ extension SearchCollectionViewCell: ViewProtocol {
     /// - Parameters:
     ///   - constraint: The value of the leading constraint.
     ///   - viewModel: Coordinating view model.
-    func logoDidAlign(with viewModel: SearchCollectionViewCellViewModel) {
+    func logoWillAlign() {
         let initial: CGFloat = 4.0
         let minX = initial
         let minY = initial
@@ -135,5 +112,21 @@ extension SearchCollectionViewCell: ViewProtocol {
             logoXConstraint.constant = maxX
             logoYConstraint.constant = maxY
         }
+    }
+}
+
+// MARK: - ViewProtocol Implementation
+
+extension SearchCollectionViewCell: ViewProtocol {
+    fileprivate func setPoster(_ image: UIImage) {
+        posterImageView.image = image
+    }
+    
+    fileprivate func setLogo(_ image: UIImage) {
+        logoImageView.image = image
+    }
+    
+    fileprivate func setTitle(_ string: String) {
+        titleLabel.text = string
     }
 }

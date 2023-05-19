@@ -20,7 +20,7 @@ final class AccountViewModel {
     
     let profiles: Observable<[UserProfile]> = .init([])
     lazy var menuItems: [AccountMenuItem] = createMenuItems()
-    private(set) var profileItems = [ProfileItem]()
+    private(set) var profileItems = [UserProfile]()
     
     private func createMenuItems() -> [AccountMenuItem] {
         let list = MyList.shared
