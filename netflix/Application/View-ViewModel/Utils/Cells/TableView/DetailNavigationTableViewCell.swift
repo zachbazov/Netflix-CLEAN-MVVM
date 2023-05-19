@@ -15,35 +15,36 @@ private protocol ViewProtocol {
 
 // MARK: - DetailNavigationTableViewCell Type
 
-final class DetailNavigationTableViewCell: UITableViewCell {
+final class DetailNavigationTableViewCell: TableViewCell<DetailViewModel> {
     fileprivate(set) var navigationView: DetailNavigationView?
     
-    /// Create a detail navigation table view cell object.
-    /// - Parameters:
-    ///   - tableView: Corresponding table view.
-    ///   - indexPath: The index path of the cell on the data source.
-    ///   - viewModel: Coordinating view model.
-    /// - Returns: A detail navigation table view cell.
-    static func create(on tableView: UITableView,
-                       for indexPath: IndexPath,
-                       with viewModel: DetailViewModel) -> DetailNavigationTableViewCell {
-        guard let cell = tableView.dequeueReusableCell(
-            withIdentifier: DetailNavigationTableViewCell.reuseIdentifier,
-            for: indexPath) as? DetailNavigationTableViewCell
-        else { fatalError() }
-        
-        cell.createNavigation(with: viewModel)
-        
-        return cell
+    deinit {
+        viewWillDeallocate()
     }
     
-    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-        super.init(style: style, reuseIdentifier: reuseIdentifier)
-        self.selectionStyle = .none
-        self.setBackgroundColor(.black)
+    override func viewDidLoad() {
+        viewWillDeploySubviews()
+        viewHierarchyWillConfigure()
     }
     
-    required init?(coder: NSCoder) { fatalError() }
+    override func viewWillDeploySubviews() {
+        createNavigation()
+    }
+    
+    override func viewHierarchyWillConfigure() {
+        navigationView?
+            .addToHierarchy(on: contentView)
+            .constraintToSuperview(contentView)
+    }
+    
+    override func viewWillDeallocate() {
+        navigationView?.removeFromSuperview()
+        navigationView = nil
+        
+        viewModel = nil
+        
+        removeFromSuperview()
+    }
 }
 
 // MARK: - ViewProtocol Implementation
@@ -53,11 +54,7 @@ extension DetailNavigationTableViewCell: ViewProtocol {}
 // MARK: - Private Presentation Implementation
 
 extension DetailNavigationTableViewCell {
-    private func createNavigation(with viewModel: DetailViewModel) {
+    private func createNavigation() {
         navigationView = DetailNavigationView(with: viewModel)
-        
-        navigationView?
-            .addToHierarchy(on: contentView)
-            .constraintToSuperview(contentView)
     }
 }

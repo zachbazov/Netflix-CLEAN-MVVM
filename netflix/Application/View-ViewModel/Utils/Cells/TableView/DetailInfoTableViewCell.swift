@@ -9,43 +9,50 @@ import UIKit
 
 // MARK: - DetailInfoTableViewCell Type
 
-final class DetailInfoTableViewCell: UITableViewCell {
-    /// Create a detail info table view cell object.
-    /// - Parameters:
-    ///   - tableView: Corresponding table view.
-    ///   - indexPath: The index path of the cel on the data source.
-    ///   - viewModel: Coordinating view model.
-    /// - Returns: A detail info table view cell.
-    static func create(on tableView: UITableView,
-                       for indexPath: IndexPath,
-                       with viewModel: DetailViewModel) -> DetailInfoTableViewCell {
-        guard let cell = tableView.dequeueReusableCell(
-            withIdentifier: DetailInfoTableViewCell.reuseIdentifier,
-            for: indexPath) as? DetailInfoTableViewCell
-        else { fatalError() }
-        
-        cell.createInfo(with: viewModel)
-        
-        return cell
+final class DetailInfoTableViewCell: TableViewCell<DetailViewModel> {
+    private var infoView: DetailInfoView?
+    
+    deinit {
+        viewWillDeallocate()
     }
     
-    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-        super.init(style: style, reuseIdentifier: reuseIdentifier)
-        self.selectionStyle = .none
-        self.setBackgroundColor(.black)
+    override func viewDidLoad() {
+        viewWillDeploySubviews()
+        viewHierarchyWillConfigure()
+        viewWillConfigure()
     }
     
-    required init?(coder: NSCoder) { fatalError() }
+    override func viewWillDeploySubviews() {
+        createInfo()
+    }
+    
+    override func viewHierarchyWillConfigure() {
+        infoView?
+            .addToHierarchy(on: contentView)
+            .constraintToSuperview(contentView)
+    }
+    
+    override func viewWillConfigure() {
+        setBackgroundColor(.black)
+        selectionStyle = .none
+    }
+    
+    override func viewWillDeallocate() {
+        infoView?.removeFromSuperview()
+        infoView = nil
+        
+        viewModel = nil
+        
+        removeFromSuperview()
+    }
 }
 
 // MARK: - Private Presentation Implementation
 
 extension DetailInfoTableViewCell {
-    private func createInfo(with viewModel: DetailViewModel) {
+    private func createInfo() {
         let viewModel = DetailInfoViewViewModel(with: viewModel)
-        let view = DetailInfoView(on: contentView, with: viewModel)
         
-        view.addToHierarchy(on: contentView)
-            .constraintToSuperview(contentView)
+        infoView = DetailInfoView(on: contentView, with: viewModel)
     }
 }

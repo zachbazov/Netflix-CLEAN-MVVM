@@ -147,16 +147,31 @@ extension DetailTableViewDataSource: UITableViewDelegate, UITableViewDataSource 
         
         switch index {
         case .info:
-            return DetailInfoTableViewCell.create(on: tableView, for: indexPath, with: viewModel)
+            return DetailInfoTableViewCell.create(of: DetailInfoTableViewCell.self,
+                                                  on: tableView,
+                                                  for: indexPath,
+                                                  with: viewModel)
         case .description:
-            return DetailDescriptionTableViewCell.create(on: tableView, for: indexPath, with: viewModel)
+            return DetailDescriptionTableViewCell.create(of: DetailDescriptionTableViewCell.self,
+                                                         on: tableView,
+                                                         for: indexPath,
+                                                         with: viewModel)
         case .panel:
-            return DetailPanelTableViewCell.create(on: tableView, for: indexPath, with: viewModel)
+            return DetailPanelTableViewCell.create(of: DetailPanelTableViewCell.self,
+                                                   on: tableView,
+                                                   for: indexPath,
+                                                   with: viewModel)
         case .navigation:
-            navigationCell = DetailNavigationTableViewCell.create(on: tableView, for: indexPath, with: viewModel)
+            navigationCell = DetailNavigationTableViewCell.create(of: DetailNavigationTableViewCell.self,
+                                                                  on: tableView,
+                                                                  for: indexPath,
+                                                                  with: viewModel)
             return navigationCell!
         case .collection:
-            collectionCell = DetailCollectionTableViewCell.create(on: tableView, for: indexPath, with: viewModel)
+            collectionCell = DetailCollectionTableViewCell.create(of: DetailCollectionTableViewCell.self,
+                                                                  on: tableView,
+                                                                  for: indexPath,
+                                                                  with: viewModel)
             return collectionCell!
         }
     }

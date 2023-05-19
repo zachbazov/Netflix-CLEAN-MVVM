@@ -12,11 +12,11 @@ import UIKit
 class TableViewCell<T>: UITableViewCell where T: ViewModel {
     var viewModel: T!
     
-    class func create<U>(
+    class func create<U, V>(
         of type: U.Type,
         on tableView: UITableView,
         for indexPath: IndexPath,
-        with viewModel: HomeViewModel) -> U {
+        with viewModel: V) -> U {
             guard let cell = tableView.dequeueReusableCell(
                 withIdentifier: String(describing: U.self),
                 for: indexPath) as? U
@@ -24,13 +24,46 @@ class TableViewCell<T>: UITableViewCell where T: ViewModel {
             
             switch cell {
             case let cell as ShowcaseTableViewCell:
+                guard let viewModel = viewModel as? HomeViewModel else { fatalError() }
+                
                 cell.viewModel = ShowcaseTableViewCellViewModel(with: viewModel)
+                cell.viewDidLoad()
+            case let cell as DetailInfoTableViewCell:
+                guard let viewModel = viewModel as? DetailViewModel else { fatalError() }
+                
+                cell.viewModel = viewModel
+                cell.viewDidLoad()
+            case let cell as DetailDescriptionTableViewCell:
+                guard let viewModel = viewModel as? DetailViewModel else { fatalError() }
+                
+                cell.viewModel = viewModel
+                cell.viewDidLoad()
+            case let cell as DetailPanelTableViewCell:
+                guard let viewModel = viewModel as? DetailViewModel else { fatalError() }
+                
+                cell.viewModel = viewModel
+                cell.viewDidLoad()
+            case let cell as DetailNavigationTableViewCell:
+                guard let viewModel = viewModel as? DetailViewModel else { fatalError() }
+                
+                cell.viewModel = viewModel
+                cell.viewDidLoad()
+            case let cell as DetailCollectionTableViewCell:
+                guard let viewModel = viewModel as? DetailViewModel else { fatalError() }
+                
+                cell.viewModel = viewModel
                 cell.viewDidLoad()
             default: break
             }
             
             return cell
         }
+    
+    deinit {
+        viewModel = nil
+        
+        removeFromSuperview()
+    }
     
     func viewDidLoad() {}
     func viewWillDeploySubviews() {}

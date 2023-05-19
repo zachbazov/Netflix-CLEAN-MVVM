@@ -885,16 +885,6 @@
 			path = EditUserProfileViewController;
 			sourceTree = "<group>";
 		};
-		A1741D0528E6797E00F3C46B /* DetailCollectionTableViewCell */ = {
-			isa = PBXGroup;
-			children = (
-				A1741D1028E679B700F3C46B /* DetailCollectionTableViewCell.swift */,
-				A1AA28D028F5909D0011EE9D /* EpisodeCollectionViewCell */,
-				A1AA28CF28F5909B0011EE9D /* TrailerCollectionViewCell */,
-			);
-			path = DetailCollectionTableViewCell;
-			sourceTree = "<group>";
-		};
 		A1741D1C28E67CD000F3C46B /* DetailInfoView */ = {
 			isa = PBXGroup;
 			children = (
@@ -1700,7 +1690,7 @@
 				A1741D0A28E679A800F3C46B /* DetailDescriptionTableViewCell.swift */,
 				A1741D0C28E679AE00F3C46B /* DetailPanelTableViewCell.swift */,
 				A1741D0E28E679B200F3C46B /* DetailNavigationTableViewCell.swift */,
-				A1741D0528E6797E00F3C46B /* DetailCollectionTableViewCell */,
+				A1741D1028E679B700F3C46B /* DetailCollectionTableViewCell.swift */,
 				A14E0CBC29BB97AD00F55500 /* AccountMenuTableViewCell */,
 			);
 			path = TableView;
@@ -1716,6 +1706,8 @@
 				A14E0CB529BB977E00F55500 /* ProfileCollectionViewCell */,
 				A14E0CC129BB980A00F55500 /* NotificationCollectionViewCell */,
 				A130BCE5295135F70070EA5E /* NewsCollectionViewCell */,
+				A1AA28D028F5909D0011EE9D /* EpisodeCollectionViewCell */,
+				A1AA28CF28F5909B0011EE9D /* TrailerCollectionViewCell */,
 			);
 			path = CollectionView;
 			sourceTree = "<group>";
