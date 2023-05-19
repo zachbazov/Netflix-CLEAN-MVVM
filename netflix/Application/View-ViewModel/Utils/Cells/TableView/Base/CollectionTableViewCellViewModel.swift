@@ -1,5 +1,5 @@
 //
-//  TableViewCellViewModel.swift
+//  CollectionTableViewCellViewModel.swift
 //  netflix
 //
 //  Created by Zach Bazov on 04/05/2023.
@@ -13,9 +13,9 @@ private protocol ViewModelProtocol {
     var section: Section { get }
 }
 
-// MARK: - TableViewCellViewModel Type
+// MARK: - CollectionTableViewCellViewModel Type
 
-struct TableViewCellViewModel {
+struct CollectionTableViewCellViewModel {
     let coordinator: HomeViewCoordinator
     
     var section: Section
@@ -32,4 +32,4 @@ struct TableViewCellViewModel {
 
 // MARK: - ViewModelProtocol Implementation
 
-extension TableViewCellViewModel: ViewModelProtocol {}
+extension CollectionTableViewCellViewModel: ViewModelProtocol {}

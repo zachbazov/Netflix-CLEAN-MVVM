@@ -1,5 +1,5 @@
 //
-//  TableViewCell.swift
+//  CollectionTableViewCell.swift
 //  netflix
 //
 //  Created by Zach Bazov on 13/09/2022.
@@ -9,10 +9,10 @@ import UIKit
 
 // MARK: - Cell Types
 
-typealias RatedTableViewCell = TableViewCell<RatedCollectionViewCell>
-typealias ResumableTableViewCell = TableViewCell<ResumableCollectionViewCell>
-typealias StandardTableViewCell = TableViewCell<StandardCollectionViewCell>
-typealias BlockbusterTableViewCell = TableViewCell<BlockbusterCollectionViewCell>
+typealias RatedTableViewCell = CollectionTableViewCell<RatedCollectionViewCell>
+typealias ResumableTableViewCell = CollectionTableViewCell<ResumableCollectionViewCell>
+typealias StandardTableViewCell = CollectionTableViewCell<StandardCollectionViewCell>
+typealias BlockbusterTableViewCell = CollectionTableViewCell<BlockbusterCollectionViewCell>
 
 // MARK: - ViewInput Type
 
@@ -21,27 +21,27 @@ private protocol ViewProtocol {
     
     static func create(on tableView: UITableView,
                        for indexPath: IndexPath,
-                       with viewModel: HomeViewModel) -> TableViewCell<T>
+                       with viewModel: HomeViewModel) -> CollectionTableViewCell<T>
     
     var collectionView: UICollectionView { get }
     var dataSource: HomeCollectionViewDataSource<T>? { get }
     var layout: CollectionViewLayout? { get }
-    var viewModel: TableViewCellViewModel? { get }
+    var viewModel: CollectionTableViewCellViewModel? { get }
     
     func createCollectionView() -> UICollectionView
     func createDataSource()
     func createLayout()
     func setLayout()
-    func layoutWillChange(with viewModel: TableViewCellViewModel)
+    func layoutWillChange(with viewModel: CollectionTableViewCellViewModel)
 }
 
-// MARK: - TableViewCell<T> Type
+// MARK: - CollectionTableViewCell<T> Type
 
-class TableViewCell<T>: UITableViewCell where T: UICollectionViewCell {
+class CollectionTableViewCell<T>: UITableViewCell where T: UICollectionViewCell {
     fileprivate lazy var collectionView: UICollectionView = createCollectionView()
     fileprivate var dataSource: HomeCollectionViewDataSource<T>?
     fileprivate var layout: CollectionViewLayout?
-    fileprivate var viewModel: TableViewCellViewModel?
+    fileprivate var viewModel: CollectionTableViewCellViewModel?
     
     /// Create a table view cell which holds a collection view.
     /// - Parameters:
@@ -49,16 +49,16 @@ class TableViewCell<T>: UITableViewCell where T: UICollectionViewCell {
     ///   - viewModel: Coordinating view model.
     static func create(on tableView: UITableView,
                        for indexPath: IndexPath,
-                       with viewModel: HomeViewModel) -> TableViewCell<T> {
+                       with viewModel: HomeViewModel) -> CollectionTableViewCell<T> {
         guard let cell = tableView.dequeueReusableCell(
-            withIdentifier: TableViewCell<T>.reuseIdentifier, for: indexPath) as? TableViewCell<T>,
+            withIdentifier: CollectionTableViewCell<T>.reuseIdentifier,
+            for: indexPath) as? CollectionTableViewCell<T>,
               let index = HomeTableViewDataSource.Index(rawValue: indexPath.section)
         else { fatalError() }
         
         let section = viewModel.section(at: index)
         
-        cell.viewModel = TableViewCellViewModel(section: section, with: viewModel)
-        
+        cell.viewModel = CollectionTableViewCellViewModel(section: section, with: viewModel)
         cell.viewDidLoad()
         
         return cell
@@ -71,17 +71,24 @@ class TableViewCell<T>: UITableViewCell where T: UICollectionViewCell {
     }
     
     func viewDidLoad() {
-        viewWillConfigure()
         viewWillDeploySubviews()
-    }
-    
-    func viewWillConfigure() {
-        setBackgroundColor(.clear)
+        viewHierarchyWillConfigure()
+        viewWillConfigure()
     }
     
     func viewWillDeploySubviews() {
         createDataSource()
         createLayout()
+    }
+    
+    func viewHierarchyWillConfigure() {
+        collectionView
+            .addToHierarchy(on: contentView)
+            .constraintToSuperview(contentView)
+    }
+    
+    func viewWillConfigure() {
+        setBackgroundColor(.clear)
     }
     
     func viewWillDeallocate() {
@@ -90,20 +97,20 @@ class TableViewCell<T>: UITableViewCell where T: UICollectionViewCell {
         dataSource = nil
         layout = nil
         viewModel = nil
+        
+        removeFromSuperview()
     }
 }
 
 // MARK: - ViewProtocol Implementation
 
-extension TableViewCell: ViewProtocol {
+extension CollectionTableViewCell: ViewProtocol {
     fileprivate func createCollectionView() -> UICollectionView {
         let collectionView = UICollectionView(frame: bounds, collectionViewLayout: .init())
         collectionView.backgroundColor = .clear
         collectionView.showsVerticalScrollIndicator = false
         collectionView.showsHorizontalScrollIndicator = false
         collectionView.registerNib(T.self)
-        contentView.addSubview(collectionView)
-        collectionView.constraintToSuperview(contentView)
         return collectionView
     }
     
@@ -131,7 +138,7 @@ extension TableViewCell: ViewProtocol {
     /// - Parameters:
     ///   - section: A section object that represent the cell.
     ///   - viewModel: Coordinating view model.
-    fileprivate func layoutWillChange(with viewModel: TableViewCellViewModel) {
+    fileprivate func layoutWillChange(with viewModel: CollectionTableViewCellViewModel) {
         guard let indices = HomeTableViewDataSource.Index(rawValue: viewModel.section.id) else { return }
         
         switch indices {
@@ -151,11 +158,11 @@ extension TableViewCell: ViewProtocol {
 
 // MARK: - ViewLifecycleBehavior Implementation
 
-extension TableViewCell: ViewLifecycleBehavior {}
+extension CollectionTableViewCell: ViewLifecycleBehavior {}
 
 // MARK: - SortOptions Type
 
-extension TableViewCell {
+extension CollectionTableViewCell {
     /// Sort representation type.
     enum SortOptions {
         case rating

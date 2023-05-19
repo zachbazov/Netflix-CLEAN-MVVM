@@ -65,7 +65,7 @@ extension HomeTableViewDataSource: DataSourceProtocol {
     }
     
     fileprivate func cellsWillRegister() {
-        tableView?.register(headerFooter: TableViewHeaderFooterView.self)
+        tableView?.register(headerFooter: LabeledTableHeaderView.self)
         tableView?.register(class: ShowcaseTableViewCell.self)
         tableView?.register(class: RatedTableViewCell.self)
         tableView?.register(class: ResumableTableViewCell.self)
@@ -141,12 +141,16 @@ extension HomeTableViewDataSource: UITableViewDelegate, UITableViewDataSource {
         
         switch index {
         default:
-            return TableViewHeaderFooterView.create(on: tableView, for: section, with: viewModel)
+            return LabeledTableHeaderView.create(of: LabeledTableHeaderView.self,
+                                                 on: tableView,
+                                                 for: section,
+                                                 with: viewModel)
         }
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         guard let index = Index(rawValue: section) else { return .zero }
+        
         switch index {
         case .display: return .zero
         case .newRelease: return 32.0
