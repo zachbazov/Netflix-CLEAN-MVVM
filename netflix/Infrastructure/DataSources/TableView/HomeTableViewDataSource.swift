@@ -112,7 +112,10 @@ extension HomeTableViewDataSource: UITableViewDelegate, UITableViewDataSource {
         
         switch index {
         case .display:
-            return ShowcaseTableViewCell.create(on: tableView, for: indexPath, with: viewModel)
+            return ShowcaseTableViewCell.create(of: ShowcaseTableViewCell.self,
+                                                on: tableView,
+                                                for: indexPath,
+                                                with: viewModel)
         case .rated:
             return RatedTableViewCell.create(on: tableView, for: indexPath, with: viewModel)
         case .resumable:

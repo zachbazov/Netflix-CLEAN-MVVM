@@ -1,5 +1,5 @@
 //
-//  TableHeaderView.swift
+//  TableViewHeader.swift
 //  netflix
 //
 //  Created by Zach Bazov on 21/02/2023.
@@ -7,9 +7,9 @@
 
 import UIKit
 
-// MARK: - TableHeaderView Type
+// MARK: - TableViewHeader Type
 
-class TableHeaderView<T>: UITableViewHeaderFooterView where T: ViewModel {
+class TableViewHeader<T>: UITableViewHeaderFooterView where T: ViewModel {
     var viewModel: T!
     
     class func create<U>(
@@ -44,4 +44,4 @@ class TableHeaderView<T>: UITableViewHeaderFooterView where T: ViewModel {
 
 // MARK: - ViewLifecycleBehavior Implementation
 
-extension TableHeaderView: ViewLifecycleBehavior {}
+extension TableViewHeader: ViewLifecycleBehavior {}

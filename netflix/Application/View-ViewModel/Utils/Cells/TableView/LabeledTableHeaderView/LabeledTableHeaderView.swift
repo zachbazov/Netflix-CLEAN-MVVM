@@ -17,7 +17,7 @@ private protocol ViewModelProtocol {
 
 // MARK: - LabeledTableHeaderView Type
 
-final class LabeledTableHeaderView: TableHeaderView<LabeledTableHeaderViewModel> {
+final class LabeledTableHeaderView: TableViewHeader<LabeledTableHeaderViewModel> {
     fileprivate lazy var titleLabel: UILabel = createLabel()
     
     override func viewDidLoad() {
