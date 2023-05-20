@@ -18,9 +18,7 @@ final class TrailerCollectionViewCell: CollectionViewCell<TrailerCollectionViewC
         viewWillConfigure()
         
         dataWillLoad { [weak self] in
-            mainQueueDispatch {
-                self?.viewDidConfigure()
-            }
+            self?.viewDidConfigure()
         }
     }
     
@@ -47,7 +45,9 @@ final class TrailerCollectionViewCell: CollectionViewCell<TrailerCollectionViewC
         AsyncImageService.shared.load(
             url: viewModel.posterImageURL,
             identifier: viewModel.posterImageIdentifier) { _ in
-                completion?()
+                mainQueueDispatch {
+                    completion?()
+                }
             }
     }
 }

@@ -7,9 +7,9 @@
 
 import Foundation
 
-// MARK: - ModelProtocol Type
+// MARK: - ViewModelProtocol Type
 
-private protocol ModelProtocol {
+private protocol ViewModelProtocol {
     var image: String { get }
     var title: String { get }
     
@@ -28,6 +28,6 @@ struct AccountMenuTableViewCellViewModel {
     }
 }
 
-// MARK: - ModelProtocol Implementation
+// MARK: - ViewModelProtocol Implementation
 
-extension AccountMenuTableViewCellViewModel: ModelProtocol {}
+extension AccountMenuTableViewCellViewModel: ViewModelProtocol {}

@@ -146,8 +146,7 @@ extension AccountMenuTableViewCell: ViewProtocol {
     }
     
     fileprivate func createImageView() -> UIImageView {
-        let image = UIImage()
-        let imageView = UIImageView(image: image)
+        let imageView = UIImageView(image: nil)
         return imageView
     }
     
