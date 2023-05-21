@@ -11,6 +11,6 @@ import UIKit
 
 protocol Mutable {
     associatedtype Cell where Cell: UICollectionViewCell
-    func sort(_ sortOptions: HomeCollectionTableViewCell<Cell>.SortOptions, sliceBy length: Int) -> Section?
+    func sort(_ sortOptions: HybridCell<Cell>.SortOptions, sliceBy length: Int) -> Section?
     func slice(_ length: Int) -> Section?
 }

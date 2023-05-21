@@ -67,10 +67,10 @@ extension HomeTableViewDataSource: DataSourceProtocol {
     fileprivate func cellsWillRegister() {
         tableView?.register(headerFooter: LabeledTableHeaderView.self)
         tableView?.register(class: ShowcaseTableViewCell.self)
-        tableView?.register(class: HomeCollectionTableViewCell<RatedCollectionViewCell>.self)
-        tableView?.register(class: HomeCollectionTableViewCell<ResumableCollectionViewCell>.self)
-        tableView?.register(class: HomeCollectionTableViewCell<StandardCollectionViewCell>.self)
-        tableView?.register(class: HomeCollectionTableViewCell<BlockbusterCollectionViewCell>.self)
+        tableView?.register(class: HybridCell<RatedCollectionViewCell>.self)
+        tableView?.register(class: HybridCell<ResumableCollectionViewCell>.self)
+        tableView?.register(class: HybridCell<StandardCollectionViewCell>.self)
+        tableView?.register(class: HybridCell<BlockbusterCollectionViewCell>.self)
     }
     
     func dataSourceWillChange() {
@@ -114,13 +114,13 @@ extension HomeTableViewDataSource: UITableViewDelegate, UITableViewDataSource {
         case .display:
             return ShowcaseTableViewCell.create(of: ShowcaseTableViewCell.self, on: tableView, for: indexPath, with: viewModel)
         case .rated:
-            return HomeCollectionTableViewCell.create(of: RatedCollectionViewCell.self, on: tableView, for: indexPath, with: viewModel)
+            return HybridCell.create(of: RatedCollectionViewCell.self, on: tableView, for: indexPath, with: viewModel)
         case .resumable:
-            return HomeCollectionTableViewCell.create(of: ResumableCollectionViewCell.self, on: tableView, for: indexPath, with: viewModel)
+            return HybridCell.create(of: ResumableCollectionViewCell.self, on: tableView, for: indexPath, with: viewModel)
         case .blockbuster:
-            return HomeCollectionTableViewCell.create(of: BlockbusterCollectionViewCell.self, on: tableView, for: indexPath, with: viewModel)
+            return HybridCell.create(of: BlockbusterCollectionViewCell.self, on: tableView, for: indexPath, with: viewModel)
         default:
-            return HomeCollectionTableViewCell.create(of: StandardCollectionViewCell.self, on: tableView, for: indexPath, with: viewModel)
+            return HybridCell.create(of: StandardCollectionViewCell.self, on: tableView, for: indexPath, with: viewModel)
         }
     }
     

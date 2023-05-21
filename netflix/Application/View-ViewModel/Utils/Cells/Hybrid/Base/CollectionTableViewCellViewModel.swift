@@ -30,6 +30,8 @@ struct CollectionTableViewCellViewModel {
     }
 }
 
+extension CollectionTableViewCellViewModel: ViewModel {}
+
 // MARK: - ViewModelProtocol Implementation
 
 extension CollectionTableViewCellViewModel: ViewModelProtocol {}
