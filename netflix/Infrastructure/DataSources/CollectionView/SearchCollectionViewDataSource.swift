@@ -16,7 +16,7 @@ private protocol DataSourceProtocol {
 
 // MARK: - SearchCollectionViewDataSource Type
 
-final class SearchCollectionViewDataSource: NSObject {
+final class SearchCollectionViewDataSource: CollectionViewDataSource<SearchCollectionViewCell, SearchCollectionViewCellViewModel> {
     fileprivate let viewModel: SearchViewModel
     
     fileprivate(set) var headerView: LabeledCollectionHeaderView?
@@ -25,25 +25,19 @@ final class SearchCollectionViewDataSource: NSObject {
     /// - Parameter viewModel: Coordinating view model.
     init(with viewModel: SearchViewModel) {
         self.viewModel = viewModel
+        
+        super.init()
     }
-}
-
-// MARK: - DataSourceProtocol Implementation
-
-extension SearchCollectionViewDataSource: DataSourceProtocol {}
-
-// MARK: - UICollectionViewDelegate & UICollectionViewDataSource Implementation
-
-extension SearchCollectionViewDataSource: UICollectionViewDelegate, UICollectionViewDataSource {
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    
+    override func numberOfItems() -> Int {
         return viewModel.items.value.count
     }
     
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+    override func cellForItem(in collectionView: UICollectionView, at indexPath: IndexPath) -> SearchCollectionViewCell {
         return SearchCollectionViewCell.create(on: collectionView, for: indexPath, with: viewModel)
     }
     
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+    override func didSelectItem(in collectionView: UICollectionView, at indexPath: IndexPath) {
         guard let controller = Application.app.coordinator.tabCoordinator.viewController?.homeViewController,
               let homeViewModel = controller.viewModel,
               let coordinator = homeViewModel.coordinator
@@ -57,7 +51,6 @@ extension SearchCollectionViewDataSource: UICollectionViewDelegate, UICollection
         
         let state = homeViewModel.dataSourceState.value
         let section = controller.navigationOverlay?.viewModel?.category.toSection()
-        let index = HomeTableViewDataSource.State(rawValue: state.rawValue)!
         let rotated = false
         
         coordinator.coordinate(to: .detail)
@@ -69,16 +62,19 @@ extension SearchCollectionViewDataSource: UICollectionViewDelegate, UICollection
         controller.viewModel.isRotated = rotated
     }
     
-    func collectionView(_ collectionView: UICollectionView,
-                        viewForSupplementaryElementOfKind kind: String,
-                        at indexPath: IndexPath) -> UICollectionReusableView {
+    override func viewForSupplementaryElement(in collectionView: UICollectionView, of kind: String, at indexPath: IndexPath) -> CollectionReusableView {
         switch kind {
         case UICollectionView.elementKindSectionHeader:
-            return LabeledCollectionHeaderView.create(in: collectionView, at: indexPath)
+            headerView = LabeledCollectionHeaderView.create(in: collectionView, at: indexPath)
+            return headerView!
         default: return .init()
         }
     }
 }
+
+// MARK: - DataSourceProtocol Implementation
+
+extension SearchCollectionViewDataSource: DataSourceProtocol {}
 
 // MARK: - UIScrollViewDelegate Implementation
 

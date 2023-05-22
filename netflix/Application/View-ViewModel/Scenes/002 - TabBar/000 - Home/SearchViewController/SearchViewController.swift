@@ -82,7 +82,7 @@ final class SearchViewController: Controller<SearchViewModel> {
 
 extension SearchViewController: ControllerProtocol {
     fileprivate func updateItems() {
-        guard let dataSource = dataSource else { return }
+//        guard let dataSource = dataSource else { return }
         collectionView.delegate = dataSource
         collectionView.dataSource = dataSource
         collectionView.reloadData()
@@ -197,7 +197,8 @@ extension SearchViewController: UISearchControllerDelegate {
 extension SearchViewController: UISearchResultsUpdating {
     func updateSearchResults(for searchController: UISearchController) {
         if let searchText = searchController.searchBar.searchTextField.text, !searchText.isEmpty {
-            dataSource.headerView?.titleLabel.text = searchText
+            dataSource.headerView?.titleLabel.text = "Results for '\(searchText)'"
+            
             return
         } else {
             viewModel?.set(media: viewModel?.topSearches ?? [])
