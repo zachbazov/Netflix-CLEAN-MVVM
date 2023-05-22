@@ -114,13 +114,33 @@ extension HomeTableViewDataSource: UITableViewDelegate, UITableViewDataSource {
         case .display:
             return ShowcaseTableViewCell.create(of: ShowcaseTableViewCell.self, on: tableView, for: indexPath, with: viewModel)
         case .rated:
-            return MediaHybridCell.create(of: RatedCollectionViewCell.self, on: tableView, for: indexPath, with: viewModel)
+            return MediaHybridCell.create(
+                expecting: MediaHybridCell<RatedCollectionViewCell>.self,
+                embedding: RatedCollectionViewCell.self,
+                on: tableView,
+                for: indexPath,
+                with: viewModel)
         case .resumable:
-            return MediaHybridCell.create(of: ResumableCollectionViewCell.self, on: tableView, for: indexPath, with: viewModel)
+            return MediaHybridCell.create(
+                expecting: MediaHybridCell<ResumableCollectionViewCell>.self,
+                embedding: ResumableCollectionViewCell.self,
+                on: tableView,
+                for: indexPath,
+                with: viewModel)
         case .blockbuster:
-            return MediaHybridCell.create(of: BlockbusterCollectionViewCell.self, on: tableView, for: indexPath, with: viewModel)
+            return MediaHybridCell.create(
+                expecting: MediaHybridCell<BlockbusterCollectionViewCell>.self,
+                embedding: BlockbusterCollectionViewCell.self,
+                on: tableView,
+                for: indexPath,
+                with: viewModel)
         default:
-            return MediaHybridCell.create(of: StandardCollectionViewCell.self, on: tableView, for: indexPath, with: viewModel)
+            return MediaHybridCell.create(
+                expecting: MediaHybridCell<StandardCollectionViewCell>.self,
+                embedding: StandardCollectionViewCell.self,
+                on: tableView,
+                for: indexPath,
+                with: viewModel)
         }
     }
     

@@ -7,8 +7,6 @@
 
 import UIKit
 
-protocol HybridCellProtocol {}
-
 // MARK: - ViewProtocol Type
 
 private protocol ViewProtocol {
@@ -27,39 +25,14 @@ private protocol ViewProtocol {
 // MARK: - HybridCell Type
 
 class HybridCell<Cell, DataSource, VM, CVM>: UITableViewCell where Cell: UICollectionViewCell,
-                                                                                DataSource: UICollectionViewDataSource,
-                                                                                VM: ViewModel,
-                                                                                CVM: ViewModel {
+                                                                   DataSource: UICollectionViewDataSource,
+                                                                   VM: ViewModel,
+                                                                   CVM: ViewModel {
     lazy var collectionView: UICollectionView = createCollectionView()
     var dataSource: DataSource?
     var viewModel: VM?
     var controllerViewModel: CVM?
     var layout: CollectionViewLayout?
-    
-    class func create(
-        of type: Cell.Type,
-        on tableView: UITableView,
-        for indexPath: IndexPath,
-        with viewModel: CVM) -> MediaHybridCell<Cell> {
-            guard let cell = tableView.dequeueReusableCell(
-                withIdentifier: MediaHybridCell<Cell>.reuseIdentifier,
-                for: indexPath) as? MediaHybridCell<Cell>
-            else { fatalError() }
-            
-            switch viewModel {
-            case let viewModel as HomeViewModel:
-                guard let index = HomeTableViewDataSource.Index(rawValue: indexPath.section) else { fatalError() }
-                
-                let section = viewModel.section(at: index)
-                
-                cell.controllerViewModel = viewModel
-                cell.viewModel = CollectionTableViewCellViewModel(section: section, with: viewModel)
-                cell.viewDidLoad()
-            default: break
-            }
-            
-            return cell
-        }
     
     class func create<T>(
         expecting cell: T.Type,
@@ -73,6 +46,16 @@ class HybridCell<Cell, DataSource, VM, CVM>: UITableViewCell where Cell: UIColle
             else { fatalError() }
             
             switch viewModel {
+            case let viewModel as HomeViewModel:
+                guard let cell = cell as? MediaHybridCell<Cell>,
+                      let index = HomeTableViewDataSource.Index(rawValue: indexPath.section)
+                else { fatalError() }
+                
+                let section = viewModel.section(at: index)
+                
+                cell.controllerViewModel = viewModel
+                cell.viewModel = MediaHybridCellViewModel(section: section, with: viewModel)
+                cell.viewDidLoad()
             case let viewModel as AccountViewModel:
                 guard let cell = cell as? MediaNotificationHybridCell else { fatalError() }
                 
@@ -89,7 +72,7 @@ class HybridCell<Cell, DataSource, VM, CVM>: UITableViewCell where Cell: UIColle
         }
     
     deinit {
-        printIfDebug(.action, "deinit \(Self.self)")
+        print("deinit \(Self.self)")
         
         viewWillDeallocate()
     }
@@ -124,7 +107,3 @@ extension HybridCell: ViewProtocol {
         collectionView.setCollectionViewLayout(layout, animated: false)
     }
 }
-
-// MARK: - HybridCellProtocol Implementation
-
-extension HybridCell: HybridCellProtocol {}

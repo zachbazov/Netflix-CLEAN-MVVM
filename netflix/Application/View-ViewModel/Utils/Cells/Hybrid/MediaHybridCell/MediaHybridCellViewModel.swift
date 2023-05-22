@@ -1,5 +1,5 @@
 //
-//  CollectionTableViewCellViewModel.swift
+//  MediaHybridCellViewModel.swift
 //  netflix
 //
 //  Created by Zach Bazov on 04/05/2023.
@@ -13,9 +13,9 @@ private protocol ViewModelProtocol {
     var section: Section { get }
 }
 
-// MARK: - CollectionTableViewCellViewModel Type
+// MARK: - MediaHybridCellViewModel Type
 
-struct CollectionTableViewCellViewModel {
+struct MediaHybridCellViewModel {
     let coordinator: HomeViewCoordinator
     
     var section: Section
@@ -30,8 +30,10 @@ struct CollectionTableViewCellViewModel {
     }
 }
 
-extension CollectionTableViewCellViewModel: ViewModel {}
+// MARK: - ViewModel Implementation
+
+extension MediaHybridCellViewModel: ViewModel {}
 
 // MARK: - ViewModelProtocol Implementation
 
-extension CollectionTableViewCellViewModel: ViewModelProtocol {}
+extension MediaHybridCellViewModel: ViewModelProtocol {}
