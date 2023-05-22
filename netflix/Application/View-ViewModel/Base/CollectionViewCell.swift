@@ -105,13 +105,13 @@ class CollectionViewCell<T>: UICollectionViewCell where T: ViewModel {
             else { fatalError() }
             
             switch cell {
-            case let cell as NotificationCollectionViewCell:
+            case let cell as AccountMenuNotificationCollectionViewCell:
                 let myList = MyList.shared
                 let media = myList.viewModel.list.toArray()
                 let model = media[indexPath.row]
                 
                 cell.representedIdentifier = model.slug as NSString
-                cell.viewModel = NotificationCollectionViewCellViewModel(media: model)
+                cell.viewModel = AccountMenuNotificationCollectionViewCellViewModel(media: model)
                 cell.indexPath = indexPath
                 cell.viewDidLoad()
             default: break

@@ -49,9 +49,9 @@ final class AccountMenuTableViewDataSource: NSObject, UITableViewDelegate, UITab
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        return MediaNotificationHybridCell.create(
-            expecting: MediaNotificationHybridCell.self,
-            embedding: NotificationCollectionViewCell.self,
+        return AccountMenuNotificationHybridCell.create(
+            expecting: AccountMenuNotificationHybridCell.self,
+            embedding: AccountMenuNotificationCollectionViewCell.self,
             on: tableView,
             for: indexPath,
             with: viewModel)

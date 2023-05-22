@@ -43,15 +43,15 @@
 		A14E0CB729BB979000F55500 /* ProfileCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A14E0CB629BB979000F55500 /* ProfileCollectionViewCell.swift */; };
 		A14E0CB929BB979900F55500 /* ProfileCollectionViewCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A14E0CB829BB979900F55500 /* ProfileCollectionViewCellViewModel.swift */; };
 		A14E0CBB29BB979F00F55500 /* ProfileCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = A14E0CBA29BB979F00F55500 /* ProfileCollectionViewCell.xib */; };
-		A14E0CBE29BB97E500F55500 /* MediaNotificationHybridCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A14E0CBD29BB97E500F55500 /* MediaNotificationHybridCell.swift */; };
-		A14E0CC329BB983300F55500 /* NotificationCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A14E0CC229BB983300F55500 /* NotificationCollectionViewCell.swift */; };
-		A14E0CC529BB983700F55500 /* NotificationCollectionViewCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A14E0CC429BB983700F55500 /* NotificationCollectionViewCellViewModel.swift */; };
-		A14E0CC729BB983C00F55500 /* NotificationCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = A14E0CC629BB983C00F55500 /* NotificationCollectionViewCell.xib */; };
+		A14E0CBE29BB97E500F55500 /* AccountMenuNotificationHybridCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A14E0CBD29BB97E500F55500 /* AccountMenuNotificationHybridCell.swift */; };
+		A14E0CC329BB983300F55500 /* AccountMenuNotificationCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A14E0CC229BB983300F55500 /* AccountMenuNotificationCollectionViewCell.swift */; };
+		A14E0CC529BB983700F55500 /* AccountMenuNotificationCollectionViewCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A14E0CC429BB983700F55500 /* AccountMenuNotificationCollectionViewCellViewModel.swift */; };
+		A14E0CC729BB983C00F55500 /* AccountMenuNotificationCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = A14E0CC629BB983C00F55500 /* AccountMenuNotificationCollectionViewCell.xib */; };
 		A14E0CC929BCAB3600F55500 /* AccountMenuItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = A14E0CC829BCAB3600F55500 /* AccountMenuItem.swift */; };
 		A14E0CCB29BCAB9D00F55500 /* AccountMenuTableViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = A14E0CCA29BCAB9D00F55500 /* AccountMenuTableViewDataSource.swift */; };
-		A14E0CCD29BCAC4B00F55500 /* MediaNotificationHybridCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A14E0CCC29BCAC4B00F55500 /* MediaNotificationHybridCellViewModel.swift */; };
+		A14E0CCD29BCAC4B00F55500 /* AccountMenuNotificationHybridCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A14E0CCC29BCAC4B00F55500 /* AccountMenuNotificationHybridCellViewModel.swift */; };
 		A14E0CCF29BCBE6D00F55500 /* ProfileCollectionViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = A14E0CCE29BCBE6D00F55500 /* ProfileCollectionViewDataSource.swift */; };
-		A14E0CD429BE81F200F55500 /* NotificationCollectionViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = A14E0CD329BE81F200F55500 /* NotificationCollectionViewDataSource.swift */; };
+		A14E0CD429BE81F200F55500 /* AccountMenuNotificationCollectionViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = A14E0CD329BE81F200F55500 /* AccountMenuNotificationCollectionViewDataSource.swift */; };
 		A14E0CD729C08DC600F55500 /* ProfileCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A14E0CD629C08DC600F55500 /* ProfileCoordinator.swift */; };
 		A14E0CD929C08DCD00F55500 /* ProfileViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A14E0CD829C08DCD00F55500 /* ProfileViewModel.swift */; };
 		A14E0CDB29C08DD000F55500 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A14E0CDA29C08DD000F55500 /* ProfileViewController.swift */; };
@@ -371,15 +371,15 @@
 		A14E0CB629BB979000F55500 /* ProfileCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileCollectionViewCell.swift; sourceTree = "<group>"; };
 		A14E0CB829BB979900F55500 /* ProfileCollectionViewCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileCollectionViewCellViewModel.swift; sourceTree = "<group>"; };
 		A14E0CBA29BB979F00F55500 /* ProfileCollectionViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ProfileCollectionViewCell.xib; sourceTree = "<group>"; };
-		A14E0CBD29BB97E500F55500 /* MediaNotificationHybridCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaNotificationHybridCell.swift; sourceTree = "<group>"; };
-		A14E0CC229BB983300F55500 /* NotificationCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationCollectionViewCell.swift; sourceTree = "<group>"; };
-		A14E0CC429BB983700F55500 /* NotificationCollectionViewCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationCollectionViewCellViewModel.swift; sourceTree = "<group>"; };
-		A14E0CC629BB983C00F55500 /* NotificationCollectionViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = NotificationCollectionViewCell.xib; sourceTree = "<group>"; };
+		A14E0CBD29BB97E500F55500 /* AccountMenuNotificationHybridCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountMenuNotificationHybridCell.swift; sourceTree = "<group>"; };
+		A14E0CC229BB983300F55500 /* AccountMenuNotificationCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountMenuNotificationCollectionViewCell.swift; sourceTree = "<group>"; };
+		A14E0CC429BB983700F55500 /* AccountMenuNotificationCollectionViewCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountMenuNotificationCollectionViewCellViewModel.swift; sourceTree = "<group>"; };
+		A14E0CC629BB983C00F55500 /* AccountMenuNotificationCollectionViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = AccountMenuNotificationCollectionViewCell.xib; sourceTree = "<group>"; };
 		A14E0CC829BCAB3600F55500 /* AccountMenuItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountMenuItem.swift; sourceTree = "<group>"; };
 		A14E0CCA29BCAB9D00F55500 /* AccountMenuTableViewDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountMenuTableViewDataSource.swift; sourceTree = "<group>"; };
-		A14E0CCC29BCAC4B00F55500 /* MediaNotificationHybridCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaNotificationHybridCellViewModel.swift; sourceTree = "<group>"; };
+		A14E0CCC29BCAC4B00F55500 /* AccountMenuNotificationHybridCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountMenuNotificationHybridCellViewModel.swift; sourceTree = "<group>"; };
 		A14E0CCE29BCBE6D00F55500 /* ProfileCollectionViewDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileCollectionViewDataSource.swift; sourceTree = "<group>"; };
-		A14E0CD329BE81F200F55500 /* NotificationCollectionViewDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationCollectionViewDataSource.swift; sourceTree = "<group>"; };
+		A14E0CD329BE81F200F55500 /* AccountMenuNotificationCollectionViewDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountMenuNotificationCollectionViewDataSource.swift; sourceTree = "<group>"; };
 		A14E0CD629C08DC600F55500 /* ProfileCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileCoordinator.swift; sourceTree = "<group>"; };
 		A14E0CD829C08DCD00F55500 /* ProfileViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewModel.swift; sourceTree = "<group>"; };
 		A14E0CDA29C08DD000F55500 /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
@@ -801,23 +801,23 @@
 			path = ProfileCollectionViewCell;
 			sourceTree = "<group>";
 		};
-		A14E0CBC29BB97AD00F55500 /* MediaNotificationHybridCell */ = {
+		A14E0CBC29BB97AD00F55500 /* AccountMenuNotificationHybridCell */ = {
 			isa = PBXGroup;
 			children = (
-				A14E0CBD29BB97E500F55500 /* MediaNotificationHybridCell.swift */,
-				A14E0CCC29BCAC4B00F55500 /* MediaNotificationHybridCellViewModel.swift */,
+				A14E0CBD29BB97E500F55500 /* AccountMenuNotificationHybridCell.swift */,
+				A14E0CCC29BCAC4B00F55500 /* AccountMenuNotificationHybridCellViewModel.swift */,
 			);
-			path = MediaNotificationHybridCell;
+			path = AccountMenuNotificationHybridCell;
 			sourceTree = "<group>";
 		};
-		A14E0CC129BB980A00F55500 /* NotificationCollectionViewCell */ = {
+		A14E0CC129BB980A00F55500 /* AccountMenuNotificationCollectionViewCell */ = {
 			isa = PBXGroup;
 			children = (
-				A14E0CC229BB983300F55500 /* NotificationCollectionViewCell.swift */,
-				A14E0CC429BB983700F55500 /* NotificationCollectionViewCellViewModel.swift */,
-				A14E0CC629BB983C00F55500 /* NotificationCollectionViewCell.xib */,
+				A14E0CC229BB983300F55500 /* AccountMenuNotificationCollectionViewCell.swift */,
+				A14E0CC429BB983700F55500 /* AccountMenuNotificationCollectionViewCellViewModel.swift */,
+				A14E0CC629BB983C00F55500 /* AccountMenuNotificationCollectionViewCell.xib */,
 			);
-			path = NotificationCollectionViewCell;
+			path = AccountMenuNotificationCollectionViewCell;
 			sourceTree = "<group>";
 		};
 		A14E0CD529C08D6600F55500 /* 001 - Profile */ = {
@@ -1495,7 +1495,7 @@
 			isa = PBXGroup;
 			children = (
 				A1AD235C2A1AF4BE00188DDC /* MediaHybridCell */,
-				A14E0CBC29BB97AD00F55500 /* MediaNotificationHybridCell */,
+				A14E0CBC29BB97AD00F55500 /* AccountMenuNotificationHybridCell */,
 			);
 			path = Hybrid;
 			sourceTree = "<group>";
@@ -1727,7 +1727,7 @@
 				A1B349FE2A167AF0002AFE9E /* PosterCollectionViewCell */,
 				A1B0D43329B0F976009977AB /* SearchCollectionViewCell */,
 				A14E0CB529BB977E00F55500 /* ProfileCollectionViewCell */,
-				A14E0CC129BB980A00F55500 /* NotificationCollectionViewCell */,
+				A14E0CC129BB980A00F55500 /* AccountMenuNotificationCollectionViewCell */,
 				A130BCE5295135F70070EA5E /* NewsCollectionViewCell */,
 				A1AA28D028F5909D0011EE9D /* EpisodeCollectionViewCell */,
 				A1AA28CF28F5909B0011EE9D /* TrailerCollectionViewCell */,
@@ -1916,7 +1916,7 @@
 				A130BCA3294FAA210070EA5E /* SearchCollectionViewDataSource.swift */,
 				A130BCE3295135820070EA5E /* NewsCollectionViewDataSource.swift */,
 				A14E0CCE29BCBE6D00F55500 /* ProfileCollectionViewDataSource.swift */,
-				A14E0CD329BE81F200F55500 /* NotificationCollectionViewDataSource.swift */,
+				A14E0CD329BE81F200F55500 /* AccountMenuNotificationCollectionViewDataSource.swift */,
 				A14E0CF529C337A800F55500 /* UserProfileCollectionViewDataSource.swift */,
 			);
 			path = CollectionView;
@@ -2105,7 +2105,7 @@
 				A1741D3428E6981B00F3C46B /* DetailNavigationView.xib in Resources */,
 				A130BCB129509CC70070EA5E /* SearchCollectionViewCell.xib in Resources */,
 				A1AA28EF28F71F410011EE9D /* TrailerCollectionViewCell.xib in Resources */,
-				A14E0CC729BB983C00F55500 /* NotificationCollectionViewCell.xib in Resources */,
+				A14E0CC729BB983C00F55500 /* AccountMenuNotificationCollectionViewCell.xib in Resources */,
 				A130BC9A294CE0B80070EA5E /* SearchViewController.xib in Resources */,
 				A1B2BAEA2A0689AB004B612A /* NavigationView.xib in Resources */,
 				A1AC9FB829A65E5300DAD66D /* AlertView.xib in Resources */,
@@ -2176,7 +2176,7 @@
 				A1B70A73293D6DC500C718C6 /* Coordinator.swift in Sources */,
 				A1AA28D428F590B30011EE9D /* EpisodeCollectionViewCell.swift in Sources */,
 				A18B997828C020FC0077A5A6 /* NetworkService.swift in Sources */,
-				A14E0CBE29BB97E500F55500 /* MediaNotificationHybridCell.swift in Sources */,
+				A14E0CBE29BB97E500F55500 /* AccountMenuNotificationHybridCell.swift in Sources */,
 				A127C1E228DD00F100CEE34F /* NavigationOverlayFooterView.swift in Sources */,
 				A1AD25D028D6D31000F793B3 /* NavigationBarViewModel.swift in Sources */,
 				A1AD767729AC85B200669667 /* NewsCollectionViewCell.swift in Sources */,
@@ -2191,7 +2191,7 @@
 				A1BA1DAC28D9D42A00730EA8 /* NavigationOverlayView.swift in Sources */,
 				A1B3F99D28C631F90042DE9F /* SignInViewController.swift in Sources */,
 				A1B1B0D2299B9F820070AD29 /* MediaUseCase.swift in Sources */,
-				A14E0CCD29BCAC4B00F55500 /* MediaNotificationHybridCellViewModel.swift in Sources */,
+				A14E0CCD29BCAC4B00F55500 /* AccountMenuNotificationHybridCellViewModel.swift in Sources */,
 				A1741D5028EC774700F3C46B /* DetailNavigationViewItemViewModel.swift in Sources */,
 				A1B68F2A2921BAE600FF5F18 /* MyList.swift in Sources */,
 				A1AA28C828F487E70011EE9D /* MediaPlayerObservers.swift in Sources */,
@@ -2356,7 +2356,7 @@
 				A1B349F22A13C59B002AFE9E /* DetailNavigationViewModel.swift in Sources */,
 				A1AA28E228F60ABE0011EE9D /* TrailerCollectionViewCellViewModel.swift in Sources */,
 				A1BD20E429E5B9E70093749E /* GradientView.swift in Sources */,
-				A14E0CD429BE81F200F55500 /* NotificationCollectionViewDataSource.swift in Sources */,
+				A14E0CD429BE81F200F55500 /* AccountMenuNotificationCollectionViewDataSource.swift in Sources */,
 				A1B70A7D293D800300C718C6 /* AuthCoordinator.swift in Sources */,
 				A18B98FE28BEB62C0077A5A6 /* SceneDelegate.swift in Sources */,
 				A1B1B0AA299AEDE20070AD29 /* Stores.swift in Sources */,
@@ -2367,13 +2367,13 @@
 				A18B994628BFD9D50077A5A6 /* Season.swift in Sources */,
 				A1A71AA7298B2A6C001C6AB1 /* ListHTTP.swift in Sources */,
 				A1E3706C29BB1E8A00CFEE9C /* AccountViewController.swift in Sources */,
-				A14E0CC529BB983700F55500 /* NotificationCollectionViewCellViewModel.swift in Sources */,
+				A14E0CC529BB983700F55500 /* AccountMenuNotificationCollectionViewCellViewModel.swift in Sources */,
 				A1D23ABD29CA715200748029 /* SectionHTTPResponseStore.swift in Sources */,
 				A1B98BB9298B1F3E001B7B62 /* ListHTTPDTO+Mapping.swift in Sources */,
 				A1741D2A28E6864600F3C46B /* DetailCollectionView.swift in Sources */,
 				A1BA1DBB28DBE02C00730EA8 /* UIView+Constraints.swift in Sources */,
 				A18B994A28BFD9DD0077A5A6 /* User+Mapping.swift in Sources */,
-				A14E0CC329BB983300F55500 /* NotificationCollectionViewCell.swift in Sources */,
+				A14E0CC329BB983300F55500 /* AccountMenuNotificationCollectionViewCell.swift in Sources */,
 				A14E0CCF29BCBE6D00F55500 /* ProfileCollectionViewDataSource.swift in Sources */,
 				A1183FC729D07CBC00D76759 /* SegmentControlViewModel.swift in Sources */,
 				A14E0CB729BB979000F55500 /* ProfileCollectionViewCell.swift in Sources */,

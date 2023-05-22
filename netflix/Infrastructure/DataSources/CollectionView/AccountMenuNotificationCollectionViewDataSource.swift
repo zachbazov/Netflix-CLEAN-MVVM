@@ -1,5 +1,5 @@
 //
-//  NotificationCollectionViewDataSource.swift
+//  AccountMenuNotificationCollectionViewDataSource.swift
 //  netflix
 //
 //  Created by Zach Bazov on 12/03/2023.
@@ -16,9 +16,9 @@ private protocol DataSourceProtocol {
     func dataSourceDidChange(at indexPaths: [IndexPath])
 }
 
-// MARK: - NotificationCollectionViewDataSource Type
+// MARK: - AccountMenuNotificationCollectionViewDataSource Type
 
-final class NotificationCollectionViewDataSource: NSObject, UICollectionViewDelegate, UICollectionViewDataSource {
+final class AccountMenuNotificationCollectionViewDataSource: NSObject, UICollectionViewDelegate, UICollectionViewDataSource {
     private let viewModel: AccountViewModel
     
     fileprivate weak var collectionView: UICollectionView?
@@ -43,8 +43,8 @@ final class NotificationCollectionViewDataSource: NSObject, UICollectionViewDele
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        return NotificationCollectionViewCell.create(
-            of: NotificationCollectionViewCell.self,
+        return AccountMenuNotificationCollectionViewCell.create(
+            of: AccountMenuNotificationCollectionViewCell.self,
             in: collectionView,
             at: indexPath,
             with: viewModel)
@@ -55,7 +55,7 @@ final class NotificationCollectionViewDataSource: NSObject, UICollectionViewDele
 
 // MARK: - DataSourceProtocol Implementation
 
-extension NotificationCollectionViewDataSource: DataSourceProtocol {
+extension AccountMenuNotificationCollectionViewDataSource: DataSourceProtocol {
     func dataSourceDidChange(at indexPaths: [IndexPath]) {
         guard let collectionView = collectionView else { return }
         collectionView.delegate = self

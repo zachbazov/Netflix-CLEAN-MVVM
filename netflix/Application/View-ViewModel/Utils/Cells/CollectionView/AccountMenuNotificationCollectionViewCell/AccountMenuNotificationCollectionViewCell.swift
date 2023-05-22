@@ -1,5 +1,5 @@
 //
-//  NotificationCollectionViewCell.swift
+//  AccountMenuNotificationCollectionViewCell.swift
 //  netflix
 //
 //  Created by Zach Bazov on 10/03/2023.
@@ -7,9 +7,9 @@
 
 import UIKit
 
-// MARK: - NotificationCollectionViewCell Type
+// MARK: - AccountMenuNotificationCollectionViewCell Type
 
-final class NotificationCollectionViewCell: CollectionViewCell<NotificationCollectionViewCellViewModel> {
+final class AccountMenuNotificationCollectionViewCell: CollectionViewCell<AccountMenuNotificationCollectionViewCellViewModel> {
     @IBOutlet private weak var previewImageView: UIImageView!
     @IBOutlet private weak var logoImageView: UIImageView!
     @IBOutlet private weak var messageLabel: UILabel!

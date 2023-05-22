@@ -57,12 +57,12 @@ class HybridCell<Cell, DataSource, VM, CVM>: UITableViewCell where Cell: UIColle
                 cell.viewModel = MediaHybridCellViewModel(section: section, with: viewModel)
                 cell.viewDidLoad()
             case let viewModel as AccountViewModel:
-                guard let cell = cell as? MediaNotificationHybridCell else { fatalError() }
+                guard let cell = cell as? AccountMenuNotificationHybridCell else { fatalError() }
                 
-                let model = viewModel.menuItems[indexPath.section]
+                let item = viewModel.menuItems[indexPath.section]
                 
                 cell.controllerViewModel = viewModel
-                cell.viewModel = MediaNotificationHybridCellViewModel(with: model, for: indexPath)
+                cell.viewModel = AccountMenuNotificationHybridCellViewModel(with: item, for: indexPath)
                 cell.viewDidLoad()
                 break
             default: break

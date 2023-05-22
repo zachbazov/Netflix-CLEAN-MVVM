@@ -1,5 +1,5 @@
 //
-//  MediaNotificationHybridCellViewModel.swift
+//  AccountMenuNotificationHybridCellViewModel.swift
 //  netflix
 //
 //  Created by Zach Bazov on 11/03/2023.
@@ -15,12 +15,16 @@ private protocol ViewModelProtocol {
     var indexPath: IndexPath { get }
 }
 
-// MARK: - MediaNotificationHybridCellViewModel Type
+// MARK: - AccountMenuNotificationHybridCellViewModel Type
 
-struct MediaNotificationHybridCellViewModel {
+struct AccountMenuNotificationHybridCellViewModel {
     let image: String
     let title: String
     let indexPath: IndexPath
+    
+    var isFirstRow: Bool {
+        return indexPath.row == .zero
+    }
     
     init(with item: AccountMenuItem, for indexPath: IndexPath) {
         self.image = item.image
@@ -31,8 +35,8 @@ struct MediaNotificationHybridCellViewModel {
 
 // MARK: - ViewModel Implementation
 
-extension MediaNotificationHybridCellViewModel: ViewModel {}
+extension AccountMenuNotificationHybridCellViewModel: ViewModel {}
 
 // MARK: - ViewModelProtocol Implementation
 
-extension MediaNotificationHybridCellViewModel: ViewModelProtocol {}
+extension AccountMenuNotificationHybridCellViewModel: ViewModelProtocol {}
