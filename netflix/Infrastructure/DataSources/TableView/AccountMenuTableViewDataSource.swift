@@ -49,7 +49,12 @@ final class AccountMenuTableViewDataSource: NSObject, UITableViewDelegate, UITab
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        return AccountMenuTableViewCell.create(in: tableView, at: indexPath, with: viewModel)
+        return MediaNotificationHybridCell.create(
+            expecting: MediaNotificationHybridCell.self,
+            embedding: NotificationCollectionViewCell.self,
+            on: tableView,
+            for: indexPath,
+            with: viewModel)
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {

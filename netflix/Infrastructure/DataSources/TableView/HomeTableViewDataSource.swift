@@ -67,10 +67,10 @@ extension HomeTableViewDataSource: DataSourceProtocol {
     fileprivate func cellsWillRegister() {
         tableView?.register(headerFooter: LabeledTableHeaderView.self)
         tableView?.register(class: ShowcaseTableViewCell.self)
-        tableView?.register(class: HybridCell<RatedCollectionViewCell>.self)
-        tableView?.register(class: HybridCell<ResumableCollectionViewCell>.self)
-        tableView?.register(class: HybridCell<StandardCollectionViewCell>.self)
-        tableView?.register(class: HybridCell<BlockbusterCollectionViewCell>.self)
+        tableView?.register(class: MediaHybridCell<RatedCollectionViewCell>.self)
+        tableView?.register(class: MediaHybridCell<ResumableCollectionViewCell>.self)
+        tableView?.register(class: MediaHybridCell<StandardCollectionViewCell>.self)
+        tableView?.register(class: MediaHybridCell<BlockbusterCollectionViewCell>.self)
     }
     
     func dataSourceWillChange() {
@@ -114,13 +114,13 @@ extension HomeTableViewDataSource: UITableViewDelegate, UITableViewDataSource {
         case .display:
             return ShowcaseTableViewCell.create(of: ShowcaseTableViewCell.self, on: tableView, for: indexPath, with: viewModel)
         case .rated:
-            return HybridCell.create(of: RatedCollectionViewCell.self, on: tableView, for: indexPath, with: viewModel)
+            return MediaHybridCell.create(of: RatedCollectionViewCell.self, on: tableView, for: indexPath, with: viewModel)
         case .resumable:
-            return HybridCell.create(of: ResumableCollectionViewCell.self, on: tableView, for: indexPath, with: viewModel)
+            return MediaHybridCell.create(of: ResumableCollectionViewCell.self, on: tableView, for: indexPath, with: viewModel)
         case .blockbuster:
-            return HybridCell.create(of: BlockbusterCollectionViewCell.self, on: tableView, for: indexPath, with: viewModel)
+            return MediaHybridCell.create(of: BlockbusterCollectionViewCell.self, on: tableView, for: indexPath, with: viewModel)
         default:
-            return HybridCell.create(of: StandardCollectionViewCell.self, on: tableView, for: indexPath, with: viewModel)
+            return MediaHybridCell.create(of: StandardCollectionViewCell.self, on: tableView, for: indexPath, with: viewModel)
         }
     }
     

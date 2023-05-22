@@ -1,5 +1,5 @@
 //
-//  HybridCell.swift
+//  MediaHybridCell.swift
 //  netflix
 //
 //  Created by Zach Bazov on 13/09/2022.
@@ -7,12 +7,9 @@
 
 import UIKit
 
-// MARK: - HybridCell Type
+// MARK: - MediaHybridCell Type
 
-final class HybridCell<Cell>:
-    CollectionTableViewCell<Cell, HomeCollectionViewDataSource<Cell>, CollectionTableViewCellViewModel, HomeViewModel>
-where Cell: UICollectionViewCell {
-    
+final class MediaHybridCell<Cell>: HybridCell<Cell, HomeCollectionViewDataSource<Cell>, CollectionTableViewCellViewModel, HomeViewModel> where Cell: UICollectionViewCell {
     override func viewDidLoad() {
         viewWillDeploySubviews()
         viewHierarchyWillConfigure()
@@ -45,6 +42,15 @@ where Cell: UICollectionViewCell {
         removeFromSuperview()
     }
     
+    override func createCollectionView() -> UICollectionView {
+        let collectionView = UICollectionView(frame: bounds, collectionViewLayout: .init())
+        collectionView.backgroundColor = .clear
+        collectionView.showsVerticalScrollIndicator = false
+        collectionView.showsHorizontalScrollIndicator = false
+        collectionView.registerNib(Cell.self)
+        return collectionView
+    }
+    
     override func createDataSource() {
         guard let viewModel = viewModel,
               let controllerViewModel = controllerViewModel
@@ -75,7 +81,7 @@ where Cell: UICollectionViewCell {
 
 // MARK: - SortOptions Type
 
-extension HybridCell {
+extension MediaHybridCell {
     /// Sort representation type.
     enum SortOptions {
         case rating

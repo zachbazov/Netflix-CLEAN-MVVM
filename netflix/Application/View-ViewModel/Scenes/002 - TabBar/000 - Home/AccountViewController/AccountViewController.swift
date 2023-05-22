@@ -133,7 +133,7 @@ extension AccountViewController {
     }
     
     private func setupTableView() {
-        tableView.register(class: AccountMenuTableViewCell.self)
+        tableView.register(class: MediaNotificationHybridCell.self)
         
         accountMenuDataSource = AccountMenuTableViewDataSource(with: viewModel)
     }
