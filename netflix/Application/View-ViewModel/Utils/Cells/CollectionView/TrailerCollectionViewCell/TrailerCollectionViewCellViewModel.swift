@@ -20,6 +20,7 @@ private protocol ViewModelProtocol {
 
 struct TrailerCollectionViewCellViewModel {
     let title: String
+    let slug: String
     var posterImagePath: String
     var posterImageIdentifier: NSString
     var posterImageURL: URL!
@@ -30,6 +31,7 @@ struct TrailerCollectionViewCellViewModel {
         guard let media = media else { fatalError() }
         
         self.title = media.title
+        self.slug = media.slug
         self.posterImagePath = media.resources.previewPoster
         self.posterImageIdentifier = .init(string: "detail-poster_\(media.slug)")
         self.posterImageURL = .init(string: self.posterImagePath)

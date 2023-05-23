@@ -116,7 +116,7 @@
                 <outlet property="logoYConstraint" destination="gBS-cQ-qHv" id="iRK-89-qAi"/>
                 <outlet property="messageLabel" destination="08d-ye-VRA" id="BPR-XP-gAg"/>
                 <outlet property="notificationIndicator" destination="iJy-aB-HO5" id="b58-bW-8K9"/>
-                <outlet property="previewImageView" destination="dtg-6t-nPV" id="hzL-Gb-3n8"/>
+                <outlet property="posterImageView" destination="dtg-6t-nPV" id="hzL-Gb-3n8"/>
                 <outlet property="subjectLabel" destination="rOP-mm-7fQ" id="zpU-AS-pHl"/>
             </connections>
             <point key="canvasLocation" x="-44" y="25"/>

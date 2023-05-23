@@ -7,12 +7,43 @@
 
 import UIKit
 
+// MARK: - CollectionViewCellResourcing Type
+
+private protocol CollectionViewCellResourcing {
+    func loadUsingAsyncAwait()
+    func loadUsingAsync()
+    func loadUsingDispatchGroup()
+    
+    func resourceWillLoad(for url: URL, withIdentifier identifier: NSString, _ completion: @escaping () -> Void)
+    func resourceWillLoad(for url: URL, withIdentifier identifier: String) async
+}
+
+// MARK: - ViewProtocol Type
+
+private protocol ViewProtocol {
+    func setPoster(_ image: UIImage)
+    func setLogo(_ image: UIImage)
+    func setTitle(_ text: String)
+    func setSubject(_ text: String)
+    func setPlaceholder(_ text: String)
+    func setTimestamp(_ text: String)
+    func setDescription(_ text: String)
+    func setEstimatedTimeTillAir(_ text: String)
+    func setMediaType(_ text: String)
+    func setGenres(_ attributedString: NSMutableAttributedString)
+    
+    func setLogoAlignment()
+    func hidePlaceholder()
+}
+
 // MARK: - CollectionViewCell Type
 
 class CollectionViewCell<T>: UICollectionViewCell where T: ViewModel {
     var viewModel: T!
     var representedIdentifier: NSString!
     var indexPath: IndexPath!
+    
+    let imageService = AsyncImageService.shared
     
     class func create(on collectionView: UICollectionView,
                       reuseIdentifier: String,
@@ -26,6 +57,7 @@ class CollectionViewCell<T>: UICollectionViewCell where T: ViewModel {
         let media = section.media[indexPath.row]
         let cellViewModel = PosterCollectionViewCellViewModel(media: media)
         
+        cell.representedIdentifier = media.slug as NSString
         cell.viewModel = cellViewModel
         cell.indexPath = indexPath
         cell.viewDidLoad()
@@ -47,10 +79,12 @@ class CollectionViewCell<T>: UICollectionViewCell where T: ViewModel {
             case let cell as EpisodeCollectionViewCell:
                 cell.viewModel = cell.createViewModel(for: cell, with: viewModel)
                 cell.indexPath = indexPath
+                cell.representedIdentifier = cell.viewModel.media.slug as NSString
                 cell.viewDidLoad()
             case let cell as TrailerCollectionViewCell:
                 cell.viewModel = cell.createViewModel(for: cell, with: viewModel)
                 cell.indexPath = indexPath
+                cell.representedIdentifier = cell.viewModel.slug as NSString
                 cell.viewDidLoad()
             default: break
             }
@@ -166,6 +200,8 @@ class CollectionViewCell<T>: UICollectionViewCell where T: ViewModel {
         }
     }
     
+    // MARK: ViewLifecycleBehavior Implementation
+    
     func dataWillLoad() {}
     func dataDidLoad() {}
     func viewDidLoad() {}
@@ -179,10 +215,40 @@ class CollectionViewCell<T>: UICollectionViewCell where T: ViewModel {
     func viewWillDeallocate() {}
     func viewDidDeallocate() {}
     
-    func dataWillLoad(completion: (() -> Void)?) {}
-    func loadResources(_ completion: (() -> Void)?) {}
+    // MARK: ViewProtocol Implementation
+    
+    func setPoster(_ image: UIImage) {}
+    func setLogo(_ image: UIImage) {}
+    func setTitle(_ text: String) {}
+    func setSubject(_ text: String) {}
+    func setPlaceholder(_ text: String) {}
+    func setTimestamp(_ text: String) {}
+    func setDescription(_ text: String) {}
+    func setEstimatedTimeTillAir(_ text: String) {}
+    func setMediaType(_ text: String) {}
+    func setGenres(_ attributedString: NSMutableAttributedString) {}
+    
+    func setLogoAlignment() {}
+    func hidePlaceholder() {}
+    
+    // MARK: CollectionViewCellResourcing Implementation
+    
+    func loadUsingAsyncAwait() {}
+    func loadUsingAsync() {}
+    func loadUsingDispatchGroup() {}
+    
+    func resourceWillLoad(for url: URL, withIdentifier identifier: NSString, _ completion: @escaping () -> Void) {}
+    func resourceWillLoad(for url: URL, withIdentifier identifier: String) async {}
 }
 
 // MARK: - ViewLifecycleBehavior Implementation
 
 extension CollectionViewCell: ViewLifecycleBehavior {}
+
+// MARK: - ViewProtocol Implementation
+
+extension CollectionViewCell: ViewProtocol {}
+
+// MARK: - CollectionViewCellResourcing Implementation
+
+extension CollectionViewCell: CollectionViewCellResourcing {}

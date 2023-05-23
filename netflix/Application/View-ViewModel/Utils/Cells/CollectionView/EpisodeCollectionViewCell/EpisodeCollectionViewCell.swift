@@ -17,41 +17,91 @@ final class EpisodeCollectionViewCell: CollectionViewCell<EpisodeCollectionViewC
     @IBOutlet private weak var playButton: UIButton!
     @IBOutlet private weak var downloadButton: UIButton!
     
+    // MARK: ViewLifecycleBehavior Implementation
+    
+    override func dataWillLoad() {
+        guard representedIdentifier == viewModel.media.slug as NSString? else { return }
+        
+        if #available(iOS 13.0, *) {
+            loadUsingAsyncAwait()
+            
+            return
+        }
+        
+        loadUsingAsync()
+    }
+    
     override func viewDidLoad() {
         viewWillConfigure()
-        
-        dataWillLoad { [weak self] in self?.viewDidConfigure() }
-    }
-    
-    override func dataWillLoad(completion: (() -> Void)?) {
-        loadResources(completion)
-    }
-    
-    override func viewDidConfigure() {
-        guard let season = viewModel.season else { return }
-        
-        let episode = season.episodes[indexPath.row]
-        let image = AsyncImageService.shared.object(for: viewModel.posterImageIdentifier)
-        
-        imageView.image = image
-        titleLabel.text = episode.title
-        timestampLabel.text = viewModel.media.length
-        descriptionTextView.text = viewModel.media.description
+        dataWillLoad()
     }
     
     override func viewWillConfigure() {
-        playButton.layer.borderColor = UIColor.white.cgColor
-        playButton.layer.borderWidth = 2.0
-        playButton.layer.cornerRadius = playButton.bounds.size.height / 2
+        playButton.border(.white, width: 2.0)
+        playButton.cornerRadius(playButton.bounds.size.height / 2)
         
-        imageView.layer.cornerRadius = 4.0
+        imageView.cornerRadius(4.0)
+        
+        setTimestamp(viewModel.media.length)
+        setDescription(viewModel.media.description)
+        
+        guard let season = viewModel.season else { return }
+        let episode = season.episodes[indexPath.row]
+        setTitle(episode.title)
     }
     
-    override func loadResources(_ completion: (() -> Void)?) {
+    // MARK: CollectionViewCellResourcing Implementation
+    
+    override func loadUsingAsync() {
+        posterWillLoad()
+    }
+    
+    override func loadUsingAsyncAwait() {
+        Task {
+            await posterWillLoad()
+        }
+    }
+    
+    // MARK: ViewProtocol Implementation
+    
+    override func setTimestamp(_ text: String) {
+        timestampLabel.text = text
+    }
+    
+    override func setDescription(_ text: String) {
+        descriptionTextView.text = text
+    }
+    
+    override func setTitle(_ text: String) {
+        titleLabel.text = text
+    }
+    
+    override func setPoster(_ image: UIImage) {
+        imageView.image = image
+    }
+}
+
+// MARK: - Private Implementation
+
+extension EpisodeCollectionViewCell {
+    private func posterWillLoad() {
         AsyncImageService.shared.load(
             url: viewModel.posterImageURL,
-            identifier: viewModel.posterImageIdentifier) { _ in
-                mainQueueDispatch { completion?() }
+            identifier: viewModel.posterImageIdentifier) { [weak self] image in
+                guard let self = self, let image = image else { return }
+                
+                mainQueueDispatch {
+                    self.setPoster(image)
+                }
             }
+    }
+    
+    private func posterWillLoad() async {
+        let url = viewModel.posterImageURL
+        let identifier = viewModel.posterImageIdentifier as String
+        
+        guard let image = await AsyncImageService.shared.load(url: url, identifier: identifier) else { return }
+        
+        setPoster(image)
     }
 }

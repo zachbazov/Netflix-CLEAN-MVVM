@@ -10,7 +10,7 @@ import UIKit
 // MARK: - AccountMenuNotificationCollectionViewCell Type
 
 final class AccountMenuNotificationCollectionViewCell: CollectionViewCell<AccountMenuNotificationCollectionViewCellViewModel> {
-    @IBOutlet private weak var previewImageView: UIImageView!
+    @IBOutlet private weak var posterImageView: UIImageView!
     @IBOutlet private weak var logoImageView: UIImageView!
     @IBOutlet private weak var messageLabel: UILabel!
     @IBOutlet private weak var subjectLabel: UILabel!
@@ -19,51 +19,96 @@ final class AccountMenuNotificationCollectionViewCell: CollectionViewCell<Accoun
     @IBOutlet private weak var logoYConstraint: NSLayoutConstraint!
     @IBOutlet private weak var notificationIndicator: UIView!
     
+    // MARK: ViewLifecycleBehavior Implementation
+    
+    override func dataWillLoad() {
+        guard representedIdentifier == viewModel.slug as NSString? else { return }
+        
+        if #available(iOS 13.0, *) {
+            loadUsingAsyncAwait()
+            
+            return
+        }
+        
+        loadUsingDispatchGroup()
+    }
+    
+    override func dataDidLoad() {
+        guard let posterImage = imageService.object(for: viewModel.posterImageIdentifier),
+              let logoImage = imageService.object(for: viewModel.logoImageIdentifier)
+        else { return }
+        
+        mainQueueDispatch { [weak self] in
+            guard let self = self else { return }
+            
+            self.setPoster(posterImage)
+            self.setLogo(logoImage)
+        }
+    }
+    
     override func viewDidLoad() {
         viewWillConfigure()
+        dataWillLoad()
     }
     
     override func viewWillConfigure() {
-        setBackgroundColor(.hexColor("#121212"))
-        previewImageView.cornerRadius(4.0)
         notificationIndicator.cornerRadius(notificationIndicator.bounds.height / 2)
+        posterImageView.cornerRadius(4.0)
         
-        guard representedIdentifier == viewModel.slug as NSString? else { return }
-        
-        subjectLabel.text = viewModel.title
-        
-        AsyncImageService.shared.load(
-            url: viewModel.posterImageURL,
-            identifier: viewModel.posterImageIdentifier) { [weak self] image in
-                mainQueueDispatch {
-                    self?.previewImageView.image = image
-                }
-            }
-        
-        AsyncImageService.shared.load(
-            url: viewModel.logoImageURL,
-            identifier: viewModel.logoImageIdentifier) { [weak self] image in
-                mainQueueDispatch {
-                    self?.logoImageView.image = image
-                }
-            }
-        
-        logoWillAlign()
+        setBackgroundColor(.hexColor("#121212"))
+        setSubject(viewModel.title)
+        setLogoAlignment()
     }
     
-    /// Align the logo constraint based on `resources.presentedLogoHorizontalAlignment`
-    /// property of the media object.
-    /// - Parameters:
-    ///   - constraint: The value of the leading constraint.
-    ///   - viewModel: Coordinating view model.
-    fileprivate func logoWillAlign() {
+    // MARK: CollectionViewCellResourcing Implementation
+    
+    override func loadUsingAsyncAwait() {
+        Task {
+            await posterWillLoad()
+            await logoWillLoad()
+            
+            dataDidLoad()
+        }
+    }
+    
+    override func loadUsingDispatchGroup() {
+        let group = DispatchGroup()
+        
+        group.enter()
+        posterWillLoad { group.leave() }
+        
+        group.enter()
+        logoWillLoad { group.leave() }
+        
+        group.notify(queue: .main) { [weak self] in
+            guard let self = self else { return }
+            
+            self.dataDidLoad()
+        }
+    }
+    
+    // MARK: ViewProtocol Implementation
+    
+    override func setSubject(_ text: String) {
+        subjectLabel.text = text
+    }
+    
+    override func setPoster(_ image: UIImage) {
+        posterImageView.image = image
+    }
+    
+    override func setLogo(_ image: UIImage) {
+        logoImageView.image = image
+    }
+    
+    override func setLogoAlignment() {
         let initial: CGFloat = 4.0
         let minX = initial
         let minY = initial
-        let midX = previewImageView.bounds.maxX - logoImageView.bounds.width - (logoImageView.bounds.width / 2)
-        let midY = previewImageView.bounds.maxY - logoImageView.bounds.height - (logoImageView.bounds.height / 2)
-        let maxX = previewImageView.bounds.maxX - logoImageView.bounds.width - initial
-        let maxY = previewImageView.bounds.maxY - logoImageView.bounds.height
+        let midX = posterImageView.bounds.maxX - logoImageView.bounds.width - (logoImageView.bounds.width / 2)
+        let midY = posterImageView.bounds.maxY - logoImageView.bounds.height - (logoImageView.bounds.height / 2)
+        let maxX = posterImageView.bounds.maxX - logoImageView.bounds.width - initial
+        let maxY = posterImageView.bounds.maxY - logoImageView.bounds.height
         
         switch viewModel.presentedSearchLogoAlignment {
         case .minXminY:
@@ -94,5 +139,39 @@ final class AccountMenuNotificationCollectionViewCell: CollectionViewCell<Accoun
             logoXConstraint.constant = maxX
             logoYConstraint.constant = maxY
         }
+    }
+}
+
+// MARK: - Private Implementation
+
+extension AccountMenuNotificationCollectionViewCell {
+    private func posterWillLoad(_ completion: @escaping () -> Void) {
+        imageService.load(
+            url: viewModel.posterImageURL,
+            identifier: viewModel.posterImageIdentifier) { _ in
+                completion()
+            }
+    }
+    
+    private func logoWillLoad(_ completion: @escaping () -> Void) {
+        imageService.load(
+            url: viewModel.logoImageURL,
+            identifier: viewModel.logoImageIdentifier) { _ in
+                completion()
+            }
+    }
+    
+    private func posterWillLoad() async {
+        let url = viewModel.posterImageURL
+        let identifier = viewModel.posterImageIdentifier as String
+        
+        await imageService.load(url: url, identifier: identifier)
+    }
+    
+    private func logoWillLoad() async {
+        let url = viewModel.logoImageURL
+        let identifier = viewModel.logoImageIdentifier as String
+        
+        await imageService.load(url: url, identifier: identifier)
     }
 }

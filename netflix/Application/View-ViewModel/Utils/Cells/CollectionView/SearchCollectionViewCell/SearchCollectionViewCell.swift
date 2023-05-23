@@ -7,14 +7,6 @@
 
 import UIKit
 
-// MARK: - ViewProtocol Type
-
-private protocol ViewProtocol {
-    func setPoster(_ image: UIImage)
-    func setLogo(_ image: UIImage)
-    func setTitle(_ string: String)
-}
-
 // MARK: - SearchCollectionViewCell Type
 
 final class SearchCollectionViewCell: CollectionViewCell<SearchCollectionViewCellViewModel> {
@@ -24,28 +16,31 @@ final class SearchCollectionViewCell: CollectionViewCell<SearchCollectionViewCel
     @IBOutlet private weak var logoXConstraint: NSLayoutConstraint!
     @IBOutlet private weak var logoYConstraint: NSLayoutConstraint!
     
+    // MARK: ViewLifecycleBehavior Implementation
+    
     override func dataWillLoad() {
         guard representedIdentifier == viewModel.slug as NSString? else { return }
         
-        AsyncImageService.shared.load(
-            url: viewModel.posterImageURL,
-            identifier: viewModel.posterImageIdentifier) { [weak self] image in
-                guard let self = self, let image = image else { return }
-                
-                mainQueueDispatch {
-                    self.setPoster(image)
-                }
-            }
+        if #available(iOS 13.0, *) {
+            loadUsingAsyncAwait()
+            
+            return
+        }
         
-        AsyncImageService.shared.load(
-            url: viewModel.logoImageURL,
-            identifier: viewModel.logoImageIdentifier) { [weak self] image in
-                guard let self = self, let image = image else { return }
-                
-                mainQueueDispatch {
-                    self.setLogo(image)
-                }
-            }
+        loadUsingDispatchGroup()
+    }
+    
+    override func dataDidLoad() {
+        guard let posterImage = imageService.object(for: viewModel.posterImageIdentifier),
+              let logoImage = imageService.object(for: viewModel.logoImageIdentifier)
+        else { return }
+        
+        mainQueueDispatch { [weak self] in
+            guard let self = self else { return }
+            
+            self.setPoster(posterImage)
+            self.setLogo(logoImage)
+        }
     }
     
     override func viewDidLoad() {
@@ -56,7 +51,7 @@ final class SearchCollectionViewCell: CollectionViewCell<SearchCollectionViewCel
     override func viewWillConfigure() {
         posterImageView.cornerRadius(4.0)
         setTitle(viewModel.title)
-        logoWillAlign()
+        setLogoAlignment()
     }
     
     override func prepareForReuse() {
@@ -71,12 +66,36 @@ final class SearchCollectionViewCell: CollectionViewCell<SearchCollectionViewCel
         removeFromSuperview()
     }
     
-    /// Align the logo constraint based on `resources.presentedLogoHorizontalAlignment`
-    /// property of the media object.
-    /// - Parameters:
-    ///   - constraint: The value of the leading constraint.
-    ///   - viewModel: Coordinating view model.
-    func logoWillAlign() {
+    // MARK: CollectionViewCellResourcing Implementation
+    
+    override func loadUsingAsyncAwait() {
+        Task {
+            await posterWillLoad()
+            await logoWillLoad()
+            
+            dataDidLoad()
+        }
+    }
+    
+    override func loadUsingDispatchGroup() {
+        let group = DispatchGroup()
+        
+        group.enter()
+        posterWillLoad { group.leave() }
+        
+        group.enter()
+        logoWillLoad { group.leave() }
+        
+        group.notify(queue: .main) { [weak self] in
+            guard let self = self else { return }
+            
+            self.dataDidLoad()
+        }
+    }
+    
+    // MARK: ViewProtocol Implementation
+    
+    override func setLogoAlignment() {
         let initial: CGFloat = 4.0
         let minX = initial
         let minY = initial
@@ -115,20 +134,50 @@ final class SearchCollectionViewCell: CollectionViewCell<SearchCollectionViewCel
             logoYConstraint.constant = maxY
         }
     }
-}
-
-// MARK: - ViewProtocol Implementation
-
-extension SearchCollectionViewCell: ViewProtocol {
-    fileprivate func setPoster(_ image: UIImage) {
+    
+    override func setTitle(_ text: String) {
+        titleLabel.text = text
+    }
+    
+    override func setPoster(_ image: UIImage) {
         posterImageView.image = image
     }
     
-    fileprivate func setLogo(_ image: UIImage) {
+    override func setLogo(_ image: UIImage) {
         logoImageView.image = image
     }
+}
+
+// MARK: Private Implementation
+
+extension SearchCollectionViewCell {
+    private func posterWillLoad(_ completion: @escaping () -> Void) {
+        AsyncImageService.shared.load(
+            url: viewModel.posterImageURL,
+            identifier: viewModel.posterImageIdentifier) { _ in
+                completion()
+            }
+    }
     
-    fileprivate func setTitle(_ string: String) {
-        titleLabel.text = string
+    private func logoWillLoad(_ completion: @escaping () -> Void) {
+        AsyncImageService.shared.load(
+            url: viewModel.logoImageURL,
+            identifier: viewModel.logoImageIdentifier) { _ in
+                completion()
+            }
+    }
+    
+    private func posterWillLoad() async {
+        let url = viewModel.posterImageURL
+        let identifier = viewModel.posterImageIdentifier as String
+        
+        await AsyncImageService.shared.load(url: url, identifier: identifier)
+    }
+    
+    private func logoWillLoad() async {
+        let url = viewModel.logoImageURL
+        let identifier = viewModel.logoImageIdentifier as String
+        
+        await AsyncImageService.shared.load(url: url, identifier: identifier)
     }
 }

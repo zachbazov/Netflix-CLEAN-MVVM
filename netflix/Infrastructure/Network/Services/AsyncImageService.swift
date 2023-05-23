@@ -72,6 +72,7 @@ class URLImageProtocol: URLProtocol {
             if self.cancelledOrComplete == false, let cancelBlock = self.block {
                 // Cancel the operation.
                 cancelBlock.cancel()
+                
                 self.cancelledOrComplete = true
             }
         }
@@ -104,9 +105,7 @@ extension AsyncImageService {
     
     func load(url: URL, identifier: NSString, completion: @escaping (UIImage?) -> Void) {
         if let cachedImage = object(for: identifier) {
-            return DispatchQueue.global(qos: .userInitiated).async {
-                completion(cachedImage)
-            }
+            return completion(cachedImage)
         }
         
         URLImageProtocol.urlSession().dataTask(with: url) { [weak self] data, response, error in
@@ -123,5 +122,28 @@ extension AsyncImageService {
                 completion(image)
             }
         }.resume()
+    }
+    
+    @discardableResult
+    func load(url: URL?, identifier: String) async -> UIImage? {
+        if let cachedImage = object(for: identifier as NSString) {
+            return cachedImage
+        }
+        
+        guard let url = url else { return nil }
+        
+        do {
+            let (data, _) = try await URLSession.shared.data(from: url)
+            
+            if let image = UIImage(data: data) {
+                set(image, forKey: identifier as NSString)
+                
+                return image
+            }
+        } catch {
+            printIfDebug(.error, "Error while resource loading.")
+        }
+        
+        return nil
     }
 }

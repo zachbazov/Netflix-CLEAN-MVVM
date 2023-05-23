@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="21507" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
-    <device id="retina6_12" orientation="portrait" appearance="light"/>
     <dependencies>
-        <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21505"/>
         <capability name="Image references" minToolsVersion="12.0"/>
         <capability name="collection view cell content view" minToolsVersion="11.0"/>
@@ -207,7 +205,7 @@
                 <outlet property="logoImageView" destination="ZLR-Rv-zgt" id="9Px-d8-10M"/>
                 <outlet property="mediaTypeLabel" destination="t6A-TS-GQd" id="oOq-FD-LMB"/>
                 <outlet property="monthLabel" destination="shO-Bs-cmC" id="YTy-YF-uBc"/>
-                <outlet property="previewPosterImageView" destination="0WS-US-IT2" id="PDk-9T-esc"/>
+                <outlet property="posterImageView" destination="0WS-US-IT2" id="PDk-9T-esc"/>
                 <outlet property="remindMeButton" destination="F17-FV-Jvd" id="WAx-QO-fwu"/>
                 <outlet property="titleLabel" destination="RVV-XP-07e" id="aUD-5I-EXh"/>
             </connections>

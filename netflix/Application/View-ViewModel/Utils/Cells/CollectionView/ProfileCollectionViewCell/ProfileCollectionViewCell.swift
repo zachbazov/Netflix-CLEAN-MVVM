@@ -7,14 +7,6 @@
 
 import UIKit
 
-// MARK: - ViewProtocol Type
-
-private protocol ViewProtocol {
-    var accountViewModel: AccountViewModel? { get }
-    
-    func setTitle(_ string: String)
-}
-
 // MARK: - ProfileCollectionViewCell Type
 
 final class ProfileCollectionViewCell: CollectionViewCell<ProfileCollectionViewCellViewModel> {
@@ -48,17 +40,15 @@ final class ProfileCollectionViewCell: CollectionViewCell<ProfileCollectionViewC
         
         configureAddProfileButton()
     }
-}
-
-// MARK: - ViewProtocol Implementation
-
-extension ProfileCollectionViewCell: ViewProtocol {
-    fileprivate func setTitle(_ string: String) {
-        titleLabel.text = string
+    
+    // MARK: ViewProtocol Implementation
+    
+    override func setTitle(_ text: String) {
+        titleLabel.text = text
     }
 }
 
-// MARK: - Private Presentation Implementation
+// MARK: - Private Implementation
 
 extension ProfileCollectionViewCell {
     private func configureProfileButtons() {
@@ -69,7 +59,7 @@ extension ProfileCollectionViewCell {
         button.setImage(image, for: .normal)
         button.cornerRadius(8.0)
         
-        titleLabel.text = viewModel.name
+        setTitle(viewModel.name)
     }
     
     private func configureAddProfileButton() {
