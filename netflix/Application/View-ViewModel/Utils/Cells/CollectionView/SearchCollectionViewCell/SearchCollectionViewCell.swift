@@ -67,6 +67,8 @@ final class SearchCollectionViewCell: CollectionViewCell<SearchCollectionViewCel
         titleLabel.text = nil
         posterImageView.image = nil
         logoImageView.image = nil
+        
+        removeFromSuperview()
     }
     
     /// Align the logo constraint based on `resources.presentedLogoHorizontalAlignment`

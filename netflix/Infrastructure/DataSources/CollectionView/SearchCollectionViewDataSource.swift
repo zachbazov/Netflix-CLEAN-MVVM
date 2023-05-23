@@ -21,8 +21,6 @@ final class SearchCollectionViewDataSource: CollectionViewDataSource<SearchColle
     
     fileprivate(set) var headerView: LabeledCollectionHeaderView?
     
-    /// Create a search collection view data source object.
-    /// - Parameter viewModel: Coordinating view model.
     init(with viewModel: SearchViewModel) {
         self.viewModel = viewModel
         
@@ -49,7 +47,6 @@ final class SearchCollectionViewDataSource: CollectionViewDataSource<SearchColle
         
         guard let media = cellViewModel.media else { return }
         
-        let state = homeViewModel.dataSourceState.value
         let section = controller.navigationOverlay?.viewModel?.category.toSection()
         let rotated = false
         
@@ -60,6 +57,10 @@ final class SearchCollectionViewDataSource: CollectionViewDataSource<SearchColle
         controller.viewModel.media = media
         controller.viewModel.section = section
         controller.viewModel.isRotated = rotated
+    }
+    
+    override func willDisplayCellForItem(_ cell: SearchCollectionViewCell, at indexPath: IndexPath) {
+        cell.opacityAnimation()
     }
     
     override func viewForSupplementaryElement(in collectionView: UICollectionView, of kind: String, at indexPath: IndexPath) -> CollectionReusableView {

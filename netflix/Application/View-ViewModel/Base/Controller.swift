@@ -30,6 +30,8 @@ class Controller<T>: UIViewController where T: ViewModel {
     
     func viewWillDeploySubviews() {}
     func viewDidDeploySubviews() {}
+    func viewHierarchyWillConfigure() {}
+    func viewHierarchyDidConfigure() {}
     func viewWillConfigure() {}
     func viewDidConfigure() {}
     func viewWillTargetSubviews() {}

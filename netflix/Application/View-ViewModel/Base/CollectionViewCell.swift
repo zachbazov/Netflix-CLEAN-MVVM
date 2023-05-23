@@ -68,8 +68,8 @@ class CollectionViewCell<T>: UICollectionViewCell where T: ViewModel {
                   let media = viewModel.items.value[indexPath.row].media
             else { fatalError() }
             
+            cell.representedIdentifier = media.slug as NSString
             cell.viewModel = SearchCollectionViewCellViewModel(media: media)
-            cell.representedIdentifier = cell.viewModel.slug as NSString
             cell.viewDidLoad()
             
             return cell

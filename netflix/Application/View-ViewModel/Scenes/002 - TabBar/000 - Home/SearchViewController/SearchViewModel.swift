@@ -18,14 +18,12 @@ private protocol ViewModelProtocol {
     var isEmpty: Bool { get }
     var topSearches: [Media] { get }
     
-    func set(media: [Media])
-    func load(requestDTO: SearchHTTPDTO.Request)
-    func update(requestDTO: SearchHTTPDTO.Request)
-    func reset()
-    
-    func didLoadNextPage(requestDTO: SearchHTTPDTO.Request)
-    func didSearch(query: String)
-    func didCancelSearch()
+    func willSearch(for query: String)
+    func willCancelSearch()
+    func itemsWillChange(mapping media: [Media])
+    func itemsWillRemove()
+    func queryWillChange(_ query: String)
+    func searchWillLoad(_ request: SearchHTTPDTO.Request)
 }
 
 // MARK: - SearchViewModel Type
@@ -57,52 +55,53 @@ extension SearchViewModel: ViewModel {}
 // MARK: - ViewModelProtocol Implementation
 
 extension SearchViewModel: ViewModelProtocol {
-    func viewDidLoad() {}
-    
-    func didLoadNextPage(requestDTO: SearchHTTPDTO.Request) {
-        load(requestDTO: requestDTO)
-    }
-    
-    func didSearch(query: String) {
+    func willSearch(for query: String) {
         guard !query.isEmpty else { return }
+        
         let requestDTO = SearchHTTPDTO.Request(regex: query)
-        self.query.value = query
-        update(requestDTO: requestDTO)
+        
+        queryWillChange(query)
+        itemsWillRemove()
+        searchWillLoad(requestDTO)
     }
     
-    func didCancelSearch() {
+    func willCancelSearch() {
         useCase.repository.task?.cancel()
     }
     
-    func set(media: [Media]) {
+    func itemsWillChange(mapping media: [Media]) {
         items.value = media.map(SearchCollectionViewCellViewModel.init)
     }
     
-    fileprivate func reset() {
+    fileprivate func itemsWillRemove() {
         items.value.removeAll()
     }
     
-    fileprivate func load(requestDTO: SearchHTTPDTO.Request) {
+    fileprivate func queryWillChange(_ query: String) {
+        self.query.value = query
+    }
+    
+    fileprivate func searchWillLoad(_ request: SearchHTTPDTO.Request) {
         coordinator?.viewController?.textFieldIndicatorView?.isLoading = true
         
         useCase.repository.task = useCase.request(
             endpoint: .searchMedia,
             for: SearchHTTPDTO.Response.self,
-            request: requestDTO,
+            request: request,
             cached: { _ in },
             completion: { [weak self] result in
-                if case let .success(responseDTO) = result {
-                    let media = responseDTO.data.toDomain()
-                    self?.set(media: media)
-                } else if case let .failure(error) = result {
+                guard let self = self else { return }
+                
+                switch result {
+                case .success(let response):
+                    let media = response.data.toDomain()
+                    
+                    self.itemsWillChange(mapping: media)
+                case .failure(let error):
                     printIfDebug(.error, "\(error)")
                 }
-                self?.coordinator?.viewController?.textFieldIndicatorView?.isLoading = false
+                
+                self.coordinator?.viewController?.textFieldIndicatorView?.isLoading = false
             })
-    }
-    
-    fileprivate func update(requestDTO: SearchHTTPDTO.Request) {
-        reset()
-        load(requestDTO: requestDTO)
     }
 }

@@ -11,16 +11,12 @@ import UIKit
 
 private protocol ControllerProtocol {
     var collectionView: UICollectionView { get }
-    var dataSource: SearchCollectionViewDataSource! { get }
+    var dataSource: SearchCollectionViewDataSource? { get }
     var searchController: UISearchController { get }
     var textFieldIndicatorView: TextFieldActivityIndicatorView? { get }
     
-    func updateItems()
-    func removeDataSource()
-    func present()
     func backButtonDidTap()
-    
-    func updateSearchQuery(_ query: String)
+    func updateSearchBarQuery(_ query: String)
 }
 
 // MARK: - SearchViewController Type
@@ -34,117 +30,95 @@ final class SearchViewController: Controller<SearchViewModel> {
     @IBOutlet private(set) weak var searchBar: UISearchBar!
     
     fileprivate lazy var collectionView: UICollectionView = createCollectionView()
-    fileprivate(set) var dataSource: SearchCollectionViewDataSource!
+    fileprivate(set) lazy var dataSource: SearchCollectionViewDataSource? = createDataSource()
     fileprivate var searchController = UISearchController(searchResultsController: nil)
     fileprivate(set) lazy var textFieldIndicatorView: TextFieldActivityIndicatorView? = createTextFieldIndicatorView()
     
     deinit {
-        viewDidUnbindObservers()
+        print("deinit \(Self.self)")
+        
+        viewWillDeallocate()
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        super.viewDidLoadBehaviors()
-        viewDidDeploySubviews()
-        viewDidTargetSubviews()
-        viewDidBindObservers()
-        viewModel.viewDidLoad()
+        super.viewWillLoadBehaviors()
+        viewHierarchyWillConfigure()
+        viewWillConfigure()
+        viewWillTargetSubviews()
+        viewWillBindObservers()
+    }
+    
+    override func viewHierarchyWillConfigure() {
+        collectionView
+            .addToHierarchy(on: contentContainer)
+            .constraintToSuperview(contentContainer)
+    }
+    
+    override func viewWillConfigure() {
+        configureSearchController()
+        configureSearchBar()
+        configureSearchBarTextField()
+    }
+    
+    override func viewWillTargetSubviews() {
+        backButton.addTarget(self, action: #selector(backButtonDidTap), for: .touchUpInside)
+    }
+    
+    override func viewWillBindObservers() {
+        viewModel?.items.observe(on: self) { [weak self] in
+            guard !$0.isEmpty else { return }
+            
+            self?.updateDataSource()
+        }
+        
+        viewModel?.query.observe(on: self) { [weak self] in
+            self?.updateSearchBarQuery($0)
+        }
+    }
+    
+    override func viewWillUnbindObservers() {
+        guard let viewModel = viewModel else { return }
+        
+        viewModel.items.remove(observer: self)
+        viewModel.query.remove(observer: self)
+        
+        printIfDebug(.success, "Removed `\(Self.self)` observers.")
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
+        
         searchController.isActive = false
     }
     
-    override func viewDidDeploySubviews() {
-        setupSearchController()
-        setupDataSource()
-    }
-    
-    override func viewDidTargetSubviews() {
-        backButton.addTarget(self, action: #selector(backButtonDidTap), for: .touchUpInside)
-    }
-    
-    override func viewDidBindObservers() {
-        viewModel?.items.observe(on: self) { [weak self] _ in self?.updateItems() }
-        viewModel?.query.observe(on: self) { [weak self] in self?.updateSearchQuery($0) }
-    }
-    
-    override func viewDidUnbindObservers() {
-        guard let viewModel = viewModel else { return }
-        viewModel.items.remove(observer: self)
-        viewModel.query.remove(observer: self)
-        printIfDebug(.success, "Removed `SearchViewModel` observers.")
+    override func viewWillDeallocate() {
+        viewWillUnbindObservers()
+        
+        collectionView.removeFromSuperview()
+        
+        textFieldIndicatorView = nil
+        dataSource = nil
+        viewModel = nil
+        
+        removeFromParent()
     }
 }
 
 // MARK: - ControllerProtocol Implementation
 
 extension SearchViewController: ControllerProtocol {
-    fileprivate func updateItems() {
-//        guard let dataSource = dataSource else { return }
-        collectionView.delegate = dataSource
-        collectionView.dataSource = dataSource
-        collectionView.reloadData()
-    }
-    
-    fileprivate func updateSearchQuery(_ query: String) {
-        searchController.isActive = false
-        searchController.searchBar.text = query
-    }
-    
-    fileprivate func removeDataSource() {
-        collectionView.delegate = nil
-        collectionView.dataSource = nil
-        collectionView.reloadData()
-        collectionView.contentSize = .zero
-        
-        viewModel?.items.value = []
-        
-        AsyncImageService.shared.cache.removeAllObjects()
-    }
-    
     @objc
     fileprivate func backButtonDidTap() {
-        guard let homeController = Application.app.coordinator.tabCoordinator.viewController?.homeViewController,
-              let searchNavigation = homeController.viewModel.coordinator?.search,
-              let searchController = searchNavigation.viewControllers.first as? SearchViewController
-        else { return }
-        
-        UIView.animate(
-            withDuration: 0.25,
-            delay: 0,
-            options: .curveEaseInOut,
-            animations: {
-                searchController.view.transform = CGAffineTransform(translationX: searchController.view.bounds.width, y: .zero)
-                searchController.view.alpha = .zero
-            },
-            completion: { _ in
-                homeController.viewModel.coordinator?.search?.remove()
-                searchController.viewModel = nil
-                searchController.dataSource = nil
-                homeController.viewModel.coordinator?.search = nil
-            }
-        )
+        viewWillAnimateDisappearance { [weak self] in
+            guard let self = self else { return }
+            
+            self.viewWillDeallocate()
+        }
     }
     
-    func present() {
-        guard let homeController = Application.app.coordinator.tabCoordinator.viewController?.homeViewController,
-              let searchNavigation = homeController.viewModel.coordinator?.search
-        else { return }
-        
-        searchNavigation.view.alpha = .zero
-        searchNavigation.view.transform = CGAffineTransform(translationX: searchNavigation.view.bounds.width, y: .zero)
-        
-        UIView.animate(
-            withDuration: 0.25,
-            delay: 0,
-            options: .curveEaseInOut,
-            animations: {
-                searchNavigation.view.transform = .identity
-                searchNavigation.view.alpha = 1.0
-            }
-        )
+    fileprivate func updateSearchBarQuery(_ query: String) {
+        searchController.searchBar.text = query
     }
 }
 
@@ -152,43 +126,26 @@ extension SearchViewController: ControllerProtocol {
 
 extension SearchViewController: UISearchBarDelegate {
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        guard let text = searchBar.text, !text.isEmpty else { return }
-        searchController.isActive = false
-        viewModel?.didSearch(query: text)
+        guard let text = searchBar.text,
+              !text.isEmpty
+        else { return }
+        
+        viewModel?.willSearch(for: text)
         
         searchBar.searchTextField.resignFirstResponder()
     }
     
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
-        viewModel?.didCancelSearch()
+        viewModel?.willCancelSearch()
+        viewModel?.itemsWillChange(mapping: viewModel?.topSearches ?? [])
         
-        viewModel?.set(media: viewModel?.topSearches ?? [])
-        
-        dataSource.headerView?.titleLabel.text = "Searches"
+        dataSource?.headerView?.titleLabel.text = "Top Searches"
     }
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        if searchText.count == 0 {
-            searchBarCancelButtonClicked(searchBar)
-        }
-    }
-}
-
-// MARK: - UISearchControllerDelegate Implementation
-
-extension SearchViewController: UISearchControllerDelegate {
-    func willPresentSearchController(_ searchController: UISearchController) {
-        collectionView.delegate = dataSource
-        collectionView.dataSource = dataSource
-        collectionView.reloadData()
-    }
-    
-    func willDismissSearchController(_ searchController: UISearchController) {
-        removeDataSource()
-    }
-    
-    func didDismissSearchController(_ searchController: UISearchController) {
-        removeDataSource()
+        guard searchText.count == .zero else { return }
+        
+        searchBarCancelButtonClicked(searchBar)
     }
 }
 
@@ -196,63 +153,79 @@ extension SearchViewController: UISearchControllerDelegate {
 
 extension SearchViewController: UISearchResultsUpdating {
     func updateSearchResults(for searchController: UISearchController) {
-        if let searchText = searchController.searchBar.searchTextField.text, !searchText.isEmpty {
-            dataSource.headerView?.titleLabel.text = "Results for '\(searchText)'"
+        guard let searchText = searchController.searchBar.searchTextField.text, !searchText.isEmpty else {
+            viewModel?.itemsWillChange(mapping: viewModel?.topSearches ?? [])
             
             return
-        } else {
-            viewModel?.set(media: viewModel?.topSearches ?? [])
         }
+        
+        dataSource?.headerView?.titleLabel.text = "Results for '\(searchText)'"
     }
 }
 
-// MARK: - Private UI Implementation
+// MARK: - Private Presentation Implementation
 
 extension SearchViewController {
-    private func setupDataSource() {
-        dataSource = SearchCollectionViewDataSource(with: viewModel)
-    }
-    
-    private func setupSearchController() {
-        searchController.delegate = self
-        searchController.searchResultsUpdater = self
-        searchController.obscuresBackgroundDuringPresentation = false
-        searchController.hidesNavigationBarDuringPresentation = false
-        searchBar.delegate = self
-        searchBar.frame = searchBarContainer.bounds
-        searchBar.barStyle = .black
-        let attributes: [NSAttributedString.Key: Any] = [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 15)]
-        let attributedString = NSAttributedString(string: "Search", attributes: attributes)
-        searchBar.searchTextField.attributedPlaceholder = attributedString
-        searchBar.searchTextPositionAdjustment = UIOffset(horizontal: 6.0, vertical: .zero)
-        searchBar.searchTextField.backgroundColor = .hexColor("#2B2B2B")
-        searchBar.searchTextField.superview?.backgroundColor = .black
-        searchBar.searchTextField.keyboardAppearance = .dark
-        searchBar.searchTextField.autocapitalizationType = .none
-        
-        definesPresentationContext = true
-        
-        if #available(iOS 13.0, *) {
-            searchBar.searchTextField.accessibilityIdentifier = "Search Field"
-        }
+    private func createDataSource() -> SearchCollectionViewDataSource {
+        return SearchCollectionViewDataSource(with: viewModel)
     }
     
     private func createCollectionView() -> UICollectionView {
         let layout = CollectionViewLayout(layout: .search, scrollDirection: .vertical)
         let collectionView = UICollectionView(frame: contentContainer.bounds, collectionViewLayout: layout)
+        
         collectionView.register(LabeledCollectionHeaderView.self,
                                 forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
                                 withReuseIdentifier: LabeledCollectionHeaderView.reuseIdentifier)
         collectionView.register(SearchCollectionViewCell.nib,
                                 forCellWithReuseIdentifier: SearchCollectionViewCell.reuseIdentifier)
-        collectionView.backgroundColor = .black
-        contentContainer.addSubview(collectionView)
-        collectionView.constraintToSuperview(contentContainer)
+        
+        collectionView.setBackgroundColor(.black)
+        
         return collectionView
     }
     
     private func createTextFieldIndicatorView() -> TextFieldActivityIndicatorView? {
         guard let searchBar = searchBar else { return nil }
+        
         return TextFieldActivityIndicatorView(textField: searchBar.searchTextField)
+    }
+    
+    private func updateDataSource() {
+        guard let dataSource = dataSource else { return }
+        
+        collectionView.delegate = dataSource
+        collectionView.dataSource = dataSource
+        collectionView.reloadData()
+    }
+    
+    private func configureSearchController() {
+        definesPresentationContext = true
+        
+        searchController.searchResultsUpdater = self
+        searchController.obscuresBackgroundDuringPresentation = true
+        searchController.hidesNavigationBarDuringPresentation = false
+    }
+    
+    private func configureSearchBar() {
+        searchBar.delegate = self
+        searchBar.frame = searchBarContainer.bounds
+        searchBar.barStyle = .black
+    }
+    
+    private func configureSearchBarTextField() {
+        let attributes: [NSAttributedString.Key: Any] = [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 15)]
+        let attributedString = NSAttributedString(string: "Search...", attributes: attributes)
+        
+        searchBar.searchTextField.attributedPlaceholder = attributedString
+        searchBar.searchTextPositionAdjustment = UIOffset(horizontal: 6.0, vertical: .zero)
+        searchBar.searchTextField.setBackgroundColor(.hexColor("#2B2B2B"))
+        searchBar.searchTextField.superview?.setBackgroundColor(.black)
+        searchBar.searchTextField.keyboardAppearance = .dark
+        searchBar.searchTextField.autocapitalizationType = .none
+        
+        if #available(iOS 13.0, *) {
+            searchBar.searchTextField.accessibilityIdentifier = "Search Field"
+        }
     }
 }

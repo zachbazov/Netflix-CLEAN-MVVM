@@ -17,6 +17,7 @@ protocol CollectionViewDataSourceProtocol {
     func numberOfItems() -> Int
     func cellForItem(in collectionView: UICollectionView, at indexPath: IndexPath) -> Cell
     func didSelectItem(in collectionView: UICollectionView, at indexPath: IndexPath)
+    func willDisplayCellForItem(_ cell: Cell, at indexPath: IndexPath)
     func viewForSupplementaryElement(in collectionView: UICollectionView, of kind: String, at indexPath: IndexPath) -> CollectionReusableView
 }
 
@@ -44,6 +45,10 @@ class CollectionViewDataSource<Cell, VM>: NSObject,
         didSelectItem(in: collectionView, at: indexPath)
     }
     
+    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        willDisplayCellForItem(cell as! Cell, at: indexPath)
+    }
+    
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         return viewForSupplementaryElement(in: collectionView, of: kind, at: indexPath)
     }
@@ -63,6 +68,8 @@ class CollectionViewDataSource<Cell, VM>: NSObject,
     }
     
     func didSelectItem(in collectionView: UICollectionView, at indexPath: IndexPath) {}
+    
+    func willDisplayCellForItem(_ cell: Cell, at indexPath: IndexPath) {}
     
     func viewForSupplementaryElement(in collectionView: UICollectionView, of kind: String, at indexPath: IndexPath) -> CollectionReusableView {
         return CollectionReusableView()
