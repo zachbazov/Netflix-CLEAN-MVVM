@@ -16,13 +16,11 @@ private protocol ViewProtocol {
 
 // MARK: - UserProfileCollectionViewCell Type
 
-final class UserProfileCollectionViewCell: UICollectionViewCell {
+final class UserProfileCollectionViewCell: CollectionViewCell<ProfileViewModel> {
     @IBOutlet private weak var imageContainer: UIView!
     @IBOutlet private weak var layerContainer: UIView!
     @IBOutlet private weak var button: UIButton!
     @IBOutlet private weak var titleLabel: UILabel!
-    
-    private var viewModel: ProfileViewModel?
     
     deinit {
         print("deinit \(String(describing: Self.self))")
@@ -44,7 +42,7 @@ final class UserProfileCollectionViewCell: UICollectionViewCell {
         return cell
     }
     
-    func viewDidConfigure() {
+    override func viewDidConfigure() {
         button.layer.cornerRadius = 4.0
     }
     
@@ -52,10 +50,6 @@ final class UserProfileCollectionViewCell: UICollectionViewCell {
         button.addTarget(self, action: #selector(didSelect), for: .touchUpInside)
     }
 }
-
-// MARK: - ViewLifecycleBehavior Implementation
-
-extension UserProfileCollectionViewCell: ViewLifecycleBehavior {}
 
 // MARK: - ViewProtocol Implementation
 

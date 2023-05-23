@@ -34,8 +34,6 @@ final class SearchCollectionViewDataSource: CollectionViewDataSource<SearchColle
     override func cellForItem(in collectionView: UICollectionView, at indexPath: IndexPath) -> SearchCollectionViewCell {
         return SearchCollectionViewCell.create(of: SearchCollectionViewCell.self,
                                                on: collectionView,
-                                               reuseIdentifier: nil,
-                                               section: nil,
                                                for: indexPath,
                                                with: viewModel)
     }
@@ -72,8 +70,11 @@ final class SearchCollectionViewDataSource: CollectionViewDataSource<SearchColle
         switch kind {
         case UICollectionView.elementKindSectionHeader:
             headerView = LabeledCollectionHeaderView.create(in: collectionView, at: indexPath)
-            return headerView!
-        default: return .init()
+            
+            guard let headerView = headerView else { fatalError() }
+            
+            return headerView
+        default: return CollectionReusableView()
         }
     }
 }

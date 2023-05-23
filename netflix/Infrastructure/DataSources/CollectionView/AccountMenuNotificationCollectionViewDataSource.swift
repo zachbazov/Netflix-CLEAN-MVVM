@@ -7,55 +7,40 @@
 
 import UIKit
 
-// MARK: - DataSourceProtocol Type
-
-private protocol DataSourceProtocol {
-    var collectionView: UICollectionView? { get }
-    var numberOfSections: Int { get }
-    
-    func dataSourceDidChange(at indexPaths: [IndexPath])
-}
-
 // MARK: - AccountMenuNotificationCollectionViewDataSource Type
 
-final class AccountMenuNotificationCollectionViewDataSource: NSObject, UICollectionViewDelegate, UICollectionViewDataSource {
+final class AccountMenuNotificationCollectionViewDataSource: CollectionViewDataSource<AccountMenuNotificationCollectionViewCell, AccountMenuNotificationCollectionViewCellViewModel> {
     private let viewModel: AccountViewModel
     
     fileprivate weak var collectionView: UICollectionView?
-    
-    fileprivate let numberOfSections: Int = 1
-    
-    deinit {
-        print("deinit \(String(describing: Self.self))")
-    }
     
     init(collectionView: UICollectionView, with viewModel: AccountViewModel) {
         self.collectionView = collectionView
         self.viewModel = viewModel
     }
     
-    func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return numberOfSections
+    override func numberOfSections() -> Int {
+        return 1
     }
-    
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+
+    override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return viewModel.menuItems[section].options?.count ?? 0
     }
-    
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+
+    override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         return AccountMenuNotificationCollectionViewCell.create(of: AccountMenuNotificationCollectionViewCell.self,
                                                                 on: collectionView,
-                                                                reuseIdentifier: nil,
-                                                                section: nil,
                                                                 for: indexPath)
     }
     
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {}
+    override func willDisplayCellForItem(_ cell: AccountMenuNotificationCollectionViewCell, at indexPath: IndexPath) {
+        cell.opacityAnimation()
+    }
 }
 
-// MARK: - DataSourceProtocol Implementation
+// MARK: - Internal Implementation
 
-extension AccountMenuNotificationCollectionViewDataSource: DataSourceProtocol {
+extension AccountMenuNotificationCollectionViewDataSource {
     func dataSourceDidChange(at indexPaths: [IndexPath]) {
         guard let collectionView = collectionView else { return }
         

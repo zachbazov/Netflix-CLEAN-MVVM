@@ -9,45 +9,45 @@ import UIKit
 
 // MARK: - ProfileCollectionViewDataSource Type
 
-final class ProfileCollectionViewDataSource: NSObject,
-                                             UICollectionViewDelegate,
-                                             UICollectionViewDataSource,
-                                             UICollectionViewDelegateFlowLayout {
+final class ProfileCollectionViewDataSource: CollectionViewDataSource<ProfileCollectionViewCell, ProfileCollectionViewCellViewModel> {
     private let viewModel: AccountViewModel
-    
-    deinit {
-        print("deinit \(String(describing: Self.self))")
-    }
     
     init(with viewModel: AccountViewModel) {
         self.viewModel = viewModel
+        
         super.init()
+        
         self.dataSourceDidChange()
     }
     
-    func dataSourceDidChange() {
-        guard let collectionView = viewModel.coordinator?.viewController?.collectionView else { return }
-        collectionView.delegate = self
-        collectionView.dataSource = self
-        collectionView.reloadData()
-    }
-    
-    func numberOfSections(in collectionView: UICollectionView) -> Int {
+    override func numberOfSections() -> Int {
         return 1
     }
     
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    override func numberOfItems() -> Int {
         return viewModel.profiles.value.count
     }
     
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+    override func cellForItem(in collectionView: UICollectionView, at indexPath: IndexPath) -> ProfileCollectionViewCell {
         return ProfileCollectionViewCell.create(of: ProfileCollectionViewCell.self,
                                                 on: collectionView,
-                                                reuseIdentifier: nil,
-                                                section: nil,
                                                 for: indexPath,
                                                 with: viewModel)
     }
     
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {}
+    override func willDisplayCellForItem(_ cell: ProfileCollectionViewCell, at indexPath: IndexPath) {
+        cell.opacityAnimation()
+    }
+}
+
+// MARK: - Internal Implementation
+
+extension ProfileCollectionViewDataSource {
+    func dataSourceDidChange() {
+        guard let collectionView = viewModel.coordinator?.viewController?.collectionView else { return }
+        
+        collectionView.delegate = self
+        collectionView.dataSource = self
+        collectionView.reloadData()
+    }
 }

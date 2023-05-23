@@ -127,13 +127,13 @@ extension DetailCollectionView: ViewProtocol {
         switch state {
         case .episodes:
             let episodes = self.viewModel.season.value.episodes
-            return DetailCollectionViewDataSource(collectionView: collectionView, items: episodes, with: viewModel)
+            return DetailCollectionViewDataSource(items: episodes, with: viewModel)
         case .trailers:
             guard let trailers = viewModel.media?.resources.trailers.toDomain() else { fatalError() }
-            return DetailCollectionViewDataSource(collectionView: collectionView, items: trailers, with: viewModel)
+            return DetailCollectionViewDataSource(items: trailers, with: viewModel)
         case .similarContent:
             guard let media = viewModel.section?.media else { fatalError() }
-            return DetailCollectionViewDataSource(collectionView: collectionView, items: media, with: viewModel)
+            return DetailCollectionViewDataSource(items: media, with: viewModel)
         }
     }
     

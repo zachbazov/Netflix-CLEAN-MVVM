@@ -7,60 +7,33 @@
 
 import UIKit
 
-// MARK: - DataSourceProtocol Type
-
-private protocol DataSourceProtocol {
-    var viewModel: NewsViewModel { get }
-    var numberOfSections: Int { get }
-    
-    func dataSourceDidChange()
-}
-
 // MARK: - NewsCollectionViewDataSource Type
 
-final class NewsCollectionViewDataSource: NSObject {
+final class NewsCollectionViewDataSource: CollectionViewDataSource<NewsCollectionViewCell, NewsCollectionViewCellViewModel> {
     fileprivate let viewModel: NewsViewModel
-    fileprivate let numberOfSections: Int = 1
     
     /// Create a news table view data source object.
     /// - Parameter viewModel: Coordinating view model.
     init(with viewModel: NewsViewModel) {
         self.viewModel = viewModel
     }
-}
-
-// MARK: - DataSourceProtocol Implementation
-
-extension NewsCollectionViewDataSource: DataSourceProtocol {
-    func dataSourceDidChange() {
-        guard let collectionView = viewModel.coordinator!.viewController!.collectionView else { return }
-        collectionView.delegate = self
-        collectionView.dataSource = self
-        collectionView.reloadData()
-    }
-}
-
-// MARK: - UICollectionViewDelegate & UICollectionViewDataSource Implementation
-
-extension NewsCollectionViewDataSource: UICollectionViewDelegate, UICollectionViewDataSource {
-    func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return numberOfSections
+    
+    override func numberOfSections() -> Int {
+        return 1
     }
     
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    override func numberOfItems() -> Int {
         return viewModel.items.value.count
     }
     
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+    override func cellForItem(in collectionView: UICollectionView, at indexPath: IndexPath) -> NewsCollectionViewCell {
         return NewsCollectionViewCell.create(of: NewsCollectionViewCell.self,
                                              on: collectionView,
-                                             reuseIdentifier: nil,
-                                             section: nil,
                                              for: indexPath,
                                              with: viewModel)
     }
     
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+    override func didSelectItem(in collectionView: UICollectionView, at indexPath: IndexPath) {
         guard let row = indexPath.row as Int?, row >= 0, row <= viewModel.items.value.count - 1 else { return }
         
         let tabCoordinator = Application.app.coordinator.tabCoordinator
@@ -77,5 +50,21 @@ extension NewsCollectionViewDataSource: UICollectionViewDelegate, UICollectionVi
         newsController.viewModel.coordinator?.shouldScreenRotate = false
         
         newsController.viewModel.coordinator?.coordinate(to: .detail)
+    }
+    
+    override func willDisplayCellForItem(_ cell: NewsCollectionViewCell, at indexPath: IndexPath) {
+        cell.opacityAnimation()
+    }
+}
+
+// MARK: - Internal Implementation
+
+extension NewsCollectionViewDataSource {
+    func dataSourceDidChange() {
+        guard let collectionView = viewModel.coordinator?.viewController?.collectionView else { return }
+        
+        collectionView.delegate = self
+        collectionView.dataSource = self
+        collectionView.reloadData()
     }
 }

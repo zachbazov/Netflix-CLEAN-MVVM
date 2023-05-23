@@ -14,7 +14,6 @@ private protocol DataSourceProtocol {
     
     var viewModel: DetailViewModel { get }
     var numberOfSections: Int { get }
-    var collectionView: UICollectionView { get }
     var items: [T] { get }
 }
 
@@ -23,7 +22,6 @@ private protocol DataSourceProtocol {
 final class DetailCollectionViewDataSource<T>: NSObject, UICollectionViewDelegate, UICollectionViewDataSource {
     fileprivate let viewModel: DetailViewModel
     fileprivate let numberOfSections = 1
-    fileprivate let collectionView: UICollectionView
     
     let items: [T]
     
@@ -32,9 +30,8 @@ final class DetailCollectionViewDataSource<T>: NSObject, UICollectionViewDelegat
     ///   - collectionView: Corresponding collection view.
     ///   - items: Represented data.
     ///   - viewModel: Coordinating view model.
-    init(collectionView: UICollectionView, items: [T], with viewModel: DetailViewModel) {
+    init(items: [T], with viewModel: DetailViewModel) {
         self.viewModel = viewModel
-        self.collectionView = collectionView
         self.items = items
     }
     
