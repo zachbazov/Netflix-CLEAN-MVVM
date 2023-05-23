@@ -50,6 +50,15 @@ extension MediaUseCase: UseCase {
         default: return nil
         }
     }
+    
+    func request<T, U>(endpoint: Endpoints, for response: T.Type, request: U) async -> T? where T: Decodable {
+        switch endpoint {
+        case .searchMedia:
+            guard let request = request as? SearchHTTPDTO.Request else { return nil }
+            return await repository.search(requestDTO: request) as? T
+        default: return nil
+        }
+    }
 }
 
 // MARK: - Endpoints Type

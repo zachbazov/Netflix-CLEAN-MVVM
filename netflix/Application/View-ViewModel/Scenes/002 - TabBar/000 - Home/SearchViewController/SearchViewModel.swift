@@ -23,7 +23,6 @@ private protocol ViewModelProtocol {
     func itemsWillChange(mapping media: [Media])
     func itemsWillRemove()
     func queryWillChange(_ query: String)
-    func searchWillLoad(_ request: SearchHTTPDTO.Request)
 }
 
 // MARK: - SearchViewModel Type
@@ -46,6 +45,12 @@ final class SearchViewModel {
         
         return controller.viewModel.topSearches
     }
+    
+    var isLoading: Bool = false {
+        didSet {
+            coordinator?.viewController?.textFieldIndicatorView?.isLoading = isLoading
+        }
+    }
 }
 
 // MARK: - ViewModel Implementation
@@ -58,11 +63,10 @@ extension SearchViewModel: ViewModelProtocol {
     func willSearch(for query: String) {
         guard !query.isEmpty else { return }
         
-        let requestDTO = SearchHTTPDTO.Request(regex: query)
-        
         queryWillChange(query)
         itemsWillRemove()
-        searchWillLoad(requestDTO)
+        
+        loadSearch()
     }
     
     func willCancelSearch() {
@@ -80,8 +84,34 @@ extension SearchViewModel: ViewModelProtocol {
     fileprivate func queryWillChange(_ query: String) {
         self.query.value = query
     }
+}
+
+// MARK: - Private Implementation
+
+extension SearchViewModel {
+    private func loadSearch() {
+        if #available(iOS 13.0, *) {
+            loadUsingAsyncAwait()
+            
+            return
+        }
+        
+        loadUsingAsync()
+    }
     
-    fileprivate func searchWillLoad(_ request: SearchHTTPDTO.Request) {
+    private func loadUsingAsyncAwait() {
+        Task {
+            await searchWillLoad()
+        }
+    }
+    
+    private func loadUsingAsync() {
+        let request = SearchHTTPDTO.Request(regex: query.value)
+        
+        searchWillLoad(request)
+    }
+    
+    private func searchWillLoad(_ request: SearchHTTPDTO.Request) {
         coordinator?.viewController?.textFieldIndicatorView?.isLoading = true
         
         useCase.repository.task = useCase.request(
@@ -103,5 +133,23 @@ extension SearchViewModel: ViewModelProtocol {
                 
                 self.coordinator?.viewController?.textFieldIndicatorView?.isLoading = false
             })
+    }
+    
+    private func searchWillLoad() async {
+        mainQueueDispatch { [weak self] in
+            self?.isLoading = true
+        }
+        
+        let request = SearchHTTPDTO.Request(regex: query.value)
+        let response = await useCase.request(endpoint: .searchMedia, for: SearchHTTPDTO.Response.self, request: request)
+        
+        guard let response = response else { return }
+        
+        let media = response.data.toDomain()
+        itemsWillChange(mapping: media)
+        
+        mainQueueDispatch { [weak self] in
+            self?.isLoading = false
+        }
     }
 }
