@@ -33,23 +33,30 @@ class CollectionViewDataSource<Cell, VM>: NSObject,
         return numberOfSections()
     }
     
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    func collectionView(_ collectionView: UICollectionView,
+                        numberOfItemsInSection section: Int) -> Int {
         return numberOfItems()
     }
     
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+    func collectionView(_ collectionView: UICollectionView,
+                        cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         return cellForItem(in: collectionView, at: indexPath)
     }
     
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+    func collectionView(_ collectionView: UICollectionView,
+                        didSelectItemAt indexPath: IndexPath) {
         didSelectItem(in: collectionView, at: indexPath)
     }
     
-    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+    func collectionView(_ collectionView: UICollectionView,
+                        willDisplay cell: UICollectionViewCell,
+                        forItemAt indexPath: IndexPath) {
         willDisplayCellForItem(cell as! Cell, at: indexPath)
     }
     
-    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+    func collectionView(_ collectionView: UICollectionView,
+                        viewForSupplementaryElementOfKind kind: String,
+                        at indexPath: IndexPath) -> UICollectionReusableView {
         return viewForSupplementaryElement(in: collectionView, of: kind, at: indexPath)
     }
     
@@ -71,7 +78,9 @@ class CollectionViewDataSource<Cell, VM>: NSObject,
     
     func willDisplayCellForItem(_ cell: Cell, at indexPath: IndexPath) {}
     
-    func viewForSupplementaryElement(in collectionView: UICollectionView, of kind: String, at indexPath: IndexPath) -> CollectionReusableView {
+    func viewForSupplementaryElement(in collectionView: UICollectionView,
+                                     of kind: String,
+                                     at indexPath: IndexPath) -> CollectionReusableView {
         return CollectionReusableView()
     }
 }

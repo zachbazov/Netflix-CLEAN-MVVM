@@ -9,4 +9,4 @@ import UIKit
 
 // MARK: - BlockbusterCollectionViewCell Type
 
-final class BlockbusterCollectionViewCell: PosterCollectionViewCell {}
+final class BlockbusterCollectionViewCell: MediaCollectionViewCell {}

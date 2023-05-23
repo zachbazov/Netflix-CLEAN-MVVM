@@ -11,11 +11,11 @@ import UIKit
 
 private protocol ViewProtocol {
     var collectionView: UICollectionView { get }
-    var dataSource: DetailCollectionViewDataSource<Mediable>? { get }
+    var dataSource: DetailCollectionViewDataSource? { get }
     
     func createCollectionView() -> UICollectionView
     func createLayout(for state: DetailNavigationView.State) -> CollectionViewLayout
-    func createDataSource(for state: DetailNavigationView.State) -> DetailCollectionViewDataSource<Mediable>?
+    func createDataSource(for state: DetailNavigationView.State) -> DetailCollectionViewDataSource?
     
     func dataSourceDidChange()
     func reload()
@@ -25,7 +25,8 @@ private protocol ViewProtocol {
 
 final class DetailCollectionView: View<DetailCollectionViewModel> {
     fileprivate lazy var collectionView: UICollectionView = createCollectionView()
-    fileprivate var dataSource: DetailCollectionViewDataSource<Mediable>?
+    
+    fileprivate var dataSource: DetailCollectionViewDataSource?
     
     /// Create a detail collection view object.
     /// - Parameters:
@@ -121,7 +122,7 @@ extension DetailCollectionView: ViewProtocol {
         }
     }
     
-    fileprivate func createDataSource(for state: DetailNavigationView.State) -> DetailCollectionViewDataSource<Mediable>? {
+    fileprivate func createDataSource(for state: DetailNavigationView.State) -> DetailCollectionViewDataSource? {
         guard let viewModel = viewModel.coordinator.viewController?.viewModel else { fatalError() }
         
         switch state {

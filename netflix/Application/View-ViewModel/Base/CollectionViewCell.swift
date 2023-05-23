@@ -56,12 +56,12 @@ class CollectionViewCell<T>: UICollectionViewCell where T: ViewModel {
         else { fatalError() }
         
         switch cell {
-        case let cell as PosterCollectionViewCell:
+        case let cell as MediaCollectionViewCell:
             guard let section = section else { fatalError() }
             
             let media = section.media[indexPath.row]
             
-            cell.viewModel = PosterCollectionViewCellViewModel(media: media)
+            cell.viewModel = MediaCollectionViewCellViewModel(media: media)
             cell.representedIdentifier = media.slug as NSString
             cell.indexPath = indexPath
             cell.viewDidLoad()

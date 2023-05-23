@@ -10,27 +10,23 @@ import UIKit
 // MARK: - DataSourceProtocol Type
 
 private protocol DataSourceProtocol {
-    associatedtype T
-    
     var viewModel: DetailViewModel { get }
-    var numberOfSections: Int { get }
-    var items: [T] { get }
+    var items: [Mediable] { get }
 }
 
 // MARK: - DetailCollectionViewDataSource Type
 
-final class DetailCollectionViewDataSource<T>: NSObject, UICollectionViewDelegate, UICollectionViewDataSource {
+final class DetailCollectionViewDataSource: NSObject, UICollectionViewDelegate, UICollectionViewDataSource {
     fileprivate let viewModel: DetailViewModel
-    fileprivate let numberOfSections = 1
     
-    let items: [T]
+    let items: [Mediable]
     
     /// Create a generic detail collection view data source object.
     /// - Parameters:
     ///   - collectionView: Corresponding collection view.
     ///   - items: Represented data.
     ///   - viewModel: Coordinating view model.
-    init(items: [T], with viewModel: DetailViewModel) {
+    init(items: [Mediable], with viewModel: DetailViewModel) {
         self.viewModel = viewModel
         self.items = items
     }
@@ -38,7 +34,7 @@ final class DetailCollectionViewDataSource<T>: NSObject, UICollectionViewDelegat
     // MARK: UICollectionViewDelegate & UICollectionViewDataSource Implementation
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return numberOfSections
+        return 1
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -56,21 +52,16 @@ final class DetailCollectionViewDataSource<T>: NSObject, UICollectionViewDelegat
         case .episodes:
             return EpisodeCollectionViewCell.create(of: EpisodeCollectionViewCell.self,
                                                     on: collectionView,
-                                                    reuseIdentifier: nil,
-                                                    section: nil,
                                                     for: indexPath,
                                                     with: viewModel)
         case .trailers:
             return TrailerCollectionViewCell.create(of: TrailerCollectionViewCell.self,
                                                     on: collectionView,
-                                                    reuseIdentifier: nil,
-                                                    section: nil,
                                                     for: indexPath,
                                                     with: viewModel)
         case .similarContent:
-            return PosterCollectionViewCell.create(of: PosterCollectionViewCell.self,
+            return MediaCollectionViewCell.create(of: StandardCollectionViewCell.self,
                                                    on: collectionView,
-                                                   reuseIdentifier: StandardCollectionViewCell.reuseIdentifier,
                                                    section: viewModel.section,
                                                    for: indexPath)
         }
@@ -90,6 +81,7 @@ final class DetailCollectionViewDataSource<T>: NSObject, UICollectionViewDelegat
             break
         case .similarContent:
             guard let media = items[indexPath.row] as? Media else { return }
+            
             viewModel.media = media
             
             coordinator.coordinate(to: .detail)

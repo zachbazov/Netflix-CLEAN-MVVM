@@ -9,7 +9,7 @@ import UIKit
 
 // MARK: - BrowseOverlayCollectionViewDataSource Type
 
-final class BrowseOverlayCollectionViewDataSource: CollectionViewDataSource<StandardCollectionViewCell, PosterCollectionViewCellViewModel> {
+final class BrowseOverlayCollectionViewDataSource: CollectionViewDataSource<StandardCollectionViewCell, MediaCollectionViewCellViewModel> {
     fileprivate let viewModel: BrowseOverlayViewModel
     
     init(viewModel: BrowseOverlayViewModel) {
@@ -26,7 +26,7 @@ final class BrowseOverlayCollectionViewDataSource: CollectionViewDataSource<Stan
     
     override func cellForItem(in collectionView: UICollectionView,
                               at indexPath: IndexPath) -> StandardCollectionViewCell {
-        return PosterCollectionViewCell.create(of: StandardCollectionViewCell.self,
+        return MediaCollectionViewCell.create(of: StandardCollectionViewCell.self,
                                                on: collectionView,
                                                reuseIdentifier: StandardCollectionViewCell.reuseIdentifier,
                                                section: viewModel.section.value,

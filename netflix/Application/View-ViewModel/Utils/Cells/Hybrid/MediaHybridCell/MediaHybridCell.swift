@@ -9,7 +9,7 @@ import UIKit
 
 // MARK: - MediaHybridCell Type
 
-final class MediaHybridCell<Cell>: HybridCell<Cell, HomeCollectionViewDataSource<Cell>, MediaHybridCellViewModel, HomeViewModel> where Cell: UICollectionViewCell {
+final class MediaHybridCell<Cell>: HybridCell<Cell, MediaCollectionViewDataSource<Cell>, MediaHybridCellViewModel, HomeViewModel> where Cell: UICollectionViewCell {
     override func viewDidLoad() {
         viewWillDeploySubviews()
         viewHierarchyWillConfigure()
@@ -56,7 +56,7 @@ final class MediaHybridCell<Cell>: HybridCell<Cell, HomeCollectionViewDataSource
               let controllerViewModel = controllerViewModel
         else { return }
         
-        dataSource = HomeCollectionViewDataSource<Cell>(on: collectionView, section: viewModel.section, viewModel: controllerViewModel)
+        dataSource = MediaCollectionViewDataSource<Cell>(on: collectionView, section: viewModel.section, viewModel: controllerViewModel)
     }
     
     override func createLayout() {

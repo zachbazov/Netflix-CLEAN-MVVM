@@ -18,7 +18,7 @@ private protocol ViewProtocol {
 
 // MARK: - RatedCollectionViewCell Type
 
-final class RatedCollectionViewCell: PosterCollectionViewCell {
+final class RatedCollectionViewCell: MediaCollectionViewCell {
     fileprivate let layerView = UIView()
     fileprivate let textLayer = TextLayer()
     

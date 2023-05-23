@@ -1,5 +1,5 @@
 //
-//  PosterCollectionViewCell.swift
+//  MediaCollectionViewCell.swift
 //  netflix
 //
 //  Created by Zach Bazov on 13/09/2022.
@@ -7,9 +7,9 @@
 
 import UIKit
 
-// MARK: - PosterCollectionViewCell Type
+// MARK: - MediaCollectionViewCell Type
 
-class PosterCollectionViewCell: CollectionViewCell<PosterCollectionViewCellViewModel> {
+class MediaCollectionViewCell: CollectionViewCell<MediaCollectionViewCellViewModel> {
     @IBOutlet private weak var posterImageView: UIImageView!
     @IBOutlet private weak var logoImageView: UIImageView!
     @IBOutlet private weak var placeholderLabel: UILabel!
@@ -150,7 +150,7 @@ class PosterCollectionViewCell: CollectionViewCell<PosterCollectionViewCellViewM
 
 // MARK: - Private Implementation
 
-extension PosterCollectionViewCell {
+extension MediaCollectionViewCell {
     private func posterWillLoad(_ completion: @escaping () -> Void) {
         resourceWillLoad(for: viewModel.posterImageURL, withIdentifier: viewModel.posterImageIdentifier, completion)
     }

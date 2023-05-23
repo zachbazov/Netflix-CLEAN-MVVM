@@ -1,5 +1,5 @@
 //
-//  PosterCollectionViewCellViewModel.swift
+//  MediaCollectionViewCellViewModel.swift
 //  netflix
 //
 //  Created by Zach Bazov on 08/09/2022.
@@ -23,9 +23,9 @@ private protocol ViewModelProtocol {
     var presentedLogoAlignment: PresentedLogoAlignment { get }
 }
 
-// MARK: - PosterCollectionViewCellViewModel Type
+// MARK: - MediaCollectionViewCellViewModel Type
 
-struct PosterCollectionViewCellViewModel {
+struct MediaCollectionViewCellViewModel {
     let title: String
     let slug: String
     let posters: [String]
@@ -61,12 +61,12 @@ struct PosterCollectionViewCellViewModel {
 
 // MARK: - ViewModel Implementation
 
-extension PosterCollectionViewCellViewModel: ViewModel {}
+extension MediaCollectionViewCellViewModel: ViewModel {}
 
 // MARK: - ViewModelProtocol Implementation
 
-extension PosterCollectionViewCellViewModel: ViewModelProtocol {}
+extension MediaCollectionViewCellViewModel: ViewModelProtocol {}
 
 // MARK: - Equatable Implementation
 
-extension PosterCollectionViewCellViewModel: Equatable {}
+extension MediaCollectionViewCellViewModel: Equatable {}

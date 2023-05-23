@@ -9,7 +9,7 @@ import UIKit
 
 // MARK: - ResumableCollectionViewCell Type
 
-final class ResumableCollectionViewCell: PosterCollectionViewCell {
+final class ResumableCollectionViewCell: MediaCollectionViewCell {
     @IBOutlet private weak var actionBoxView: UIView!
     @IBOutlet private weak var optionsButton: UIButton!
     @IBOutlet private weak var infoButton: UIButton!

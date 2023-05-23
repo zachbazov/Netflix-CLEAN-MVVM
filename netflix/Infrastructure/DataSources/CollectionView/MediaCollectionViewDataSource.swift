@@ -1,5 +1,5 @@
 //
-//  HomeCollectionViewDataSource.swift
+//  MediaCollectionViewDataSource.swift
 //  netflix
 //
 //  Created by Zach Bazov on 13/09/2022.
@@ -11,28 +11,17 @@ import UIKit
 
 private protocol DataSourceProtocol {
     var collectionView: UICollectionView? { get }
-    var coordinator: HomeViewCoordinator { get }
     var section: Section { get }
-    
-    func didLoad()
-    func dataSourceDidChange()
 }
 
-// MARK: - HomeCollectionViewDataSource Type
+// MARK: - MediaCollectionViewDataSource Type
 
-final class HomeCollectionViewDataSource<Cell>: NSObject,
-                                                UICollectionViewDelegate,
-                                                UICollectionViewDataSource,
-                                                UICollectionViewDataSourcePrefetching where Cell: UICollectionViewCell {
-    fileprivate weak var collectionView: UICollectionView?
+final class MediaCollectionViewDataSource<Cell>: CollectionViewDataSource<MediaCollectionViewCell, MediaCollectionViewCellViewModel>, UICollectionViewDataSourcePrefetching where Cell: UICollectionViewCell {
     fileprivate let coordinator: HomeViewCoordinator
     fileprivate let section: Section
     
-    /// Create home's collection view data source object.
-    /// - Parameters:
-    ///   - collectionView: Corresponding collection view.
-    ///   - section: Corresponding media's section object.
-    ///   - viewModel: Coordinating view model.
+    fileprivate weak var collectionView: UICollectionView?
+    
     init(on collectionView: UICollectionView,
          section: Section,
          viewModel: HomeViewModel) {
@@ -46,28 +35,26 @@ final class HomeCollectionViewDataSource<Cell>: NSObject,
         
         super.init()
         
-        self.didLoad()
+        self.dataSourceDidChange()
     }
     
-    deinit {
-        print("deinit \(Self.self)")
+    override func numberOfSections() -> Int {
+        return 1
     }
     
-    // MARK: UICollectionViewDelegate & UICollectionViewDataSource & UICollectionViewDataSourcePrefetching Implementation
-    
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return self.section.media.count
+    override func numberOfItems() -> Int {
+        return section.media.count
     }
     
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        return PosterCollectionViewCell.create(of: PosterCollectionViewCell.self,
+    override func cellForItem(in collectionView: UICollectionView, at indexPath: IndexPath) -> MediaCollectionViewCell {
+        return MediaCollectionViewCell.create(of: MediaCollectionViewCell.self,
                                                on: collectionView,
                                                reuseIdentifier: Cell.reuseIdentifier,
                                                section: section,
                                                for: indexPath)
     }
     
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+    override func didSelectItem(in collectionView: UICollectionView, at indexPath: IndexPath) {
         coordinator.coordinate(to: .detail)
         
         guard let controller = coordinator.detail?.viewControllers.first as? DetailViewController else { return }
@@ -79,9 +66,11 @@ final class HomeCollectionViewDataSource<Cell>: NSObject,
         controller.viewModel.isRotated = false
     }
     
-    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+    override func willDisplayCellForItem(_ cell: MediaCollectionViewCell, at indexPath: IndexPath) {
         cell.opacityAnimation()
     }
+    
+    // MARK: UICollectionViewDataSourcePrefetching Implementation
     
     func collectionView(_ collectionView: UICollectionView, prefetchItemsAt indexPaths: [IndexPath]) {}
     
@@ -90,12 +79,12 @@ final class HomeCollectionViewDataSource<Cell>: NSObject,
 
 // MARK: - DataSourceProtocol Implementation
 
-extension HomeCollectionViewDataSource: DataSourceProtocol {
-    fileprivate func didLoad() {
-        dataSourceDidChange()
-    }
-    
-    fileprivate func dataSourceDidChange() {
+extension MediaCollectionViewDataSource: DataSourceProtocol {}
+
+// MARK: - Private Implementation
+
+extension MediaCollectionViewDataSource {
+    private func dataSourceDidChange() {
         collectionView?.delegate = self
         collectionView?.dataSource = self
         collectionView?.prefetchDataSource = self
