@@ -35,11 +35,11 @@ extension BrowseOverlayCollectionViewDataSource: UICollectionViewDelegate, UICol
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        return StandardCollectionViewCell.create(
-            on: collectionView,
-            reuseIdentifier: StandardCollectionViewCell.reuseIdentifier,
-            section: viewModel.section.value,
-            for: indexPath)
+        return PosterCollectionViewCell.create(of: PosterCollectionViewCell.self,
+                                               on: collectionView,
+                                               reuseIdentifier: StandardCollectionViewCell.reuseIdentifier,
+                                               section: viewModel.section.value,
+                                               for: indexPath)
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {

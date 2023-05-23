@@ -43,11 +43,11 @@ final class AccountMenuNotificationCollectionViewDataSource: NSObject, UICollect
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        return AccountMenuNotificationCollectionViewCell.create(
-            of: AccountMenuNotificationCollectionViewCell.self,
-            in: collectionView,
-            at: indexPath,
-            with: viewModel)
+        return AccountMenuNotificationCollectionViewCell.create(of: AccountMenuNotificationCollectionViewCell.self,
+                                                                on: collectionView,
+                                                                reuseIdentifier: nil,
+                                                                section: nil,
+                                                                for: indexPath)
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {}
@@ -58,6 +58,7 @@ final class AccountMenuNotificationCollectionViewDataSource: NSObject, UICollect
 extension AccountMenuNotificationCollectionViewDataSource: DataSourceProtocol {
     func dataSourceDidChange(at indexPaths: [IndexPath]) {
         guard let collectionView = collectionView else { return }
+        
         collectionView.delegate = self
         collectionView.dataSource = self
         collectionView.reloadItems(at: indexPaths)

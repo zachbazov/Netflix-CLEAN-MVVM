@@ -59,18 +59,23 @@ final class DetailCollectionViewDataSource<T>: NSObject, UICollectionViewDelegat
         case .episodes:
             return EpisodeCollectionViewCell.create(of: EpisodeCollectionViewCell.self,
                                                     on: collectionView,
+                                                    reuseIdentifier: nil,
+                                                    section: nil,
                                                     for: indexPath,
                                                     with: viewModel)
         case .trailers:
             return TrailerCollectionViewCell.create(of: TrailerCollectionViewCell.self,
                                                     on: collectionView,
+                                                    reuseIdentifier: nil,
+                                                    section: nil,
                                                     for: indexPath,
                                                     with: viewModel)
         case .similarContent:
-            return PosterCollectionViewCell.create(on: collectionView,
-                                             reuseIdentifier: StandardCollectionViewCell.reuseIdentifier,
-                                             section: viewModel.section,
-                                             for: indexPath)
+            return PosterCollectionViewCell.create(of: PosterCollectionViewCell.self,
+                                                   on: collectionView,
+                                                   reuseIdentifier: StandardCollectionViewCell.reuseIdentifier,
+                                                   section: viewModel.section,
+                                                   for: indexPath)
         }
     }
     

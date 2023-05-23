@@ -21,6 +21,7 @@ private protocol DataSourceProtocol {
 final class NewsCollectionViewDataSource: NSObject {
     fileprivate let viewModel: NewsViewModel
     fileprivate let numberOfSections: Int = 1
+    
     /// Create a news table view data source object.
     /// - Parameter viewModel: Coordinating view model.
     init(with viewModel: NewsViewModel) {
@@ -51,7 +52,12 @@ extension NewsCollectionViewDataSource: UICollectionViewDelegate, UICollectionVi
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        return NewsCollectionViewCell.create(in: collectionView, at: indexPath, with: viewModel)
+        return NewsCollectionViewCell.create(of: NewsCollectionViewCell.self,
+                                             on: collectionView,
+                                             reuseIdentifier: nil,
+                                             section: nil,
+                                             for: indexPath,
+                                             with: viewModel)
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {

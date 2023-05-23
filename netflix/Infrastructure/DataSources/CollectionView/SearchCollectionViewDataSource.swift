@@ -32,7 +32,12 @@ final class SearchCollectionViewDataSource: CollectionViewDataSource<SearchColle
     }
     
     override func cellForItem(in collectionView: UICollectionView, at indexPath: IndexPath) -> SearchCollectionViewCell {
-        return SearchCollectionViewCell.create(on: collectionView, for: indexPath, with: viewModel)
+        return SearchCollectionViewCell.create(of: SearchCollectionViewCell.self,
+                                               on: collectionView,
+                                               reuseIdentifier: nil,
+                                               section: nil,
+                                               for: indexPath,
+                                               with: viewModel)
     }
     
     override func didSelectItem(in collectionView: UICollectionView, at indexPath: IndexPath) {
