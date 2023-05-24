@@ -11,33 +11,28 @@ import UIKit
 
 private protocol DataSourceProtocol {
     var reusableViewPointSize: CGFloat { get }
-    
-    func createDummyView() -> UIView
-    func dataSourceDidChange()
 }
 
 // MARK: - AccountMenuTableViewDataSource Type
 
-final class AccountMenuTableViewDataSource: NSObject, UITableViewDelegate, UITableViewDataSource {
+final class AccountMenuTableViewDataSource: TableViewDataSource {
     private let viewModel: AccountViewModel
     
     fileprivate let reusableViewPointSize: CGFloat = 1.0
     
-    deinit {
-        print("deinit \(String(describing: Self.self))")
-    }
-    
     init(with viewModel: AccountViewModel) {
         self.viewModel = viewModel
+        
         super.init()
+        
         self.dataSourceDidChange()
     }
     
-    func numberOfSections(in tableView: UITableView) -> Int {
+    override func numberOfSections() -> Int {
         return viewModel.menuItems.count
     }
     
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    override func numberOfRows(in section: Int) -> Int {
         guard let section = AccountMenuTableViewDataSource.Section(rawValue: section) else { return 1 }
         switch section {
         case .notifications:
@@ -48,16 +43,15 @@ final class AccountMenuTableViewDataSource: NSObject, UITableViewDelegate, UITab
         }
     }
     
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        return AccountMenuNotificationHybridCell.create(
-            expecting: AccountMenuNotificationHybridCell.self,
-            embedding: AccountMenuNotificationCollectionViewCell.self,
-            on: tableView,
-            for: indexPath,
-            with: viewModel)
+    override func cellForRow<T>(in tableView: UITableView, at indexPath: IndexPath) -> T where T : UITableViewCell {
+        return AccountMenuNotificationHybridCell.create(expecting: AccountMenuNotificationHybridCell.self,
+                                                        embedding: AccountMenuNotificationCollectionViewCell.self,
+                                                        on: tableView,
+                                                        for: indexPath,
+                                                        with: viewModel) as! T
     }
     
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+    override func heightForRow(in tableView: UITableView, at indexPath: IndexPath) -> CGFloat {
         guard let section = AccountMenuTableViewDataSource.Section(rawValue: indexPath.section) else { return .zero }
         
         let pointSize: CGFloat = 56.0
@@ -74,23 +68,7 @@ final class AccountMenuTableViewDataSource: NSObject, UITableViewDelegate, UITab
         return pointSize
     }
     
-    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return reusableViewPointSize
-    }
-    
-    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        return createDummyView()
-    }
-    
-    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-        return reusableViewPointSize
-    }
-    
-    func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
-        return createDummyView()
-    }
-    
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    override func didSelectRow(in tableView: UITableView, at indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         
         guard let section = AccountMenuTableViewDataSource.Section(rawValue: indexPath.section) else { return }
@@ -113,17 +91,31 @@ final class AccountMenuTableViewDataSource: NSObject, UITableViewDelegate, UITab
             break
         }
     }
+    
+    override func willDisplayCellForRow(_ cell: UITableViewCell, at indexPath: IndexPath) {
+        cell.opacityAnimation()
+    }
+    
+    override func viewForHeader(in section: Int) -> UIView? {
+        return createDummyView()
+    }
+    
+    override func heightForHeader(in section: Int) -> CGFloat {
+        return reusableViewPointSize
+    }
+    
+    override func viewForFooter(in section: Int) -> UIView? {
+        return createDummyView()
+    }
+    
+    override func heightForFooter(in section: Int) -> CGFloat {
+        return reusableViewPointSize
+    }
 }
 
 // MARK: - DataSourceProtocol Implementation
 
 extension AccountMenuTableViewDataSource: DataSourceProtocol {
-    fileprivate func createDummyView() -> UIView {
-        let view = UIView()
-        view.backgroundColor = .black
-        return view
-    }
-    
     func dataSourceDidChange() {
         guard let tableView = viewModel.coordinator?.viewController?.tableView else { return }
         tableView.delegate = self
@@ -141,5 +133,15 @@ extension AccountMenuTableViewDataSource {
         case appSettings
         case account
         case help
+    }
+}
+
+// MARK: - Private Implementation
+
+extension AccountMenuTableViewDataSource {
+    private func createDummyView() -> UIView {
+        let view = UIView()
+        view.backgroundColor = .black
+        return view
     }
 }

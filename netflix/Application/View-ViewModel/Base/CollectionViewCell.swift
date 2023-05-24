@@ -122,11 +122,7 @@ class CollectionViewCell<T>: UICollectionViewCell where T: ViewModel {
     }
     
     deinit {
-        representedIdentifier = nil
-        indexPath = nil
-        viewModel = nil
-        
-        removeFromSuperview()
+        viewWillDeallocate()
     }
     
     override func prepareForReuse() {
@@ -149,7 +145,13 @@ class CollectionViewCell<T>: UICollectionViewCell where T: ViewModel {
     func viewWillConfigure() {}
     func viewDidConfigure() {}
     
-    func viewWillDeallocate() {}
+    func viewWillDeallocate() {
+        representedIdentifier = nil
+        indexPath = nil
+        viewModel = nil
+        
+        removeFromSuperview()
+    }
     func viewDidDeallocate() {}
     
     // MARK: ViewProtocol Implementation
