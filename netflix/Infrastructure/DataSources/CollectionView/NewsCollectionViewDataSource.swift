@@ -9,7 +9,7 @@ import UIKit
 
 // MARK: - NewsCollectionViewDataSource Type
 
-final class NewsCollectionViewDataSource: CollectionViewDataSource<NewsCollectionViewCell, NewsCollectionViewCellViewModel> {
+final class NewsCollectionViewDataSource: CollectionViewDataSource {
     
     fileprivate let viewModel: NewsViewModel
     

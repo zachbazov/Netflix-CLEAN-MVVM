@@ -9,7 +9,7 @@ import UIKit
 
 // MARK: - BrowseOverlayCollectionViewDataSource Type
 
-final class BrowseOverlayCollectionViewDataSource: CollectionViewDataSource<StandardCollectionViewCell, MediaCollectionViewCellViewModel> {
+final class BrowseOverlayCollectionViewDataSource: CollectionViewDataSource {
     
     fileprivate let viewModel: BrowseOverlayViewModel
     

@@ -9,7 +9,7 @@ import UIKit
 
 // MARK: - AccountMenuNotificationCollectionViewDataSource Type
 
-final class AccountMenuNotificationCollectionViewDataSource: CollectionViewDataSource<AccountMenuNotificationCollectionViewCell, AccountMenuNotificationCollectionViewCellViewModel> {
+final class AccountMenuNotificationCollectionViewDataSource: CollectionViewDataSource {
     
     private let viewModel: AccountViewModel
     

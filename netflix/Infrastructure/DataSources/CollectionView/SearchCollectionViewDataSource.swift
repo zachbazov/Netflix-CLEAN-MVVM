@@ -16,7 +16,7 @@ private protocol DataSourceProtocol {
 
 // MARK: - SearchCollectionViewDataSource Type
 
-final class SearchCollectionViewDataSource: CollectionViewDataSource<SearchCollectionViewCell, SearchCollectionViewCellViewModel> {
+final class SearchCollectionViewDataSource: CollectionViewDataSource {
     
     fileprivate let viewModel: SearchViewModel
     

@@ -16,7 +16,7 @@ private protocol DataSourceProtocol {
 
 // MARK: - DetailCollectionViewDataSource Type
 
-final class DetailCollectionViewDataSource: CollectionViewDataSource<DetailCollectionViewCell, DetailCollectionViewCellViewModel> {
+final class DetailCollectionViewDataSource: CollectionViewDataSource {
     
     fileprivate let viewModel: DetailViewModel
     

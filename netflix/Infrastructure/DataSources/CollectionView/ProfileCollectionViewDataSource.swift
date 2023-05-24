@@ -9,7 +9,7 @@ import UIKit
 
 // MARK: - ProfileCollectionViewDataSource Type
 
-final class ProfileCollectionViewDataSource: CollectionViewDataSource<ProfileCollectionViewCell, ProfileCollectionViewCellViewModel> {
+final class ProfileCollectionViewDataSource: CollectionViewDataSource {
     
     private let viewModel: AccountViewModel
     

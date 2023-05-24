@@ -9,10 +9,7 @@ import UIKit
 
 // MARK: - CollectionViewDataSourceProtocol Type
 
-protocol CollectionViewDataSourceProtocol {
-    associatedtype VM: ViewModel
-    associatedtype Cell: CollectionViewCell<VM>
-    
+private protocol CollectionViewDataSourceProtocol {
     func numberOfSections() -> Int
     func numberOfItems(in section: Int) -> Int
     func cellForItem<T>(in collectionView: UICollectionView, at indexPath: IndexPath) -> T where T: UICollectionViewCell
@@ -23,10 +20,11 @@ protocol CollectionViewDataSourceProtocol {
 
 // MARK: - CollectionViewDataSource Type
 
-class CollectionViewDataSource<Cell, VM>: NSObject,
-                                          UICollectionViewDelegate,
-                                          UICollectionViewDataSource,
-                                          CollectionViewDataSourceProtocol where Cell: CollectionViewCell<VM>, VM: ViewModel {
+class CollectionViewDataSource: NSObject,
+                                UICollectionViewDelegate,
+                                UICollectionViewDataSource,
+                                CollectionViewDataSourceProtocol {
+    
     // MARK:  UICollectionViewDelegate & UICollectionViewDataSource Implementation
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {
