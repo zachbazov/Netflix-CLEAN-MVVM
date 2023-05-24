@@ -10,6 +10,7 @@ import UIKit
 // MARK: - NewsCollectionViewDataSource Type
 
 final class NewsCollectionViewDataSource: CollectionViewDataSource<NewsCollectionViewCell, NewsCollectionViewCellViewModel> {
+    
     fileprivate let viewModel: NewsViewModel
     
     /// Create a news table view data source object.
@@ -22,15 +23,15 @@ final class NewsCollectionViewDataSource: CollectionViewDataSource<NewsCollectio
         return 1
     }
     
-    override func numberOfItems() -> Int {
+    override func numberOfItems(in section: Int) -> Int {
         return viewModel.items.value.count
     }
     
-    override func cellForItem(in collectionView: UICollectionView, at indexPath: IndexPath) -> NewsCollectionViewCell {
+    override func cellForItem<T>(in collectionView: UICollectionView, at indexPath: IndexPath) -> T where T: UICollectionViewCell {
         return NewsCollectionViewCell.create(of: NewsCollectionViewCell.self,
                                              on: collectionView,
                                              for: indexPath,
-                                             with: viewModel)
+                                             with: viewModel) as! T
     }
     
     override func didSelectItem(in collectionView: UICollectionView, at indexPath: IndexPath) {
@@ -52,7 +53,7 @@ final class NewsCollectionViewDataSource: CollectionViewDataSource<NewsCollectio
         newsController.viewModel.coordinator?.coordinate(to: .detail)
     }
     
-    override func willDisplayCellForItem(_ cell: NewsCollectionViewCell, at indexPath: IndexPath) {
+    override func willDisplayCellForItem<T>(_ cell: T, at indexPath: IndexPath) where T: UICollectionViewCell {
         cell.opacityAnimation()
     }
 }

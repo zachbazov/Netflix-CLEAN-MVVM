@@ -17,6 +17,7 @@ private protocol DataSourceProtocol {
 // MARK: - SearchCollectionViewDataSource Type
 
 final class SearchCollectionViewDataSource: CollectionViewDataSource<SearchCollectionViewCell, SearchCollectionViewCellViewModel> {
+    
     fileprivate let viewModel: SearchViewModel
     
     fileprivate(set) var headerView: LabeledCollectionHeaderView?
@@ -27,15 +28,15 @@ final class SearchCollectionViewDataSource: CollectionViewDataSource<SearchColle
         super.init()
     }
     
-    override func numberOfItems() -> Int {
+    override func numberOfItems(in section: Int) -> Int {
         return viewModel.items.value.count
     }
     
-    override func cellForItem(in collectionView: UICollectionView, at indexPath: IndexPath) -> SearchCollectionViewCell {
+    override func cellForItem<T>(in collectionView: UICollectionView, at indexPath: IndexPath) -> T where T : UICollectionViewCell {
         return SearchCollectionViewCell.create(of: SearchCollectionViewCell.self,
                                                on: collectionView,
                                                for: indexPath,
-                                               with: viewModel)
+                                               with: viewModel) as! T
     }
     
     override func didSelectItem(in collectionView: UICollectionView, at indexPath: IndexPath) {
@@ -62,7 +63,7 @@ final class SearchCollectionViewDataSource: CollectionViewDataSource<SearchColle
         controller.viewModel.isRotated = rotated
     }
     
-    override func willDisplayCellForItem(_ cell: SearchCollectionViewCell, at indexPath: IndexPath) {
+    override func willDisplayCellForItem<T>(_ cell: T, at indexPath: IndexPath) where T: UICollectionViewCell {
         cell.opacityAnimation()
     }
     

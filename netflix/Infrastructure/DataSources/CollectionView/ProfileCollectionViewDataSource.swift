@@ -10,6 +10,7 @@ import UIKit
 // MARK: - ProfileCollectionViewDataSource Type
 
 final class ProfileCollectionViewDataSource: CollectionViewDataSource<ProfileCollectionViewCell, ProfileCollectionViewCellViewModel> {
+    
     private let viewModel: AccountViewModel
     
     init(with viewModel: AccountViewModel) {
@@ -24,18 +25,18 @@ final class ProfileCollectionViewDataSource: CollectionViewDataSource<ProfileCol
         return 1
     }
     
-    override func numberOfItems() -> Int {
+    override func numberOfItems(in section: Int) -> Int {
         return viewModel.profiles.value.count
     }
     
-    override func cellForItem(in collectionView: UICollectionView, at indexPath: IndexPath) -> ProfileCollectionViewCell {
+    override func cellForItem<T>(in collectionView: UICollectionView, at indexPath: IndexPath) -> T where T : UICollectionViewCell {
         return ProfileCollectionViewCell.create(of: ProfileCollectionViewCell.self,
                                                 on: collectionView,
                                                 for: indexPath,
-                                                with: viewModel)
+                                                with: viewModel) as! T
     }
     
-    override func willDisplayCellForItem(_ cell: ProfileCollectionViewCell, at indexPath: IndexPath) {
+    override func willDisplayCellForItem<T>(_ cell: T, at indexPath: IndexPath) where T: UICollectionViewCell {
         cell.opacityAnimation()
     }
 }

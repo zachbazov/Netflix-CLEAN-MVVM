@@ -10,6 +10,7 @@ import UIKit
 // MARK: - UserProfileCollectionViewDataSource Type
 
 final class UserProfileCollectionViewDataSource: CollectionViewDataSource<UserProfileCollectionViewCell, ProfileViewModel> {
+    
     private let viewModel: ProfileViewModel
     
     private weak var collectionView: UICollectionView?
@@ -23,15 +24,15 @@ final class UserProfileCollectionViewDataSource: CollectionViewDataSource<UserPr
         return 1
     }
     
-    override func numberOfItems() -> Int {
+    override func numberOfItems(in section: Int) -> Int {
         return viewModel.profiles.count
     }
     
-    override func cellForItem(in collectionView: UICollectionView, at indexPath: IndexPath) -> UserProfileCollectionViewCell {
-        return UserProfileCollectionViewCell.create(in: collectionView, at: indexPath, with: viewModel)
+    override func cellForItem<T>(in collectionView: UICollectionView, at indexPath: IndexPath) -> T where T: UICollectionViewCell {
+        return UserProfileCollectionViewCell.create(in: collectionView, at: indexPath, with: viewModel) as! T
     }
     
-    override func willDisplayCellForItem(_ cell: UserProfileCollectionViewCell, at indexPath: IndexPath) {
+    override func willDisplayCellForItem<T>(_ cell: T, at indexPath: IndexPath) where T : UICollectionViewCell {
         cell.opacityAnimation()
     }
     

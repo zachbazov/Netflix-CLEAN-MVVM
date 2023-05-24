@@ -17,6 +17,7 @@ private protocol DataSourceProtocol {
 // MARK: - MediaCollectionViewDataSource Type
 
 final class MediaCollectionViewDataSource<Cell>: CollectionViewDataSource<MediaCollectionViewCell, MediaCollectionViewCellViewModel>, UICollectionViewDataSourcePrefetching where Cell: UICollectionViewCell {
+    
     fileprivate let coordinator: HomeViewCoordinator
     fileprivate let section: Section
     
@@ -42,16 +43,16 @@ final class MediaCollectionViewDataSource<Cell>: CollectionViewDataSource<MediaC
         return 1
     }
     
-    override func numberOfItems() -> Int {
-        return section.media.count
+    override func numberOfItems(in section: Int) -> Int {
+        return self.section.media.count
     }
     
-    override func cellForItem(in collectionView: UICollectionView, at indexPath: IndexPath) -> MediaCollectionViewCell {
+    override func cellForItem<T>(in collectionView: UICollectionView, at indexPath: IndexPath) -> T where T: UICollectionViewCell {
         return MediaCollectionViewCell.create(of: MediaCollectionViewCell.self,
                                                on: collectionView,
                                                reuseIdentifier: Cell.reuseIdentifier,
                                                section: section,
-                                               for: indexPath)
+                                               for: indexPath) as! T
     }
     
     override func didSelectItem(in collectionView: UICollectionView, at indexPath: IndexPath) {
@@ -66,7 +67,7 @@ final class MediaCollectionViewDataSource<Cell>: CollectionViewDataSource<MediaC
         controller.viewModel.isRotated = false
     }
     
-    override func willDisplayCellForItem(_ cell: MediaCollectionViewCell, at indexPath: IndexPath) {
+    override func willDisplayCellForItem<T>(_ cell: T, at indexPath: IndexPath) where T: UICollectionViewCell {
         cell.opacityAnimation()
     }
     

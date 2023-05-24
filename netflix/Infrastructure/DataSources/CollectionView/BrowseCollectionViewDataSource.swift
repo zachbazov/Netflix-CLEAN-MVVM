@@ -10,6 +10,7 @@ import UIKit
 // MARK: - BrowseOverlayCollectionViewDataSource Type
 
 final class BrowseOverlayCollectionViewDataSource: CollectionViewDataSource<StandardCollectionViewCell, MediaCollectionViewCellViewModel> {
+    
     fileprivate let viewModel: BrowseOverlayViewModel
     
     init(viewModel: BrowseOverlayViewModel) {
@@ -20,24 +21,23 @@ final class BrowseOverlayCollectionViewDataSource: CollectionViewDataSource<Stan
         return 1
     }
     
-    override func numberOfItems() -> Int {
+    override func numberOfItems(in section: Int) -> Int {
         return viewModel.section.value.media.count
     }
     
-    override func cellForItem(in collectionView: UICollectionView,
-                              at indexPath: IndexPath) -> StandardCollectionViewCell {
+    override func cellForItem<T>(in collectionView: UICollectionView, at indexPath: IndexPath) -> T where T: UICollectionViewCell {
         return MediaCollectionViewCell.create(of: StandardCollectionViewCell.self,
                                                on: collectionView,
                                                reuseIdentifier: StandardCollectionViewCell.reuseIdentifier,
                                                section: viewModel.section.value,
-                                               for: indexPath)
+                                               for: indexPath) as! T
     }
     
     override func didSelectItem(in collectionView: UICollectionView, at indexPath: IndexPath) {
         viewModel.didSelect(at: indexPath)
     }
     
-    override func willDisplayCellForItem(_ cell: StandardCollectionViewCell, at indexPath: IndexPath) {
+    override func willDisplayCellForItem<T>(_ cell: T, at indexPath: IndexPath) where T: UICollectionViewCell {
         cell.opacityAnimation()
     }
 }

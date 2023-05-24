@@ -10,6 +10,7 @@ import UIKit
 // MARK: - AccountMenuNotificationCollectionViewDataSource Type
 
 final class AccountMenuNotificationCollectionViewDataSource: CollectionViewDataSource<AccountMenuNotificationCollectionViewCell, AccountMenuNotificationCollectionViewCellViewModel> {
+    
     private let viewModel: AccountViewModel
     
     fileprivate weak var collectionView: UICollectionView?
@@ -23,17 +24,17 @@ final class AccountMenuNotificationCollectionViewDataSource: CollectionViewDataS
         return 1
     }
 
-    override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    override func numberOfItems(in section: Int) -> Int {
         return viewModel.menuItems[section].options?.count ?? 0
     }
 
-    override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+    override func cellForItem<T>(in collectionView: UICollectionView, at indexPath: IndexPath) -> T where T: UICollectionViewCell {
         return AccountMenuNotificationCollectionViewCell.create(of: AccountMenuNotificationCollectionViewCell.self,
                                                                 on: collectionView,
-                                                                for: indexPath)
+                                                                for: indexPath) as! T
     }
     
-    override func willDisplayCellForItem(_ cell: AccountMenuNotificationCollectionViewCell, at indexPath: IndexPath) {
+    override func willDisplayCellForItem<T>(_ cell: T, at indexPath: IndexPath) where T: UICollectionViewCell {
         cell.opacityAnimation()
     }
 }

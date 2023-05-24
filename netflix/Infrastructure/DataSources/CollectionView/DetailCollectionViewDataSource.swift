@@ -16,7 +16,8 @@ private protocol DataSourceProtocol {
 
 // MARK: - DetailCollectionViewDataSource Type
 
-final class DetailCollectionViewDataSource: NSObject, UICollectionViewDelegate, UICollectionViewDataSource {
+final class DetailCollectionViewDataSource: CollectionViewDataSource<DetailCollectionViewCell, DetailCollectionViewCellViewModel> {
+    
     fileprivate let viewModel: DetailViewModel
     
     let items: [Mediable]
@@ -31,18 +32,17 @@ final class DetailCollectionViewDataSource: NSObject, UICollectionViewDelegate, 
         self.items = items
     }
     
-    // MARK: UICollectionViewDelegate & UICollectionViewDataSource Implementation
+    // MARK: CollectionViewDataSourceProtocol Implementation
     
-    func numberOfSections(in collectionView: UICollectionView) -> Int {
+    override func numberOfSections() -> Int {
         return 1
     }
     
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    override func numberOfItems(in section: Int) -> Int {
         return items.count
     }
     
-    func collectionView(_ collectionView: UICollectionView,
-                        cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+    override func cellForItem<T>(in collectionView: UICollectionView, at indexPath: IndexPath) -> T where T: UICollectionViewCell {
         guard let viewModel = viewModel.coordinator?.viewController?.viewModel,
               let dataSource = viewModel.coordinator?.viewController?.dataSource,
               let state = dataSource.navigationCell?.navigationView?.viewModel.state.value
@@ -53,21 +53,21 @@ final class DetailCollectionViewDataSource: NSObject, UICollectionViewDelegate, 
             return DetailCollectionViewCell.create(of: EpisodeCollectionViewCell.self,
                                                    on: collectionView,
                                                    for: indexPath,
-                                                   with: viewModel)
+                                                   with: viewModel) as! T
         case .trailers:
             return DetailCollectionViewCell.create(of: TrailerCollectionViewCell.self,
                                                     on: collectionView,
                                                     for: indexPath,
-                                                    with: viewModel)
+                                                    with: viewModel) as! T
         case .similarContent:
             return MediaCollectionViewCell.create(of: StandardCollectionViewCell.self,
                                                    on: collectionView,
                                                    section: viewModel.section,
-                                                   for: indexPath)
+                                                   for: indexPath) as! T
         }
     }
     
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+    override func didSelectItem(in collectionView: UICollectionView, at indexPath: IndexPath) {
         guard let coordinator = viewModel.coordinator,
               let viewModel = viewModel.coordinator?.viewController?.viewModel,
               let dataSource = viewModel.coordinator?.viewController?.dataSource,
@@ -86,6 +86,10 @@ final class DetailCollectionViewDataSource: NSObject, UICollectionViewDelegate, 
             
             coordinator.coordinate(to: .detail)
         }
+    }
+    
+    override func willDisplayCellForItem<T>(_ cell: T, at indexPath: IndexPath) where T: UICollectionViewCell {
+        cell.opacityAnimation()
     }
 }
 
