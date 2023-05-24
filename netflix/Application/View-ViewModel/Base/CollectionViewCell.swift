@@ -95,14 +95,14 @@ class CollectionViewCell<T>: UICollectionViewCell where T: ViewModel {
         case let cell as EpisodeCollectionViewCell:
             guard let viewModel = viewModel as? DetailViewModel else { fatalError() }
             
-            cell.viewModel = EpisodeCollectionViewCellViewModel(with: viewModel)
-            cell.representedIdentifier = cell.viewModel.media.slug as NSString
+            cell.viewModel = DetailCollectionViewCellViewModel(with: viewModel)
+            cell.representedIdentifier = cell.viewModel.slug as NSString
             cell.indexPath = indexPath
             cell.viewDidLoad()
         case let cell as TrailerCollectionViewCell:
             guard let viewModel = viewModel as? DetailViewModel else { fatalError() }
             
-            cell.viewModel = TrailerCollectionViewCellViewModel(with: viewModel.media)
+            cell.viewModel = DetailCollectionViewCellViewModel(with: viewModel)
             cell.representedIdentifier = cell.viewModel.slug as NSString
             cell.indexPath = indexPath
             cell.viewDidLoad()

@@ -186,8 +186,8 @@ extension DetailCollectionView {
         else { return }
         
         if case .episodes = state {
-            let cellViewModel = EpisodeCollectionViewCellViewModel(with: viewModel)
-            let requestDTO = SeasonHTTPDTO.Request(slug: cellViewModel.media.slug, season: 1)
+            let cellViewModel = DetailCollectionViewCellViewModel(with: viewModel)
+            let requestDTO = SeasonHTTPDTO.Request(slug: cellViewModel.slug, season: 1)
             
             self.viewModel?.seasonDidLoad(request: requestDTO) {}
         }
