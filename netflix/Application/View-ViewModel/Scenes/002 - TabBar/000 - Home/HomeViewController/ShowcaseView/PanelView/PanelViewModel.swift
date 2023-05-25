@@ -11,7 +11,7 @@ import Foundation
 
 private protocol ViewModelProtocol {
     var media: Media? { get }
-    var sectionAt: (HomeTableViewDataSource.Index) -> Section { get }
+    var sectionAt: (MediaTableViewDataSource.Index) -> Section { get }
     var myList: MyList { get }
 }
 
@@ -21,7 +21,7 @@ final class PanelViewModel {
     let coordinator: HomeViewCoordinator
     
     var media: Media?
-    let sectionAt: (HomeTableViewDataSource.Index) -> Section
+    let sectionAt: (MediaTableViewDataSource.Index) -> Section
     let myList = MyList.shared
     
     init(with viewModel: ShowcaseTableViewCellViewModel) {

@@ -196,7 +196,7 @@ extension NavigationOverlayView: ViewProtocol {
 
 extension NavigationOverlayView {
     /// Category aka Media's genres representation type.
-    typealias Category = HomeTableViewDataSource.Index
+    typealias Category = MediaTableViewDataSource.Index
 }
 
 // MARK: - NavigationOverlayView.Category to Section Conversion

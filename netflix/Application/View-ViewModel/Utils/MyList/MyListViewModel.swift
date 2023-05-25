@@ -67,7 +67,7 @@ extension MyListViewModel: ViewModelProtocol {
     func sectionWillReload() {
         guard let homeController = coordinator.viewController,
               homeController.tableView?.numberOfSections ?? .zero > 0,
-              let myListIndex = HomeTableViewDataSource.Index(rawValue: 6),
+              let myListIndex = MediaTableViewDataSource.Index(rawValue: 6),
               let section = homeController.viewModel?.section(at: .myList)
         else { return }
         

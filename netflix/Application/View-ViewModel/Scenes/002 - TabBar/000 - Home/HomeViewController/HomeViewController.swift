@@ -10,7 +10,7 @@ import UIKit
 // MARK: - ViewControllerProtocol Type
 
 private protocol ViewControllerProtocol {
-    var dataSource: HomeTableViewDataSource? { get }
+    var dataSource: MediaTableViewDataSource? { get }
     var navigationView: NavigationView? { get }
     var navigationOverlay: NavigationOverlayView? { get }
     var browseOverlayView: BrowseOverlayView? { get }
@@ -30,7 +30,7 @@ final class HomeViewController: Controller<HomeViewModel> {
     @IBOutlet private(set) var browseOverlayViewContainer: UIView!
     @IBOutlet private(set) var navigationViewContainerHeight: NSLayoutConstraint!
     
-    private(set) var dataSource: HomeTableViewDataSource?
+    private(set) var dataSource: MediaTableViewDataSource?
     private(set) var navigationView: NavigationView?
     private(set) var navigationOverlay: NavigationOverlayView?
     private(set) var browseOverlayView: BrowseOverlayView?
@@ -70,7 +70,7 @@ final class HomeViewController: Controller<HomeViewModel> {
         
         viewModel.dataSourceState.remove(observer: self)
         
-        printIfDebug(.success, "Removed `HomeViewModel` observers.")
+        printIfDebug(.success, "Removed `\(Self.self)` observers.")
     }
 }
 
@@ -78,7 +78,7 @@ final class HomeViewController: Controller<HomeViewModel> {
 
 extension HomeViewController: ViewControllerProtocol {
     fileprivate func createDataSource() {
-        dataSource = HomeTableViewDataSource(viewModel: viewModel)
+        dataSource = MediaTableViewDataSource(viewModel: viewModel)
     }
     
     fileprivate func createNavigationView() {

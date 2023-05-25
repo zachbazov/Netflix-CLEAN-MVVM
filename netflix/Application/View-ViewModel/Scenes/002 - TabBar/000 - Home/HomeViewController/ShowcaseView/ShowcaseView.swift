@@ -150,7 +150,7 @@ extension ShowcaseView: ViewProtocol {
         
         let state = homeViewModel.dataSourceState.value
         let section = controller.navigationOverlay?.viewModel?.category.toSection()
-        let index = HomeTableViewDataSource.State(rawValue: state.rawValue)!
+        let index = MediaTableViewDataSource.State(rawValue: state.rawValue)!
         let media = homeViewModel.showcases[index]
         
         coordinator.coordinate(to: .detail)

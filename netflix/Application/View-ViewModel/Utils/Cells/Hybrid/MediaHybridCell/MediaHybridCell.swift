@@ -61,7 +61,7 @@ final class MediaHybridCell<Cell>: HybridCell<Cell, MediaCollectionViewDataSourc
     
     override func createLayout() {
         guard let viewModel = viewModel,
-              let indices = HomeTableViewDataSource.Index(rawValue: viewModel.section.id)
+              let indices = MediaTableViewDataSource.Index(rawValue: viewModel.section.id)
         else { return }
         
         switch indices {

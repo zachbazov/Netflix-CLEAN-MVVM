@@ -1,5 +1,5 @@
 //
-//  HomeTableViewDataSource.swift
+//  MediaTableViewDataSource.swift
 //  netflix
 //
 //  Created by Zach Bazov on 13/09/2022.
@@ -11,6 +11,7 @@ import UIKit
 
 private protocol DataSourceProtocol {
     var viewModel: HomeViewModel { get }
+    var showcaseCell: ShowcaseTableViewCell? { get }
     
     var initialOffsetY: CGFloat { get }
     var primaryOffsetY: CGFloat { get }
@@ -18,9 +19,10 @@ private protocol DataSourceProtocol {
     func setContentInset()
 }
 
-// MARK: - HomeTableViewDataSource Type
+// MARK: - MediaTableViewDataSource Type
 
-final class HomeTableViewDataSource: TableViewDataSource {
+final class MediaTableViewDataSource: TableViewDataSource {
+    
     fileprivate let viewModel: HomeViewModel
     
     var showcaseCell: ShowcaseTableViewCell?
@@ -52,9 +54,9 @@ final class HomeTableViewDataSource: TableViewDataSource {
         switch index {
         case .display:
             showcaseCell = ShowcaseTableViewCell.create(of: ShowcaseTableViewCell.self,
-                                                on: tableView,
-                                                for: indexPath,
-                                                with: viewModel)
+                                                        on: tableView,
+                                                        for: indexPath,
+                                                        with: viewModel)
             return showcaseCell as! T
         case .rated:
             return MediaHybridCell.create(expecting: MediaHybridCell<RatedCollectionViewCell>.self,
@@ -84,7 +86,7 @@ final class HomeTableViewDataSource: TableViewDataSource {
     }
     
     override func heightForRow(in tableView: UITableView, at indexPath: IndexPath) -> CGFloat {
-        guard let index = HomeTableViewDataSource.Index(rawValue: indexPath.section),
+        guard let index = MediaTableViewDataSource.Index(rawValue: indexPath.section),
               let view = viewModel.coordinator?.viewController?.view
         else { return .zero }
         
@@ -176,7 +178,7 @@ final class HomeTableViewDataSource: TableViewDataSource {
 
 // MARK: - DataSourceProtocol Implementation
 
-extension HomeTableViewDataSource: DataSourceProtocol {
+extension MediaTableViewDataSource: DataSourceProtocol {
     func dataSourceWillChange() {
         guard let controller = viewModel.coordinator?.viewController,
               let tableView = controller.tableView
@@ -207,7 +209,7 @@ extension HomeTableViewDataSource: DataSourceProtocol {
 
 // MARK: - Index Type
 
-extension HomeTableViewDataSource {
+extension MediaTableViewDataSource {
     /// Section index representation type.
     enum Index: Int, CaseIterable {
         case display
@@ -232,7 +234,7 @@ extension HomeTableViewDataSource {
 
 // MARK: - State Type
 
-extension HomeTableViewDataSource {
+extension MediaTableViewDataSource {
     /// Section state representation type.
     enum State: Int, CaseIterable {
         case all
@@ -243,7 +245,7 @@ extension HomeTableViewDataSource {
 
 // MARK: - Valuable Implementation
 
-extension HomeTableViewDataSource.Index: Valuable {
+extension MediaTableViewDataSource.Index: Valuable {
     var stringValue: String {
         switch self {
         case .display: return "Display"
@@ -269,7 +271,7 @@ extension HomeTableViewDataSource.Index: Valuable {
 
 // MARK: - Private Implementation
 
-extension HomeTableViewDataSource {
+extension MediaTableViewDataSource {
     private func applyStyleChanges(_ condition: Bool, limit: CGFloat) {
         guard let controller = viewModel.coordinator?.viewController else { return }
         

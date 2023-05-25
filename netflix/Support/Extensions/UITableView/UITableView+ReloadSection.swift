@@ -10,8 +10,8 @@ import UIKit.UITableView
 // MARK: - Reload Section by Index
 
 extension UITableView {
-    func reloadSection(at index: HomeTableViewDataSource.Index, with animation: RowAnimation = .automatic) {
-        guard let index = HomeTableViewDataSource.Index(rawValue: index.rawValue) else { return }
+    func reloadSection(at index: MediaTableViewDataSource.Index, with animation: RowAnimation = .automatic) {
+        guard let index = MediaTableViewDataSource.Index(rawValue: index.rawValue) else { return }
         
         let indexSet = IndexSet(integer: index.rawValue)
         

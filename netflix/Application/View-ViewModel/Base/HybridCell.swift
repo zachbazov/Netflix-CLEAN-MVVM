@@ -51,7 +51,7 @@ class HybridCell<Cell, DataSource, VM, CVM>: UITableViewCell where Cell: UIColle
             switch viewModel {
             case let viewModel as HomeViewModel:
                 guard let cell = cell as? MediaHybridCell<Cell>,
-                      let index = HomeTableViewDataSource.Index(rawValue: indexPath.section)
+                      let index = MediaTableViewDataSource.Index(rawValue: indexPath.section)
                 else { fatalError() }
                 
                 let section = viewModel.section(at: index)

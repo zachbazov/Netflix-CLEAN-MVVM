@@ -20,17 +20,17 @@ private protocol ViewModelProtocol {
     var media: [Media] { get }
     var topSearches: [Media] { get }
     
-    var dataSourceState: Observable<HomeTableViewDataSource.State> { get }
-    var showcases: [HomeTableViewDataSource.State: Media] { get }
+    var dataSourceState: Observable<MediaTableViewDataSource.State> { get }
+    var showcases: [MediaTableViewDataSource.State: Media] { get }
     
     var isSectionsEmpty: Bool { get }
     
-    func changeDataSourceStateIfNeeded(_ state: HomeTableViewDataSource.State)
-    func dataSourceStateWillChange(_ state: HomeTableViewDataSource.State)
+    func changeDataSourceStateIfNeeded(_ state: MediaTableViewDataSource.State)
+    func dataSourceStateWillChange(_ state: MediaTableViewDataSource.State)
     
-    func section(at index: HomeTableViewDataSource.Index) -> Section
-    func filter(at index: HomeTableViewDataSource.Index) -> [Media]
-    func filter(at state: HomeTableViewDataSource.State) -> Media?
+    func section(at index: MediaTableViewDataSource.Index) -> Section
+    func filter(at index: MediaTableViewDataSource.Index) -> [Media]
+    func filter(at state: MediaTableViewDataSource.State) -> Media?
     func sectionsWillFilter()
     func showcasesWillFilter()
 }
@@ -50,8 +50,8 @@ final class HomeViewModel {
     private(set) lazy var media = [Media]()
     private(set) lazy var topSearches = [Media]()
     
-    let dataSourceState: Observable<HomeTableViewDataSource.State> = Observable(.all)
-    private(set) lazy var showcases = [HomeTableViewDataSource.State: Media]()
+    let dataSourceState: Observable<MediaTableViewDataSource.State> = Observable(.all)
+    private(set) lazy var showcases = [MediaTableViewDataSource.State: Media]()
     
     var isSectionsEmpty: Bool { return sections.isEmpty }
     
@@ -95,11 +95,11 @@ extension HomeViewModel: Coordinable {}
 // MARK: - ViewModelProtocol Implementation
 
 extension HomeViewModel: ViewModelProtocol {
-    func dataSourceStateWillChange(_ state: HomeTableViewDataSource.State) {
+    func dataSourceStateWillChange(_ state: MediaTableViewDataSource.State) {
         dataSourceState.value = state
     }
     
-    func changeDataSourceStateIfNeeded(_ state: HomeTableViewDataSource.State) {
+    func changeDataSourceStateIfNeeded(_ state: MediaTableViewDataSource.State) {
         guard dataSourceState.value != state else { return }
         
         dataSourceState.value = state
@@ -108,7 +108,7 @@ extension HomeViewModel: ViewModelProtocol {
     /// Given a specific index, returns a section object.
     /// - Parameter index: A representation of the section's index.
     /// - Returns: A section.
-    func section(at index: HomeTableViewDataSource.Index) -> Section {
+    func section(at index: MediaTableViewDataSource.Index) -> Section {
         return sections[index.rawValue]
     }
     
@@ -117,18 +117,18 @@ extension HomeViewModel: ViewModelProtocol {
     func sectionsWillFilter() {
         guard !isSectionsEmpty else { return }
         
-        HomeTableViewDataSource.Index.allCases.forEach {
+        MediaTableViewDataSource.Index.allCases.forEach {
             sections[$0.rawValue].media = filter(at: $0)
         }
     }
     
     fileprivate func showcasesWillFilter() {
-        HomeTableViewDataSource.State.allCases.forEach {
+        MediaTableViewDataSource.State.allCases.forEach {
             showcases[$0] = filter(at: $0)
         }
     }
     
-    fileprivate func filter(at state: HomeTableViewDataSource.State) -> Media? {
+    fileprivate func filter(at state: MediaTableViewDataSource.State) -> Media? {
         guard showcases[state] == nil else { return nil }
         
         switch state {
@@ -144,7 +144,7 @@ extension HomeViewModel: ViewModelProtocol {
     /// Filter a section based on an index of the table view data source.
     /// - Parameter index: Representation of the section's index.
     /// - Returns: Filtered media array.
-    fileprivate func filter(at index: HomeTableViewDataSource.Index) -> [Media] {
+    fileprivate func filter(at index: MediaTableViewDataSource.Index) -> [Media] {
         switch index {
         case .newRelease:
             switch dataSourceState.value {

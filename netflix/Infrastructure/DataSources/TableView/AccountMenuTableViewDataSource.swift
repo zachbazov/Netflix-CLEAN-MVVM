@@ -16,6 +16,7 @@ private protocol DataSourceProtocol {
 // MARK: - AccountMenuTableViewDataSource Type
 
 final class AccountMenuTableViewDataSource: TableViewDataSource {
+    
     private let viewModel: AccountViewModel
     
     fileprivate let reusableViewPointSize: CGFloat = 1.0

@@ -20,6 +20,7 @@ private protocol DataSourceProtocol {
 // MARK: - DetailTableViewDataSource Type
 
 final class DetailTableViewDataSource: TableViewDataSource {
+    
     fileprivate let coordinator: DetailViewCoordinator
     
     fileprivate(set) var navigationCell: DetailNavigationTableViewCell?
