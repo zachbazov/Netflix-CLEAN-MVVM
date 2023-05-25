@@ -31,8 +31,8 @@ struct DetailCollectionViewCellViewModel {
         self.posterImageURL = .init(string: self.posterImagePath)
         
         if let dataSource = viewModel.coordinator?.viewController?.dataSource,
-           let collection = dataSource.collectionCell?.detailCollectionView {
-            self.season = collection.viewModel.season.value
+           let collectionCell = dataSource.collectionCell {
+            self.season = collectionCell.viewModel?.season.value
         }
     }
 }

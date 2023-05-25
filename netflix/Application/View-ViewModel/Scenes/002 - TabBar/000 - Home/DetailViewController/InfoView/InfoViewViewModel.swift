@@ -1,5 +1,5 @@
 //
-//  DetailInfoViewViewModel.swift
+//  InfoViewViewModel.swift
 //  netflix
 //
 //  Created by Zach Bazov on 04/10/2022.
@@ -18,9 +18,9 @@ private protocol ViewModelProtocol {
     var isHD: Bool { get }
 }
 
-// MARK: - DetailInfoViewViewModel Type
+// MARK: - InfoViewViewModel Type
 
-struct DetailInfoViewViewModel {
+struct InfoViewViewModel {
     let mediaType: String
     let title: String
     let downloadButtonTitle: String
@@ -60,8 +60,8 @@ struct DetailInfoViewViewModel {
 
 // MARK: - ViewModel Implementation
 
-extension DetailInfoViewViewModel: ViewModel {}
+extension InfoViewViewModel: ViewModel {}
 
 // MARK: - ViewModelProtocol Implementation
 
-extension DetailInfoViewViewModel: ViewModelProtocol {}
+extension InfoViewViewModel: ViewModelProtocol {}

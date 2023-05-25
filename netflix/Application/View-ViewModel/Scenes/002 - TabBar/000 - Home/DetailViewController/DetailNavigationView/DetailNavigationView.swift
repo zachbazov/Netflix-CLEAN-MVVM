@@ -176,16 +176,16 @@ extension DetailNavigationView: ViewProtocol {
     
     fileprivate func collectionStateWillChange(for state: DetailNavigationView.State) {
         guard let controller = viewModel?.coordinator.viewController,
-              let collection = controller.dataSource?.collectionCell?.detailCollectionView
+              let collectionCell = controller.dataSource?.collectionCell
         else { return }
         
         switch state {
         case .episodes:
-            collection.viewModel?.stateWillChange(.series)
+            collectionCell.viewModel?.stateWillChange(.series)
         case .trailers:
-            collection.viewModel?.stateWillChange(.film)
+            collectionCell.viewModel?.stateWillChange(.film)
         case .similarContent:
-            collection.viewModel?.stateWillChange(.similarContent)
+            collectionCell.viewModel?.stateWillChange(.similarContent)
         }
     }
 }

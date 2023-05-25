@@ -11,7 +11,7 @@ import UIKit
 
 final class InfoTableViewCell: DetailTableViewCell {
     
-    private var infoView: DetailInfoView?
+    private var infoView: InfoView?
     
     deinit {
         viewWillDeallocate()
@@ -44,8 +44,8 @@ final class InfoTableViewCell: DetailTableViewCell {
 
 extension InfoTableViewCell {
     private func createInfo() {
-        let viewModel = DetailInfoViewViewModel(with: viewModel)
+        let viewModel = InfoViewViewModel(with: viewModel)
         
-        infoView = DetailInfoView(on: contentView, with: viewModel)
+        infoView = InfoView(on: contentView, with: viewModel)
     }
 }

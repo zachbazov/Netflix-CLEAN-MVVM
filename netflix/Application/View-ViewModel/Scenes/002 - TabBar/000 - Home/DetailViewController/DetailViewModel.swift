@@ -18,6 +18,8 @@ private protocol ViewModelProtocol {
     var media: Media? { get }
     var isRotated: Bool { get }
     
+    var items: [Mediable] { get }
+    
     func shouldScreenRotate()
 }
 
@@ -33,6 +35,8 @@ final class DetailViewModel {
     var section: Section?
     var media: Media?
     var isRotated: Bool = false
+    
+    var items: [Mediable] = []
     
     deinit {
         media = nil

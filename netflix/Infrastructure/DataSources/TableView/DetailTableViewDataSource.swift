@@ -10,11 +10,11 @@ import UIKit
 // MARK: - DataSourceProtocol Type
 
 private protocol DataSourceProtocol {
-    var collectionCell: DetailCollectionTableViewCell? { get }
+    var collectionCell: DetailHybridCell? { get }
     var navigationCell: NavigationTableViewCell? { get }
     
-    func contentSize(for state: DetailNavigationView.State) -> Float
-    func reloadData(at index: DetailTableViewDataSource.Index)
+    func contentSize(for state: DetailNavigationView.State) -> CGFloat
+    func reloadRow(at index: DetailTableViewDataSource.Index)
 }
 
 // MARK: - DetailTableViewDataSource Type
@@ -24,7 +24,7 @@ final class DetailTableViewDataSource: TableViewDataSource {
     fileprivate let coordinator: DetailViewCoordinator
     
     fileprivate(set) var navigationCell: NavigationTableViewCell?
-    fileprivate(set) var collectionCell: DetailCollectionTableViewCell?
+    fileprivate(set) var collectionCell: DetailHybridCell?
     
     init(with viewModel: DetailViewModel) {
         guard let coordinator = viewModel.coordinator else { fatalError() }
@@ -61,30 +61,31 @@ final class DetailTableViewDataSource: TableViewDataSource {
         switch index {
         case .info:
             return InfoTableViewCell.create(of: InfoTableViewCell.self,
-                                                  on: tableView,
-                                                  for: indexPath,
-                                                  with: viewModel) as! T
+                                            on: tableView,
+                                            for: indexPath,
+                                            with: viewModel) as! T
         case .description:
             return DescriptionTableViewCell.create(of: DescriptionTableViewCell.self,
-                                                         on: tableView,
-                                                         for: indexPath,
-                                                         with: viewModel) as! T
-        case .panel:
-            return PanelTableViewCell.create(of: PanelTableViewCell.self,
                                                    on: tableView,
                                                    for: indexPath,
                                                    with: viewModel) as! T
+        case .panel:
+            return PanelTableViewCell.create(of: PanelTableViewCell.self,
+                                             on: tableView,
+                                             for: indexPath,
+                                             with: viewModel) as! T
         case .navigation:
             navigationCell = NavigationTableViewCell.create(of: NavigationTableViewCell.self,
-                                                                  on: tableView,
-                                                                  for: indexPath,
-                                                                  with: viewModel)
+                                                            on: tableView,
+                                                            for: indexPath,
+                                                            with: viewModel)
             return navigationCell as! T
         case .collection:
-            collectionCell = DetailCollectionTableViewCell.create(of: DetailCollectionTableViewCell.self,
-                                                                  on: tableView,
-                                                                  for: indexPath,
-                                                                  with: viewModel)
+            collectionCell = DetailHybridCell.create(expecting: DetailHybridCell.self,
+                                                     embedding: DetailCollectionViewCell.self,
+                                                     on: tableView,
+                                                     for: indexPath,
+                                                     with: viewModel)
             return collectionCell as! T
         }
     }
@@ -108,7 +109,7 @@ final class DetailTableViewDataSource: TableViewDataSource {
                   let state = dataSource.navigationCell?.navigationView?.viewModel.state.value
             else { return .zero }
             
-            return CGFloat(contentSize(for: state))
+            return contentSize(for: state)
         }
     }
 }
@@ -116,22 +117,22 @@ final class DetailTableViewDataSource: TableViewDataSource {
 // MARK: - DataSourceProtocol Implementation
 
 extension DetailTableViewDataSource: DataSourceProtocol {
-    fileprivate func contentSize(for state: DetailNavigationView.State) -> Float {
-        let cellHeight: Float
-        let lineSpacing: Float
-        let itemsCount: Float
-        let itemsPerLine: Float
-        let topContentInset: Float
-        let roundedItemsOutput: Float
-        let value: Float
+    fileprivate func contentSize(for state: DetailNavigationView.State) -> CGFloat {
+        let cellHeight: CGFloat
+        let lineSpacing: CGFloat
+        let itemsCount: CGFloat
+        let itemsPerLine: CGFloat
+        let topContentInset: CGFloat
+        let roundedItemsOutput: CGFloat
+        let value: CGFloat
         
         switch state {
         case .episodes:
-            guard let season = collectionCell?.detailCollectionView?.viewModel.season.value else { return .zero }
+            guard let season = collectionCell?.viewModel?.season.value else { return .zero }
             
             cellHeight = 156.0
             lineSpacing = 8.0
-            itemsCount = Float(season.episodes.count)
+            itemsCount = CGFloat(season.episodes.count)
             value = cellHeight * itemsCount + (lineSpacing * itemsCount)
             
             return value
@@ -142,7 +143,7 @@ extension DetailTableViewDataSource: DataSourceProtocol {
             
             cellHeight = 224.0
             lineSpacing = 8.0
-            itemsCount = Float(trailers.count)
+            itemsCount = CGFloat(trailers.count)
             value = cellHeight * itemsCount + (lineSpacing * itemsCount)
             
             return value
@@ -155,7 +156,7 @@ extension DetailTableViewDataSource: DataSourceProtocol {
             lineSpacing = 8.0
             itemsPerLine = 3.0
             topContentInset = 16.0
-            itemsCount = Float(media.count)
+            itemsCount = CGFloat(media.count)
             roundedItemsOutput = (itemsCount / itemsPerLine).rounded(.awayFromZero)
             value = roundedItemsOutput * cellHeight + lineSpacing * roundedItemsOutput + topContentInset
             
@@ -163,12 +164,12 @@ extension DetailTableViewDataSource: DataSourceProtocol {
         }
     }
     
-    func reloadData(at index: DetailTableViewDataSource.Index) {
+    func reloadRow(at index: DetailTableViewDataSource.Index) {
         guard let tableView = coordinator.viewController?.tableView else { return }
         
         switch index {
         case .collection:
-            collectionCell?.detailCollectionView?.dataSourceDidChange()
+            collectionCell?.dataSourceDidChange()
             
             let indexPath = IndexPath(row: index.rawValue, section: .zero)
             heightForRow(in: tableView, at: indexPath)

@@ -1,5 +1,5 @@
 //
-//  DetailDescriptionView.swift
+//  DescriptionView.swift
 //  netflix
 //
 //  Created by Zach Bazov on 30/09/2022.
@@ -15,9 +15,9 @@ private protocol ViewProtocol {
     func setWriters(_ string: String)
 }
 
-// MARK: - DetailDescriptionView Type
+// MARK: - DescriptionView Type
 
-final class DetailDescriptionView: View<DetailDescriptionViewViewModel> {
+final class DescriptionView: View<DescriptionViewViewModel> {
     @IBOutlet private weak var descriptionTextView: UITextView!
     @IBOutlet private weak var castLabel: UILabel!
     @IBOutlet private weak var writersLabel: UILabel!
@@ -26,7 +26,7 @@ final class DetailDescriptionView: View<DetailDescriptionViewViewModel> {
     /// - Parameters:
     ///   - parent: Instantiating view.
     ///   - viewModel: Coordinating view model.
-    init(on parent: UIView, with viewModel: DetailDescriptionViewViewModel) {
+    init(on parent: UIView, with viewModel: DescriptionViewViewModel) {
         super.init(frame: parent.bounds)
         
         self.nibDidLoad()
@@ -52,11 +52,11 @@ final class DetailDescriptionView: View<DetailDescriptionViewViewModel> {
 
 // MARK: - ViewInstantiable Implementation
 
-extension DetailDescriptionView: ViewInstantiable {}
+extension DescriptionView: ViewInstantiable {}
 
 // MARK: - ViewProtocol Implementation
 
-extension DetailDescriptionView: ViewProtocol {
+extension DescriptionView: ViewProtocol {
     fileprivate func setDescription(_ string: String) {
         descriptionTextView.text = string
     }

@@ -1,5 +1,5 @@
 //
-//  DetailInfoView.swift
+//  InfoView.swift
 //  netflix
 //
 //  Created by Zach Bazov on 30/09/2022.
@@ -23,9 +23,9 @@ private protocol ViewProtocol {
     func setButtonTitle(_ string: String)
 }
 
-// MARK: - DetailInfoView Type
+// MARK: - InfoView Type
 
-final class DetailInfoView: View<DetailInfoViewViewModel> {
+final class InfoView: View<InfoViewViewModel> {
     @IBOutlet private weak var mediaTypeLabel: UILabel!
     @IBOutlet private weak var gradientView: UIView!
     @IBOutlet private weak var titlelabel: UILabel!
@@ -43,7 +43,7 @@ final class DetailInfoView: View<DetailInfoViewViewModel> {
     /// - Parameters:
     ///   - parent: Instantiating view.
     ///   - viewModel: Coordinating view model.
-    init(on parent: UIView, with viewModel: DetailInfoViewViewModel) {
+    init(on parent: UIView, with viewModel: InfoViewViewModel) {
         super.init(frame: parent.bounds)
         
         self.nibDidLoad()
@@ -95,11 +95,11 @@ final class DetailInfoView: View<DetailInfoViewViewModel> {
 
 // MARK: - ViewInstantiable Implementation
 
-extension DetailInfoView: ViewInstantiable {}
+extension InfoView: ViewInstantiable {}
 
 // MARK: - ViewProtocol Implementation
 
-extension DetailInfoView: ViewProtocol {
+extension InfoView: ViewProtocol {
     fileprivate func createAgeRestriction() {
         ageRestrictionView = AgeRestrictionView(on: ageRestrictionViewContainer)
     }
@@ -131,7 +131,7 @@ extension DetailInfoView: ViewProtocol {
 
 // MARK: - Private Presentation Implementation
 
-extension DetailInfoView {
+extension InfoView {
     private func configureGradients() {
         let colors = [UIColor(red: 25.0/255, green: 25.0/255, blue: 25.0/255, alpha: 1.0), .clear]
         gradientView.addGradientLayer(colors: colors, locations: [0.3, 1.0])

@@ -50,7 +50,10 @@ class CollectionViewCell<T>: UICollectionViewCell where T: ViewModel {
                               reuseIdentifier: String? = nil,
                               section: Section? = nil,
                               for indexPath: IndexPath,
-                              with viewModel: CVM? = Void) -> U {
+                              with viewModel: CVM? = Void) -> U where U: UICollectionViewCell {
+        
+        collectionView.register(U.nib, forCellWithReuseIdentifier: U.reuseIdentifier)
+        
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier ?? String(describing: type),
                                                             for: indexPath) as? U
         else { fatalError() }

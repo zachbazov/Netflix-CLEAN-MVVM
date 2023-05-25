@@ -51,11 +51,6 @@ class TableViewCell<T>: UITableViewCell where T: ViewModel {
                 
                 cell.viewModel = viewModel
                 cell.viewDidLoad()
-            case let cell as DetailCollectionTableViewCell:
-                guard let viewModel = viewModel as? DetailViewModel else { fatalError() }
-                
-                cell.viewModel = viewModel
-                cell.viewDidLoad()
             default: break
             }
             

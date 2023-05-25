@@ -7,29 +7,14 @@
 
 import UIKit
 
-// MARK: - DataSourceProtocol Type
-
-private protocol DataSourceProtocol {
-    var viewModel: DetailViewModel { get }
-    var items: [Mediable] { get }
-}
-
 // MARK: - DetailCollectionViewDataSource Type
 
 final class DetailCollectionViewDataSource: CollectionViewDataSource {
     
     fileprivate let viewModel: DetailViewModel
     
-    let items: [Mediable]
-    
-    /// Create a generic detail collection view data source object.
-    /// - Parameters:
-    ///   - collectionView: Corresponding collection view.
-    ///   - items: Represented data.
-    ///   - viewModel: Coordinating view model.
-    init(items: [Mediable], with viewModel: DetailViewModel) {
+    init(with viewModel: DetailViewModel) {
         self.viewModel = viewModel
-        self.items = items
     }
     
     // MARK: CollectionViewDataSourceProtocol Implementation
@@ -39,7 +24,7 @@ final class DetailCollectionViewDataSource: CollectionViewDataSource {
     }
     
     override func numberOfItems(in section: Int) -> Int {
-        return items.count
+        return viewModel.items.count
     }
     
     override func cellForItem<T>(in collectionView: UICollectionView, at indexPath: IndexPath) -> T where T: UICollectionViewCell {
@@ -80,7 +65,7 @@ final class DetailCollectionViewDataSource: CollectionViewDataSource {
         case .trailers:
             break
         case .similarContent:
-            guard let media = items[indexPath.row] as? Media else { return }
+            guard let media = viewModel.items[indexPath.row] as? Media else { return }
             
             viewModel.media = media
             
@@ -92,7 +77,3 @@ final class DetailCollectionViewDataSource: CollectionViewDataSource {
         cell.opacityAnimation()
     }
 }
-
-// MARK: - DataSourceProtocol Implementation
-
-extension DetailCollectionViewDataSource: DataSourceProtocol {}

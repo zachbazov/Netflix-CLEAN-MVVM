@@ -28,6 +28,7 @@ class HybridCell<Cell, DataSource, VM, CVM>: UITableViewCell where Cell: UIColle
                                                                    DataSource: UICollectionViewDataSource,
                                                                    VM: ViewModel,
                                                                    CVM: ViewModel {
+    
     lazy var collectionView: UICollectionView = createCollectionView()
     var dataSource: DataSource?
     var viewModel: VM?
@@ -67,7 +68,12 @@ class HybridCell<Cell, DataSource, VM, CVM>: UITableViewCell where Cell: UIColle
                 cell.controllerViewModel = viewModel
                 cell.viewModel = AccountMenuNotificationHybridCellViewModel(with: item, for: indexPath)
                 cell.viewDidLoad()
-                break
+            case let viewModel as DetailViewModel:
+                guard let cell = cell as? DetailHybridCell else { fatalError() }
+                
+                cell.controllerViewModel = viewModel
+                cell.viewModel = DetailHybridCellViewModel(with: viewModel)
+                cell.viewDidLoad()
             default: break
             }
             
@@ -75,8 +81,6 @@ class HybridCell<Cell, DataSource, VM, CVM>: UITableViewCell where Cell: UIColle
         }
     
     deinit {
-        print("deinit \(Self.self)")
-        
         viewWillDeallocate()
     }
     
@@ -90,16 +94,31 @@ class HybridCell<Cell, DataSource, VM, CVM>: UITableViewCell where Cell: UIColle
     func viewWillDeploySubviews() {}
     func viewHierarchyWillConfigure() {}
     func viewWillConfigure() {}
-    func viewWillDeallocate() {}
+    func viewWillBindObservers() {}
+    func viewWillUnbindObservers() {}
+    func viewWillDeallocate() {
+        dataSource = nil
+        layout = nil
+        viewModel = nil
+        controllerViewModel = nil
+        
+        removeFromSuperview()
+    }
     
     func createCollectionView() -> UICollectionView { return UICollectionView() }
     func createDataSource() {}
+    func createDataSource() -> DataSource? { return nil }
     func createLayout() {}
+    func createLayout() -> CollectionViewLayout? { return nil }
 }
 
 // MARK: - ViewLifecycleBehavior Implementation
 
 extension HybridCell: ViewLifecycleBehavior {}
+
+// MARK: - View
+
+extension HybridCell: ViewObserving {}
 
 // MARK: - ViewProtocol Implementation
 

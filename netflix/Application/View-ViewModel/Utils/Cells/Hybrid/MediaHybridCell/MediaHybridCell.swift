@@ -10,6 +10,7 @@ import UIKit
 // MARK: - MediaHybridCell Type
 
 final class MediaHybridCell<Cell>: HybridCell<Cell, MediaCollectionViewDataSource<Cell>, MediaHybridCellViewModel, HomeViewModel> where Cell: UICollectionViewCell {
+    
     override func viewDidLoad() {
         viewWillDeploySubviews()
         viewHierarchyWillConfigure()

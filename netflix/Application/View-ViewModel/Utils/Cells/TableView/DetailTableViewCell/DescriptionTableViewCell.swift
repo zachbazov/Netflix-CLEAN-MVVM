@@ -11,7 +11,7 @@ import UIKit
 
 final class DescriptionTableViewCell: DetailTableViewCell {
     
-    private var descriptionView: DetailDescriptionView?
+    private var descriptionView: DescriptionView?
     
     deinit {
         viewWillDeallocate()
@@ -44,8 +44,8 @@ final class DescriptionTableViewCell: DetailTableViewCell {
 
 extension DescriptionTableViewCell {
     private func createDescription() {
-        let viewModel = DetailDescriptionViewViewModel(with: viewModel.media)
+        let viewModel = DescriptionViewViewModel(with: viewModel.media)
         
-        descriptionView = DetailDescriptionView(on: contentView, with: viewModel)
+        descriptionView = DescriptionView(on: contentView, with: viewModel)
     }
 }

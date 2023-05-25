@@ -1,5 +1,5 @@
 //
-//  DetailDescriptionViewViewModel.swift
+//  DescriptionViewViewModel.swift
 //  netflix
 //
 //  Created by Zach Bazov on 04/10/2022.
@@ -15,9 +15,9 @@ private protocol ViewModelProtocol {
     var writers: String { get }
 }
 
-// MARK: - DetailDescriptionViewViewModel Type
+// MARK: - DescriptionViewViewModel Type
 
-struct DetailDescriptionViewViewModel {
+struct DescriptionViewViewModel {
     let description: String
     let cast: String
     let writers: String
@@ -35,8 +35,8 @@ struct DetailDescriptionViewViewModel {
 
 // MARK: - ViewModel Implementation
 
-extension DetailDescriptionViewViewModel: ViewModel {}
+extension DescriptionViewViewModel: ViewModel {}
 
 // MARK: - ViewModelProtocol Implementation
 
-extension DetailDescriptionViewViewModel: ViewModelProtocol {}
+extension DescriptionViewViewModel: ViewModelProtocol {}
