@@ -276,7 +276,6 @@
 		A1BA1DA328D8149B00730EA8 /* UIImage+Rendering.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1BA1DA228D8149B00730EA8 /* UIImage+Rendering.swift */; };
 		A1BA1DA528D818C400730EA8 /* CALayer+Shadow.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1BA1DA428D818C400730EA8 /* CALayer+Shadow.swift */; };
 		A1BA1DA728D8BA9F00730EA8 /* UIView+Animations.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1BA1DA628D8BA9F00730EA8 /* UIView+Animations.swift */; };
-		A1BA1DA928D9315E00730EA8 /* ShowcaseTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = A1BA1DA828D9315E00730EA8 /* ShowcaseTableViewCell.xib */; };
 		A1BA1DAC28D9D42A00730EA8 /* NavigationOverlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1BA1DAB28D9D42A00730EA8 /* NavigationOverlayView.swift */; };
 		A1BA1DB928DA20CA00730EA8 /* NavigationOverlayViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1BA1DB828DA20CA00730EA8 /* NavigationOverlayViewModel.swift */; };
 		A1BA1DBB28DBE02C00730EA8 /* UIView+Constraints.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1BA1DBA28DBE02C00730EA8 /* UIView+Constraints.swift */; };
@@ -609,7 +608,6 @@
 		A1BA1DA228D8149B00730EA8 /* UIImage+Rendering.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+Rendering.swift"; sourceTree = "<group>"; };
 		A1BA1DA428D818C400730EA8 /* CALayer+Shadow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CALayer+Shadow.swift"; sourceTree = "<group>"; };
 		A1BA1DA628D8BA9F00730EA8 /* UIView+Animations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Animations.swift"; sourceTree = "<group>"; };
-		A1BA1DA828D9315E00730EA8 /* ShowcaseTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ShowcaseTableViewCell.xib; sourceTree = "<group>"; };
 		A1BA1DAB28D9D42A00730EA8 /* NavigationOverlayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationOverlayView.swift; sourceTree = "<group>"; };
 		A1BA1DB828DA20CA00730EA8 /* NavigationOverlayViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationOverlayViewModel.swift; sourceTree = "<group>"; };
 		A1BA1DBA28DBE02C00730EA8 /* UIView+Constraints.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Constraints.swift"; sourceTree = "<group>"; };
@@ -1539,7 +1537,6 @@
 			children = (
 				A1AD259F28D2987B00F793B3 /* ShowcaseTableViewCell.swift */,
 				A1C7E7AA292BC5C1004690B9 /* ShowcaseTableViewCellViewModel.swift */,
-				A1BA1DA828D9315E00730EA8 /* ShowcaseTableViewCell.xib */,
 			);
 			path = ShowcaseTableViewCell;
 			sourceTree = "<group>";
@@ -2147,7 +2144,6 @@
 				A1B70A90293E762000C718C6 /* LandpageViewController.xib in Resources */,
 				A1B70A85293E550400C718C6 /* DetailViewController.xib in Resources */,
 				A18B990528BEB62E0077A5A6 /* Assets.xcassets in Resources */,
-				A1BA1DA928D9315E00730EA8 /* ShowcaseTableViewCell.xib in Resources */,
 				A130BCDD29511E8F0070EA5E /* NewsViewController.xib in Resources */,
 				A1AA28D628F590B90011EE9D /* EpisodeCollectionViewCell.xib in Resources */,
 				A1AD767529AC85AE00669667 /* NewsCollectionViewCell.xib in Resources */,

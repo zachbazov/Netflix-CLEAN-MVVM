@@ -69,6 +69,6 @@ extension DetailViewController: ControllerProtocol {
     }
     
     fileprivate func createDataSource() {
-        dataSource = DetailTableViewDataSource(on: tableView, with: viewModel)
+        dataSource = DetailTableViewDataSource(with: viewModel)
     }
 }

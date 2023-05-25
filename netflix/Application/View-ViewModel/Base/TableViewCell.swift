@@ -16,7 +16,10 @@ class TableViewCell<T>: UITableViewCell where T: ViewModel {
         of type: U.Type,
         on tableView: UITableView,
         for indexPath: IndexPath,
-        with viewModel: V) -> U {
+        with viewModel: V) -> U where U: UITableViewCell {
+            
+            tableView.register(class: U.self)
+            
             guard let cell = tableView.dequeueReusableCell(
                 withIdentifier: String(describing: U.self),
                 for: indexPath) as? U

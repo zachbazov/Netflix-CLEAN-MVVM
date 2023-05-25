@@ -30,6 +30,8 @@ final class NavigationOverlayTableViewDataSource: TableViewDataSource {
     }
     
     override func heightForRow(in tableView: UITableView, at indexPath: IndexPath) -> CGFloat {
+        tableView.estimatedSectionHeaderHeight = .zero
+        tableView.estimatedSectionFooterHeight = .zero
         return viewModel.rowHeight
     }
     
@@ -54,5 +56,15 @@ extension NavigationOverlayTableViewDataSource {
         case none
         case main
         case genres
+    }
+}
+
+// MARK: - Private Implementation
+
+extension NavigationOverlayTableViewDataSource {
+    private func createDummyView() -> UIView {
+        let view = UIView()
+        view.backgroundColor = .clear
+        return view
     }
 }
