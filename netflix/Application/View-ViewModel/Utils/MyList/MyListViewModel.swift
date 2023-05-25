@@ -15,7 +15,7 @@ private protocol ViewModelProtocol {
     var list: Set<Media> { get }
     var section: Section { get }
     
-    func viewWillUpdate()
+    func sectionWillReload()
     func shouldAddOrRemove(_ media: Media, uponSelection selected: Bool)
     func contains(_ media: Media, in list: [Media]) -> Bool
     func filter(section: Section)
@@ -64,7 +64,7 @@ extension MyListViewModel: ViewModelProtocol {
         listWillUpdate()
     }
     
-    func viewWillUpdate() {
+    func sectionWillReload() {
         guard let homeController = coordinator.viewController,
               homeController.tableView?.numberOfSections ?? .zero > 0,
               let myListIndex = HomeTableViewDataSource.Index(rawValue: 6),
@@ -87,7 +87,7 @@ extension MyListViewModel: ViewModelProtocol {
         }
         
         updateList()
-        viewWillUpdate()
+        sectionWillReload()
     }
     
     func contains(_ media: Media, in list: [Media]) -> Bool {
@@ -127,6 +127,12 @@ private protocol DataProviderProtocol {
 
 extension MyListViewModel: DataProviderProtocol {
     func listWillLoad() {
+        guard self.list.isEmpty else {
+            dataDidLoad()
+            
+            return
+        }
+        
         let request = ListHTTPDTO.GET.Request(user: user)
         
         useCase.repository.task = useCase.request(
@@ -144,6 +150,8 @@ extension MyListViewModel: DataProviderProtocol {
                     self.list = media.toSet()
                     
                     self.section.media = media
+                    
+                    self.dataDidLoad()
                 case .failure(let error):
                     printIfDebug(.error, "\(error)")
                 }
@@ -162,23 +170,32 @@ extension MyListViewModel: DataProviderProtocol {
             cached: { _ in },
             completion: { [weak self] result in
                 guard let self = self else { return }
-                if case .success = result {
+                
+                switch result {
+                case .success:
                     self.section.media = self.list.toArray()
-                }
-                if case let .failure(error) = result {
+                case .failure(let error):
                     printIfDebug(.error, "\(error)")
                 }
             })
     }
     
     func listWillLoad() async {
-        let request = ListHTTPDTO.GET.Request(user: user)
-        let response = await useCase.request(endpoint: .getList, for: ListHTTPDTO.GET.Request.self, request: request)
+        guard self.list.isEmpty else {
+            dataDidLoad()
+            
+            return
+        }
         
-        guard let list = response?.media?.toDomain() else { return }
+        let request = ListHTTPDTO.GET.Request(user: user)
+        let response = await useCase.request(endpoint: .getList, for: ListHTTPDTO.GET.Response.self, request: request)
+        
+        guard let list = response?.data.first?.media.toDomain() else { return }
         
         self.list = list.toSet()
         self.section.media = list
+        
+        dataDidLoad()
     }
     
     fileprivate func listWillUpdate() async {
@@ -190,5 +207,20 @@ extension MyListViewModel: DataProviderProtocol {
         guard let _ = response else { return }
         
         section.media = list.toArray()
+    }
+}
+
+// MARK: - Private Implementation
+
+extension MyListViewModel {
+    private func dataDidLoad() {
+        mainQueueDispatch { [weak self] in
+            guard let self = self,
+                  let dataSource = self.coordinator.viewController?.dataSource,
+                  let panelView = dataSource.showcaseCell?.showcaseView?.panelView
+            else { return }
+            
+            panelView.selectIfNeeded()
+        }
     }
 }

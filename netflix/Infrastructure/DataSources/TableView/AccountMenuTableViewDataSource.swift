@@ -96,7 +96,7 @@ final class AccountMenuTableViewDataSource: TableViewDataSource {
         cell.opacityAnimation()
     }
     
-    override func viewForHeader(in section: Int) -> UIView? {
+    override func viewForHeader(in tableView: UITableView, at section: Int) -> UIView? {
         return createDummyView()
     }
     

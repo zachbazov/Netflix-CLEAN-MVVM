@@ -163,7 +163,7 @@ extension ShowcaseView: ViewProtocol {
     }
     
     fileprivate func removeNavigationGradientFromSuperview() {
-        guard let controller = viewModel.coordinator.viewController else { return }
+        guard let controller = viewModel?.coordinator.viewController else { return }
         
         controller.navigationView?.removeGradient()
     }
@@ -269,6 +269,8 @@ extension ShowcaseView: ViewProtocol {
     
     fileprivate func loadResources() {
         prepareForReuse()
+        
+        guard let viewModel = viewModel else { return }
         
         AsyncImageService.shared.load(
             url: viewModel.posterImageURL,

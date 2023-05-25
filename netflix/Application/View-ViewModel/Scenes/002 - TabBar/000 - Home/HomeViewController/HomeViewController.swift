@@ -78,7 +78,7 @@ final class HomeViewController: Controller<HomeViewModel> {
 
 extension HomeViewController: ViewControllerProtocol {
     fileprivate func createDataSource() {
-        dataSource = HomeTableViewDataSource(tableView: tableView, viewModel: viewModel)
+        dataSource = HomeTableViewDataSource(viewModel: viewModel)
     }
     
     fileprivate func createNavigationView() {

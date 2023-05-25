@@ -16,7 +16,7 @@ private protocol TableViewDataSourceProtocol {
     func heightForRow(in tableView: UITableView, at indexPath: IndexPath) -> CGFloat
     func didSelectRow(in tableView: UITableView, at indexPath: IndexPath)
     func willDisplayCellForRow(_ cell: UITableViewCell, at indexPath: IndexPath)
-    func viewForHeader(in section: Int) -> UIView?
+    func viewForHeader(in tableView: UITableView, at section: Int) -> UIView?
     func heightForHeader(in section: Int) -> CGFloat
     func viewForFooter(in section: Int) -> UIView?
     func heightForFooter(in section: Int) -> CGFloat
@@ -52,7 +52,7 @@ class TableViewDataSource: NSObject, UITableViewDelegate, UITableViewDataSource 
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        return viewForHeader(in: section)
+        return viewForHeader(in: tableView, at: section)
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
@@ -93,7 +93,7 @@ class TableViewDataSource: NSObject, UITableViewDelegate, UITableViewDataSource 
     
     func willDisplayCellForRow(_ cell: UITableViewCell, at indexPath: IndexPath) {}
     
-    func viewForHeader(in section: Int) -> UIView? {
+    func viewForHeader(in tableView: UITableView, at section: Int) -> UIView? {
         return nil
     }
     

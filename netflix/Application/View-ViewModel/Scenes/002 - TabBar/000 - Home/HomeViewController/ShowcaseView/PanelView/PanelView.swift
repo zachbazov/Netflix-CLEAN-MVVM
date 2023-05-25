@@ -45,10 +45,15 @@ final class PanelView: View<PanelViewModel> {
         viewWillDeallocate()
     }
     
+    override func dataWillLoad() {
+        myList.dataWillLoad()
+    }
+    
     override func viewDidLoad() {
         viewHierarchyWillConfigure()
         viewWillConfigure()
         viewWillTargetSubviews()
+        dataWillLoad()
     }
     
     override func viewHierarchyWillConfigure() {
@@ -59,7 +64,6 @@ final class PanelView: View<PanelViewModel> {
     override func viewWillConfigure() {
         configurePlayButton()
         configureMyListButton()
-        selectIfNeeded()
     }
     
     override func viewWillTargetSubviews() {
@@ -111,7 +115,7 @@ extension PanelView: ViewProtocol {
         myListButton.toggle()
     }
     
-    fileprivate func selectIfNeeded() {
+    func selectIfNeeded() {
         guard let showcase = viewModel?.media else { return }
         
         let media = viewModel.sectionAt(.myList).media

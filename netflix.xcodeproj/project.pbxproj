@@ -1007,8 +1007,8 @@
 				A1AD25C328D4D25400F793B3 /* NavigationBarView */,
 				A1183FCA29D11C0600D76759 /* SegmentControlView */,
 				A1BA1DAA28D9D3D500730EA8 /* NavigationOverlayView */,
-				A18D851A29403CD100840045 /* BrowseOverlayView */,
 				A1AD25A928D2A6AE00F793B3 /* ShowcaseView */,
+				A18D851A29403CD100840045 /* BrowseOverlayView */,
 			);
 			path = HomeViewController;
 			sourceTree = "<group>";
@@ -1900,8 +1900,8 @@
 			isa = PBXGroup;
 			children = (
 				A1E81D2928CFE4A400D044EA /* HomeTableViewDataSource.swift */,
-				A1BA1DC128DCB7D700730EA8 /* NavigationOverlayTableViewDataSource.swift */,
 				A1741D1228E67A4F00F3C46B /* DetailTableViewDataSource.swift */,
+				A1BA1DC128DCB7D700730EA8 /* NavigationOverlayTableViewDataSource.swift */,
 				A14E0CCA29BCAB9D00F55500 /* AccountMenuTableViewDataSource.swift */,
 			);
 			path = TableView;

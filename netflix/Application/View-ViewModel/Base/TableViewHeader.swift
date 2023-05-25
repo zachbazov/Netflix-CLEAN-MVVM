@@ -16,7 +16,10 @@ class TableViewHeader<T>: UITableViewHeaderFooterView where T: ViewModel {
         of type: U.Type,
         on tableView: UITableView,
         for index: Int,
-        with viewModel: HomeViewModel) -> U {
+        with viewModel: HomeViewModel) -> U where U: UITableViewHeaderFooterView {
+            
+            tableView.register(headerFooter: U.self)
+            
             guard let cell = tableView.dequeueReusableHeaderFooterView(
                 withIdentifier: reuseIdentifier) as? U
             else { fatalError() }

@@ -82,8 +82,6 @@ extension HomeViewModel: ViewModel {
     func dataDidLoad() {
         ActivityIndicatorView.remove()
         
-        myList.dataWillLoad()
-        
         showcasesWillFilter()
         
         dataSourceStateWillChange(.all)

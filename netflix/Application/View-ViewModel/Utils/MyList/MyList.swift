@@ -34,9 +34,7 @@ extension MyList: ListProtocol {
     
     func dataWillLoad() {
         if #available(iOS 13.0, *) {
-            Task {
-                await loadUsingAsyncAwait()
-            }
+            loadUsingAsyncAwait()
             
             return
         }
@@ -44,15 +42,13 @@ extension MyList: ListProtocol {
         loadAsync()
     }
     
-    fileprivate func loadUsingAsyncAwait() async {
-        mainQueueDispatch { [weak self] in
-            self?.viewModel.listWillLoad()
+    fileprivate func loadUsingAsyncAwait() {
+        Task {
+            await viewModel.listWillLoad()
         }
     }
     
     fileprivate func loadAsync() {
-        mainQueueDispatch { [weak self] in
-            self?.viewModel.listWillLoad()
-        }
+        viewModel.listWillLoad()
     }
 }

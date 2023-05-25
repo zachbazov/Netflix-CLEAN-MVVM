@@ -10,141 +10,80 @@ import UIKit
 // MARK: - DataSourceProtocol Type
 
 private protocol DataSourceProtocol {
-    var tableView: UITableView? { get }
     var viewModel: HomeViewModel { get }
-    var numberOfRows: Int { get }
+    
     var initialOffsetY: CGFloat { get }
     var primaryOffsetY: CGFloat { get }
     
-    func didLoad()
-    func cellsWillRegister()
-    func dataSourceWillChange()
-    func contentWillInset()
-    func applyStyleChanges(_ condition: Bool, limit: CGFloat)
+    func setContentInset()
 }
 
 // MARK: - HomeTableViewDataSource Type
 
-final class HomeTableViewDataSource: NSObject {
-    fileprivate weak var tableView: UITableView?
+final class HomeTableViewDataSource: TableViewDataSource {
     fileprivate let viewModel: HomeViewModel
     
-    fileprivate let numberOfRows: Int = 1
+    var showcaseCell: ShowcaseTableViewCell?
+    
     fileprivate var initialOffsetY: CGFloat = .zero
     fileprivate(set) var primaryOffsetY: CGFloat = .zero
     
-    /// Create an home's table view data source object.
-    /// - Parameters:
-    ///   - tableView: Corresponding table view.
-    ///   - viewModel: Coordinating view model.
-    init(tableView: UITableView, viewModel: HomeViewModel) {
-        self.tableView = tableView
+    init(viewModel: HomeViewModel) {
         self.viewModel = viewModel
         
         super.init()
         
-        self.didLoad()
+        self.setContentInset()
     }
     
-    deinit {
-        print("deinit \(Self.self)")
-        
-        tableView?.removeFromSuperview()
-        tableView = nil
-        
-        viewModel.coordinator = nil
-    }
-}
-
-// MARK: - DataSourceProtocol Implementation
-
-extension HomeTableViewDataSource: DataSourceProtocol {
-    fileprivate func didLoad() {
-        cellsWillRegister()
-        contentWillInset()
-    }
+    // MARK: TableViewDataSourceProtocol Implementation
     
-    fileprivate func cellsWillRegister() {
-        tableView?.register(headerFooter: LabeledTableHeaderView.self)
-        tableView?.register(class: ShowcaseTableViewCell.self)
-        tableView?.register(class: MediaHybridCell<RatedCollectionViewCell>.self)
-        tableView?.register(class: MediaHybridCell<ResumableCollectionViewCell>.self)
-        tableView?.register(class: MediaHybridCell<StandardCollectionViewCell>.self)
-        tableView?.register(class: MediaHybridCell<BlockbusterCollectionViewCell>.self)
-    }
-    
-    func dataSourceWillChange() {
-        viewModel.sectionsWillFilter()
-        
-        tableView?.delegate = self
-        tableView?.dataSource = self
-        tableView?.reloadData()
-    }
-    
-    fileprivate func contentWillInset() {
-        guard let controller = viewModel.coordinator?.viewController,
-              let window = UIApplication.shared.windows.first
-        else { return }
-        
-        let statusBarHeight = window.windowScene?.statusBarManager?.statusBarFrame.size.height ?? .zero
-        let remainder = controller.view.bounds.height - controller.navigationViewContainer.bounds.height
-        let offset = controller.view.bounds.height - remainder - statusBarHeight
-        
-        initialOffsetY = offset
-        
-        tableView?.contentInset = .init(top: initialOffsetY, left: .zero, bottom: .zero, right: .zero)
-    }
-}
-
-// MARK: - UITableViewDelegate & UITableViewDataSource Implementation
-
-extension HomeTableViewDataSource: UITableViewDelegate, UITableViewDataSource {
-    func numberOfSections(in tableView: UITableView) -> Int {
+    override func numberOfSections() -> Int {
         return viewModel.sections.count
     }
     
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return numberOfRows
+    override func numberOfRows(in section: Int) -> Int {
+        return 1
     }
     
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    override func cellForRow<T>(in tableView: UITableView, at indexPath: IndexPath) -> T where T: UITableViewCell {
         guard let index = Index(rawValue: indexPath.section) else { fatalError() }
         
         switch index {
         case .display:
-            return ShowcaseTableViewCell.create(of: ShowcaseTableViewCell.self, on: tableView, for: indexPath, with: viewModel)
+            showcaseCell = ShowcaseTableViewCell.create(of: ShowcaseTableViewCell.self,
+                                                on: tableView,
+                                                for: indexPath,
+                                                with: viewModel)
+            return showcaseCell as! T
         case .rated:
-            return MediaHybridCell.create(
-                expecting: MediaHybridCell<RatedCollectionViewCell>.self,
-                embedding: RatedCollectionViewCell.self,
-                on: tableView,
-                for: indexPath,
-                with: viewModel)
+            return MediaHybridCell.create(expecting: MediaHybridCell<RatedCollectionViewCell>.self,
+                                          embedding: RatedCollectionViewCell.self,
+                                          on: tableView,
+                                          for: indexPath,
+                                          with: viewModel) as! T
         case .resumable:
-            return MediaHybridCell.create(
-                expecting: MediaHybridCell<ResumableCollectionViewCell>.self,
-                embedding: ResumableCollectionViewCell.self,
-                on: tableView,
-                for: indexPath,
-                with: viewModel)
+            return MediaHybridCell.create(expecting: MediaHybridCell<ResumableCollectionViewCell>.self,
+                                          embedding: ResumableCollectionViewCell.self,
+                                          on: tableView,
+                                          for: indexPath,
+                                          with: viewModel) as! T
         case .blockbuster:
-            return MediaHybridCell.create(
-                expecting: MediaHybridCell<BlockbusterCollectionViewCell>.self,
-                embedding: BlockbusterCollectionViewCell.self,
-                on: tableView,
-                for: indexPath,
-                with: viewModel)
+            return MediaHybridCell.create(expecting: MediaHybridCell<BlockbusterCollectionViewCell>.self,
+                                          embedding: BlockbusterCollectionViewCell.self,
+                                          on: tableView,
+                                          for: indexPath,
+                                          with: viewModel) as! T
         default:
-            return MediaHybridCell.create(
-                expecting: MediaHybridCell<StandardCollectionViewCell>.self,
-                embedding: StandardCollectionViewCell.self,
-                on: tableView,
-                for: indexPath,
-                with: viewModel)
+            return MediaHybridCell.create(expecting: MediaHybridCell<StandardCollectionViewCell>.self,
+                                          embedding: StandardCollectionViewCell.self,
+                                          on: tableView,
+                                          for: indexPath,
+                                          with: viewModel) as! T
         }
     }
     
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+    override func heightForRow(in tableView: UITableView, at indexPath: IndexPath) -> CGFloat {
         guard let index = HomeTableViewDataSource.Index(rawValue: indexPath.section),
               let view = viewModel.coordinator?.viewController?.view
         else { return .zero }
@@ -156,7 +95,11 @@ extension HomeTableViewDataSource: UITableViewDelegate, UITableViewDataSource {
         }
     }
     
-    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+    override func willDisplayCellForRow(_ cell: UITableViewCell, at indexPath: IndexPath) {
+        cell.opacityAnimation()
+    }
+    
+    override func viewForHeader(in tableView: UITableView, at section: Int) -> UIView? {
         guard let index = Index(rawValue: section) else { return nil }
         
         switch index {
@@ -168,7 +111,7 @@ extension HomeTableViewDataSource: UITableViewDelegate, UITableViewDataSource {
         }
     }
     
-    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+    override func heightForHeader(in section: Int) -> CGFloat {
         guard let index = Index(rawValue: section) else { return .zero }
         
         switch index {
@@ -178,11 +121,7 @@ extension HomeTableViewDataSource: UITableViewDelegate, UITableViewDataSource {
         }
     }
     
-    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        cell.opacityAnimation()
-    }
-    
-    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+    override func tableViewDidScroll(_ scrollView: UIScrollView) {
         guard let window = UIApplication.shared.windows.first,
               let controller = viewModel.coordinator?.viewController
         else { return }
@@ -233,29 +172,36 @@ extension HomeTableViewDataSource: UITableViewDelegate, UITableViewDataSource {
                 self.applyStyleChanges(isScrollingUp, limit: segmentHeight)
             })
     }
-    
-    fileprivate func applyStyleChanges(_ condition: Bool, limit: CGFloat) {
-        guard let controller = viewModel.coordinator?.viewController else { return }
+}
+
+// MARK: - DataSourceProtocol Implementation
+
+extension HomeTableViewDataSource: DataSourceProtocol {
+    func dataSourceWillChange() {
+        guard let controller = viewModel.coordinator?.viewController,
+              let tableView = controller.tableView
+        else { return }
         
-        if condition {
-            if self.primaryOffsetY <= limit {
-                controller.navigationView?.apply(.gradient)
-            } else {
-                controller.navigationView?.apply(.blur)
-            }
-            
-            if self.primaryOffsetY <= .zero {
-                controller.navigationView?.apply(.gradient)
-            }
-        } else {
-            guard self.primaryOffsetY >= .zero else {
-                controller.navigationView?.apply(.gradient)
-                
-                return
-            }
-            
-            controller.navigationView?.apply(.blur)
-        }
+        viewModel.sectionsWillFilter()
+        
+        tableView.delegate = self
+        tableView.dataSource = self
+        tableView.reloadData()
+    }
+    
+    fileprivate func setContentInset() {
+        guard let controller = viewModel.coordinator?.viewController,
+              let tableView = controller.tableView,
+              let window = UIApplication.shared.windows.first
+        else { return }
+        
+        let statusBarHeight = window.windowScene?.statusBarManager?.statusBarFrame.size.height ?? .zero
+        let remainder = controller.view.bounds.height - controller.navigationViewContainer.bounds.height
+        let offset = controller.view.bounds.height - remainder - statusBarHeight
+        
+        initialOffsetY = offset
+        
+        tableView.contentInset = .init(top: initialOffsetY, left: .zero, bottom: .zero, right: .zero)
     }
 }
 
@@ -317,6 +263,34 @@ extension HomeTableViewDataSource.Index: Valuable {
         case .anime: return "Anime"
         case .familyNchildren: return "Family & Children"
         case .documentary: return "Documentary"
+        }
+    }
+}
+
+// MARK: - Private Implementation
+
+extension HomeTableViewDataSource {
+    private func applyStyleChanges(_ condition: Bool, limit: CGFloat) {
+        guard let controller = viewModel.coordinator?.viewController else { return }
+        
+        if condition {
+            if self.primaryOffsetY <= limit {
+                controller.navigationView?.apply(.gradient)
+            } else {
+                controller.navigationView?.apply(.blur)
+            }
+            
+            if self.primaryOffsetY <= .zero {
+                controller.navigationView?.apply(.gradient)
+            }
+        } else {
+            guard self.primaryOffsetY >= .zero else {
+                controller.navigationView?.apply(.gradient)
+                
+                return
+            }
+            
+            controller.navigationView?.apply(.blur)
         }
     }
 }

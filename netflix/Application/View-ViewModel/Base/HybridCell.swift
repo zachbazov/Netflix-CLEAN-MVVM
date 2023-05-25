@@ -40,6 +40,9 @@ class HybridCell<Cell, DataSource, VM, CVM>: UITableViewCell where Cell: UIColle
         on tableView: UITableView,
         for indexPath: IndexPath,
         with viewModel: CVM) -> T where T: UITableViewCell {
+            
+            tableView.register(class: T.self)
+            
             guard let cell = tableView.dequeueReusableCell(
                 withIdentifier: T.reuseIdentifier,
                 for: indexPath) as? T
