@@ -95,6 +95,8 @@ final class SearchViewController: Controller<SearchViewModel> {
     override func viewWillDeallocate() {
         viewWillUnbindObservers()
         
+        searchBar.searchTextField.resignFirstResponder()
+        
         collectionView.removeFromSuperview()
         
         textFieldIndicatorView = nil

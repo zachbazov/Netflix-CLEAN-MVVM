@@ -291,7 +291,7 @@ extension HomeViewModel: DataProviderProtocol {
                     printIfDebug(.error, "\(error)")
                     
                     let authService = Application.app.services.authentication
-                    authService.signOut()
+                    authService.signOut(nil)
                 }
             })
     }

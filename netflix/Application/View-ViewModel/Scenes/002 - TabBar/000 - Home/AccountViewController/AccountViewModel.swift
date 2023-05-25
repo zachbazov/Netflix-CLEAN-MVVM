@@ -9,19 +9,36 @@ import Foundation
 
 // MARK: - ViewModelProtocol Type
 
-private protocol ViewModelProtocol {}
+private protocol ViewModelProtocol {
+    var userUseCase: UserUseCase { get }
+    var profiles: Observable<[UserProfile]> { get }
+    var menuItems: [AccountMenuItem] { get }
+}
 
 // MARK: - AccountViewModel Type
 
 final class AccountViewModel {
+    
     var coordinator: AccountViewCoordinator?
     
-    fileprivate lazy var userUseCase = UserUseCase()
+    fileprivate let userUseCase = UserUseCase()
     
-    let profiles: Observable<[UserProfile]> = .init([])
+    let profiles: Observable<[UserProfile]> = Observable([])
+    
     lazy var menuItems: [AccountMenuItem] = createMenuItems()
-    private(set) var profileItems = [UserProfile]()
-    
+}
+
+// MARK: - ViewModel Implementation
+
+extension AccountViewModel: ViewModel {
+    func viewDidLoad() {
+        loadProfiles()
+    }
+}
+
+// MARK: - ViewModelProtocol Implementation
+
+extension AccountViewModel: ViewModelProtocol {
     private func createMenuItems() -> [AccountMenuItem] {
         let list = MyList.shared
         let media = list.viewModel.list.toArray()
@@ -35,7 +52,19 @@ final class AccountViewModel {
         return items
     }
     
-    fileprivate func getUserProfiles() {
+    private func loadProfiles() {
+        if #available(iOS 13.0, *) {
+            Task {
+                await userProfilesDidLoad()
+            }
+            
+            return
+        }
+        
+        userProfilesDidLoad()
+    }
+    
+    private func userProfilesDidLoad() {
         let authService = Application.app.services.authentication
         
         guard let user = authService.user else { return }
@@ -58,7 +87,7 @@ final class AccountViewModel {
             })
     }
     
-    func userProfilesDidLoad() async {
+    private func userProfilesDidLoad() async {
         let authService = Application.app.services.authentication
         
         guard let user = authService.user else { return }
@@ -75,27 +104,3 @@ final class AccountViewModel {
         self.profiles.value.append(addProfile)
     }
 }
-
-// MARK: - ViewModel Implementation
-
-extension AccountViewModel: ViewModel {
-    func viewDidLoad() {
-        loadData()
-    }
-    
-    private func loadData() {
-        if #available(iOS 13.0, *) {
-            Task {
-                await userProfilesDidLoad()
-            }
-            
-            return
-        }
-        
-        getUserProfiles()
-    }
-}
-
-// MARK: - ViewModelProtocol Implementation
-
-extension AccountViewModel: ViewModelProtocol {}

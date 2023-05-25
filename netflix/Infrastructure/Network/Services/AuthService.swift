@@ -19,7 +19,7 @@ private protocol AuthServiceProtocol {
     func resign(completion: @escaping (UserDTO?) -> Void)
     func signIn(for requestDTO: UserHTTPDTO.Request, completion: @escaping (UserDTO?) -> Void)
     func signUp(for requestDTO: UserHTTPDTO.Request, completion: @escaping (Bool) -> Void)
-    func signOut()
+    func signOut(_ completion: (() -> Void)?)
     
     func deleteResponse(for request: UserHTTPDTO.Request) async
     
@@ -179,7 +179,7 @@ extension AuthService: AuthServiceProtocol {
     }
     
     /// Invoke a sign out request.
-    func signOut() {
+    func signOut(_ completion: (() -> Void)?) {
         let coordinator = Application.app.coordinator
         let context = responses.coreDataStorage.context()
         let group = DispatchGroup()
@@ -200,6 +200,8 @@ extension AuthService: AuthServiceProtocol {
                 self.responses.deleteResponse(for: requestDTO, in: context) { group.leave() }
                 
                 self.user = nil
+                
+                completion?()
             case .failure(let error):
                 printIfDebug(.error, "\(error)")
                 

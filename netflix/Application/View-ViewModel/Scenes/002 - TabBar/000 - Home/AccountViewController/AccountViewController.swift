@@ -12,8 +12,6 @@ import UIKit
 private protocol ViewControllerProtocol {
     func backButtonDidTap()
     func signOutDidTap()
-    func signOut()
-    func didFinish()
 }
 
 // MARK: - AccountViewController Type
@@ -28,43 +26,57 @@ final class AccountViewController: Controller<AccountViewModel> {
     @IBOutlet private weak var versionLabel: UILabel!
     
     private(set) lazy var collectionView: UICollectionView = createCollectionView()
-    
-    private(set) var profileDataSource: ProfileCollectionViewDataSource?
+    private(set) lazy var profileDataSource: ProfileCollectionViewDataSource = createProfileDataSource()
     private var accountMenuDataSource: AccountMenuTableViewDataSource?
+    
+    deinit {
+        viewWillDeallocate()
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        super.viewDidLoadBehaviors()
-        viewDidDeploySubviews()
-        viewDidTargetSubviews()
-        viewDidBindObservers()
+        super.viewWillLoadBehaviors()
+        viewWillDeploySubviews()
+        viewHierarchyWillConfigure()
+        viewWillTargetSubviews()
+        viewWillBindObservers()
         viewModel.viewDidLoad()
     }
     
-    override func viewDidDeploySubviews() {
-        setupCollectionView()
-        setupTableView()
+    override func viewWillDeploySubviews() {
+        createAccountMenuDataSource()
     }
     
-    override func viewDidTargetSubviews() {
+    override func viewHierarchyWillConfigure() {
+        collectionView
+            .addToHierarchy(on: collectionContainer)
+            .constraintToSuperview(collectionContainer)
+    }
+    
+    override func viewWillTargetSubviews() {
         backButton.addTarget(self, action: #selector(backButtonDidTap), for: .touchUpInside)
         signOutButton.addTarget(self, action: #selector(signOutDidTap), for: .touchUpInside)
     }
     
-    override func viewDidBindObservers() {
-        viewModel.profiles.observe(on: self) { [weak self] _ in self?.profileDataSource?.dataSourceDidChange() }
+    override func viewWillBindObservers() {
+        viewModel.profiles.observe(on: self) { [weak self] _ in
+            guard let self = self else { return }
+            
+            self.profileDataSource.dataSourceDidChange()
+        }
     }
     
-    override func viewDidUnbindObservers() {
+    override func viewWillUnbindObservers() {
         guard let viewModel = viewModel else { return }
+        
         viewModel.profiles.remove(observer: self)
-        printIfDebug(.debug, "Removed `AccountViewModel` observers.")
+        
+        printIfDebug(.success, "Removed `\(Self.self)` observers.")
     }
     
-    override func viewDidDeallocate() {
-        viewDidUnbindObservers()
+    override func viewWillDeallocate() {
+        viewWillUnbindObservers()
         
-        profileDataSource = nil
         accountMenuDataSource = nil
         
         collectionView.removeFromSuperview()
@@ -81,63 +93,20 @@ final class AccountViewController: Controller<AccountViewModel> {
 extension AccountViewController: ViewControllerProtocol {
     @objc
     fileprivate func backButtonDidTap() {
-        super.viewWillAnimateDisappearance { [weak self] in self?.viewDidDeallocate() }
+        super.viewWillAnimateDisappearance { [weak self] in
+            self?.viewWillDeallocate()
+        }
     }
     
     @objc
     func signOutDidTap() {
         signOut()
     }
-    
-    fileprivate func signOut() {
-        let authService = Application.app.services.authentication
-        let coordinator = Application.app.coordinator
-        
-        ActivityIndicatorView.present()
-        
-        if #available(iOS 13, *) {
-            Task {
-                guard let user = authService.user else { return }
-                
-                let request = UserHTTPDTO.Request(user: user, selectedProfile: nil)
-                let status = await authService.signOut(with: request)
-                
-                guard status else { return }
-                
-                ActivityIndicatorView.remove()
-                
-                backButtonDidTap()
-                
-                mainQueueDispatch { coordinator.coordinate(to: .auth) }
-            }
-            
-            return
-        }
-        
-        authService.signOut()
-    }
-    
-    fileprivate func didFinish() {
-        
-    }
 }
 
-// MARK: - Private UI Implementation
+// MARK: - Private Implementation
 
 extension AccountViewController {
-    private func setupCollectionView() {
-        collectionContainer.addSubview(collectionView)
-        collectionView.constraintToSuperview(collectionContainer)
-        
-        profileDataSource = ProfileCollectionViewDataSource(with: viewModel)
-    }
-    
-    private func setupTableView() {
-        tableView.register(class: AccountMenuNotificationHybridCell.self)
-        
-        accountMenuDataSource = AccountMenuTableViewDataSource(with: viewModel)
-    }
-    
     private func createCollectionView() -> UICollectionView {
         let layout = CollectionViewLayout(layout: .profile, scrollDirection: .horizontal)
         let collectionView = UICollectionView(frame: collectionContainer.bounds, collectionViewLayout: layout)
@@ -145,5 +114,56 @@ extension AccountViewController {
         collectionView.contentInset = UIEdgeInsets(top: .zero, left: 16.0, bottom: .zero, right: 16.0)
         collectionView.backgroundColor = .black
         return collectionView
+    }
+    
+    private func createProfileDataSource() -> ProfileCollectionViewDataSource {
+        return ProfileCollectionViewDataSource(with: viewModel)
+    }
+    
+    private func createAccountMenuDataSource() {
+        accountMenuDataSource = AccountMenuTableViewDataSource(with: viewModel)
+    }
+    
+    private func signOut() {
+        let authService = Application.app.services.authentication
+        
+        ActivityIndicatorView.present()
+        
+        if #available(iOS 13, *) {
+            signOutUsingAsyncAwait()
+            
+            return
+        }
+        
+        authService.signOut() { [weak self] in
+            self?.signOutDidComplete()
+        }
+    }
+    
+    private func signOutUsingAsyncAwait() {
+        let authService = Application.app.services.authentication
+        
+        guard let user = authService.user else { return }
+        
+        Task {
+            let request = UserHTTPDTO.Request(user: user, selectedProfile: nil)
+            let status = await authService.signOut(with: request)
+            
+            guard status else { return }
+            
+            signOutDidComplete()
+        }
+    }
+    
+    private func signOutDidComplete() {
+        let coordinator = Application.app.coordinator
+        
+        ActivityIndicatorView.remove()
+        
+        backButtonDidTap()
+        
+        mainQueueDispatch {
+            coordinator.coordinate(to: .auth)
+        }
     }
 }
