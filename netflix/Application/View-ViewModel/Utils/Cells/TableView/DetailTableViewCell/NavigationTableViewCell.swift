@@ -1,5 +1,5 @@
 //
-//  DetailNavigationTableViewCell.swift
+//  NavigationTableViewCell.swift
 //  netflix
 //
 //  Created by Zach Bazov on 30/09/2022.
@@ -7,22 +7,19 @@
 
 import UIKit
 
-// MARK: - ViewProtocol Type
+// MARK: - NavigationTableViewCell Type
 
-private protocol ViewProtocol {
-    var navigationView: DetailNavigationView? { get }
-}
-
-// MARK: - DetailNavigationTableViewCell Type
-
-final class DetailNavigationTableViewCell: TableViewCell<DetailViewModel> {
+final class NavigationTableViewCell: DetailTableViewCell {
+    
     fileprivate(set) var navigationView: DetailNavigationView?
     
     deinit {
         viewWillDeallocate()
+        super.viewWillDeallocate()
     }
     
     override func viewDidLoad() {
+        super.viewDidLoad()
         viewWillDeploySubviews()
         viewHierarchyWillConfigure()
     }
@@ -40,20 +37,12 @@ final class DetailNavigationTableViewCell: TableViewCell<DetailViewModel> {
     override func viewWillDeallocate() {
         navigationView?.removeFromSuperview()
         navigationView = nil
-        
-        viewModel = nil
-        
-        removeFromSuperview()
     }
 }
 
-// MARK: - ViewProtocol Implementation
+// MARK: - Private Implementation
 
-extension DetailNavigationTableViewCell: ViewProtocol {}
-
-// MARK: - Private Presentation Implementation
-
-extension DetailNavigationTableViewCell {
+extension NavigationTableViewCell {
     private func createNavigation() {
         navigationView = DetailNavigationView(with: viewModel)
     }

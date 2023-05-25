@@ -1,5 +1,5 @@
 //
-//  DetailInfoTableViewCell.swift
+//  InfoTableViewCell.swift
 //  netflix
 //
 //  Created by Zach Bazov on 30/09/2022.
@@ -7,19 +7,21 @@
 
 import UIKit
 
-// MARK: - DetailInfoTableViewCell Type
+// MARK: - InfoTableViewCell Type
 
-final class DetailInfoTableViewCell: TableViewCell<DetailViewModel> {
+final class InfoTableViewCell: DetailTableViewCell {
+    
     private var infoView: DetailInfoView?
     
     deinit {
         viewWillDeallocate()
+        super.viewWillDeallocate()
     }
     
     override func viewDidLoad() {
+        super.viewDidLoad()
         viewWillDeploySubviews()
         viewHierarchyWillConfigure()
-        viewWillConfigure()
     }
     
     override func viewWillDeploySubviews() {
@@ -32,24 +34,15 @@ final class DetailInfoTableViewCell: TableViewCell<DetailViewModel> {
             .constraintToSuperview(contentView)
     }
     
-    override func viewWillConfigure() {
-        setBackgroundColor(.black)
-        selectionStyle = .none
-    }
-    
     override func viewWillDeallocate() {
         infoView?.removeFromSuperview()
         infoView = nil
-        
-        viewModel = nil
-        
-        removeFromSuperview()
     }
 }
 
-// MARK: - Private Presentation Implementation
+// MARK: - Private Implementation
 
-extension DetailInfoTableViewCell {
+extension InfoTableViewCell {
     private func createInfo() {
         let viewModel = DetailInfoViewViewModel(with: viewModel)
         

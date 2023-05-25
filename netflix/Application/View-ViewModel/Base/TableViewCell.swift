@@ -31,22 +31,22 @@ class TableViewCell<T>: UITableViewCell where T: ViewModel {
                 
                 cell.viewModel = ShowcaseTableViewCellViewModel(with: viewModel)
                 cell.viewDidLoad()
-            case let cell as DetailInfoTableViewCell:
+            case let cell as InfoTableViewCell:
                 guard let viewModel = viewModel as? DetailViewModel else { fatalError() }
                 
                 cell.viewModel = viewModel
                 cell.viewDidLoad()
-            case let cell as DetailDescriptionTableViewCell:
+            case let cell as DescriptionTableViewCell:
                 guard let viewModel = viewModel as? DetailViewModel else { fatalError() }
                 
                 cell.viewModel = viewModel
                 cell.viewDidLoad()
-            case let cell as DetailPanelTableViewCell:
+            case let cell as PanelTableViewCell:
                 guard let viewModel = viewModel as? DetailViewModel else { fatalError() }
                 
                 cell.viewModel = viewModel
                 cell.viewDidLoad()
-            case let cell as DetailNavigationTableViewCell:
+            case let cell as NavigationTableViewCell:
                 guard let viewModel = viewModel as? DetailViewModel else { fatalError() }
                 
                 cell.viewModel = viewModel

@@ -1,5 +1,5 @@
 //
-//  DetailDescriptionTableViewCell.swift
+//  DescriptionTableViewCell.swift
 //  netflix
 //
 //  Created by Zach Bazov on 30/09/2022.
@@ -7,16 +7,19 @@
 
 import UIKit
 
-// MARK: - DetailDescriptionTableViewCell Type
+// MARK: - DescriptionTableViewCell Type
 
-final class DetailDescriptionTableViewCell: TableViewCell<DetailViewModel> {
+final class DescriptionTableViewCell: DetailTableViewCell {
+    
     private var descriptionView: DetailDescriptionView?
     
     deinit {
         viewWillDeallocate()
+        super.viewWillDeallocate()
     }
     
     override func viewDidLoad() {
+        super.viewDidLoad()
         viewWillDeploySubviews()
         viewHierarchyWillConfigure()
     }
@@ -34,16 +37,12 @@ final class DetailDescriptionTableViewCell: TableViewCell<DetailViewModel> {
     override func viewWillDeallocate() {
         descriptionView?.removeFromSuperview()
         descriptionView = nil
-        
-        viewModel = nil
-        
-        removeFromSuperview()
     }
 }
 
-// MARK: - Private Presentation Logic
+// MARK: - Private Implementation
 
-extension DetailDescriptionTableViewCell {
+extension DescriptionTableViewCell {
     private func createDescription() {
         let viewModel = DetailDescriptionViewViewModel(with: viewModel.media)
         

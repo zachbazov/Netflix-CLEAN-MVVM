@@ -7,18 +7,19 @@
 
 import UIKit
 
-// MARK: - ViewProtocol Type
-
-private protocol ViewProtocol {
-    var detailCollectionView: DetailCollectionView? { get }
-}
-
 // MARK: - DetailCollectionTableViewCell Type
 
-final class DetailCollectionTableViewCell: TableViewCell<DetailViewModel> {
+final class DetailCollectionTableViewCell: DetailTableViewCell {
+    
     private(set) var detailCollectionView: DetailCollectionView?
     
+    deinit {
+        viewWillDeallocate()
+        super.viewWillDeallocate()
+    }
+    
     override func viewDidLoad() {
+        super.viewDidLoad()
         viewWillDeploySubviews()
         viewHierarchyWillConfigure()
     }
@@ -32,13 +33,16 @@ final class DetailCollectionTableViewCell: TableViewCell<DetailViewModel> {
             .addToHierarchy(on: contentView)
             .constraintToSuperview(contentView)
     }
+    
+    override func viewWillDeallocate() {
+        detailCollectionView?.removeFromSuperview()
+        detailCollectionView = nil
+        
+        removeFromSuperview()
+    }
 }
 
-// MARK: - ViewProtocol Implementation
-
-extension DetailCollectionTableViewCell: ViewProtocol {}
-
-// MARK: - Private Presentation Implementation
+// MARK: - Private Implementation
 
 extension DetailCollectionTableViewCell {
     private func createCollection() {

@@ -11,7 +11,7 @@ import UIKit
 
 private protocol DataSourceProtocol {
     var collectionCell: DetailCollectionTableViewCell? { get }
-    var navigationCell: DetailNavigationTableViewCell? { get }
+    var navigationCell: NavigationTableViewCell? { get }
     
     func contentSize(for state: DetailNavigationView.State) -> Float
     func reloadData(at index: DetailTableViewDataSource.Index)
@@ -23,7 +23,7 @@ final class DetailTableViewDataSource: TableViewDataSource {
     
     fileprivate let coordinator: DetailViewCoordinator
     
-    fileprivate(set) var navigationCell: DetailNavigationTableViewCell?
+    fileprivate(set) var navigationCell: NavigationTableViewCell?
     fileprivate(set) var collectionCell: DetailCollectionTableViewCell?
     
     init(with viewModel: DetailViewModel) {
@@ -60,22 +60,22 @@ final class DetailTableViewDataSource: TableViewDataSource {
         
         switch index {
         case .info:
-            return DetailInfoTableViewCell.create(of: DetailInfoTableViewCell.self,
+            return InfoTableViewCell.create(of: InfoTableViewCell.self,
                                                   on: tableView,
                                                   for: indexPath,
                                                   with: viewModel) as! T
         case .description:
-            return DetailDescriptionTableViewCell.create(of: DetailDescriptionTableViewCell.self,
+            return DescriptionTableViewCell.create(of: DescriptionTableViewCell.self,
                                                          on: tableView,
                                                          for: indexPath,
                                                          with: viewModel) as! T
         case .panel:
-            return DetailPanelTableViewCell.create(of: DetailPanelTableViewCell.self,
+            return PanelTableViewCell.create(of: PanelTableViewCell.self,
                                                    on: tableView,
                                                    for: indexPath,
                                                    with: viewModel) as! T
         case .navigation:
-            navigationCell = DetailNavigationTableViewCell.create(of: DetailNavigationTableViewCell.self,
+            navigationCell = NavigationTableViewCell.create(of: NavigationTableViewCell.self,
                                                                   on: tableView,
                                                                   for: indexPath,
                                                                   with: viewModel)
