@@ -9,19 +9,20 @@ import UIKit
 
 // MARK: - DownloadsNavigationView Type
 
-final class DownloadsNavigationView: UIView, ViewInstantiable {
+final class DownloadsNavigationView: UIView {
     @IBOutlet private var titleLabel: UILabel!
     @IBOutlet private var airPlayButton: UIButton!
     @IBOutlet private var accountButton: UIButton!
     
-    /// Create a navigation view object.
-    /// - Parameter parent: Instantiating view.
-    init(on parent: UIView) {
-        super.init(frame: parent.bounds)
+    init() {
+        super.init(frame: .zero)
+        
         self.nibDidLoad()
-        parent.addSubview(self)
-        self.constraintToSuperview(parent)
     }
     
     required init?(coder: NSCoder) { fatalError() }
 }
+
+// MARK: - ViewInstantiable Implementation
+
+extension DownloadsNavigationView: ViewInstantiable {}
