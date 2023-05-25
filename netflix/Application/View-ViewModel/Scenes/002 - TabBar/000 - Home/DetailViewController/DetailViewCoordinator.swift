@@ -22,8 +22,6 @@ final class DetailViewCoordinator {
 // MARK: - CoordinatorProtocol Implementation
 
 extension DetailViewCoordinator: CoordinatorProtocol {
-    /// Create a new detail controller upon existed detail controller.
-    /// - Parameter media: Corresponding media object.
     func createDetailController() {
         guard let navigation = viewController?.navigationController else { return }
         

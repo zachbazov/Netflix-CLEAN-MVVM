@@ -14,13 +14,10 @@ final class NewsNavigationView: UIView {
     @IBOutlet private weak var airPlayButton: UIButton!
     @IBOutlet private weak var accountButton: UIButton!
     
-    /// Create a navigation view object.
-    /// - Parameter parent: Instantiating view.
-    init(on parent: UIView) {
-        super.init(frame: parent.bounds)
-        parent.addSubview(self)
+    init() {
+        super.init(frame: .zero)
+        
         self.nibDidLoad()
-        self.constraintToSuperview(parent)
     }
     
     required init?(coder: NSCoder) { fatalError() }

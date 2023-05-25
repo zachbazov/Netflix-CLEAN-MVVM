@@ -10,46 +10,54 @@ import UIKit
 // MARK: - ControllerProtocol Type
 
 private protocol ControllerProtocol {
-    var navigationView: NewsNavigationView! { get }
-    var collectionView: UICollectionView! { get }
-    var dataSource: NewsCollectionViewDataSource! { get }
+    var navigationView: NewsNavigationView { get }
+    var collectionView: UICollectionView { get }
+    var dataSource: NewsCollectionViewDataSource { get }
 }
 
 // MARK: - NewsViewController Type
 
 final class NewsViewController: Controller<NewsViewModel> {
     @IBOutlet private var navigationViewContainer: UIView!
-    @IBOutlet private(set) var tableViewContainer: UIView!
+    @IBOutlet private(set) var collectionViewContainer: UIView!
     
-    fileprivate var navigationView: NewsNavigationView!
-    fileprivate(set) var collectionView: UICollectionView!
-    fileprivate var dataSource: NewsCollectionViewDataSource!
+    fileprivate lazy var navigationView: NewsNavigationView = createNavigationView()
+    fileprivate(set) lazy var collectionView: UICollectionView = createCollectionView()
+    fileprivate lazy var dataSource: NewsCollectionViewDataSource = createDataSource()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        viewDidDeploySubviews()
+        viewHierarchyWillConfigure()
         viewDidBindObservers()
         viewModel.viewDidLoad()
     }
     
-    override func viewDidDeploySubviews() {
-        setupNavigationView()
-        setupCollectionView()
-        setupDataSource()
+    override func viewHierarchyWillConfigure() {
+        navigationView
+            .addToHierarchy(on: navigationViewContainer)
+            .constraintToSuperview(navigationViewContainer)
+        
+        collectionView
+            .addToHierarchy(on: collectionViewContainer)
+            .constraintToSuperview(collectionViewContainer)
     }
     
     override func viewDidBindObservers() {
         viewModel.items.observe(on: self) { [weak self] _ in
-            guard let self = self, !self.viewModel.isEmpty else { return }
+            guard let self = self,
+                  !self.viewModel.isEmpty
+            else { return }
+            
             self.dataSource.dataSourceDidChange()
         }
     }
     
     override func viewDidUnbindObservers() {
-        if let viewModel = viewModel {
-            printIfDebug(.success, "Removed `NewsViewModel` observers.")
-            viewModel.items.remove(observer: self)
-        }
+        guard let viewModel = viewModel else { return }
+        
+        viewModel.items.remove(observer: self)
+        
+        printIfDebug(.success, "Removed `\(Self.self)` observers.")
     }
 }
 
@@ -57,25 +65,25 @@ final class NewsViewController: Controller<NewsViewModel> {
 
 extension NewsViewController: ControllerProtocol {}
 
-// MARK: - Private UI Implementation
+// MARK: - Private Implementation
 
 extension NewsViewController {
-    private func setupNavigationView() {
-        navigationView = NewsNavigationView(on: navigationViewContainer)
+    private func createNavigationView() -> NewsNavigationView {
+        return NewsNavigationView()
     }
     
-    private func setupCollectionView() {
+    private func createCollectionView() -> UICollectionView {
         let layout = CollectionViewLayout(layout: .news, scrollDirection: .vertical)
-        collectionView = UICollectionView(frame: tableViewContainer.bounds, collectionViewLayout: layout)
+        
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.showsVerticalScrollIndicator = false
         collectionView.showsHorizontalScrollIndicator = false
-        collectionView.registerNib(NewsCollectionViewCell.self)
-        collectionView.backgroundColor = .black
+        collectionView.setBackgroundColor(.black)
         
-        tableViewContainer.addSubview(collectionView)
+        return collectionView
     }
     
-    private func setupDataSource() {
-        dataSource = NewsCollectionViewDataSource(with: viewModel)
+    private func createDataSource() -> NewsCollectionViewDataSource {
+        return NewsCollectionViewDataSource(with: viewModel)
     }
 }

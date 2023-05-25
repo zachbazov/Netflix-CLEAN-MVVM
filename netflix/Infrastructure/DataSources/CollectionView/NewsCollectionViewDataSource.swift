@@ -44,11 +44,11 @@ final class NewsCollectionViewDataSource: CollectionViewDataSource {
         else { return }
         
         let cellViewModel = viewModel.items.value[row]
-        let section = homeController.viewModel?.section(at: .resumable)
+        let section = homeController.viewModel?.section(at: .newRelease)
         
-        newsController.viewModel.coordinator?.section = section
-        newsController.viewModel.coordinator?.media = cellViewModel.media
-        newsController.viewModel.coordinator?.shouldScreenRotate = false
+        newsController.viewModel.section = section
+        newsController.viewModel.media = cellViewModel.media
+        newsController.viewModel.shouldScreenRotate = false
         
         newsController.viewModel.coordinator?.coordinate(to: .detail)
     }

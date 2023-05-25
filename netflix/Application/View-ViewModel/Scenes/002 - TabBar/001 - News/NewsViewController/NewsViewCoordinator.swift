@@ -10,10 +10,6 @@ import UIKit
 // MARK: - CoordinatorProtocol Type
 
 private protocol CoordinatorProtocol {
-    var section: Section? { get }
-    var media: Media? { get }
-    var shouldScreenRotate: Bool { get }
-    
     func createDetailController()
 }
 
@@ -21,31 +17,31 @@ private protocol CoordinatorProtocol {
 
 final class NewsViewCoordinator {
     var viewController: NewsViewController?
-    
-    var section: Section?
-    var media: Media?
-    var shouldScreenRotate: Bool = false
 }
 
 // MARK: - CoordinatorProtocol Implementation
 
 extension NewsViewCoordinator: CoordinatorProtocol {
     fileprivate func createDetailController() {
-        guard let section = section, let media = media else { return }
-        
-        guard let homeController = Application.app.coordinator.tabCoordinator.viewController?.homeViewController,
-              let homeViewModel = homeController.viewModel
+        guard let viewModel = viewController?.viewModel,
+              let section = viewModel.section,
+              let media = viewModel.media
         else { return }
         
+        let coordinator = DetailViewCoordinator()
         let controller = DetailViewController()
-//        let viewModel = DetailViewModel(section: section, media: media, with: homeViewModel)
-//        controller.viewModel = viewModel
-//        controller.viewModel.coordinator = DetailViewCoordinator()
-//        controller.viewModel.coordinator?.viewController = controller
-//        controller.viewModel.isRotated = shouldScreenRotate
+        let detailViewModel = DetailViewModel()
+        
+        controller.viewModel = detailViewModel
+        controller.viewModel.media = media
+        controller.viewModel.section = section
+        controller.viewModel.isRotated = false
+        coordinator.viewController = controller
+        detailViewModel.coordinator = coordinator
         
         let navigation = UINavigationController(rootViewController: controller)
         navigation.setNavigationBarHidden(true, animated: false)
+        navigation.view.setBackgroundColor(.black)
         
         viewController?.present(navigation, animated: true)
     }
@@ -58,6 +54,7 @@ extension NewsViewCoordinator: Coordinate {
     enum Screen {
         case detail
     }
+    
     /// Screen presentation control.
     /// - Parameter screen: The screen to be allocated and presented.
     func coordinate(to screen: Screen) {

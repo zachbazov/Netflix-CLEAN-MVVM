@@ -47,6 +47,8 @@ extension MediaUseCase: UseCase {
             return await repository.getAll()
         case .getTopSearches:
             return await repository.getTopSearches() as? T
+        case .getUpcomings:
+            return await repository.getUpcomings() as? T
         default: return nil
         }
     }

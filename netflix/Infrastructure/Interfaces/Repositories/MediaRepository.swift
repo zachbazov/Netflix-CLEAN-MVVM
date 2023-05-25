@@ -154,6 +154,19 @@ extension MediaRepository {
         return task
     }
     
+    func getUpcomings() async -> NewsHTTPDTO.Response? {
+        let params = ["isNewRelease": true]
+        let request = NewsHTTPDTO.Request(queryParams: params)
+        let endpoint = APIEndpoint.getUpcomingMedia(with: request)
+        let result = await dataTransferService.request(with: endpoint)
+        
+        if case let .success(response) = result {
+            return response
+        }
+        
+        return nil
+    }
+    
     func getTopSearches(completion: @escaping (Result<SearchHTTPDTO.Response, Error>) -> Void) -> Cancellable? {
         let task = RepositoryTask()
         
