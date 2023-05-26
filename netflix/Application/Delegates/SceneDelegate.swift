@@ -31,7 +31,7 @@ extension SceneDelegate: UIWindowSceneDelegate {
         window = UIWindow(windowScene: windowScene)
         // Deploy the application.
         let application = Application.app
-        application.deployScene(in: window)
+        application.appDidLaunch(in: window)
     }
     /// Occurs once the scene has been disconnected from the app.
     /// - Parameter scene: Corresponding scene.

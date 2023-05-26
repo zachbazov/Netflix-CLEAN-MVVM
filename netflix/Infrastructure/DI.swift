@@ -7,27 +7,49 @@
 
 import Foundation
 
-protocol RegistrableDepedency {
+// MARK: - ApplicationDepending Type
+
+private protocol ApplicationDepending {
+    func registerCoordinators()
+    func registerAppServices()
+    func registerStores()
+}
+
+// MARK: - DomainDepending Type
+
+private protocol DomainDepending {
+    func registerUseCases()
+}
+
+// MARK: - InfrastructureDepending Type
+
+private protocol InfrastructureDepending {
+    func registerServices()
+}
+
+// MARK: - RegistrableDepedency Type
+
+private protocol RegistrableDepedency {
     func register<T>(_ type: T.Type, handler: @escaping (DependencyResolver) -> T)
     func resolve<T>(_ type: T.Type, resolver: DependencyResolver) -> T
 }
 
-protocol ResolvableDependency {
-    func resolve<T>(_ type: T.Type) -> T
-}
+// MARK: - DependencyRegistry Type
 
 final class DependencyRegistry {
     var dependencies: [String: Any] = [:]
 }
 
+// MARK: - RegistrableDepedency Implementation
+
 extension DependencyRegistry: RegistrableDepedency {
-    func register<T>(_ type: T.Type, handler: @escaping (DependencyResolver) -> T) {
+    fileprivate func register<T>(_ type: T.Type, handler: @escaping (DependencyResolver) -> T) {
         let key = String(describing: type)
         
         dependencies[key] = handler
     }
     
-    func resolve<T>(_ type: T.Type, resolver: DependencyResolver) -> T {
+    fileprivate func resolve<T>(_ type: T.Type, resolver: DependencyResolver) -> T {
         let key = String(describing: type)
         
         guard let factory = dependencies[key] as? (DependencyResolver) -> T else {
@@ -38,19 +60,31 @@ extension DependencyRegistry: RegistrableDepedency {
     }
 }
 
+// MARK: - ResolvableDependency Type
+
+private protocol ResolvableDependency {
+    func resolve<T>(_ type: T.Type) -> T
+}
+
+// MARK: - DependencyResolver Type
+
 final class DependencyResolver {
-    private let registry: DependencyRegistry
+    let registry: DependencyRegistry
     
     init(registry: DependencyRegistry) {
         self.registry = registry
     }
 }
 
+// MARK: - DependencyResolver Implementation
+
 extension DependencyResolver: ResolvableDependency {
-    func resolve<T>(_ type: T.Type) -> T {
+    fileprivate func resolve<T>(_ type: T.Type) -> T {
         return registry.resolve(type, resolver: self)
     }
 }
+
+// MARK: - DI Type
 
 final class DI {
     static let shared = DI()
@@ -59,10 +93,15 @@ final class DI {
     lazy var resolver = DependencyResolver(registry: registry)
 
     private init() {
+        registerCoordinators()
+        registerAppServices()
+        registerStores()
         registerServices()
         registerUseCases()
     }
 }
+
+// MARK: - ResolvableDependency Implementation
 
 extension DI: ResolvableDependency {
     func resolve<T>(_ type: T.Type) -> T {
@@ -70,40 +109,33 @@ extension DI: ResolvableDependency {
     }
 }
 
-protocol ApplicationDepending {
+// MARK: - ApplicationDepending Implementation
+
+extension DI: ApplicationDepending {
+    fileprivate func registerCoordinators() {
+        registry.register(Coordinator.self) { _ in
+            return Coordinator()
+        }
+    }
     
-}
-
-protocol DomainDepending {
-    func registerUseCases()
-}
-
-protocol InfrastructureDepending {
-    func registerServices()
-}
-
-extension DI: InfrastructureDepending {
-    func registerServices() {
-        registry.register(AuthService.self) { _ in
-            return AuthService()
+    fileprivate func registerAppServices() {
+        registry.register(Services.self) { _ in
+            return Services()
         }
-        
-        registry.register(DataTransferService.self) { resolver in
-            let networkService = resolver.resolve(NetworkService.self)
-            return DataTransferService(networkService: networkService)
-        }
-        
-        registry.register(NetworkService.self) { resolver in
-            let configuration = Application.app.services.configuration
-            let url = URL(string: configuration.apiScheme + "://" + configuration.apiHost)!
-            let config = NetworkConfig(baseURL: url)
-            return NetworkService(config: config)
+    }
+    
+    fileprivate func registerStores() {
+        registry.register(Stores.self) { resolver in
+            let services = resolver.resolve(Services.self)
+            return Stores(services: services)
         }
     }
 }
 
+// MARK: - DomainDepending Implementation
+
 extension DI: DomainDepending {
-    func registerUseCases() {
+    fileprivate func registerUseCases() {
         registry.register(UserUseCase.self) { resolver in
             let authService = resolver.resolve(AuthService.self)
             let dataTransferService = resolver.resolve(DataTransferService.self)
@@ -136,6 +168,28 @@ extension DI: DomainDepending {
             let dataTransferService = resolver.resolve(DataTransferService.self)
             let repository = ListRepository(dataTransferService: dataTransferService)
             return ListUseCase(repository: repository)
+        }
+    }
+}
+
+// MARK: - InfrastructureDepending Implementation
+
+extension DI: InfrastructureDepending {
+    fileprivate func registerServices() {
+        registry.register(AuthService.self) { _ in
+            return AuthService()
+        }
+        
+        registry.register(DataTransferService.self) { resolver in
+            let networkService = resolver.resolve(NetworkService.self)
+            return DataTransferService(networkService: networkService)
+        }
+        
+        registry.register(NetworkService.self) { resolver in
+            let configuration = Application.app.services.configuration
+            let url = URL(string: configuration.apiScheme + "://" + configuration.apiHost)!
+            let config = NetworkConfig(baseURL: url)
+            return NetworkService(config: config)
         }
     }
 }

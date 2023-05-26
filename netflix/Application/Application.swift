@@ -7,15 +7,22 @@
 
 import UIKit
 
-// MARK: - ApplicationProtocol Type
+// MARK: - ApplicationLaunching Type
 
-private protocol ApplicationProtocol {
-    var coordinator: Coordinator { get }
-    var services: Services { get }
-    var stores: Stores { get }
-    
-    func resign()
-    func didFinishResigning(with user: UserDTO?)
+private protocol ApplicationLaunching {
+    func appDidLaunch(in window: UIWindow?)
+}
+
+// MARK: - ApplicationAuthenticating Type
+
+private protocol ApplicationAuthenticating {
+    func appDidResign()
+    func appDidEndResigning(for user: UserDTO?)
+}
+
+// MARK: - ApplicationCoordinating Type
+
+private protocol ApplicationCoordinating {
     func deployScene(in window: UIWindow?)
     func coordinate(to screen: Coordinator.Screen)
 }
@@ -24,25 +31,33 @@ private protocol ApplicationProtocol {
 
 final class Application {
     static let app = Application()
+    
+    private let dependencies = DI.shared
+    
     private init() {}
     
-    lazy var coordinator = Coordinator()
-    lazy var services = Services()
-    lazy var stores = Stores(services: services)
+    lazy var coordinator = dependencies.resolve(Coordinator.self)
+    lazy var services = dependencies.resolve(Services.self)
+    lazy var stores = dependencies.resolve(Stores.self)
 }
 
-// MARK: - ApplicationProtocol Implementation
+// MARK: - ApplicationLaunching Implementation
 
-extension Application: ApplicationProtocol {
-    /// Check for the last signed authentication response by the user.
-    /// In case there is a valid response present the TabBar screen.
-    /// In case there isn't a valid response present the Auth screen.
-    fileprivate func resign() {
+extension Application: ApplicationLaunching {
+    func appDidLaunch(in window: UIWindow?) {
+        deployScene(in: window)
+    }
+}
+
+// MARK: - ApplicationAuthenticating Implementation
+
+extension Application: ApplicationAuthenticating {
+    fileprivate func appDidResign() {
         if #available(iOS 13.0, *) {
             Task {
                 let user = await services.authentication.resign()
                 
-                didFinishResigning(with: user)
+                appDidEndResigning(for: user)
             }
             
             return
@@ -51,39 +66,37 @@ extension Application: ApplicationProtocol {
         services.authentication.resign { [weak self] user in
             guard let self = self else { return }
             
-            self.didFinishResigning(with: user)
+            self.appDidEndResigning(for: user)
         }
     }
     
-    /// Based on the corresponding user, navigate to a screen.
-    /// In case there is a valid user, navigate to the tab bat screen.
-    /// In case there isn't, navigate to the auth screen.
-    /// - Parameter user: Corresponding user object.
-    fileprivate func didFinishResigning(with user: UserDTO?) {
+    fileprivate func appDidEndResigning(for user: UserDTO?) {
         guard let user = user else { return coordinate(to: .auth) }
         
         guard let selectedProfile = user.selectedProfile,
               let profiles = user.profiles,
-              profiles.contains(where: { $0 == selectedProfile }) else {
-            return coordinate(to: .profile)
-        }
+              profiles.contains(where: { $0 == selectedProfile })
+        else { return coordinate(to: .profile) }
         
         coordinate(to: .tabBar)
     }
-    
-    /// Allocate a root view controller for the window.
-    /// - Parameter window: Application's root window.
-    func deployScene(in window: UIWindow?) {
+}
+
+// MARK: - ApplicationProtocol Implementation
+
+extension Application: ApplicationCoordinating {
+    fileprivate func deployScene(in window: UIWindow?) {
         coordinator.window = window
-        // Stack and present the window.
+        
         window?.makeKeyAndVisible()
-        // Check for the latest signed response by the user.
-        resign()
+        
+        appDidResign()
     }
     
     fileprivate func coordinate(to screen: Coordinator.Screen) {
         mainQueueDispatch { [weak self] in
             guard let self = self else { return }
+            
             self.coordinator.coordinate(to: screen)
         }
     }

@@ -1098,6 +1098,13 @@
 			path = UseCases;
 			sourceTree = "<group>";
 		};
+		A18A797A2A2163E000FE60AB /* Services */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
 		A18B98EF28BEB62C0077A5A6 = {
 			isa = PBXGroup;
 			children = (
@@ -1131,6 +1138,7 @@
 		A18B990F28BEB93F0077A5A6 /* Infrastructure */ = {
 			isa = PBXGroup;
 			children = (
+				A18A79732A20DBB900FE60AB /* DI.swift */,
 				A1B1B0C8299B95270070AD29 /* Interfaces */,
 				A18B997428C011700077A5A6 /* Network */,
 				A18B998128C03DED0077A5A6 /* PersistentStores */,
@@ -1143,7 +1151,9 @@
 			isa = PBXGroup;
 			children = (
 				A18B994028BFD96E0077A5A6 /* Entities */,
-				A1A71AB3298D8196001C6AB1 /* Interfaces */,
+				A18A797A2A2163E000FE60AB /* Services */,
+				A18A79712A20538E00FE60AB /* Repositories */,
+				A18A79722A20539300FE60AB /* UseCases */,
 			);
 			path = Domain;
 			sourceTree = "<group>";
@@ -1167,7 +1177,6 @@
 				A1F56A5B28C668100089BD4F /* Theme.swift */,
 				A1B1B0A7299AEDDE0070AD29 /* Services.swift */,
 				A1B1B0A9299AEDE20070AD29 /* Stores.swift */,
-				A18A79732A20DBB900FE60AB /* DI.swift */,
 				A1B1B0A4299AED4A0070AD29 /* Delegates */,
 				A18B991228BEB9490077A5A6 /* View-ViewModel */,
 			);
@@ -1416,15 +1425,6 @@
 				A196AE0828C140A300C5D733 /* ValueTransformer.swift */,
 			);
 			path = Utils;
-			sourceTree = "<group>";
-		};
-		A1A71AB3298D8196001C6AB1 /* Interfaces */ = {
-			isa = PBXGroup;
-			children = (
-				A18A79712A20538E00FE60AB /* Repositories */,
-				A18A79722A20539300FE60AB /* UseCases */,
-			);
-			path = Interfaces;
 			sourceTree = "<group>";
 		};
 		A1AA28CA28F48A1D0011EE9D /* PreviewView */ = {

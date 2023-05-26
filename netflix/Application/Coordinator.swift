@@ -10,13 +10,6 @@ import UIKit
 // MARK: - CoordinatorProtocol Type
 
 private protocol CoordinatorProtocol {
-    var viewController: UIViewController? { get }
-    var window: UIWindow? { get }
-    
-    var authCoordinator: AuthCoordinator { get }
-    var profileCoordinator: ProfileCoordinator { get }
-    var tabCoordinator: TabBarCoordinator { get }
-    
     func createAuthController() -> AuthController
     func createProfileController() -> ProfileViewController
     func createTabBarController() -> TabBarController
