@@ -20,7 +20,7 @@ private protocol ServicesProtocol {
 // MARK: - Services Type
 
 final class Services {
-    fileprivate let configuration: Configuration
+    let configuration: Configuration
     
     lazy var authentication = AuthService()
     lazy var dataTransfer: DataTransferService = createDataTransferService()

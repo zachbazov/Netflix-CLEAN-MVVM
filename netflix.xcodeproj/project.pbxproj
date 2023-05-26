@@ -1086,7 +1086,6 @@
 			isa = PBXGroup;
 			children = (
 				A1B1B0AB299B12010070AD29 /* Repository.swift */,
-				A18A796F2A20536700FE60AB /* RequestInvoking.swift */,
 			);
 			path = Repositories;
 			sourceTree = "<group>";
@@ -1852,6 +1851,7 @@
 				A18B998928C040A70077A5A6 /* Cancellable.swift */,
 				A1B98BA3298A414E001B7B62 /* HTTP.swift */,
 				A1AC9FA429A24D1600DAD66D /* NetworkHosting.swift */,
+				A18A796F2A20536700FE60AB /* RequestInvoking.swift */,
 				A18A79752A20F49600FE60AB /* Taskable.swift */,
 			);
 			path = Protocols;

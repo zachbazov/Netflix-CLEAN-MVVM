@@ -40,8 +40,8 @@ private protocol ViewModelProtocol {
 final class HomeViewModel {
     var coordinator: HomeViewCoordinator?
     
-    fileprivate lazy var sectionUseCase: SectionUseCase = DI.shared.useCases().createSectionUseCase()
-    fileprivate lazy var mediaUseCase: MediaUseCase = DI.shared.useCases().createMediaUseCase()
+    fileprivate lazy var sectionUseCase: SectionUseCase = DI.shared.resolve(SectionUseCase.self)
+    fileprivate lazy var mediaUseCase: MediaUseCase = DI.shared.resolve(MediaUseCase.self)
     
     fileprivate let orientation = DeviceOrientation.shared
     fileprivate let myList = MyList.shared

@@ -28,7 +28,7 @@ private protocol ViewModelProtocol {
 final class DetailViewModel {
     var coordinator: DetailViewCoordinator?
     
-    lazy var useCase: SeasonUseCase = DI.shared.useCases().createSeasonUseCase()
+    lazy var useCase: SeasonUseCase = DI.shared.resolve(SeasonUseCase.self)
     let orientation = DeviceOrientation.shared
     let myList = MyList.shared
     

@@ -29,7 +29,7 @@ private protocol ViewModelProtocol {
 final class AuthViewModel {
     var coordinator: AuthCoordinator?
     
-    fileprivate lazy var useCase: UserUseCase = DI.shared.useCases().createUserUseCase()
+    fileprivate lazy var useCase: UserUseCase = DI.shared.resolve(UserUseCase.self)
 }
 
 // MARK: - ViewModel Implementation

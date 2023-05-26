@@ -33,7 +33,7 @@ private protocol ViewModelProtocol {
 final class ProfileViewModel {
     var coordinator: ProfileCoordinator?
     
-    fileprivate(set) lazy var userUseCase: UserUseCase = DI.shared.useCases().createUserUseCase()
+    fileprivate(set) lazy var userUseCase: UserUseCase = DI.shared.resolve(UserUseCase.self)
     
     var profiles = [UserProfile]()
     var selectedProfile: UserProfile?

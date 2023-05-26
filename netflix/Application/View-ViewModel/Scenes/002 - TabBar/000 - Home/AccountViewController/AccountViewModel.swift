@@ -20,7 +20,7 @@ private protocol ViewModelProtocol {
 final class AccountViewModel {
     var coordinator: AccountViewCoordinator?
     
-    fileprivate lazy var userUseCase: UserUseCase = DI.shared.useCases().createUserUseCase()
+    fileprivate lazy var userUseCase: UserUseCase = DI.shared.resolve(UserUseCase.self)
     
     let profiles: Observable<[UserProfile]> = Observable([])
     

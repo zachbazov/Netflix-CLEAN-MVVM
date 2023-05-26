@@ -26,7 +26,7 @@ private protocol ViewModelProtocol {
 final class NewsViewModel {
     var coordinator: NewsViewCoordinator?
     
-    fileprivate lazy var useCase: MediaUseCase = DI.shared.useCases().createMediaUseCase()
+    fileprivate lazy var useCase: MediaUseCase = DI.shared.resolve(MediaUseCase.self)
     
     let items: Observable<[NewsCollectionViewCellViewModel]> = Observable([])
     
