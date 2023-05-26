@@ -29,7 +29,7 @@ private protocol ViewModelProtocol {
 final class AuthViewModel {
     var coordinator: AuthCoordinator?
     
-    fileprivate let useCase = UserUseCase()
+    fileprivate lazy var useCase: UserUseCase = DI.shared.useCases().createUserUseCase()
 }
 
 // MARK: - ViewModel Implementation
@@ -76,7 +76,7 @@ extension AuthViewModel: ViewModelProtocol {
     func signOut(completion: @escaping (Result<VoidHTTPDTO.Response, DataTransferError>) -> Void) {
         useCase.repository.task = useCase.request(endpoint: .signOut,
                                                   for: VoidHTTPDTO.Response.self,
-                                                  request: Void.self,
+                                                  request: VoidHTTPDTO.Response.self,
                                                   cached: nil,
                                                   completion: completion)
     }

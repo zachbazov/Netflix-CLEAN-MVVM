@@ -10,8 +10,11 @@ import Foundation
 // MARK: - SeasonUseCase Type
 
 final class SeasonUseCase {
-    typealias T = SeasonRepository
-    let repository = SeasonRepository()
+    let repository: SeasonRepository
+    
+    init(repository: SeasonRepository) {
+        self.repository = repository
+    }
 }
 
 // MARK: - UseCase Implementation

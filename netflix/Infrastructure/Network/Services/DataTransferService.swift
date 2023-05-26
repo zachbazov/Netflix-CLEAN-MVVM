@@ -7,6 +7,12 @@
 
 import Foundation
 
+// MARK: - TransferableDataService Type
+
+protocol TransferableDataService {
+    var dataTransferService: DataServiceTransferring { get }
+}
+
 // MARK: - DataTransferError Type
 
 enum DataTransferError: Error {
@@ -16,9 +22,9 @@ enum DataTransferError: Error {
     case resolvedNetworlFailure(Error)
 }
 
-// MARK: - DataTransferServiceProtocol Type
+// MARK: - DataServiceTransferring Type
 
-protocol DataTransferServiceProtocol {
+protocol DataServiceTransferring {
     typealias CompletionHandler<T> = (Result<T, DataTransferError>) -> Void
     
     @discardableResult
@@ -30,6 +36,10 @@ protocol DataTransferServiceProtocol {
     func request<E: ResponseRequestable>(
         with endpoint: E,
         completion: @escaping CompletionHandler<Void>) -> NetworkCancellable? where E.Response == Void
+    
+    func request<T, E>(with endpoint: E) async -> Result<T, DataTransferError>? where T: Decodable, E: ResponseRequestable, T == E.Response
+    
+    func request<E>(with endpoint: E) async -> Result<VoidHTTPDTO.Response, DataTransferError>? where E: ResponseRequestable
 }
 
 // MARK: - DataTransferErrorResolverProtocol Type
@@ -58,9 +68,9 @@ struct DataTransferService {
     let errorLogger = DataTransferErrorLogger()
 }
 
-// MARK: - DataTransferServiceProtocol Implementation
+// MARK: - DataServiceTransferring Implementation
 
-extension DataTransferService: DataTransferServiceProtocol {
+extension DataTransferService: DataServiceTransferring {
     func request<T, E>(
         with endpoint: E,
         completion: @escaping CompletionHandler<T>) -> NetworkCancellable? where T: Decodable, E: ResponseRequestable, T == E.Response {

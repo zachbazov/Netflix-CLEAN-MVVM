@@ -16,10 +16,7 @@ protocol ListRepositoryRouting {
 
 // MARK: - ListRepository Type
 
-final class ListRepository: Repository {
-    let dataTransferService: DataTransferService = Application.app.services.dataTransfer
-    var task: Cancellable? { willSet { task?.cancel() } }
-}
+final class ListRepository: Repository {}
 
 // MARK: - ListRepositoryProtocol Implementation
 

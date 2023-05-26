@@ -10,8 +10,11 @@ import Foundation
 // MARK: - MediaUseCase Type
 
 final class MediaUseCase {
-    typealias T = MediaRepository
-    let repository = MediaRepository()
+    let repository: MediaRepository
+    
+    init(repository: MediaRepository) {
+        self.repository = repository
+    }
 }
 
 // MARK: - UseCase Implementation

@@ -113,6 +113,9 @@
 		A18A79682A1FA96600FE60AB /* DetailTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A18A79672A1FA96600FE60AB /* DetailTableViewCell.swift */; };
 		A18A796B2A1FB15800FE60AB /* DetailHybridCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A18A796A2A1FB15800FE60AB /* DetailHybridCell.swift */; };
 		A18A796D2A1FB15C00FE60AB /* DetailHybridCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A18A796C2A1FB15C00FE60AB /* DetailHybridCellViewModel.swift */; };
+		A18A79702A20536700FE60AB /* RequestInvoking.swift in Sources */ = {isa = PBXBuildFile; fileRef = A18A796F2A20536700FE60AB /* RequestInvoking.swift */; };
+		A18A79742A20DBB900FE60AB /* DI.swift in Sources */ = {isa = PBXBuildFile; fileRef = A18A79732A20DBB900FE60AB /* DI.swift */; };
+		A18A79762A20F49600FE60AB /* Taskable.swift in Sources */ = {isa = PBXBuildFile; fileRef = A18A79752A20F49600FE60AB /* Taskable.swift */; };
 		A18B98FC28BEB62C0077A5A6 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A18B98FB28BEB62C0077A5A6 /* AppDelegate.swift */; };
 		A18B98FE28BEB62C0077A5A6 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A18B98FD28BEB62C0077A5A6 /* SceneDelegate.swift */; };
 		A18B990528BEB62E0077A5A6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A18B990428BEB62E0077A5A6 /* Assets.xcassets */; };
@@ -442,6 +445,9 @@
 		A18A79672A1FA96600FE60AB /* DetailTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailTableViewCell.swift; sourceTree = "<group>"; };
 		A18A796A2A1FB15800FE60AB /* DetailHybridCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailHybridCell.swift; sourceTree = "<group>"; };
 		A18A796C2A1FB15C00FE60AB /* DetailHybridCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailHybridCellViewModel.swift; sourceTree = "<group>"; };
+		A18A796F2A20536700FE60AB /* RequestInvoking.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestInvoking.swift; sourceTree = "<group>"; };
+		A18A79732A20DBB900FE60AB /* DI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DI.swift; sourceTree = "<group>"; };
+		A18A79752A20F49600FE60AB /* Taskable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Taskable.swift; sourceTree = "<group>"; };
 		A18B98F828BEB62C0077A5A6 /* netflix.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = netflix.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A18B98FB28BEB62C0077A5A6 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		A18B98FD28BEB62C0077A5A6 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -1076,6 +1082,23 @@
 			path = Reusables;
 			sourceTree = "<group>";
 		};
+		A18A79712A20538E00FE60AB /* Repositories */ = {
+			isa = PBXGroup;
+			children = (
+				A1B1B0AB299B12010070AD29 /* Repository.swift */,
+				A18A796F2A20536700FE60AB /* RequestInvoking.swift */,
+			);
+			path = Repositories;
+			sourceTree = "<group>";
+		};
+		A18A79722A20539300FE60AB /* UseCases */ = {
+			isa = PBXGroup;
+			children = (
+				A1B1B0C3299B89F10070AD29 /* UseCase.swift */,
+			);
+			path = UseCases;
+			sourceTree = "<group>";
+		};
 		A18B98EF28BEB62C0077A5A6 = {
 			isa = PBXGroup;
 			children = (
@@ -1145,6 +1168,7 @@
 				A1F56A5B28C668100089BD4F /* Theme.swift */,
 				A1B1B0A7299AEDDE0070AD29 /* Services.swift */,
 				A1B1B0A9299AEDE20070AD29 /* Stores.swift */,
+				A18A79732A20DBB900FE60AB /* DI.swift */,
 				A1B1B0A4299AED4A0070AD29 /* Delegates */,
 				A18B991228BEB9490077A5A6 /* View-ViewModel */,
 			);
@@ -1322,8 +1346,8 @@
 		A18B999028C0DE570077A5A6 /* Endpoints */ = {
 			isa = PBXGroup;
 			children = (
-				A18B997928C0244D0077A5A6 /* Endpoint.swift */,
 				A18B999128C0DE710077A5A6 /* APIEndpoint.swift */,
+				A18B997928C0244D0077A5A6 /* Endpoint.swift */,
 			);
 			path = Endpoints;
 			sourceTree = "<group>";
@@ -1398,8 +1422,8 @@
 		A1A71AB3298D8196001C6AB1 /* Interfaces */ = {
 			isa = PBXGroup;
 			children = (
-				A1B1B0AB299B12010070AD29 /* Repository.swift */,
-				A1B1B0C3299B89F10070AD29 /* UseCase.swift */,
+				A18A79712A20538E00FE60AB /* Repositories */,
+				A18A79722A20539300FE60AB /* UseCases */,
 			);
 			path = Interfaces;
 			sourceTree = "<group>";
@@ -1825,9 +1849,10 @@
 		A1B70A97293EC2CA00C718C6 /* Protocols */ = {
 			isa = PBXGroup;
 			children = (
-				A1AC9FA429A24D1600DAD66D /* NetworkHosting.swift */,
 				A18B998928C040A70077A5A6 /* Cancellable.swift */,
 				A1B98BA3298A414E001B7B62 /* HTTP.swift */,
+				A1AC9FA429A24D1600DAD66D /* NetworkHosting.swift */,
+				A18A79752A20F49600FE60AB /* Taskable.swift */,
 			);
 			path = Protocols;
 			sourceTree = "<group>";
@@ -2220,6 +2245,8 @@
 				A18B997828C020FC0077A5A6 /* NetworkService.swift in Sources */,
 				A14E0CBE29BB97E500F55500 /* AccountMenuNotificationHybridCell.swift in Sources */,
 				A127C1E228DD00F100CEE34F /* NavigationOverlayFooterView.swift in Sources */,
+				A18A79762A20F49600FE60AB /* Taskable.swift in Sources */,
+				A18A79742A20DBB900FE60AB /* DI.swift in Sources */,
 				A1AD25D028D6D31000F793B3 /* NavigationBarViewModel.swift in Sources */,
 				A1AD767729AC85B200669667 /* NewsCollectionViewCell.swift in Sources */,
 				A18B995D28BFFBF30077A5A6 /* EpisodeDTO+Mapping.swift in Sources */,
@@ -2263,6 +2290,7 @@
 				A1B70A75293D76EB00C718C6 /* HomeViewCoordinator.swift in Sources */,
 				A1B70A77293D77BA00C718C6 /* TabBarCoordinator.swift in Sources */,
 				A18B991728BEBD040077A5A6 /* Configuration.swift in Sources */,
+				A18A79702A20536700FE60AB /* RequestInvoking.swift in Sources */,
 				A18B997C28C029A30077A5A6 /* DataTransferService.swift in Sources */,
 				A1B98BB1298A495F001B7B62 /* NewsHTTPDTO+Mapping.swift in Sources */,
 				A18A796B2A1FB15800FE60AB /* DetailHybridCell.swift in Sources */,

@@ -29,9 +29,9 @@ protocol NewsRepositoryRouting {
 // MARK: - MediaRepository Type
 
 final class MediaRepository: Repository {
-    let dataTransferService: DataTransferService = Application.app.services.dataTransfer
+//    let dataTransferService: DataTransferService = Application.app.services.dataTransfer
     let responseStorage: MediaHTTPResponseStore = Application.app.stores.mediaResponses
-    var task: Cancellable? { willSet { task?.cancel() } }
+//    var task: Cancellable? { willSet { task?.cancel() } }
 }
 
 // MARK: - MediaRepositoryProtocol Implementation

@@ -16,9 +16,9 @@ protocol SectionsRepositoryRouting {
 // MARK: - SectionRepository Type
 
 final class SectionRepository: Repository {
-    let dataTransferService: DataTransferService = Application.app.services.dataTransfer
+//    let dataTransferService: DataTransferService = Application.app.services.dataTransfer
     let sectionResponseStore: SectionHTTPResponseStore = Application.app.stores.sectionResponses
-    var task: Cancellable? { willSet { task?.cancel() } }
+//    var task: Cancellable? { willSet { task?.cancel() } }
 }
 
 // MARK: - SectionRepositoryProtocol Implementation

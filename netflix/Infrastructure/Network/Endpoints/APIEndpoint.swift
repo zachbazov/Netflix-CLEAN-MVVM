@@ -11,9 +11,9 @@ import Foundation
 
 struct APIEndpoint {}
 
-// MARK: - UserRepositoryRouting Implementation
+// MARK: - UserRepositoryEndpointing Implementation
 
-extension APIEndpoint: UserRepositoryRouting {
+extension APIEndpoint: UserRepositoryEndpointing {
     static func signUp(with request: UserHTTPDTO.Request) -> Endpoint<UserHTTPDTO.Response> {
         return Endpoint(path: "api/v1/users/signup",
                         method: .post,

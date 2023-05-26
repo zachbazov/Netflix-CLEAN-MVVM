@@ -16,8 +16,8 @@ protocol SeasonRepositoryRouting {
 // MARK: - SeasonRepository Type
 
 final class SeasonRepository: Repository {
-    let dataTransferService: DataTransferService = Application.app.services.dataTransfer
-    var task: Cancellable? { willSet { task?.cancel() } }
+//    let dataTransferService: DataTransferService = Application.app.services.dataTransfer
+//    var task: Cancellable? { willSet { task?.cancel() } }
 }
 
 // MARK: - SeasonRepositoryProtocol Implementation

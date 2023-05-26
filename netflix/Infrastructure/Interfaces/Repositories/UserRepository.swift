@@ -7,21 +7,17 @@
 
 import Foundation
 
-// MARK: - UserRepositoryRouting Type
+// MARK: - UserRepositoryEndpointing Type
 
-protocol UserRepositoryRouting {
-    static func signUp(with requestDTO: UserHTTPDTO.Request) -> Endpoint<UserHTTPDTO.Response>
-    static func signIn(with requestDTO: UserHTTPDTO.Request) -> Endpoint<UserHTTPDTO.Response>
+protocol UserRepositoryEndpointing {
+    static func signUp(with request: UserHTTPDTO.Request) -> Endpoint<UserHTTPDTO.Response>
+    static func signIn(with request: UserHTTPDTO.Request) -> Endpoint<UserHTTPDTO.Response>
     static func signOut(with request: UserHTTPDTO.Request) -> Endpoint<VoidHTTPDTO.Response>?
 }
 
-// MARK: - UserRepositoryProtocol Type
+// MARK: - UserAuthenticating Type
 
-private protocol UserRepositoryProtocol {
-    var dataTransferService: DataTransferService { get }
-    var userResponses: UserHTTPResponseStore { get }
-    var task: Cancellable? { get }
-    
+protocol UserAuthenticating {
     func signUp(request: UserHTTPDTO.Request,
                 completion: @escaping (Result<UserHTTPDTO.Response, DataTransferError>) -> Void) -> Cancellable?
     func signIn(request: UserHTTPDTO.Request,
@@ -29,37 +25,40 @@ private protocol UserRepositoryProtocol {
                 completion: @escaping (Result<UserHTTPDTO.Response, DataTransferError>) -> Void) -> Cancellable?
     func signOut(completion: @escaping (Result<VoidHTTPDTO.Response, DataTransferError>) -> Void) -> Cancellable?
     
-    func getUserProfiles(request: UserProfileHTTPDTO.GET.Request,
-                         completion: @escaping (Result<UserProfileHTTPDTO.GET.Response, DataTransferError>) -> Void) -> Cancellable?
-    func createUserProfile(request: UserProfileHTTPDTO.POST.Request,
-                           completion: @escaping (Result<UserProfileHTTPDTO.POST.Response, DataTransferError>) -> Void) -> Cancellable?
-    func updateUserProfile(request: UserHTTPDTO.Request,
-                           completion: @escaping (Result<UserHTTPDTO.Response, DataTransferError>) -> Void) -> Cancellable?
-    
     func signUp(request: UserHTTPDTO.Request) async -> UserHTTPDTO.Response?
     func signIn(request: UserHTTPDTO.Request) async -> UserHTTPDTO.Response?
     func signOut(request: UserHTTPDTO.Request) async -> VoidHTTPDTO.Response?
-    
-    func getUserProfiles(request: UserProfileHTTPDTO.GET.Request) async -> UserProfileHTTPDTO.GET.Response?
-    func createUserProfile(request: UserProfileHTTPDTO.POST.Request) async -> UserProfileHTTPDTO.POST.Response?
-    func updateUserData(request: UserHTTPDTO.Request) async -> UserHTTPDTO.Response?
 }
 
 // MARK: - UserRepository Type
 
-final class UserRepository {
-    let dataTransferService: DataTransferService = Application.app.services.dataTransfer
-    let userResponses: UserHTTPResponseStore = Application.app.stores.userResponses
-    var task: Cancellable? { willSet { task?.cancel() } }
+final class UserRepository: Repository {
+    let authenticator: UserAuthenticating
+    let persistentStore: UserHTTPResponseStore
+    let invoker: RequestInvoking
+    
+    init(dataTransferService: DataTransferService,
+         authenticator: UserAuthenticating,
+         persistentStore: UserHTTPResponseStore,
+         invoker: RequestInvoking) {
+        self.authenticator = authenticator
+        self.persistentStore = persistentStore
+        self.invoker = invoker
+        super.init(dataTransferService: dataTransferService)
+    }
 }
 
-// MARK: - Repository Implementation
+// MARK: - UserAuthenticating Implementation
 
-extension UserRepository: Repository {}
-
-// MARK: - UserRepositoryProtocol Implementation
-
-extension UserRepository: UserRepositoryProtocol {
+final class UserRepositoryAuthenticator: UserAuthenticating {
+    let dataTransferService: DataTransferService
+    let persistentStore: UserHTTPResponseStore
+    
+    init(dataTransferService: DataTransferService, persistentStore: UserHTTPResponseStore) {
+        self.dataTransferService = dataTransferService
+        self.persistentStore = persistentStore
+    }
+    
     func signUp(request: UserHTTPDTO.Request,
                 completion: @escaping (Result<UserHTTPDTO.Response, DataTransferError>) -> Void) -> Cancellable? {
         let task = RepositoryTask()
@@ -67,10 +66,14 @@ extension UserRepository: UserRepositoryProtocol {
         guard !task.isCancelled else { return nil }
         
         let endpoint = APIEndpoint.signUp(with: request)
+        
         task.networkTask = dataTransferService.request(with: endpoint) { [weak self] result in
+            guard let self = self else { return }
+            
             switch result {
             case .success(let response):
-                self?.userResponses.save(response: response, for: request)
+                self.persistentStore.save(response: response, for: request)
+                
                 completion(.success(response))
             case .failure(let error):
                 completion(.failure(error))
@@ -85,7 +88,7 @@ extension UserRepository: UserRepositoryProtocol {
                 completion: @escaping (Result<UserHTTPDTO.Response, DataTransferError>) -> Void) -> Cancellable? {
         let task = RepositoryTask()
         
-        userResponses.getResponse(for: request) { [weak self] result in
+        persistentStore.getResponse(for: request) { [weak self] result in
             guard let self = self else { return }
             
             if case let .success(response?) = result {
@@ -95,10 +98,12 @@ extension UserRepository: UserRepositoryProtocol {
             guard !task.isCancelled else { return }
             
             let endpoint = APIEndpoint.signIn(with: request)
+            
             task.networkTask = self.dataTransferService.request(with: endpoint) { result in
                 switch result {
                 case .success(let response):
-                    self.userResponses.save(response: response, for: request)
+                    self.persistentStore.save(response: response, for: request)
+                    
                     completion(.success(response))
                 case .failure(let error):
                     completion(.failure(error))
@@ -115,82 +120,18 @@ extension UserRepository: UserRepositoryProtocol {
         guard !task.isCancelled else { return nil }
         
         let authService = Application.app.services.authentication
-        let request = UserHTTPDTO.Request(user: authService.user!, selectedProfile: nil)
+        
+        guard let user = authService.user else { return nil }
+        
+        let request = UserHTTPDTO.Request(user: user, selectedProfile: nil)
+        
         guard let endpoint = APIEndpoint.signOut(with: request) else { return nil }
         task.networkTask = dataTransferService.request(with: endpoint, completion: completion)
         
-        let context = userResponses.coreDataStorage.context()
-        userResponses.deleteResponse(for: request, in: context)
+        let context = persistentStore.coreDataStorage.context()
+        persistentStore.deleteResponse(for: request, in: context)
         
         return task
-    }
-    
-    func getUserProfiles(request: UserProfileHTTPDTO.GET.Request,
-                         completion: @escaping (Result<UserProfileHTTPDTO.GET.Response, DataTransferError>) -> Void) -> Cancellable? {
-        let task = RepositoryTask()
-        
-        guard !task.isCancelled else { return nil }
-        
-        let endpoint = APIEndpoint.getUserProfiles(with: request)
-        task.networkTask = dataTransferService.request(with: endpoint) { result in
-            switch result {
-            case .success(let response):
-                completion(.success(response))
-            case .failure(let error):
-                completion(.failure(error))
-            }
-        }
-        
-        return task
-    }
-    
-    func createUserProfile(request: UserProfileHTTPDTO.POST.Request,
-                           completion: @escaping (Result<UserProfileHTTPDTO.POST.Response, DataTransferError>) -> Void) -> Cancellable? {
-        let task = RepositoryTask()
-        
-        guard !task.isCancelled else { return nil }
-        
-        let endpoint = APIEndpoint.createUserProfile(with: request)
-        task.networkTask = dataTransferService.request(with: endpoint) { result in
-            switch result {
-            case .success(let response):
-                completion(.success(response))
-            case .failure(let error):
-                completion(.failure(error))
-            }
-        }
-        
-        return task
-    }
-    
-    func updateUserProfile(request: UserHTTPDTO.Request,
-                           completion: @escaping (Result<UserHTTPDTO.Response, DataTransferError>) -> Void) -> Cancellable? {
-        let task = RepositoryTask()
-        
-        guard !task.isCancelled else { return nil }
-        
-        let endpoint = APIEndpoint.updateUserData(with: request)
-        task.networkTask = dataTransferService.request(with: endpoint) { result in
-            switch result {
-            case .success(let response):
-                completion(.success(response))
-            case .failure(let error):
-                completion(.failure(error))
-            }
-        }
-        
-        return task
-    }
-    
-    func getUserProfiles(request: UserProfileHTTPDTO.GET.Request) async -> UserProfileHTTPDTO.GET.Response? {
-        let endpoint = APIEndpoint.getUserProfiles(with: request)
-        let result = await dataTransferService.request(with: endpoint)
-        
-        if case let .success(response) = result {
-            return response
-        }
-        
-        return nil
     }
     
     func signUp(request: UserHTTPDTO.Request) async -> UserHTTPDTO.Response? {
@@ -198,7 +139,7 @@ extension UserRepository: UserRepositoryProtocol {
         let result = await dataTransferService.request(with: endpoint)
         
         if case let .success(response) = result {
-            userResponses.save(response: response, for: request)
+            persistentStore.save(response: response, for: request)
             return response
         }
         
@@ -206,12 +147,13 @@ extension UserRepository: UserRepositoryProtocol {
     }
     
     func signIn(request: UserHTTPDTO.Request) async -> UserHTTPDTO.Response? {
-        guard let cached = await userResponses.getResponse(for: request) else {
+        guard let cached = await persistentStore.getResponse(for: request) else {
             let endpoint = APIEndpoint.signIn(with: request)
             let result = await dataTransferService.request(with: endpoint)
             
             if case let .success(response) = result {
-                userResponses.save(response: response, for: request)
+                persistentStore.save(response: response, for: request)
+                
                 return response
             }
             
@@ -223,40 +165,155 @@ extension UserRepository: UserRepositoryProtocol {
     
     func signOut(request: UserHTTPDTO.Request) async -> VoidHTTPDTO.Response? {
         guard let endpoint = APIEndpoint.signOut(with: request) else { return nil }
+        
         let result = await dataTransferService.request(with: endpoint)
-        let context = userResponses.coreDataStorage.context()
+        let context = persistentStore.coreDataStorage.context()
 
         if case let .success(response) = result {
-            userResponses.deleteResponse(for: request, in: context)
+            persistentStore.deleteResponse(for: request, in: context)
+            
             return response
         }
         
         return nil
     }
+}
+
+// MARK: - RepositoryInvoker Type
+
+final class RepositoryInvoker {
+    let dataTransferService: DataTransferService
+    let persistentStore: UserHTTPResponseStore
     
-    func createUserProfile(request: UserProfileHTTPDTO.POST.Request) async -> UserProfileHTTPDTO.POST.Response? {
-        let endpoint = APIEndpoint.createUserProfile(with: request)
-        let result = await dataTransferService.request(with: endpoint)
-        
-        if case let .success(response) = result {
-            return response
+    init(dataTransferService: DataTransferService, persistentStore: UserHTTPResponseStore) {
+        self.dataTransferService = dataTransferService
+        self.persistentStore = persistentStore
+    }
+}
+
+// MARK: - RequestInvoking Implementation
+
+extension RepositoryInvoker: RequestInvoking {
+    func getAll<T, U>(request: U, completion: @escaping (Result<T, DataTransferError>) -> Void) -> Cancellable? where T: Decodable, U: Decodable {
+        switch request {
+        case let request as UserProfileHTTPDTO.GET.Request:
+            let task = RepositoryTask()
+            
+            guard !task.isCancelled else { return nil }
+            
+            let endpoint = APIEndpoint.getUserProfiles(with: request)
+            task.networkTask = dataTransferService.request(with: endpoint) { result in
+                switch result {
+                case .success(let response):
+                    completion(.success(response as! T))
+                case .failure(let error):
+                    completion(.failure(error))
+                }
+            }
+            
+            return task
+        default:
+            return nil
         }
-        
-        return nil
     }
     
-    func updateUserData(request: UserHTTPDTO.Request) async -> UserHTTPDTO.Response? {
-        let authService = Application.app.services.authentication
-        let endpoint = APIEndpoint.updateUserData(with: request)
-        let result = await dataTransferService.request(with: endpoint)
-        
-        if case let .success(response) = result {
-            var response = response
-            response.token = authService.userToken
-            userResponses.save(response: response, for: request)
-            return response
+    func createOne<T, U>(request: U, completion: @escaping (Result<T, DataTransferError>) -> Void) -> Cancellable? where T: Decodable, U: Decodable {
+        switch request {
+        case let request as UserProfileHTTPDTO.POST.Request:
+            let task = RepositoryTask()
+            
+            guard !task.isCancelled else { return nil }
+            
+            let endpoint = APIEndpoint.createUserProfile(with: request)
+            task.networkTask = dataTransferService.request(with: endpoint) { result in
+                switch result {
+                case .success(let response):
+                    completion(.success(response as! T))
+                case .failure(let error):
+                    completion(.failure(error))
+                }
+            }
+            
+            return task
+        default:
+            return nil
         }
-        
-        return nil
+    }
+    
+    func updateOne<T, U>(request: U, completion: @escaping (Result<T, DataTransferError>) -> Void) -> Cancellable? where T: Decodable, U: Decodable {
+        switch request {
+        case let request as UserHTTPDTO.Request:
+            let task = RepositoryTask()
+            
+            guard !task.isCancelled else { return nil }
+            
+            let endpoint = APIEndpoint.updateUserData(with: request)
+            task.networkTask = dataTransferService.request(with: endpoint) { result in
+                switch result {
+                case .success(let response):
+                    completion(.success(response as! T))
+                case .failure(let error):
+                    completion(.failure(error))
+                }
+            }
+            
+            return task
+        default:
+            return nil
+        }
+    }
+    
+    func getAll<T, U>(request: U) async -> T? where T: Decodable, U: Decodable {
+        switch request {
+        case let request as UserProfileHTTPDTO.GET.Request:
+            let endpoint = APIEndpoint.getUserProfiles(with: request)
+            let result = await dataTransferService.request(with: endpoint)
+            
+            if case let .success(response) = result {
+                return response as? T
+            }
+            
+            return nil
+        default:
+            return nil
+        }
+    }
+    
+    func createOne<T, U>(request: U) async -> T? where T: Decodable, U: Decodable {
+        switch request {
+        case let request as UserProfileHTTPDTO.POST.Request:
+            let endpoint = APIEndpoint.createUserProfile(with: request)
+            let result = await dataTransferService.request(with: endpoint)
+            
+            if case let .success(response) = result {
+                return response as? T
+            }
+            
+            return nil
+        default:
+            return nil
+        }
+    }
+    
+    func updateOne<T, U>(request: U) async -> T? where T: Decodable, U: Decodable {
+        switch request {
+        case let request as UserHTTPDTO.Request:
+            let authService = Application.app.services.authentication
+            let endpoint = APIEndpoint.updateUserData(with: request)
+            let result = await dataTransferService.request(with: endpoint)
+            
+            if case let .success(response) = result {
+                var response = response
+                response.token = authService.userToken
+                
+                persistentStore.save(response: response, for: request)
+                
+                return response as? T
+            }
+            
+            return nil
+        default:
+            return nil
+        }
     }
 }

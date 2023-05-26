@@ -11,9 +11,6 @@ import Foundation
 
 protocol UseCase {
     associatedtype Endpoint
-    associatedtype T: Repository
-    
-    var repository: T { get }
     
     func request<T, U>(endpoint: Endpoint,
                        for response: T.Type,

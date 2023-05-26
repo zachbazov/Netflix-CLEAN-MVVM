@@ -30,7 +30,7 @@ private protocol ViewModelProtocol {
 final class SearchViewModel {
     var coordinator: SearchViewCoordinator?
     
-    fileprivate let useCase = MediaUseCase()
+    fileprivate lazy var useCase: MediaUseCase = DI.shared.useCases().createMediaUseCase()
     
     let items: Observable<[SearchCollectionViewCellViewModel]> = Observable([])
     

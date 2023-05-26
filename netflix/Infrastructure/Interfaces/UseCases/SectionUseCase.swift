@@ -10,8 +10,11 @@ import Foundation
 // MARK: - SectionUseCase Type
 
 final class SectionUseCase {
-    typealias T = SectionRepository
-    let repository = SectionRepository()
+    let repository: SectionRepository
+    
+    init(repository: SectionRepository) {
+        self.repository = repository
+    }
 }
 
 // MARK: - UseCase Implementation

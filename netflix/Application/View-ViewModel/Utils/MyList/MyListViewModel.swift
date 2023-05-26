@@ -26,7 +26,7 @@ private protocol ViewModelProtocol {
 final class MyListViewModel {
     let coordinator: HomeViewCoordinator
     
-    fileprivate let useCase = ListUseCase()
+    fileprivate lazy var useCase: ListUseCase = DI.shared.useCases().createListUseCase()
     
     fileprivate let user: UserDTO
     

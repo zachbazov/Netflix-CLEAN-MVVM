@@ -10,8 +10,11 @@ import Foundation
 // MARK: - ListUseCase Type
 
 final class ListUseCase {
-    typealias T = ListRepository
-    let repository = ListRepository()
+    let repository: ListRepository
+    
+    init(repository: ListRepository) {
+        self.repository = repository
+    }
 }
 
 // MARK: - UseCase Implementation
