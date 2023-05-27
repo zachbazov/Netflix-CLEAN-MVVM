@@ -13,9 +13,9 @@ final class FastLaughsViewCoordinator {
     var viewController: FastLaughsViewController?
 }
 
-// MARK: - Coordinate Implementation
+// MARK: - Coordinator Implementation
 
-extension FastLaughsViewCoordinator: Coordinate {
+extension FastLaughsViewCoordinator: Coordinator {
     enum Screen {
         case fastLaughs
     }

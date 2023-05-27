@@ -86,9 +86,9 @@ extension ProfileCoordinator: CoordinatorProtocol {
     }
 }
 
-// MARK: - Coordinate Implementation
+// MARK: - Coordinator Implementation
 
-extension ProfileCoordinator: Coordinate {
+extension ProfileCoordinator: Coordinator {
     /// Screen representation type.
     enum Screen {
         case userProfile

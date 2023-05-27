@@ -9,7 +9,10 @@ import UIKit
 
 // MARK: - FastLaughsViewController Type
 
-final class FastLaughsViewController: Controller<FastLaughsViewModel> {
+final class FastLaughsViewController: UIViewController, Controller {
+    
+    var viewModel: FastLaughsViewModel!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
     }

@@ -36,9 +36,9 @@ final class SignInViewModel {
 
 extension SignInViewModel: ViewModel {}
 
-// MARK: - Coordinable Implementation
+// MARK: - CoordinatorAssignable Implementation
 
-extension SignInViewModel: Coordinable {}
+extension SignInViewModel: CoordinatorAssignable {}
 
 // MARK: - ViewModelProtocol Implementation
 

@@ -13,9 +13,9 @@ final class DownloadsViewCoordinator {
     var viewController: DownloadsViewController?
 }
 
-// MARK: - Coordinate Implementation
+// MARK: - Coordinator Implementation
 
-extension DownloadsViewCoordinator: Coordinate {
+extension DownloadsViewCoordinator: Coordinator {
     /// View representation type.
     enum Screen {
         case downloads

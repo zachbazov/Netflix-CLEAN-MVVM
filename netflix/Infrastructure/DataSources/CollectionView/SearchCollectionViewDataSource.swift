@@ -40,7 +40,7 @@ final class SearchCollectionViewDataSource: CollectionViewDataSource {
     }
     
     override func didSelectItem(in collectionView: UICollectionView, at indexPath: IndexPath) {
-        guard let controller = Application.app.coordinator.tabCoordinator?.viewController?.homeViewController,
+        guard let controller = Application.app.coordinator.tabCoordinator?.home?.viewControllers.first as? HomeViewController,
               let homeViewModel = controller.viewModel,
               let coordinator = homeViewModel.coordinator
         else { return }

@@ -23,8 +23,8 @@ private protocol ApplicationAuthenticating {
 // MARK: - ApplicationCoordinating Type
 
 private protocol ApplicationCoordinating {
-    func sceneDidDeploy(in window: UIWindow?)
-    func coordinate(to screen: Coordinator.Screen)
+    func setWindow(_ window: UIWindow?)
+    func coordinate(to screen: RootCoordinator.Screen)
 }
 
 // MARK: - Application Type
@@ -34,7 +34,7 @@ final class Application {
     
     private init() {}
     
-    private(set) lazy var coordinator = Coordinator()
+    private(set) lazy var coordinator = RootCoordinator()
     private(set) lazy var services = Services()
     private(set) lazy var stores = Stores(services: services)
 }
@@ -43,7 +43,7 @@ final class Application {
 
 extension Application: ApplicationLaunching {
     func appDidLaunch(in window: UIWindow?) {
-        sceneDidDeploy(in: window)
+        setWindow(window)
         
         appDidResign()
     }
@@ -71,31 +71,30 @@ extension Application: ApplicationAuthenticating {
     }
     
     fileprivate func appDidEndResigning(for user: UserDTO?) {
-        printIfDebug(.debug, "1")
         guard let user = user else {
             return coordinate(to: .auth)
         }
-        printIfDebug(.debug, "2")
+        
         guard let selectedProfile = user.selectedProfile,
               let profiles = user.profiles,
               profiles.contains(where: { $0 == selectedProfile }) else {
             return coordinate(to: .profile)
         }
-        printIfDebug(.debug, "3")
+        
         coordinate(to: .tabBar)
     }
 }
 
-// MARK: - ApplicationProtocol Implementation
+// MARK: - ApplicationCoordinating Implementation
 
 extension Application: ApplicationCoordinating {
-    fileprivate func sceneDidDeploy(in window: UIWindow?) {
+    fileprivate func setWindow(_ window: UIWindow?) {
         coordinator.window = window
         
         window?.makeKeyAndVisible()
     }
     
-    fileprivate func coordinate(to screen: Coordinator.Screen) {
+    fileprivate func coordinate(to screen: RootCoordinator.Screen) {
         mainQueueDispatch { [weak self] in
             guard let self = self else { return }
             

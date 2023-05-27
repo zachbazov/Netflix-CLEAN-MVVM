@@ -10,7 +10,7 @@ import XCTest
 
 final class CoordinatorTests: XCTestCase {
     var application: Application!
-    var coordinator: Coordinator!
+    var coordinator: RootCoordinator!
     
     override func setUp() {
         super.setUp()

@@ -78,9 +78,9 @@ extension AuthCoordinator: CoordinatorProtocol {
     }
 }
 
-// MARK: - Coordinate Implementation
+// MARK: - Coordinator Implementation
 
-extension AuthCoordinator: Coordinate {
+extension AuthCoordinator: Coordinator {
     /// View representation type.
     @objc
     enum Screen: Int {

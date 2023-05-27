@@ -23,10 +23,11 @@ private protocol ViewControllerProtocol {
 
 // MARK: - UserProfileViewController Type
 
-final class UserProfileViewController: Controller<ProfileViewModel> {
-    
+final class UserProfileViewController: UIViewController, Controller {
     fileprivate lazy var collectionView: UICollectionView = createCollectionView()
     fileprivate(set) lazy var dataSource: UserProfileCollectionViewDataSource = createDataSource()
+    
+    var viewModel: ProfileViewModel!
     
     deinit {
         print("deinit \(String(describing: Self.self))")
@@ -34,17 +35,17 @@ final class UserProfileViewController: Controller<ProfileViewModel> {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        super.viewDidLoadBehaviors()
+        viewDidLoadBehaviors()
         viewDidDeploySubviews()
         viewModel.viewDidLoad()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        super.deviceWillLockOrientation(.portrait)
+        deviceWillLockOrientation(.portrait)
     }
     
-    override func viewDidDeploySubviews() {
+    func viewDidDeploySubviews() {
         title = "Who's Watching?"
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .edit,
                                                             target: self,

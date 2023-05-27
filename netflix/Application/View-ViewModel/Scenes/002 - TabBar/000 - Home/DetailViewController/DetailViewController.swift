@@ -19,9 +19,11 @@ private protocol ControllerProtocol {
 
 // MARK: - DetailViewController Type
 
-final class DetailViewController: Controller<DetailViewModel> {
+final class DetailViewController: UIViewController, Controller {
     @IBOutlet private(set) weak var tableView: UITableView!
     @IBOutlet private(set) weak var previewContainer: UIView!
+    
+    var viewModel: DetailViewModel!
     
     private(set) var previewView: PreviewView?
     private(set) var dataSource: DetailTableViewDataSource?
@@ -46,12 +48,12 @@ final class DetailViewController: Controller<DetailViewModel> {
         viewModel?.shouldScreenRotate()
     }
     
-    override func viewWillDeploySubviews() {
+    func viewWillDeploySubviews() {
         createPreviewView()
         createDataSource()
     }
     
-    override func viewWillDeallocate() {
+    func viewWillDeallocate() {
         deviceWillLockOrientation(.portrait)
         
         previewView = nil

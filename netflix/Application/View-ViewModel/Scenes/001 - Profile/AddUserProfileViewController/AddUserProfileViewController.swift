@@ -13,7 +13,9 @@ private protocol ViewControllerProtocol {}
 
 // MARK: - AddUserProfileViewController Type
 
-final class AddUserProfileViewController: Controller<ProfileViewModel> {
+final class AddUserProfileViewController: UIViewController, Controller {
+    
+    var viewModel: ProfileViewModel!
     
     override func viewDidLoad() {
         super.viewDidLoad()

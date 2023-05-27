@@ -143,8 +143,8 @@ extension DI: ApplicationDepending {
     }
     
     fileprivate func registerCoordinators() {
-        registry.register(Coordinator.self) { _ in
-            return Coordinator()
+        registry.register(RootCoordinator.self) { _ in
+            return RootCoordinator()
         }
         
         registry.register(AuthCoordinator.self) { resolver in

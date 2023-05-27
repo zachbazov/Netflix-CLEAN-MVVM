@@ -104,9 +104,9 @@ extension HomeViewCoordinator: CoordinatorProtocol {
     }
 }
 
-// MARK: - Coordinate Implementation
+// MARK: - Coordinator Implementation
 
-extension HomeViewCoordinator: Coordinate {
+extension HomeViewCoordinator: Coordinator {
     /// View representation type.
     enum Screen: Int {
         case detail

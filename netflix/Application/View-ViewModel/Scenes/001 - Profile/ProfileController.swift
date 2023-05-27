@@ -9,7 +9,9 @@ import UIKit
 
 // MARK: - ProfileController Type
 
-final class ProfileController: Controller<ProfileViewModel> {
+final class ProfileController: UIViewController, Controller {
+    var viewModel: ProfileViewModel!
+    
     deinit {
         print("deinit \(String(describing: Self.self))")
         viewModel.coordinator = nil

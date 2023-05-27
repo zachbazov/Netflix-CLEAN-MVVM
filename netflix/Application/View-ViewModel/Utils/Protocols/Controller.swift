@@ -13,21 +13,48 @@ protocol ViewAnimating {
     func viewWillAnimateAppearance()
 }
 
-// MARK: - Controller<T> Type
+protocol Controller: UIViewController,
+                     ViewLifecycleBehavior,
+                     ViewObserving,
+                     ViewModeling,
+                     ViewAnimating,
+                     DeviceOrienting,
+                     NavigationControllerStyling {
+    associatedtype ViewModelType: ViewModel
+    
+    var viewModel: ViewModelType! { get set }
+    
+    // MARK: ViewLifecycleBehavior
+    
+    func viewWillLoadBehaviors()
+    func viewDidLoadBehaviors()
+    func viewWillDeploySubviews()
+    func viewDidDeploySubviews()
+    func viewHierarchyWillConfigure()
+    func viewHierarchyDidConfigure()
+    func viewWillConfigure()
+    func viewDidConfigure()
+    func viewWillTargetSubviews()
+    func viewDidTargetSubviews()
+    func viewWillDeallocate()
+    func viewDidDeallocate()
+    
+    // MARK: ViewObserving
+    
+    func viewWillBindObservers()
+    func viewDidBindObservers()
+    func viewWillUnbindObservers()
+    func viewDidUnbindObservers()
+    
+    // MARK: ViewAnimating
+    
+    func viewWillAnimateAppearance()
+    func viewWillAnimateDisappearance(_ completion: @escaping () -> Void)
+}
 
-class Controller<T>: UIViewController where T: ViewModel {
-    override var preferredStatusBarStyle: UIStatusBarStyle {
-        return .lightContent
-    }
-    
-    var viewModel: T!
-    
-    func viewWillLoadBehaviors() {
-        addBehaviors([BackButtonEmptyTitleNavigationBarBehavior(),
-                      BlackStyleNavigationBarBehavior()])
-    }
+extension Controller {
+    func viewWillLoadBehaviors() {}
     func viewDidLoadBehaviors() {}
-    
     func viewWillDeploySubviews() {}
     func viewDidDeploySubviews() {}
     func viewHierarchyWillConfigure() {}
@@ -76,25 +103,9 @@ class Controller<T>: UIViewController where T: ViewModel {
     }
 }
 
-// MARK: - ViewLifecycleBehavior Implementation
-
-extension Controller: ViewLifecycleBehavior {}
-
-// MARK: - ViewModeling Implementation
-
-extension Controller: ViewModeling {}
-
-// MARK: - ViewObserving Implementation
-
-extension Controller: ViewObserving {}
-
-// MARK: - ViewAnimating Implementation
-
-extension Controller: ViewAnimating {}
-
 // MARK: - DeviceOrienting Implementation
 
-extension Controller: DeviceOrienting {
+extension Controller {
     func deviceWillLockOrientation(_ mask: UIInterfaceOrientationMask = .portrait) {
         let orientation = DeviceOrientation.shared
         orientation.setLock(orientation: mask)
@@ -103,7 +114,7 @@ extension Controller: DeviceOrienting {
 
 // MARK: - NavigationControllerStyling Implementation
 
-extension Controller: NavigationControllerStyling {
+extension Controller {
     func titleViewWillConfigure(withAssetNamed asset: String = "netflix-logo-2") {
         let point = CGPoint(x: 0.0, y: 0.0)
         let size = CGSize(width: 80.0, height: 24.0)

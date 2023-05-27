@@ -36,9 +36,9 @@ final class AuthViewModel {
 
 extension AuthViewModel: ViewModel {}
 
-// MARK: - Coordinable Implementation
+// MARK: - CoordinatorAssignable Implementation
 
-extension AuthViewModel: Coordinable {}
+extension AuthViewModel: CoordinatorAssignable {}
 
 // MARK: - ViewModelProtocol Implementation
 

@@ -88,9 +88,9 @@ extension HomeViewModel: ViewModel {
     }
 }
 
-// MARK: - Coordinable Implementation
+// MARK: - CoordinatorAssignable Implementation
 
-extension HomeViewModel: Coordinable {}
+extension HomeViewModel: CoordinatorAssignable {}
 
 // MARK: - ViewModelProtocol Implementation
 

@@ -13,9 +13,9 @@ final class SearchViewCoordinator {
     var viewController: SearchViewController?
 }
 
-// MARK: - Coordinate Implementation
+// MARK: - Coordinator Implementation
 
-extension SearchViewCoordinator: Coordinate {
+extension SearchViewCoordinator: Coordinator {
     /// View representation type.
     enum Screen {
         case search

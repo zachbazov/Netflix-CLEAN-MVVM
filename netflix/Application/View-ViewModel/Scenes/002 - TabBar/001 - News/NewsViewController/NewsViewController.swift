@@ -17,9 +17,11 @@ private protocol ControllerProtocol {
 
 // MARK: - NewsViewController Type
 
-final class NewsViewController: Controller<NewsViewModel> {
+final class NewsViewController: UIViewController, Controller {
     @IBOutlet private var navigationViewContainer: UIView!
     @IBOutlet private(set) var collectionViewContainer: UIView!
+    
+    var viewModel: NewsViewModel!
     
     fileprivate lazy var navigationView: NewsNavigationView = createNavigationView()
     fileprivate(set) lazy var collectionView: UICollectionView = createCollectionView()
@@ -32,7 +34,7 @@ final class NewsViewController: Controller<NewsViewModel> {
         viewModel.viewDidLoad()
     }
     
-    override func viewHierarchyWillConfigure() {
+    func viewHierarchyWillConfigure() {
         navigationView
             .addToHierarchy(on: navigationViewContainer)
             .constraintToSuperview(navigationViewContainer)
@@ -42,7 +44,7 @@ final class NewsViewController: Controller<NewsViewModel> {
             .constraintToSuperview(collectionViewContainer)
     }
     
-    override func viewDidBindObservers() {
+    func viewDidBindObservers() {
         viewModel.items.observe(on: self) { [weak self] _ in
             guard let self = self,
                   !self.viewModel.isEmpty
@@ -52,7 +54,7 @@ final class NewsViewController: Controller<NewsViewModel> {
         }
     }
     
-    override func viewDidUnbindObservers() {
+    func viewDidUnbindObservers() {
         guard let viewModel = viewModel else { return }
         
         viewModel.items.remove(observer: self)

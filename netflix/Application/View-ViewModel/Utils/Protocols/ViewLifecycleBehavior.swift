@@ -10,9 +10,6 @@ import Foundation
 // MARK: - ViewLifecycleBehavior Type
 
 protocol ViewLifecycleBehavior {
-    func dataWillLoad()
-    func dataDidLoad()
-    
     func viewWillLoad()
     func viewDidLoad()
     func viewWillLoadBehaviors()
@@ -32,14 +29,11 @@ protocol ViewLifecycleBehavior {
     func viewWillDeallocate()
     func viewDidDeallocate()
     
-    func viewWillConstraint()
-    func viewDidConstraint()
-    
     func viewWillAnimateAppearance()
+    func viewDidAnimateAppearance()
     func viewWillAnimateDisappearance()
+    func viewDidAnimateDisappearance()
     func viewShouldAppear(_ presented: Bool)
-    
-    func prepareForReuse()
 }
 
 // MARK: - Default Implementation
@@ -67,12 +61,9 @@ extension ViewLifecycleBehavior {
     func viewWillDeallocate() {}
     func viewDidDeallocate() {}
     
-    func viewWillConstraint() {}
-    func viewDidConstraint() {}
-    
     func viewWillAnimateAppearance() {}
+    func viewDidAnimateAppearance() {}
     func viewWillAnimateDisappearance() {}
+    func viewDidAnimateDisappearance() {}
     func viewShouldAppear(_ presented: Bool) {}
-    
-    func prepareForReuse() {}
 }

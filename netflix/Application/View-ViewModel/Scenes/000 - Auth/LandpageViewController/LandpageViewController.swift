@@ -17,7 +17,7 @@ private protocol ViewControllerProtocol {
 
 // MARK: - LandpageViewController Type
 
-final class LandpageViewController: Controller<AuthViewModel> {
+final class LandpageViewController: UIViewController, Controller {
     @IBOutlet private weak var backgroundImageView: UIImageView!
     @IBOutlet private weak var statusBarGradientView: UIView!
     @IBOutlet private weak var topGradientView: UIView!
@@ -25,6 +25,8 @@ final class LandpageViewController: Controller<AuthViewModel> {
     @IBOutlet private weak var signUpButton: UIButton!
     @IBOutlet private weak var headlineTextView: UITextView!
     @IBOutlet private weak var descriptionTextView: UITextView!
+    
+    var viewModel: AuthViewModel!
     
     private weak var signInBarButton: UIView! {
         guard let rightBarButtonItemView = navigationItem.rightBarButtonItem?.value(forKey: "view") as? UIView else {
@@ -38,14 +40,14 @@ final class LandpageViewController: Controller<AuthViewModel> {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        super.viewDidLoadBehaviors()
+        viewWillLoadBehaviors()
         viewDidDeploySubviews()
         viewDidTargetSubviews()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        super.deviceWillLockOrientation(.portrait)
+        deviceWillLockOrientation(.portrait)
         animateView()
     }
     
@@ -54,11 +56,11 @@ final class LandpageViewController: Controller<AuthViewModel> {
         setupGradients()
     }
     
-    override func viewDidDeploySubviews() {
+    func viewDidDeploySubviews() {
         setupNavigationBarButtonItem()
     }
     
-    override func viewDidTargetSubviews() {
+    func viewDidTargetSubviews() {
         signUpButton.addTarget(self, action: #selector(coordinateToSignUp), for: .touchUpInside)
     }
 }

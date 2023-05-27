@@ -16,9 +16,11 @@ private protocol ControllerProtocol {
 
 // MARK: - DownloadsViewController Type
 
-final class DownloadsViewController: Controller<DownloadsViewModel> {
+final class DownloadsViewController: UIViewController, Controller {
     @IBOutlet private var navigationViewContainer: UIView!
     @IBOutlet private var downloadsViewContainer: UIView!
+    
+    var viewModel: DownloadsViewModel!
     
     fileprivate lazy var navigationView: DownloadsNavigationView = createDownloadsNavigationView()
     fileprivate lazy var downloadsView: DownloadsView = createDownloadsView()
@@ -28,7 +30,7 @@ final class DownloadsViewController: Controller<DownloadsViewModel> {
         viewHierarchyWillConfigure()
     }
     
-    override func viewHierarchyWillConfigure() {
+    func viewHierarchyWillConfigure() {
         navigationView
             .addToHierarchy(on: navigationViewContainer)
             .constraintToSuperview(navigationViewContainer)

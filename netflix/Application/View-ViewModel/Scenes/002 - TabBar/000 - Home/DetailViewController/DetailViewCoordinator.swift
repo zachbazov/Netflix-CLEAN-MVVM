@@ -47,9 +47,9 @@ extension DetailViewCoordinator: CoordinatorProtocol {
     }
 }
 
-// MARK: - Coordinate Implementation
+// MARK: - Coordinator Implementation
 
-extension DetailViewCoordinator: Coordinate {
+extension DetailViewCoordinator: Coordinator {
     /// View representation type.
     enum Screen {
         case detail

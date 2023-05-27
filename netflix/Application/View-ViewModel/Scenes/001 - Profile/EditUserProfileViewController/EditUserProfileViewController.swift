@@ -13,7 +13,9 @@ private protocol ViewControllerProtocol {}
 
 // MARK: - EditUserProfileViewController Type
 
-final class EditUserProfileViewController: Controller<ProfileViewModel> {
+final class EditUserProfileViewController: UIViewController, Controller {
+    
+    var viewModel: ProfileViewModel!
     
     override func viewDidLoad() {
         super.viewDidLoad()

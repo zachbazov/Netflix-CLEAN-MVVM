@@ -39,9 +39,9 @@ final class SignUpViewModel {
 
 extension SignUpViewModel: ViewModel {}
 
-// MARK: - Coordinable Implementation
+// MARK: - CoordinatorAssignable Implementation
 
-extension SignUpViewModel: Coordinable {}
+extension SignUpViewModel: CoordinatorAssignable {}
 
 // MARK: - ViewModelProtocol Implementation
 

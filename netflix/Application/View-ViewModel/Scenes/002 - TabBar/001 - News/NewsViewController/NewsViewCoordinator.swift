@@ -47,9 +47,9 @@ extension NewsViewCoordinator: CoordinatorProtocol {
     }
 }
 
-// MARK: - Coordinate Implementation
+// MARK: - Coordinator Implementation
 
-extension NewsViewCoordinator: Coordinate {
+extension NewsViewCoordinator: Coordinator {
     /// View representation type.
     enum Screen {
         case detail

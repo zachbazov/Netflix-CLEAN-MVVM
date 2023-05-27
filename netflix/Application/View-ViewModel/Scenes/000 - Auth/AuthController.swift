@@ -9,4 +9,6 @@ import UIKit
 
 // MARK: - AuthController Type
 
-final class AuthController: Controller<AuthViewModel> {}
+final class AuthController: UIViewController, Controller {
+    var viewModel: AuthViewModel!
+}

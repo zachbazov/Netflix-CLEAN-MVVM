@@ -17,6 +17,6 @@ final class TabBarViewModel {
 
 extension TabBarViewModel: ViewModel {}
 
-// MARK: - Coordinable Implementation
+// MARK: - CoordinatorAssignable Implementation
 
-extension TabBarViewModel: Coordinable {}
+extension TabBarViewModel: CoordinatorAssignable {}

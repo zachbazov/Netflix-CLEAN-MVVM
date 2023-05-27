@@ -13,9 +13,9 @@ final class AccountViewCoordinator {
     var viewController: AccountViewController?
 }
 
-// MARK: - Coordinate Implementation
+// MARK: - Coordinator Implementation
 
-extension AccountViewCoordinator: Coordinate {
+extension AccountViewCoordinator: Coordinator {
     /// View representation type.
     enum Screen {
         case account

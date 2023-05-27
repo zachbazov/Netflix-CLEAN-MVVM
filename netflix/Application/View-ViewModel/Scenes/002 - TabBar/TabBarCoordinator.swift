@@ -26,6 +26,7 @@ private struct TabBarConfiguration {
             downloadsTabItem(for: controller as! UINavigationController)
         }
     }
+    
     /// Create an Home tab bar item.
     /// - Parameter controller: Tab's root controller.
     private func homeTabItem(for controller: UINavigationController) {
@@ -78,12 +79,14 @@ extension TabBarConfiguration {
         let image: UIImage
         let tag: Int
         var navigationBarHidden: Bool?
+        
         /// Apply configuration a tab bar item.
         /// - Parameter controller: Receiver view controller.
         func applyConfig<T: UIViewController>(for controller: T) {
             let attributes = NSAttributedString.tabBarItemAttributes
             controller.tabBarItem = UITabBarItem(title: title, image: image, tag: tag)
             controller.tabBarItem.setTitleTextAttributes(attributes, for: .normal)
+            
             // In-case the receiver view controller wrapper is a navigation controller type.
             if let controller = controller as? UINavigationController {
                 controller.setNavigationBarHidden(navigationBarHidden ?? true, animated: false)
@@ -174,9 +177,9 @@ extension TabBarCoordinator {
     }
 }
 
-// MARK: - Coordinate Implementation
+// MARK: - Coordinator Implementation
 
-extension TabBarCoordinator: Coordinate {
+extension TabBarCoordinator: Coordinator {
     /// View representation type.
     enum Screen: Int {
         case home

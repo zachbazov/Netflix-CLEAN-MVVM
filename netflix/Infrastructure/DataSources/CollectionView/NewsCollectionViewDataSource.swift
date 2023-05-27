@@ -40,8 +40,8 @@ final class NewsCollectionViewDataSource: CollectionViewDataSource {
         
         
         guard let tabCoordinator = Application.app.coordinator.tabCoordinator,
-              let homeController = tabCoordinator.viewController?.homeViewController,
-              let newsController = tabCoordinator.viewController?.newsViewController
+              let homeController = tabCoordinator.home?.viewControllers.first as? HomeViewController,
+              let newsController = tabCoordinator.news?.viewControllers.first as? NewsViewController
         else { return }
         
         let cellViewModel = viewModel.items.value[row]

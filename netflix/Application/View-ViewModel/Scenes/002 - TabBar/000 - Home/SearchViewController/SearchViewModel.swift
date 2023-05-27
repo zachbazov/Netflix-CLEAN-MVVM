@@ -41,7 +41,7 @@ final class SearchViewModel {
     fileprivate var isEmpty: Bool { return items.value.isEmpty }
     
     var topSearches: [Media] {
-        guard let controller = Application.app.coordinator.tabCoordinator?.viewController?.homeViewController else { fatalError("Unexpected controller \(HomeViewController.self) value.") }
+        guard let controller = Application.app.coordinator.tabCoordinator?.home?.viewControllers.first as? HomeViewController else { fatalError("Unexpected controller \(HomeViewController.self) value.") }
         
         return controller.viewModel.topSearches
     }

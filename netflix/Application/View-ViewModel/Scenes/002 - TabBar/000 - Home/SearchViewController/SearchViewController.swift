@@ -21,13 +21,15 @@ private protocol ControllerProtocol {
 
 // MARK: - SearchViewController Type
 
-final class SearchViewController: Controller<SearchViewModel> {
+final class SearchViewController: UIViewController, Controller {
     @IBOutlet private weak var contentView: UIView!
     @IBOutlet private weak var barContainer: UIView!
     @IBOutlet private weak var searchBarContainer: UIView!
     @IBOutlet private weak var contentContainer: UIView!
     @IBOutlet private weak var backButton: UIButton!
     @IBOutlet private(set) weak var searchBar: UISearchBar!
+    
+    var viewModel: SearchViewModel!
     
     fileprivate lazy var collectionView: UICollectionView = createCollectionView()
     fileprivate(set) lazy var dataSource: SearchCollectionViewDataSource? = createDataSource()
@@ -42,30 +44,30 @@ final class SearchViewController: Controller<SearchViewModel> {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        super.viewWillLoadBehaviors()
+        viewWillLoadBehaviors()
         viewHierarchyWillConfigure()
         viewWillConfigure()
         viewWillTargetSubviews()
         viewWillBindObservers()
     }
     
-    override func viewHierarchyWillConfigure() {
+    func viewHierarchyWillConfigure() {
         collectionView
             .addToHierarchy(on: contentContainer)
             .constraintToSuperview(contentContainer)
     }
     
-    override func viewWillConfigure() {
+    func viewWillConfigure() {
         configureSearchController()
         configureSearchBar()
         configureSearchBarTextField()
     }
     
-    override func viewWillTargetSubviews() {
+    func viewWillTargetSubviews() {
         backButton.addTarget(self, action: #selector(backButtonDidTap), for: .touchUpInside)
     }
     
-    override func viewWillBindObservers() {
+    func viewWillBindObservers() {
         viewModel?.items.observe(on: self) { [weak self] in
             guard !$0.isEmpty else { return }
             
@@ -77,7 +79,7 @@ final class SearchViewController: Controller<SearchViewModel> {
         }
     }
     
-    override func viewWillUnbindObservers() {
+    func viewWillUnbindObservers() {
         guard let viewModel = viewModel else { return }
         
         viewModel.items.remove(observer: self)
@@ -92,7 +94,7 @@ final class SearchViewController: Controller<SearchViewModel> {
         searchController.isActive = false
     }
     
-    override func viewWillDeallocate() {
+    func viewWillDeallocate() {
         viewWillUnbindObservers()
         
         searchBar.searchTextField.resignFirstResponder()

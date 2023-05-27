@@ -15,12 +15,14 @@ private protocol ViewControllerProtocol {
 
 // MARK: - SignUpViewController Type
 
-final class SignUpViewController: Controller<SignUpViewModel> {
+final class SignUpViewController: UIViewController, Controller {
     @IBOutlet private(set) weak var nameTextField: UITextField!
     @IBOutlet private(set) weak var emailTextField: UITextField!
     @IBOutlet private(set) weak var passwordTextField: UITextField!
     @IBOutlet private(set) weak var passwordConfirmTextField: UITextField!
     @IBOutlet private weak var signUpButton: UIButton!
+    
+    var viewModel: SignUpViewModel!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -29,7 +31,7 @@ final class SignUpViewController: Controller<SignUpViewModel> {
         viewDidConfigure()
     }
     
-    override func viewDidDeploySubviews() {
+    func viewDidDeploySubviews() {
         setAttributes(for: [nameTextField, emailTextField,
                             passwordTextField, passwordConfirmTextField])
         
@@ -38,7 +40,7 @@ final class SignUpViewController: Controller<SignUpViewModel> {
         titleViewWillConfigure()
     }
     
-    override func viewDidTargetSubviews() {
+    func viewDidTargetSubviews() {
         signUpButton.addTarget(viewModel, action: #selector(viewModel?.signUpButtonDidTap), for: .touchUpInside)
         nameTextField.addTarget(self, action: #selector(textFieldValueDidChange), for: .editingChanged)
         emailTextField.addTarget(self, action: #selector(textFieldValueDidChange), for: .editingChanged)
@@ -46,7 +48,7 @@ final class SignUpViewController: Controller<SignUpViewModel> {
         passwordConfirmTextField.addTarget(self, action: #selector(textFieldValueDidChange), for: .editingChanged)
     }
     
-    override func viewDidConfigure() {
+    func viewDidConfigure() {
         nameTextField.delegate = self
         emailTextField.delegate = self
         passwordTextField.delegate = self

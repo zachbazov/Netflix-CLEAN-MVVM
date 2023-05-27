@@ -15,10 +15,12 @@ private protocol ViewControllerProtocol {
 
 // MARK: - SignInViewController Type
 
-final class SignInViewController: Controller<SignInViewModel> {
+final class SignInViewController: UIViewController, Controller {
     @IBOutlet private(set) weak var emailTextField: UITextField!
     @IBOutlet private(set) weak var passwordTextField: UITextField!
     @IBOutlet weak var signInButton: UIButton!
+    
+    var viewModel: SignInViewModel!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -27,7 +29,7 @@ final class SignInViewController: Controller<SignInViewModel> {
         viewDidConfigure()
     }
     
-    override func viewDidDeploySubviews() {
+    func viewDidDeploySubviews() {
         setAttributes(for: [emailTextField, passwordTextField])
         
         signInButton.border(.black, width: 1.5)
@@ -35,13 +37,13 @@ final class SignInViewController: Controller<SignInViewModel> {
         titleViewWillConfigure()
     }
     
-    override func viewDidTargetSubviews() {
+    func viewDidTargetSubviews() {
         signInButton.addTarget(viewModel, action: #selector(viewModel?.signInButtonDidTap), for: .touchUpInside)
         emailTextField.addTarget(self, action: #selector(textFieldValueDidChange), for: .editingChanged)
         passwordTextField.addTarget(self, action: #selector(textFieldValueDidChange), for: .editingChanged)
     }
     
-    override func viewDidConfigure() {
+    func viewDidConfigure() {
         emailTextField.delegate = self
         passwordTextField.delegate = self
     }

@@ -16,7 +16,7 @@ private protocol ViewControllerProtocol {
 
 // MARK: - AccountViewController Type
 
-final class AccountViewController: Controller<AccountViewModel> {
+final class AccountViewController: UIViewController, Controller {
     @IBOutlet private weak var backButton: UIButton!
     @IBOutlet private weak var profileLabel: UILabel!
     @IBOutlet private weak var collectionContainer: UIView!
@@ -24,6 +24,8 @@ final class AccountViewController: Controller<AccountViewModel> {
     @IBOutlet private(set) weak var tableView: UITableView!
     @IBOutlet private weak var signOutButton: UIButton!
     @IBOutlet private weak var versionLabel: UILabel!
+    
+    var viewModel: AccountViewModel!
     
     private(set) lazy var collectionView: UICollectionView = createCollectionView()
     private(set) lazy var profileDataSource: ProfileCollectionViewDataSource = createProfileDataSource()
@@ -35,7 +37,7 @@ final class AccountViewController: Controller<AccountViewModel> {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        super.viewWillLoadBehaviors()
+        viewWillLoadBehaviors()
         viewWillDeploySubviews()
         viewHierarchyWillConfigure()
         viewWillTargetSubviews()
@@ -43,22 +45,22 @@ final class AccountViewController: Controller<AccountViewModel> {
         viewModel.viewDidLoad()
     }
     
-    override func viewWillDeploySubviews() {
+    func viewWillDeploySubviews() {
         createAccountMenuDataSource()
     }
     
-    override func viewHierarchyWillConfigure() {
+    func viewHierarchyWillConfigure() {
         collectionView
             .addToHierarchy(on: collectionContainer)
             .constraintToSuperview(collectionContainer)
     }
     
-    override func viewWillTargetSubviews() {
+    func viewWillTargetSubviews() {
         backButton.addTarget(self, action: #selector(backButtonDidTap), for: .touchUpInside)
         signOutButton.addTarget(self, action: #selector(signOutDidTap), for: .touchUpInside)
     }
     
-    override func viewWillBindObservers() {
+    func viewWillBindObservers() {
         viewModel.profiles.observe(on: self) { [weak self] _ in
             guard let self = self else { return }
             
@@ -66,7 +68,7 @@ final class AccountViewController: Controller<AccountViewModel> {
         }
     }
     
-    override func viewWillUnbindObservers() {
+    func viewWillUnbindObservers() {
         guard let viewModel = viewModel else { return }
         
         viewModel.profiles.remove(observer: self)
@@ -74,7 +76,7 @@ final class AccountViewController: Controller<AccountViewModel> {
         printIfDebug(.success, "Removed `\(Self.self)` observers.")
     }
     
-    override func viewWillDeallocate() {
+    func viewWillDeallocate() {
         viewWillUnbindObservers()
         
         accountMenuDataSource = nil
@@ -93,7 +95,7 @@ final class AccountViewController: Controller<AccountViewModel> {
 extension AccountViewController: ViewControllerProtocol {
     @objc
     fileprivate func backButtonDidTap() {
-        super.viewWillAnimateDisappearance { [weak self] in
+        viewWillAnimateDisappearance { [weak self] in
             self?.viewWillDeallocate()
         }
     }

@@ -23,12 +23,14 @@ private protocol ViewControllerProtocol {
 
 // MARK: - HomeViewController Type
 
-final class HomeViewController: Controller<HomeViewModel> {
+final class HomeViewController: UIViewController, Controller {
     @IBOutlet private(set) var tableView: UITableView!
     @IBOutlet private(set) var navigationViewContainer: UIView!
     @IBOutlet private(set) var navigationOverlayViewContainer: UIView!
     @IBOutlet private(set) var browseOverlayViewContainer: UIView!
     @IBOutlet private(set) var navigationViewContainerHeight: NSLayoutConstraint!
+    
+    var viewModel: HomeViewModel!
     
     private(set) var dataSource: MediaTableViewDataSource?
     private(set) var navigationView: NavigationView?
@@ -37,7 +39,7 @@ final class HomeViewController: Controller<HomeViewModel> {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        super.viewWillLoadBehaviors()
+        viewWillLoadBehaviors()
         viewWillBindObservers()
         viewWillDeploySubviews()
         viewModel.viewDidLoad()
@@ -45,17 +47,17 @@ final class HomeViewController: Controller<HomeViewModel> {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        super.deviceWillLockOrientation(.portrait)
+        deviceWillLockOrientation(.portrait)
     }
     
-    override func viewWillDeploySubviews() {
+    func viewWillDeploySubviews() {
         createDataSource()
         createNavigationView()
         createNavigationOverlay()
         createBrowseOverlay()
     }
     
-    override func viewWillBindObservers() {
+    func viewWillBindObservers() {
         guard let viewModel = viewModel else { return }
         
         viewModel.dataSourceState.observe(on: self) { [weak self] state in
@@ -65,7 +67,7 @@ final class HomeViewController: Controller<HomeViewModel> {
         }
     }
     
-    override func viewWillUnbindObservers() {
+    func viewWillUnbindObservers() {
         guard let viewModel = viewModel else { return }
         
         viewModel.dataSourceState.remove(observer: self)
