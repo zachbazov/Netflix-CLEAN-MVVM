@@ -7,78 +7,14 @@
 
 import UIKit
 
-final class DI {
-    static var shared = DI()
-    
-    private init() {}
-    
-    lazy var authCoordinator: AuthCoordinator = createAuthCoordinator()
-    lazy var profileCoordinator: ProfileCoordinator = createProfileCoordinator()
-    lazy var tabBarCoordinator: TabBarCoordinator = createTabBarCoordinator()
-    
-    func createAuthCoordinator() -> AuthCoordinator {
-        let viewModel = createAuthViewModel()
-        let controller = createAuthController()
-        authCoordinator = AuthCoordinator()
-        authCoordinator.viewController = controller
-        viewModel.coordinator = authCoordinator
-        controller.viewModel = viewModel
-        return authCoordinator
-    }
-    
-    private func createAuthViewModel() -> AuthViewModel {
-        return AuthViewModel()
-    }
-    
-    private func createAuthController() -> AuthController {
-        return AuthController()
-    }
-    
-    func createProfileCoordinator() -> ProfileCoordinator {
-        let controller = ProfileController()
-        let viewModel = ProfileViewModel()
-        profileCoordinator = ProfileCoordinator()
-        profileCoordinator.viewController = controller
-        viewModel.coordinator = profileCoordinator
-        controller.viewModel = viewModel
-        return profileCoordinator
-    }
-    
-    private func createProfileViewModel() -> ProfileViewModel {
-        return ProfileViewModel()
-    }
-    
-    private func createProfileController() -> ProfileController {
-        return ProfileController()
-    }
-    
-    func createTabBarCoordinator() -> TabBarCoordinator {
-        let controller = TabBarController()
-        let viewModel = TabBarViewModel()
-        tabBarCoordinator = TabBarCoordinator()
-        tabBarCoordinator.viewController = controller
-        viewModel.coordinator = tabBarCoordinator
-        controller.viewModel = viewModel
-        return tabBarCoordinator
-    }
-    
-    private func createTabBarViewModel() -> TabBarViewModel {
-        return TabBarViewModel()
-    }
-    
-    private func createTabBarController() -> TabBarController {
-        return TabBarController()
-    }
-}
-
 // MARK: - Coordinator Type
 
 final class Coordinator {
     weak var viewController: UIViewController?
     weak var window: UIWindow? { didSet { viewController = window?.rootViewController } }
     
-    fileprivate(set) lazy var authCoordinator = DI.shared.createAuthCoordinator()
-    fileprivate(set) lazy var profileCoordinator = DI.shared.createProfileCoordinator()
+    fileprivate(set) lazy var authCoordinator = DI.shared.resolve(AuthCoordinator.self)
+    fileprivate(set) lazy var profileCoordinator = DI.shared.resolve(ProfileCoordinator.self)
     fileprivate(set) var tabCoordinator: TabBarCoordinator?
 }
 
@@ -105,7 +41,7 @@ extension Coordinator: Coordinate {
             
             profileCoordinator.coordinate(to: .userProfile)
         case .tabBar:
-            tabCoordinator = DI.shared.createTabBarCoordinator()
+            tabCoordinator = DI.shared.resolve(TabBarCoordinator.self)
             
             window?.rootViewController = tabCoordinator?.viewController
             
