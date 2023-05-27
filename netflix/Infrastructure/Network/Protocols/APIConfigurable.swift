@@ -1,5 +1,5 @@
 //
-//  NetworkHosting.swift
+//  APIConfigurable.swift
 //  netflix
 //
 //  Created by Zach Bazov on 19/02/2023.
@@ -7,9 +7,9 @@
 
 import Foundation
 
-// MARK: - NetworkHosting Type
+// MARK: - APIConfigurable Type
 
-protocol NetworkHosting {
+protocol APIConfigurable {
     var apiScheme: String { get }
     var apiHost: String { get }
 }

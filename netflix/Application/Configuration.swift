@@ -9,9 +9,9 @@ import Foundation
 
 // MARK: - Configuration Type
 
-final class Configuration: NetworkHosting {
+final class Configuration: APIConfigurable {
     
-    // MARK: APIBundleLoading Properties
+    // MARK: APIConfiguration Implementation
     
     lazy var apiScheme: String = {
         guard

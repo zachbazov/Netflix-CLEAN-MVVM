@@ -7,14 +7,6 @@
 
 import Foundation
 
-// MARK: - NetworkConfigurable Type
-
-protocol NetworkConfigurable {
-    var baseURL: URL { get }
-    var headers: [String: String] { get }
-    var queryParameters: [String: String] { get }
-}
-
 // MARK: - NetworkConfig Type
 
 struct NetworkConfig: NetworkConfigurable {

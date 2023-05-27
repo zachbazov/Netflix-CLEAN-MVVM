@@ -16,8 +16,8 @@ private protocol ApplicationLaunching {
 // MARK: - ApplicationAuthenticating Type
 
 private protocol ApplicationAuthenticating {
-    func appDidResign()
-    func appDidEndResigning(for user: UserDTO?)
+    func resignUserSession()
+    func handleResignedSession(for user: UserDTO?)
 }
 
 // MARK: - ApplicationCoordinating Type
@@ -45,19 +45,19 @@ extension Application: ApplicationLaunching {
     func appDidLaunch(in window: UIWindow?) {
         setWindow(window)
         
-        appDidResign()
+        resignUserSession()
     }
 }
 
 // MARK: - ApplicationAuthenticating Implementation
 
 extension Application: ApplicationAuthenticating {
-    fileprivate func appDidResign() {
+    fileprivate func resignUserSession() {
         if #available(iOS 13.0, *) {
             Task {
                 let user = await services.authentication.resign()
                 
-                appDidEndResigning(for: user)
+                handleResignedSession(for: user)
             }
             
             return
@@ -66,11 +66,11 @@ extension Application: ApplicationAuthenticating {
         services.authentication.resign { [weak self] user in
             guard let self = self else { return }
             
-            self.appDidEndResigning(for: user)
+            self.handleResignedSession(for: user)
         }
     }
     
-    fileprivate func appDidEndResigning(for user: UserDTO?) {
+    fileprivate func handleResignedSession(for user: UserDTO?) {
         guard let user = user else {
             return coordinate(to: .auth)
         }
