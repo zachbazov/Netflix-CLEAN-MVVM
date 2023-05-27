@@ -29,7 +29,7 @@ private protocol ViewModelProtocol {
 final class AuthViewModel {
     var coordinator: AuthCoordinator?
     
-    fileprivate lazy var useCase: UserUseCase = DI.shared.resolve(UserUseCase.self)
+    fileprivate lazy var useCase: UserUseCase = createUseCase()
 }
 
 // MARK: - ViewModel Implementation
@@ -100,5 +100,20 @@ extension AuthViewModel: ViewModelProtocol {
     /// - Returns: User's response object.
     func signOut(with request: UserHTTPDTO.Request) async -> VoidHTTPDTO.Response? {
         return await useCase.request(endpoint: .signOut, for: VoidHTTPDTO.Response.self, request: request)
+    }
+}
+
+// MARK: - Private Implementation
+
+extension AuthViewModel {
+    private func createUseCase() -> UserUseCase {
+        let services = Application.app.services
+        let authService = services.authentication
+        let dataTransferService = services.dataTransfer
+        let persistentStore = UserHTTPResponseStore(authService: authService)
+        let authenticator = UserRepositoryAuthenticator(dataTransferService: dataTransferService, persistentStore: persistentStore)
+        let invoker = RepositoryInvoker(dataTransferService: dataTransferService, persistentStore: persistentStore)
+        let repository = UserRepository(dataTransferService: dataTransferService, authenticator: authenticator, persistentStore: persistentStore, invoker: invoker)
+        return UserUseCase(repository: repository)
     }
 }

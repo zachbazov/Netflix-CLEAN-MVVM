@@ -20,7 +20,7 @@ private protocol ViewModelProtocol {
 final class AccountViewModel {
     var coordinator: AccountViewCoordinator?
     
-    fileprivate lazy var userUseCase: UserUseCase = DI.shared.resolve(UserUseCase.self)
+    fileprivate lazy var userUseCase: UserUseCase = createUseCase()
     
     let profiles: Observable<[UserProfile]> = Observable([])
     
@@ -101,5 +101,20 @@ extension AccountViewModel: ViewModelProtocol {
         let addProfile = UserProfile(_id: "add", name: "Add Profile", image: "plus", active: false, user: user._id!)
         
         self.profiles.value.append(addProfile)
+    }
+}
+
+// MARK: - Private Implementation
+
+extension AccountViewModel {
+    private func createUseCase() -> UserUseCase {
+        let services = Application.app.services
+        let authService = services.authentication
+        let dataTransferService = services.dataTransfer
+        let persistentStore = UserHTTPResponseStore(authService: authService)
+        let authenticator = UserRepositoryAuthenticator(dataTransferService: dataTransferService, persistentStore: persistentStore)
+        let invoker = RepositoryInvoker(dataTransferService: dataTransferService, persistentStore: persistentStore)
+        let repository = UserRepository(dataTransferService: dataTransferService, authenticator: authenticator, persistentStore: persistentStore, invoker: invoker)
+        return UserUseCase(repository: repository)
     }
 }

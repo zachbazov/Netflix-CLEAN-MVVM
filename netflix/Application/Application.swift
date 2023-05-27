@@ -32,13 +32,11 @@ private protocol ApplicationCoordinating {
 final class Application {
     static let app = Application()
     
-    private let dependencies = DI.shared
-    
     private init() {}
     
-    lazy var coordinator = dependencies.resolve(Coordinator.self)
-    lazy var services = dependencies.resolve(Services.self)
-    lazy var stores = dependencies.resolve(Stores.self)
+    lazy var coordinator = Coordinator()
+    lazy var services = Services()
+    lazy var stores = Stores(services: services)
 }
 
 // MARK: - ApplicationLaunching Implementation

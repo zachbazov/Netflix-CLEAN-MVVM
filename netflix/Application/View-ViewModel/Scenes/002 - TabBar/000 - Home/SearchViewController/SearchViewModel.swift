@@ -30,7 +30,7 @@ private protocol ViewModelProtocol {
 final class SearchViewModel {
     var coordinator: SearchViewCoordinator?
     
-    fileprivate lazy var useCase: MediaUseCase = DI.shared.resolve(MediaUseCase.self)
+    fileprivate lazy var useCase: MediaUseCase = createUseCase()
     
     let items: Observable<[SearchCollectionViewCellViewModel]> = Observable([])
     
@@ -151,5 +151,16 @@ extension SearchViewModel {
         mainQueueDispatch { [weak self] in
             self?.isLoading = false
         }
+    }
+}
+
+// MARK: - Private Implementation
+
+extension SearchViewModel {
+    private func createUseCase() -> MediaUseCase {
+        let services = Application.app.services
+        let dataTransferService = services.dataTransfer
+        let repository = MediaRepository(dataTransferService: dataTransferService)
+        return MediaUseCase(repository: repository)
     }
 }

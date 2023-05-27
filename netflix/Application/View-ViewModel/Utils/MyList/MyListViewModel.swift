@@ -26,7 +26,7 @@ private protocol ViewModelProtocol {
 final class MyListViewModel {
     let coordinator: HomeViewCoordinator
     
-    fileprivate lazy var useCase: ListUseCase = DI.shared.resolve(ListUseCase.self)
+    fileprivate lazy var useCase: ListUseCase = createUseCase()
     
     fileprivate let user: UserDTO
     
@@ -222,5 +222,16 @@ extension MyListViewModel {
             
             panelView.selectIfNeeded()
         }
+    }
+}
+
+// MARK: - Private Implementation
+
+extension MyListViewModel {
+    private func createUseCase() -> ListUseCase {
+        let services = Application.app.services
+        let dataTransferService = services.dataTransfer
+        let repository = ListRepository(dataTransferService: dataTransferService)
+        return ListUseCase(repository: repository)
     }
 }

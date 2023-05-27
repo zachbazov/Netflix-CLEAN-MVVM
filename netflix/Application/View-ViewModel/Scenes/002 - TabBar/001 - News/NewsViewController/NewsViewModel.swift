@@ -26,7 +26,7 @@ private protocol ViewModelProtocol {
 final class NewsViewModel {
     var coordinator: NewsViewCoordinator?
     
-    fileprivate lazy var useCase: MediaUseCase = DI.shared.resolve(MediaUseCase.self)
+    fileprivate lazy var useCase: MediaUseCase = createUseCase()
     
     let items: Observable<[NewsCollectionViewCellViewModel]> = Observable([])
     
@@ -94,5 +94,16 @@ extension NewsViewModel {
         guard let response = response else { return }
         
         items.value = response.toCellViewModels()
+    }
+}
+
+// MARK: - Private Implementation
+
+extension NewsViewModel {
+    private func createUseCase() -> MediaUseCase {
+        let services = Application.app.services
+        let dataTransferService = services.dataTransfer
+        let repository = MediaRepository(dataTransferService: dataTransferService)
+        return MediaUseCase(repository: repository)
     }
 }

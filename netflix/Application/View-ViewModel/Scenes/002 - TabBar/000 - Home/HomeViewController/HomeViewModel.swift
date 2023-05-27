@@ -40,8 +40,8 @@ private protocol ViewModelProtocol {
 final class HomeViewModel {
     var coordinator: HomeViewCoordinator?
     
-    fileprivate lazy var sectionUseCase: SectionUseCase = DI.shared.resolve(SectionUseCase.self)
-    fileprivate lazy var mediaUseCase: MediaUseCase = DI.shared.resolve(MediaUseCase.self)
+    fileprivate lazy var sectionUseCase: SectionUseCase = createSectionUseCase()
+    fileprivate lazy var mediaUseCase: MediaUseCase = createMediaUseCase()
     
     fileprivate let orientation = DeviceOrientation.shared
     fileprivate let myList = MyList.shared
@@ -361,5 +361,23 @@ extension HomeViewModel: DataProviderProtocol {
         guard let media = response?.data.toDomain() else { return }
         
         self.topSearches = media
+    }
+}
+
+// MARK: - Private Implementation
+
+extension HomeViewModel {
+    private func createSectionUseCase() -> SectionUseCase {
+        let services = Application.app.services
+        let dataTransferService = services.dataTransfer
+        let repository = SectionRepository(dataTransferService: dataTransferService)
+        return SectionUseCase(repository: repository)
+    }
+    
+    private func createMediaUseCase() -> MediaUseCase {
+        let services = Application.app.services
+        let dataTransferService = services.dataTransfer
+        let repository = MediaRepository(dataTransferService: dataTransferService)
+        return MediaUseCase(repository: repository)
     }
 }

@@ -12,10 +12,22 @@ import Foundation
 final class Services {
     let configuration: Configuration
     
-    lazy var authentication: AuthService = DI.shared.resolve(AuthService.self)
-    lazy var dataTransfer: DataTransferService = DI.shared.resolve(DataTransferService.self)
+    lazy var authentication: AuthService = AuthService()
+    lazy var dataTransfer: DataTransferService = createDataTransferService()
     
     init(configuration: Configuration = Configuration()) {
         self.configuration = configuration
+    }
+}
+
+// MARK: - Private Implementation
+
+extension Services {
+    private func createDataTransferService() -> DataTransferService {
+        let configuration = Application.app.services.configuration
+        let url = URL(string: configuration.apiScheme + "://" + configuration.apiHost)!
+        let config = NetworkConfig(baseURL: url)
+        let networkService = NetworkService(config: config)
+        return DataTransferService(networkService: networkService)
     }
 }

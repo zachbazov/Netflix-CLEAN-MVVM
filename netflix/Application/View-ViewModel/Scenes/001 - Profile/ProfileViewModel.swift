@@ -33,7 +33,7 @@ private protocol ViewModelProtocol {
 final class ProfileViewModel {
     var coordinator: ProfileCoordinator?
     
-    fileprivate(set) lazy var userUseCase: UserUseCase = DI.shared.resolve(UserUseCase.self)
+    fileprivate(set) lazy var userUseCase: UserUseCase = createUseCase()
     
     var profiles = [UserProfile]()
     var selectedProfile: UserProfile?
@@ -241,5 +241,20 @@ extension ProfileViewModel {
             
             didFinish()
         }
+    }
+}
+
+// MARK: - Private Implementation
+
+extension ProfileViewModel {
+    private func createUseCase() -> UserUseCase {
+        let services = Application.app.services
+        let authService = services.authentication
+        let dataTransferService = services.dataTransfer
+        let persistentStore = UserHTTPResponseStore(authService: authService)
+        let authenticator = UserRepositoryAuthenticator(dataTransferService: dataTransferService, persistentStore: persistentStore)
+        let invoker = RepositoryInvoker(dataTransferService: dataTransferService, persistentStore: persistentStore)
+        let repository = UserRepository(dataTransferService: dataTransferService, authenticator: authenticator, persistentStore: persistentStore, invoker: invoker)
+        return UserUseCase(repository: repository)
     }
 }

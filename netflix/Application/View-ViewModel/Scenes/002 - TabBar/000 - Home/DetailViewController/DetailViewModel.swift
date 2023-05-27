@@ -28,7 +28,7 @@ private protocol ViewModelProtocol {
 final class DetailViewModel {
     var coordinator: DetailViewCoordinator?
     
-    lazy var useCase: SeasonUseCase = DI.shared.resolve(SeasonUseCase.self)
+    lazy var useCase: SeasonUseCase = createUseCase()
     let orientation = DeviceOrientation.shared
     let myList = MyList.shared
     
@@ -58,5 +58,17 @@ extension DetailViewModel: ViewModelProtocol {
             
             self.orientation.set(orientation: self.isRotated ? .landscapeLeft : .portrait)
         }
+    }
+}
+
+// MARK: - Private Implementation
+
+extension DetailViewModel {
+    private func createUseCase() -> SeasonUseCase {
+        let services = Application.app.services
+        let authService = services.authentication
+        let dataTransferService = services.dataTransfer
+        let repository = SeasonRepository(dataTransferService: dataTransferService)
+        return SeasonUseCase(repository: repository)
     }
 }
