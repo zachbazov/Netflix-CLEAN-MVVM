@@ -25,11 +25,11 @@ extension SceneDelegate: UIWindowSceneDelegate {
                willConnectTo session: UISceneSession,
                options connectionOptions: UIScene.ConnectionOptions) {
         guard let windowScene = (scene as? UIWindowScene) else { return }
-        // Apply application appearance configurations.
+        
         Theme.default()
-        // Allocate root's references.
+        
         window = UIWindow(windowScene: windowScene)
-        // Deploy the application.
+        
         let application = Application.app
         application.appDidLaunch(in: window)
     }

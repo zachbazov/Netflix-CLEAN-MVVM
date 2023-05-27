@@ -109,6 +109,8 @@ extension HomeViewModel: ViewModelProtocol {
     /// - Parameter index: A representation of the section's index.
     /// - Returns: A section.
     func section(at index: MediaTableViewDataSource.Index) -> Section {
+        guard !isSectionsEmpty else { return .vacantValue }
+        
         return sections[index.rawValue]
     }
     

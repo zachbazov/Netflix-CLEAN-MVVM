@@ -37,9 +37,10 @@ final class NewsCollectionViewDataSource: CollectionViewDataSource {
     override func didSelectItem(in collectionView: UICollectionView, at indexPath: IndexPath) {
         guard let row = indexPath.row as Int?, row >= 0, row <= viewModel.items.value.count - 1 else { return }
         
-        let tabCoordinator = Application.app.coordinator.tabCoordinator
         
-        guard let homeController = tabCoordinator.viewController?.homeViewController,
+        
+        guard let tabCoordinator = Application.app.coordinator.tabCoordinator,
+              let homeController = tabCoordinator.viewController?.homeViewController,
               let newsController = tabCoordinator.viewController?.newsViewController
         else { return }
         

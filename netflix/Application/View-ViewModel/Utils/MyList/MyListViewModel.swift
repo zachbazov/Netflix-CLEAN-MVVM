@@ -34,7 +34,7 @@ final class MyListViewModel {
     let section: Section
     
     init() {
-        guard let homeController = Application.app.coordinator.tabCoordinator.viewController?.homeViewController,
+        guard let homeController = Application.app.coordinator.tabCoordinator?.home.viewControllers.first as? HomeViewController,
               let homeViewModel = homeController.viewModel
         else { fatalError() }
         

@@ -41,6 +41,7 @@ extension Theme: ThemingBehavior {
             navigationBarAppearance.backgroundColor = .black.withAlphaComponent(0.75)
             navigationBarAppearance.buttonAppearance = barButtonItemAppearance
             
+            UINavigationBar.appearance().barTintColor = .white
             UINavigationBar.appearance().standardAppearance = navigationBarAppearance
             UINavigationBar.appearance().scrollEdgeAppearance = navigationBarAppearance
         } else {
@@ -68,6 +69,7 @@ extension Theme: ThemingBehavior {
             navigationBarAppearance.backgroundColor = .black
             navigationBarAppearance.buttonAppearance = barButtonItemAppearance
             
+            UINavigationBar.appearance().barTintColor = .white
             UINavigationBar.appearance().standardAppearance = navigationBarAppearance
             UINavigationBar.appearance().scrollEdgeAppearance = navigationBarAppearance
         } else {

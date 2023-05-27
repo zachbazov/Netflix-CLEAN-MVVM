@@ -92,24 +92,6 @@ extension TabBarConfiguration {
     }
 }
 
-// MARK: - CoordinatorProtocol Type
-
-private protocol CoordinatorProtocol {
-    var configuration: TabBarConfiguration { get }
-    
-    var home: UINavigationController! { get }
-    var news: UINavigationController! { get }
-    var fastLaughs: UINavigationController! { get }
-    var downloads: UIViewController! { get }
-    
-    func createHomeController() -> UINavigationController
-    func createNewsController() -> UINavigationController
-    func createFastLaughsController() -> UINavigationController
-    func createDownloadsController() -> UINavigationController
-    
-    func deploy()
-}
-
 // MARK: - TabBarCoordinator Type
 
 final class TabBarCoordinator {
@@ -123,9 +105,9 @@ final class TabBarCoordinator {
     fileprivate var downloads: UIViewController!
 }
 
-// MARK: - CoordinatorProtocol Implementation
+// MARK: -  Implementation
 
-extension TabBarCoordinator: CoordinatorProtocol {
+extension TabBarCoordinator {
     /// Allocate home view controller and it's dependencies.
     /// Reset after re-allocation if needed.
     /// - Returns: A wrapper navigation controller for the view controller.
@@ -190,18 +172,6 @@ extension TabBarCoordinator: CoordinatorProtocol {
         configuration.tabBarItem(for: .downloads, with: navigation)
         return navigation
     }
-    /// Allocate and set view controllers for the tab controller.
-    func deploy() {
-        /// Home's navigation view controls the state of the table view data source.
-        /// Hence, `home` property will be initialized every time the state changes.
-        home = createHomeController()
-        /// One-time initialization is needed for the other scenes.
-        if news == nil { news = createNewsController() }
-        if fastLaughs == nil { fastLaughs = createFastLaughsController() }
-        if downloads == nil { downloads = createDownloadsController() }
-        /// Arranged view controllers for the tab controller.
-        viewController?.viewControllers = [home, news, fastLaughs, downloads]
-    }
 }
 
 // MARK: - Coordinate Implementation
@@ -214,9 +184,20 @@ extension TabBarCoordinator: Coordinate {
         case fastLaughs
         case downloads
     }
+    
     /// Screen presentation control.
     /// - Parameter screen: The screen to be allocated and presented.
     func coordinate(to screen: Screen) {
-        deploy()
+        /// Home's navigation view controls the state of the table view data source.
+        /// Hence, `home` property will be initialized every time the state changes.
+        home = createHomeController()
+        
+        /// One-time initialization is needed for the other scenes.
+        if news == nil { news = createNewsController() }
+        if fastLaughs == nil { fastLaughs = createFastLaughsController() }
+        if downloads == nil { downloads = createDownloadsController() }
+        
+        /// Arranged view controllers for the tab controller.
+        viewController?.viewControllers = [home, news, fastLaughs, downloads]
     }
 }

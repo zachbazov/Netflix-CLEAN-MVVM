@@ -26,7 +26,7 @@ private protocol CoordinatorProtocol {
 // MARK: - ProfileCoordinator Type
 
 final class ProfileCoordinator {
-    var viewController: ProfileViewController?
+    var viewController: ProfileController?
     
     fileprivate lazy var navigationController: UINavigationController = createNavigationController()
     fileprivate(set) lazy var userProfileController: UserProfileViewController = createUserProfileViewController()

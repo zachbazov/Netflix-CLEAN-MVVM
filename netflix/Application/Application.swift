@@ -23,7 +23,7 @@ private protocol ApplicationAuthenticating {
 // MARK: - ApplicationCoordinating Type
 
 private protocol ApplicationCoordinating {
-    func deployScene(in window: UIWindow?)
+    func sceneDidDeploy(in window: UIWindow?)
     func coordinate(to screen: Coordinator.Screen)
 }
 
@@ -34,16 +34,18 @@ final class Application {
     
     private init() {}
     
-    lazy var coordinator = Coordinator()
-    lazy var services = Services()
-    lazy var stores = Stores(services: services)
+    private(set) lazy var coordinator = Coordinator()
+    private(set) lazy var services = Services()
+    private(set) lazy var stores = Stores(services: services)
 }
 
 // MARK: - ApplicationLaunching Implementation
 
 extension Application: ApplicationLaunching {
     func appDidLaunch(in window: UIWindow?) {
-        deployScene(in: window)
+        sceneDidDeploy(in: window)
+        
+        appDidResign()
     }
 }
 
@@ -69,13 +71,17 @@ extension Application: ApplicationAuthenticating {
     }
     
     fileprivate func appDidEndResigning(for user: UserDTO?) {
-        guard let user = user else { return coordinate(to: .auth) }
-        
+        printIfDebug(.debug, "1")
+        guard let user = user else {
+            return coordinate(to: .auth)
+        }
+        printIfDebug(.debug, "2")
         guard let selectedProfile = user.selectedProfile,
               let profiles = user.profiles,
-              profiles.contains(where: { $0 == selectedProfile })
-        else { return coordinate(to: .profile) }
-        
+              profiles.contains(where: { $0 == selectedProfile }) else {
+            return coordinate(to: .profile)
+        }
+        printIfDebug(.debug, "3")
         coordinate(to: .tabBar)
     }
 }
@@ -83,12 +89,10 @@ extension Application: ApplicationAuthenticating {
 // MARK: - ApplicationProtocol Implementation
 
 extension Application: ApplicationCoordinating {
-    fileprivate func deployScene(in window: UIWindow?) {
+    fileprivate func sceneDidDeploy(in window: UIWindow?) {
         coordinator.window = window
         
         window?.makeKeyAndVisible()
-        
-        appDidResign()
     }
     
     fileprivate func coordinate(to screen: Coordinator.Screen) {

@@ -7,14 +7,68 @@
 
 import UIKit
 
-// MARK: - CoordinatorProtocol Type
-
-private protocol CoordinatorProtocol {
-    func createAuthController() -> AuthController
-    func createProfileController() -> ProfileViewController
-    func createTabBarController() -> TabBarController
+final class DI {
+    static var shared = DI()
     
-    func deploy(_ screen: Coordinator.Screen)
+    private init() {}
+    
+    lazy var authCoordinator: AuthCoordinator = createAuthCoordinator()
+    lazy var profileCoordinator: ProfileCoordinator = createProfileCoordinator()
+    lazy var tabBarCoordinator: TabBarCoordinator = createTabBarCoordinator()
+    
+    func createAuthCoordinator() -> AuthCoordinator {
+        let viewModel = createAuthViewModel()
+        let controller = createAuthController()
+        authCoordinator = AuthCoordinator()
+        authCoordinator.viewController = controller
+        viewModel.coordinator = authCoordinator
+        controller.viewModel = viewModel
+        return authCoordinator
+    }
+    
+    private func createAuthViewModel() -> AuthViewModel {
+        return AuthViewModel()
+    }
+    
+    private func createAuthController() -> AuthController {
+        return AuthController()
+    }
+    
+    func createProfileCoordinator() -> ProfileCoordinator {
+        let controller = ProfileController()
+        let viewModel = ProfileViewModel()
+        profileCoordinator = ProfileCoordinator()
+        profileCoordinator.viewController = controller
+        viewModel.coordinator = profileCoordinator
+        controller.viewModel = viewModel
+        return profileCoordinator
+    }
+    
+    private func createProfileViewModel() -> ProfileViewModel {
+        return ProfileViewModel()
+    }
+    
+    private func createProfileController() -> ProfileController {
+        return ProfileController()
+    }
+    
+    func createTabBarCoordinator() -> TabBarCoordinator {
+        let controller = TabBarController()
+        let viewModel = TabBarViewModel()
+        tabBarCoordinator = TabBarCoordinator()
+        tabBarCoordinator.viewController = controller
+        viewModel.coordinator = tabBarCoordinator
+        controller.viewModel = viewModel
+        return tabBarCoordinator
+    }
+    
+    private func createTabBarViewModel() -> TabBarViewModel {
+        return TabBarViewModel()
+    }
+    
+    private func createTabBarController() -> TabBarController {
+        return TabBarController()
+    }
 }
 
 // MARK: - Coordinator Type
@@ -23,54 +77,9 @@ final class Coordinator {
     weak var viewController: UIViewController?
     weak var window: UIWindow? { didSet { viewController = window?.rootViewController } }
     
-    fileprivate(set) lazy var authCoordinator = AuthCoordinator()
-    fileprivate(set) lazy var profileCoordinator = ProfileCoordinator()
-    fileprivate(set) lazy var tabCoordinator = TabBarCoordinator()
-}
-
-// MARK: - CoordinatorProtocol Implementation
-
-extension Coordinator: CoordinatorProtocol {
-    /// Allocating and presenting the authorization screen.
-    fileprivate func createAuthController() -> AuthController {
-        let viewModel = AuthViewModel()
-        let controller = AuthController()
-        authCoordinator.viewController = controller
-        viewModel.coordinator = authCoordinator
-        controller.viewModel = viewModel
-        return controller
-    }
-    
-    /// Allocating and presenting the user profile selection screen.
-    fileprivate func createProfileController() -> ProfileViewController {
-        let controller = ProfileViewController()
-        let viewModel = ProfileViewModel()
-        profileCoordinator.viewController = controller
-        viewModel.coordinator = profileCoordinator
-        controller.viewModel = viewModel
-        return controller
-    }
-    
-    /// Allocating and presenting the tab bar screen.
-    fileprivate func createTabBarController() -> TabBarController {
-        let controller = TabBarController()
-        let viewModel = TabBarViewModel()
-        tabCoordinator.viewController = controller
-        viewModel.coordinator = tabCoordinator
-        controller.viewModel = viewModel
-        return controller
-    }
-    
-    fileprivate func deploy(_ screen: Screen) {
-        switch screen {
-        case .auth:
-            authCoordinator.coordinate(to: .landpage)
-        case .profile:
-            profileCoordinator.coordinate(to: .userProfile)
-        case .tabBar:
-            tabCoordinator.coordinate(to: .home)
-        }
-    }
+    fileprivate(set) lazy var authCoordinator = DI.shared.createAuthCoordinator()
+    fileprivate(set) lazy var profileCoordinator = DI.shared.createProfileCoordinator()
+    fileprivate(set) var tabCoordinator: TabBarCoordinator?
 }
 
 // MARK: - Coordinate Implementation
@@ -86,19 +95,21 @@ extension Coordinator: Coordinate {
     /// Screen presentation control.
     /// - Parameter screen: The screen to be allocated and presented.
     func coordinate(to screen: Screen) {
-        var controller: UIViewController
-        
         switch screen {
         case .auth:
-            controller = createAuthController()
+            window?.rootViewController = authCoordinator.viewController
+            
+            authCoordinator.coordinate(to: .landpage)
         case .profile:
-            controller = createProfileController()
+            window?.rootViewController = profileCoordinator.viewController
+            
+            profileCoordinator.coordinate(to: .userProfile)
         case .tabBar:
-            controller = createTabBarController()
+            tabCoordinator = DI.shared.createTabBarCoordinator()
+            
+            window?.rootViewController = tabCoordinator?.viewController
+            
+            tabCoordinator?.coordinate(to: .home)
         }
-        
-        window?.rootViewController = controller
-        
-        deploy(screen)
     }
 }
