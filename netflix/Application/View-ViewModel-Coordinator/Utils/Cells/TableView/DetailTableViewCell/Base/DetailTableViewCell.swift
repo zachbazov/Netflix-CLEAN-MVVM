@@ -9,22 +9,25 @@ import UIKit
 
 // MARK: - DetailTableViewCell Type
 
-class DetailTableViewCell: TableViewCell<DetailViewModel> {
+class DetailTableViewCell: UITableViewCell, TableViewCell {
+    var viewModel: DetailViewModel!
     
     deinit {
         viewWillDeallocate()
     }
     
-    override func viewDidLoad() {
+    // MARK: TableViewCell Implementation
+    
+    func viewDidLoad() {
         viewWillConfigure()
     }
     
-    override func viewWillConfigure() {
+    func viewWillConfigure() {
         setBackgroundColor(.black)
         selectionStyle = .none
     }
     
-    override func viewWillDeallocate() {
+    func viewWillDeallocate() {
         viewModel = nil
         
         removeFromSuperview()

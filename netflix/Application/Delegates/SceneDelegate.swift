@@ -48,9 +48,9 @@ extension SceneDelegate: UIWindowSceneDelegate {
     func sceneDidEnterBackground(_ scene: UIScene) {}
 }
 
-// MARK: - SceneObserverUnbinding Implementation
+// MARK: - SceneObserverUnbindable Implementation
 
-extension SceneDelegate: SceneObserverUnbinding {
+extension SceneDelegate: SceneObserverUnbindable {
     /// Remove all tar-bar related observers.
     /// The observers of `DetailViewController` will be removed automatically once home's instance is deallocated.
     func sceneObserversDidUnbind() {

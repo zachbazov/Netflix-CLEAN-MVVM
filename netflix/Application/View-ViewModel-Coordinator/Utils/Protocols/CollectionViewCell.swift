@@ -9,7 +9,7 @@ import UIKit
 
 // MARK: - CollectionViewCellResourcing Type
 
-private protocol CollectionViewCellResourcing {
+protocol CollectionViewCellResourcing {
     func loadUsingAsyncAwait()
     func loadUsingAsync()
     func loadUsingDispatchGroup()
@@ -18,9 +18,20 @@ private protocol CollectionViewCellResourcing {
     func resourceWillLoad(for url: URL, withIdentifier identifier: String) async
 }
 
-// MARK: - ViewProtocol Type
+// MARK: - CollectionViewCellResourcing Implementation
 
-private protocol ViewProtocol {
+extension CollectionViewCellResourcing {
+    func loadUsingAsyncAwait() {}
+    func loadUsingAsync() {}
+    func loadUsingDispatchGroup() {}
+    
+    func resourceWillLoad(for url: URL, withIdentifier identifier: NSString, _ completion: @escaping () -> Void) {}
+    func resourceWillLoad(for url: URL, withIdentifier identifier: String) async {}
+}
+
+// MARK: - CollectionViewCellConfiguring Type
+
+protocol CollectionViewCellConfiguring {
     func setPoster(_ image: UIImage)
     func setLogo(_ image: UIImage)
     func setTitle(_ text: String)
@@ -36,16 +47,41 @@ private protocol ViewProtocol {
     func hidePlaceholder()
 }
 
+// MARK: - CollectionViewCellConfiguring Implementation
+
+extension CollectionViewCellConfiguring {
+    func setPoster(_ image: UIImage) {}
+    func setLogo(_ image: UIImage) {}
+    func setTitle(_ text: String) {}
+    func setSubject(_ text: String) {}
+    func setPlaceholder(_ text: String) {}
+    func setTimestamp(_ text: String) {}
+    func setDescription(_ text: String) {}
+    func setEstimatedTimeTillAir(_ text: String) {}
+    func setMediaType(_ text: String) {}
+    func setGenres(_ attributedString: NSMutableAttributedString) {}
+    func setLogoAlignment() {}
+    func hidePlaceholder() {}
+}
+
 // MARK: - CollectionViewCell Type
 
-class CollectionViewCell<T>: UICollectionViewCell where T: ViewModel {
-    var viewModel: T!
-    var representedIdentifier: NSString!
-    var indexPath: IndexPath!
+protocol CollectionViewCell: UICollectionViewCell,
+                             ViewLifecycleBehavior,
+                             DataLoadable,
+                             CollectionViewCellResourcing,
+                             CollectionViewCellConfiguring {
+    associatedtype ViewModelType: ViewModel
     
-    let imageService = AsyncImageService.shared
-    
-    class func create<U, CVM>(of type: U.Type,
+    var viewModel: ViewModelType! { get set }
+    var representedIdentifier: NSString! { get set }
+    var indexPath: IndexPath! { get set }
+}
+
+// MARK: - CollectionViewCell Implementation
+
+extension CollectionViewCell {
+    static func create<U, CVM>(of type: U.Type,
                               on collectionView: UICollectionView,
                               reuseIdentifier: String? = nil,
                               section: Section? = nil,
@@ -68,12 +104,12 @@ class CollectionViewCell<T>: UICollectionViewCell where T: ViewModel {
             cell.representedIdentifier = media.slug as NSString
             cell.indexPath = indexPath
             cell.viewDidLoad()
-        case let cell as ProfileCollectionViewCell:
+        case let cell as AccountProfileCollectionViewCell:
             guard let viewModel = viewModel as? AccountViewModel else { fatalError() }
             
             let model = viewModel.profiles.value[indexPath.row]
             
-            cell.viewModel = ProfileCollectionViewCellViewModel(with: model)
+            cell.viewModel = AccountProfileCollectionViewCellViewModel(with: model)
             cell.accountViewModel = viewModel
             cell.indexPath = indexPath
             cell.viewDidLoad()
@@ -118,79 +154,20 @@ class CollectionViewCell<T>: UICollectionViewCell where T: ViewModel {
             cell.representedIdentifier = cell.viewModel.media.slug as NSString
             cell.indexPath = indexPath
             cell.viewDidLoad()
+        case let cell as ProfileCollectionViewCell:
+            guard let viewModel = viewModel as? ProfileViewModel else { fatalError() }
+            
+            let model = viewModel.profiles[indexPath.row]
+            
+            cell.tag = indexPath.row
+            cell.profileViewModel = viewModel
+            cell.viewModel = ProfileCollectionViewCellViewModel(with: model)
+            cell.representedIdentifier = cell.viewModel.name as NSString
+            cell.indexPath = indexPath
+            cell.viewDidLoad()
         default: break
         }
         
         return cell
     }
-    
-    deinit {
-        viewWillDeallocate()
-    }
-    
-    override func prepareForReuse() {
-        super.prepareForReuse()
-        
-        representedIdentifier = nil
-        indexPath = nil
-        viewModel = nil
-    }
-    
-    // MARK: ViewLifecycleBehavior Implementation
-    
-    func dataWillLoad() {}
-    func dataDidLoad() {}
-    func viewDidLoad() {}
-    func viewWillDeploySubviews() {}
-    func viewDidDeploySubviews() {}
-    func viewHierarchyWillConfigure() {}
-    func viewHierarchyDidConfigure() {}
-    func viewWillConfigure() {}
-    func viewDidConfigure() {}
-    
-    func viewWillDeallocate() {
-        representedIdentifier = nil
-        indexPath = nil
-        viewModel = nil
-        
-        removeFromSuperview()
-    }
-    func viewDidDeallocate() {}
-    
-    // MARK: ViewProtocol Implementation
-    
-    func setPoster(_ image: UIImage) {}
-    func setLogo(_ image: UIImage) {}
-    func setTitle(_ text: String) {}
-    func setSubject(_ text: String) {}
-    func setPlaceholder(_ text: String) {}
-    func setTimestamp(_ text: String) {}
-    func setDescription(_ text: String) {}
-    func setEstimatedTimeTillAir(_ text: String) {}
-    func setMediaType(_ text: String) {}
-    func setGenres(_ attributedString: NSMutableAttributedString) {}
-    
-    func setLogoAlignment() {}
-    func hidePlaceholder() {}
-    
-    // MARK: CollectionViewCellResourcing Implementation
-    
-    func loadUsingAsyncAwait() {}
-    func loadUsingAsync() {}
-    func loadUsingDispatchGroup() {}
-    
-    func resourceWillLoad(for url: URL, withIdentifier identifier: NSString, _ completion: @escaping () -> Void) {}
-    func resourceWillLoad(for url: URL, withIdentifier identifier: String) async {}
 }
-
-// MARK: - ViewLifecycleBehavior Implementation
-
-extension CollectionViewCell: ViewLifecycleBehavior {}
-
-// MARK: - ViewProtocol Implementation
-
-extension CollectionViewCell: ViewProtocol {}
-
-// MARK: - CollectionViewCellResourcing Implementation
-
-extension CollectionViewCell: CollectionViewCellResourcing {}

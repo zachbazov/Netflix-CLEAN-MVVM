@@ -9,7 +9,7 @@ import UIKit
 
 // MARK: - NewsCollectionViewCell Type
 
-final class NewsCollectionViewCell: CollectionViewCell<NewsCollectionViewCellViewModel> {
+final class NewsCollectionViewCell: UICollectionViewCell, CollectionViewCell {
     @IBOutlet private weak var posterImageView: UIImageView!
     @IBOutlet private weak var ageRestrictionView: AgeRestrictionView!
     @IBOutlet private weak var monthLabel: UILabel!
@@ -25,9 +25,16 @@ final class NewsCollectionViewCell: CollectionViewCell<NewsCollectionViewCellVie
     @IBOutlet private weak var descriptionTextView: UITextView!
     @IBOutlet private weak var genresLabel: UILabel!
     
-    // MARK: ViewLifecycleBehavior Implementation
+    var viewModel: NewsCollectionViewCellViewModel!
     
-    override func dataWillLoad() {
+    var representedIdentifier: NSString!
+    var indexPath: IndexPath!
+    
+    var imageService: AsyncImageService = AsyncImageService.shared
+    
+    // MARK: DataLoadable Implementation
+    
+    func dataWillLoad() {
         guard representedIdentifier == viewModel.media.slug as NSString? else { return }
         
         if #available(iOS 13.0, *) {
@@ -39,7 +46,7 @@ final class NewsCollectionViewCell: CollectionViewCell<NewsCollectionViewCellVie
         loadUsingDispatchGroup()
     }
     
-    override func dataDidLoad() {
+    func dataDidLoad() {
         guard let previewPosterImage = imageService.object(for: viewModel.previewPosterImageIdentifier),
               let logoImage = imageService.object(for: viewModel.displayLogoImageIdentifier)
         else { return }
@@ -48,12 +55,14 @@ final class NewsCollectionViewCell: CollectionViewCell<NewsCollectionViewCellVie
         setLogo(logoImage)
     }
     
-    override func viewDidLoad() {
+    // MARK: ViewLifecycleBehavior Implementation
+    
+    func viewDidLoad() {
         viewWillConfigure()
         dataWillLoad()
     }
     
-    override func viewWillConfigure() {
+    func viewWillConfigure() {
         posterImageView.cornerRadius(10.0)
         
         setBackgroundColor(.black)
@@ -80,37 +89,37 @@ final class NewsCollectionViewCell: CollectionViewCell<NewsCollectionViewCellVie
     
     // MARK: ViewProtocol Implementation
     
-    override func setPoster(_ image: UIImage) {
+    func setPoster(_ image: UIImage) {
         posterImageView.image = image
     }
     
-    override func setLogo(_ image: UIImage) {
+    func setLogo(_ image: UIImage) {
         logoImageView.image = image
     }
     
-    override func setEstimatedTimeTillAir(_ text: String) {
+    func setEstimatedTimeTillAir(_ text: String) {
         etaTillOnAir.text = text
     }
     
-    override func setMediaType(_ text: String) {
+    func setMediaType(_ text: String) {
         mediaTypeLabel.text = text
     }
     
-    override func setTitle(_ text: String) {
+    func setTitle(_ text: String) {
         titleLabel.text = text
     }
     
-    override func setDescription(_ text: String) {
+    func setDescription(_ text: String) {
         descriptionTextView.text = text
     }
     
-    override func setGenres(_ attributedString: NSMutableAttributedString) {
+    func setGenres(_ attributedString: NSMutableAttributedString) {
         genresLabel.attributedText = attributedString
     }
     
     // MARK: CollectionViewCellResourcing Implementation
     
-    override func loadUsingDispatchGroup() {
+    func loadUsingDispatchGroup() {
         let group = DispatchGroup()
         
         group.enter()
@@ -130,7 +139,7 @@ final class NewsCollectionViewCell: CollectionViewCell<NewsCollectionViewCellVie
         }
     }
     
-    override func loadUsingAsyncAwait() {
+    func loadUsingAsyncAwait() {
         Task {
             await posterWillLoad()
             await logoWillLoad()

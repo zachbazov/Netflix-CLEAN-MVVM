@@ -10,7 +10,6 @@ import UIKit
 // MARK: - DescriptionTableViewCell Type
 
 final class DescriptionTableViewCell: DetailTableViewCell {
-    
     private var descriptionView: DescriptionView?
     
     deinit {
@@ -18,17 +17,19 @@ final class DescriptionTableViewCell: DetailTableViewCell {
         super.viewWillDeallocate()
     }
     
+    // MARK: TableViewCell Implementation
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         viewWillDeploySubviews()
         viewHierarchyWillConfigure()
     }
     
-    override func viewWillDeploySubviews() {
+    func viewWillDeploySubviews() {
         createDescription()
     }
     
-    override func viewHierarchyWillConfigure() {
+    func viewHierarchyWillConfigure() {
         descriptionView?
             .addToHierarchy(on: contentView)
             .constraintToSuperview(contentView)

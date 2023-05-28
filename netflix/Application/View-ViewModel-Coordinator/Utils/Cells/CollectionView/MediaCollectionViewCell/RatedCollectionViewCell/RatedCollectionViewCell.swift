@@ -35,11 +35,11 @@ final class RatedCollectionViewCell: MediaCollectionViewCell {
         viewDidConfigure()
     }
     
-    override func viewDidConfigure() {
+    func viewDidConfigure() {
         viewHierarchyWillConfigure()
     }
     
-    override func viewHierarchyWillConfigure() {
+    func viewHierarchyWillConfigure() {
         layerView
             .addToHierarchy(on: contentView)
             .constraintBottom(toParent: contentView, withHeightAnchor: bounds.height / 2)

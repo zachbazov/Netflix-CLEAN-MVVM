@@ -10,14 +10,13 @@ import UIKit
 // MARK: - EpisodeCollectionViewCell Type
 
 final class EpisodeCollectionViewCell: DetailCollectionViewCell {
-    
     @IBOutlet private weak var timestampLabel: UILabel!
     @IBOutlet private weak var descriptionTextView: UITextView!
     @IBOutlet private weak var downloadButton: UIButton!
     
     // MARK: ViewLifecycleBehavior Implementation
     
-    override func viewDidLoad() {
+    func viewDidLoad() {
         super.dataWillLoad()
         
         viewWillConfigure()
@@ -36,11 +35,11 @@ final class EpisodeCollectionViewCell: DetailCollectionViewCell {
     
     // MARK: ViewProtocol Implementation
     
-    override func setTimestamp(_ text: String) {
+    func setTimestamp(_ text: String) {
         timestampLabel.text = text
     }
     
-    override func setDescription(_ text: String) {
+    func setDescription(_ text: String) {
         descriptionTextView.text = text
     }
 }

@@ -196,7 +196,7 @@ final class RepositoryInvoker {
 extension RepositoryInvoker: RequestInvoking {
     func getAll<T, U>(request: U, completion: @escaping (Result<T, DataTransferError>) -> Void) -> Cancellable? where T: Decodable, U: Decodable {
         switch request {
-        case let request as UserProfileHTTPDTO.GET.Request:
+        case let request as ProfileHTTPDTO.GET.Request:
             let task = RepositoryTask()
             
             guard !task.isCancelled else { return nil }
@@ -219,7 +219,7 @@ extension RepositoryInvoker: RequestInvoking {
     
     func createOne<T, U>(request: U, completion: @escaping (Result<T, DataTransferError>) -> Void) -> Cancellable? where T: Decodable, U: Decodable {
         switch request {
-        case let request as UserProfileHTTPDTO.POST.Request:
+        case let request as ProfileHTTPDTO.POST.Request:
             let task = RepositoryTask()
             
             guard !task.isCancelled else { return nil }
@@ -265,7 +265,7 @@ extension RepositoryInvoker: RequestInvoking {
     
     func getAll<T, U>(request: U) async -> T? where T: Decodable, U: Decodable {
         switch request {
-        case let request as UserProfileHTTPDTO.GET.Request:
+        case let request as ProfileHTTPDTO.GET.Request:
             let endpoint = APIEndpoint.getUserProfiles(with: request)
             let result = await dataTransferService.request(with: endpoint)
             
@@ -281,7 +281,7 @@ extension RepositoryInvoker: RequestInvoking {
     
     func createOne<T, U>(request: U) async -> T? where T: Decodable, U: Decodable {
         switch request {
-        case let request as UserProfileHTTPDTO.POST.Request:
+        case let request as ProfileHTTPDTO.POST.Request:
             let endpoint = APIEndpoint.createUserProfile(with: request)
             let result = await dataTransferService.request(with: endpoint)
             

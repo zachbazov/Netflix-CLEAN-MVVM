@@ -9,9 +9,12 @@ import UIKit
 
 // MARK: - CollectionReusableView Type
 
-class CollectionReusableView: UICollectionReusableView {
-    class func create<T>(in collectionView: UICollectionView,
-                         at indexPath: IndexPath) -> T {
+protocol CollectionReusableView: UICollectionReusableView, ViewLifecycleBehavior, Reusable {}
+
+// MARK: - CollectionReusableView Implementation
+
+extension CollectionReusableView {
+    static func create<T>(in collectionView: UICollectionView, at indexPath: IndexPath) -> T {
         guard let cell = collectionView.dequeueReusableSupplementaryView(
             ofKind: UICollectionView.elementKindSectionHeader,
             withReuseIdentifier: reuseIdentifier,
@@ -26,15 +29,4 @@ class CollectionReusableView: UICollectionReusableView {
         
         return cell
     }
-    
-    func viewDidLoad() {}
-    func viewHierarchyWillConfigure() {}
 }
-
-// MARK: - ViewLifecycleBehavior Implementation
-
-extension CollectionReusableView: ViewLifecycleBehavior {}
-
-// MARK: - Reusable Implementation
-
-extension CollectionReusableView: Reusable {}

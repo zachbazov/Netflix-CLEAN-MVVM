@@ -9,14 +9,21 @@ import UIKit
 
 // MARK: - DetailCollectionViewCell Type
 
-class DetailCollectionViewCell: CollectionViewCell<DetailCollectionViewCellViewModel> {
+class DetailCollectionViewCell: UICollectionViewCell, CollectionViewCell {
     @IBOutlet private(set) weak var imageView: UIImageView!
     @IBOutlet private(set) weak var titleLabel: UILabel!
     @IBOutlet private(set) weak var playButton: UIButton!
     
-    // MARK: ViewLifecycleBehavior Implementation
+    var viewModel: DetailCollectionViewCellViewModel!
     
-    override func dataWillLoad() {
+    var representedIdentifier: NSString!
+    var indexPath: IndexPath!
+    
+    var imageService: AsyncImageService = AsyncImageService.shared
+    
+    // MARK: DataLoadable Implementation
+    
+    func dataWillLoad() {
         guard representedIdentifier == viewModel.slug as NSString? else { return }
         
         if #available(iOS 13.0, *) {
@@ -28,7 +35,9 @@ class DetailCollectionViewCell: CollectionViewCell<DetailCollectionViewCellViewM
         loadUsingAsync()
     }
     
-    override func viewWillConfigure() {
+    // MARK: ViewLifecycleBehavior Implementation
+    
+    func viewWillConfigure() {
         playButton.border(.white, width: 2.0)
         playButton.cornerRadius(playButton.bounds.size.height / 2)
         
@@ -37,11 +46,11 @@ class DetailCollectionViewCell: CollectionViewCell<DetailCollectionViewCellViewM
     
     // MARK: CollectionViewCellResourcing Implementation
     
-    override func loadUsingAsync() {
+    func loadUsingAsync() {
         posterWillLoad()
     }
     
-    override func loadUsingAsyncAwait() {
+    func loadUsingAsyncAwait() {
         Task {
             await posterWillLoad()
         }
@@ -49,11 +58,11 @@ class DetailCollectionViewCell: CollectionViewCell<DetailCollectionViewCellViewM
     
     // MARK: ViewProtocol Implementation
     
-    override func setTitle(_ text: String) {
+    func setTitle(_ text: String) {
         titleLabel.text = text
     }
     
-    override func setPoster(_ image: UIImage) {
+    func setPoster(_ image: UIImage) {
         imageView.image = image
     }
 }

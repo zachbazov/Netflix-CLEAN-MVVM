@@ -9,10 +9,17 @@ import UIKit
 
 // MARK: - TableViewHeader Type
 
-class TableViewHeader<T>: UITableViewHeaderFooterView where T: ViewModel {
-    var viewModel: T!
+protocol TableViewHeader: UITableViewHeaderFooterView, ViewLifecycleBehavior {
+    associatedtype ViewModelType: ViewModel
+    var viewModel: ViewModelType! { get set }
     
-    class func create<U>(
+    func setTitle(_ string: String)
+}
+
+// MARK: - TableViewHeader Implementation
+
+extension TableViewHeader {
+    static func create<U>(
         of type: U.Type,
         on tableView: UITableView,
         for index: Int,
@@ -33,18 +40,4 @@ class TableViewHeader<T>: UITableViewHeaderFooterView where T: ViewModel {
             
             return cell
         }
-    
-    deinit {
-        viewModel = nil
-        
-        removeFromSuperview()
-    }
-    
-    func viewDidLoad() {}
-    func viewHierarchyWillConfigure() {}
-    func viewWillConfigure() {}
 }
-
-// MARK: - ViewLifecycleBehavior Implementation
-
-extension TableViewHeader: ViewLifecycleBehavior {}

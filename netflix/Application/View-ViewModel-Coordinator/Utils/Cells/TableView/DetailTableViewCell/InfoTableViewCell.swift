@@ -10,7 +10,6 @@ import UIKit
 // MARK: - InfoTableViewCell Type
 
 final class InfoTableViewCell: DetailTableViewCell {
-    
     private var infoView: InfoView?
     
     deinit {
@@ -18,17 +17,19 @@ final class InfoTableViewCell: DetailTableViewCell {
         super.viewWillDeallocate()
     }
     
+    // MARK: TableViewCell Implementation
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         viewWillDeploySubviews()
         viewHierarchyWillConfigure()
     }
     
-    override func viewWillDeploySubviews() {
+    func viewWillDeploySubviews() {
         createInfo()
     }
     
-    override func viewHierarchyWillConfigure() {
+    func viewHierarchyWillConfigure() {
         infoView?
             .addToHierarchy(on: contentView)
             .constraintToSuperview(contentView)

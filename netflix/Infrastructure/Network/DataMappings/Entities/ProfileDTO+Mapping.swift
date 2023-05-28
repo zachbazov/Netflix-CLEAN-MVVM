@@ -1,5 +1,5 @@
 //
-//  UserProfileDTO+Mapping.swift
+//  ProfileDTO+Mapping.swift
 //  netflix
 //
 //  Created by Zach Bazov on 14/03/2023.
@@ -7,10 +7,10 @@
 
 import Foundation
 
-// MARK: - UserProfileDTO Type
+// MARK: - ProfileDTO Type
 
 @objc
-public final class UserProfileDTO: NSObject, Codable, NSSecureCoding {
+public final class ProfileDTO: NSObject, Codable, NSSecureCoding {
     var _id: String? = nil
     let name: String
     let image: String
@@ -38,18 +38,18 @@ public final class UserProfileDTO: NSObject, Codable, NSSecureCoding {
     }
     
     public required init?(coder: NSCoder) {
-        self._id = coder.decodeObject(of: [UserProfileDTO.self, NSString.self], forKey: "_id") as? String ?? ""
-        self.name = coder.decodeObject(of: [UserProfileDTO.self, NSString.self], forKey: "name") as? String ?? ""
-        self.image = coder.decodeObject(of: [UserProfileDTO.self, NSString.self], forKey: "image") as? String ?? ""
+        self._id = coder.decodeObject(of: [ProfileDTO.self, NSString.self], forKey: "_id") as? String ?? ""
+        self.name = coder.decodeObject(of: [ProfileDTO.self, NSString.self], forKey: "name") as? String ?? ""
+        self.image = coder.decodeObject(of: [ProfileDTO.self, NSString.self], forKey: "image") as? String ?? ""
         self.active = coder.decodeBool(forKey: "active")
-        self.user = coder.decodeObject(of: [UserProfileDTO.self, NSString.self], forKey: "user") as? String ?? ""
+        self.user = coder.decodeObject(of: [ProfileDTO.self, NSString.self], forKey: "user") as? String ?? ""
     }
 }
 
 // MARK: - Mapping
 
-extension UserProfileDTO {
-    func toDomain() -> UserProfile {
+extension ProfileDTO {
+    func toDomain() -> Profile {
         guard let id = _id else {
             return .init(name: name, image: image, active: active, user: user)
         }
@@ -57,8 +57,8 @@ extension UserProfileDTO {
     }
 }
 
-extension Array where Element == UserProfileDTO {
-    func toDomain() -> [UserProfile] {
+extension Array where Element == ProfileDTO {
+    func toDomain() -> [Profile] {
         return map { $0.toDomain() }
     }
 }

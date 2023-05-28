@@ -2,7 +2,7 @@
 //  ProfileCollectionViewDataSource.swift
 //  netflix
 //
-//  Created by Zach Bazov on 11/03/2023.
+//  Created by Zach Bazov on 16/03/2023.
 //
 
 import UIKit
@@ -11,14 +11,13 @@ import UIKit
 
 final class ProfileCollectionViewDataSource: CollectionViewDataSource {
     
-    private let viewModel: AccountViewModel
+    private let viewModel: ProfileViewModel
     
-    init(with viewModel: AccountViewModel) {
+    private weak var collectionView: UICollectionView?
+    
+    init(for collectionView: UICollectionView, with viewModel: ProfileViewModel) {
+        self.collectionView = collectionView
         self.viewModel = viewModel
-        
-        super.init()
-        
-        self.dataSourceDidChange()
     }
     
     override func numberOfSections() -> Int {
@@ -26,18 +25,21 @@ final class ProfileCollectionViewDataSource: CollectionViewDataSource {
     }
     
     override func numberOfItems(in section: Int) -> Int {
-        return viewModel.profiles.value.count
+        return viewModel.profiles.count
     }
     
-    override func cellForItem<T>(in collectionView: UICollectionView, at indexPath: IndexPath) -> T where T : UICollectionViewCell {
-        return ProfileCollectionViewCell.create(of: ProfileCollectionViewCell.self,
-                                                on: collectionView,
-                                                for: indexPath,
-                                                with: viewModel) as! T
+    override func cellForItem<T>(in collectionView: UICollectionView, at indexPath: IndexPath) -> T where T: UICollectionViewCell {
+        return ProfileCollectionViewCell.create(of: ProfileCollectionViewCell.self, on: collectionView, for: indexPath, with: viewModel) as! T
     }
     
-    override func willDisplayCellForItem<T>(_ cell: T, at indexPath: IndexPath) where T: UICollectionViewCell {
+    override func willDisplayCellForItem<T>(_ cell: T, at indexPath: IndexPath) where T : UICollectionViewCell {
         cell.opacityAnimation()
+    }
+    
+    override func didSelectItem(in collectionView: UICollectionView, at indexPath: IndexPath) {
+        guard let cell = collectionView.cellForItem(at: indexPath) as? ProfileCollectionViewCell else { return }
+        
+        cell.didSelect()
     }
 }
 
@@ -45,7 +47,7 @@ final class ProfileCollectionViewDataSource: CollectionViewDataSource {
 
 extension ProfileCollectionViewDataSource {
     func dataSourceDidChange() {
-        guard let collectionView = viewModel.coordinator?.viewController?.collectionView else { return }
+        guard let collectionView = collectionView else { return }
         
         collectionView.delegate = self
         collectionView.dataSource = self

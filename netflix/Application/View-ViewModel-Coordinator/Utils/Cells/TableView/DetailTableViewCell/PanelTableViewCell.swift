@@ -10,7 +10,6 @@ import UIKit
 // MARK: - PanelTableViewCell Type
 
 final class PanelTableViewCell: DetailTableViewCell {
-    
     private var panelView: DetailPanelView?
     
     deinit {
@@ -18,17 +17,19 @@ final class PanelTableViewCell: DetailTableViewCell {
         super.viewWillDeallocate()
     }
     
+    // MARK: TableViewCell Implementation
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         viewWillDeploySubviews()
         viewHierarchyWillConfigure()
     }
     
-    override func viewWillDeploySubviews() {
+    func viewWillDeploySubviews() {
         createPanelView()
     }
     
-    override func viewHierarchyWillConfigure() {
+    func viewHierarchyWillConfigure() {
         panelView?.addToHierarchy(on: contentView)
     }
     
@@ -38,7 +39,7 @@ final class PanelTableViewCell: DetailTableViewCell {
     }
 }
 
-// MARK: - Private Logic
+// MARK: - Private Implementation
 
 extension PanelTableViewCell {
     private func createPanelView() {

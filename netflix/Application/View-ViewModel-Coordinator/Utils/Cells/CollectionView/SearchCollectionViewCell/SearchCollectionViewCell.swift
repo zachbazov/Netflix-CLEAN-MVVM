@@ -9,16 +9,23 @@ import UIKit
 
 // MARK: - SearchCollectionViewCell Type
 
-final class SearchCollectionViewCell: CollectionViewCell<SearchCollectionViewCellViewModel> {
+final class SearchCollectionViewCell: UICollectionViewCell, CollectionViewCell {
     @IBOutlet private weak var posterImageView: UIImageView!
     @IBOutlet private weak var logoImageView: UIImageView!
     @IBOutlet private weak var titleLabel: UILabel!
     @IBOutlet private weak var logoXConstraint: NSLayoutConstraint!
     @IBOutlet private weak var logoYConstraint: NSLayoutConstraint!
     
-    // MARK: ViewLifecycleBehavior Implementation
+    var viewModel: SearchCollectionViewCellViewModel!
     
-    override func dataWillLoad() {
+    var representedIdentifier: NSString!
+    var indexPath: IndexPath!
+    
+    var imageService: AsyncImageService = AsyncImageService.shared
+    
+    // MARK: DataLoadable Implementation
+    
+    func dataWillLoad() {
         guard representedIdentifier == viewModel.slug as NSString? else { return }
         
         if #available(iOS 13.0, *) {
@@ -30,7 +37,7 @@ final class SearchCollectionViewCell: CollectionViewCell<SearchCollectionViewCel
         loadUsingDispatchGroup()
     }
     
-    override func dataDidLoad() {
+    func dataDidLoad() {
         guard let posterImage = imageService.object(for: viewModel.posterImageIdentifier),
               let logoImage = imageService.object(for: viewModel.logoImageIdentifier)
         else { return }
@@ -43,12 +50,14 @@ final class SearchCollectionViewCell: CollectionViewCell<SearchCollectionViewCel
         }
     }
     
-    override func viewDidLoad() {
+    // MARK: ViewLifecycleBehavior Implementation
+    
+    func viewDidLoad() {
         viewWillConfigure()
         dataWillLoad()
     }
     
-    override func viewWillConfigure() {
+    func viewWillConfigure() {
         posterImageView.cornerRadius(4.0)
         setTitle(viewModel.title)
         setLogoAlignment()
@@ -68,7 +77,7 @@ final class SearchCollectionViewCell: CollectionViewCell<SearchCollectionViewCel
     
     // MARK: CollectionViewCellResourcing Implementation
     
-    override func loadUsingAsyncAwait() {
+    func loadUsingAsyncAwait() {
         Task {
             await posterWillLoad()
             await logoWillLoad()
@@ -77,7 +86,7 @@ final class SearchCollectionViewCell: CollectionViewCell<SearchCollectionViewCel
         }
     }
     
-    override func loadUsingDispatchGroup() {
+    func loadUsingDispatchGroup() {
         let group = DispatchGroup()
         
         group.enter()
@@ -95,7 +104,7 @@ final class SearchCollectionViewCell: CollectionViewCell<SearchCollectionViewCel
     
     // MARK: ViewProtocol Implementation
     
-    override func setLogoAlignment() {
+    func setLogoAlignment() {
         let initial: CGFloat = 4.0
         let minX = initial
         let minY = initial
@@ -135,15 +144,15 @@ final class SearchCollectionViewCell: CollectionViewCell<SearchCollectionViewCel
         }
     }
     
-    override func setTitle(_ text: String) {
+    func setTitle(_ text: String) {
         titleLabel.text = text
     }
     
-    override func setPoster(_ image: UIImage) {
+    func setPoster(_ image: UIImage) {
         posterImageView.image = image
     }
     
-    override func setLogo(_ image: UIImage) {
+    func setLogo(_ image: UIImage) {
         logoImageView.image = image
     }
 }

@@ -9,27 +9,8 @@ import Foundation
 
 // MARK: - Configuration Type
 
-final class Configuration: APIConfigurable {
+struct Configuration {
+    private let dependencies: DI = DI.shared
     
-    // MARK: APIConfiguration Implementation
-    
-    lazy var apiScheme: String = {
-        guard
-            let value = Localization.Configuration.API().scheme as String?,
-            let scheme = Bundle.main.object(forInfoDictionaryKey: value) as? String else {
-            let message = Localization.Configuration.API().schemeError
-            fatalError(message)
-        }
-        return scheme
-    }()
-    
-    lazy var apiHost: String = {
-        guard
-            let value = Localization.Configuration.API().host as String?,
-            let host = Bundle.main.object(forInfoDictionaryKey: value) as? String else {
-            let message = Localization.Configuration.API().hostError
-            fatalError(message)
-        }
-        return host
-    }()
+    lazy var api: APIConfig = dependencies.resolve(APIConfig.self)
 }

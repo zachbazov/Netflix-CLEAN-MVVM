@@ -1,5 +1,5 @@
 //
-//  ViewAnimating.swift
+//  ViewAnimatable.swift
 //  netflix
 //
 //  Created by Zach Bazov on 28/05/2023.
@@ -7,9 +7,9 @@
 
 import Foundation
 
-// MARK: - ViewAnimating Type
+// MARK: - ViewAnimatable Type
 
-protocol ViewAnimating {
+protocol ViewAnimatable {
     func viewWillAnimateAppearance()
     func viewDidAnimateAppearance()
     func viewWillAnimateDisappearance()
@@ -17,9 +17,9 @@ protocol ViewAnimating {
     func viewShouldAppear(_ presented: Bool)
 }
 
-// MARK: - ViewAnimating Implementation
+// MARK: - ViewAnimatable Implementation
 
-extension ViewAnimating {
+extension ViewAnimatable {
     func viewWillAnimateAppearance() {}
     func viewDidAnimateAppearance() {}
     func viewWillAnimateDisappearance() {}

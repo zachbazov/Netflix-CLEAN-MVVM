@@ -1,5 +1,5 @@
 //
-//  SceneObserverUnbinding.swift
+//  SceneObserverUnbindable.swift
 //  netflix
 //
 //  Created by Zach Bazov on 16/02/2023.
@@ -7,8 +7,8 @@
 
 import Foundation
 
-// MARK: - SceneObserverUnbinding Type
+// MARK: - SceneObserverUnbindable Type
 
-protocol SceneObserverUnbinding {
+protocol SceneObserverUnbindable {
     func sceneObserversDidUnbind()
 }

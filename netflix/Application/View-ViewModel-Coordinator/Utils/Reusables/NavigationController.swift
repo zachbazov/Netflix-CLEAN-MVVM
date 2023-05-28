@@ -7,17 +7,22 @@
 
 import UIKit
 
-// MARK: - NavigationProtocol Type
+// MARK: - NavigatableController Type
 
-private protocol NavigationProtocol {
-    var isHidden: Bool { get }
+private protocol NavigatableController: UINavigationController {
+    var isHidden: Bool { get set }
     
     func viewWillConfigure()
 }
 
 // MARK: - NavigationController Type
 
-class NavigationController: UINavigationController {
+final class NavigationController: UINavigationController {
+    var isHidden: Bool {
+        get { return isNavigationBarHidden }
+        set { setNavigationBarHidden(newValue, animated: false) }
+    }
+    
     override init(rootViewController: UIViewController) {
         super.init(rootViewController: rootViewController)
         
@@ -27,14 +32,9 @@ class NavigationController: UINavigationController {
     required init?(coder aDecoder: NSCoder) { fatalError() }
 }
 
-// MARK: - NavigationProtocol Implementation
+// MARK: - NavigatableController Implementation
 
-extension NavigationController: NavigationProtocol {
-    var isHidden: Bool {
-        get { return isNavigationBarHidden }
-        set { setNavigationBarHidden(newValue, animated: false) }
-    }
-    
+extension NavigationController: NavigatableController {
     func viewWillConfigure() {
         modalPresentationStyle = .fullScreen
         isHidden = false

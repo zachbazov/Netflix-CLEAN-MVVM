@@ -28,7 +28,7 @@ final class AccountViewController: UIViewController, Controller {
     var viewModel: AccountViewModel!
     
     private(set) lazy var collectionView: UICollectionView = createCollectionView()
-    private(set) lazy var profileDataSource: ProfileCollectionViewDataSource = createProfileDataSource()
+    private(set) lazy var profileDataSource: AccountProfileCollectionViewDataSource = createProfileDataSource()
     private var accountMenuDataSource: AccountMenuTableViewDataSource?
     
     deinit {
@@ -112,14 +112,14 @@ extension AccountViewController {
     private func createCollectionView() -> UICollectionView {
         let layout = CollectionViewLayout(layout: .profile, scrollDirection: .horizontal)
         let collectionView = UICollectionView(frame: collectionContainer.bounds, collectionViewLayout: layout)
-        collectionView.register(ProfileCollectionViewCell.nib, forCellWithReuseIdentifier: ProfileCollectionViewCell.reuseIdentifier)
+        collectionView.register(AccountProfileCollectionViewCell.nib, forCellWithReuseIdentifier: AccountProfileCollectionViewCell.reuseIdentifier)
         collectionView.contentInset = UIEdgeInsets(top: .zero, left: 16.0, bottom: .zero, right: 16.0)
         collectionView.backgroundColor = .black
         return collectionView
     }
     
-    private func createProfileDataSource() -> ProfileCollectionViewDataSource {
-        return ProfileCollectionViewDataSource(with: viewModel)
+    private func createProfileDataSource() -> AccountProfileCollectionViewDataSource {
+        return AccountProfileCollectionViewDataSource(with: viewModel)
     }
     
     private func createAccountMenuDataSource() {

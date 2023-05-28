@@ -7,25 +7,29 @@
 
 import UIKit
 
-// MARK: - ViewModelProtocol Type
-
-private protocol ViewModelProtocol {
-    var titleLabel: UILabel { get }
-    
-    func setTitle(_ string: String)
-}
-
 // MARK: - LabeledTableHeaderView Type
 
-final class LabeledTableHeaderView: TableViewHeader<LabeledTableHeaderViewModel> {
+final class LabeledTableHeaderView: UITableViewHeaderFooterView {
     fileprivate lazy var titleLabel: UILabel = createLabel()
     
-    override func viewDidLoad() {
+    var viewModel: LabeledTableHeaderViewModel!
+    
+    deinit {
+        viewModel = nil
+        
+        removeFromSuperview()
+    }
+}
+
+// MARK: - TableViewHeader Implementation
+
+extension LabeledTableHeaderView: TableViewHeader {
+    func viewDidLoad() {
         viewHierarchyWillConfigure()
         viewWillConfigure()
     }
     
-    override func viewHierarchyWillConfigure() {
+    func viewHierarchyWillConfigure() {
         titleLabel
             .addToHierarchy(on: contentView)
             .constraintBottom(toParent: contentView, withLeadingAnchor: .zero)
@@ -34,21 +38,17 @@ final class LabeledTableHeaderView: TableViewHeader<LabeledTableHeaderViewModel>
             .constraintToSuperview(contentView)
     }
     
-    override func viewWillConfigure() {
+    func viewWillConfigure() {
         configureBackground()
         configureTitle()
     }
-}
-
-// MARK: - ViewModelProtocol Implementation
-
-extension LabeledTableHeaderView: ViewModelProtocol {
-    fileprivate func setTitle(_ string: String) {
+    
+    func setTitle(_ string: String) {
         titleLabel.text = string
     }
 }
 
-// MARK: - Private Presentation Implementation
+// MARK: - Private Implementation
 
 extension LabeledTableHeaderView {
     private func createLabel() -> UILabel {

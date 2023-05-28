@@ -2,69 +2,99 @@
 //  ProfileCollectionViewCell.swift
 //  netflix
 //
-//  Created by Zach Bazov on 10/03/2023.
+//  Created by Zach Bazov on 15/03/2023.
 //
 
 import UIKit
 
 // MARK: - ProfileCollectionViewCell Type
 
-final class ProfileCollectionViewCell: CollectionViewCell<ProfileCollectionViewCellViewModel> {
+final class ProfileCollectionViewCell: UICollectionViewCell, CollectionViewCell {
     @IBOutlet private weak var imageContainer: UIView!
     @IBOutlet private weak var layerContainer: UIView!
     @IBOutlet private weak var button: UIButton!
     @IBOutlet private weak var titleLabel: UILabel!
     
-    var accountViewModel: AccountViewModel?
+    var profileViewModel: ProfileViewModel!
+    var viewModel: ProfileCollectionViewCellViewModel!
+    
+    var representedIdentifier: NSString!
+    var indexPath: IndexPath!
+    
+    var imageService: AsyncImageService = AsyncImageService.shared
     
     deinit {
-        print("deinit \(Self.self)")
-        
-        accountViewModel = nil
-        
-        removeFromSuperview()
+        viewWillDeallocate()
     }
     
-    override func viewDidLoad() {
-        viewWillConfigure()
+    func viewDidLoad() {
+        viewDidConfigure()
+        viewDidTargetSubviews()
     }
     
-    override func viewWillConfigure() {
-        guard let profiles = accountViewModel?.profiles.value else { return }
+    func viewDidConfigure() {
+        button.cornerRadius(4.0)
+        
+        guard let profiles = profileViewModel?.profiles else { return }
         
         guard indexPath.row == profiles.count - 1 else {
-            configureProfileButtons()
-            
-            return
+            return configureProfileButtons()
         }
         
         configureAddProfileButton()
     }
     
-    // MARK: ViewProtocol Implementation
+    func viewDidTargetSubviews() {
+        button.addTarget(self, action: #selector(didSelect), for: .touchUpInside)
+    }
     
-    override func setTitle(_ text: String) {
+    func viewWillDeallocate() {
+        representedIdentifier = nil
+        indexPath = nil
+        profileViewModel = nil
+        viewModel = nil
+        
+        removeFromSuperview()
+    }
+}
+
+// MARK: - CollectionViewCellConfiguring Implementation
+
+extension ProfileCollectionViewCell: CollectionViewCellConfiguring {
+    func setTitle(_ text: String) {
         titleLabel.text = text
     }
 }
 
-// MARK: - Private Implementation
+// MARK: - Internal Implementation
+
+extension ProfileCollectionViewCell {
+    @objc
+    func didSelect() {
+        let addProfileIndex = profileViewModel.profiles.count - 1
+        
+        switch tag {
+        case addProfileIndex:
+            profileViewModel?.coordinator?.coordinate(to: .addProfile)
+        default:
+            userProfileUpdateSession()
+        }
+    }
+}
+
+// MARK - Private Implementation
 
 extension ProfileCollectionViewCell {
     private func configureProfileButtons() {
         let imageName = viewModel.image
         let image = UIImage(named: imageName)
         
-        button.tag = indexPath.row
         button.setImage(image, for: .normal)
         button.cornerRadius(8.0)
-        
         setTitle(viewModel.name)
     }
     
     private func configureAddProfileButton() {
-        guard let profiles = accountViewModel?.profiles.value else { return }
-        
         let imageName = viewModel.image
         let imageSize: CGFloat = 40.0
         let symbolConfiguration = UIImage.SymbolConfiguration(pointSize: imageSize, weight: .light)
@@ -73,13 +103,27 @@ extension ProfileCollectionViewCell {
             .withTintColor(.hexColor("#cacaca"))
             .withConfiguration(symbolConfiguration)
         
-        button.tag = profiles.count - 1
         button.setImage(image, for: .normal)
         button.cornerRadius(8.0)
-        
-        setTitle(viewModel.name)
+        setTitle("Add Profile")
         
         layerContainer.cornerRadius(8.0)
         layerContainer.border(.hexColor("#aaaaaa"), width: 1.0)
+    }
+    
+    private func userProfileUpdateSession() {
+        let profile = profileViewModel.profiles[tag]
+        
+        profileViewModel.selectedProfile = profile
+        
+        if #available(iOS 13.0, *) {
+            Task {
+                await profileViewModel.userProfileDidUpdate(with: profile._id ?? .toBlank())
+            }
+            
+            return
+        }
+        
+        profileViewModel.updateUserProfile(with: profile._id!)
     }
 }

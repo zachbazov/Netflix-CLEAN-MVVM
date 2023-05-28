@@ -9,30 +9,52 @@ import UIKit
 
 // MARK: - MediaHybridCell Type
 
-final class MediaHybridCell<Cell>: HybridCell<Cell, MediaCollectionViewDataSource<Cell>, MediaHybridCellViewModel, HomeViewModel> where Cell: UICollectionViewCell {
+final class MediaHybridCell<Cell>: UITableViewCell where Cell: UICollectionViewCell {
+    lazy var collectionView: UICollectionView = createCollectionView()
+    var cell: Cell?
+    var dataSource: MediaCollectionViewDataSource<Cell>?
+    var viewModel: MediaHybridCellViewModel?
+    var controllerViewModel: HomeViewModel?
+    var layout: CollectionViewLayout?
     
-    override func viewDidLoad() {
+    deinit {
+        collectionView.removeFromSuperview()
+        
+        cell = nil
+        dataSource = nil
+        viewModel = nil
+        controllerViewModel = nil
+        layout = nil
+        
+        removeFromSuperview()
+    }
+}
+
+// MARK: - HybridCell Implementation
+
+extension MediaHybridCell: HybridCell {
+    func viewDidLoad() {
         viewWillDeploySubviews()
         viewHierarchyWillConfigure()
         viewWillConfigure()
     }
     
-    override func viewWillDeploySubviews() {
+    func viewWillDeploySubviews() {
         createDataSource()
         createLayout()
     }
     
-    override func viewHierarchyWillConfigure() {
+    func viewHierarchyWillConfigure() {
         collectionView
             .addToHierarchy(on: contentView)
             .constraintToSuperview(contentView)
     }
     
-    override func viewWillConfigure() {
+    func viewWillConfigure() {
         setBackgroundColor(.clear)
     }
     
-    override func viewWillDeallocate() {
+    func viewWillDeallocate() {
         collectionView.removeFromSuperview()
         
         dataSource = nil
@@ -43,7 +65,7 @@ final class MediaHybridCell<Cell>: HybridCell<Cell, MediaCollectionViewDataSourc
         removeFromSuperview()
     }
     
-    override func createCollectionView() -> UICollectionView {
+    func createCollectionView() -> UICollectionView {
         let collectionView = UICollectionView(frame: bounds, collectionViewLayout: .init())
         collectionView.backgroundColor = .clear
         collectionView.showsVerticalScrollIndicator = false
@@ -52,7 +74,7 @@ final class MediaHybridCell<Cell>: HybridCell<Cell, MediaCollectionViewDataSourc
         return collectionView
     }
     
-    override func createDataSource() {
+    func createDataSource() {
         guard let viewModel = viewModel,
               let controllerViewModel = controllerViewModel
         else { return }
@@ -60,7 +82,7 @@ final class MediaHybridCell<Cell>: HybridCell<Cell, MediaCollectionViewDataSourc
         dataSource = MediaCollectionViewDataSource<Cell>(on: collectionView, section: viewModel.section, viewModel: controllerViewModel)
     }
     
-    override func createLayout() {
+    func createLayout() {
         guard let viewModel = viewModel,
               let indices = MediaTableViewDataSource.Index(rawValue: viewModel.section.id)
         else { return }

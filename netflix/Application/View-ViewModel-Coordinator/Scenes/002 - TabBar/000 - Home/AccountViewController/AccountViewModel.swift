@@ -11,7 +11,7 @@ import Foundation
 
 private protocol ViewModelProtocol {
     var userUseCase: UserUseCase { get }
-    var profiles: Observable<[UserProfile]> { get }
+    var profiles: Observable<[Profile]> { get }
     var menuItems: [AccountMenuItem] { get }
 }
 
@@ -22,7 +22,7 @@ final class AccountViewModel {
     
     fileprivate lazy var userUseCase: UserUseCase = createUseCase()
     
-    let profiles: Observable<[UserProfile]> = Observable([])
+    let profiles: Observable<[Profile]> = Observable([])
     
     lazy var menuItems: [AccountMenuItem] = createMenuItems()
 }
@@ -68,11 +68,11 @@ extension AccountViewModel: ViewModelProtocol {
         
         guard let user = authService.user else { return }
         
-        let request = UserProfileHTTPDTO.GET.Request(user: user)
+        let request = ProfileHTTPDTO.GET.Request(user: user)
         
         userUseCase.repository.task = userUseCase.request(
             endpoint: .getUserProfiles,
-            for: UserProfileHTTPDTO.GET.Response.self,
+            for: ProfileHTTPDTO.GET.Response.self,
             request: request,
             cached: { _ in },
             completion: { [weak self] result in
@@ -91,14 +91,14 @@ extension AccountViewModel: ViewModelProtocol {
         
         guard let user = authService.user else { return }
         
-        let request = UserProfileHTTPDTO.GET.Request(user: user)
-        let response = await userUseCase.request(endpoint: .getUserProfiles, for: UserProfileHTTPDTO.GET.Response.self, request: request)
+        let request = ProfileHTTPDTO.GET.Request(user: user)
+        let response = await userUseCase.request(endpoint: .getUserProfiles, for: ProfileHTTPDTO.GET.Response.self, request: request)
         
         guard let profiles = response?.data.toDomain() else { return }
         
         self.profiles.value = profiles
         
-        let addProfile = UserProfile(_id: "add", name: "Add Profile", image: "plus", active: false, user: user._id!)
+        let addProfile = Profile(_id: "add", name: "Add Profile", image: "plus", active: false, user: user._id!)
         
         self.profiles.value.append(addProfile)
     }

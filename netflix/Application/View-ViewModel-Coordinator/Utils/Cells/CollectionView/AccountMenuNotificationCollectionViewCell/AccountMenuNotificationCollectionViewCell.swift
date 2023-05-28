@@ -9,7 +9,7 @@ import UIKit
 
 // MARK: - AccountMenuNotificationCollectionViewCell Type
 
-final class AccountMenuNotificationCollectionViewCell: CollectionViewCell<AccountMenuNotificationCollectionViewCellViewModel> {
+final class AccountMenuNotificationCollectionViewCell: UICollectionViewCell, CollectionViewCell {
     @IBOutlet private weak var posterImageView: UIImageView!
     @IBOutlet private weak var logoImageView: UIImageView!
     @IBOutlet private weak var messageLabel: UILabel!
@@ -19,9 +19,16 @@ final class AccountMenuNotificationCollectionViewCell: CollectionViewCell<Accoun
     @IBOutlet private weak var logoYConstraint: NSLayoutConstraint!
     @IBOutlet private weak var notificationIndicator: UIView!
     
-    // MARK: ViewLifecycleBehavior Implementation
+    var viewModel: AccountMenuNotificationCollectionViewCellViewModel!
     
-    override func dataWillLoad() {
+    var representedIdentifier: NSString!
+    var indexPath: IndexPath!
+    
+    var imageService: AsyncImageService = AsyncImageService.shared
+    
+    // MARK: DataLoadable Implementation
+    
+    func dataWillLoad() {
         guard representedIdentifier == viewModel.slug as NSString? else { return }
         
         if #available(iOS 13.0, *) {
@@ -33,7 +40,7 @@ final class AccountMenuNotificationCollectionViewCell: CollectionViewCell<Accoun
         loadUsingDispatchGroup()
     }
     
-    override func dataDidLoad() {
+    func dataDidLoad() {
         guard let posterImage = imageService.object(for: viewModel.posterImageIdentifier),
               let logoImage = imageService.object(for: viewModel.logoImageIdentifier)
         else { return }
@@ -46,12 +53,14 @@ final class AccountMenuNotificationCollectionViewCell: CollectionViewCell<Accoun
         }
     }
     
-    override func viewDidLoad() {
+    // MARK: ViewLifecycleBehavior Implementation
+    
+    func viewDidLoad() {
         viewWillConfigure()
         dataWillLoad()
     }
     
-    override func viewWillConfigure() {
+    func viewWillConfigure() {
         notificationIndicator.cornerRadius(notificationIndicator.bounds.height / 2)
         posterImageView.cornerRadius(4.0)
         
@@ -62,7 +71,7 @@ final class AccountMenuNotificationCollectionViewCell: CollectionViewCell<Accoun
     
     // MARK: CollectionViewCellResourcing Implementation
     
-    override func loadUsingAsyncAwait() {
+    func loadUsingAsyncAwait() {
         Task {
             await posterWillLoad()
             await logoWillLoad()
@@ -71,7 +80,7 @@ final class AccountMenuNotificationCollectionViewCell: CollectionViewCell<Accoun
         }
     }
     
-    override func loadUsingDispatchGroup() {
+    func loadUsingDispatchGroup() {
         let group = DispatchGroup()
         
         group.enter()
@@ -89,19 +98,19 @@ final class AccountMenuNotificationCollectionViewCell: CollectionViewCell<Accoun
     
     // MARK: ViewProtocol Implementation
     
-    override func setSubject(_ text: String) {
+    func setSubject(_ text: String) {
         subjectLabel.text = text
     }
     
-    override func setPoster(_ image: UIImage) {
+    func setPoster(_ image: UIImage) {
         posterImageView.image = image
     }
     
-    override func setLogo(_ image: UIImage) {
+    func setLogo(_ image: UIImage) {
         logoImageView.image = image
     }
     
-    override func setLogoAlignment() {
+    func setLogoAlignment() {
         let initial: CGFloat = 4.0
         let minX = initial
         let minY = initial

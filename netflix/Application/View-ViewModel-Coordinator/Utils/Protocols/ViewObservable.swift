@@ -1,5 +1,5 @@
 //
-//  ViewObserving.swift
+//  ViewObservable.swift
 //  netflix
 //
 //  Created by Zach Bazov on 28/05/2023.
@@ -7,18 +7,18 @@
 
 import Foundation
 
-// MARK: - ViewObserving Type
+// MARK: - ViewObservable Type
 
-protocol ViewObserving {
+protocol ViewObservable {
     func viewWillBindObservers()
     func viewDidBindObservers()
     func viewWillUnbindObservers()
     func viewDidUnbindObservers()
 }
 
-// MARK: - ViewObserving Implementation
+// MARK: - ViewObservable Implementation
 
-extension ViewObserving {
+extension ViewObservable {
     func viewWillBindObservers() {}
     func viewDidBindObservers() {}
     func viewWillUnbindObservers() {}

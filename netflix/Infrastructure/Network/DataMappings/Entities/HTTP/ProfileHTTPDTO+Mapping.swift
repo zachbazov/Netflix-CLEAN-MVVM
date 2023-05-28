@@ -1,5 +1,5 @@
 //
-//  UserProfileHTTPDTO+Mapping.swift
+//  ProfileHTTPDTO+Mapping.swift
 //  netflix
 //
 //  Created by Zach Bazov on 14/03/2023.
@@ -7,9 +7,9 @@
 
 import Foundation
 
-// MARK: - UserProfileHTTPDTO Type
+// MARK: - ProfileHTTPDTO Type
 
-struct UserProfileHTTPDTO {
+struct ProfileHTTPDTO {
     struct GET: HTTP {
         struct Request: Decodable {
             let user: UserDTO
@@ -18,19 +18,19 @@ struct UserProfileHTTPDTO {
         struct Response: Decodable {
             let status: String
             let results: Int
-            let data: [UserProfileDTO]
+            let data: [ProfileDTO]
         }
     }
     
     struct POST: HTTP {
         struct Request: Decodable {
             let user: UserDTO
-            let profile: UserProfileDTO
+            let profile: ProfileDTO
         }
         
         struct Response: Decodable {
             let status: String
-            let data: UserProfileDTO
+            let data: ProfileDTO
         }
     }
     
@@ -41,45 +41,45 @@ struct UserProfileHTTPDTO {
         
         struct Response: Decodable {
             let status: String
-            let data: UserProfileDTO
+            let data: ProfileDTO
         }
     }
 }
 
 // MARK: - Mappings
 
-extension UserProfileHTTPDTO.GET.Request {
-    func toDomain() -> UserProfileHTTP.GET.Request {
+extension ProfileHTTPDTO.GET.Request {
+    func toDomain() -> ProfileHTTP.GET.Request {
         return .init(user: user.toDomain())
     }
 }
 
-extension UserProfileHTTPDTO.GET.Response {
-    func toDomain() -> UserProfileHTTP.GET.Response {
+extension ProfileHTTPDTO.GET.Response {
+    func toDomain() -> ProfileHTTP.GET.Response {
         return .init(status: status, results: results, data: data.toDomain())
     }
 }
 
-extension UserProfileHTTPDTO.POST.Request {
-    func toDomain() -> UserProfileHTTP.POST.Request {
+extension ProfileHTTPDTO.POST.Request {
+    func toDomain() -> ProfileHTTP.POST.Request {
         return .init(user: user.toDomain(), profile: profile.toDomain())
     }
 }
 
-extension UserProfileHTTPDTO.POST.Response {
-    func toDomain() -> UserProfileHTTP.POST.Response {
+extension ProfileHTTPDTO.POST.Response {
+    func toDomain() -> ProfileHTTP.POST.Response {
         return .init(status: status, data: data.toDomain())
     }
 }
 
-extension UserProfileHTTPDTO.PATCH.Request {
-    func toDomain() -> UserProfileHTTP.PATCH.Request {
+extension ProfileHTTPDTO.PATCH.Request {
+    func toDomain() -> ProfileHTTP.PATCH.Request {
         return .init(user: user.toDomain())
     }
 }
 
-extension UserProfileHTTPDTO.PATCH.Response {
-    func toDomain() -> UserProfileHTTP.PATCH.Response {
+extension ProfileHTTPDTO.PATCH.Response {
+    func toDomain() -> ProfileHTTP.PATCH.Response {
         return .init(status: status, data: data.toDomain())
     }
 }

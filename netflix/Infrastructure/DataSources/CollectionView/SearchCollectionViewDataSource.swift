@@ -7,17 +7,9 @@
 
 import UIKit
 
-// MARK: - DataSourceProtocol Type
-
-private protocol DataSourceProtocol {
-    var viewModel: SearchViewModel { get }
-    var headerView: LabeledCollectionHeaderView? { get }
-}
-
 // MARK: - SearchCollectionViewDataSource Type
 
 final class SearchCollectionViewDataSource: CollectionViewDataSource {
-    
     fileprivate let viewModel: SearchViewModel
     
     fileprivate(set) var headerView: LabeledCollectionHeaderView?
@@ -67,7 +59,7 @@ final class SearchCollectionViewDataSource: CollectionViewDataSource {
         cell.opacityAnimation()
     }
     
-    override func viewForSupplementaryElement(in collectionView: UICollectionView, of kind: String, at indexPath: IndexPath) -> CollectionReusableView {
+    override func viewForSupplementaryElement(in collectionView: UICollectionView, of kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         switch kind {
         case UICollectionView.elementKindSectionHeader:
             headerView = LabeledCollectionHeaderView.create(in: collectionView, at: indexPath)
@@ -75,14 +67,10 @@ final class SearchCollectionViewDataSource: CollectionViewDataSource {
             guard let headerView = headerView else { fatalError() }
             
             return headerView
-        default: return CollectionReusableView()
+        default: return UICollectionReusableView()
         }
     }
 }
-
-// MARK: - DataSourceProtocol Implementation
-
-extension SearchCollectionViewDataSource: DataSourceProtocol {}
 
 // MARK: - UIScrollViewDelegate Implementation
 

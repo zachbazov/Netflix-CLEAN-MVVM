@@ -7,15 +7,11 @@
 
 import UIKit
 
-// MARK: - ViewProtocol Type
-
-private protocol ViewProtocol {
-    var showcaseView: ShowcaseView? { get }
-}
-
 // MARK: - ShowcaseTableViewCell Type
 
-final class ShowcaseTableViewCell: TableViewCell<ShowcaseTableViewCellViewModel> {
+final class ShowcaseTableViewCell: UITableViewCell {
+    var viewModel: ShowcaseTableViewCellViewModel!
+    
     fileprivate(set) var showcaseView: ShowcaseView?
     
     deinit {
@@ -24,33 +20,6 @@ final class ShowcaseTableViewCell: TableViewCell<ShowcaseTableViewCellViewModel>
         showcaseView?.viewWillDeallocate()
         
         viewWillDeallocate()
-    }
-    
-    override func viewDidLoad() {
-        viewWillConfigure()
-        viewWillDeploySubviews()
-        viewHierarchyWillConfigure()
-    }
-    
-    override func viewWillDeploySubviews() {
-        createShowcaseView()
-    }
-    
-    override func viewHierarchyWillConfigure() {
-        showcaseView?
-            .addToHierarchy(on: contentView)
-            .constraintToSuperview(contentView)
-    }
-    
-    override func viewWillConfigure() {
-        setBackgroundColor(.clear)
-    }
-    
-    override func viewWillDeallocate() {
-        showcaseView = nil
-        viewModel = nil
-        
-        removeFromSuperview()
     }
     
     override func prepareForReuse() {
@@ -62,7 +31,38 @@ final class ShowcaseTableViewCell: TableViewCell<ShowcaseTableViewCellViewModel>
     }
 }
 
-// MARK: - Private Presentation Implementation
+// MARK: - TableViewCell Implementation
+
+extension ShowcaseTableViewCell: TableViewCell {
+    func viewDidLoad() {
+        viewWillConfigure()
+        viewWillDeploySubviews()
+        viewHierarchyWillConfigure()
+    }
+    
+    func viewWillDeploySubviews() {
+        createShowcaseView()
+    }
+    
+    func viewHierarchyWillConfigure() {
+        showcaseView?
+            .addToHierarchy(on: contentView)
+            .constraintToSuperview(contentView)
+    }
+    
+    func viewWillConfigure() {
+        setBackgroundColor(.clear)
+    }
+    
+    func viewWillDeallocate() {
+        showcaseView = nil
+        viewModel = nil
+        
+        removeFromSuperview()
+    }
+}
+
+// MARK: - Private Implementation
 
 extension ShowcaseTableViewCell {
     private func createShowcaseView() {

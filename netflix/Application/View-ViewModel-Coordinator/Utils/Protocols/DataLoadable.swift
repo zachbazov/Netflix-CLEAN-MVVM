@@ -1,5 +1,5 @@
 //
-//  DataLoading.swift
+//  DataLoadable.swift
 //  netflix
 //
 //  Created by Zach Bazov on 28/05/2023.
@@ -7,16 +7,16 @@
 
 import Foundation
 
-// MARK: - DataLoading Type
+// MARK: - DataLoadable Type
 
-protocol DataLoading {
+protocol DataLoadable {
     func dataWillLoad()
     func dataDidLoad()
 }
 
-// MARK: - DataLoading Implementation
+// MARK: - DataLoadable Implementation
 
-extension DataLoading {
+extension DataLoadable {
     func dataWillLoad() {}
     func dataDidLoad() {}
 }

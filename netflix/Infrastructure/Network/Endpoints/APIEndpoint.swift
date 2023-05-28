@@ -42,14 +42,14 @@ extension APIEndpoint: UserRepositoryEndpointing {
                         headerParameters: ["content-type": "application/json"])
     }
     
-    static func getUserProfiles(with request: UserProfileHTTPDTO.GET.Request) -> Endpoint<UserProfileHTTPDTO.GET.Response> {
+    static func getUserProfiles(with request: ProfileHTTPDTO.GET.Request) -> Endpoint<ProfileHTTPDTO.GET.Response> {
         return Endpoint(path: "api/v1/users/profiles",
                         method: .get,
                         headerParameters: ["content-type": "application/json"],
                         queryParameters: ["user": request.user._id ?? ""])
     }
     
-    static func createUserProfile(with request: UserProfileHTTPDTO.POST.Request) -> Endpoint<UserProfileHTTPDTO.POST.Response> {
+    static func createUserProfile(with request: ProfileHTTPDTO.POST.Request) -> Endpoint<ProfileHTTPDTO.POST.Response> {
         return Endpoint(path: "api/v1/users/profiles",
                         method: .post,
                         headerParameters: ["content-type": "application/json"],

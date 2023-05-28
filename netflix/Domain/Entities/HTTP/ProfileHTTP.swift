@@ -1,5 +1,5 @@
 //
-//  UserProfileHTTP.swift
+//  ProfileHTTP.swift
 //  netflix
 //
 //  Created by Zach Bazov on 14/03/2023.
@@ -7,9 +7,9 @@
 
 import Foundation
 
-// MARK: - UserProfileHTTP Type
+// MARK: - ProfileHTTP Type
 
-struct UserProfileHTTP {
+struct ProfileHTTP {
     struct GET: HTTP {
         struct Request {
             let user: User
@@ -18,19 +18,19 @@ struct UserProfileHTTP {
         struct Response {
             let status: String
             let results: Int
-            let data: [UserProfile]
+            let data: [Profile]
         }
     }
     
     struct POST: HTTP {
         struct Request {
             let user: User
-            let profile: UserProfile
+            let profile: Profile
         }
         
         struct Response {
             let status: String
-            let data: UserProfile
+            let data: Profile
         }
     }
     
@@ -41,7 +41,7 @@ struct UserProfileHTTP {
         
         struct Response {
             let status: String
-            let data: UserProfile
+            let data: Profile
         }
     }
 }

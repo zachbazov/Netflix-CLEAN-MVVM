@@ -43,12 +43,12 @@ extension UserUseCase: UseCase {
             let completion = completion as? ((Result<UserHTTPDTO.Response, DataTransferError>) -> Void) ?? { _ in }
             return repository.invoker.updateOne(request: request, completion: completion)
         case .getUserProfiles:
-            guard let request = request as? UserProfileHTTPDTO.GET.Request else { return nil }
-            let completion = completion as? ((Result<UserProfileHTTPDTO.GET.Response, DataTransferError>) -> Void) ?? { _ in }
+            guard let request = request as? ProfileHTTPDTO.GET.Request else { return nil }
+            let completion = completion as? ((Result<ProfileHTTPDTO.GET.Response, DataTransferError>) -> Void) ?? { _ in }
             return repository.invoker.getAll(request: request, completion: completion)
         case .createUserProfile:
-            guard let request = request as? UserProfileHTTPDTO.POST.Request else { return nil }
-            let completion = completion as? ((Result<UserProfileHTTPDTO.POST.Response, DataTransferError>) -> Void) ?? { _ in }
+            guard let request = request as? ProfileHTTPDTO.POST.Request else { return nil }
+            let completion = completion as? ((Result<ProfileHTTPDTO.POST.Response, DataTransferError>) -> Void) ?? { _ in }
             return repository.invoker.createOne(request: request, completion: completion)
         }
     }
@@ -70,10 +70,10 @@ extension UserUseCase: UseCase {
             guard let request = request as? UserHTTPDTO.Request else { return nil }
             return await repository.invoker.updateOne(request: request)
         case .getUserProfiles:
-            guard let request = request as? UserProfileHTTPDTO.GET.Request else { return nil }
+            guard let request = request as? ProfileHTTPDTO.GET.Request else { return nil }
             return await repository.invoker.getAll(request: request)
         case .createUserProfile:
-            guard let request = request as? UserProfileHTTPDTO.POST.Request else { return nil }
+            guard let request = request as? ProfileHTTPDTO.POST.Request else { return nil }
             return await repository.invoker.createOne(request: request)
         }
     }

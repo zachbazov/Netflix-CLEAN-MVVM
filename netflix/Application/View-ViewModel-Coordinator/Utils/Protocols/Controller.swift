@@ -11,15 +11,15 @@ import UIKit
 
 protocol Controller: UIViewController,
                      ViewLifecycleBehavior,
-                     ViewObserving,
-                     ViewAnimating,
-                     DeviceOrienting,
+                     ViewObservable,
+                     ViewAnimatable,
+                     DeviceOrientable,
                      NavigationStylable {
     associatedtype ViewModelType: ViewModel
     var viewModel: ViewModelType! { get set }
 }
 
-// MARK: - ViewAnimating Implementation
+// MARK: - ViewAnimatable Implementation
 
 extension Controller {
     func viewWillAnimateAppearance() {
@@ -55,7 +55,7 @@ extension Controller {
     }
 }
 
-// MARK: - DeviceOrienting Implementation
+// MARK: - DeviceOrientable Implementation
 
 extension Controller {
     func deviceWillLockOrientation(_ mask: UIInterfaceOrientationMask = .portrait) {

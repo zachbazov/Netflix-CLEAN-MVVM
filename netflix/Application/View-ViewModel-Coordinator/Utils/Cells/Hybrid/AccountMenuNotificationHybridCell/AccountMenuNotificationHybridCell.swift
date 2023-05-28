@@ -7,40 +7,49 @@
 
 import UIKit
 
-// MARK: - ViewProtocol Type
-
-private protocol ViewProtocol {
-    var label: UILabel { get }
-    var image: UIImageView { get }
-    var notificationIndicator: UIView { get }
-    
-    func setTitle(_ string: String)
-}
-
 // MARK: - AccountMenuNotificationHybridCell Type
 
-final class AccountMenuNotificationHybridCell: HybridCell<AccountMenuNotificationCollectionViewCell, AccountMenuNotificationCollectionViewDataSource, AccountMenuNotificationHybridCellViewModel, AccountViewModel> {
+final class AccountMenuNotificationHybridCell: UITableViewCell {
     lazy var label: UILabel = createTitleLabel()
     lazy var image: UIImageView = createImageView()
     lazy var notificationIndicator: UIView = createNotificationIndicatorView()
+    lazy var collectionView: UICollectionView = createCollectionView()
+    
+    var cell: AccountMenuNotificationCollectionViewCell?
+    var dataSource: AccountMenuNotificationCollectionViewDataSource?
+    var viewModel: AccountMenuNotificationHybridCellViewModel?
+    var controllerViewModel: AccountViewModel?
+    var layout: CollectionViewLayout?
     
     deinit {
         viewWillDeallocate()
-        super.viewWillDeallocate()
     }
     
-    override func viewDidLoad() {
+    override func prepareForReuse() {
+        label.text = nil
+        image.image = nil
+        accessoryView = nil
+        accessoryType = .none
+        
+        super.prepareForReuse()
+    }
+}
+
+// MARK: - HybridCell Implementation
+
+extension AccountMenuNotificationHybridCell: HybridCell {
+    func viewDidLoad() {
         viewWillDeploySubviews()
         viewHierarchyWillConfigure()
         viewWillConfigure()
     }
     
-    override func viewWillDeploySubviews() {
+    func viewWillDeploySubviews() {
         createDataSource()
         createLayout()
     }
     
-    override func viewHierarchyWillConfigure() {
+    func viewHierarchyWillConfigure() {
         image.addToHierarchy(on: contentView)
         label.addToHierarchy(on: contentView)
         
@@ -52,7 +61,7 @@ final class AccountMenuNotificationHybridCell: HybridCell<AccountMenuNotificatio
                 sizeInPoints: 28.0)
     }
     
-    override func viewWillConfigure() {
+    func viewWillConfigure() {
         guard let viewModel = viewModel else { return }
         
         setBackgroundColor(.hexColor("#121212"))
@@ -63,22 +72,22 @@ final class AccountMenuNotificationHybridCell: HybridCell<AccountMenuNotificatio
         configureIndicator()
     }
     
-    override func viewWillDeallocate() {
+    func viewWillDeallocate() {
         label.removeFromSuperview()
         image.removeFromSuperview()
         notificationIndicator.removeFromSuperview()
-    }
-    
-    override func prepareForReuse() {
-        super.prepareForReuse()
+        collectionView.removeFromSuperview()
         
-        label.text = nil
-        image.image = nil
-        accessoryView = nil
-        accessoryType = .none
+        cell = nil
+        dataSource = nil
+        viewModel = nil
+        controllerViewModel = nil
+        layout = nil
+        
+        removeFromSuperview()
     }
     
-    override func createCollectionView() -> UICollectionView {
+    func createCollectionView() -> UICollectionView {
         let collectionView = UICollectionView(frame: bounds, collectionViewLayout: .init())
         collectionView.backgroundColor = .hexColor("#121212")
         collectionView.showsVerticalScrollIndicator = false
@@ -87,13 +96,13 @@ final class AccountMenuNotificationHybridCell: HybridCell<AccountMenuNotificatio
         return collectionView
     }
     
-    override func createDataSource() {
+    func createDataSource() {
         guard let controllerViewModel = controllerViewModel else { return }
         
         dataSource = AccountMenuNotificationCollectionViewDataSource(collectionView: collectionView, with: controllerViewModel)
     }
     
-    override func createLayout() {
+    func createLayout() {
         layout = CollectionViewLayout(layout: .notification, scrollDirection: .vertical)
         
         guard let layout = layout else { return }
@@ -102,15 +111,7 @@ final class AccountMenuNotificationHybridCell: HybridCell<AccountMenuNotificatio
     }
 }
 
-// MARK: - ViewProtocol Implementation
-
-extension AccountMenuNotificationHybridCell: ViewProtocol {
-    fileprivate func setTitle(_ string: String) {
-        label.text = string
-    }
-}
-
-// MARK: - Private Presentation Implementation
+// MARK: - Private Implementation
 
 extension AccountMenuNotificationHybridCell {
     private func createImageView() -> UIImageView {
@@ -203,5 +204,9 @@ extension AccountMenuNotificationHybridCell {
             
             notificationIndicator.removeFromSuperview()
         }
+    }
+    
+    private func setTitle(_ string: String) {
+        label.text = string
     }
 }

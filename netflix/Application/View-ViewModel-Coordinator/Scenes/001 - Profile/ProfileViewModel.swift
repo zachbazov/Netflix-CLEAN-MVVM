@@ -12,8 +12,8 @@ import Foundation
 private protocol ViewModelProtocol {
     var userUseCase: UserUseCase { get }
     
-    var profiles: [UserProfile] { get }
-    var selectedProfile: UserProfile? { get }
+    var profiles: [Profile] { get }
+    var selectedProfile: Profile? { get }
     
     func getUserProfiles()
     func createUserProfile()
@@ -35,8 +35,8 @@ final class ProfileViewModel {
     
     fileprivate(set) lazy var userUseCase: UserUseCase = createUseCase()
     
-    var profiles = [UserProfile]()
-    var selectedProfile: UserProfile?
+    var profiles = [Profile]()
+    var selectedProfile: Profile?
     
     deinit {
         print("deinit \(String(describing: Self.self))")
@@ -61,11 +61,11 @@ extension ProfileViewModel: ViewModelProtocol {
         
         guard let user = authService.user else { return }
         
-        let request = UserProfileHTTPDTO.GET.Request(user: user)
+        let request = ProfileHTTPDTO.GET.Request(user: user)
         
         userUseCase.repository.task = userUseCase.request(
             endpoint: .getUserProfiles,
-            for: UserProfileHTTPDTO.GET.Response.self,
+            for: ProfileHTTPDTO.GET.Response.self,
             request: request,
             cached: { _ in },
             completion: { [weak self] result in
@@ -84,12 +84,12 @@ extension ProfileViewModel: ViewModelProtocol {
         
         guard let user = authService.user else { return }
         
-        let profile = UserProfileDTO(name: "test", image: "av-dark-green", active: false, user: user._id ?? "")
-        let request = UserProfileHTTPDTO.POST.Request(user: user, profile: profile)
+        let profile = ProfileDTO(name: "test", image: "av-dark-green", active: false, user: user._id ?? "")
+        let request = ProfileHTTPDTO.POST.Request(user: user, profile: profile)
         
         userUseCase.repository.task = userUseCase.request(
             endpoint: .createUserProfile,
-            for: UserProfileHTTPDTO.POST.Response.self,
+            for: ProfileHTTPDTO.POST.Response.self,
             request: request,
             cached: { _ in },
             completion: { [weak self] result in
@@ -155,14 +155,14 @@ extension ProfileViewModel: ViewModelProtocol {
         
         guard let user = authService.user else { return }
         
-        let request = UserProfileHTTPDTO.GET.Request(user: user)
-        let response = await userUseCase.request(endpoint: .getUserProfiles, for: UserProfileHTTPDTO.GET.Response.self, request: request)
+        let request = ProfileHTTPDTO.GET.Request(user: user)
+        let response = await userUseCase.request(endpoint: .getUserProfiles, for: ProfileHTTPDTO.GET.Response.self, request: request)
         
         guard let profiles = response?.data.toDomain() else { return }
         
         self.profiles = profiles
         
-        let addProfile = UserProfile(_id: "", name: "Add Profile", image: "plus", active: false, user: user._id!)
+        let addProfile = Profile(_id: "", name: "Add Profile", image: "plus", active: false, user: user._id!)
         
         self.profiles.append(addProfile)
     }
@@ -172,10 +172,10 @@ extension ProfileViewModel: ViewModelProtocol {
         
         guard let user = authService.user else { return }
         
-        let profile = UserProfileDTO(name: "test", image: "av-dark-green", active: false, user: user._id ?? "")
-        let request = UserProfileHTTPDTO.POST.Request(user: user, profile: profile)
+        let profile = ProfileDTO(name: "test", image: "av-dark-green", active: false, user: user._id ?? "")
+        let request = ProfileHTTPDTO.POST.Request(user: user, profile: profile)
         
-        let response = await userUseCase.request(endpoint: .createUserProfile, for: UserProfileHTTPDTO.POST.Response.self, request: request)
+        let response = await userUseCase.request(endpoint: .createUserProfile, for: ProfileHTTPDTO.POST.Response.self, request: request)
         
         guard let response = response else { return }
         

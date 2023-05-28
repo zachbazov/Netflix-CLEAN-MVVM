@@ -76,9 +76,9 @@ extension DetailPanelView: ViewInstantiable {}
 
 extension DetailPanelView: ViewLifecycleBehavior {}
 
-// MARK: - ViewObserving Implementation
+// MARK: - ViewObservable Implementation
 
-extension DetailPanelView: ViewObserving {}
+extension DetailPanelView: ViewObservable {}
 
 // MARK: - ViewProtocol Implementation
 

@@ -24,14 +24,14 @@ final class ResumableCollectionViewCell: MediaCollectionViewCell {
         viewDidConfigure()
     }
     
-    override func viewDidConfigure() {
+    func viewDidConfigure() {
         configurePlayButton()
         configureProgressView()
         configureGradients()
     }
 }
 
-// MARK: - Private Presentation Implementation
+// MARK: - Private Implementation
 
 extension ResumableCollectionViewCell {
     private func configurePlayButton() {

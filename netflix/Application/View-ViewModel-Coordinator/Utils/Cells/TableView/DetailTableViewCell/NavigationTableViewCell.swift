@@ -10,7 +10,6 @@ import UIKit
 // MARK: - NavigationTableViewCell Type
 
 final class NavigationTableViewCell: DetailTableViewCell {
-    
     fileprivate(set) var navigationView: DetailNavigationView?
     
     deinit {
@@ -18,17 +17,19 @@ final class NavigationTableViewCell: DetailTableViewCell {
         super.viewWillDeallocate()
     }
     
+    // MARK: TableViewCell Implementation
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         viewWillDeploySubviews()
         viewHierarchyWillConfigure()
     }
     
-    override func viewWillDeploySubviews() {
+    func viewWillDeploySubviews() {
         createNavigation()
     }
     
-    override func viewHierarchyWillConfigure() {
+    func viewHierarchyWillConfigure() {
         navigationView?
             .addToHierarchy(on: contentView)
             .constraintToSuperview(contentView)

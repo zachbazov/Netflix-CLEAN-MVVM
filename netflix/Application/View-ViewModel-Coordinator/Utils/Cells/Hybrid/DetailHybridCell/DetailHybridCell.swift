@@ -9,31 +9,41 @@ import UIKit
 
 // MARK: - DetailHybridCell Type
 
-final class DetailHybridCell: HybridCell<DetailCollectionViewCell, DetailCollectionViewDataSource, DetailHybridCellViewModel, DetailViewModel> {
+final class DetailHybridCell: UITableViewCell {
+    lazy var collectionView: UICollectionView = createCollectionView()
+    
+    var cell: DetailCollectionViewCell?
+    var dataSource: DetailCollectionViewDataSource?
+    var viewModel: DetailHybridCellViewModel?
+    var controllerViewModel: DetailViewModel?
+    var layout: CollectionViewLayout?
     
     deinit {
         viewWillDeallocate()
-        super.viewWillDeallocate()
     }
-    
-    override func viewDidLoad() {
+}
+
+// MARK: - HybridCell Implementation
+
+extension DetailHybridCell: HybridCell {
+    func viewDidLoad() {
         viewHierarchyWillConfigure()
         viewWillConfigure()
         viewWillBindObservers()
         viewModel?.dataWillLoad()
     }
     
-    override func viewHierarchyWillConfigure() {
+    func viewHierarchyWillConfigure() {
         collectionView
             .addToHierarchy(on: contentView)
             .constraintToSuperview(contentView)
     }
     
-    override func viewWillConfigure() {
+    func viewWillConfigure() {
         setBackgroundColor(.clear)
     }
     
-    override func viewWillBindObservers() {
+    func viewWillBindObservers() {
         viewModel?.season.observe(on: self) { [weak self] season in
             guard let self = self else { return }
 
@@ -47,7 +57,7 @@ final class DetailHybridCell: HybridCell<DetailCollectionViewCell, DetailCollect
         }
     }
 
-    override func viewWillUnbindObservers() {
+    func viewWillUnbindObservers() {
         guard let viewModel = viewModel else { return }
 
         viewModel.season.remove(observer: self)
@@ -56,11 +66,13 @@ final class DetailHybridCell: HybridCell<DetailCollectionViewCell, DetailCollect
         printIfDebug(.success, "Removed `\(Self.self)` observers.")
     }
     
-    override func viewWillDeallocate() {
+    func viewWillDeallocate() {
         viewWillUnbindObservers()
         
         collectionView.removeFromSuperview()
+        cell?.removeFromSuperview()
         
+        cell = nil
         dataSource = nil
         layout = nil
         viewModel = nil
@@ -69,7 +81,7 @@ final class DetailHybridCell: HybridCell<DetailCollectionViewCell, DetailCollect
         removeFromSuperview()
     }
     
-    override func createCollectionView() -> UICollectionView {
+    func createCollectionView() -> UICollectionView {
         let collectionView = UICollectionView(frame: bounds, collectionViewLayout: .init())
         collectionView.setBackgroundColor(.black)
         collectionView.isScrollEnabled = false
@@ -79,7 +91,7 @@ final class DetailHybridCell: HybridCell<DetailCollectionViewCell, DetailCollect
         return collectionView
     }
     
-    override func createDataSource() -> DetailCollectionViewDataSource? {
+    func createDataSource() -> DetailCollectionViewDataSource? {
         guard let controllerViewModel = controllerViewModel,
               let dataSource = controllerViewModel.coordinator?.viewController?.dataSource,
               let navigationView = dataSource.navigationCell?.navigationView
@@ -90,7 +102,7 @@ final class DetailHybridCell: HybridCell<DetailCollectionViewCell, DetailCollect
         return DetailCollectionViewDataSource(with: controllerViewModel)
     }
     
-    override func createLayout() -> CollectionViewLayout? {
+    func createLayout() -> CollectionViewLayout? {
         guard let controllerViewModel = controllerViewModel,
               let dataSource = controllerViewModel.coordinator?.viewController?.dataSource,
               let navigationView = dataSource.navigationCell?.navigationView

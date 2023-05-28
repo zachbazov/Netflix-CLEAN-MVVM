@@ -9,10 +9,15 @@ import UIKit
 
 // MARK: - TableViewCell Type
 
-class TableViewCell<T>: UITableViewCell where T: ViewModel {
-    var viewModel: T!
-    
-    class func create<U, V>(
+protocol TableViewCell: UITableViewCell, ViewLifecycleBehavior {
+    associatedtype ViewModelType: ViewModel
+    var viewModel: ViewModelType! { get set }
+}
+
+// MARK: - TableViewCell Implementation
+
+extension TableViewCell {
+    static func create<U, V>(
         of type: U.Type,
         on tableView: UITableView,
         for indexPath: IndexPath,
@@ -56,20 +61,4 @@ class TableViewCell<T>: UITableViewCell where T: ViewModel {
             
             return cell
         }
-    
-    deinit {
-        viewModel = nil
-        
-        removeFromSuperview()
-    }
-    
-    func viewDidLoad() {}
-    func viewWillDeploySubviews() {}
-    func viewHierarchyWillConfigure() {}
-    func viewWillConfigure() {}
-    func viewWillDeallocate() {}
 }
-
-// MARK: - ViewLifecycleBehavior Implementation
-
-extension TableViewCell: ViewLifecycleBehavior {}

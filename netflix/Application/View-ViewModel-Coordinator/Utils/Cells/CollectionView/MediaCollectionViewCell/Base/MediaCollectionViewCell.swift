@@ -9,15 +9,26 @@ import UIKit
 
 // MARK: - MediaCollectionViewCell Type
 
-class MediaCollectionViewCell: CollectionViewCell<MediaCollectionViewCellViewModel> {
+class MediaCollectionViewCell: UICollectionViewCell, CollectionViewCell {
     @IBOutlet private weak var posterImageView: UIImageView!
     @IBOutlet private weak var logoImageView: UIImageView!
     @IBOutlet private weak var placeholderLabel: UILabel!
     @IBOutlet private weak var logoBottomConstraint: NSLayoutConstraint!
     
-    // MARK: ViewLifecycleBehavior Implementation
+    var viewModel: MediaCollectionViewCellViewModel!
     
-    override func dataWillLoad() {
+    var representedIdentifier: NSString!
+    var indexPath: IndexPath!
+    
+    var imageService: AsyncImageService = AsyncImageService.shared
+    
+//    deinit {
+//        viewWillDeallocate()
+//    }
+    
+    // MARK: DataLoadable Implementation
+    
+    func dataWillLoad() {
         guard representedIdentifier == viewModel.slug as NSString? else { return }
         
         if #available(iOS 13.0, *) {
@@ -29,7 +40,7 @@ class MediaCollectionViewCell: CollectionViewCell<MediaCollectionViewCellViewMod
         loadUsingDispatchGroup()
     }
     
-    override func dataDidLoad() {
+    func dataDidLoad() {
         guard let posterImage = imageService.object(for: viewModel.posterImageIdentifier),
               let logoImage = imageService.object(for: viewModel.logoImageIdentifier)
         else { return }
@@ -40,12 +51,14 @@ class MediaCollectionViewCell: CollectionViewCell<MediaCollectionViewCellViewMod
         setLogo(logoImage)
     }
     
-    override func viewDidLoad() {
+    // MARK: ViewLifecycleBehavior Implementation
+    
+    func viewDidLoad() {
         viewWillConfigure()
         dataWillLoad()
     }
     
-    override func viewWillConfigure() {
+    func viewWillConfigure() {
         setBackgroundColor(.clear)
         
         posterImageView.clipsToBounds = true
@@ -58,7 +71,7 @@ class MediaCollectionViewCell: CollectionViewCell<MediaCollectionViewCellViewMod
         setLogoAlignment()
     }
     
-    override func viewWillDeallocate() {
+    func viewWillDeallocate() {
         representedIdentifier = nil
         indexPath = nil
         viewModel = nil
@@ -79,7 +92,7 @@ class MediaCollectionViewCell: CollectionViewCell<MediaCollectionViewCellViewMod
     
     // MARK: ViewProtocol Implementation
     
-    override func setLogoAlignment() {
+    func setLogoAlignment() {
         guard let constraint = logoBottomConstraint else { return }
         
         switch viewModel.presentedLogoAlignment {
@@ -93,7 +106,7 @@ class MediaCollectionViewCell: CollectionViewCell<MediaCollectionViewCellViewMod
     
     // MARK: CollectionViewCellResourcing Implementation
     
-    override func loadUsingAsyncAwait() {
+    func loadUsingAsyncAwait() {
         Task {
             await posterWillLoad()
             await logoWillLoad()
@@ -102,7 +115,7 @@ class MediaCollectionViewCell: CollectionViewCell<MediaCollectionViewCellViewMod
         }
     }
     
-    override func loadUsingDispatchGroup() {
+    func loadUsingDispatchGroup() {
         let group = DispatchGroup()
         
         group.enter()
@@ -119,31 +132,31 @@ class MediaCollectionViewCell: CollectionViewCell<MediaCollectionViewCellViewMod
         }
     }
     
-    override func resourceWillLoad(for url: URL, withIdentifier identifier: NSString, _ completion: @escaping () -> Void) {
+    func resourceWillLoad(for url: URL, withIdentifier identifier: NSString, _ completion: @escaping () -> Void) {
         imageService.load(url: url, identifier: identifier) { _ in
             completion()
         }
     }
     
-    override func resourceWillLoad(for url: URL, withIdentifier identifier: String) async {
+    func resourceWillLoad(for url: URL, withIdentifier identifier: String) async {
         await imageService.load(url: url, identifier: identifier)
     }
     
     // MARK: ViewProtocol Implementation
     
-    override func setPoster(_ image: UIImage) {
+    func setPoster(_ image: UIImage) {
         posterImageView.image = image
     }
     
-    override func setLogo(_ image: UIImage) {
+    func setLogo(_ image: UIImage) {
         logoImageView.image = image
     }
     
-    override func setPlaceholder(_ text: String) {
+    func setPlaceholder(_ text: String) {
         placeholderLabel.text = text
     }
     
-    override func hidePlaceholder() {
+    func hidePlaceholder() {
         placeholderLabel.alpha = .zero
     }
 }

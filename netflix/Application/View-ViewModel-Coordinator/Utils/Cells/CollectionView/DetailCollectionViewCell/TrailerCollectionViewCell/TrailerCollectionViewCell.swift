@@ -13,7 +13,7 @@ final class TrailerCollectionViewCell: DetailCollectionViewCell {
     
     // MARK: ViewLifecycleBehavior Implementation
     
-    override func viewDidLoad() {
+    func viewDidLoad() {
         super.dataWillLoad()
         
         viewWillConfigure()

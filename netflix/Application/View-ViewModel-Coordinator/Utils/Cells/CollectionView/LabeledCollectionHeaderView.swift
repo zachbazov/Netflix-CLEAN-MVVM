@@ -7,33 +7,23 @@
 
 import UIKit
 
-// MARK: - ViewProtocol Type
-
-private protocol ViewProtocol {
-    var titleLabel: UILabel { get }
-}
-
 // MARK: - LabeledCollectionHeaderView Type
 
-final class LabeledCollectionHeaderView: CollectionReusableView {
+final class LabeledCollectionHeaderView: UICollectionReusableView, CollectionReusableView {
     fileprivate(set) lazy var titleLabel: UILabel = createTitleLabel()
     
-    override func viewDidLoad() {
+    func viewDidLoad() {
         viewHierarchyWillConfigure()
     }
     
-    override func viewHierarchyWillConfigure() {
+    func viewHierarchyWillConfigure() {
         titleLabel
             .addToHierarchy(on: self)
             .constraintBottom(toParent: self, withBottomAnchor: -8.0)
     }
 }
 
-// MARK: - ViewProtocol Implementation
-
-extension LabeledCollectionHeaderView: ViewProtocol {}
-
-// MARK: - Private Presentation Implementation
+// MARK: - Private Implementation
 
 extension LabeledCollectionHeaderView {
     private func createTitleLabel() -> UILabel {

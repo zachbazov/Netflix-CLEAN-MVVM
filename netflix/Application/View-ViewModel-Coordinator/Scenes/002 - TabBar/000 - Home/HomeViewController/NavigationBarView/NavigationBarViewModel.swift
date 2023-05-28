@@ -32,17 +32,17 @@ extension NavigationBarViewModel: ViewModel {}
 // MARK: - ViewModelProtocol Implementation
 
 extension NavigationBarViewModel: ViewModelProtocol {
-    func getUserProfiles(_ completion: @escaping (UserProfile?) -> Void) {
+    func getUserProfiles(_ completion: @escaping (Profile?) -> Void) {
         let authService = Application.app.services.auth
         let profileViewModel = ProfileViewModel()
         
         guard let user = authService.user else { return }
         
-        let request = UserProfileHTTPDTO.GET.Request(user: user)
+        let request = ProfileHTTPDTO.GET.Request(user: user)
         
         _ = profileViewModel.userUseCase.request(
             endpoint: .getUserProfiles,
-            for: UserProfileHTTPDTO.GET.Response.self,
+            for: ProfileHTTPDTO.GET.Response.self,
             request: request,
             cached: { _ in },
             completion: { result in

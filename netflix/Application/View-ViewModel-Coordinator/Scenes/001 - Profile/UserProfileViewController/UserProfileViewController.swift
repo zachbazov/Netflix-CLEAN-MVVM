@@ -11,7 +11,7 @@ import UIKit
 
 private protocol ViewControllerProtocol {
     var collectionView: UICollectionView { get }
-    var dataSource: UserProfileCollectionViewDataSource { get }
+    var dataSource: ProfileCollectionViewDataSource { get }
     
     func present()
     
@@ -25,7 +25,7 @@ private protocol ViewControllerProtocol {
 
 final class UserProfileViewController: UIViewController, Controller {
     fileprivate lazy var collectionView: UICollectionView = createCollectionView()
-    fileprivate(set) lazy var dataSource: UserProfileCollectionViewDataSource = createDataSource()
+    fileprivate(set) lazy var dataSource: ProfileCollectionViewDataSource = createDataSource()
     
     var viewModel: ProfileViewModel!
     
@@ -79,13 +79,13 @@ extension UserProfileViewController: ViewControllerProtocol {
         collectionView.showsHorizontalScrollIndicator = false
         collectionView.isScrollEnabled = false
         collectionView.backgroundColor = .black
-        collectionView.register(UserProfileCollectionViewCell.nib,
-                                forCellWithReuseIdentifier: UserProfileCollectionViewCell.reuseIdentifier)
+        collectionView.register(ProfileCollectionViewCell.nib,
+                                forCellWithReuseIdentifier: ProfileCollectionViewCell.reuseIdentifier)
         return collectionView
     }
     
-    fileprivate func createDataSource() -> UserProfileCollectionViewDataSource {
-        return UserProfileCollectionViewDataSource(for: collectionView, with: viewModel)
+    fileprivate func createDataSource() -> ProfileCollectionViewDataSource {
+        return ProfileCollectionViewDataSource(for: collectionView, with: viewModel)
     }
     
     fileprivate func createLayout() -> UICollectionViewCompositionalLayout {
