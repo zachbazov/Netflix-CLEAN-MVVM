@@ -34,9 +34,12 @@ final class Application {
     
     private init() {}
     
-    private(set) lazy var coordinator = RootCoordinator()
-    private(set) lazy var services = Services()
-    private(set) lazy var stores = Stores(services: services)
+    private let dependencies: DI = DI.shared
+    
+    private(set) lazy var configuration: Configuration = dependencies.resolve(Configuration.self)
+    private(set) lazy var services: Services = dependencies.resolve(Services.self)
+    private(set) lazy var stores: Stores = dependencies.resolve(Stores.self)
+    private(set) lazy var coordinator: RootCoordinator = dependencies.resolve(RootCoordinator.self)
 }
 
 // MARK: - ApplicationLaunching Implementation
@@ -55,7 +58,7 @@ extension Application: ApplicationAuthenticating {
     fileprivate func resignUserSession() {
         if #available(iOS 13.0, *) {
             Task {
-                let user = await services.authentication.resign()
+                let user = await services.auth.resign()
                 
                 handleResignedSession(for: user)
             }
@@ -63,7 +66,7 @@ extension Application: ApplicationAuthenticating {
             return
         }
         
-        services.authentication.resign { [weak self] user in
+        services.auth.resign { [weak self] user in
             guard let self = self else { return }
             
             self.handleResignedSession(for: user)

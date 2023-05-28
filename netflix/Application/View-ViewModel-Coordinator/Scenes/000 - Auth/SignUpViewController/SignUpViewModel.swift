@@ -54,7 +54,7 @@ extension SignUpViewModel: ViewModelProtocol {
     
     /// Invokes a sign up request by the user credentials.
     fileprivate func signUpRequest() {
-        let authService = Application.app.services.authentication
+        let authService = Application.app.services.auth
         let coordinator = Application.app.coordinator
         
         guard let nameTextField = coordinator.authCoordinator.signUpController.nameTextField,

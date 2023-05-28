@@ -13,6 +13,7 @@ private protocol ApplicationDepending {
     func registerCoordinators()
     func registerAppServices()
     func registerStores()
+    func registerConfigurators()
 }
 
 // MARK: - DomainDepending Type
@@ -27,63 +28,6 @@ private protocol InfrastructureDepending {
     func registerServices()
 }
 
-// MARK: - RegistrableDepedency Type
-
-private protocol RegistrableDepedency {
-    func register<T>(_ type: T.Type, handler: @escaping (DependencyResolver) -> T)
-    func resolve<T>(_ type: T.Type, resolver: DependencyResolver) -> T
-}
-
-// MARK: - DependencyRegistry Type
-
-final class DependencyRegistry {
-    var dependencies: [String: Any] = [:]
-}
-
-// MARK: - RegistrableDepedency Implementation
-
-extension DependencyRegistry: RegistrableDepedency {
-    fileprivate func register<T>(_ type: T.Type, handler: @escaping (DependencyResolver) -> T) {
-        let key = String(describing: type)
-        
-        dependencies[key] = handler
-    }
-    
-    fileprivate func resolve<T>(_ type: T.Type, resolver: DependencyResolver) -> T {
-        let key = String(describing: type)
-        
-        guard let factory = dependencies[key] as? (DependencyResolver) -> T else {
-            fatalError("Dependency `\(key)` not registered.")
-        }
-        
-        return factory(resolver)
-    }
-}
-
-// MARK: - ResolvableDependency Type
-
-private protocol ResolvableDependency {
-    func resolve<T>(_ type: T.Type) -> T
-}
-
-// MARK: - DependencyResolver Type
-
-final class DependencyResolver {
-    let registry: DependencyRegistry
-    
-    init(registry: DependencyRegistry) {
-        self.registry = registry
-    }
-}
-
-// MARK: - DependencyResolver Implementation
-
-extension DependencyResolver: ResolvableDependency {
-    fileprivate func resolve<T>(_ type: T.Type) -> T {
-        return registry.resolve(type, resolver: self)
-    }
-}
-
 // MARK: - DI Type
 
 final class DI {
@@ -93,6 +37,7 @@ final class DI {
     lazy var resolver = DependencyResolver(registry: registry)
 
     private init() {
+        registerConfigurators()
         registerViewModels()
         registerViewControllers()
         registerServices()
@@ -114,6 +59,16 @@ extension DI: ResolvableDependency {
 // MARK: - ApplicationDepending Implementation
 
 extension DI: ApplicationDepending {
+    fileprivate func registerConfigurators() {
+        registry.register(Configuration.self) { _ in
+            return Configuration()
+        }
+        
+        registry.register(APIConfig.self) { _ in
+            return APIConfig()
+        }
+    }
+    
     fileprivate func registerViewModels() {
         registry.register(AuthViewModel.self) { _ in
             return AuthViewModel()
@@ -139,6 +94,31 @@ extension DI: ApplicationDepending {
         
         registry.register(TabBarController.self) { _ in
             return TabBarController()
+        }
+    }
+    
+    fileprivate func registerAppServices() {
+        registry.register(Services.self) { _ in
+            return Services()
+        }
+    }
+    
+    fileprivate func registerStores() {
+        registry.register(Stores.self) { resolver in
+            return Stores()
+        }
+        
+        registry.register(UserHTTPResponseStore.self) { resolver in
+            let authService = resolver.resolve(AuthService.self)
+            return UserHTTPResponseStore(authService: authService)
+        }
+        
+        registry.register(MediaHTTPResponseStore.self) { _ in
+            return MediaHTTPResponseStore()
+        }
+        
+        registry.register(SectionHTTPResponseStore.self) { _ in
+            return SectionHTTPResponseStore()
         }
     }
     
@@ -175,19 +155,6 @@ extension DI: ApplicationDepending {
             viewModel.coordinator = coordinator
             controller.viewModel = viewModel
             return coordinator
-        }
-    }
-    
-    fileprivate func registerAppServices() {
-        registry.register(Services.self) { _ in
-            return Services()
-        }
-    }
-    
-    fileprivate func registerStores() {
-        registry.register(Stores.self) { resolver in
-            let services = resolver.resolve(Services.self)
-            return Stores(services: services)
         }
     }
 }
@@ -246,8 +213,8 @@ extension DI: InfrastructureDepending {
         }
         
         registry.register(NetworkService.self) { resolver in
-            let configuration = Application.app.services.configuration
-            let url = URL(string: configuration.apiScheme + "://" + configuration.apiHost)!
+            var configuration = Application.app.configuration
+            let url = URL(string: configuration.api.scheme + "://" + configuration.api.host)!
             let config = NetworkConfig(baseURL: url)
             return NetworkService(config: config)
         }

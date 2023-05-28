@@ -33,7 +33,7 @@ extension NavigationBarViewModel: ViewModel {}
 
 extension NavigationBarViewModel: ViewModelProtocol {
     func getUserProfiles(_ completion: @escaping (UserProfile?) -> Void) {
-        let authService = Application.app.services.authentication
+        let authService = Application.app.services.auth
         let profileViewModel = ProfileViewModel()
         
         guard let user = authService.user else { return }

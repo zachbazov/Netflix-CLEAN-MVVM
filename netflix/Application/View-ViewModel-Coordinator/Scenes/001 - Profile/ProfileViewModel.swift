@@ -57,7 +57,7 @@ extension ProfileViewModel: ViewModel {
 
 extension ProfileViewModel: ViewModelProtocol {
     fileprivate func getUserProfiles() {
-        let authService = Application.app.services.authentication
+        let authService = Application.app.services.auth
         
         guard let user = authService.user else { return }
         
@@ -80,7 +80,7 @@ extension ProfileViewModel: ViewModelProtocol {
     }
     
     fileprivate func createUserProfile() {
-        let authService = Application.app.services.authentication
+        let authService = Application.app.services.auth
         
         guard let user = authService.user else { return }
         
@@ -104,7 +104,7 @@ extension ProfileViewModel: ViewModelProtocol {
     }
     
     func updateUserProfile(with profileId: String) {
-        let authService = Application.app.services.authentication
+        let authService = Application.app.services.auth
         
         guard let user = authService.user else { return }
         
@@ -129,7 +129,7 @@ extension ProfileViewModel: ViewModelProtocol {
     }
     
     func updateUserProfileForSigningOut(completion: @escaping () -> Void) {
-        let authService = Application.app.services.authentication
+        let authService = Application.app.services.auth
         
         guard let user = authService.user else { return }
         
@@ -151,7 +151,7 @@ extension ProfileViewModel: ViewModelProtocol {
     }
     
     fileprivate func userProfilesDidLoad() async {
-        let authService = Application.app.services.authentication
+        let authService = Application.app.services.auth
         
         guard let user = authService.user else { return }
         
@@ -168,7 +168,7 @@ extension ProfileViewModel: ViewModelProtocol {
     }
     
     fileprivate func userProfileDidCreate() async {
-        let authService = Application.app.services.authentication
+        let authService = Application.app.services.auth
         
         guard let user = authService.user else { return }
         
@@ -183,7 +183,7 @@ extension ProfileViewModel: ViewModelProtocol {
     }
     
     func updateUserProfileForSigningOut() async -> Bool {
-        let authService = Application.app.services.authentication
+        let authService = Application.app.services.auth
         
         guard let user = authService.user else { return false }
         
@@ -197,7 +197,7 @@ extension ProfileViewModel: ViewModelProtocol {
     }
     
     func userProfileDidUpdate(with profileId: String) async {
-        let authService = Application.app.services.authentication
+        let authService = Application.app.services.auth
         
         guard let user = authService.user else { return }
         
@@ -249,7 +249,7 @@ extension ProfileViewModel {
 extension ProfileViewModel {
     private func createUseCase() -> UserUseCase {
         let services = Application.app.services
-        let authService = services.authentication
+        let authService = services.auth
         let dataTransferService = services.dataTransfer
         let persistentStore = UserHTTPResponseStore(authService: authService)
         let authenticator = UserRepositoryAuthenticator(dataTransferService: dataTransferService, persistentStore: persistentStore)

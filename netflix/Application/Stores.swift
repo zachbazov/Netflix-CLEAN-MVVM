@@ -7,24 +7,12 @@
 
 import Foundation
 
-// MARK: - StoresProtocol Type
-
-private protocol StoresProtocol {
-    var services: Services { get }
-    var userResponses: UserHTTPResponseStore { get }
-    var mediaResponses: MediaHTTPResponseStore { get }
-}
-
 // MARK: - Stores Type
 
-final class Stores: StoresProtocol {
-    fileprivate let services: Services
+final class Stores {
+    private let dependencies: DI = DI.shared
     
-    lazy var userResponses = UserHTTPResponseStore(authService: services.authentication)
-    lazy var mediaResponses = MediaHTTPResponseStore()
-    lazy var sectionResponses = SectionHTTPResponseStore()
-    
-    required init(services: Services) {
-        self.services = services
-    }
+    lazy var userResponses: UserHTTPResponseStore = dependencies.resolve(UserHTTPResponseStore.self)
+    lazy var mediaResponses: MediaHTTPResponseStore = dependencies.resolve(MediaHTTPResponseStore.self)
+    lazy var sectionResponses: SectionHTTPResponseStore = dependencies.resolve(SectionHTTPResponseStore.self)
 }

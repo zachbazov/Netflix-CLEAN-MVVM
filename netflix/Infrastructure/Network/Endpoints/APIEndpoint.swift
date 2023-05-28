@@ -35,7 +35,7 @@ extension APIEndpoint: UserRepositoryEndpointing {
     }
     
     static func signOut(with request: UserHTTPDTO.Request) -> Endpoint<VoidHTTPDTO.Response>? {
-        let authService = Application.app.services.authentication
+        let authService = Application.app.services.auth
         guard authService.user?._id == request.user._id else { return nil }
         return Endpoint(path: "api/v1/users/signout",
                         method: .get,

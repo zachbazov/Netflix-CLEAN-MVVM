@@ -127,7 +127,7 @@ extension AccountViewController {
     }
     
     private func signOut() {
-        let authService = Application.app.services.authentication
+        let authService = Application.app.services.auth
         
         ActivityIndicatorView.present()
         
@@ -143,7 +143,7 @@ extension AccountViewController {
     }
     
     private func signOutUsingAsyncAwait() {
-        let authService = Application.app.services.authentication
+        let authService = Application.app.services.auth
         
         guard let user = authService.user else { return }
         

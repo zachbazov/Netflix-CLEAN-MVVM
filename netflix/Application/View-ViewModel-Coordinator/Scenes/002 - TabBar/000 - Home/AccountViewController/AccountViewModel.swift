@@ -64,7 +64,7 @@ extension AccountViewModel: ViewModelProtocol {
     }
     
     private func userProfilesDidLoad() {
-        let authService = Application.app.services.authentication
+        let authService = Application.app.services.auth
         
         guard let user = authService.user else { return }
         
@@ -87,7 +87,7 @@ extension AccountViewModel: ViewModelProtocol {
     }
     
     private func userProfilesDidLoad() async {
-        let authService = Application.app.services.authentication
+        let authService = Application.app.services.auth
         
         guard let user = authService.user else { return }
         
@@ -109,7 +109,7 @@ extension AccountViewModel: ViewModelProtocol {
 extension AccountViewModel {
     private func createUseCase() -> UserUseCase {
         let services = Application.app.services
-        let authService = services.authentication
+        let authService = services.auth
         let dataTransferService = services.dataTransfer
         let persistentStore = UserHTTPResponseStore(authService: authService)
         let authenticator = UserRepositoryAuthenticator(dataTransferService: dataTransferService, persistentStore: persistentStore)

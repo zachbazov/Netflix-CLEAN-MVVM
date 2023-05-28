@@ -10,8 +10,8 @@ import UIKit
 // MARK: - ThemingBehavior Type
 
 private protocol ThemingBehavior {
-    static func `default`()
-    static func dark()
+    static func applyDefaultAppearance()
+    static func applyDarkAppearance()
 }
 
 // MARK: - Theme Type
@@ -25,7 +25,7 @@ final class Theme {
 
 extension Theme: ThemingBehavior {
     /// Setup application's default appearance.
-    static func `default`() {
+    static func applyDefaultAppearance() {
         if #available(iOS 15, *) {
             let barButtonItemAppearance = UIBarButtonItemAppearance()
             barButtonItemAppearance.configureWithDefault(for: .plain)
@@ -52,8 +52,9 @@ extension Theme: ThemingBehavior {
                 .font: UIFont.systemFont(ofSize: 17, weight: .heavy)]
         }
     }
+    
     /// Setup application's dark appearance.
-    static func dark() {
+    static func applyDarkAppearance() {
         if #available(iOS 15, *) {
             let barButtonItemAppearance = UIBarButtonItemAppearance()
             barButtonItemAppearance.configureWithDefault(for: .plain)

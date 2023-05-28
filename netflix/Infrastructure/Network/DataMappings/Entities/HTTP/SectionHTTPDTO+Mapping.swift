@@ -33,7 +33,7 @@ extension SectionHTTPDTO.Response {
 
 extension SectionHTTPDTO.Response {
     func toEntity(in context: NSManagedObjectContext) -> SectionHTTPResponseEntity {
-        let authService = Application.app.services.authentication
+        let authService = Application.app.services.auth
         let entity: SectionHTTPResponseEntity = .init(context: context)
         entity.status = status
         entity.results = Int32(results)

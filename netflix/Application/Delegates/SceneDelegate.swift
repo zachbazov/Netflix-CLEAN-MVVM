@@ -26,7 +26,7 @@ extension SceneDelegate: UIWindowSceneDelegate {
                options connectionOptions: UIScene.ConnectionOptions) {
         guard let windowScene = (scene as? UIWindowScene) else { return }
         
-        Theme.default()
+        Theme.applyDefaultAppearance()
         
         window = UIWindow(windowScene: windowScene)
         
@@ -54,7 +54,7 @@ extension SceneDelegate: SceneObserverUnbinding {
     /// Remove all tar-bar related observers.
     /// The observers of `DetailViewController` will be removed automatically once home's instance is deallocated.
     func sceneObserversDidUnbind() {
-        guard let tabCoordinator = Application.app.coordinator.tabCoordinator else { return }
+        let tabCoordinator = Application.app.coordinator.tabCoordinator
         
         // Remove any home-related observers.
         if let homeController = tabCoordinator.home?.viewControllers.first as? HomeViewController {

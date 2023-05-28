@@ -10,6 +10,6 @@ import Foundation
 // MARK: - APIConfigurable Type
 
 protocol APIConfigurable {
-    var apiScheme: String { get }
-    var apiHost: String { get }
+    var scheme: String { get }
+    var host: String { get }
 }

@@ -34,14 +34,14 @@ final class MyListViewModel {
     let section: Section
     
     init() {
-        guard let homeController = Application.app.coordinator.tabCoordinator?.home.viewControllers.first as? HomeViewController,
+        guard let homeController = Application.app.coordinator.tabCoordinator.home.viewControllers.first as? HomeViewController,
               let homeViewModel = homeController.viewModel
         else { fatalError() }
         
         guard let coordinator = homeViewModel.coordinator else { fatalError() }
         self.coordinator = coordinator
         
-        let authentication = Application.app.services.authentication
+        let authentication = Application.app.services.auth
         guard let user = authentication.user else { fatalError() }
         self.user = user
         

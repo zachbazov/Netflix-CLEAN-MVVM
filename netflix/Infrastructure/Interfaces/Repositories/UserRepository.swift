@@ -119,7 +119,7 @@ final class UserRepositoryAuthenticator: UserAuthenticating {
         
         guard !task.isCancelled else { return nil }
         
-        let authService = Application.app.services.authentication
+        let authService = Application.app.services.auth
         
         guard let user = authService.user else { return nil }
         
@@ -298,7 +298,7 @@ extension RepositoryInvoker: RequestInvoking {
     func updateOne<T, U>(request: U) async -> T? where T: Decodable, U: Decodable {
         switch request {
         case let request as UserHTTPDTO.Request:
-            let authService = Application.app.services.authentication
+            let authService = Application.app.services.auth
             let endpoint = APIEndpoint.updateUserData(with: request)
             let result = await dataTransferService.request(with: endpoint)
             

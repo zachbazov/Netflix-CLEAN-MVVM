@@ -108,7 +108,7 @@ extension AuthViewModel: ViewModelProtocol {
 extension AuthViewModel {
     private func createUseCase() -> UserUseCase {
         let services = Application.app.services
-        let authService = services.authentication
+        let authService = services.auth
         let dataTransferService = services.dataTransfer
         let persistentStore = UserHTTPResponseStore(authService: authService)
         let authenticator = UserRepositoryAuthenticator(dataTransferService: dataTransferService, persistentStore: persistentStore)

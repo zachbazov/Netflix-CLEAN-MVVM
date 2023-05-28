@@ -19,7 +19,7 @@ final class SectionHTTPResponseStore {
 
 extension SectionHTTPResponseStore {
     func fetchRequest() -> NSFetchRequest<SectionHTTPResponseEntity> {
-        let authService = Application.app.services.authentication
+        let authService = Application.app.services.auth
         let request: NSFetchRequest = SectionHTTPResponseEntity.fetchRequest()
         request.predicate = NSPredicate(format: "%K = %@",
                                         #keyPath(SectionHTTPResponseEntity.userId),

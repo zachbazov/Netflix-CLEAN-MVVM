@@ -205,7 +205,7 @@ extension NavigationOverlayView {
 
 extension NavigationOverlayView.Category {
     func toSection() -> Section {
-        guard let controller = Application.app.coordinator.tabCoordinator?.home?.viewControllers.first as? HomeViewController,
+        guard let controller = Application.app.coordinator.tabCoordinator.home?.viewControllers.first as? HomeViewController,
               let viewModel = controller.viewModel
         else { return .vacantValue }
         
