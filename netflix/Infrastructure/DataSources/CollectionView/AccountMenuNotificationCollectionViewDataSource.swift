@@ -10,7 +10,6 @@ import UIKit
 // MARK: - AccountMenuNotificationCollectionViewDataSource Type
 
 final class AccountMenuNotificationCollectionViewDataSource: CollectionViewDataSource {
-    
     private let viewModel: AccountViewModel
     
     fileprivate weak var collectionView: UICollectionView?
@@ -28,7 +27,8 @@ final class AccountMenuNotificationCollectionViewDataSource: CollectionViewDataS
         return viewModel.menuItems[section].options?.count ?? 0
     }
 
-    override func cellForItem<T>(in collectionView: UICollectionView, at indexPath: IndexPath) -> T where T: UICollectionViewCell {
+    override func cellForItem<T>(in collectionView: UICollectionView,
+                                 at indexPath: IndexPath) -> T where T: UICollectionViewCell {
         return AccountMenuNotificationCollectionViewCell.create(of: AccountMenuNotificationCollectionViewCell.self,
                                                                 on: collectionView,
                                                                 for: indexPath) as! T

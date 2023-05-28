@@ -1022,20 +1022,20 @@
 		A186923628CA92620087DE3B /* DataSources */ = {
 			isa = PBXGroup;
 			children = (
-				A18A79642A1FA76000FE60AB /* Protocols */,
+				A18A79642A1FA76000FE60AB /* Base */,
 				A1D23AB829CA1A1B00748029 /* CollectionView */,
 				A1D23AB729CA1A1100748029 /* TableView */,
 			);
 			path = DataSources;
 			sourceTree = "<group>";
 		};
-		A18A79642A1FA76000FE60AB /* Protocols */ = {
+		A18A79642A1FA76000FE60AB /* Base */ = {
 			isa = PBXGroup;
 			children = (
 				A1AD23612A1BDAD800188DDC /* CollectionViewDataSource.swift */,
 				A1AD235F2A1BDACF00188DDC /* TableViewDataSource.swift */,
 			);
-			path = Protocols;
+			path = Base;
 			sourceTree = "<group>";
 		};
 		A18A79652A1FA93900FE60AB /* DetailTableViewCell */ = {
@@ -1081,7 +1081,6 @@
 				A1741D4028EBD33D00F3C46B /* HDView.swift */,
 				A1B70A93293E9FA400C718C6 /* NavigationController.swift */,
 				A1BD20E829EED69F0093749E /* OpaqueView.swift */,
-				A1741D6128EF716000F3C46B /* ScheduledTimer.swift */,
 				A1E3706229B5DAE900CFEE9C /* TextFieldActivityIndicatorView.swift */,
 			);
 			path = Reusables;
@@ -1718,6 +1717,7 @@
 				A1B1B0C5299B8C130070AD29 /* UseCases */,
 				A1B779112A0E6207009014FD /* Color.swift */,
 				A1AE02D0293BA29A00AF0BD6 /* DeviceOrientation.swift */,
+				A1741D6128EF716000F3C46B /* ScheduledTimer.swift */,
 			);
 			path = Interfaces;
 			sourceTree = "<group>";

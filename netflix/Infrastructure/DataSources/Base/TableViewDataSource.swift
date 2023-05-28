@@ -25,7 +25,10 @@ private protocol TableViewDataSourceProtocol {
 
 // MARK: - TableViewDataSource Type
 
-class TableViewDataSource: NSObject, UITableViewDelegate, UITableViewDataSource {
+class TableViewDataSource: NSObject,
+                           UITableViewDelegate,
+                           UITableViewDataSource,
+                           TableViewDataSourceProtocol {
     
     // MARK:  UITableViewDelegate & UITableViewDataSource Implementation
     
@@ -113,8 +116,3 @@ class TableViewDataSource: NSObject, UITableViewDelegate, UITableViewDataSource 
     
     func tableViewDidScroll(_ scrollView: UIScrollView) {}
 }
-
-// MARK: - TableViewDataSourceProtocol Implementation
-
-extension TableViewDataSource: TableViewDataSourceProtocol {}
-
