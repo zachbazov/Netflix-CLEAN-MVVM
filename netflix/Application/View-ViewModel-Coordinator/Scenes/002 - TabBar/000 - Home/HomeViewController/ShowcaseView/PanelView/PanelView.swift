@@ -24,7 +24,7 @@ final class PanelView: UIView, View {
     var viewModel: PanelViewModel!
     
     private let parent: UIView
-    private let myList: MyListService = Application.app.services.myList
+    private let myList: MyList = Application.app.services.myList
     
     /// Create a panel view object.
     /// - Parameters:

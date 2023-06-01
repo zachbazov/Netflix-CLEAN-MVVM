@@ -15,8 +15,6 @@ final class ShowcaseTableViewCell: UITableViewCell {
     fileprivate(set) var showcaseView: ShowcaseView?
     
     deinit {
-        print("deinit \(Self.self)")
-        
         viewWillDeallocate()
     }
     

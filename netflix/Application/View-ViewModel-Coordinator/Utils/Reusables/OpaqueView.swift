@@ -23,10 +23,6 @@ private protocol ViewProtocol {
 final class OpaqueView: UIView {
     fileprivate lazy var blurView: UIVisualEffectView = createVisualEffectView()
     fileprivate lazy var gradientView: UIView = createGradientView()
-    
-    deinit {
-        print("deinit \(Self.self)")
-    }
 }
 
 // MARK: - ViewProtocol Implementation

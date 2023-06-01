@@ -56,6 +56,14 @@ extension TableViewCell {
                 
                 cell.viewModel = viewModel
                 cell.viewDidLoad()
+            case let cell as NavigationOverlayTableViewCell:
+                guard let viewModel = viewModel as? NavigationOverlayViewModel else { fatalError() }
+                
+                let model = viewModel.items[indexPath.row]
+                let cellViewModel = NavigationOverlayCollectionViewCellViewModel(title: model.stringValue)
+                
+                cell.viewModel = cellViewModel
+                cell.viewDidLoad()
             default: break
             }
             

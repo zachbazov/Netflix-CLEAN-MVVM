@@ -10,9 +10,6 @@ import UIKit
 // MARK: - ViewProtocol Type
 
 private protocol ViewProtocol {
-    var button: UIButton { get }
-    
-    func createButton() -> UIButton
     func viewDidTap()
 }
 

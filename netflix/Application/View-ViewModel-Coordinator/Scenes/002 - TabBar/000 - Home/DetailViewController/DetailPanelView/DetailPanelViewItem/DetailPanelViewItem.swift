@@ -10,7 +10,7 @@ import UIKit
 // MARK: - ViewProtocol Type
 
 private protocol ViewProtocol {
-    var myList: MyListService { get }
+    var myList: MyList { get }
     
     var imageView: UIImageView { get }
     var label: UILabel { get }
@@ -28,7 +28,7 @@ private protocol ViewProtocol {
 // MARK: - DetailPanelViewItem Type
 
 final class DetailPanelViewItem: UIView, View {
-    fileprivate let myList: MyListService = Application.app.services.myList
+    fileprivate let myList: MyList = Application.app.services.myList
     
     fileprivate lazy var imageView = createImageView()
     fileprivate lazy var label = createLabel()

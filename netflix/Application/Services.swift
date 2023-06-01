@@ -12,7 +12,7 @@ import Foundation
 final class Services {
     lazy var auth = AuthService()
     lazy var dataTransfer: DataTransferService = createDataTransferService()
-    lazy var myList = MyListService()
+    lazy var myList = MyList()
     
     private func createDataTransferService() -> DataTransferService {
         var configuration = Application.app.configuration

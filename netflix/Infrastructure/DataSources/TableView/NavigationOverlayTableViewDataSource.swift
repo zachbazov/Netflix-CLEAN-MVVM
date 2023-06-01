@@ -10,7 +10,6 @@ import UIKit
 // MARK: - NavigationOverlayTableViewDataSource Type
 
 final class NavigationOverlayTableViewDataSource: TableViewDataSource {
-    
     fileprivate let viewModel: NavigationOverlayViewModel
     
     init(with viewModel: NavigationOverlayViewModel) {
@@ -26,7 +25,7 @@ final class NavigationOverlayTableViewDataSource: TableViewDataSource {
     }
     
     override func cellForRow<T>(in tableView: UITableView, at indexPath: IndexPath) -> T where T: UITableViewCell {
-        return NavigationOverlayTableViewCell.create(on: tableView, for: indexPath, with: viewModel) as! T
+        return NavigationOverlayTableViewCell.create(of: NavigationOverlayTableViewCell.self, on: tableView, for: indexPath, with: viewModel) as! T
     }
     
     override func heightForRow(in tableView: UITableView, at indexPath: IndexPath) -> CGFloat {

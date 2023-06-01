@@ -19,8 +19,6 @@ final class ProfileCollectionViewDataSource: CollectionViewDataSource {
     }
     
     deinit {
-        printIfDebug(.debug, "deinit \(Self.self)")
-        
         collectionView.delegate = nil
         collectionView.dataSource = nil
         collectionView.removeFromSuperview()

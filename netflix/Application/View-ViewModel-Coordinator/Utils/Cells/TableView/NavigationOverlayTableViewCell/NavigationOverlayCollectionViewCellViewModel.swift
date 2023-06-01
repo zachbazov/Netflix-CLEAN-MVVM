@@ -7,18 +7,12 @@
 
 import Foundation
 
-// MARK: - ViewModelProtocol Type
-
-private protocol ViewModelProtocol {
-    var title: String { get }
-}
-
 // MARK: - NavigationOverlayCollectionViewCellViewModel Type
 
 struct NavigationOverlayCollectionViewCellViewModel {
     let title: String
 }
 
-// MARK: - ViewModelProtocol Implementation
+// MARK: - ViewModel Implementation
 
-extension NavigationOverlayCollectionViewCellViewModel: ViewModelProtocol {}
+extension NavigationOverlayCollectionViewCellViewModel: ViewModel {}

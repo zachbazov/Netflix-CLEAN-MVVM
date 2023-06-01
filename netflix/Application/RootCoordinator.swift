@@ -114,7 +114,7 @@ extension RootCoordinator {
         didDeallocate()
     }
     
-    private func deallocateTabBar() {
+    func deallocateTabBar() {
         tabCoordinator?.removeViewControllers()
         tabCoordinator = nil
         

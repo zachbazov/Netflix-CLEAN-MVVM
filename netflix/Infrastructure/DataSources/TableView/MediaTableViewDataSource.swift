@@ -38,9 +38,7 @@ final class MediaTableViewDataSource: TableViewDataSource {
     }
     
     deinit {
-        print("deinit \(Self.self)")
         showcaseCell?.viewWillDeallocate()
-        showcaseCell?.removeFromSuperview()
         showcaseCell = nil
     }
     

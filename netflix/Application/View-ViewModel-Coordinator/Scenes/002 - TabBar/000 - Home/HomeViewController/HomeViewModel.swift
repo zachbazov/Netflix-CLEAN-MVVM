@@ -14,7 +14,7 @@ private protocol ViewModelProtocol {
     var mediaUseCase: MediaUseCase { get }
     
     var orientation: DeviceOrientation { get }
-    var myList: MyListService { get }
+    var myList: MyList { get }
     
     var sections: [Section] { get }
     var media: [Media] { get }
@@ -44,7 +44,7 @@ final class HomeViewModel {
     fileprivate lazy var mediaUseCase: MediaUseCase = createMediaUseCase()
     
     fileprivate let orientation = DeviceOrientation.shared
-    fileprivate let myList: MyListService = Application.app.services.myList
+    fileprivate let myList: MyList = Application.app.services.myList
     
     private(set) lazy var sections = [Section]()
     private(set) lazy var media = [Media]()

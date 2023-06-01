@@ -7,7 +7,9 @@
 
 import UIKit
 
-final class MyListService {
+// MARK: - MyList Type
+
+final class MyList {
     private lazy var useCase: ListUseCase = createUseCase()
     
     var list = Set<Media>()

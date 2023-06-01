@@ -30,10 +30,6 @@ final class NavigationController: UINavigationController {
     }
     
     required init?(coder aDecoder: NSCoder) { fatalError() }
-    
-    deinit {
-        printIfDebug(.debug, "deinit \(Self.self)")
-    }
 }
 
 // MARK: - NavigatableController Implementation
