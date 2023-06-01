@@ -7,22 +7,19 @@
 
 import UIKit
 
-// MARK: - ViewControllerProtocol Type
-
-private protocol ViewControllerProtocol {}
-
 // MARK: - AddUserProfileViewController Type
 
 final class AddUserProfileViewController: UIViewController, Controller {
-    
     var viewModel: ProfileViewModel!
+    
+    deinit {
+        viewModel = nil
+        
+        removeFromParent()
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .black
     }
 }
-
-// MARK: - ViewControllerProtocol Implementation
-
-extension AddUserProfileViewController: ViewControllerProtocol {}

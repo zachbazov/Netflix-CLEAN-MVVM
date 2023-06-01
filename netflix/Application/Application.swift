@@ -34,12 +34,10 @@ final class Application {
     
     private init() {}
     
-    private let dependencies: DI = DI.shared
-    
-    private(set) lazy var configuration: Configuration = dependencies.resolve(Configuration.self)
-    private(set) lazy var services: Services = dependencies.resolve(Services.self)
-    private(set) lazy var stores: Stores = dependencies.resolve(Stores.self)
-    private(set) lazy var coordinator: RootCoordinator = dependencies.resolve(RootCoordinator.self)
+    private(set) lazy var configuration = Configuration()
+    private(set) lazy var services = Services()
+    private(set) lazy var stores = Stores()
+    private(set) lazy var coordinator = RootCoordinator()
 }
 
 // MARK: - ApplicationLaunching Implementation
@@ -94,7 +92,7 @@ extension Application: ApplicationCoordinating {
     fileprivate func setWindow(_ window: UIWindow?) {
         coordinator.window = window
         
-        window?.makeKeyAndVisible()
+        coordinator.window?.makeKeyAndVisible()
     }
     
     fileprivate func coordinate(to screen: RootCoordinator.Screen) {

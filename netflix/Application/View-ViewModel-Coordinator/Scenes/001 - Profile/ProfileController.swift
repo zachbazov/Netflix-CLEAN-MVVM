@@ -11,10 +11,4 @@ import UIKit
 
 final class ProfileController: UIViewController, Controller {
     var viewModel: ProfileViewModel!
-    
-    deinit {
-        print("deinit \(String(describing: Self.self))")
-        viewModel.coordinator = nil
-        viewModel = nil
-    }
 }

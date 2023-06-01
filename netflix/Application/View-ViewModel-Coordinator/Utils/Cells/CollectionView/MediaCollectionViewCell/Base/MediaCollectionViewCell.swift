@@ -22,9 +22,9 @@ class MediaCollectionViewCell: UICollectionViewCell, CollectionViewCell {
     
     var imageService: AsyncImageService = AsyncImageService.shared
     
-//    deinit {
-//        viewWillDeallocate()
-//    }
+    deinit {
+        viewWillDeallocate()
+    }
     
     // MARK: DataLoadable Implementation
     

@@ -24,7 +24,7 @@ final class PanelView: UIView, View {
     var viewModel: PanelViewModel!
     
     private let parent: UIView
-    private let myList = MyList.shared
+    private let myList: MyListService = Application.app.services.myList
     
     /// Create a panel view object.
     /// - Parameters:
@@ -48,7 +48,7 @@ final class PanelView: UIView, View {
     }
     
     func dataWillLoad() {
-        myList.dataWillLoad()
+        myList.loadData()
     }
     
     func viewDidLoad() {
@@ -110,7 +110,7 @@ extension PanelView: ViewProtocol {
               let showcase = viewModel?.media
         else { return }
         
-        myList.viewModel.shouldAddOrRemove(showcase, uponSelection: myListButton.isSelected)
+        myList.shouldAddOrRemove(showcase, uponSelection: myListButton.isSelected)
         
         controller.browseOverlayView?.reloadData()
         
@@ -121,7 +121,7 @@ extension PanelView: ViewProtocol {
         guard let showcase = viewModel?.media else { return }
         
         let media = viewModel.sectionAt(.myList).media
-        let contains = myList.viewModel.contains(showcase, in: media)
+        let contains = myList.contains(showcase, in: media)
         
         myListButton.toggle(contains)
     }

@@ -37,12 +37,6 @@ final class ProfileViewModel {
     
     var profiles = [Profile]()
     var selectedProfile: Profile?
-    
-    deinit {
-        print("deinit \(String(describing: Self.self))")
-        selectedProfile = nil
-        coordinator = nil
-    }
 }
 
 // MARK: - ViewModel Implementation
@@ -198,13 +192,13 @@ extension ProfileViewModel: ViewModelProtocol {
     
     func userProfileDidUpdate(with profileId: String) async {
         let authService = Application.app.services.auth
-        
+
         guard let user = authService.user else { return }
-        
+
         let request = UserHTTPDTO.Request(user: user, selectedProfile: profileId)
-        
+
         let response = await userUseCase.request(endpoint: .updateUserData, for: UserHTTPDTO.Response.self, request: request)
-        
+
         guard let _ = response else { return }
         
         mainQueueDispatch {
@@ -216,7 +210,7 @@ extension ProfileViewModel: ViewModelProtocol {
     fileprivate func didFinish() {
         mainQueueDispatch { [weak self] in
             guard let self = self else { return }
-            guard let dataSource = self.coordinator?.userProfileController.dataSource else { return }
+            guard let dataSource = self.coordinator?.userProfileController?.dataSource else { return }
             dataSource.dataSourceDidChange()
         }
     }

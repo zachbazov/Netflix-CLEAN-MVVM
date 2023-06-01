@@ -16,14 +16,14 @@ final class ListDTO<T: Decodable>: Decodable {
 
 // MARK: - Mapping
 
-extension ListDTO<MediaDTO> {
+extension ListDTO where T == MediaDTO {
     func toDomain() -> List<Media> {
-        return .init(user: user, media: media.map { $0.toDomain() })
+        return List(user: user, media: media.map { $0.toDomain() })
     }
 }
 
-extension ListDTO<String> {
+extension ListDTO where T == String {
     func toDomain() -> List<String> {
-        return .init(user: user, media: media)
+        return List(user: user, media: media)
     }
 }

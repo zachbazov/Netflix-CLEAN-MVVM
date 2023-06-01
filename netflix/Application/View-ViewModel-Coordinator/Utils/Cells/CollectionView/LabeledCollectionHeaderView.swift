@@ -12,6 +12,12 @@ import UIKit
 final class LabeledCollectionHeaderView: UICollectionReusableView, CollectionReusableView {
     fileprivate(set) lazy var titleLabel: UILabel = createTitleLabel()
     
+    deinit {
+        print("deinit \(Self.self)")
+        
+        removeFromSuperview()
+    }
+    
     func viewDidLoad() {
         viewHierarchyWillConfigure()
     }

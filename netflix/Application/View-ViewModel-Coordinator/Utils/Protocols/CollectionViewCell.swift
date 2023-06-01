@@ -114,8 +114,8 @@ extension CollectionViewCell {
             cell.indexPath = indexPath
             cell.viewDidLoad()
         case let cell as AccountMenuNotificationCollectionViewCell:
-            let myList = MyList.shared
-            let media = myList.viewModel.list.toArray()
+            let myList = Application.app.services.myList
+            let media = myList.list.toArray()
             let model = media[indexPath.row]
             
             cell.viewModel = AccountMenuNotificationCollectionViewCellViewModel(media: model)

@@ -184,7 +184,7 @@ extension AuthService: AuthServiceProtocol {
         let context = responses.coreDataStorage.context()
         let group = DispatchGroup()
         let viewModel = AuthViewModel()
-        let profileViewModel = coordinator.profileCoordinator.viewController?.viewModel
+        let profileViewModel = coordinator.profileCoordinator?.viewController?.viewModel
         let requestDTO = UserHTTPDTO.Request(user: user!, selectedProfile: nil)
         
         group.enter()

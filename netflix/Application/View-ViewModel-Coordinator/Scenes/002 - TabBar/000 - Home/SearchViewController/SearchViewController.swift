@@ -37,8 +37,6 @@ final class SearchViewController: UIViewController, Controller {
     fileprivate(set) lazy var textFieldIndicatorView: TextFieldActivityIndicatorView? = createTextFieldIndicatorView()
     
     deinit {
-        print("deinit \(Self.self)")
-        
         viewWillDeallocate()
     }
     

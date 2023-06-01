@@ -12,7 +12,7 @@ import Foundation
 private protocol ViewModelProtocol {
     var useCase: SeasonUseCase { get }
     var orientation: DeviceOrientation { get }
-    var myList: MyList { get }
+    var myList: MyListService { get }
     
     var section: Section? { get }
     var media: Media? { get }
@@ -30,7 +30,7 @@ final class DetailViewModel {
     
     lazy var useCase: SeasonUseCase = createUseCase()
     let orientation = DeviceOrientation.shared
-    let myList = MyList.shared
+    let myList: MyListService = Application.app.services.myList
     
     var section: Section?
     var media: Media?

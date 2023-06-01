@@ -52,29 +52,31 @@ extension SignInViewModel: ViewModelProtocol {
     /// Invokes a sign in request for the user credentials.
     fileprivate func signInRequest() {
         let authService = Application.app.services.auth
-        
-        guard let emailTextField = coordinator?.signInController.emailTextField,
-              let passTextField = coordinator?.signInController.passwordTextField else { return }
-        
+
+        guard let emailTextField = coordinator?.signInController?.emailTextField,
+              let passTextField = coordinator?.signInController?.passwordTextField
+        else { return }
+
         emailTextField.resignFirstResponder()
         passTextField.resignFirstResponder()
-        
+
         guard let email = email, let password = password else { return }
-        
+
         guard email.isNotEmpty, password.isNotEmpty else { return }
-        
+
         ActivityIndicatorView.present()
-        
+
         let userDTO = UserDTO(email: email, password: password)
         let requestDTO = UserHTTPDTO.Request(user: userDTO, selectedProfile: nil)
         
         if #available(iOS 13.0, *) {
             Task {
                 let response = await authService.signIn(with: requestDTO)
-                
+
                 guard let user = response?.data else { return }
                 
                 didFinish(with: user)
+                
             }
             
             return
@@ -91,21 +93,21 @@ extension SignInViewModel: ViewModelProtocol {
         mainQueueDispatch { [weak self] in
             guard let self = self else { return }
             
-            let emailTextField = self.coordinator?.signInController.emailTextField
-            let passTextField = self.coordinator?.signInController.passwordTextField
-            
+            let emailTextField = self.coordinator?.signInController?.emailTextField
+            let passTextField = self.coordinator?.signInController?.passwordTextField
+
             guard let user = user else {
                 emailTextField?.text = .toBlank()
                 passTextField?.text = .toBlank()
                 return
             }
-            
+
             guard let selectedProfile = user.selectedProfile, selectedProfile.isNotEmpty else {
                 let coordinator = Application.app.coordinator
                 coordinator.coordinate(to: .profile)
                 return
             }
-            
+
             let coordinator = Application.app.coordinator
             coordinator.coordinate(to: .tabBar)
         }

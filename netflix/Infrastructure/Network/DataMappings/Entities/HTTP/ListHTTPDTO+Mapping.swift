@@ -33,7 +33,6 @@ struct ListHTTPDTO {
             var data: ListDTO<String>
         }
     }
-
 }
 
 // MARK: - Mapping

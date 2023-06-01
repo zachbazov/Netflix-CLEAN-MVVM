@@ -10,7 +10,7 @@ import UIKit
 // MARK: - ViewProtocol Type
 
 private protocol ViewProtocol {
-    var myList: MyList { get }
+    var myList: MyListService { get }
     
     var imageView: UIImageView { get }
     var label: UILabel { get }
@@ -28,7 +28,7 @@ private protocol ViewProtocol {
 // MARK: - DetailPanelViewItem Type
 
 final class DetailPanelViewItem: UIView, View {
-    fileprivate let myList = MyList.shared
+    fileprivate let myList: MyListService = Application.app.services.myList
     
     fileprivate lazy var imageView = createImageView()
     fileprivate lazy var label = createLabel()
@@ -127,12 +127,13 @@ extension DetailPanelViewItem: ViewProtocol {
     /// Occurs while the `DisplayView` presenting media is contained in the user's list.
     fileprivate func selectIfNeeded() {
         guard let tag = Item(rawValue: tag),
-              let viewModel = viewModel
+              let viewModel = viewModel,
+              let section = myList.section
         else { return }
         
         if case .myList = tag {
-            let media = myList.viewModel.section.media
-            let contains = myList.viewModel.contains(viewModel.media, in: media)
+            let media = section.media
+            let contains = myList.contains(viewModel.media, in: media)
             
             viewModel.isSelectedWillChange(contains)
         }
@@ -142,14 +143,14 @@ extension DetailPanelViewItem: ViewProtocol {
     func viewDidTap() {
         guard let tag = Item(rawValue: tag),
               let viewModel = viewModel,
-              let homeController = myList.viewModel.coordinator.viewController
+              let homeController = Application.app.coordinator.tabCoordinator?.home?.viewControllers.first as? HomeViewController
         else { return }
         
         switch tag {
         case .myList:
             let media = viewModel.media
             
-            myList.viewModel.shouldAddOrRemove(media, uponSelection: viewModel.isSelected.value)
+            myList.shouldAddOrRemove(media, uponSelection: viewModel.isSelected.value)
             
             homeController.browseOverlayView?.reloadData()
             homeController.tableView.reloadSection(at: .display)

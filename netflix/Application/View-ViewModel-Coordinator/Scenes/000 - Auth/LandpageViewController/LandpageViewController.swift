@@ -38,6 +38,10 @@ final class LandpageViewController: UIViewController, Controller {
     private var hasGradient = false
     private var hasAnimate = false
     
+    deinit {
+        viewDidDeallocate()
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         viewWillLoadBehaviors()
@@ -62,6 +66,12 @@ final class LandpageViewController: UIViewController, Controller {
     
     func viewDidTargetSubviews() {
         signUpButton.addTarget(self, action: #selector(coordinateToSignUp), for: .touchUpInside)
+    }
+    
+    func viewDidDeallocate() {
+        viewModel = nil
+        
+        removeFromParent()
     }
 }
 

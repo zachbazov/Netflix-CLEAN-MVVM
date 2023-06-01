@@ -57,7 +57,9 @@ final class ShowcaseView: UIView, View {
     private(set) var gradient: GradientView?
     
     init(on parent: UIView, with viewModel: ShowcaseTableViewCellViewModel?) {
-        guard let viewModel = viewModel else { fatalError("Unexpected \(ShowcaseTableViewCellViewModel.self) value.") }
+        guard let viewModel = viewModel else {
+            fatalError("Unexpected \(ShowcaseTableViewCellViewModel.self) value.")
+        }
         self.cellViewModel = viewModel
         
         super.init(frame: .zero)
@@ -69,8 +71,6 @@ final class ShowcaseView: UIView, View {
     required init?(coder: NSCoder) { fatalError() }
     
     deinit {
-        print("deinit \(Self.self)")
-        
         viewWillDeallocate()
     }
     
@@ -112,8 +112,13 @@ final class ShowcaseView: UIView, View {
     }
     
     func viewWillDeallocate() {
-        panelView?.removeFromSuperview()
+        panelView?.viewWillDeallocate()
         panelView = nil
+        
+        gradient?.remove()
+        gradient = nil
+        
+        viewModel = nil
         
         removeNavigationGradientFromSuperview()
         
@@ -274,7 +279,9 @@ extension ShowcaseView: ViewProtocol {
         
         guard let viewModel = viewModel else { return }
         
-        AsyncImageService.shared.load(
+        let imageService = AsyncImageService.shared
+        
+        imageService.load(
             url: viewModel.posterImageURL,
             identifier: viewModel.posterImageIdentifier) { [weak self] image in
                 guard let self = self, let image = image else { return }
@@ -285,7 +292,7 @@ extension ShowcaseView: ViewProtocol {
                 }
             }
         
-        AsyncImageService.shared.load(
+        imageService.load(
             url: viewModel.logoImageURL,
             identifier: viewModel.logoImageIdentifier) { [weak self] image in
                 guard let self = self, let image = image else { return }

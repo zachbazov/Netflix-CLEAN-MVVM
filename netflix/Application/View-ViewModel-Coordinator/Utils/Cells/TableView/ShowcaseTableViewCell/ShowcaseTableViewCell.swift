@@ -17,8 +17,6 @@ final class ShowcaseTableViewCell: UITableViewCell {
     deinit {
         print("deinit \(Self.self)")
         
-        showcaseView?.viewWillDeallocate()
-        
         viewWillDeallocate()
     }
     
@@ -55,7 +53,9 @@ extension ShowcaseTableViewCell: TableViewCell {
     }
     
     func viewWillDeallocate() {
+        showcaseView?.viewWillDeallocate()
         showcaseView = nil
+        
         viewModel = nil
         
         removeFromSuperview()

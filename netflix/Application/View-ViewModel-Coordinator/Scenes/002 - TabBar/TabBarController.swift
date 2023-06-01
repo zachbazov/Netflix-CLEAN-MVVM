@@ -12,9 +12,19 @@ import UIKit
 final class TabBarController: UITabBarController, TabController {
     var viewModel: TabBarViewModel!
     
+    deinit {
+        viewModel?.coordinator = nil
+        viewModel = nil
+        
+        viewControllers?.removeAll()
+        removeFromParent()
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         viewDidConfigure()
+        
+        delegate = self
     }
     
     func viewDidConfigure() {

@@ -10,7 +10,5 @@ import Foundation
 // MARK: - Configuration Type
 
 struct Configuration {
-    private let dependencies: DI = DI.shared
-    
-    lazy var api: APIConfig = dependencies.resolve(APIConfig.self)
+    lazy var api = APIConfig()
 }

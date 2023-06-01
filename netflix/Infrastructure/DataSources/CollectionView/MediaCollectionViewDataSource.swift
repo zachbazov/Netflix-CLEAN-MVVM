@@ -18,7 +18,6 @@ private protocol DataSourceProtocol {
 
 final class MediaCollectionViewDataSource<Cell>: CollectionViewDataSource,
                                                  UICollectionViewDataSourcePrefetching where Cell: UICollectionViewCell {
-    
     fileprivate let coordinator: HomeViewCoordinator
     fileprivate let section: Section
     

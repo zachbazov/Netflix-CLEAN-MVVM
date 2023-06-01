@@ -114,7 +114,6 @@
 		A18A796B2A1FB15800FE60AB /* DetailHybridCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A18A796A2A1FB15800FE60AB /* DetailHybridCell.swift */; };
 		A18A796D2A1FB15C00FE60AB /* DetailHybridCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A18A796C2A1FB15C00FE60AB /* DetailHybridCellViewModel.swift */; };
 		A18A79702A20536700FE60AB /* RequestInvoking.swift in Sources */ = {isa = PBXBuildFile; fileRef = A18A796F2A20536700FE60AB /* RequestInvoking.swift */; };
-		A18A79742A20DBB900FE60AB /* DI.swift in Sources */ = {isa = PBXBuildFile; fileRef = A18A79732A20DBB900FE60AB /* DI.swift */; };
 		A18A79762A20F49600FE60AB /* Taskable.swift in Sources */ = {isa = PBXBuildFile; fileRef = A18A79752A20F49600FE60AB /* Taskable.swift */; };
 		A18A79912A22B33F00FE60AB /* DataLoadable.swift in Sources */ = {isa = PBXBuildFile; fileRef = A18A79902A22B33E00FE60AB /* DataLoadable.swift */; };
 		A18A79932A22B4F200FE60AB /* CoordinatorAssignable.swift in Sources */ = {isa = PBXBuildFile; fileRef = A18A79922A22B4F200FE60AB /* CoordinatorAssignable.swift */; };
@@ -124,8 +123,6 @@
 		A18A799E2A22C48D00FE60AB /* DeviceOrientable.swift in Sources */ = {isa = PBXBuildFile; fileRef = A18A799D2A22C48D00FE60AB /* DeviceOrientable.swift */; };
 		A18A79A02A22CD9700FE60AB /* NetworkConfigurable.swift in Sources */ = {isa = PBXBuildFile; fileRef = A18A799F2A22CD9700FE60AB /* NetworkConfigurable.swift */; };
 		A18A79A32A22CECC00FE60AB /* APIConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = A18A79A22A22CECC00FE60AB /* APIConfig.swift */; };
-		A18A79A62A22D17000FE60AB /* DependencyResolver.swift in Sources */ = {isa = PBXBuildFile; fileRef = A18A79A52A22D17000FE60AB /* DependencyResolver.swift */; };
-		A18A79A82A22D19900FE60AB /* DependencyRegistry.swift in Sources */ = {isa = PBXBuildFile; fileRef = A18A79A72A22D19900FE60AB /* DependencyRegistry.swift */; };
 		A18B98FC28BEB62C0077A5A6 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A18B98FB28BEB62C0077A5A6 /* AppDelegate.swift */; };
 		A18B98FE28BEB62C0077A5A6 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A18B98FD28BEB62C0077A5A6 /* SceneDelegate.swift */; };
 		A18B990528BEB62E0077A5A6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A18B990428BEB62E0077A5A6 /* Assets.xcassets */; };
@@ -162,7 +159,6 @@
 		A18B99A128C0FEC40077A5A6 /* UserHTTPResponseEntity+Mapping.swift in Sources */ = {isa = PBXBuildFile; fileRef = A18B99A028C0FEC40077A5A6 /* UserHTTPResponseEntity+Mapping.swift */; };
 		A18D851C29403CE900840045 /* BrowseOverlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A18D851B29403CE900840045 /* BrowseOverlayView.swift */; };
 		A18D852029403D5D00840045 /* BrowseOverlayViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A18D851F29403D5D00840045 /* BrowseOverlayViewModel.swift */; };
-		A18D852429423F6F00840045 /* MyListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A18D852329423F6F00840045 /* MyListViewModel.swift */; };
 		A196AE0928C140A300C5D733 /* ValueTransformer.swift in Sources */ = {isa = PBXBuildFile; fileRef = A196AE0828C140A300C5D733 /* ValueTransformer.swift */; };
 		A19956DD29019A3900B7D655 /* List.swift in Sources */ = {isa = PBXBuildFile; fileRef = A19956DC29019A3900B7D655 /* List.swift */; };
 		A19956DF29019A7700B7D655 /* ListDTO+Mapping.swift in Sources */ = {isa = PBXBuildFile; fileRef = A19956DE29019A7700B7D655 /* ListDTO+Mapping.swift */; };
@@ -191,7 +187,6 @@
 		A1AC9F96299F8C5700DAD66D /* ConfigurationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1AC9F95299F8C5700DAD66D /* ConfigurationTests.swift */; };
 		A1AC9F98299F8E1000DAD66D /* CoordinatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1AC9F97299F8E1000DAD66D /* CoordinatorTests.swift */; };
 		A1AC9F9C299FA80B00DAD66D /* AuthServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1AC9F9B299FA80B00DAD66D /* AuthServiceTests.swift */; };
-		A1AC9FA529A24D1600DAD66D /* APIConfigurable.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1AC9FA429A24D1600DAD66D /* APIConfigurable.swift */; };
 		A1AC9FA729A3617400DAD66D /* ViewLifecycleBehavior.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1AC9FA629A3617400DAD66D /* ViewLifecycleBehavior.swift */; };
 		A1AC9FAC29A4D1A300DAD66D /* TableViewHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1AC9FAB29A4D1A300DAD66D /* TableViewHeader.swift */; };
 		A1AC9FB629A65E4D00DAD66D /* AlertView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1AC9FB529A65E4D00DAD66D /* AlertView.swift */; };
@@ -249,7 +244,7 @@
 		A1B3F99828C6278A0042DE9F /* SignUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B3F99728C6278A0042DE9F /* SignUpViewController.swift */; };
 		A1B3F99D28C631F90042DE9F /* SignInViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B3F99C28C631F90042DE9F /* SignInViewController.swift */; };
 		A1B480BC293686330041418D /* StandardCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B480BB293686330041418D /* StandardCollectionViewCell.swift */; };
-		A1B68F2A2921BAE600FF5F18 /* MyList.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B68F292921BAE600FF5F18 /* MyList.swift */; };
+		A1B68F2A2921BAE600FF5F18 /* MyListService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B68F292921BAE600FF5F18 /* MyListService.swift */; };
 		A1B68F2C2923CB5300FF5F18 /* LabeledTableHeaderViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B68F2B2923CB5300FF5F18 /* LabeledTableHeaderViewModel.swift */; };
 		A1B68F2E2923DF2300FF5F18 /* Set+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B68F2D2923DF2300FF5F18 /* Set+Extension.swift */; };
 		A1B70A6F293D578200C718C6 /* View.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B70A6E293D578200C718C6 /* View.swift */; };
@@ -456,7 +451,6 @@
 		A18A796A2A1FB15800FE60AB /* DetailHybridCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailHybridCell.swift; sourceTree = "<group>"; };
 		A18A796C2A1FB15C00FE60AB /* DetailHybridCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailHybridCellViewModel.swift; sourceTree = "<group>"; };
 		A18A796F2A20536700FE60AB /* RequestInvoking.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestInvoking.swift; sourceTree = "<group>"; };
-		A18A79732A20DBB900FE60AB /* DI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DI.swift; sourceTree = "<group>"; };
 		A18A79752A20F49600FE60AB /* Taskable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Taskable.swift; sourceTree = "<group>"; };
 		A18A79902A22B33E00FE60AB /* DataLoadable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataLoadable.swift; sourceTree = "<group>"; };
 		A18A79922A22B4F200FE60AB /* CoordinatorAssignable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoordinatorAssignable.swift; sourceTree = "<group>"; };
@@ -466,8 +460,6 @@
 		A18A799D2A22C48D00FE60AB /* DeviceOrientable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceOrientable.swift; sourceTree = "<group>"; };
 		A18A799F2A22CD9700FE60AB /* NetworkConfigurable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkConfigurable.swift; sourceTree = "<group>"; };
 		A18A79A22A22CECC00FE60AB /* APIConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIConfig.swift; sourceTree = "<group>"; };
-		A18A79A52A22D17000FE60AB /* DependencyResolver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DependencyResolver.swift; sourceTree = "<group>"; };
-		A18A79A72A22D19900FE60AB /* DependencyRegistry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DependencyRegistry.swift; sourceTree = "<group>"; };
 		A18B98F828BEB62C0077A5A6 /* netflix.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = netflix.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A18B98FB28BEB62C0077A5A6 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		A18B98FD28BEB62C0077A5A6 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -506,7 +498,6 @@
 		A18B99A028C0FEC40077A5A6 /* UserHTTPResponseEntity+Mapping.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UserHTTPResponseEntity+Mapping.swift"; sourceTree = "<group>"; };
 		A18D851B29403CE900840045 /* BrowseOverlayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowseOverlayView.swift; sourceTree = "<group>"; };
 		A18D851F29403D5D00840045 /* BrowseOverlayViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowseOverlayViewModel.swift; sourceTree = "<group>"; };
-		A18D852329423F6F00840045 /* MyListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyListViewModel.swift; sourceTree = "<group>"; };
 		A196AE0828C140A300C5D733 /* ValueTransformer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ValueTransformer.swift; sourceTree = "<group>"; };
 		A19956DC29019A3900B7D655 /* List.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = List.swift; sourceTree = "<group>"; };
 		A19956DE29019A7700B7D655 /* ListDTO+Mapping.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ListDTO+Mapping.swift"; sourceTree = "<group>"; };
@@ -536,7 +527,6 @@
 		A1AC9F95299F8C5700DAD66D /* ConfigurationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigurationTests.swift; sourceTree = "<group>"; };
 		A1AC9F97299F8E1000DAD66D /* CoordinatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoordinatorTests.swift; sourceTree = "<group>"; };
 		A1AC9F9B299FA80B00DAD66D /* AuthServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthServiceTests.swift; sourceTree = "<group>"; };
-		A1AC9FA429A24D1600DAD66D /* APIConfigurable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIConfigurable.swift; sourceTree = "<group>"; };
 		A1AC9FA629A3617400DAD66D /* ViewLifecycleBehavior.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewLifecycleBehavior.swift; sourceTree = "<group>"; };
 		A1AC9FAB29A4D1A300DAD66D /* TableViewHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableViewHeader.swift; sourceTree = "<group>"; };
 		A1AC9FB529A65E4D00DAD66D /* AlertView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertView.swift; sourceTree = "<group>"; };
@@ -594,7 +584,7 @@
 		A1B3F99728C6278A0042DE9F /* SignUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpViewController.swift; sourceTree = "<group>"; };
 		A1B3F99C28C631F90042DE9F /* SignInViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInViewController.swift; sourceTree = "<group>"; };
 		A1B480BB293686330041418D /* StandardCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StandardCollectionViewCell.swift; sourceTree = "<group>"; };
-		A1B68F292921BAE600FF5F18 /* MyList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyList.swift; sourceTree = "<group>"; };
+		A1B68F292921BAE600FF5F18 /* MyListService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyListService.swift; sourceTree = "<group>"; };
 		A1B68F2B2923CB5300FF5F18 /* LabeledTableHeaderViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LabeledTableHeaderViewModel.swift; sourceTree = "<group>"; };
 		A1B68F2D2923DF2300FF5F18 /* Set+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Set+Extension.swift"; sourceTree = "<group>"; };
 		A1B70A6E293D578200C718C6 /* View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = View.swift; sourceTree = "<group>"; };
@@ -1072,7 +1062,6 @@
 			children = (
 				A1AC9FB429A65E0A00DAD66D /* AlertView */,
 				A1741D5628EE5C9A00F3C46B /* MediaPlayer */,
-				A18D852529423F7600840045 /* MyList */,
 				A130BCA1294FA48E0070EA5E /* ActivityIndicatorView.swift */,
 				A1741D3E28EBD33200F3C46B /* AgeRestrictionView.swift */,
 				A1BD20E129E5B9CC0093749E /* BlurView.swift */,
@@ -1092,24 +1081,6 @@
 				A18A79A22A22CECC00FE60AB /* APIConfig.swift */,
 			);
 			path = Interfaces;
-			sourceTree = "<group>";
-		};
-		A18A79A42A22D14800FE60AB /* Dependencies */ = {
-			isa = PBXGroup;
-			children = (
-				A18A79A92A22D1CA00FE60AB /* Utils */,
-				A18A79732A20DBB900FE60AB /* DI.swift */,
-			);
-			path = Dependencies;
-			sourceTree = "<group>";
-		};
-		A18A79A92A22D1CA00FE60AB /* Utils */ = {
-			isa = PBXGroup;
-			children = (
-				A18A79A72A22D19900FE60AB /* DependencyRegistry.swift */,
-				A18A79A52A22D17000FE60AB /* DependencyResolver.swift */,
-			);
-			path = Utils;
 			sourceTree = "<group>";
 		};
 		A18B98EF28BEB62C0077A5A6 = {
@@ -1215,6 +1186,8 @@
 		A18B993228BFC6FC0077A5A6 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
+				A1FC093029DC5C4900CB4C9E /* NavigationOverlayTableViewCell */,
+				A18D85182940382500840045 /* NavigationOverlayFooterView */,
 				A18B993928BFC95A0077A5A6 /* Behaviors */,
 				A1B349FB2A165F98002AFE9E /* Cells */,
 				A18B993428BFC7130077A5A6 /* Protocols */,
@@ -1426,15 +1399,6 @@
 				A18D851F29403D5D00840045 /* BrowseOverlayViewModel.swift */,
 			);
 			path = BrowseOverlayView;
-			sourceTree = "<group>";
-		};
-		A18D852529423F7600840045 /* MyList */ = {
-			isa = PBXGroup;
-			children = (
-				A1B68F292921BAE600FF5F18 /* MyList.swift */,
-				A18D852329423F6F00840045 /* MyListViewModel.swift */,
-			);
-			path = MyList;
 			sourceTree = "<group>";
 		};
 		A19956DB2900E0C600B7D655 /* Utils */ = {
@@ -1712,11 +1676,11 @@
 		A1B1B0C8299B95270070AD29 /* Interfaces */ = {
 			isa = PBXGroup;
 			children = (
-				A18A79A42A22D14800FE60AB /* Dependencies */,
 				A1B3F98828C54F160042DE9F /* Repositories */,
 				A1B1B0C5299B8C130070AD29 /* UseCases */,
 				A1B779112A0E6207009014FD /* Color.swift */,
 				A1AE02D0293BA29A00AF0BD6 /* DeviceOrientation.swift */,
+				A1B68F292921BAE600FF5F18 /* MyListService.swift */,
 				A1741D6128EF716000F3C46B /* ScheduledTimer.swift */,
 			);
 			path = Interfaces;
@@ -1825,8 +1789,8 @@
 		A1B3F99628C627710042DE9F /* SignUpViewController */ = {
 			isa = PBXGroup;
 			children = (
-				A1B3F99728C6278A0042DE9F /* SignUpViewController.swift */,
 				A1B70AA629400B0E00C718C6 /* SignUpViewModel.swift */,
+				A1B3F99728C6278A0042DE9F /* SignUpViewController.swift */,
 				A1B70A8D293E72D700C718C6 /* SignUpViewController.xib */,
 			);
 			path = SignUpViewController;
@@ -1835,8 +1799,8 @@
 		A1B3F99B28C631D90042DE9F /* SignInViewController */ = {
 			isa = PBXGroup;
 			children = (
-				A1B3F99C28C631F90042DE9F /* SignInViewController.swift */,
 				A1B70AA429400ACD00C718C6 /* SignInViewModel.swift */,
+				A1B3F99C28C631F90042DE9F /* SignInViewController.swift */,
 				A1B70A8B293E72D000C718C6 /* SignInViewController.xib */,
 			);
 			path = SignInViewController;
@@ -1854,7 +1818,6 @@
 		A1B70A97293EC2CA00C718C6 /* Protocols */ = {
 			isa = PBXGroup;
 			children = (
-				A1AC9FA429A24D1600DAD66D /* APIConfigurable.swift */,
 				A18B998928C040A70077A5A6 /* Cancellable.swift */,
 				A1B98BA3298A414E001B7B62 /* HTTP.swift */,
 				A18A796F2A20536700FE60AB /* RequestInvoking.swift */,
@@ -1937,18 +1900,8 @@
 			children = (
 				A1BA1DAB28D9D42A00730EA8 /* NavigationOverlayView.swift */,
 				A1BA1DB828DA20CA00730EA8 /* NavigationOverlayViewModel.swift */,
-				A1BA1DC028DCB75600730EA8 /* Cells */,
 			);
 			path = NavigationOverlayView;
-			sourceTree = "<group>";
-		};
-		A1BA1DC028DCB75600730EA8 /* Cells */ = {
-			isa = PBXGroup;
-			children = (
-				A1FC093029DC5C4900CB4C9E /* NavigationOverlayTableViewCell */,
-				A18D85182940382500840045 /* NavigationOverlayFooterView */,
-			);
-			path = Cells;
 			sourceTree = "<group>";
 		};
 		A1D23AB729CA1A1100748029 /* TableView */ = {
@@ -2255,7 +2208,6 @@
 				A127C1E228DD00F100CEE34F /* NavigationOverlayFooterView.swift in Sources */,
 				A18A79A32A22CECC00FE60AB /* APIConfig.swift in Sources */,
 				A18A79762A20F49600FE60AB /* Taskable.swift in Sources */,
-				A18A79742A20DBB900FE60AB /* DI.swift in Sources */,
 				A1AD25D028D6D31000F793B3 /* NavigationBarViewModel.swift in Sources */,
 				A1AD767729AC85B200669667 /* NewsCollectionViewCell.swift in Sources */,
 				A18B995D28BFFBF30077A5A6 /* EpisodeDTO+Mapping.swift in Sources */,
@@ -2271,7 +2223,7 @@
 				A1B1B0D2299B9F820070AD29 /* MediaUseCase.swift in Sources */,
 				A14E0CCD29BCAC4B00F55500 /* AccountMenuNotificationHybridCellViewModel.swift in Sources */,
 				A1741D5028EC774700F3C46B /* DetailNavigationViewItemViewModel.swift in Sources */,
-				A1B68F2A2921BAE600FF5F18 /* MyList.swift in Sources */,
+				A1B68F2A2921BAE600FF5F18 /* MyListService.swift in Sources */,
 				A1AA28C828F487E70011EE9D /* MediaPlayerObservers.swift in Sources */,
 				A130BCB32950D76C0070EA5E /* SearchCollectionViewCellViewModel.swift in Sources */,
 				A1AD25C028D3FC9600F793B3 /* UITableView+Register.swift in Sources */,
@@ -2315,7 +2267,6 @@
 				A1BDC0D32A0993D60027C251 /* NavigationViewModel.swift in Sources */,
 				A18B997A28C0244D0077A5A6 /* Endpoint.swift in Sources */,
 				A1B93C812900CF2900AF2C7F /* UserHTTPRequestEntity+Mapping.swift in Sources */,
-				A1AC9FA529A24D1600DAD66D /* APIConfigurable.swift in Sources */,
 				A1B2BAE82A0688D1004B612A /* NavigationView.swift in Sources */,
 				A1741D2228E67CE200F3C46B /* InfoView.swift in Sources */,
 				A18A799C2A22C1EF00FE60AB /* ViewAnimatable.swift in Sources */,
@@ -2368,7 +2319,6 @@
 				A1B70A71293D578600C718C6 /* ViewModel.swift in Sources */,
 				A1B0D43029AE6FD4009977AB /* FastLaughsViewController.swift in Sources */,
 				A1B70A7B293D7B7000C718C6 /* Application.swift in Sources */,
-				A18A79A82A22D19900FE60AB /* DependencyRegistry.swift in Sources */,
 				A1741D0F28E679B200F3C46B /* NavigationTableViewCell.swift in Sources */,
 				A18691D628C8423B0087DE3B /* DetailViewController.swift in Sources */,
 				A1B93C7F2900B69B00AF2C7F /* MediaResponseEntity+Mapping.swift in Sources */,
@@ -2417,7 +2367,6 @@
 				A1F56A6F28C695FC0089BD4F /* UITextField+Extension.swift in Sources */,
 				A1B93C7228FF329800AF2C7F /* Array+Extension.swift in Sources */,
 				A18B998028C03CA20077A5A6 /* JWT.swift in Sources */,
-				A18D852429423F6F00840045 /* MyListViewModel.swift in Sources */,
 				A1E81D2E28CFE79400D044EA /* LabeledTableHeaderView.swift in Sources */,
 				A1BA1DC228DCB7D700730EA8 /* NavigationOverlayTableViewDataSource.swift in Sources */,
 				A130BCB929510C900070EA5E /* DownloadsViewCoordinator.swift in Sources */,
@@ -2435,7 +2384,6 @@
 				A1E3706529B7C45700CFEE9C /* VoidHTTP.swift in Sources */,
 				A1B70A9E293EC5D600C718C6 /* AuthController.swift in Sources */,
 				A1E81D2028CFE47B00D044EA /* ResumableCollectionViewCell.swift in Sources */,
-				A18A79A62A22D17000FE60AB /* DependencyResolver.swift in Sources */,
 				A1741D0B28E679A900F3C46B /* DescriptionTableViewCell.swift in Sources */,
 				A1B349F22A13C59B002AFE9E /* DetailNavigationViewModel.swift in Sources */,
 				A1BD20E429E5B9E70093749E /* GradientView.swift in Sources */,
@@ -2666,8 +2614,8 @@
 		A18B990D28BEB62E0077A5A6 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				API_HOST = "netflix-rest-api.onrender.com";
-				API_SCHEME = https;
+				API_HOST = "localhost:3000";
+				API_SCHEME = http;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
@@ -2698,8 +2646,8 @@
 		A18B990E28BEB62E0077A5A6 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				API_HOST = "netflix-rest-api.onrender.com";
-				API_SCHEME = https;
+				API_HOST = "localhost:3000";
+				API_SCHEME = http;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;

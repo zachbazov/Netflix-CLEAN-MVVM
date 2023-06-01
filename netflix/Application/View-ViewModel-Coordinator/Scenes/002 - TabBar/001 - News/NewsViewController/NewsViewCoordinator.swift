@@ -17,6 +17,12 @@ private protocol CoordinatorProtocol {
 
 final class NewsViewCoordinator {
     var viewController: NewsViewController?
+    
+    deinit {
+        viewController?.viewModel = nil
+        viewController?.removeFromParent()
+        viewController = nil
+    }
 }
 
 // MARK: - CoordinatorProtocol Implementation

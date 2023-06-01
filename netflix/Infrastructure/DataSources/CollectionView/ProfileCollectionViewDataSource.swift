@@ -10,14 +10,20 @@ import UIKit
 // MARK: - ProfileCollectionViewDataSource Type
 
 final class ProfileCollectionViewDataSource: CollectionViewDataSource {
-    
-    private let viewModel: ProfileViewModel
-    
-    private weak var collectionView: UICollectionView?
+    let viewModel: ProfileViewModel
+    let collectionView: UICollectionView
     
     init(for collectionView: UICollectionView, with viewModel: ProfileViewModel) {
         self.collectionView = collectionView
         self.viewModel = viewModel
+    }
+    
+    deinit {
+        printIfDebug(.debug, "deinit \(Self.self)")
+        
+        collectionView.delegate = nil
+        collectionView.dataSource = nil
+        collectionView.removeFromSuperview()
     }
     
     override func numberOfSections() -> Int {
@@ -47,8 +53,6 @@ final class ProfileCollectionViewDataSource: CollectionViewDataSource {
 
 extension ProfileCollectionViewDataSource {
     func dataSourceDidChange() {
-        guard let collectionView = collectionView else { return }
-        
         collectionView.delegate = self
         collectionView.dataSource = self
         collectionView.reloadData()

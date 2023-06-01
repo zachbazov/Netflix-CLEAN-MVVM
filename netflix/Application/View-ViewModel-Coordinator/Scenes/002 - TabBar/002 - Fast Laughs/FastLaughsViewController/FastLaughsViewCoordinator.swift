@@ -11,6 +11,11 @@ import Foundation
 
 final class FastLaughsViewCoordinator {
     var viewController: FastLaughsViewController?
+    
+    deinit {
+        viewController?.removeFromParent()
+        viewController = nil
+    }
 }
 
 // MARK: - Coordinator Implementation

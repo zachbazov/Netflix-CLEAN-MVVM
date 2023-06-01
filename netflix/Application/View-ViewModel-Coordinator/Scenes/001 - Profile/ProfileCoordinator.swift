@@ -7,82 +7,27 @@
 
 import UIKit
 
-// MARK: - CoordinatorProtocol Type
-
-private protocol CoordinatorProtocol {
-    var navigationController: UINavigationController { get }
-    var userProfileController: UserProfileViewController { get }
-    var addUserProfileController: AddUserProfileViewController { get }
-    var editUserProfileController: EditUserProfileViewController { get }
-    
-    func createNavigationController() -> UINavigationController
-    func createUserProfileViewController() -> UserProfileViewController
-    func createAddUserProfileViewController() -> AddUserProfileViewController
-    func createEditUserProfileViewController() -> EditUserProfileViewController
-    
-    func deploy(_ screen: ProfileCoordinator.Screen)
-}
-
 // MARK: - ProfileCoordinator Type
 
 final class ProfileCoordinator {
     var viewController: ProfileController?
     
-    fileprivate lazy var navigationController: UINavigationController = createNavigationController()
-    fileprivate(set) lazy var userProfileController: UserProfileViewController = createUserProfileViewController()
-    fileprivate lazy var addUserProfileController: AddUserProfileViewController = createAddUserProfileViewController()
-    fileprivate lazy var editUserProfileController: EditUserProfileViewController = createEditUserProfileViewController()
+    lazy var navigationController: UINavigationController? = createNavigationController()
+    lazy var userProfileController: UserProfileViewController? = createUserProfileViewController()
+    lazy var addUserProfileController: AddUserProfileViewController? = createAddUserProfileViewController()
+    lazy var editUserProfileController: EditUserProfileViewController? = createEditUserProfileViewController()
     
-    deinit {
-        print("deinit \(String(describing: Self.self))")
+    func removeViewControllers() {
+        navigationController?.viewControllers.forEach { $0.removeFromParent() }
+        navigationController?.removeFromParent()
+        navigationController = nil
+        addUserProfileController = nil
+        editUserProfileController = nil
+        userProfileController = nil
+        
+        viewController?.viewModel = nil
         viewController?.removeFromParent()
         viewController = nil
-    }
-}
-
-// MARK: - CoordinatorProtocol Implementation
-
-extension ProfileCoordinator: CoordinatorProtocol {
-    fileprivate func createNavigationController() -> UINavigationController {
-        let navigation = UINavigationController(rootViewController: userProfileController)
-        navigation.setNavigationBarHidden(false, animated: false)
-        return navigation
-    }
-    
-    fileprivate func createUserProfileViewController() -> UserProfileViewController {
-        let controller = UserProfileViewController()
-        controller.viewModel = viewController?.viewModel
-        return controller
-    }
-    
-    fileprivate func createAddUserProfileViewController() -> AddUserProfileViewController {
-        let controller = AddUserProfileViewController()
-        controller.viewModel = viewController?.viewModel
-        return controller
-    }
-    
-    fileprivate func createEditUserProfileViewController() -> EditUserProfileViewController {
-        let controller = EditUserProfileViewController()
-        controller.viewModel = viewController?.viewModel
-        return controller
-    }
-    
-    fileprivate func deploy(_ screen: Screen) {
-        switch screen {
-        case .userProfile:
-            
-            navigationController.removeFromParent()
-            
-            guard let view = viewController?.view else { return }
-            
-            viewController?.add(child: navigationController, container: view)
-            
-            userProfileController.present()
-        case .addProfile:
-            navigationController.present(addUserProfileController, animated: true)
-        case .editProfile:
-            navigationController.pushViewController(editUserProfileController, animated: true)
-        }
     }
 }
 
@@ -99,6 +44,52 @@ extension ProfileCoordinator: Coordinator {
     /// Screen representation control.
     /// - Parameter screen: The screen to be allocated and presented.
     func coordinate(to screen: Screen) {
-        deploy(screen)
+        switch screen {
+        case .userProfile:
+            guard let navigationController = navigationController else { return }
+            
+            navigationController.removeFromParent()
+            
+            guard let view = viewController?.view else { return }
+            
+            viewController?.add(child: navigationController, container: view)
+            
+            userProfileController?.present()
+        case .addProfile:
+            guard let addUserProfileController = addUserProfileController else { fatalError() }
+            navigationController?.present(addUserProfileController, animated: true)
+        case .editProfile:
+            guard let editUserProfileController = editUserProfileController else { fatalError() }
+            navigationController?.pushViewController(editUserProfileController, animated: true)
+        }
+    }
+}
+
+// MARK: - Private Implementation
+
+extension ProfileCoordinator {
+    private func createNavigationController() -> UINavigationController {
+        guard let userProfileController = userProfileController else { fatalError() }
+        let navigation = UINavigationController(rootViewController: userProfileController)
+        navigation.setNavigationBarHidden(false, animated: false)
+        return navigation
+    }
+    
+    private func createUserProfileViewController() -> UserProfileViewController {
+        let controller = UserProfileViewController()
+        controller.viewModel = viewController?.viewModel
+        return controller
+    }
+    
+    private func createAddUserProfileViewController() -> AddUserProfileViewController {
+        let controller = AddUserProfileViewController()
+        controller.viewModel = viewController?.viewModel
+        return controller
+    }
+    
+    private func createEditUserProfileViewController() -> EditUserProfileViewController {
+        let controller = EditUserProfileViewController()
+        controller.viewModel = viewController?.viewModel
+        return controller
     }
 }

@@ -25,8 +25,6 @@ final class NavigationBarView: UIView, View {
     private let parent: UIView
     
     deinit {
-        print("deinit \(Self.self)")
-        
         viewWillDeallocate()
     }
     
@@ -64,6 +62,8 @@ final class NavigationBarView: UIView, View {
     
     func viewWillDeallocate() {
         viewModel = nil
+        
+        removeFromSuperview()
     }
 }
 

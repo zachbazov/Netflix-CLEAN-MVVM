@@ -49,8 +49,6 @@ final class SegmentControlView: UIView, View {
     required init?(coder: NSCoder) { fatalError() }
     
     deinit {
-        print("deinit \(Self.self)")
-        
         viewWillDeallocate()
     }
     

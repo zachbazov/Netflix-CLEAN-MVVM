@@ -24,6 +24,10 @@ final class SignUpViewController: UIViewController, Controller {
     
     var viewModel: SignUpViewModel!
     
+    deinit {
+        viewDidDeallocate()
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         viewDidDeploySubviews()
@@ -53,6 +57,13 @@ final class SignUpViewController: UIViewController, Controller {
         emailTextField.delegate = self
         passwordTextField.delegate = self
         passwordConfirmTextField.delegate = self
+    }
+    
+    func viewDidDeallocate() {
+        viewModel?.coordinator = nil
+        viewModel = nil
+        
+        removeFromParent()
     }
 }
 

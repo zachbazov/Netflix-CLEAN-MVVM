@@ -40,6 +40,10 @@ final class DescriptionView: UIView, View {
     
     required init?(coder: NSCoder) { fatalError() }
     
+    deinit {
+        viewWillDeallocate()
+    }
+    
     func viewDidLoad() {
         viewWillConfigure()
     }
@@ -49,6 +53,12 @@ final class DescriptionView: UIView, View {
         setDescription(viewModel.description)
         setCast(viewModel.cast)
         setWriters(viewModel.writers)
+    }
+    
+    func viewWillDeallocate() {
+        viewModel = nil
+        
+        removeFromSuperview()
     }
 }
 

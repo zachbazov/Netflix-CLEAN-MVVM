@@ -32,8 +32,6 @@ final class BrowseOverlayView: UIView, View {
     private let parent: UIView
     
     deinit {
-        print("deinit \(Self.self)")
-        
         viewWillDeallocate()
     }
     

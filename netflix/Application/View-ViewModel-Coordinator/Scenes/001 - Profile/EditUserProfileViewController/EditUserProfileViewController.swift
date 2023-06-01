@@ -7,15 +7,16 @@
 
 import UIKit
 
-// MARK: - ViewControllerProtocol Type
-
-private protocol ViewControllerProtocol {}
-
 // MARK: - EditUserProfileViewController Type
 
 final class EditUserProfileViewController: UIViewController, Controller {
-    
     var viewModel: ProfileViewModel!
+    
+    deinit {
+        viewModel = nil
+        
+        removeFromParent()
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -24,7 +25,3 @@ final class EditUserProfileViewController: UIViewController, Controller {
         view.backgroundColor = .black
     }
 }
-
-// MARK: - ViewControllerProtocol Implementation
-
-extension EditUserProfileViewController: ViewControllerProtocol {}

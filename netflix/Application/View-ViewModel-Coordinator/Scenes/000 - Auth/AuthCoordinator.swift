@@ -7,74 +7,29 @@
 
 import UIKit
 
-// MARK: - CoordinatorProtocol Type
-
-private protocol CoordinatorProtocol {
-    var navigationController: NavigationController { get }
-    var landpageController: LandpageViewController { get }
-    var signInController: SignInViewController { get }
-    var signUpController: SignUpViewController { get }
-    
-    func createNavigationController() -> NavigationController
-    func createLandpageController() -> LandpageViewController
-    func createSignInController() -> SignInViewController
-    func createSignUpController() -> SignUpViewController
-    
-    func deploy(_ screen: AuthCoordinator.Screen)
-}
-
 // MARK: - AuthCoordinator Type
 
 final class AuthCoordinator {
     var viewController: AuthController?
     
-    fileprivate(set) lazy var navigationController: NavigationController = createNavigationController()
-    fileprivate lazy var landpageController: LandpageViewController = createLandpageController()
-    fileprivate(set) lazy var signInController: SignInViewController = createSignInController()
-    fileprivate(set) lazy var signUpController: SignUpViewController = createSignUpController()
-}
-
-// MARK: - CoordinatorProtocol Implementation
-
-extension AuthCoordinator: CoordinatorProtocol {
-    fileprivate func createNavigationController() -> NavigationController {
-        return NavigationController(rootViewController: landpageController)
-    }
+    lazy var navigationController: NavigationController? = createNavigationController()
+    lazy var landpageController: LandpageViewController? = createLandpageController()
+    var signInController: SignInViewController?
+    var signUpController: SignUpViewController?
     
-    fileprivate func createLandpageController() -> LandpageViewController {
-        let controller = LandpageViewController()
-        controller.viewModel = viewController?.viewModel
-        return controller
-    }
-    
-    fileprivate func createSignInController() -> SignInViewController {
-        let controller = SignInViewController()
-        let viewModel = SignInViewModel(with: viewController!.viewModel)
-        controller.viewModel = viewModel
-        controller.viewModel.coordinator = self
-        return controller
-    }
-    
-    fileprivate func createSignUpController() -> SignUpViewController {
-        let controller = SignUpViewController()
-        let viewModel = SignUpViewModel(with: viewController!.viewModel)
-        controller.viewModel = viewModel
-        controller.viewModel.coordinator = self
-        return controller
-    }
-    
-    /// Push or present a new controller to the navigation stack.
-    /// - Parameter sender: The object that's been interacted with.
-    fileprivate func deploy(_ screen: Screen) {
-        switch screen {
-        case .landpage:
-            viewController?.present(navigationController, animated: true)
-        case .signIn:
-            navigationController.pushViewController(signInController, animated: true)
-        case .signUp:
-            navigationController.pushViewController(signUpController, animated: true)
-        default: break
-        }
+    func removeViewControllers() {
+        navigationController?.viewControllers.forEach { $0.removeFromParent() }
+        navigationController?.removeFromParent()
+        navigationController = nil
+        
+        viewController?.removeFromParent()
+        viewController?.viewModel.coordinator = nil
+        viewController?.viewModel = nil
+        viewController = nil
+        
+        landpageController = nil
+        signInController = nil
+        signUpController = nil
     }
 }
 
@@ -95,7 +50,54 @@ extension AuthCoordinator: Coordinator {
     func coordinate(to screen: Screen) {
         mainQueueDispatch { [weak self] in
             guard let self = self else { return }
-            self.deploy(screen)
+            
+            switch screen {
+            case .landpage:
+                guard let navigationController = self.navigationController else { return }
+                self.viewController?.present(navigationController, animated: true)
+            case .signIn:
+                self.signInController = self.createSignInController()
+                
+                guard let signInController = self.signInController else { return }
+                self.navigationController?.pushViewController(signInController, animated: true)
+            case .signUp:
+                self.signUpController = self.createSignUpController()
+                
+                guard let signUpController = self.signUpController else { return }
+                self.navigationController?.pushViewController(signUpController, animated: true)
+            default: break
+            }
         }
+    }
+}
+
+// MARK: - Private Implementation
+
+extension AuthCoordinator {
+    private func createNavigationController() -> NavigationController {
+        guard let landpageController = landpageController else { fatalError() }
+        return NavigationController(rootViewController: landpageController)
+    }
+    
+    private func createLandpageController() -> LandpageViewController {
+        let controller = LandpageViewController()
+        controller.viewModel = viewController?.viewModel
+        return controller
+    }
+    
+    private func createSignInController() -> SignInViewController {
+        let controller = SignInViewController()
+        let viewModel = SignInViewModel(with: viewController!.viewModel)
+        controller.viewModel = viewModel
+        controller.viewModel.coordinator = self
+        return controller
+    }
+    
+    private func createSignUpController() -> SignUpViewController {
+        let controller = SignUpViewController()
+        let viewModel = SignUpViewModel(with: viewController!.viewModel)
+        controller.viewModel = viewModel
+        controller.viewModel.coordinator = self
+        return controller
     }
 }

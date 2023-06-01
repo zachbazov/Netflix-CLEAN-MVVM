@@ -7,14 +7,6 @@
 
 import UIKit
 
-// MARK: - ControllerProtocol Type
-
-private protocol ControllerProtocol {
-    var navigationView: NewsNavigationView { get }
-    var collectionView: UICollectionView { get }
-    var dataSource: NewsCollectionViewDataSource { get }
-}
-
 // MARK: - NewsViewController Type
 
 final class NewsViewController: UIViewController, Controller {
@@ -23,9 +15,13 @@ final class NewsViewController: UIViewController, Controller {
     
     var viewModel: NewsViewModel!
     
-    fileprivate lazy var navigationView: NewsNavigationView = createNavigationView()
-    fileprivate(set) lazy var collectionView: UICollectionView = createCollectionView()
-    fileprivate lazy var dataSource: NewsCollectionViewDataSource = createDataSource()
+    fileprivate lazy var navigationView: NewsNavigationView? = createNavigationView()
+    fileprivate(set) lazy var collectionView: UICollectionView? = createCollectionView()
+    fileprivate lazy var dataSource: NewsCollectionViewDataSource? = createDataSource()
+    
+    deinit {
+        viewWillDeallocate()
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -35,11 +31,11 @@ final class NewsViewController: UIViewController, Controller {
     }
     
     func viewHierarchyWillConfigure() {
-        navigationView
+        navigationView?
             .addToHierarchy(on: navigationViewContainer)
             .constraintToSuperview(navigationViewContainer)
         
-        collectionView
+        collectionView?
             .addToHierarchy(on: collectionViewContainer)
             .constraintToSuperview(collectionViewContainer)
     }
@@ -50,7 +46,7 @@ final class NewsViewController: UIViewController, Controller {
                   !self.viewModel.isEmpty
             else { return }
             
-            self.dataSource.dataSourceDidChange()
+            self.dataSource?.dataSourceDidChange()
         }
     }
     
@@ -61,11 +57,23 @@ final class NewsViewController: UIViewController, Controller {
         
         printIfDebug(.success, "Removed `\(Self.self)` observers.")
     }
+    
+    func viewWillDeallocate() {
+        viewDidUnbindObservers()
+        
+        viewModel?.coordinator = nil
+        viewModel = nil
+        
+        dataSource = nil
+        collectionView?.removeFromSuperview()
+        collectionView = nil
+        
+        navigationView?.removeFromSuperview()
+        navigationView = nil
+        
+        removeFromParent()
+    }
 }
-
-// MARK: - ControllerProtocol Implementation
-
-extension NewsViewController: ControllerProtocol {}
 
 // MARK: - Private Implementation
 

@@ -35,6 +35,12 @@ final class NewsViewModel {
     var section: Section?
     var media: Media?
     var shouldScreenRotate: Bool = false
+    
+    deinit {
+        coordinator = nil
+        section = nil
+        media = nil
+    }
 }
 
 // MARK: - ViewModel Implementaiton

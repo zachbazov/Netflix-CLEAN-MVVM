@@ -9,6 +9,6 @@ import UIKit
 
 // MARK: - TabController Type
 
-protocol TabController: UITabBarController {
+protocol TabController: UITabBarController, UITabBarControllerDelegate {
     func viewDidConfigure()
 }

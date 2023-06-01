@@ -39,8 +39,8 @@ extension AccountViewModel: ViewModel {
 
 extension AccountViewModel: ViewModelProtocol {
     private func createMenuItems() -> [AccountMenuItem] {
-        let list = MyList.shared
-        let media = list.viewModel.list.toArray()
+        let list = Application.app.services.myList
+        let media = list.list.toArray()
         
         let notifications = AccountMenuItem(image: "bell", title: "Notifications", options: media, isExpanded: false)
         let myList = AccountMenuItem(image: "checkmark", title: "My List")

@@ -29,8 +29,6 @@ final class DetailViewController: UIViewController, Controller {
     private(set) var dataSource: DetailTableViewDataSource?
     
     deinit {
-        print("deinit \(Self.self)")
-        
         viewWillDeallocate()
     }
     

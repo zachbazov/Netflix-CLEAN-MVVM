@@ -102,10 +102,35 @@ final class TabBarCoordinator {
     
     fileprivate let configuration = TabBarConfiguration()
     
-    private(set) var home: UINavigationController!
-    private(set) var news: UINavigationController!
-    fileprivate(set) var fastLaughs: UINavigationController!
-    fileprivate var downloads: UIViewController!
+    lazy var home: UINavigationController? = createHomeController()
+    lazy var news: UINavigationController? = createNewsController()
+    lazy var fastLaughs: UINavigationController? = createFastLaughsController()
+    lazy var downloads: UINavigationController? = createDownloadsController()
+    
+    deinit {
+        home = nil
+        news = nil
+        fastLaughs = nil
+        downloads = nil
+        
+        viewController?.viewModel?.coordinator = nil
+        viewController?.viewModel = nil
+        viewController?.viewControllers?.removeAll()
+        viewController?.removeFromParent()
+        viewController = nil
+    }
+    
+    func removeViewControllers() {
+        let homeController = home?.viewControllers.first as? HomeViewController
+        let newsController = news?.viewControllers.first as? NewsViewController
+        let fastController = fastLaughs?.viewControllers.first as? FastLaughsViewController
+        let downloadsController = downloads?.viewControllers.first as? DownloadsViewController
+        
+        homeController?.viewWillDeallocate()
+        newsController?.viewWillDeallocate()
+        fastController?.viewWillDeallocate()
+        downloadsController?.viewWillDeallocate()
+    }
 }
 
 // MARK: -  Implementation
@@ -114,24 +139,22 @@ extension TabBarCoordinator {
     /// Allocate home view controller and it's dependencies.
     /// Reset after re-allocation if needed.
     /// - Returns: A wrapper navigation controller for the view controller.
-    fileprivate func createHomeController() -> UINavigationController {
+    func createHomeController() -> UINavigationController {
         let coordinator = HomeViewCoordinator()
         let viewModel = HomeViewModel()
         let controller = HomeViewController()
-        // Allocate root's referencens.
+        
         controller.viewModel = viewModel
         controller.viewModel.coordinator = coordinator
         coordinator.viewController = controller
-        // Embed the view controller in a navigation controller.
+        
         let navigation = UINavigationController(rootViewController: controller)
-        // Update the tag representor property.
         navigation.navigationBar.tag = Screen.home.rawValue
-        // Configure the tab bar item.
         configuration.tabBarItem(for: .home, with: navigation)
         return navigation
     }
     
-    fileprivate func createNewsController() -> UINavigationController {
+    func createNewsController() -> UINavigationController {
         let coordinator = NewsViewCoordinator()
         let viewModel = NewsViewModel()
         let controller = NewsViewController()
@@ -146,7 +169,7 @@ extension TabBarCoordinator {
         return navigation
     }
     
-    fileprivate func createFastLaughsController() -> UINavigationController {
+    func createFastLaughsController() -> UINavigationController {
         let coordinator = FastLaughsViewCoordinator()
         let viewModel = FastLaughsViewModel()
         let controller = FastLaughsViewController()
@@ -155,13 +178,13 @@ extension TabBarCoordinator {
         controller.viewModel.coordinator = coordinator
         coordinator.viewController = controller
         
-        let navigation = UINavigationController(rootViewController: UIViewController())
+        let navigation = UINavigationController(rootViewController: controller)
         navigation.navigationBar.tag = Screen.fastLaughs.rawValue
         configuration.tabBarItem(for: .fastLaughs, with: navigation)
         return navigation
     }
     
-    fileprivate func createDownloadsController() -> UINavigationController {
+    func createDownloadsController() -> UINavigationController {
         let coordinator = DownloadsViewCoordinator()
         let viewModel = DownloadsViewModel()
         let controller = DownloadsViewController()
@@ -191,16 +214,12 @@ extension TabBarCoordinator: Coordinator {
     /// Screen presentation control.
     /// - Parameter screen: The screen to be allocated and presented.
     func coordinate(to screen: Screen) {
-        /// Home's navigation view controls the state of the table view data source.
-        /// Hence, `home` property will be initialized every time the state changes.
-        home = createHomeController()
+        guard let home = home,
+              let news = news,
+              let fastLaughs = fastLaughs,
+              let downloads = downloads
+        else { return }
         
-        /// One-time initialization is needed for the other scenes.
-        if news == nil { news = createNewsController() }
-        if fastLaughs == nil { fastLaughs = createFastLaughsController() }
-        if downloads == nil { downloads = createDownloadsController() }
-        
-        /// Arranged view controllers for the tab controller.
         viewController?.viewControllers = [home, news, fastLaughs, downloads]
     }
 }

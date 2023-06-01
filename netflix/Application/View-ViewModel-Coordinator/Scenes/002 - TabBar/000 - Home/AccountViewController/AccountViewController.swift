@@ -86,7 +86,7 @@ final class AccountViewController: UIViewController, Controller {
         viewModel?.coordinator = nil
         viewModel = nil
         
-        remove()
+        removeFromParent()
     }
 }
 
@@ -158,13 +158,17 @@ extension AccountViewController {
     }
     
     private func signOutDidComplete() {
-        let coordinator = Application.app.coordinator
-        
         ActivityIndicatorView.remove()
         
         backButtonDidTap()
         
-        mainQueueDispatch {
+        mainQueueDispatch { [weak self] in
+            guard let self = self else { return }
+            
+            self.viewWillDeallocate()
+            
+            let coordinator = Application.app.coordinator
+            coordinator.deallocateTabBar()
             coordinator.coordinate(to: .auth)
         }
     }

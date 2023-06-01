@@ -14,7 +14,7 @@ private protocol ViewModelProtocol {
     var mediaUseCase: MediaUseCase { get }
     
     var orientation: DeviceOrientation { get }
-    var myList: MyList { get }
+    var myList: MyListService { get }
     
     var sections: [Section] { get }
     var media: [Media] { get }
@@ -44,7 +44,7 @@ final class HomeViewModel {
     fileprivate lazy var mediaUseCase: MediaUseCase = createMediaUseCase()
     
     fileprivate let orientation = DeviceOrientation.shared
-    fileprivate let myList = MyList.shared
+    fileprivate let myList: MyListService = Application.app.services.myList
     
     private(set) lazy var sections = [Section]()
     private(set) lazy var media = [Media]()
@@ -56,8 +56,6 @@ final class HomeViewModel {
     var isSectionsEmpty: Bool { return sections.isEmpty }
     
     deinit {
-        print("deinit \(Self.self)")
-        
         coordinator = nil
     }
 }
@@ -85,6 +83,8 @@ extension HomeViewModel: ViewModel {
         showcasesWillFilter()
         
         dataSourceStateWillChange(.all)
+        
+        myList.viewModel = self
     }
 }
 
@@ -187,7 +187,7 @@ extension HomeViewModel: ViewModelProtocol {
                 return media.shuffled().filter { $0.type == "film" }
             }
         case .myList:
-            let media = myList.viewModel.list
+            let media = myList.list
             
             switch dataSourceState.value {
             case .all:

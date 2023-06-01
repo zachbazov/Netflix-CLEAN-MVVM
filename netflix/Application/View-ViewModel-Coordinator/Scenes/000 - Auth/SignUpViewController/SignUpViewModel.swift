@@ -57,10 +57,11 @@ extension SignUpViewModel: ViewModelProtocol {
         let authService = Application.app.services.auth
         let coordinator = Application.app.coordinator
         
-        guard let nameTextField = coordinator.authCoordinator.signUpController.nameTextField,
-              let emailTextField = coordinator.authCoordinator.signUpController.emailTextField,
-              let passTextField = coordinator.authCoordinator.signUpController.passwordTextField,
-              let passConfirmTextField = coordinator.authCoordinator.signUpController.passwordConfirmTextField else { return }
+        guard let nameTextField = coordinator.authCoordinator?.signUpController?.nameTextField,
+              let emailTextField = coordinator.authCoordinator?.signUpController?.emailTextField,
+              let passTextField = coordinator.authCoordinator?.signUpController?.passwordTextField,
+              let passConfirmTextField = coordinator.authCoordinator?.signUpController?.passwordConfirmTextField
+        else { return }
         
         nameTextField.resignFirstResponder()
         emailTextField.resignFirstResponder()
@@ -107,10 +108,10 @@ extension SignUpViewModel: ViewModelProtocol {
         mainQueueDispatch { [weak self] in
             guard let self = self else { return }
             
-            let nameTextField = self.coordinator?.signUpController.nameTextField
-            let emailTextField = self.coordinator?.signUpController.emailTextField
-            let passTextField = self.coordinator?.signUpController.passwordTextField
-            let passConfirmTextField = self.coordinator?.signUpController.passwordConfirmTextField
+            let nameTextField = self.coordinator?.signUpController?.nameTextField
+            let emailTextField = self.coordinator?.signUpController?.emailTextField
+            let passTextField = self.coordinator?.signUpController?.passwordTextField
+            let passConfirmTextField = self.coordinator?.signUpController?.passwordConfirmTextField
             
             guard status else {
                 nameTextField?.text = .toBlank()

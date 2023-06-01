@@ -12,7 +12,7 @@ import Foundation
 private protocol ViewModelProtocol {
     var media: Media? { get }
     var sectionAt: (MediaTableViewDataSource.Index) -> Section { get }
-    var myList: MyList { get }
+    var myList: MyListService { get }
 }
 
 // MARK: - PanelViewModel Type
@@ -22,7 +22,7 @@ final class PanelViewModel {
     
     var media: Media?
     let sectionAt: (MediaTableViewDataSource.Index) -> Section
-    let myList = MyList.shared
+    let myList: MyListService = Application.app.services.myList
     
     init(with viewModel: ShowcaseTableViewCellViewModel) {
         self.coordinator = viewModel.coordinator
@@ -35,6 +35,10 @@ final class PanelViewModel {
         
         self.media = showcase
         self.sectionAt = homeViewModel.section(at:)
+    }
+    
+    deinit {
+        media = nil
     }
 }
 

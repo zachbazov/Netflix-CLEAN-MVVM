@@ -18,15 +18,7 @@ final class MediaHybridCell<Cell>: UITableViewCell where Cell: UICollectionViewC
     var layout: CollectionViewLayout?
     
     deinit {
-        collectionView.removeFromSuperview()
-        
-        cell = nil
-        dataSource = nil
-        viewModel = nil
-        controllerViewModel = nil
-        layout = nil
-        
-        removeFromSuperview()
+        viewWillDeallocate()
     }
 }
 
@@ -56,11 +48,13 @@ extension MediaHybridCell: HybridCell {
     
     func viewWillDeallocate() {
         collectionView.removeFromSuperview()
+        cell?.removeFromSuperview()
         
+        cell = nil
         dataSource = nil
-        layout = nil
         viewModel = nil
         controllerViewModel = nil
+        layout = nil
         
         removeFromSuperview()
     }

@@ -21,6 +21,10 @@ final class DownloadsNavigationView: UIView {
     }
     
     required init?(coder: NSCoder) { fatalError() }
+    
+    deinit {
+        removeFromSuperview()
+    }
 }
 
 // MARK: - ViewInstantiable Implementation

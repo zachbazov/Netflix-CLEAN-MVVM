@@ -10,8 +10,17 @@ import Foundation
 // MARK: - Services Type
 
 final class Services {
-    private let dependencies: DI = DI.shared
+    lazy var auth = AuthService()
+    lazy var dataTransfer: DataTransferService = createDataTransferService()
+    lazy var myList = MyListService()
     
-    lazy var auth: AuthService = dependencies.resolve(AuthService.self)
-    lazy var dataTransfer: DataTransferService = dependencies.resolve(DataTransferService.self)
+    private func createDataTransferService() -> DataTransferService {
+        var configuration = Application.app.configuration
+        
+        guard let url = URL(string: configuration.api.urlString) else { fatalError() }
+        
+        let config = NetworkConfig(baseURL: url)
+        let networkService = NetworkService(config: config)
+        return DataTransferService(networkService: networkService)
+    }
 }

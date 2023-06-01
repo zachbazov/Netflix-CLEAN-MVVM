@@ -7,20 +7,6 @@
 
 import UIKit
 
-// MARK: - ViewControllerProtocol Type
-
-private protocol ViewControllerProtocol {
-    var dataSource: MediaTableViewDataSource? { get }
-    var navigationView: NavigationView? { get }
-    var navigationOverlay: NavigationOverlayView? { get }
-    var browseOverlayView: BrowseOverlayView? { get }
-    
-    func createDataSource()
-    func createNavigationView()
-    func createNavigationOverlay()
-    func createBrowseOverlay()
-}
-
 // MARK: - HomeViewController Type
 
 final class HomeViewController: UIViewController, Controller {
@@ -32,10 +18,10 @@ final class HomeViewController: UIViewController, Controller {
     
     var viewModel: HomeViewModel!
     
-    private(set) var dataSource: MediaTableViewDataSource?
-    private(set) var navigationView: NavigationView?
-    private(set) var navigationOverlay: NavigationOverlayView?
-    private(set) var browseOverlayView: BrowseOverlayView?
+    var dataSource: MediaTableViewDataSource?
+    var navigationView: NavigationView?
+    var navigationOverlay: NavigationOverlayView?
+    var browseOverlayView: BrowseOverlayView?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -74,24 +60,50 @@ final class HomeViewController: UIViewController, Controller {
         
         printIfDebug(.success, "Removed `\(Self.self)` observers.")
     }
+    
+    func viewWillDeallocate() {
+        viewWillUnbindObservers()
+        
+        tableView?.removeFromSuperview()
+        
+        navigationView?.viewWillDeallocate()
+        navigationOverlay?.viewWillDeallocate()
+        browseOverlayView?.viewWillDeallocate()
+        
+        dataSource = nil
+        navigationView = nil
+        navigationOverlay = nil
+        browseOverlayView = nil
+        
+        viewModel?.coordinator?.viewController?.removeFromParent()
+        viewModel?.coordinator?.account?.removeFromParent()
+        viewModel?.coordinator?.detail?.removeFromParent()
+        viewModel?.coordinator?.search?.removeFromParent()
+        
+        viewModel?.coordinator?.viewController = nil
+        viewModel?.coordinator = nil
+        viewModel = nil
+        
+        removeFromParent()
+    }
 }
 
-// MARK: - ViewControllerProtocol Implementation
+// MARK: - Private Implementation
 
-extension HomeViewController: ViewControllerProtocol {
-    fileprivate func createDataSource() {
+extension HomeViewController {
+    private func createDataSource() {
         dataSource = MediaTableViewDataSource(viewModel: viewModel)
     }
     
-    fileprivate func createNavigationView() {
+    private func createNavigationView() {
         navigationView = NavigationView(on: navigationViewContainer, with: viewModel)
     }
     
-    fileprivate func createNavigationOverlay() {
+    private func createNavigationOverlay() {
         navigationOverlay = NavigationOverlayView(on: navigationOverlayViewContainer, with: viewModel)
     }
     
-    fileprivate func createBrowseOverlay() {
+    private func createBrowseOverlay() {
         browseOverlayView = BrowseOverlayView(on: browseOverlayViewContainer, with: viewModel)
     }
 }

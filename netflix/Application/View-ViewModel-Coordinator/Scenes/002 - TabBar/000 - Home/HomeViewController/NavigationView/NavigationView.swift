@@ -48,6 +48,10 @@ final class NavigationView: UIView, View {
         self.viewDidLoad()
     }
     
+    deinit {
+        viewWillDeallocate()
+    }
+    
     required init?(coder: NSCoder) { fatalError() }
     
     func viewDidLoad() {
@@ -63,6 +67,21 @@ final class NavigationView: UIView, View {
     func viewHierarchyWillConfigure() {
         self.addToHierarchy(on: parent)
             .constraintToSuperview(parent)
+    }
+    
+    func viewWillDeallocate() {
+        navigationBar?.viewWillDeallocate()
+        segmentControl?.viewWillDeallocate()
+        
+        blur?.remove()
+        gradient?.remove()
+        
+        blur = nil
+        gradient = nil
+        
+        viewModel = nil
+        
+        removeFromSuperview()
     }
 }
 

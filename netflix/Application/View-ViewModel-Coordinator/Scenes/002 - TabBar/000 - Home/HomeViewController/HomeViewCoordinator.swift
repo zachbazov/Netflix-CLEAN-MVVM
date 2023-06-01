@@ -7,100 +7,19 @@
 
 import UIKit
 
-// MARK: - CoordinatorProtocol Type
-
-private protocol CoordinatorProtocol {
-    var detail: UINavigationController? { get }
-    var search: UINavigationController? { get }
-    var account: UINavigationController? { get }
-    
-    func createDetailNavigationController() -> UINavigationController?
-    func createSearchNavigationController() -> UINavigationController
-    func createAccountNavigationController() -> UINavigationController
-    
-    func deploy(_ screen: HomeViewCoordinator.Screen)
-}
-
 // MARK: - HomeViewCoordinator Type
 
 final class HomeViewCoordinator {
     var viewController: HomeViewController?
     
-    weak var detail: UINavigationController?
-    weak var search: UINavigationController?
-    weak var account: UINavigationController?
-}
-
-// MARK: - CoordinatorProtocol Implementation
-
-extension HomeViewCoordinator: CoordinatorProtocol {
-    fileprivate func createDetailNavigationController() -> UINavigationController? {
-        let coordinator = DetailViewCoordinator()
-        let controller = DetailViewController()
-        let viewModel = DetailViewModel()
-        
-        controller.viewModel = viewModel
-        controller.viewModel?.coordinator = coordinator
-        coordinator.viewController = controller
-        
-        let navigation = UINavigationController(rootViewController: controller)
-        navigation.setNavigationBarHidden(true, animated: false)
-        navigation.view.backgroundColor = .black
-        return navigation
-    }
+    private(set) var detail: UINavigationController?
+    private(set) var search: UINavigationController?
+    private(set) var account: UINavigationController?
     
-    fileprivate func createSearchNavigationController() -> UINavigationController {
-        let coordinator = SearchViewCoordinator()
-        let viewModel = SearchViewModel()
-        let controller = SearchViewController()
-        
-        controller.viewModel = viewModel
-        controller.viewModel?.coordinator = coordinator
-        coordinator.viewController = controller
-        
-        let navigation = UINavigationController(rootViewController: controller)
-        navigation.setNavigationBarHidden(true, animated: false)
-        navigation.navigationBar.tag = Screen.search.rawValue
-        return navigation
-    }
-    
-    func createAccountNavigationController() -> UINavigationController {
-        let coordinator = AccountViewCoordinator()
-        let viewModel = AccountViewModel()
-        let controller = AccountViewController()
-        
-        controller.viewModel = viewModel
-        controller.viewModel.coordinator = coordinator
-        coordinator.viewController = controller
-        
-        let navigation = UINavigationController(rootViewController: controller)
-        navigation.setNavigationBarHidden(true, animated: false)
-        return navigation
-    }
-    
-    fileprivate func deploy(_ screen: Screen) {
-        switch screen {
-        case .detail:
-            guard let navigation = detail else { return }
-            
-            viewController?.present(navigation, animated: true)
-        case .search:
-            guard let navigation = search, let view = viewController?.view else { return }
-            viewController?.add(child: navigation, container: view)
-            
-            guard let controller = navigation.viewControllers.first as? SearchViewController else { return }
-            controller.viewWillAnimateAppearance()
-        case .account:
-            guard let navigation = account, let view = viewController?.view else { return }
-            viewController?.add(child: navigation, container: view)
-            
-            guard let controller = navigation.viewControllers.first as? AccountViewController else { return }
-            controller.viewWillAnimateAppearance()
-        case .browse:
-            guard let controller = viewController else { return }
-            
-            controller.browseOverlayView?.viewModel.isPresentedWillChange(true)
-        }
+    deinit {
+        viewController?.viewModel = nil
+        viewController?.removeFromParent()
+        viewController = nil
     }
 }
 
@@ -119,12 +38,80 @@ extension HomeViewCoordinator: Coordinator {
     /// - Parameter screen: The screen to be allocated and presented.
     func coordinate(to screen: Screen) {
         switch screen {
-        case .detail: detail = createDetailNavigationController()
-        case .search: search = createSearchNavigationController()
-        case .account: account = createAccountNavigationController()
-        case .browse: break
+        case .detail:
+            detail = createDetailNavigationController()
+            
+            guard let navigation = detail else { return }
+            
+            viewController?.present(navigation, animated: true)
+        case .search:
+            search = createSearchNavigationController()
+            
+            guard let navigation = search, let view = viewController?.view else { return }
+            viewController?.add(child: navigation, container: view)
+            
+            guard let controller = navigation.viewControllers.first as? SearchViewController else { return }
+            controller.viewWillAnimateAppearance()
+        case .account:
+            account = createAccountNavigationController()
+            
+            guard let navigation = account, let view = viewController?.view else { return }
+            viewController?.add(child: navigation, container: view)
+            
+            guard let controller = navigation.viewControllers.first as? AccountViewController else { return }
+            controller.viewWillAnimateAppearance()
+        case .browse:
+            guard let controller = viewController else { return }
+            
+            controller.browseOverlayView?.viewModel.isPresentedWillChange(true)
         }
+    }
+}
+
+// MARK: - Private Implementation
+
+extension HomeViewCoordinator {
+    private func createDetailNavigationController() -> UINavigationController? {
+        let coordinator = DetailViewCoordinator()
+        let controller = DetailViewController()
+        let viewModel = DetailViewModel()
         
-        deploy(screen)
+        controller.viewModel = viewModel
+        controller.viewModel?.coordinator = coordinator
+        coordinator.viewController = controller
+        
+        let navigation = UINavigationController(rootViewController: controller)
+        navigation.setNavigationBarHidden(true, animated: false)
+        navigation.view.backgroundColor = .black
+        return navigation
+    }
+    
+    private func createSearchNavigationController() -> UINavigationController {
+        let coordinator = SearchViewCoordinator()
+        let viewModel = SearchViewModel()
+        let controller = SearchViewController()
+        
+        controller.viewModel = viewModel
+        controller.viewModel?.coordinator = coordinator
+        coordinator.viewController = controller
+        
+        let navigation = UINavigationController(rootViewController: controller)
+        navigation.setNavigationBarHidden(true, animated: false)
+        navigation.navigationBar.tag = Screen.search.rawValue
+        return navigation
+    }
+    
+    private func createAccountNavigationController() -> UINavigationController {
+        let coordinator = AccountViewCoordinator()
+        let viewModel = AccountViewModel()
+        let controller = AccountViewController()
+        
+        controller.viewModel = viewModel
+        controller.viewModel.coordinator = coordinator
+        coordinator.viewController = controller
+        
+        let navigation = UINavigationController(rootViewController: controller)
+        navigation.setNavigationBarHidden(true, animated: false)
+        return navigation
     }
 }

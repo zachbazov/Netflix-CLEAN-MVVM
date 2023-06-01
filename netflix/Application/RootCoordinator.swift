@@ -10,11 +10,9 @@ import UIKit
 // MARK: - RootCoordinator Type
 
 final class RootCoordinator {
-    private let dependencies: DI = DI.shared
-    
-    private(set) lazy var authCoordinator: AuthCoordinator = dependencies.resolve(AuthCoordinator.self)
-    private(set) lazy var profileCoordinator: ProfileCoordinator = dependencies.resolve(ProfileCoordinator.self)
-    private(set) lazy var tabCoordinator: TabBarCoordinator = dependencies.resolve(TabBarCoordinator.self)
+    var authCoordinator: AuthCoordinator?
+    var profileCoordinator: ProfileCoordinator?
+    var tabCoordinator: TabBarCoordinator?
     
     weak var viewController: UIViewController?
     weak var window: UIWindow? {
@@ -39,19 +37,94 @@ extension RootCoordinator: Coordinator {
     func coordinate(to screen: Screen) {
         switch screen {
         case .auth:
-            window?.rootViewController = authCoordinator.viewController
+            authCoordinator = createAuthCoordinator()
             
-            authCoordinator.coordinate(to: .landpage)
+            window?.rootViewController = authCoordinator?.viewController
+            
+            authCoordinator?.coordinate(to: .landpage)
         case .profile:
-            window?.rootViewController = profileCoordinator.viewController
+            if authCoordinator != nil {
+                deallocateAuth()
+            }
             
-            profileCoordinator.coordinate(to: .userProfile)
+            profileCoordinator = createProfileCoordinator()
+            
+            window?.rootViewController = profileCoordinator?.viewController
+            
+            profileCoordinator?.coordinate(to: .userProfile)
         case .tabBar:
-            tabCoordinator = DI.shared.resolve(TabBarCoordinator.self)
+            if profileCoordinator != nil {
+                deallocateProfile()
+            }
             
-            window?.rootViewController = tabCoordinator.viewController
+            tabCoordinator = createTabBarCoordinator()
             
-            tabCoordinator.coordinate(to: .home)
+            window?.rootViewController = tabCoordinator?.viewController
+            
+            tabCoordinator?.coordinate(to: .home)
         }
+    }
+}
+
+// MARK: - Private Implementation
+
+extension RootCoordinator {
+    private func createAuthCoordinator() -> AuthCoordinator {
+        let coordinator = AuthCoordinator()
+        let controller = AuthController()
+        let viewModel = AuthViewModel()
+        controller.viewModel = viewModel
+        controller.viewModel.coordinator = coordinator
+        coordinator.viewController = controller
+        return coordinator
+    }
+    
+    private func createProfileCoordinator() -> ProfileCoordinator {
+        let controller = ProfileController()
+        let viewModel = ProfileViewModel()
+        let coordinator = ProfileCoordinator()
+        controller.viewModel = viewModel
+        controller.viewModel.coordinator = coordinator
+        coordinator.viewController = controller
+        return coordinator
+    }
+    
+    private func createTabBarCoordinator() -> TabBarCoordinator {
+        let controller = TabBarController()
+        let viewModel = TabBarViewModel()
+        let coordinator = TabBarCoordinator()
+        controller.viewModel = viewModel
+        controller.viewModel.coordinator = coordinator
+        coordinator.viewController = controller
+        return coordinator
+    }
+    
+    private func didDeallocate() {
+        window?.rootViewController?.removeFromParent()
+        window?.rootViewController = nil
+        
+        viewController?.removeFromParent()
+        viewController = nil
+    }
+    
+    private func deallocateAuth() {
+        authCoordinator?.removeViewControllers()
+        authCoordinator = nil
+        
+        didDeallocate()
+    }
+    
+    private func deallocateTabBar() {
+        tabCoordinator?.removeViewControllers()
+        tabCoordinator = nil
+        
+        didDeallocate()
+    }
+    
+    private func deallocateProfile() {
+        profileCoordinator?.removeViewControllers()
+        profileCoordinator = nil
+        
+        didDeallocate()
     }
 }

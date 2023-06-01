@@ -10,9 +10,12 @@ import Foundation
 // MARK: - Stores Type
 
 final class Stores {
-    private let dependencies: DI = DI.shared
+    lazy var userResponses: UserHTTPResponseStore = loadUserPersistentStore()
+    lazy var mediaResponses = MediaHTTPResponseStore()
+    lazy var sectionResponses = SectionHTTPResponseStore()
     
-    lazy var userResponses: UserHTTPResponseStore = dependencies.resolve(UserHTTPResponseStore.self)
-    lazy var mediaResponses: MediaHTTPResponseStore = dependencies.resolve(MediaHTTPResponseStore.self)
-    lazy var sectionResponses: SectionHTTPResponseStore = dependencies.resolve(SectionHTTPResponseStore.self)
+    private func loadUserPersistentStore() -> UserHTTPResponseStore {
+        let authService = Application.app.services.auth
+        return UserHTTPResponseStore(authService: authService)
+    }
 }

@@ -22,7 +22,6 @@ private protocol DataSourceProtocol {
 // MARK: - MediaTableViewDataSource Type
 
 final class MediaTableViewDataSource: TableViewDataSource {
-    
     fileprivate let viewModel: HomeViewModel
     
     var showcaseCell: ShowcaseTableViewCell?
@@ -36,6 +35,13 @@ final class MediaTableViewDataSource: TableViewDataSource {
         super.init()
         
         self.setContentInset()
+    }
+    
+    deinit {
+        print("deinit \(Self.self)")
+        showcaseCell?.viewWillDeallocate()
+        showcaseCell?.removeFromSuperview()
+        showcaseCell = nil
     }
     
     // MARK: TableViewDataSourceProtocol Implementation

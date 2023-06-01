@@ -7,13 +7,6 @@
 
 import UIKit
 
-// MARK: - ControllerProtocol Type
-
-private protocol ControllerProtocol {
-    var navigationView: DownloadsNavigationView { get }
-    var downloadsView: DownloadsView { get }
-}
-
 // MARK: - DownloadsViewController Type
 
 final class DownloadsViewController: UIViewController, Controller {
@@ -22,28 +15,49 @@ final class DownloadsViewController: UIViewController, Controller {
     
     var viewModel: DownloadsViewModel!
     
-    fileprivate lazy var navigationView: DownloadsNavigationView = createDownloadsNavigationView()
-    fileprivate lazy var downloadsView: DownloadsView = createDownloadsView()
+    var navigationView: DownloadsNavigationView?
+    var downloadsView: DownloadsView?
+    
+    deinit {
+        printIfDebug(.debug, "deinit \(Self.self)")
+        
+        viewWillDeallocate()
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        viewWillDeploySubviews()
         viewHierarchyWillConfigure()
     }
     
+    func viewWillDeploySubviews() {
+        navigationView = createDownloadsNavigationView()
+        downloadsView = createDownloadsView()
+    }
+    
     func viewHierarchyWillConfigure() {
-        navigationView
+        navigationView?
             .addToHierarchy(on: navigationViewContainer)
             .constraintToSuperview(navigationViewContainer)
         
-        downloadsView
+        downloadsView?
             .addToHierarchy(on: downloadsViewContainer)
             .constraintToSuperview(downloadsViewContainer)
     }
+    
+    func viewWillDeallocate() {
+        navigationView?.removeFromSuperview()
+        navigationView = nil
+        downloadsView?.removeFromSuperview()
+        downloadsView = nil
+        
+        viewModel?.coordinator?.viewController = nil
+        viewModel?.coordinator = nil
+        viewModel = nil
+        
+        removeFromParent()
+    }
 }
-
-// MARK: - ControllerProtocol Implementation
-
-extension DownloadsViewController: ControllerProtocol {}
 
 // MARK: - Private Implementation
 

@@ -9,12 +9,7 @@ import Foundation
 
 // MARK: - List Type
 
-final class List<T> {
+struct List<T> {
     let user: String
     var media: [T]
-    
-    init(user: String, media: [T]) {
-        self.user = user
-        self.media = media
-    }
 }

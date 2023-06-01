@@ -24,13 +24,13 @@ private protocol ViewControllerProtocol {
 // MARK: - UserProfileViewController Type
 
 final class UserProfileViewController: UIViewController, Controller {
-    fileprivate lazy var collectionView: UICollectionView = createCollectionView()
+    fileprivate(set) lazy var collectionView: UICollectionView = createCollectionView()
     fileprivate(set) lazy var dataSource: ProfileCollectionViewDataSource = createDataSource()
     
     var viewModel: ProfileViewModel!
     
     deinit {
-        print("deinit \(String(describing: Self.self))")
+        viewWillDeallocate()
     }
     
     override func viewDidLoad() {
@@ -51,6 +51,15 @@ final class UserProfileViewController: UIViewController, Controller {
                                                             target: self,
                                                             action: #selector(editDidTap))
         setupCollectionView()
+    }
+    
+    func viewWillDeallocate() {
+        collectionView.removeFromSuperview()
+        dataSource.collectionView.removeFromSuperview()
+        
+        viewModel = nil
+        
+        removeFromParent()
     }
 }
 

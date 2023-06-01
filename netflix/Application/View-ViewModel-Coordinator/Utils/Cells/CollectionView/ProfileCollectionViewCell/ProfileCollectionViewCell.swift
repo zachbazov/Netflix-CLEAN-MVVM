@@ -21,9 +21,9 @@ final class ProfileCollectionViewCell: UICollectionViewCell, CollectionViewCell 
     var representedIdentifier: NSString!
     var indexPath: IndexPath!
     
-    var imageService: AsyncImageService = AsyncImageService.shared
-    
     deinit {
+        printIfDebug(.debug, "deinit \(Self.self)")
+        
         viewWillDeallocate()
     }
     
