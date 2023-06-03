@@ -38,8 +38,6 @@ extension MediaUseCase: UseCase {
                     completion: @escaping (Result<T, DataTransferError>) -> Void) -> Cancellable? where T: Decodable {
         switch endpoint {
         case .getAllMedia:
-            let cached = cached as? ((MediaHTTPDTO.Response?) -> Void) ?? { _ in }
-            let completion = completion as? ((Result<MediaHTTPDTO.Response, DataTransferError>) -> Void) ?? { _ in }
             return repository.find(request: request, cached: cached, completion: completion)
         case .getTopSearches:
             let completion = completion as? ((Result<SearchHTTPDTO.Response, DataTransferError>) -> Void) ?? { _ in }

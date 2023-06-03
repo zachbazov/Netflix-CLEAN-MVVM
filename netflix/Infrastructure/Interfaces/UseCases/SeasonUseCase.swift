@@ -38,4 +38,8 @@ extension SeasonUseCase: UseCase {
             return repository.find(request: request, cached: cached, completion: completion)
         }
     }
+    
+    func request<T>(endpoint: Endpoints, for response: T.Type, request: Any?) async -> T? where T: Decodable {
+        return nil
+    }
 }

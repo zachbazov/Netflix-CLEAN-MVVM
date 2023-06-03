@@ -21,22 +21,6 @@ protocol NetworkRequestable {
     func request<T>(endpoint: E, for response: T.Type, request: Any?) async -> T? where T: Decodable
 }
 
-// MARK: - NetworkRequestable Implementation
-
-extension UseCase {
-    func request<T>(endpoint: E,
-                    for response: T.Type,
-                    request: Any?,
-                    cached: @escaping (T?) -> Void,
-                    completion: @escaping (Result<T, DataTransferError>) -> Void) -> Cancellable? where T: Decodable {
-        return nil
-    }
-    
-    func request<T>(endpoint: E, for response: T.Type, request: Any?) async -> T? where T: Decodable {
-        return nil
-    }
-}
-
 // MARK: - UseCase Type
 
 protocol UseCase: NetworkRequestable {

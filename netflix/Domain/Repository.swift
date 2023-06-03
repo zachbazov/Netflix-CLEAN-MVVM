@@ -69,4 +69,6 @@ protocol Taskable {
 
 // MARK: - Repository Type
 
-protocol Repository: Taskable, DataServiceTransferable, RepositoryRequestable {}
+protocol Repository: Taskable,
+                     DataServiceTransferable,
+                     RepositoryRequestable {}

@@ -52,14 +52,10 @@ extension UserUseCase: UseCase {
             let completion = completion as? ((Result<VoidHTTPDTO.Response, DataTransferError>) -> Void) ?? { _ in }
             return repository.signOut(completion: completion)
         case .updateUserData:
-            guard let request = request as? UserHTTPDTO.Request else { return nil }
-            let completion = completion as? ((Result<UserHTTPDTO.Response, DataTransferError>) -> Void) ?? { _ in }
             return repository.update(request: request, completion: completion)
         case .getUserProfiles:
             return repository.find(request: request, cached: cached, completion: completion)
         case .createUserProfile:
-            guard let request = request as? ProfileHTTPDTO.POST.Request else { return nil }
-            let completion = completion as? ((Result<ProfileHTTPDTO.POST.Response, DataTransferError>) -> Void) ?? { _ in }
             return repository.create(request: request, completion: completion)
         }
     }
@@ -79,14 +75,10 @@ extension UserUseCase: UseCase {
             
             return await repository.signOut(request: request) as? T
         case .updateUserData:
-            guard let request = request as? UserHTTPDTO.Request else { return nil }
-            
             return await repository.update(request: request)
         case .getUserProfiles:
             return await repository.find(request: request)
         case .createUserProfile:
-            guard let request = request as? ProfileHTTPDTO.POST.Request else { return nil }
-            
             return await repository.create(request: request)
         }
     }
