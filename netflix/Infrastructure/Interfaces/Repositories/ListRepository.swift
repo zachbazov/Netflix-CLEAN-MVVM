@@ -53,9 +53,9 @@ extension ListRepository: ListRepositoryRouting {
 // MARK: - ListRepositoryProtocol Implementation
 
 extension ListRepository {
-    func getOne<T, U>(request: U,
-                      cached: @escaping (T?) -> Void,
-                      completion: @escaping (Result<T, Error>) -> Void) -> Cancellable? where T: Decodable, U: Decodable {
+    func find<T>(request: Any?,
+                 cached: @escaping (T?) -> Void,
+                 completion: @escaping (Result<T, DataTransferError>) -> Void) -> Cancellable? where T: Decodable {
         guard let request = request as? ListHTTPDTO.GET.Request else { return nil }
         
         let requestDTO = ListHTTPDTO.GET.Request(user: request.user)
@@ -76,8 +76,7 @@ extension ListRepository {
         return task
     }
     
-    func updateOne<T, U>(request: U,
-                         completion: @escaping (Result<T, Error>) -> Void) -> Cancellable? where T: Decodable, U: Decodable {
+    func update<T>(request: Any?, completion: @escaping (Result<T, DataTransferError>) -> Void) -> Cancellable? where T: Decodable {
         guard let request = request as? ListHTTPDTO.PATCH.Request else { return nil }
         
         let task = RepositoryTask()
@@ -99,7 +98,7 @@ extension ListRepository {
         return task
     }
     
-    func getOne<T, U>(request: U) async -> T? where T: Decodable, U: Decodable {
+    func find<T>(request: Any?) async -> T? where T: Decodable {
         guard let request = request as? ListHTTPDTO.GET.Request else { return nil }
         
         let endpoint = ListRepository.getMyList(with: request)
@@ -112,7 +111,7 @@ extension ListRepository {
         return nil
     }
     
-    func updateOne<T, U>(request: U) async -> T? where T: Decodable, U: Decodable {
+    func update<T>(request: Any?) async -> T? where T: Decodable {
         guard let request = request as? ListHTTPDTO.PATCH.Request else { return nil }
         
         let endpoint = ListRepository.updateMyList(with: request)

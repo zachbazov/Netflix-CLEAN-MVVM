@@ -10,93 +10,53 @@ import Foundation
 // MARK: - RepositoryRequestable Type
 
 protocol RepositoryRequestable {
-    func getAll<T>(cached: @escaping (T?) -> Void,
-                   completion: @escaping (Result<T, DataTransferError>) -> Void) -> Cancellable? where T: Decodable
-    func getAll<T, U>(request: U,
-                      completion: @escaping (Result<T, DataTransferError>) -> Void) -> Cancellable? where T: Decodable, U: Decodable
-    func getOne<T, U>(request: U,
-                      cached: @escaping (T?) -> Void,
-                      completion: @escaping (Result<T, DataTransferError>) -> Void) -> Cancellable? where T: Decodable, U: Decodable
-    func createOne<T, U>(request: U,
-                         completion: @escaping (Result<T, DataTransferError>) -> Void) -> Cancellable? where T: Decodable, U: Decodable
-    func updateOne<T, U>(request: U,
-                         completion: @escaping (Result<T, DataTransferError>) -> Void) -> Cancellable? where T: Decodable, U: Decodable
-    func deleteAll<T>(completion: @escaping (Result<T, DataTransferError>) -> Void) -> Cancellable? where T: Decodable
-    func deleteOne<T, U>(request: U,
-                         completion: @escaping (Result<T, DataTransferError>) -> Void) -> Cancellable? where T: Decodable, U: Decodable
+    func find<T>(request: Any?,
+                 cached: @escaping (T?) -> Void,
+                 completion: @escaping (Result<T, DataTransferError>) -> Void) -> Cancellable? where T: Decodable
+    func create<T>(request: Any?, completion: @escaping (Result<T, DataTransferError>) -> Void) -> Cancellable? where T: Decodable
+    func update<T>(request: Any?, completion: @escaping (Result<T, DataTransferError>) -> Void) -> Cancellable? where T: Decodable
+    func delete<T>(request: Any?, completion: @escaping (Result<T, DataTransferError>) -> Void) -> Cancellable? where T: Decodable
     
-    func getAll<T>() async -> T? where T: Decodable
-    func getAll<T, U>(request: U) async -> T? where T: Decodable, U: Decodable
-    func getOne<T, U>(request: U) async -> T? where T: Decodable, U: Decodable
-    func createOne<T, U>(request: U) async -> T? where T: Decodable, U: Decodable
-    func updateOne<T, U>(request: U) async -> T? where T: Decodable, U: Decodable
-    func deleteAll<T>() async -> T? where T: Decodable
-    func deleteOne<T, U>(request: U) async -> T? where T: Decodable, U: Decodable
+    func find<T>(request: Any?) async -> T? where T: Decodable
+    func create<T>(request: Any?) async -> T? where T: Decodable
+    func update<T>(request: Any?) async -> T? where T: Decodable
+    func delete<T>(request: Any?) async -> T? where T: Decodable
 }
 
 // MARK: - RepositoryRequestable Implementation
 
 extension RepositoryRequestable {
-    func getAll<T>(cached: @escaping (T?) -> Void,
-                   completion: @escaping (Result<T, DataTransferError>) -> Void) -> Cancellable? where T: Decodable {
+    func find<T>(request: Any?,
+                 cached: @escaping (T?) -> Void,
+                 completion: @escaping (Result<T, DataTransferError>) -> Void) -> Cancellable? where T: Decodable {
         return nil
     }
     
-    func getAll<T, U>(request: U,
-                      completion: @escaping (Result<T, DataTransferError>) -> Void) -> Cancellable? where T: Decodable, U: Decodable {
+    func create<T>(request: Any?, completion: @escaping (Result<T, DataTransferError>) -> Void) -> Cancellable? where T: Decodable {
         return nil
     }
     
-    func getOne<T, U>(request: U,
-                      cached: @escaping (T?) -> Void,
-                      completion: @escaping (Result<T, DataTransferError>) -> Void) -> Cancellable? where T: Decodable, U: Decodable {
+    func update<T>(request: Any?, completion: @escaping (Result<T, DataTransferError>) -> Void) -> Cancellable? where T: Decodable {
         return nil
     }
     
-    func createOne<T, U>(request: U,
-                         completion: @escaping (Result<T, DataTransferError>) -> Void) -> Cancellable? where T: Decodable, U: Decodable {
+    func delete<T>(request: Any?, completion: @escaping (Result<T, DataTransferError>) -> Void) -> Cancellable? where T: Decodable {
         return nil
     }
     
-    func updateOne<T, U>(request: U,
-                         completion: @escaping (Result<T, DataTransferError>) -> Void) -> Cancellable? where T: Decodable, U: Decodable {
+    func find<T>(request: Any?) async -> T? where T: Decodable {
         return nil
     }
     
-    func deleteAll<T>(completion: @escaping (Result<T, DataTransferError>) -> Void) -> Cancellable? where T: Decodable {
+    func create<T>(request: Any?) async -> T? where T: Decodable {
         return nil
     }
     
-    func deleteOne<T, U>(request: U,
-                         completion: @escaping (Result<T, DataTransferError>) -> Void) -> Cancellable? where T: Decodable, U: Decodable {
+    func update<T>(request: Any?) async -> T? where T: Decodable {
         return nil
     }
     
-    func getAll<T>() async -> T? where T: Decodable {
-        return nil
-    }
-    
-    func getAll<T, U>(request: U) async -> T? where T: Decodable, U: Decodable {
-        return nil
-    }
-    
-    func getOne<T, U>(request: U) async -> T? where T: Decodable, U: Decodable {
-        return nil
-    }
-    
-    func createOne<T, U>(request: U) async -> T? where T: Decodable, U: Decodable {
-        return nil
-    }
-    
-    func updateOne<T, U>(request: U) async -> T? where T: Decodable, U: Decodable {
-        return nil
-    }
-    
-    func deleteAll<T>() async -> T? where T: Decodable {
-        return nil
-    }
-    
-    func deleteOne<T, U>(request: U) async -> T? where T: Decodable, U: Decodable {
+    func delete<T>(request: Any?) async -> T? where T: Decodable {
         return nil
     }
 }

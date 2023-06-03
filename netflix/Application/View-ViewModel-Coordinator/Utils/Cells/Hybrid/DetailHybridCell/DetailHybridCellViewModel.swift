@@ -99,7 +99,7 @@ extension DetailHybridCellViewModel {
             endpoint: .getSeason,
             for: SeasonHTTPDTO.Response.self,
             request: request,
-            cached: nil,
+            cached: { _ in },
             completion: { [weak self] result in
                 if case let .success(responseDTO) = result {
                     guard var season = responseDTO.data.first else { return }

@@ -274,7 +274,7 @@ extension HomeViewModel: DataProviderProtocol {
         sectionUseCase.repository.task = sectionUseCase.request(
             endpoint: .getSections,
             for: SectionHTTPDTO.Response.self,
-            request: SectionHTTPDTO.Request.self,
+            request: nil,
             cached: { [weak self] response in
                 guard let self = self, let response = response else { return }
                 
@@ -342,7 +342,7 @@ extension HomeViewModel: DataProviderProtocol {
     }
     
     fileprivate func sectionsDidLoad() async {
-        let response = await sectionUseCase.request(endpoint: .getSections, for: SectionHTTPDTO.Response.self)
+        let response = await sectionUseCase.request(endpoint: .getSections, for: SectionHTTPDTO.Response.self, request: nil)
         
         guard let sections = response?.data.toDomain() else { return }
         
@@ -350,7 +350,7 @@ extension HomeViewModel: DataProviderProtocol {
     }
     
     fileprivate func mediaDidLoad() async {
-        let response = await mediaUseCase.request(endpoint: .getAllMedia, for: MediaHTTPDTO.Response.self)
+        let response = await mediaUseCase.request(endpoint: .getAllMedia, for: MediaHTTPDTO.Response.self, request: nil)
         
         guard let media = response?.data.toDomain() else { return }
         
@@ -358,7 +358,7 @@ extension HomeViewModel: DataProviderProtocol {
     }
     
     fileprivate func topSearchesDidLoad() async {
-        let response = await mediaUseCase.request(endpoint: .getTopSearches, for: SearchHTTPDTO.Response.self)
+        let response = await mediaUseCase.request(endpoint: .getTopSearches, for: SearchHTTPDTO.Response.self, request: nil)
         
         guard let media = response?.data.toDomain() else { return }
         

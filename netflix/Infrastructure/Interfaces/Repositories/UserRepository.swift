@@ -7,9 +7,9 @@
 
 import Foundation
 
-// MARK: - UserRepositoryEndpointing Type
+// MARK: - UserRepositoryURLReferrable Type
 
-protocol UserRepositoryEndpointing {
+protocol UserRepositoryURLReferrable {
     static func signUp(with request: UserHTTPDTO.Request) -> Endpoint<UserHTTPDTO.Response>
     static func signIn(with request: UserHTTPDTO.Request) -> Endpoint<UserHTTPDTO.Response>
     static func signOut(with request: UserHTTPDTO.Request) -> Endpoint<VoidHTTPDTO.Response>?
@@ -46,9 +46,9 @@ final class UserRepository: Repository {
     }
 }
 
-// MARK: - UserRepositoryEndpointing Implementation
+// MARK: - UserRepositoryURLReferrable Implementation
 
-extension UserRepository: UserRepositoryEndpointing {
+extension UserRepository: UserRepositoryURLReferrable {
     static func signUp(with request: UserHTTPDTO.Request) -> Endpoint<UserHTTPDTO.Response> {
         return Endpoint(path: "api/v1/users/signup",
                         method: .post,
@@ -228,7 +228,9 @@ extension UserRepository: UserAuthenticating {
 // MARK: - RepositoryRequestable Implementation
 
 extension UserRepository {
-    func getAll<T, U>(request: U, completion: @escaping (Result<T, DataTransferError>) -> Void) -> Cancellable? where T: Decodable, U: Decodable {
+    func find<T>(request: Any?,
+                 cached: @escaping (T?) -> Void,
+                 completion: @escaping (Result<T, DataTransferError>) -> Void) -> Cancellable? where T: Decodable {
         switch request {
         case let request as ProfileHTTPDTO.GET.Request:
             let task = RepositoryTask()
@@ -251,7 +253,7 @@ extension UserRepository {
         }
     }
     
-    func createOne<T, U>(request: U, completion: @escaping (Result<T, DataTransferError>) -> Void) -> Cancellable? where T: Decodable, U: Decodable {
+    func create<T>(request: Any?, completion: @escaping (Result<T, DataTransferError>) -> Void) -> Cancellable? where T: Decodable {
         switch request {
         case let request as ProfileHTTPDTO.POST.Request:
             let task = RepositoryTask()
@@ -274,7 +276,7 @@ extension UserRepository {
         }
     }
     
-    func updateOne<T, U>(request: U, completion: @escaping (Result<T, DataTransferError>) -> Void) -> Cancellable? where T: Decodable, U: Decodable {
+    func update<T>(request: Any?, completion: @escaping (Result<T, DataTransferError>) -> Void) -> Cancellable? where T: Decodable {
         switch request {
         case let request as UserHTTPDTO.Request:
             let task = RepositoryTask()
@@ -297,7 +299,7 @@ extension UserRepository {
         }
     }
     
-    func getAll<T, U>(request: U) async -> T? where T: Decodable, U: Decodable {
+    func find<T>(request: Any?) async -> T? where T: Decodable {
         switch request {
         case let request as ProfileHTTPDTO.GET.Request:
             let endpoint = UserRepository.getUserProfiles(with: request)
@@ -313,7 +315,7 @@ extension UserRepository {
         }
     }
     
-    func createOne<T, U>(request: U) async -> T? where T: Decodable, U: Decodable {
+    func create<T>(request: Any?) async -> T? where T: Decodable {
         switch request {
         case let request as ProfileHTTPDTO.POST.Request:
             let endpoint = UserRepository.createUserProfile(with: request)
@@ -329,7 +331,7 @@ extension UserRepository {
         }
     }
     
-    func updateOne<T, U>(request: U) async -> T? where T: Decodable, U: Decodable {
+    func update<T>(request: Any?) async -> T? where T: Decodable {
         switch request {
         case let request as UserHTTPDTO.Request:
             let authService = Application.app.services.auth

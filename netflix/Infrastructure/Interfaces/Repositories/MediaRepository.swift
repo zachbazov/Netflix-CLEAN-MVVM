@@ -84,8 +84,9 @@ extension MediaRepository: MediaRepositoryRouting {
 // MARK: - RepositoryRequestable Implementation
 
 extension MediaRepository {
-    func getAll<T>(cached: @escaping (T?) -> Void,
-                   completion: @escaping (Result<T, Error>) -> Void) -> Cancellable? where T: Decodable {
+    func find<T>(request: Any?,
+                 cached: @escaping (T?) -> Void,
+                 completion: @escaping (Result<T, DataTransferError>) -> Void) -> Cancellable? where T: Decodable {
         let task = RepositoryTask()
         
         persistentStore.getResponse { [weak self] result in
@@ -113,48 +114,9 @@ extension MediaRepository {
         return task
     }
     
-    func getAll<T>() async -> T? where T: Decodable {
-        guard let cached = await persistentStore.getResponse() else {
-            let endpoint = MediaRepository.getAllMedia()
-            let result = await dataTransferService.request(with: endpoint)
-            
-            if case let .success(response) = result {
-                persistentStore.save(response: response)
-                
-                return response as? T
-            }
-            
-            return nil
-        }
-        
-        return cached as? T
-    }
-    
-    func getOne<T, U>(request: U,
-                      cached: @escaping (T?) -> Void,
-                      completion: @escaping (Result<T, Error>) -> Void) -> Cancellable? where T: Decodable, U: Decodable {
-        guard let request = request as? MediaHTTPDTO.Request else { return nil }
-        let requestDTO = MediaHTTPDTO.Request(id: request.id, slug: request.slug)
-        let task = RepositoryTask()
-        
-        guard !task.isCancelled else { return nil }
-        
-        let endpoint = MediaRepository.getMedia(with: requestDTO)
-        task.networkTask = dataTransferService.request(with: endpoint) { result in
-            switch result {
-            case .success(let response):
-                completion(.success(response as! T))
-            case .failure(let error):
-                completion(.failure(error))
-            }
-        }
-        
-        return task
-    }
-    
     func search(requestDTO: SearchHTTPDTO.Request,
                 cached: @escaping (SearchHTTPDTO.Response) -> Void,
-                completion: @escaping (Result<SearchHTTPDTO.Response, Error>) -> Void) -> Cancellable? {
+                completion: @escaping (Result<SearchHTTPDTO.Response, DataTransferError>) -> Void) -> Cancellable? {
         let task = RepositoryTask()
         
         guard !task.isCancelled else { return nil }
@@ -184,7 +146,7 @@ extension MediaRepository {
         return nil
     }
     
-    func getUpcomings(completion: @escaping (Result<NewsHTTPDTO.Response, Error>) -> Void) -> Cancellable? {
+    func getUpcomings(completion: @escaping (Result<NewsHTTPDTO.Response, DataTransferError>) -> Void) -> Cancellable? {
         let params = ["isNewRelease": true]
         let requestDTO = NewsHTTPDTO.Request(queryParams: params)
         let task = RepositoryTask()
@@ -203,6 +165,23 @@ extension MediaRepository {
         return task
     }
     
+    func find<T>(request: Any?) async -> T? where T: Decodable {
+        guard let cached = await persistentStore.getResponse() else {
+            let endpoint = MediaRepository.getAllMedia()
+            let result = await dataTransferService.request(with: endpoint)
+            
+            if case let .success(response) = result {
+                persistentStore.save(response: response)
+                
+                return response as? T
+            }
+            
+            return nil
+        }
+        
+        return cached as? T
+    }
+    
     func getUpcomings() async -> NewsHTTPDTO.Response? {
         let params = ["isNewRelease": true]
         let request = NewsHTTPDTO.Request(queryParams: params)
@@ -216,7 +195,7 @@ extension MediaRepository {
         return nil
     }
     
-    func getTopSearches(completion: @escaping (Result<SearchHTTPDTO.Response, Error>) -> Void) -> Cancellable? {
+    func getTopSearches(completion: @escaping (Result<SearchHTTPDTO.Response, DataTransferError>) -> Void) -> Cancellable? {
         let task = RepositoryTask()
         
         guard !task.isCancelled else { return nil }

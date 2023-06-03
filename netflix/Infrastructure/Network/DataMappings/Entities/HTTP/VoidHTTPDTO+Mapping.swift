@@ -10,7 +10,7 @@ import Foundation
 // MARK: - VoidHTTPDTO Type
 
 struct VoidHTTPDTO: HTTP {
-    typealias Request = Void
+    struct Request: Decodable {}
     
     struct Response: Decodable {
         let status: String

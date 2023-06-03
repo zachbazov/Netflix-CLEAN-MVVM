@@ -81,7 +81,7 @@ extension NewsViewModel {
             endpoint: .getUpcomings,
             for: NewsHTTPDTO.Response.self,
             request: Any.self,
-            cached: nil,
+            cached: { _ in },
             completion: { [weak self] result in
                 guard let self = self else { return }
                 
@@ -95,7 +95,7 @@ extension NewsViewModel {
     }
     
     private func upcomingMediaWillLoad() async {
-        let response = await useCase.request(endpoint: .getUpcomings, for: NewsHTTPDTO.Response.self)
+        let response = await useCase.request(endpoint: .getUpcomings, for: NewsHTTPDTO.Response.self, request: nil)
         
         guard let response = response else { return }
         

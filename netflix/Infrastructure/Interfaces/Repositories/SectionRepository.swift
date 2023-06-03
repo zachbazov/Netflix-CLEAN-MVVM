@@ -44,8 +44,9 @@ extension SectionRepository: SectionsRepositoryRouting {
 // MARK: - SectionRepositoryProtocol Implementation
 
 extension SectionRepository {
-    func getAll<T>(cached: @escaping (T?) -> Void,
-                   completion: @escaping (Result<T, Error>) -> Void) -> Cancellable? where T: Decodable {
+    func find<T>(request: Any?,
+                 cached: @escaping (T?) -> Void,
+                 completion: @escaping (Result<T, DataTransferError>) -> Void) -> Cancellable? where T: Decodable {
         let task = RepositoryTask()
         
         persistentStore.getResponse { [weak self] result in
@@ -74,7 +75,7 @@ extension SectionRepository {
         return task
     }
     
-    func getAll<T>() async -> T? where T: Decodable {
+    func find<T>(request: Any?) async -> T? where T: Decodable {
         guard let cached = await persistentStore.getResponse() else {
             let endpoint = SectionRepository.getAllSections()
             let result = await self.dataTransferService.request(with: endpoint)
@@ -89,11 +90,5 @@ extension SectionRepository {
         }
         
         return cached as? T
-    }
-    
-    func getOne<T, U>(request: U,
-                      cached: @escaping (T?) -> Void,
-                      completion: @escaping (Result<T, Error>) -> Void) -> Cancellable? where T: Decodable, U: Decodable {
-        return nil
     }
 }

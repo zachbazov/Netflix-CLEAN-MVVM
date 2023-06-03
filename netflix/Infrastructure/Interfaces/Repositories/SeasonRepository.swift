@@ -41,17 +41,9 @@ extension SeasonRepository: SeasonRepositoryRouting {
 // MARK: - SeasonRepositoryProtocol Implementation
 
 extension SeasonRepository {
-    func getAll<T>(cached: @escaping (T?) -> Void, completion: @escaping (Result<T, Error>) -> Void) -> Cancellable? where T: Decodable {
-        return nil
-    }
-    
-    func getAll<T>() async -> T? where T: Decodable {
-        return nil
-    }
-    
-    func getOne<T, U>(request: U,
-                      cached: @escaping (T?) -> Void,
-                      completion: @escaping (Result<T, Error>) -> Void) -> Cancellable? where T: Decodable, U: Decodable {
+    func find<T>(request: Any?,
+                 cached: @escaping (T?) -> Void,
+                 completion: @escaping (Result<T, DataTransferError>) -> Void) -> Cancellable? where T: Decodable {
         guard let request = request as? SeasonHTTPDTO.Request else { return nil }
         
         let task = RepositoryTask()

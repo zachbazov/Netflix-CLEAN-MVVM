@@ -110,7 +110,6 @@ extension AccountViewModel {
     private func createUseCase() -> UserUseCase {
         let services = Application.app.services
         let stores = Application.app.stores
-        let authService = services.auth
         let dataTransferService = services.dataTransfer
         let persistentStore = stores.userResponses
         let repository = UserRepository(dataTransferService: dataTransferService, persistentStore: persistentStore)

@@ -52,7 +52,7 @@ extension AuthViewModel: ViewModelProtocol {
         useCase.repository.task = useCase.request(endpoint: .signUp,
                                                   for: UserHTTPDTO.Response.self,
                                                   request: requestDTO,
-                                                  cached: nil,
+                                                  cached: { _ in },
                                                   completion: completion)
     }
     
@@ -76,8 +76,8 @@ extension AuthViewModel: ViewModelProtocol {
     func signOut(completion: @escaping (Result<VoidHTTPDTO.Response, DataTransferError>) -> Void) {
         useCase.repository.task = useCase.request(endpoint: .signOut,
                                                   for: VoidHTTPDTO.Response.self,
-                                                  request: VoidHTTPDTO.Response.self,
-                                                  cached: nil,
+                                                  request: VoidHTTPDTO.Request(),
+                                                  cached: { _ in },
                                                   completion: completion)
     }
     

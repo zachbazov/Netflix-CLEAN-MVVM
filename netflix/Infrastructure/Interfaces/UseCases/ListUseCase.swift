@@ -29,33 +29,25 @@ extension ListUseCase {
 // MARK: - UseCase Implementation
 
 extension ListUseCase: UseCase {
-    func request<T, U>(endpoint: Endpoints,
-                       for response: T.Type,
-                       request: U? = nil,
-                       cached: ((T?) -> Void)?,
-                       completion: ((Result<T, Error>) -> Void)?) -> Cancellable? {
+    func request<T>(endpoint: Endpoints,
+                    for response: T.Type,
+                    request: Any?,
+                    cached: @escaping (T?) -> Void,
+                    completion: @escaping (Result<T, DataTransferError>) -> Void) -> Cancellable? where T: Decodable {
         switch endpoint {
         case .getList:
-            guard let request = request as? ListHTTPDTO.GET.Request else { return nil }
-            let completion = completion as? ((Result<ListHTTPDTO.GET.Response, Error>) -> Void) ?? { _ in }
-            return repository.getOne(request: request, cached: { _ in }, completion: completion)
+            return repository.find(request: request, cached: cached, completion: completion)
         case .updateList:
-            guard let request = request as? ListHTTPDTO.PATCH.Request else { return nil }
-            let completion = completion as? ((Result<ListHTTPDTO.PATCH.Response, Error>) -> Void) ?? { _ in }
-            return repository.updateOne(request: request, completion: completion)
+            return repository.update(request: request, completion: completion)
         }
     }
     
-    func request<T, U>(endpoint: Endpoints,
-                       for response: T.Type,
-                       request: U) async -> T? where T : Decodable {
+    func request<T>(endpoint: Endpoints, for response: T.Type, request: Any?) async -> T? where T: Decodable {
         switch endpoint {
         case .getList:
-            guard let request = request as? ListHTTPDTO.GET.Request else { return nil }
-            return await repository.getOne(request: request)
+            return await repository.find(request: request)
         case .updateList:
-            guard let request = request as? ListHTTPDTO.PATCH.Request else { return nil }
-            return await repository.updateOne(request: request)
+            return await repository.update(request: request)
         }
     }
 }

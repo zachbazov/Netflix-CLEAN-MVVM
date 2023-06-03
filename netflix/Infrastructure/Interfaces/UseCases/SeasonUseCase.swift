@@ -28,16 +28,14 @@ extension SeasonUseCase {
 // MARK: - UseCase Implementation
 
 extension SeasonUseCase: UseCase {
-    func request<T, U>(endpoint: Endpoints,
-                       for response: T.Type,
-                       request: U?,
-                       cached: ((T?) -> Void)?,
-                       completion: ((Result<T, Error>) -> Void)?) -> Cancellable? {
+    func request<T>(endpoint: Endpoints,
+                    for response: T.Type,
+                    request: Any?,
+                    cached: @escaping (T?) -> Void,
+                    completion: @escaping (Result<T, DataTransferError>) -> Void) -> Cancellable? where T: Decodable {
         switch endpoint {
         case .getSeason:
-            guard let request = request as? SeasonHTTPDTO.Request else { return nil }
-            let completion = completion as? ((Result<SeasonHTTPDTO.Response, Error>) -> Void) ?? { _ in }
-            return repository.getOne(request: request, cached: { _ in }, completion: completion)
+            return repository.find(request: request, cached: cached, completion: completion)
         }
     }
 }
