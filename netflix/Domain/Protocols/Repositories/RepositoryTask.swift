@@ -9,10 +9,14 @@ import Foundation
 
 // MARK: - RepositoryTask Type
 
-final class RepositoryTask: Cancellable {
+final class RepositoryTask {
     var networkTask: NetworkCancellable?
     var isCancelled: Bool = false
-    
+}
+
+// MARK: - Cancellable Implementation
+
+extension RepositoryTask: Cancellable {
     func cancel() {
         networkTask?.cancel()
         isCancelled = true

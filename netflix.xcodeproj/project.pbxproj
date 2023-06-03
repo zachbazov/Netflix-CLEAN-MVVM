@@ -878,6 +878,57 @@
 			path = EditUserProfileViewController;
 			sourceTree = "<group>";
 		};
+		A16C8BED2A2BAB75008CD489 /* Protocols */ = {
+			isa = PBXGroup;
+			children = (
+				A16C8BEE2A2BABA9008CD489 /* Repositories */,
+				A16C8BEF2A2BABB0008CD489 /* UseCases */,
+				A1B98BA3298A414E001B7B62 /* HTTP.swift */,
+			);
+			path = Protocols;
+			sourceTree = "<group>";
+		};
+		A16C8BEE2A2BABA9008CD489 /* Repositories */ = {
+			isa = PBXGroup;
+			children = (
+				A1B1B0AB299B12010070AD29 /* Repository.swift */,
+				A18B998C28C0426E0077A5A6 /* RepositoryTask.swift */,
+			);
+			path = Repositories;
+			sourceTree = "<group>";
+		};
+		A16C8BEF2A2BABB0008CD489 /* UseCases */ = {
+			isa = PBXGroup;
+			children = (
+				A1B1B0C3299B89F10070AD29 /* UseCase.swift */,
+			);
+			path = UseCases;
+			sourceTree = "<group>";
+		};
+		A16C8BF02A2BAC29008CD489 /* Repositories */ = {
+			isa = PBXGroup;
+			children = (
+				A19956E02901A09900B7D655 /* ListRepository.swift */,
+				A1AA290128FCAB980011EE9D /* MediaRepository.swift */,
+				A1AA28DF28F5E0F20011EE9D /* SeasonRepository.swift */,
+				A18691DF28C8D4640087DE3B /* SectionRepository.swift */,
+				A1B3F98928C54F510042DE9F /* UserRepository.swift */,
+			);
+			path = Repositories;
+			sourceTree = "<group>";
+		};
+		A16C8BF12A2BAC2F008CD489 /* UseCases */ = {
+			isa = PBXGroup;
+			children = (
+				A1B1B0DB299BA1FA0070AD29 /* ListUseCase.swift */,
+				A1B1B0D1299B9F820070AD29 /* MediaUseCase.swift */,
+				A1B1B0D3299B9F870070AD29 /* SeasonUseCase.swift */,
+				A1B1B0D9299BA0910070AD29 /* SectionUseCase.swift */,
+				A1B1B0C6299B8C1D0070AD29 /* UserUseCase.swift */,
+			);
+			path = UseCases;
+			sourceTree = "<group>";
+		};
 		A1741D1C28E67CD000F3C46B /* InfoView */ = {
 			isa = PBXGroup;
 			children = (
@@ -1064,12 +1115,13 @@
 			path = Reusables;
 			sourceTree = "<group>";
 		};
-		A18A79A12A22CE9C00FE60AB /* Interfaces */ = {
+		A18A79A12A22CE9C00FE60AB /* Modules */ = {
 			isa = PBXGroup;
 			children = (
 				A18A79A22A22CECC00FE60AB /* APIConfig.swift */,
+				A18B997928C0244D0077A5A6 /* Endpoint.swift */,
 			);
-			path = Interfaces;
+			path = Modules;
 			sourceTree = "<group>";
 		};
 		A18B98EF28BEB62C0077A5A6 = {
@@ -1095,30 +1147,30 @@
 			children = (
 				A18B991328BEB9760077A5A6 /* Application */,
 				A18B991128BEB9460077A5A6 /* Domain */,
-				A18B990F28BEB93F0077A5A6 /* Infrastructure */,
+				A18B990F28BEB93F0077A5A6 /* Data */,
 				A1AEB449299E54860016DE2B /* Support */,
 				A18B991428BEB9940077A5A6 /* Resources */,
 			);
 			path = netflix;
 			sourceTree = "<group>";
 		};
-		A18B990F28BEB93F0077A5A6 /* Infrastructure */ = {
+		A18B990F28BEB93F0077A5A6 /* Data */ = {
 			isa = PBXGroup;
 			children = (
-				A1B1B0C8299B95270070AD29 /* Interfaces */,
 				A18B997428C011700077A5A6 /* Network */,
 				A18B998128C03DED0077A5A6 /* PersistentStores */,
 				A186923628CA92620087DE3B /* DataSources */,
 			);
-			path = Infrastructure;
+			path = Data;
 			sourceTree = "<group>";
 		};
 		A18B991128BEB9460077A5A6 /* Domain */ = {
 			isa = PBXGroup;
 			children = (
-				A18B994028BFD96E0077A5A6 /* Entities */,
-				A1B1B0AB299B12010070AD29 /* Repository.swift */,
-				A1B1B0C3299B89F10070AD29 /* UseCase.swift */,
+				A18B994028BFD96E0077A5A6 /* Models */,
+				A16C8BED2A2BAB75008CD489 /* Protocols */,
+				A16C8BF02A2BAC29008CD489 /* Repositories */,
+				A16C8BF12A2BAC2F008CD489 /* UseCases */,
 			);
 			path = Domain;
 			sourceTree = "<group>";
@@ -1177,6 +1229,7 @@
 			children = (
 				A18B993928BFC95A0077A5A6 /* Behaviors */,
 				A1B349FB2A165F98002AFE9E /* Cells */,
+				A1B1B0C8299B95270070AD29 /* Modules */,
 				A18B993428BFC7130077A5A6 /* Protocols */,
 				A1AEB44A299E56BD0016DE2B /* Reactive */,
 				A18A796E2A1FC73D00FE60AB /* Reusables */,
@@ -1252,7 +1305,7 @@
 			path = Behaviors;
 			sourceTree = "<group>";
 		};
-		A18B994028BFD96E0077A5A6 /* Entities */ = {
+		A18B994028BFD96E0077A5A6 /* Models */ = {
 			isa = PBXGroup;
 			children = (
 				A1B98BB4298AD251001B7B62 /* HTTP */,
@@ -1267,7 +1320,7 @@
 				A1AA28E728F6909B0011EE9D /* Trailer+Mapping.swift */,
 				A18B994928BFD9DD0077A5A6 /* User+Mapping.swift */,
 			);
-			path = Entities;
+			path = Models;
 			sourceTree = "<group>";
 		};
 		A18B995328BFF1260077A5A6 /* DataMappings */ = {
@@ -1282,8 +1335,7 @@
 			isa = PBXGroup;
 			children = (
 				A18B995328BFF1260077A5A6 /* DataMappings */,
-				A18B999028C0DE570077A5A6 /* Endpoints */,
-				A18A79A12A22CE9C00FE60AB /* Interfaces */,
+				A18A79A12A22CE9C00FE60AB /* Modules */,
 				A1B70A97293EC2CA00C718C6 /* Protocols */,
 				A1B1B0CC299B99E30070AD29 /* Services */,
 			);
@@ -1319,22 +1371,6 @@
 				A1B93C822900D2A800AF2C7F /* QoS.swift */,
 			);
 			path = System;
-			sourceTree = "<group>";
-		};
-		A18B998B28C042670077A5A6 /* Tasks */ = {
-			isa = PBXGroup;
-			children = (
-				A18B998C28C0426E0077A5A6 /* RepositoryTask.swift */,
-			);
-			path = Tasks;
-			sourceTree = "<group>";
-		};
-		A18B999028C0DE570077A5A6 /* Endpoints */ = {
-			isa = PBXGroup;
-			children = (
-				A18B997928C0244D0077A5A6 /* Endpoint.swift */,
-			);
-			path = Endpoints;
 			sourceTree = "<group>";
 		};
 		A18B999928C0E0120077A5A6 /* Entities */ = {
@@ -1630,30 +1666,16 @@
 			path = Delegates;
 			sourceTree = "<group>";
 		};
-		A1B1B0C5299B8C130070AD29 /* UseCases */ = {
-			isa = PBXGroup;
-			children = (
-				A1B1B0DB299BA1FA0070AD29 /* ListUseCase.swift */,
-				A1B1B0D1299B9F820070AD29 /* MediaUseCase.swift */,
-				A1B1B0D3299B9F870070AD29 /* SeasonUseCase.swift */,
-				A1B1B0D9299BA0910070AD29 /* SectionUseCase.swift */,
-				A1B1B0C6299B8C1D0070AD29 /* UserUseCase.swift */,
-			);
-			path = UseCases;
-			sourceTree = "<group>";
-		};
-		A1B1B0C8299B95270070AD29 /* Interfaces */ = {
+		A1B1B0C8299B95270070AD29 /* Modules */ = {
 			isa = PBXGroup;
 			children = (
 				A1741D5628EE5C9A00F3C46B /* MediaPlayer */,
-				A1B3F98828C54F160042DE9F /* Repositories */,
-				A1B1B0C5299B8C130070AD29 /* UseCases */,
 				A1B779112A0E6207009014FD /* Color.swift */,
 				A1AE02D0293BA29A00AF0BD6 /* DeviceOrientation.swift */,
 				A1B68F292921BAE600FF5F18 /* MyList.swift */,
 				A1741D6128EF716000F3C46B /* ScheduledTimer.swift */,
 			);
-			path = Interfaces;
+			path = Modules;
 			sourceTree = "<group>";
 		};
 		A1B1B0CB299B99DA0070AD29 /* NetworkService */ = {
@@ -1744,19 +1766,6 @@
 			path = Base;
 			sourceTree = "<group>";
 		};
-		A1B3F98828C54F160042DE9F /* Repositories */ = {
-			isa = PBXGroup;
-			children = (
-				A18B998B28C042670077A5A6 /* Tasks */,
-				A19956E02901A09900B7D655 /* ListRepository.swift */,
-				A1AA290128FCAB980011EE9D /* MediaRepository.swift */,
-				A1AA28DF28F5E0F20011EE9D /* SeasonRepository.swift */,
-				A18691DF28C8D4640087DE3B /* SectionRepository.swift */,
-				A1B3F98928C54F510042DE9F /* UserRepository.swift */,
-			);
-			path = Repositories;
-			sourceTree = "<group>";
-		};
 		A1B3F99628C627710042DE9F /* SignUpViewController */ = {
 			isa = PBXGroup;
 			children = (
@@ -1790,7 +1799,6 @@
 			isa = PBXGroup;
 			children = (
 				A18B998928C040A70077A5A6 /* Cancellable.swift */,
-				A1B98BA3298A414E001B7B62 /* HTTP.swift */,
 			);
 			path = Protocols;
 			sourceTree = "<group>";

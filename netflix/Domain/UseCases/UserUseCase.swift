@@ -24,9 +24,9 @@ extension UserUseCase {
         case signIn
         case signUp
         case signOut
-        case updateUserData
         case getUserProfiles
         case createUserProfile
+        case updateUserData
     }
 }
 
@@ -40,46 +40,34 @@ extension UserUseCase: UseCase {
                     completion: @escaping (Result<T, DataTransferError>) -> Void) -> Cancellable? where T: Decodable {
         switch endpoint {
         case .signUp:
-            guard let request = request as? UserHTTPDTO.Request else { return nil }
-            let completion = completion as? ((Result<UserHTTPDTO.Response, DataTransferError>) -> Void) ?? { _ in }
-            return repository.signUp(request: request, completion: completion)
+            return repository.sign(endpoint: endpoint, request: request, cached: cached, completion: completion)
         case .signIn:
-            guard let request = request as? UserHTTPDTO.Request else { return nil }
-            let completion = completion as? ((Result<UserHTTPDTO.Response, DataTransferError>) -> Void) ?? { _ in }
-            let cached = cached as? ((UserHTTPDTO.Response?) -> Void) ?? { _ in }
-            return repository.signIn(request: request, cached: cached, completion: completion)
+            return repository.sign(endpoint: endpoint, request: request, cached: cached, completion: completion)
         case .signOut:
-            let completion = completion as? ((Result<VoidHTTPDTO.Response, DataTransferError>) -> Void) ?? { _ in }
-            return repository.signOut(completion: completion)
-        case .updateUserData:
-            return repository.update(request: request, completion: completion)
+            return repository.sign(endpoint: endpoint, request: request, cached: cached, completion: completion)
         case .getUserProfiles:
             return repository.find(request: request, cached: cached, completion: completion)
         case .createUserProfile:
             return repository.create(request: request, completion: completion)
+        case .updateUserData:
+            return repository.update(request: request, completion: completion)
         }
     }
     
     func request<T>(endpoint: Endpoints, for response: T.Type, request: Any?) async -> T? where T: Decodable {
         switch endpoint {
         case .signUp:
-            guard let request = request as? UserHTTPDTO.Request else { return nil }
-            
-            return await repository.signUp(request: request) as? T
+            return await repository.sign(endpoint: endpoint, request: request)
         case .signIn:
-            guard let request = request as? UserHTTPDTO.Request else { return nil }
-            
-            return await repository.signIn(request: request) as? T
+            return await repository.sign(endpoint: endpoint, request: request)
         case .signOut:
-            guard let request = request as? UserHTTPDTO.Request else { return nil }
-            
-            return await repository.signOut(request: request) as? T
-        case .updateUserData:
-            return await repository.update(request: request)
+            return await repository.sign(endpoint: endpoint, request: request)
         case .getUserProfiles:
             return await repository.find(request: request)
         case .createUserProfile:
             return await repository.create(request: request)
+        case .updateUserData:
+            return await repository.update(request: request)
         }
     }
 }
