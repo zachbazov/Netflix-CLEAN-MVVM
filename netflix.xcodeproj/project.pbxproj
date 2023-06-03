@@ -113,8 +113,6 @@
 		A18A79682A1FA96600FE60AB /* DetailTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A18A79672A1FA96600FE60AB /* DetailTableViewCell.swift */; };
 		A18A796B2A1FB15800FE60AB /* DetailHybridCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A18A796A2A1FB15800FE60AB /* DetailHybridCell.swift */; };
 		A18A796D2A1FB15C00FE60AB /* DetailHybridCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A18A796C2A1FB15C00FE60AB /* DetailHybridCellViewModel.swift */; };
-		A18A79702A20536700FE60AB /* RequestInvoking.swift in Sources */ = {isa = PBXBuildFile; fileRef = A18A796F2A20536700FE60AB /* RequestInvoking.swift */; };
-		A18A79762A20F49600FE60AB /* Taskable.swift in Sources */ = {isa = PBXBuildFile; fileRef = A18A79752A20F49600FE60AB /* Taskable.swift */; };
 		A18A79912A22B33F00FE60AB /* DataLoadable.swift in Sources */ = {isa = PBXBuildFile; fileRef = A18A79902A22B33E00FE60AB /* DataLoadable.swift */; };
 		A18A79932A22B4F200FE60AB /* CoordinatorAssignable.swift in Sources */ = {isa = PBXBuildFile; fileRef = A18A79922A22B4F200FE60AB /* CoordinatorAssignable.swift */; };
 		A18A79952A22B73C00FE60AB /* ViewObservable.swift in Sources */ = {isa = PBXBuildFile; fileRef = A18A79942A22B73C00FE60AB /* ViewObservable.swift */; };
@@ -154,7 +152,6 @@
 		A18B998728C03F050077A5A6 /* CoreDataStorage.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = A18B998528C03F050077A5A6 /* CoreDataStorage.xcdatamodeld */; };
 		A18B998A28C040A70077A5A6 /* Cancellable.swift in Sources */ = {isa = PBXBuildFile; fileRef = A18B998928C040A70077A5A6 /* Cancellable.swift */; };
 		A18B998D28C0426E0077A5A6 /* RepositoryTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = A18B998C28C0426E0077A5A6 /* RepositoryTask.swift */; };
-		A18B999228C0DE710077A5A6 /* APIEndpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = A18B999128C0DE710077A5A6 /* APIEndpoint.swift */; };
 		A18B999E28C0E6D80077A5A6 /* UserHTTPResponseStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = A18B999D28C0E6D80077A5A6 /* UserHTTPResponseStore.swift */; };
 		A18B99A128C0FEC40077A5A6 /* UserHTTPResponseEntity+Mapping.swift in Sources */ = {isa = PBXBuildFile; fileRef = A18B99A028C0FEC40077A5A6 /* UserHTTPResponseEntity+Mapping.swift */; };
 		A18D851C29403CE900840045 /* BrowseOverlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A18D851B29403CE900840045 /* BrowseOverlayView.swift */; };
@@ -448,8 +445,6 @@
 		A18A79672A1FA96600FE60AB /* DetailTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailTableViewCell.swift; sourceTree = "<group>"; };
 		A18A796A2A1FB15800FE60AB /* DetailHybridCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailHybridCell.swift; sourceTree = "<group>"; };
 		A18A796C2A1FB15C00FE60AB /* DetailHybridCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailHybridCellViewModel.swift; sourceTree = "<group>"; };
-		A18A796F2A20536700FE60AB /* RequestInvoking.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestInvoking.swift; sourceTree = "<group>"; };
-		A18A79752A20F49600FE60AB /* Taskable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Taskable.swift; sourceTree = "<group>"; };
 		A18A79902A22B33E00FE60AB /* DataLoadable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataLoadable.swift; sourceTree = "<group>"; };
 		A18A79922A22B4F200FE60AB /* CoordinatorAssignable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoordinatorAssignable.swift; sourceTree = "<group>"; };
 		A18A79942A22B73C00FE60AB /* ViewObservable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewObservable.swift; sourceTree = "<group>"; };
@@ -491,7 +486,6 @@
 		A18B998628C03F050077A5A6 /* CoreDataStorage.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = CoreDataStorage.xcdatamodel; sourceTree = "<group>"; };
 		A18B998928C040A70077A5A6 /* Cancellable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Cancellable.swift; sourceTree = "<group>"; };
 		A18B998C28C0426E0077A5A6 /* RepositoryTask.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepositoryTask.swift; sourceTree = "<group>"; };
-		A18B999128C0DE710077A5A6 /* APIEndpoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIEndpoint.swift; sourceTree = "<group>"; };
 		A18B999D28C0E6D80077A5A6 /* UserHTTPResponseStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserHTTPResponseStore.swift; sourceTree = "<group>"; };
 		A18B99A028C0FEC40077A5A6 /* UserHTTPResponseEntity+Mapping.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UserHTTPResponseEntity+Mapping.swift"; sourceTree = "<group>"; };
 		A18D851B29403CE900840045 /* BrowseOverlayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowseOverlayView.swift; sourceTree = "<group>"; };
@@ -1338,7 +1332,6 @@
 		A18B999028C0DE570077A5A6 /* Endpoints */ = {
 			isa = PBXGroup;
 			children = (
-				A18B999128C0DE710077A5A6 /* APIEndpoint.swift */,
 				A18B997928C0244D0077A5A6 /* Endpoint.swift */,
 			);
 			path = Endpoints;
@@ -1798,8 +1791,6 @@
 			children = (
 				A18B998928C040A70077A5A6 /* Cancellable.swift */,
 				A1B98BA3298A414E001B7B62 /* HTTP.swift */,
-				A18A796F2A20536700FE60AB /* RequestInvoking.swift */,
-				A18A79752A20F49600FE60AB /* Taskable.swift */,
 			);
 			path = Protocols;
 			sourceTree = "<group>";
@@ -2184,7 +2175,6 @@
 				A14E0CBE29BB97E500F55500 /* AccountMenuNotificationHybridCell.swift in Sources */,
 				A127C1E228DD00F100CEE34F /* NavigationOverlayFooterView.swift in Sources */,
 				A18A79A32A22CECC00FE60AB /* APIConfig.swift in Sources */,
-				A18A79762A20F49600FE60AB /* Taskable.swift in Sources */,
 				A1AD25D028D6D31000F793B3 /* NavigationBarViewModel.swift in Sources */,
 				A1AD767729AC85B200669667 /* NewsCollectionViewCell.swift in Sources */,
 				A18B995D28BFFBF30077A5A6 /* EpisodeDTO+Mapping.swift in Sources */,
@@ -2229,7 +2219,6 @@
 				A1B70A75293D76EB00C718C6 /* HomeViewCoordinator.swift in Sources */,
 				A1B70A77293D77BA00C718C6 /* TabBarCoordinator.swift in Sources */,
 				A18B991728BEBD040077A5A6 /* Configuration.swift in Sources */,
-				A18A79702A20536700FE60AB /* RequestInvoking.swift in Sources */,
 				A18B997C28C029A30077A5A6 /* DataTransferService.swift in Sources */,
 				A1B98BB1298A495F001B7B62 /* NewsHTTPDTO+Mapping.swift in Sources */,
 				A18A796B2A1FB15800FE60AB /* DetailHybridCell.swift in Sources */,
@@ -2255,7 +2244,6 @@
 				A1D23AC029CA746D00748029 /* SectionHTTPResponseEntity+Mapping.swift in Sources */,
 				A14E0CF029C32CA300F55500 /* ProfileCollectionViewCellViewModel.swift in Sources */,
 				A14E0CDF29C0DA1700F55500 /* Profile.swift in Sources */,
-				A18B999228C0DE710077A5A6 /* APIEndpoint.swift in Sources */,
 				A1AA28D228F590AF0011EE9D /* TrailerCollectionViewCell.swift in Sources */,
 				A1B98BA9298A4373001B7B62 /* MediaHTTPDTO+Mapping.swift in Sources */,
 				A1BA1DA528D818C400730EA8 /* CALayer+Shadow.swift in Sources */,

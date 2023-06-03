@@ -7,9 +7,9 @@
 
 import Foundation
 
-// MARK: - TransferableDataService Type
+// MARK: - DataServiceTransferable Type
 
-protocol TransferableDataService {
+protocol DataServiceTransferable {
     var dataTransferService: DataServiceTransferring { get }
 }
 

@@ -161,8 +161,10 @@ extension SearchViewModel {
 extension SearchViewModel {
     private func createUseCase() -> MediaUseCase {
         let services = Application.app.services
+        let stores = Application.app.stores
         let dataTransferService = services.dataTransfer
-        let repository = MediaRepository(dataTransferService: dataTransferService)
+        let persistentStore = stores.mediaResponses
+        let repository = MediaRepository(dataTransferService: dataTransferService, persistentStore: persistentStore)
         return MediaUseCase(repository: repository)
     }
 }

@@ -243,12 +243,11 @@ extension ProfileViewModel {
 extension ProfileViewModel {
     private func createUseCase() -> UserUseCase {
         let services = Application.app.services
+        let stores = Application.app.stores
         let authService = services.auth
         let dataTransferService = services.dataTransfer
-        let persistentStore = UserHTTPResponseStore(authService: authService)
-        let authenticator = UserRepositoryAuthenticator(dataTransferService: dataTransferService, persistentStore: persistentStore)
-        let invoker = RepositoryInvoker(dataTransferService: dataTransferService, persistentStore: persistentStore)
-        let repository = UserRepository(dataTransferService: dataTransferService, authenticator: authenticator, persistentStore: persistentStore, invoker: invoker)
+        let persistentStore = stores.userResponses
+        let repository = UserRepository(dataTransferService: dataTransferService, persistentStore: persistentStore)
         return UserUseCase(repository: repository)
     }
 }

@@ -16,7 +16,39 @@ protocol ListRepositoryRouting {
 
 // MARK: - ListRepository Type
 
-final class ListRepository: Repository {}
+final class ListRepository: Repository {
+    var dataTransferService: DataServiceTransferring
+    
+    var task: Cancellable? {
+        willSet { task?.cancel() }
+    }
+    
+    init(dataTransferService: DataServiceTransferring) {
+        self.dataTransferService = dataTransferService
+    }
+}
+
+// MARK: - ListRepositoryRouting Implementation
+
+extension ListRepository: ListRepositoryRouting {
+    static func getMyList(with request: ListHTTPDTO.GET.Request) -> Endpoint<ListHTTPDTO.GET.Response> {
+        return Endpoint(path: "api/v1/mylists",
+                        method: .get,
+                        headerParameters: ["content-type": "application/json"],
+                        queryParameters: ["user": request.user._id ?? ""])
+    }
+    
+    static func updateMyList(with request: ListHTTPDTO.PATCH.Request) -> Endpoint<ListHTTPDTO.PATCH.Response> {
+        return Endpoint(path: "api/v1/mylists",
+                        method: .patch,
+                        headerParameters: ["content-type": "application/json"],
+                        queryParameters: ["user": request.user],
+                        bodyParameters: ["user": request.user,
+                                         "media": request.media],
+                        bodyEncoding: .jsonSerializationData)
+    }
+}
+
 
 // MARK: - ListRepositoryProtocol Implementation
 
@@ -31,7 +63,7 @@ extension ListRepository {
         
         guard !task.isCancelled else { return nil }
         
-        let endpoint = APIEndpoint.getMyList(with: requestDTO)
+        let endpoint = ListRepository.getMyList(with: requestDTO)
         task.networkTask = dataTransferService.request(with: endpoint) { result in
             switch result {
             case .success(let response):
@@ -52,7 +84,7 @@ extension ListRepository {
         
         guard !task.isCancelled else { return nil }
         
-        let endpoint = APIEndpoint.updateMyList(with: request)
+        let endpoint = ListRepository.updateMyList(with: request)
         task.networkTask = dataTransferService.request(
             with: endpoint,
             completion: { result in
@@ -70,7 +102,7 @@ extension ListRepository {
     func getOne<T, U>(request: U) async -> T? where T: Decodable, U: Decodable {
         guard let request = request as? ListHTTPDTO.GET.Request else { return nil }
         
-        let endpoint = APIEndpoint.getMyList(with: request)
+        let endpoint = ListRepository.getMyList(with: request)
         let result = await dataTransferService.request(with: endpoint)
         
         if case let .success(response) = result {
@@ -83,7 +115,7 @@ extension ListRepository {
     func updateOne<T, U>(request: U) async -> T? where T: Decodable, U: Decodable {
         guard let request = request as? ListHTTPDTO.PATCH.Request else { return nil }
         
-        let endpoint = APIEndpoint.updateMyList(with: request)
+        let endpoint = ListRepository.updateMyList(with: request)
         let result = await dataTransferService.request(with: endpoint)
         
         if case let .success(response) = result {

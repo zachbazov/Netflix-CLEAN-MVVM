@@ -12,9 +12,9 @@ import UIKit
 final class HomeViewCoordinator {
     var viewController: HomeViewController?
     
-    private(set) var detail: UINavigationController?
-    private(set) var search: UINavigationController?
-    private(set) var account: UINavigationController?
+    private(set) weak var detail: UINavigationController?
+    private(set) weak var search: UINavigationController?
+    private(set) weak var account: UINavigationController?
     
     deinit {
         viewController?.viewModel = nil

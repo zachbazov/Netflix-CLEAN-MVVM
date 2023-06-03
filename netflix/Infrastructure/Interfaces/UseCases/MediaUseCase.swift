@@ -17,6 +17,17 @@ final class MediaUseCase {
     }
 }
 
+// MARK: - Endpoints Type
+
+extension MediaUseCase {
+    enum Endpoints {
+        case getAllMedia
+        case getTopSearches
+        case getUpcomings
+        case searchMedia
+    }
+}
+
 // MARK: - UseCase Implementation
 
 extension MediaUseCase: UseCase {
@@ -63,16 +74,5 @@ extension MediaUseCase: UseCase {
             return await repository.search(requestDTO: request) as? T
         default: return nil
         }
-    }
-}
-
-// MARK: - Endpoints Type
-
-extension MediaUseCase {
-    enum Endpoints {
-        case getAllMedia
-        case getTopSearches
-        case getUpcomings
-        case searchMedia
     }
 }

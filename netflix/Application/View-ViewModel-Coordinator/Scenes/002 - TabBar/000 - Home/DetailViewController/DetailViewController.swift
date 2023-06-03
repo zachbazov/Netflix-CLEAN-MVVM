@@ -54,6 +54,8 @@ final class DetailViewController: UIViewController, Controller {
     func viewWillDeallocate() {
         deviceWillLockOrientation(.portrait)
         
+        tableView.removeFromSuperview()
+        
         previewView = nil
         dataSource = nil
         viewModel = nil

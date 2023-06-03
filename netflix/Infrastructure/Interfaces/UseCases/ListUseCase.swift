@@ -17,6 +17,15 @@ final class ListUseCase {
     }
 }
 
+// MARK: - Endpoints Type
+
+extension ListUseCase {
+    enum Endpoints {
+        case getList
+        case updateList
+    }
+}
+
 // MARK: - UseCase Implementation
 
 extension ListUseCase: UseCase {
@@ -48,14 +57,5 @@ extension ListUseCase: UseCase {
             guard let request = request as? ListHTTPDTO.PATCH.Request else { return nil }
             return await repository.updateOne(request: request)
         }
-    }
-}
-
-// MARK: - Endpoints Type
-
-extension ListUseCase {
-    enum Endpoints {
-        case getList
-        case updateList
     }
 }

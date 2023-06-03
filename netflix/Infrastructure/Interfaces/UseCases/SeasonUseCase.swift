@@ -17,6 +17,14 @@ final class SeasonUseCase {
     }
 }
 
+// MARK: - Endpoints Type
+
+extension SeasonUseCase {
+    enum Endpoints {
+        case getSeason
+    }
+}
+
 // MARK: - UseCase Implementation
 
 extension SeasonUseCase: UseCase {
@@ -31,13 +39,5 @@ extension SeasonUseCase: UseCase {
             let completion = completion as? ((Result<SeasonHTTPDTO.Response, Error>) -> Void) ?? { _ in }
             return repository.getOne(request: request, cached: { _ in }, completion: completion)
         }
-    }
-}
-
-// MARK: - Endpoints Type
-
-extension SeasonUseCase {
-    enum Endpoints {
-        case getSeason
     }
 }

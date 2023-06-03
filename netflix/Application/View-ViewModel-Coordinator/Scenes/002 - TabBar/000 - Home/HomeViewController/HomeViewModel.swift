@@ -371,15 +371,19 @@ extension HomeViewModel: DataProviderProtocol {
 extension HomeViewModel {
     private func createSectionUseCase() -> SectionUseCase {
         let services = Application.app.services
+        let stores = Application.app.stores
         let dataTransferService = services.dataTransfer
-        let repository = SectionRepository(dataTransferService: dataTransferService)
+        let persistentStore = stores.sectionResponses
+        let repository = SectionRepository(dataTransferService: dataTransferService, persistentStore: persistentStore)
         return SectionUseCase(repository: repository)
     }
     
     private func createMediaUseCase() -> MediaUseCase {
         let services = Application.app.services
+        let stores = Application.app.stores
         let dataTransferService = services.dataTransfer
-        let repository = MediaRepository(dataTransferService: dataTransferService)
+        let persistentStore = stores.mediaResponses
+        let repository = MediaRepository(dataTransferService: dataTransferService, persistentStore: persistentStore)
         return MediaUseCase(repository: repository)
     }
 }

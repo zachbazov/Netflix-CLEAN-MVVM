@@ -17,6 +17,19 @@ final class UserUseCase {
     }
 }
 
+// MARK: - Endpoints Type
+
+extension UserUseCase {
+    enum Endpoints {
+        case signIn
+        case signUp
+        case signOut
+        case updateUserData
+        case getUserProfiles
+        case createUserProfile
+    }
+}
+
 // MARK: - UseCase Implementation
 
 extension UserUseCase: UseCase {
@@ -29,27 +42,27 @@ extension UserUseCase: UseCase {
         case .signUp:
             guard let request = request as? UserHTTPDTO.Request else { return nil }
             let completion = completion as? ((Result<UserHTTPDTO.Response, DataTransferError>) -> Void) ?? { _ in }
-            return repository.authenticator.signUp(request: request, completion: completion)
+            return repository.signUp(request: request, completion: completion)
         case .signIn:
             guard let request = request as? UserHTTPDTO.Request else { return nil }
             let completion = completion as? ((Result<UserHTTPDTO.Response, DataTransferError>) -> Void) ?? { _ in }
             let cached = cached as? ((UserHTTPDTO.Response?) -> Void) ?? { _ in }
-            return repository.authenticator.signIn(request: request, cached: cached, completion: completion)
+            return repository.signIn(request: request, cached: cached, completion: completion)
         case .signOut:
             let completion = completion as? ((Result<VoidHTTPDTO.Response, DataTransferError>) -> Void) ?? { _ in }
-            return repository.authenticator.signOut(completion: completion)
+            return repository.signOut(completion: completion)
         case .updateUserData:
             guard let request = request as? UserHTTPDTO.Request else { return nil }
             let completion = completion as? ((Result<UserHTTPDTO.Response, DataTransferError>) -> Void) ?? { _ in }
-            return repository.invoker.updateOne(request: request, completion: completion)
+            return repository.updateOne(request: request, completion: completion)
         case .getUserProfiles:
             guard let request = request as? ProfileHTTPDTO.GET.Request else { return nil }
             let completion = completion as? ((Result<ProfileHTTPDTO.GET.Response, DataTransferError>) -> Void) ?? { _ in }
-            return repository.invoker.getAll(request: request, completion: completion)
+            return repository.getAll(request: request, completion: completion)
         case .createUserProfile:
             guard let request = request as? ProfileHTTPDTO.POST.Request else { return nil }
             let completion = completion as? ((Result<ProfileHTTPDTO.POST.Response, DataTransferError>) -> Void) ?? { _ in }
-            return repository.invoker.createOne(request: request, completion: completion)
+            return repository.createOne(request: request, completion: completion)
         }
     }
     
@@ -59,35 +72,22 @@ extension UserUseCase: UseCase {
         switch endpoint {
         case .signUp:
             guard let request = request as? UserHTTPDTO.Request else { return nil }
-            return await repository.authenticator.signUp(request: request) as? T
+            return await repository.signUp(request: request) as? T
         case .signIn:
             guard let request = request as? UserHTTPDTO.Request else { return nil }
-            return await repository.authenticator.signIn(request: request) as? T
+            return await repository.signIn(request: request) as? T
         case .signOut:
             guard let request = request as? UserHTTPDTO.Request else { return nil }
-            return await repository.authenticator.signOut(request: request) as? T
+            return await repository.signOut(request: request) as? T
         case .updateUserData:
             guard let request = request as? UserHTTPDTO.Request else { return nil }
-            return await repository.invoker.updateOne(request: request)
+            return await repository.updateOne(request: request)
         case .getUserProfiles:
             guard let request = request as? ProfileHTTPDTO.GET.Request else { return nil }
-            return await repository.invoker.getAll(request: request)
+            return await repository.getAll(request: request)
         case .createUserProfile:
             guard let request = request as? ProfileHTTPDTO.POST.Request else { return nil }
-            return await repository.invoker.createOne(request: request)
+            return await repository.createOne(request: request)
         }
-    }
-}
-
-// MARK: - Endpoints Type
-
-extension UserUseCase {
-    enum Endpoints {
-        case signIn
-        case signUp
-        case signOut
-        case updateUserData
-        case getUserProfiles
-        case createUserProfile
     }
 }

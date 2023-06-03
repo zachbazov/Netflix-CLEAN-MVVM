@@ -123,7 +123,7 @@ extension PreviewView: ViewProtocol {
     }
 }
 
-// MARK: - Private Presentation Logic
+// MARK: - Private Implementation
 
 extension PreviewView {
     private func configureMediaPlayer() {

@@ -17,6 +17,14 @@ final class SectionUseCase {
     }
 }
 
+// MARK: - Endpoints Type
+
+extension SectionUseCase {
+    enum Endpoints {
+        case getSections
+    }
+}
+
 // MARK: - UseCase Implementation
 
 extension SectionUseCase: UseCase {
@@ -38,13 +46,5 @@ extension SectionUseCase: UseCase {
         case .getSections:
             return await repository.getAll()
         }
-    }
-}
-
-// MARK: - Endpoints Type
-
-extension SectionUseCase {
-    enum Endpoints {
-        case getSections
     }
 }

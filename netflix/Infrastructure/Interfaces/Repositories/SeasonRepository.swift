@@ -16,8 +16,26 @@ protocol SeasonRepositoryRouting {
 // MARK: - SeasonRepository Type
 
 final class SeasonRepository: Repository {
-//    let dataTransferService: DataTransferService = Application.app.services.dataTransfer
-//    var task: Cancellable? { willSet { task?.cancel() } }
+    let dataTransferService: DataServiceTransferring
+    
+    var task: Cancellable? {
+        willSet { task?.cancel() }
+    }
+    
+    init(dataTransferService: DataServiceTransferring) {
+        self.dataTransferService = dataTransferService
+    }
+}
+
+// MARK: - SeasonRepositoryRouting Implementation
+
+extension SeasonRepository: SeasonRepositoryRouting {
+    static func getSeason(with request: SeasonHTTPDTO.Request) -> Endpoint<SeasonHTTPDTO.Response> {
+        return Endpoint(path: "api/v1/seasons",
+                        method: .get,
+                        headerParameters: ["content-type": "application/json"],
+                        queryParameters: ["slug": request.slug ?? "", "season": request.season ?? 1])
+    }
 }
 
 // MARK: - SeasonRepositoryProtocol Implementation
@@ -40,7 +58,7 @@ extension SeasonRepository {
         
         guard !task.isCancelled else { return nil }
         
-        let endpoint = APIEndpoint.getSeason(with: request)
+        let endpoint = SeasonRepository.getSeason(with: request)
         task.networkTask = dataTransferService.request(with: endpoint) { result in
             switch result {
             case .success(let response):

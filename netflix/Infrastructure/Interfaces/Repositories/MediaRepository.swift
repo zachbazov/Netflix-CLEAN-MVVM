@@ -29,19 +29,66 @@ protocol NewsRepositoryRouting {
 // MARK: - MediaRepository Type
 
 final class MediaRepository: Repository {
-//    let dataTransferService: DataTransferService = Application.app.services.dataTransfer
-    let responseStorage: MediaHTTPResponseStore = Application.app.stores.mediaResponses
-//    var task: Cancellable? { willSet { task?.cancel() } }
+    let dataTransferService: DataServiceTransferring
+    
+    let persistentStore: MediaHTTPResponseStore
+    
+    var task: Cancellable? {
+        willSet { task?.cancel() }
+    }
+    
+    init(dataTransferService: DataServiceTransferring, persistentStore: MediaHTTPResponseStore) {
+        self.dataTransferService = dataTransferService
+        self.persistentStore = persistentStore
+    }
 }
 
-// MARK: - MediaRepositoryProtocol Implementation
+// MARK: - MediaRepositoryRouting Implementation
+
+extension MediaRepository: MediaRepositoryRouting {
+    static func getAllMedia() -> Endpoint<MediaHTTPDTO.Response> {
+        return Endpoint(path: "api/v1/media",
+                        method: .get,
+                        headerParameters: ["content-type": "application/json"])
+    }
+    
+    static func getMedia(with request: MediaHTTPDTO.Request) -> Endpoint<MediaHTTPDTO.Response> {
+        return Endpoint(path: "api/v1/media",
+                        method: .get,
+                        headerParameters: ["content-type": "application/json"],
+                        queryParameters: request.slug != nil ? ["slug": request.slug ?? ""] : ["id": request.id ?? ""])
+    }
+    
+    static func getUpcomingMedia(with request: NewsHTTPDTO.Request) -> Endpoint<NewsHTTPDTO.Response> {
+        return Endpoint(path: "api/v1/media",
+                        method: .get,
+                        headerParameters: ["content-type": "application/json"],
+                        queryParameters: request.queryParams)
+    }
+    
+    static func getTopSearchedMedia() -> Endpoint<SearchHTTPDTO.Response> {
+        return Endpoint(path: "api/v1/media",
+                        method: .get,
+                        headerParameters: ["content-type": "application/json"],
+                        queryParameters: ["timesSearched": 1, "limit": 20])
+    }
+    
+    static func searchMedia(with request: SearchHTTPDTO.Request) -> Endpoint<SearchHTTPDTO.Response> {
+        return Endpoint(path: "api/v1/media/search",
+                        method: .get,
+                        headerParameters: ["content-type": "application/json"],
+                        queryParameters: ["slug": request.regex, "title": request.regex])
+    }
+}
+
+// MARK: - RepositoryRequestable Implementation
 
 extension MediaRepository {
     func getAll<T>(cached: @escaping (T?) -> Void,
                    completion: @escaping (Result<T, Error>) -> Void) -> Cancellable? where T: Decodable {
         let task = RepositoryTask()
         
-        responseStorage.getResponse { [weak self] result in
+        persistentStore.getResponse { [weak self] result in
             guard let self = self else { return }
             
             if case let .success(responseDTO?) = result {
@@ -50,11 +97,12 @@ extension MediaRepository {
             
             guard !task.isCancelled else { return }
             
-            let endpoint = APIEndpoint.getAllMedia()
+            let endpoint = MediaRepository.getAllMedia()
             task.networkTask = self.dataTransferService.request(with: endpoint) { result in
                 switch result {
                 case .success(let response):
-                    self.responseStorage.save(response: response)
+                    self.persistentStore.save(response: response)
+                    
                     completion(.success(response as! T))
                 case .failure(let error):
                     completion(.failure(error))
@@ -66,12 +114,13 @@ extension MediaRepository {
     }
     
     func getAll<T>() async -> T? where T: Decodable {
-        guard let cached = await responseStorage.getResponse() else {
-            let endpoint = APIEndpoint.getAllMedia()
+        guard let cached = await persistentStore.getResponse() else {
+            let endpoint = MediaRepository.getAllMedia()
             let result = await dataTransferService.request(with: endpoint)
             
             if case let .success(response) = result {
-                responseStorage.save(response: response)
+                persistentStore.save(response: response)
+                
                 return response as? T
             }
             
@@ -90,7 +139,7 @@ extension MediaRepository {
         
         guard !task.isCancelled else { return nil }
         
-        let endpoint = APIEndpoint.getMedia(with: requestDTO)
+        let endpoint = MediaRepository.getMedia(with: requestDTO)
         task.networkTask = dataTransferService.request(with: endpoint) { result in
             switch result {
             case .success(let response):
@@ -110,7 +159,7 @@ extension MediaRepository {
         
         guard !task.isCancelled else { return nil }
         
-        let endpoint = APIEndpoint.searchMedia(with: requestDTO)
+        let endpoint = MediaRepository.searchMedia(with: requestDTO)
         task.networkTask = dataTransferService.request(
             with: endpoint,
             completion: { result in
@@ -125,7 +174,7 @@ extension MediaRepository {
     }
     
     func search(requestDTO: SearchHTTPDTO.Request) async -> SearchHTTPDTO.Response? {
-        let endpoint = APIEndpoint.searchMedia(with: requestDTO)
+        let endpoint = MediaRepository.searchMedia(with: requestDTO)
         let result = await dataTransferService.request(with: endpoint)
         
         if case let .success(response) = result {
@@ -142,7 +191,7 @@ extension MediaRepository {
         
         guard !task.isCancelled else { return nil }
         
-        let endpoint = APIEndpoint.getUpcomingMedia(with: requestDTO)
+        let endpoint = MediaRepository.getUpcomingMedia(with: requestDTO)
         task.networkTask = dataTransferService.request(with: endpoint, completion: { result in
             if case let .success(responseDTO) = result {
                 completion(.success(responseDTO))
@@ -157,7 +206,7 @@ extension MediaRepository {
     func getUpcomings() async -> NewsHTTPDTO.Response? {
         let params = ["isNewRelease": true]
         let request = NewsHTTPDTO.Request(queryParams: params)
-        let endpoint = APIEndpoint.getUpcomingMedia(with: request)
+        let endpoint = MediaRepository.getUpcomingMedia(with: request)
         let result = await dataTransferService.request(with: endpoint)
         
         if case let .success(response) = result {
@@ -172,7 +221,7 @@ extension MediaRepository {
         
         guard !task.isCancelled else { return nil }
         
-        let endpoint = APIEndpoint.getTopSearchedMedia()
+        let endpoint = MediaRepository.getTopSearchedMedia()
         task.networkTask = dataTransferService.request(with: endpoint, completion: { result in
             if case let .success(responseDTO) = result {
                 completion(.success(responseDTO))
@@ -185,7 +234,7 @@ extension MediaRepository {
     }
     
     func getTopSearches() async -> SearchHTTPDTO.Response? {
-        let endpoint = APIEndpoint.getTopSearchedMedia()
+        let endpoint = MediaRepository.getTopSearchedMedia()
         let result = await dataTransferService.request(with: endpoint)
         
         if case let .success(response) = result {
