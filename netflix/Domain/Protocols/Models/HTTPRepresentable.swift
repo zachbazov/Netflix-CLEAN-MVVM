@@ -1,5 +1,5 @@
 //
-//  HTTP.swift
+//  HTTPRepresentable.swift
 //  netflix
 //
 //  Created by Zach Bazov on 01/02/2023.
@@ -7,9 +7,9 @@
 
 import Foundation
 
-// MARK: - HTTP Type
+// MARK: - HTTPRepresentable Type
 
-protocol HTTP {
+protocol HTTPRepresentable {
     associatedtype Request
     associatedtype Response
 }

@@ -9,11 +9,11 @@ import Foundation
 
 // MARK: - SeasonHTTP Type
 
-struct SeasonHTTP: HTTP {
+struct SeasonHTTP: HTTPRepresentable {
     struct Request {
-        var id: String? = nil
-        var slug: String? = nil
-        var season: Int? = 1
+        var id: String?
+        var slug: String?
+        var season: Int?
     }
 
     struct Response {

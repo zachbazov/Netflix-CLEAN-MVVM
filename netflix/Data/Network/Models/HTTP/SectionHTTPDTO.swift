@@ -1,5 +1,5 @@
 //
-//  SectionHTTPDTO+Mapping.swift
+//  SectionHTTPDTO.swift
 //  netflix
 //
 //  Created by Zach Bazov on 01/02/2023.
@@ -9,7 +9,7 @@ import CoreData
 
 // MARK: - SectionHTTPDTO Type
 
-struct SectionHTTPDTO: HTTP {
+struct SectionHTTPDTO: HTTPRepresentable {
     struct Request: Decodable {
         let user: UserDTO
     }

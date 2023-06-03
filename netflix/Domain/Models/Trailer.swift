@@ -11,12 +11,12 @@ import Foundation
 
 struct Trailer {
     var id: String?
-    var urlPath: String
+    let urlPath: String
 }
 
-// MARK: - Mediable Implementation
+// MARK: - MediaRepresentable Implementation
 
-extension Trailer: Mediable {}
+extension Trailer: MediaRepresentable {}
 
 // MARK: - Mapping
 

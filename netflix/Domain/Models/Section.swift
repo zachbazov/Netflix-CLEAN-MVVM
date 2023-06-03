@@ -7,13 +7,6 @@
 
 import Foundation
 
-// MARK: - Sectionable Type
-
-protocol Sectionable {
-    var id: Int { get }
-    var title: String { get }
-}
-
 // MARK: - Section Type
 
 final class Section {
@@ -36,9 +29,9 @@ final class Section {
 
 // MARK: - Sectionable Implementation
 
-extension Section: Sectionable {}
+extension Section: SectionRepresentable {}
 
-// MARK: -
+// MARK: - Vacant Value
 
 extension Section {
     static var vacantValue: Section {

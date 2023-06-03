@@ -11,14 +11,14 @@ import Foundation
 
 struct Episode {
     var id: String?
-    var mediaId: String
-    var title: String
-    var slug: String
-    var season: Int
-    var episode: Int
-    var url: String
+    let mediaId: String
+    let title: String
+    let slug: String
+    let season: Int
+    let episode: Int
+    let url: String
 }
 
-// MARK: - Mediable Implementation
+// MARK: - MediaRepresentable Implementation
 
-extension Episode: Mediable {}
+extension Episode: MediaRepresentable {}

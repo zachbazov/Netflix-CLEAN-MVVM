@@ -9,7 +9,7 @@ import Foundation
 
 // MARK: - SectionHTTP Type
 
-struct SectionHTTP: HTTP {
+struct SectionHTTP: HTTPRepresentable {
     struct Request {
         let user: User
     }

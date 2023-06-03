@@ -1,5 +1,5 @@
 //
-//  VoidHTTPDTO+Mapping.swift
+//  VoidHTTPDTO.swift
 //  netflix
 //
 //  Created by Zach Bazov on 23/03/2023.
@@ -9,12 +9,12 @@ import Foundation
 
 // MARK: - VoidHTTPDTO Type
 
-struct VoidHTTPDTO: HTTP {
+struct VoidHTTPDTO: HTTPRepresentable {
     struct Request: Decodable {}
     
     struct Response: Decodable {
         let status: String
-        let message: String?
+        var message: String?
     }
 }
 

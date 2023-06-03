@@ -7,6 +7,8 @@
 
 import Foundation
 
+// MARK: - AccountMenuItem Type
+
 struct AccountMenuItem {
     let image: String
     let title: String

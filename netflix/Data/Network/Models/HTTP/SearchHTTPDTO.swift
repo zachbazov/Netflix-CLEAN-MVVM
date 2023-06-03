@@ -9,7 +9,7 @@ import Foundation
 
 // MARK: - SearchHTTPDTO Type
 
-struct SearchHTTPDTO: HTTP {
+struct SearchHTTPDTO: HTTPRepresentable {
     struct Request: Equatable {
         let regex: String
     }

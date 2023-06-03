@@ -10,13 +10,13 @@ import Foundation
 // MARK: - User Type
 
 struct User {
-    let _id: String?
-    let name: String?
-    let email: String?
-    let password: String?
-    let passwordConfirm: String?
-    let role: String?
-    let active: Bool?
+    var _id: String?
+    var name: String?
+    var email: String?
+    var password: String?
+    var passwordConfirm: String?
+    var role: String?
+    var active: Bool?
     var token: String?
     var mylist: [String]?
     var profiles: [String]?

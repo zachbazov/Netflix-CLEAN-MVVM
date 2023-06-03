@@ -1,5 +1,5 @@
 //
-//  ProfileDTO+Mapping.swift
+//  ProfileDTO.swift
 //  netflix
 //
 //  Created by Zach Bazov on 14/03/2023.
@@ -11,10 +11,10 @@ import Foundation
 
 @objc
 public final class ProfileDTO: NSObject, Codable, NSSecureCoding {
-    var _id: String? = nil
+    var _id: String?
     let name: String
     let image: String
-    var active: Bool
+    let active: Bool
     let user: String
     
     init(_id: String? = nil, name: String, image: String, active: Bool, user: String) {

@@ -1,5 +1,5 @@
 //
-//  ListDTO+Mapping.swift
+//  ListDTO.swift
 //  netflix
 //
 //  Created by Zach Bazov on 20/10/2022.

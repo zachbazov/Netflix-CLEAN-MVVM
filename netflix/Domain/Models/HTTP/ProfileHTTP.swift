@@ -10,7 +10,7 @@ import Foundation
 // MARK: - ProfileHTTP Type
 
 struct ProfileHTTP {
-    struct GET: HTTP {
+    struct GET: HTTPRepresentable {
         struct Request {
             let user: User
         }
@@ -22,7 +22,7 @@ struct ProfileHTTP {
         }
     }
     
-    struct POST: HTTP {
+    struct POST: HTTPRepresentable {
         struct Request {
             let user: User
             let profile: Profile
@@ -34,7 +34,7 @@ struct ProfileHTTP {
         }
     }
     
-    struct PATCH: HTTP {
+    struct PATCH: HTTPRepresentable {
         struct Request {
             let user: User
         }

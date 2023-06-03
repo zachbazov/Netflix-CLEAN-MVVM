@@ -1,5 +1,5 @@
 //
-//  NewsHTTPDTO+Mapping.swift
+//  NewsHTTPDTO.swift
 //  netflix
 //
 //  Created by Zach Bazov on 01/02/2023.
@@ -9,14 +9,14 @@ import Foundation
 
 // MARK: - NewsHTTPDTO Type
 
-struct NewsHTTPDTO: HTTP {
+struct NewsHTTPDTO: HTTPRepresentable {
     struct Request {
         let queryParams: [String: Any]
     }
     
     struct Response: Decodable {
         let status: String
-        let results: Int?
+        var results: Int?
         let data: [MediaDTO]
     }
 }

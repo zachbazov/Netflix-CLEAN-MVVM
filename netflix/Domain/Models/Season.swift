@@ -10,11 +10,11 @@ import Foundation
 // MARK: - Season Type
 
 struct Season {
-    var mediaId: String
-    var title: String
-    var slug: String
-    var season: Int
-    var episodes: [Episode]
+    let mediaId: String
+    let title: String
+    let slug: String
+    let season: Int
+    let episodes: [Episode]
 }
 
 // MARK: - Vacant Value

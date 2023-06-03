@@ -1,5 +1,5 @@
 //
-//  UserHTTPDTO+Mapping.swift
+//  UserHTTPDTO.swift
 //  netflix
 //
 //  Created by Zach Bazov on 01/02/2023.
@@ -9,7 +9,7 @@ import CoreData
 
 // MARK: - UserHTTPDTO Type
 
-struct UserHTTPDTO: HTTP {
+struct UserHTTPDTO: HTTPRepresentable {
     struct Request: Decodable {
         let user: UserDTO
         var selectedProfile: String?
@@ -18,7 +18,7 @@ struct UserHTTPDTO: HTTP {
     struct Response: Decodable {
         var status: String?
         var token: String?
-        let data: UserDTO?
+        var data: UserDTO?
         var request: Request?
     }
 }

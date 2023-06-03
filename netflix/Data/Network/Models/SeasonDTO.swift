@@ -1,5 +1,5 @@
 //
-//  SeasonDTO+Mapping.swift
+//  SeasonDTO.swift
 //  netflix
 //
 //  Created by Zach Bazov on 31/08/2022.

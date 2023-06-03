@@ -1,5 +1,5 @@
 //
-//  ListHTTPDTO+Mapping.swift
+//  ListHTTPDTO.swift
 //  netflix
 //
 //  Created by Zach Bazov on 02/02/2023.
@@ -10,7 +10,7 @@ import Foundation
 // MARK: - ListHTTPDTO Type
 
 struct ListHTTPDTO {
-    struct GET: HTTP {
+    struct GET: HTTPRepresentable {
         struct Request: Decodable {
             let user: UserDTO
             var media: [MediaDTO]?
@@ -22,7 +22,7 @@ struct ListHTTPDTO {
         }
     }
 
-    struct PATCH: HTTP {
+    struct PATCH: HTTPRepresentable {
         struct Request: Decodable {
             let user: String
             let media: [String]

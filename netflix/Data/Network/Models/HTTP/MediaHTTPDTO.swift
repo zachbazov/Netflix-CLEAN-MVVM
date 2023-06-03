@@ -1,5 +1,5 @@
 //
-//  MediaHTTPDTO+Mapping.swift
+//  MediaHTTPDTO.swift
 //  netflix
 //
 //  Created by Zach Bazov on 01/02/2023.
@@ -9,10 +9,10 @@ import CoreData
 
 // MARK: - MediaHTTPDTO Type
 
-struct MediaHTTPDTO: HTTP {
+struct MediaHTTPDTO: HTTPRepresentable {
     struct Request: Decodable {
-        let id: String?
-        let slug: String?
+        var id: String?
+        var slug: String?
     }
     
     struct Response: Codable {

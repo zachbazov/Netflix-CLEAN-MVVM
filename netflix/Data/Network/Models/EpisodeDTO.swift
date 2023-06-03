@@ -1,5 +1,5 @@
 //
-//  EpisodeDTO+Mapping.swift
+//  EpisodeDTO.swift
 //  netflix
 //
 //  Created by Zach Bazov on 31/08/2022.

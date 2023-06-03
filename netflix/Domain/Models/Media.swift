@@ -7,12 +7,6 @@
 
 import UIKit
 
-// MARK: - Mediable Type
-
-protocol Mediable {
-    var id: String? { get }
-}
-
 // MARK: - MediaResources Type
 
 struct MediaResources {
@@ -33,7 +27,7 @@ struct MediaResources {
 // MARK: - Media Type
 
 struct Media {
-    let id: String?
+    var id: String?
     let type: String
     let title: String
     let slug: String
@@ -51,13 +45,13 @@ struct Media {
     let isNewRelease: Bool
     let isSecret: Bool
     let resources: MediaResources
-    let seasons: [String]?
+    var seasons: [String]?
     let timesSearched: Int
 }
 
-// MARK: - Mediable Implementation
+// MARK: - MediaRepresentable Implementation
 
-extension Media: Mediable {}
+extension Media: MediaRepresentable {}
 
 // MARK: - Equatable Implementation
 

@@ -18,7 +18,7 @@ private protocol ViewModelProtocol {
     func stateWillChange(_ state: DetailHybridCell.State)
     func seasonWillChange(_ season: Season)
     
-    func setItems(for state: DetailNavigationView.State) -> [Mediable]
+    func setItems(for state: DetailNavigationView.State) -> [MediaRepresentable]
 }
 
 // MARK: - DetailHybridCellViewModel Type
@@ -63,7 +63,7 @@ extension DetailHybridCellViewModel: ViewModelProtocol {
         self.state.value = state
     }
     
-    func setItems(for state: DetailNavigationView.State) -> [Mediable] {
+    func setItems(for state: DetailNavigationView.State) -> [MediaRepresentable] {
         switch state {
         case .episodes:
             return season.value.episodes
@@ -86,7 +86,7 @@ extension DetailHybridCellViewModel {
         
         if case .episodes = state {
             let cellViewModel = DetailCollectionViewCellViewModel(with: controller.viewModel)
-            let requestDTO = SeasonHTTPDTO.Request(slug: cellViewModel.slug, season: 1)
+            let requestDTO = SeasonHTTPDTO.Request(id: nil, slug: cellViewModel.slug, season: 1)
             
             self.seasonDidLoad(request: requestDTO) {}
         }

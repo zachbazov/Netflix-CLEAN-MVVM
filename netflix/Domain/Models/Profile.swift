@@ -10,11 +10,11 @@ import Foundation
 // MARK: - Profile Type
 
 struct Profile {
-    var _id: String? = nil
+    var _id: String?
     let name: String
     let image: String
     var active: Bool?
-    let user: String?
+    var user: String?
 }
 
 // MARK: - Mapping

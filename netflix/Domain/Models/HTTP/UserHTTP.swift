@@ -9,15 +9,15 @@ import Foundation
 
 // MARK: - UserHTTP Type
 
-struct UserHTTP: HTTP {
+struct UserHTTP: HTTPRepresentable {
     struct Request {
         let user: User
-        let selectedProfile: String?
+        var selectedProfile: String?
     }
 
     struct Response {
         var status: String?
-        let token: String?
+        var token: String?
         var data: User?
         var request: Request?
     }

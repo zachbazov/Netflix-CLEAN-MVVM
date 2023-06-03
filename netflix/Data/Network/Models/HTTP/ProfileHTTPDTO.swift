@@ -1,5 +1,5 @@
 //
-//  ProfileHTTPDTO+Mapping.swift
+//  ProfileHTTPDTO.swift
 //  netflix
 //
 //  Created by Zach Bazov on 14/03/2023.
@@ -10,7 +10,7 @@ import Foundation
 // MARK: - ProfileHTTPDTO Type
 
 struct ProfileHTTPDTO {
-    struct GET: HTTP {
+    struct GET: HTTPRepresentable {
         struct Request: Decodable {
             let user: UserDTO
         }
@@ -22,7 +22,7 @@ struct ProfileHTTPDTO {
         }
     }
     
-    struct POST: HTTP {
+    struct POST: HTTPRepresentable {
         struct Request: Decodable {
             let user: UserDTO
             let profile: ProfileDTO
@@ -34,7 +34,7 @@ struct ProfileHTTPDTO {
         }
     }
     
-    struct PATCH: HTTP {
+    struct PATCH: HTTPRepresentable {
         struct Request: Decodable {
             let user: UserDTO
         }

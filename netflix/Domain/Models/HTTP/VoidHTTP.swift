@@ -9,11 +9,11 @@ import Foundation
 
 // MARK: - VoidHTTP Type
 
-struct VoidHTTP: HTTP {
-    typealias Request = Void
+struct VoidHTTP: HTTPRepresentable {
+    struct Request {}
     
     struct Response {
         let status: String
-        let message: String?
+        var message: String?
     }
 }

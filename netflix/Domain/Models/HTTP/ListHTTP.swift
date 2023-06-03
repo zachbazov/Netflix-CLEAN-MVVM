@@ -9,7 +9,7 @@ import Foundation
 
 // MARK: - ListHTTP Type
 
-struct ListHTTP: HTTP {
+struct ListHTTP: HTTPRepresentable {
     struct Request {
         let user: User
     }
