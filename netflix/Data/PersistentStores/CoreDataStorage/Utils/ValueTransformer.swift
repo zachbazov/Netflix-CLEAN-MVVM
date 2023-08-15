@@ -42,12 +42,12 @@ final class ValueTransformer<T: NSObject>: NSSecureUnarchiveFromDataTransformer 
     }
     
     override func reverseTransformedValue(_ value: Any?) -> Any? {
-        guard let value = value as? T else {
-            guard let value = value as? [T] else {
+        guard let single = value as? T else {
+            guard let array = value as? [T] else {
                 fatalError("Wrong data type, received \(type(of: value)).")
             }
-            return super.reverseTransformedValue(value)
+            return super.reverseTransformedValue(array)
         }
-        return super.reverseTransformedValue(value)
+        return super.reverseTransformedValue(single)
     }
 }

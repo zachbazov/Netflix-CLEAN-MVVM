@@ -20,29 +20,17 @@ class MediaCollectionViewCell: UICollectionViewCell, CollectionViewCell {
     var representedIdentifier: NSString!
     var indexPath: IndexPath!
     
-    var imageService: AsyncImageService = AsyncImageService.shared
-    
     deinit {
         viewWillDeallocate()
     }
     
     // MARK: DataLoadable Implementation
     
-    func dataWillLoad() {
-        guard representedIdentifier == viewModel.slug as NSString? else { return }
-        
-        if #available(iOS 13.0, *) {
-            loadUsingAsyncAwait()
-            
-            return
-        }
-        
-        loadUsingDispatchGroup()
-    }
-    
     func dataDidLoad() {
-        guard let posterImage = imageService.object(for: viewModel.posterImageIdentifier),
-              let logoImage = imageService.object(for: viewModel.logoImageIdentifier)
+        let imageService = Application.app.services.image
+        
+        guard let posterImage = imageService.cache.object(for: viewModel.posterImageIdentifier),
+              let logoImage = imageService.cache.object(for: viewModel.logoImageIdentifier)
         else { return }
         
         hidePlaceholder()
@@ -55,7 +43,8 @@ class MediaCollectionViewCell: UICollectionViewCell, CollectionViewCell {
     
     func viewDidLoad() {
         viewWillConfigure()
-        dataWillLoad()
+        
+        fetchData()
     }
     
     func viewWillConfigure() {
@@ -106,20 +95,11 @@ class MediaCollectionViewCell: UICollectionViewCell, CollectionViewCell {
     
     // MARK: CollectionViewCellResourcing Implementation
     
-    func loadUsingAsyncAwait() {
-        Task {
-            await posterWillLoad()
-            await logoWillLoad()
-            
-            dataDidLoad()
-        }
-    }
-    
-    func loadUsingDispatchGroup() {
+    func fetchData() {
         let group = DispatchGroup()
         
         group.enter()
-        posterWillLoad { group.leave()}
+        posterWillLoad { group.leave() }
         
         group.enter()
         logoWillLoad { group.leave() }
@@ -133,13 +113,15 @@ class MediaCollectionViewCell: UICollectionViewCell, CollectionViewCell {
     }
     
     func resourceWillLoad(for url: URL, withIdentifier identifier: NSString, _ completion: @escaping () -> Void) {
-        imageService.load(url: url, identifier: identifier) { _ in
+        let imageService = Application.app.services.image
+        
+        imageService.load(url: url, identifier: identifier) { [weak self] _ in
+            guard let self = self,
+                  self.representedIdentifier == self.viewModel.slug as NSString?
+            else { return }
+            
             completion()
         }
-    }
-    
-    func resourceWillLoad(for url: URL, withIdentifier identifier: String) async {
-        await imageService.load(url: url, identifier: identifier)
     }
     
     // MARK: ViewProtocol Implementation
@@ -170,21 +152,5 @@ extension MediaCollectionViewCell {
     
     private func logoWillLoad(_ completion: @escaping () -> Void) {
         resourceWillLoad(for: viewModel.logoImageURL, withIdentifier: viewModel.logoImageIdentifier, completion)
-    }
-    
-    private func posterWillLoad() async {
-        guard let url = viewModel.posterImageURL else { return }
-        
-        let identifier = viewModel.posterImageIdentifier as String
-        
-        await resourceWillLoad(for: url, withIdentifier: identifier)
-    }
-    
-    private func logoWillLoad() async {
-        guard let url = viewModel.logoImageURL else { return }
-        
-        let identifier = viewModel.logoImageIdentifier as String
-        
-        await resourceWillLoad(for: url, withIdentifier: identifier)
     }
 }

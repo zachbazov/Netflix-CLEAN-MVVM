@@ -28,7 +28,7 @@ final class SegmentControlView: UIView, View {
     
     var viewModel: SegmentControlViewModel!
     
-    private let parent: UIView
+    private weak var parent: UIView?
     
     /// Create a navigation view object.
     /// - Parameters:
@@ -59,6 +59,8 @@ final class SegmentControlView: UIView, View {
     }
     
     func viewHierarchyWillConfigure() {
+        guard let parent = parent else { return }
+        
         self.addToHierarchy(on: parent)
             .constraintToSuperview(parent)
     }
@@ -164,16 +166,16 @@ extension SegmentControlView: ViewProtocol {
 extension SegmentControlView {
     private func configureButtons() {
         allButton
-            .border(.white.withAlphaComponent(0.3), width: 1.5)
+            .border(UIColor.white.withAlphaComponent(0.3), width: 1.5)
             .round()
         tvShowsButton
-            .border(.white.withAlphaComponent(0.3), width: 1.5)
+            .border(UIColor.white.withAlphaComponent(0.3), width: 1.5)
             .round()
         moviesButton
-            .border(.white.withAlphaComponent(0.3), width: 1.5)
+            .border(UIColor.white.withAlphaComponent(0.3), width: 1.5)
             .round()
         categoriesButton
-            .border(.white.withAlphaComponent(0.3), width: 1.5)
+            .border(UIColor.white.withAlphaComponent(0.3), width: 1.5)
             .round()
     }
 }

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="21507" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
-    <device id="retina6_12" orientation="portrait" appearance="light"/>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="17701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21505"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17703"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -11,25 +11,27 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="NavigationView" customModule="netflix" customModuleProvider="target">
             <connections>
                 <outlet property="navigationContainer" destination="fSV-8e-bxU" id="bBT-HF-Qq4"/>
+                <outlet property="navigationHeight" destination="HtJ-nn-XAK" id="CAe-sw-nDS"/>
                 <outlet property="segmentContainer" destination="79c-Hx-AGo" id="Uda-Pd-JPi"/>
+                <outlet property="segmentHeight" destination="w8P-AE-JgR" id="KtB-z4-Efd"/>
             </connections>
         </placeholder>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
         <view contentMode="scaleToFill" id="DJm-2m-b4y">
-            <rect key="frame" x="0.0" y="0.0" width="393" height="155"/>
+            <rect key="frame" x="0.0" y="0.0" width="393" height="140"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <subviews>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="WtA-gG-7bb" userLabel="Navigation Container">
-                    <rect key="frame" x="0.0" y="0.0" width="393" height="155"/>
+                    <rect key="frame" x="0.0" y="0.0" width="393" height="140"/>
                     <subviews>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="fSV-8e-bxU" userLabel="Navigation Container">
-                            <rect key="frame" x="0.0" y="59" width="393" height="48"/>
+                            <rect key="frame" x="0.0" y="44" width="393" height="48"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="48" id="HtJ-nn-XAK"/>
                             </constraints>
                         </view>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="79c-Hx-AGo" userLabel="Segment Container">
-                            <rect key="frame" x="0.0" y="107" width="393" height="48"/>
+                            <rect key="frame" x="0.0" y="92" width="393" height="48"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="48" id="w8P-AE-JgR"/>
                             </constraints>
@@ -43,7 +45,7 @@
                         <constraint firstItem="79c-Hx-AGo" firstAttribute="leading" secondItem="WtA-gG-7bb" secondAttribute="leading" id="dY7-FK-LEY"/>
                         <constraint firstItem="79c-Hx-AGo" firstAttribute="top" secondItem="NXn-QT-NNY" secondAttribute="top" constant="48" id="kDh-lf-BJ0"/>
                         <constraint firstItem="fSV-8e-bxU" firstAttribute="leading" secondItem="WtA-gG-7bb" secondAttribute="leading" id="oDe-Wa-FGQ"/>
-                        <constraint firstAttribute="height" constant="155" id="w1w-rP-bFk"/>
+                        <constraint firstAttribute="height" constant="140" id="w1w-rP-bFk"/>
                     </constraints>
                 </view>
             </subviews>

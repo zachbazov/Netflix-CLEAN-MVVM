@@ -67,7 +67,7 @@ final class MediaPlayerOverlayView: UIView, View {
     }
     
     func viewWillConfigure() {
-        gradientView.setBackgroundColor(.black.withAlphaComponent(0.5))
+        gradientView.setBackgroundColor(UIColor.black.withAlphaComponent(0.5))
         
         let title = mediaPlayerView?.viewModel?.media.title
         setTitle(title)
@@ -250,12 +250,12 @@ extension MediaPlayerOverlayView {
         
         switch player.timeControlStatus {
         case .playing:
-            systemImage = .init(systemName: "pause")!
+            systemImage = UIImage(systemName: "pause")!
         case .paused,
                 .waitingToPlayAtSpecifiedRate:
-            systemImage = .init(systemName: "arrowtriangle.right.fill")!
+            systemImage = UIImage(systemName: "arrowtriangle.right.fill")!
         default:
-            systemImage = .init(systemName: "pause")!
+            systemImage = UIImage(systemName: "pause")!
         }
         
         playButton.setImage(systemImage, for: .normal)
@@ -281,7 +281,7 @@ extension MediaPlayerOverlayView {
     private func startTimer() {
         guard let viewModel = viewModel else { return }
         
-        viewModel.timer.schedule(timeInterval: viewModel.durationThreshold,
+        viewModel.timer.schedule(timeInterval: TimeInterval(viewModel.durationThreshold),
                                  target: self,
                                  selector: #selector(viewWillDisappear),
                                  repeats: viewModel.repeats)

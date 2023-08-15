@@ -34,7 +34,7 @@ protocol NetworkServiceProtocol {
     
     func request(endpoint: Requestable, completion: @escaping CompletionHandler) -> NetworkCancellable?
     
-    func request(endpoint: Requestable) async throws -> (Data, URLResponse)?
+//    func request(endpoint: Requestable) async throws -> (Data, URLResponse)?
 }
 
 // MARK: - NetworkSessionManagerProtocol Type
@@ -44,7 +44,7 @@ protocol NetworkSessionManagerProtocol {
     
     func request(_ request: URLRequest, completion: @escaping CompletionHandler) -> NetworkCancellable
     
-    func request(_ request: URLRequest) async throws -> (Data, URLResponse)?
+//    func request(_ request: URLRequest) async throws -> (Data, URLResponse)?
 }
 
 // MARK: - NetworkErrorLoggerProtocol Type
@@ -90,12 +90,12 @@ extension NetworkService {
         return sessionDataTask
     }
     
-    private func request(request: URLRequest) async -> (Data, URLResponse)? {
-        self.logger.log(request: request)
-        guard let (data, response) = await sessionManager.request(request) else { return nil }
-        self.logger.log(responseData: data, response: response)
-        return (data, response)
-    }
+//    private func request(request: URLRequest) async -> (Data, URLResponse)? {
+//        self.logger.log(request: request)
+//        guard let (data, response) = await sessionManager.request(request) else { return nil }
+//        self.logger.log(responseData: data, response: response)
+//        return (data, response)
+//    }
     
     private func resolve(error: Error) -> NetworkError {
         let code = URLError.Code(rawValue: (error as NSError).code)
@@ -112,7 +112,7 @@ extension NetworkService {
 extension NetworkService: NetworkServiceProtocol {
     func request(endpoint: Requestable, completion: @escaping CompletionHandler) -> NetworkCancellable? {
         do {
-            let urlRequest = try endpoint.urlRequest(with: config)
+            let urlRequest: URLRequest = try endpoint.urlRequest(with: config)
             return request(request: urlRequest, completion: completion)
         } catch {
             completion(.failure(.urlGeneration))
@@ -120,15 +120,15 @@ extension NetworkService: NetworkServiceProtocol {
         }
     }
     
-    func request(endpoint: Requestable) async -> (Data, URLResponse)? {
-        do {
-            let urlRequest = try await endpoint.urlRequest(with: config)
-            guard let (data, response) = await self.request(request: urlRequest) else { return nil }
-            return (data, response)
-        } catch {
-            return nil
-        }
-    }
+//    func request(endpoint: Requestable) async -> (Data, URLResponse)? {
+//        do {
+//            let urlRequest = try await endpoint.urlRequest(with: config)
+//            guard let (data, response) = await self.request(request: urlRequest) else { return nil }
+//            return (data, response)
+//        } catch {
+//            return nil
+//        }
+//    }
 }
 
 // MARK: - NetworkSessionManager Type
@@ -140,9 +140,9 @@ struct NetworkSessionManager: NetworkSessionManagerProtocol {
         return task
     }
     
-    func request(_ request: URLRequest) async -> (Data, URLResponse)? {
-        return try? await URLSession.shared.data(for: request)
-    }
+//    func request(_ request: URLRequest) async -> (Data, URLResponse)? {
+//        return try? await URLSession.shared.data(for: request)
+//    }
 }
 
 // MARK: - NetworkErrorLogger Type

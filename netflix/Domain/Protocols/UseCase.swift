@@ -18,7 +18,7 @@ protocol NetworkRequestable {
                     cached: @escaping (T?) -> Void,
                     completion: @escaping (Result<T, DataTransferError>) -> Void) -> Cancellable? where T: Decodable
     
-    func request<T>(endpoint: E, for response: T.Type, request: Any?) async -> T? where T: Decodable
+//    func request<T>(endpoint: E, for response: T.Type, request: Any?) async -> T? where T: Decodable
 }
 
 // MARK: - UseCase Type

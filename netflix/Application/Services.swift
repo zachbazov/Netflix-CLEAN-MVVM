@@ -12,6 +12,7 @@ import Foundation
 final class Services {
     lazy var auth = AuthService()
     lazy var dataTransfer: DataTransferService = createDataTransferService()
+    lazy var image: ImageService = createImageService()
     lazy var myList = MyList()
     
     private func createDataTransferService() -> DataTransferService {
@@ -22,5 +23,10 @@ final class Services {
         let config = NetworkConfig(baseURL: url)
         let networkService = NetworkService(config: config)
         return DataTransferService(networkService: networkService)
+    }
+    
+    private func createImageService() -> ImageService {
+        let urlService = URLImageService()
+        return ImageService(urlService: urlService)
     }
 }

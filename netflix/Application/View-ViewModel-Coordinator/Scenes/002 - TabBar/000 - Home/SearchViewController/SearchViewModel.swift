@@ -92,20 +92,20 @@ extension SearchViewModel: ViewModelProtocol {
 
 extension SearchViewModel {
     private func loadSearch() {
-        if #available(iOS 13.0, *) {
-            loadUsingAsyncAwait()
-            
-            return
-        }
+//        if #available(iOS 13.0, *) {
+//            loadUsingAsyncAwait()
+//            
+//            return
+//        }
         
         loadUsingAsync()
     }
     
-    private func loadUsingAsyncAwait() {
-        Task {
-            await searchWillLoad()
-        }
-    }
+//    private func loadUsingAsyncAwait() {
+//        Task {
+//            await searchWillLoad()
+//        }
+//    }
     
     private func loadUsingAsync() {
         let request = SearchHTTPDTO.Request(regex: query.value)
@@ -137,23 +137,23 @@ extension SearchViewModel {
             })
     }
     
-    private func searchWillLoad() async {
-        mainQueueDispatch { [weak self] in
-            self?.isLoading = true
-        }
-        
-        let request = SearchHTTPDTO.Request(regex: query.value)
-        let response = await useCase.request(endpoint: .searchMedia, for: SearchHTTPDTO.Response.self, request: request)
-        
-        guard let response = response else { return }
-        
-        let media = response.data.toDomain()
-        itemsWillChange(mapping: media)
-        
-        mainQueueDispatch { [weak self] in
-            self?.isLoading = false
-        }
-    }
+//    private func searchWillLoad() async {
+//        mainQueueDispatch { [weak self] in
+//            self?.isLoading = true
+//        }
+//
+//        let request = SearchHTTPDTO.Request(regex: query.value)
+//        let response = await useCase.request(endpoint: .searchMedia, for: SearchHTTPDTO.Response.self, request: request)
+//
+//        guard let response = response else { return }
+//
+//        let media = response.data.toDomain()
+//        itemsWillChange(mapping: media)
+//
+//        mainQueueDispatch { [weak self] in
+//            self?.isLoading = false
+//        }
+//    }
 }
 
 // MARK: - Private Implementation

@@ -73,7 +73,11 @@ extension MediaHybridCell: HybridCell {
               let controllerViewModel = controllerViewModel
         else { return }
         
-        dataSource = MediaCollectionViewDataSource<Cell>(on: collectionView, section: viewModel.section, viewModel: controllerViewModel)
+        dataSource = MediaCollectionViewDataSource<Cell>(section: viewModel.section, viewModel: controllerViewModel)
+        collectionView.delegate = dataSource
+        collectionView.dataSource = dataSource
+        collectionView.prefetchDataSource = dataSource
+        collectionView.reloadData()
     }
     
     func createLayout() {

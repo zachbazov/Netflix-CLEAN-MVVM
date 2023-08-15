@@ -19,22 +19,6 @@ class DetailCollectionViewCell: UICollectionViewCell, CollectionViewCell {
     var representedIdentifier: NSString!
     var indexPath: IndexPath!
     
-    var imageService: AsyncImageService = AsyncImageService.shared
-    
-    // MARK: DataLoadable Implementation
-    
-    func dataWillLoad() {
-        guard representedIdentifier == viewModel.slug as NSString? else { return }
-        
-        if #available(iOS 13.0, *) {
-            loadUsingAsyncAwait()
-            
-            return
-        }
-        
-        loadUsingAsync()
-    }
-    
     // MARK: ViewLifecycleBehavior Implementation
     
     func viewWillConfigure() {
@@ -42,18 +26,6 @@ class DetailCollectionViewCell: UICollectionViewCell, CollectionViewCell {
         playButton.cornerRadius(playButton.bounds.size.height / 2)
         
         imageView.cornerRadius(4.0)
-    }
-    
-    // MARK: CollectionViewCellResourcing Implementation
-    
-    func loadUsingAsync() {
-        posterWillLoad()
-    }
-    
-    func loadUsingAsyncAwait() {
-        Task {
-            await posterWillLoad()
-        }
     }
     
     // MARK: ViewProtocol Implementation
@@ -70,24 +42,20 @@ class DetailCollectionViewCell: UICollectionViewCell, CollectionViewCell {
 // MARK: - Private Implementation
 
 extension DetailCollectionViewCell {
-    private func posterWillLoad() {
-        AsyncImageService.shared.load(
+    func fetchImage() {
+        let imageService = Application.app.services.image
+        
+        imageService.load(
             url: viewModel.posterImageURL,
             identifier: viewModel.posterImageIdentifier) { [weak self] image in
-                guard let self = self, let image = image else { return }
-                
-                mainQueueDispatch {
-                    self.setPoster(image)
-                }
+            guard let self = self,
+                  self.representedIdentifier == self.viewModel.slug as NSString?,
+                  let image = image
+            else { return }
+            
+            mainQueueDispatch {
+                self.setPoster(image)
             }
-    }
-    
-    private func posterWillLoad() async {
-        let url = viewModel.posterImageURL
-        let identifier = viewModel.posterImageIdentifier as String
-        
-        guard let image = await AsyncImageService.shared.load(url: url, identifier: identifier) else { return }
-        
-        setPoster(image)
+        }
     }
 }

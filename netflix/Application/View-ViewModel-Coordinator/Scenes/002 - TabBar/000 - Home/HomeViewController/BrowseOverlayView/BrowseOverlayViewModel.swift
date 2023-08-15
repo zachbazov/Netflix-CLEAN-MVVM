@@ -52,7 +52,7 @@ extension BrowseOverlayViewModel: ViewModelProtocol {
         
         guard let controller = coordinator.detail?.viewControllers.first as? DetailViewController else { return }
         
-        let section = section.value
+        let section = self.section.value
         let media = section.media[indexPath.row]
         
         controller.viewModel.section = section

@@ -93,10 +93,14 @@ final class HomeViewController: UIViewController, Controller {
 extension HomeViewController {
     private func createDataSource() {
         dataSource = MediaTableViewDataSource(viewModel: viewModel)
+        
     }
     
     private func createNavigationView() {
-        navigationView = NavigationView(on: navigationViewContainer, with: viewModel)
+        navigationView = NavigationView(with: viewModel)
+        navigationView?
+            .addToHierarchy(on: navigationViewContainer)
+            .constraintToSuperview(navigationViewContainer)
     }
     
     private func createNavigationOverlay() {

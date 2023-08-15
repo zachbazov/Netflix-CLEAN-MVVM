@@ -131,29 +131,8 @@ extension AccountViewController {
         
         ActivityIndicatorView.present()
         
-        if #available(iOS 13, *) {
-            signOutUsingAsyncAwait()
-            
-            return
-        }
-        
         authService.signOut() { [weak self] in
             self?.signOutDidComplete()
-        }
-    }
-    
-    private func signOutUsingAsyncAwait() {
-        let authService = Application.app.services.auth
-        
-        guard let user = authService.user else { return }
-        
-        Task {
-            let request = UserHTTPDTO.Request(user: user, selectedProfile: nil)
-            let status = await authService.signOut(with: request)
-            
-            guard status else { return }
-            
-            signOutDidComplete()
         }
     }
     
@@ -166,7 +145,7 @@ extension AccountViewController {
             guard let self = self else { return }
             
             self.viewWillDeallocate()
-            
+
             let coordinator = Application.app.coordinator
             coordinator.deallocateTabBar()
             coordinator.coordinate(to: .auth)

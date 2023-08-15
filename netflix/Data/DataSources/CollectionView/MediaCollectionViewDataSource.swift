@@ -7,13 +7,6 @@
 
 import UIKit
 
-// MARK: - DataSourceProtocol Type
-
-private protocol DataSourceProtocol {
-    var collectionView: UICollectionView? { get }
-    var section: Section { get }
-}
-
 // MARK: - MediaCollectionViewDataSource Type
 
 final class MediaCollectionViewDataSource<Cell>: CollectionViewDataSource,
@@ -21,22 +14,15 @@ final class MediaCollectionViewDataSource<Cell>: CollectionViewDataSource,
     fileprivate let coordinator: HomeViewCoordinator
     fileprivate let section: Section
     
-    fileprivate weak var collectionView: UICollectionView?
-    
-    init(on collectionView: UICollectionView,
-         section: Section,
-         viewModel: HomeViewModel) {
+    init(section: Section, viewModel: HomeViewModel) {
         guard let coordinator = viewModel.coordinator else {
             fatalError("Unexpected \(type(of: viewModel.coordinator)) coordinator value.")
         }
         
         self.coordinator = coordinator
         self.section = section
-        self.collectionView = collectionView
         
         super.init()
-        
-        self.dataSourceDidChange()
     }
     
     override func numberOfSections() -> Int {
@@ -52,7 +38,8 @@ final class MediaCollectionViewDataSource<Cell>: CollectionViewDataSource,
                                                on: collectionView,
                                                reuseIdentifier: Cell.reuseIdentifier,
                                                section: section,
-                                               for: indexPath) as! T
+                                               for: indexPath,
+                                               with: coordinator.viewController?.viewModel) as! T
     }
     
     override func didSelectItem(in collectionView: UICollectionView, at indexPath: IndexPath) {
@@ -78,17 +65,6 @@ final class MediaCollectionViewDataSource<Cell>: CollectionViewDataSource,
     func collectionView(_ collectionView: UICollectionView, cancelPrefetchingForItemsAt indexPaths: [IndexPath]) {}
 }
 
-// MARK: - DataSourceProtocol Implementation
-
-extension MediaCollectionViewDataSource: DataSourceProtocol {}
-
 // MARK: - Private Implementation
 
-extension MediaCollectionViewDataSource {
-    private func dataSourceDidChange() {
-        collectionView?.delegate = self
-        collectionView?.dataSource = self
-        collectionView?.prefetchDataSource = self
-        collectionView?.reloadData()
-    }
-}
+extension MediaCollectionViewDataSource {}

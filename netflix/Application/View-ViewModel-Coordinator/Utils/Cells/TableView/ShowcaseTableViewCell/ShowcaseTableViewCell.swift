@@ -64,6 +64,6 @@ extension ShowcaseTableViewCell: TableViewCell {
 
 extension ShowcaseTableViewCell {
     private func createShowcaseView() {
-        showcaseView = ShowcaseView(on: contentView, with: viewModel)
+        showcaseView = ShowcaseView(with: viewModel)
     }
 }

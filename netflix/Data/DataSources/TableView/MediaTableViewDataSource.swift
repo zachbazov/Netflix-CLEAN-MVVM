@@ -16,7 +16,7 @@ private protocol DataSourceProtocol {
     var initialOffsetY: CGFloat { get }
     var primaryOffsetY: CGFloat { get }
     
-    func setContentInset()
+//    func setContentInset()
 }
 
 // MARK: - MediaTableViewDataSource Type
@@ -34,7 +34,7 @@ final class MediaTableViewDataSource: TableViewDataSource {
         
         super.init()
         
-        self.setContentInset()
+//        self.setContentInset()
     }
     
     deinit {
@@ -128,55 +128,60 @@ final class MediaTableViewDataSource: TableViewDataSource {
     }
     
     override func tableViewDidScroll(_ scrollView: UIScrollView) {
-        guard let window = UIApplication.shared.windows.first,
-              let controller = viewModel.coordinator?.viewController
-        else { return }
+        guard let controller = viewModel.coordinator?.viewController else { return }
         
-        let offsetY = scrollView.panGestureRecognizer.translation(in: controller.view).y
-        let isScrollingUp = offsetY > .zero
+        let offsetY: CGFloat = scrollView.panGestureRecognizer.translation(in: controller.view).y
+        let contentOffsetY = scrollView.contentOffset.y
+        let redH: CGFloat = 48.0
+        let isScrollingUp = offsetY >= .zero
         
-        let segmentY = -scrollView.contentOffset.y - controller.navigationViewContainer.bounds.height
-        var segmentMaxY = max(.zero, -segmentY)
-        primaryOffsetY = min(.zero, -scrollView.contentOffset.y - controller.navigationViewContainer.bounds.height)
+        if isScrollingUp {
+            self.show()
+            
+            if contentOffsetY <= redH {
+                controller.navigationView?.apply(.gradient)
+            } else {
+                controller.navigationView?.apply(.blur)
+            }
+        } else {
+            if contentOffsetY >= redH {
+                self.hide()
+                controller.navigationView?.apply(.blur)
+            } else {
+                self.show()
+                controller.navigationView?.apply(.gradient)
+            }
+        }
         
-        let segmentHeight = controller.navigationView?.segmentControl?.bounds.size.height ?? .zero
-        let statusBarHeight = window.windowScene?.statusBarManager?.statusBarFrame.height ?? .zero
-        let heightLimit: CGFloat = statusBarHeight + initialOffsetY
+//        UIView.animate(
+//            withDuration: 0.25,
+//            delay: .zero,
+//            options: .curveEaseInOut,
+//            animations: { [weak self] in
+//                guard let self = self else { return }
+//
+//                controller.navigationView?.layoutIfNeeded()
+//            })
+    }
+    
+    private func hide() {
+        guard let controller = viewModel.coordinator?.viewController else { return }
         
-        primaryOffsetY = -primaryOffsetY
+        let redH: CGFloat = 48.0
+        let purpleH: CGFloat = 140.0
         
-        segmentMaxY = segmentMaxY > segmentHeight ? segmentHeight : segmentMaxY
+        controller.navigationView?.segmentHeight.constant = .zero
+        controller.navigationViewContainerHeight.constant = purpleH - redH
+    }
+    
+    private func show() {
+        guard let controller = viewModel.coordinator?.viewController else { return }
         
-        UIView.animate(
-            withDuration: 0.25,
-            delay: .zero,
-            options: .curveEaseInOut,
-            animations: { [weak self] in
-                guard let self = self else { return }
-                
-                if isScrollingUp {
-                    let condition = self.primaryOffsetY <= segmentHeight
-                    
-                    controller.navigationViewContainerHeight.constant = condition
-                        ? heightLimit + (-segmentMaxY * 2)
-                        : heightLimit
-                    
-                    controller.navigationView?.segmentControl?.origin(
-                        y: condition
-                            ? -segmentMaxY
-                            : -segmentMaxY + segmentHeight)
-                    
-                    controller.navigationView?.segmentControl?.alpha = condition
-                        ? 1.0 - (segmentMaxY / segmentHeight)
-                        : 1.0
-                } else {
-                    controller.navigationViewContainerHeight.constant = heightLimit + -segmentMaxY
-                    controller.navigationView?.segmentControl?.origin(y: -segmentMaxY)
-                    controller.navigationView?.segmentControl?.alpha = 1.0 - (segmentMaxY / segmentHeight)
-                }
-                
-                self.applyStyleChanges(isScrollingUp, limit: segmentHeight)
-            })
+        let redH: CGFloat = 48.0
+        let purpleH: CGFloat = 140.0
+        
+        controller.navigationView?.segmentHeight.constant = redH
+        controller.navigationViewContainerHeight.constant = purpleH
     }
 }
 
@@ -195,20 +200,20 @@ extension MediaTableViewDataSource: DataSourceProtocol {
         tableView.reloadData()
     }
     
-    fileprivate func setContentInset() {
-        guard let controller = viewModel.coordinator?.viewController,
-              let tableView = controller.tableView,
-              let window = UIApplication.shared.windows.first
-        else { return }
-        
-        let statusBarHeight = window.windowScene?.statusBarManager?.statusBarFrame.size.height ?? .zero
-        let remainder = controller.view.bounds.height - controller.navigationViewContainer.bounds.height
-        let offset = controller.view.bounds.height - remainder - statusBarHeight
-        
-        initialOffsetY = offset
-        
-        tableView.contentInset = .init(top: initialOffsetY, left: .zero, bottom: .zero, right: .zero)
-    }
+//    fileprivate func setContentInset() {
+//        guard let controller = viewModel.coordinator?.viewController,
+//              let tableView = controller.tableView,
+//              let window = UIApplication.shared.windows.first
+//        else { return }
+//
+//        let statusBarHeight = window.windowScene?.statusBarManager?.statusBarFrame.size.height ?? .zero
+//        let remainder = controller.view.bounds.height - controller.navigationViewContainer.bounds.height
+//        let offset = controller.view.bounds.height - remainder - statusBarHeight
+//
+//        initialOffsetY = .zero
+//
+//        tableView.contentInset = .init(top: initialOffsetY, left: .zero, bottom: .zero, right: .zero)
+//    }
 }
 
 // MARK: - Index Type
@@ -286,9 +291,9 @@ extension MediaTableViewDataSource {
                 controller.navigationView?.apply(.blur)
             }
             
-            if self.primaryOffsetY <= .zero {
-                controller.navigationView?.apply(.gradient)
-            }
+//            if self.primaryOffsetY <= .zero {
+//                controller.navigationView?.apply(.gradient)
+//            }
         } else {
             guard self.primaryOffsetY >= .zero else {
                 controller.navigationView?.apply(.gradient)

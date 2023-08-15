@@ -53,21 +53,4 @@ extension UserUseCase: UseCase {
             return repository.update(request: request, completion: completion)
         }
     }
-    
-    func request<T>(endpoint: Endpoints, for response: T.Type, request: Any?) async -> T? where T: Decodable {
-        switch endpoint {
-        case .signUp:
-            return await repository.sign(endpoint: endpoint, request: request)
-        case .signIn:
-            return await repository.sign(endpoint: endpoint, request: request)
-        case .signOut:
-            return await repository.sign(endpoint: endpoint, request: request)
-        case .getUserProfiles:
-            return await repository.find(request: request)
-        case .createUserProfile:
-            return await repository.create(request: request)
-        case .updateUserData:
-            return await repository.update(request: request)
-        }
-    }
 }

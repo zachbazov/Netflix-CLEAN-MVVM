@@ -87,15 +87,15 @@ extension SignUpViewModel: ViewModelProtocol {
         
         let requestDTO = UserHTTPDTO.Request(user: userDTO, selectedProfile: nil)
         
-        if #available(iOS 13.0, *) {
-            Task {
-                let status = await authService.signUp(with: requestDTO)
-                
-                didFinish(with: status)
-            }
-            
-            return
-        }
+//        if #available(iOS 13.0, *) {
+//            Task {
+//                let status = await authService.signUp(with: requestDTO)
+//                
+//                didFinish(with: status)
+//            }
+//            
+//            return
+//        }
         
         authService.signUp(for: requestDTO) { [weak self] status in
             self?.didFinish(with: status)

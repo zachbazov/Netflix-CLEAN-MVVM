@@ -24,25 +24,13 @@ final class AccountMenuNotificationCollectionViewCell: UICollectionViewCell, Col
     var representedIdentifier: NSString!
     var indexPath: IndexPath!
     
-    var imageService: AsyncImageService = AsyncImageService.shared
-    
     // MARK: DataLoadable Implementation
     
-    func dataWillLoad() {
-        guard representedIdentifier == viewModel.slug as NSString? else { return }
-        
-        if #available(iOS 13.0, *) {
-            loadUsingAsyncAwait()
-            
-            return
-        }
-        
-        loadUsingDispatchGroup()
-    }
-    
     func dataDidLoad() {
-        guard let posterImage = imageService.object(for: viewModel.posterImageIdentifier),
-              let logoImage = imageService.object(for: viewModel.logoImageIdentifier)
+        let imageService = Application.app.services.image
+        
+        guard let posterImage = imageService.cache.object(for: viewModel.posterImageIdentifier),
+              let logoImage = imageService.cache.object(for: viewModel.logoImageIdentifier)
         else { return }
         
         mainQueueDispatch { [weak self] in
@@ -57,7 +45,8 @@ final class AccountMenuNotificationCollectionViewCell: UICollectionViewCell, Col
     
     func viewDidLoad() {
         viewWillConfigure()
-        dataWillLoad()
+        
+        fetchData()
     }
     
     func viewWillConfigure() {
@@ -67,33 +56,6 @@ final class AccountMenuNotificationCollectionViewCell: UICollectionViewCell, Col
         setBackgroundColor(.hexColor("#121212"))
         setSubject(viewModel.title)
         setLogoAlignment()
-    }
-    
-    // MARK: CollectionViewCellResourcing Implementation
-    
-    func loadUsingAsyncAwait() {
-        Task {
-            await posterWillLoad()
-            await logoWillLoad()
-            
-            dataDidLoad()
-        }
-    }
-    
-    func loadUsingDispatchGroup() {
-        let group = DispatchGroup()
-        
-        group.enter()
-        posterWillLoad { group.leave() }
-        
-        group.enter()
-        logoWillLoad { group.leave() }
-        
-        group.notify(queue: .main) { [weak self] in
-            guard let self = self else { return }
-            
-            self.dataDidLoad()
-        }
     }
     
     // MARK: ViewProtocol Implementation
@@ -155,32 +117,46 @@ final class AccountMenuNotificationCollectionViewCell: UICollectionViewCell, Col
 
 extension AccountMenuNotificationCollectionViewCell {
     private func posterWillLoad(_ completion: @escaping () -> Void) {
+        let imageService = Application.app.services.image
+        
         imageService.load(
             url: viewModel.posterImageURL,
-            identifier: viewModel.posterImageIdentifier) { _ in
-                completion()
-            }
+            identifier: viewModel.posterImageIdentifier) { [weak self] _ in
+            guard let self = self,
+                  self.representedIdentifier == self.viewModel.slug as NSString?
+            else { return }
+            
+            completion()
+        }
     }
     
     private func logoWillLoad(_ completion: @escaping () -> Void) {
+        let imageService = Application.app.services.image
+        
         imageService.load(
             url: viewModel.logoImageURL,
-            identifier: viewModel.logoImageIdentifier) { _ in
-                completion()
-            }
+            identifier: viewModel.logoImageIdentifier) { [weak self] _ in
+            guard let self = self,
+                  self.representedIdentifier == self.viewModel.slug as NSString?
+            else { return }
+            
+            completion()
+        }
     }
     
-    private func posterWillLoad() async {
-        let url = viewModel.posterImageURL
-        let identifier = viewModel.posterImageIdentifier as String
+    private func fetchData() {
+        let group = DispatchGroup()
         
-        await imageService.load(url: url, identifier: identifier)
-    }
-    
-    private func logoWillLoad() async {
-        let url = viewModel.logoImageURL
-        let identifier = viewModel.logoImageIdentifier as String
+        group.enter()
+        posterWillLoad { group.leave() }
         
-        await imageService.load(url: url, identifier: identifier)
+        group.enter()
+        logoWillLoad { group.leave() }
+        
+        group.notify(queue: .main) { [weak self] in
+            guard let self = self else { return }
+            
+            self.dataDidLoad()
+        }
     }
 }

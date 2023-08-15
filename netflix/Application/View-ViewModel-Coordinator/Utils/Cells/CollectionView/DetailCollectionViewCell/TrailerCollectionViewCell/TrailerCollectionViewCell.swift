@@ -14,7 +14,7 @@ final class TrailerCollectionViewCell: DetailCollectionViewCell {
     // MARK: ViewLifecycleBehavior Implementation
     
     func viewDidLoad() {
-        super.dataWillLoad()
+        super.fetchImage()
         
         viewWillConfigure()
     }

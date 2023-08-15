@@ -31,7 +31,8 @@ final class AccountMenuNotificationCollectionViewDataSource: CollectionViewDataS
                                  at indexPath: IndexPath) -> T where T: UICollectionViewCell {
         return AccountMenuNotificationCollectionViewCell.create(of: AccountMenuNotificationCollectionViewCell.self,
                                                                 on: collectionView,
-                                                                for: indexPath) as! T
+                                                                for: indexPath,
+                                                                with: viewModel) as! T
     }
     
     override func willDisplayCellForItem<T>(_ cell: T, at indexPath: IndexPath) where T: UICollectionViewCell {

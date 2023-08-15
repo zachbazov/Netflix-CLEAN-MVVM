@@ -12,7 +12,7 @@ import Foundation
 protocol UserRepositoryURLReferrable {
     static func signUp(with request: UserHTTPDTO.Request) -> Endpoint<UserHTTPDTO.Response>
     static func signIn(with request: UserHTTPDTO.Request) -> Endpoint<UserHTTPDTO.Response>
-    static func signOut(with request: UserHTTPDTO.Request) -> Endpoint<VoidHTTPDTO.Response>?
+    static func signOut(with request: UserHTTPDTO.Request) -> Endpoint<VoidHTTPDTO.Response>
     
     static func getUserProfiles(with request: ProfileHTTPDTO.GET.Request) -> Endpoint<ProfileHTTPDTO.GET.Response>
     static func createUserProfile(with request: ProfileHTTPDTO.POST.Request) -> Endpoint<ProfileHTTPDTO.POST.Response>
@@ -26,8 +26,6 @@ protocol UserAuthenticable {
                  request: Any?,
                  cached: @escaping (T?) -> Void,
                  completion: @escaping (Result<T, DataTransferError>) -> Void) -> Cancellable?
-    
-    func sign<T>(endpoint: UserUseCase.Endpoints, request: Any?) async -> T? where T: Decodable
 }
 
 // MARK: - UserRepository Type
@@ -71,14 +69,14 @@ extension UserRepository: UserRepositoryURLReferrable {
         return Endpoint(path: path, method: method, headerParameters: headerParams, bodyParameters: bodyParams)
     }
     
-    static func signOut(with request: UserHTTPDTO.Request) -> Endpoint<VoidHTTPDTO.Response>? {
+    static func signOut(with request: UserHTTPDTO.Request) -> Endpoint<VoidHTTPDTO.Response> {
         let path = "api/v1/users/signout"
         let method: HTTPMethodType = .get
         let headerParams = ["content-type": "application/json"]
         
         let authService = Application.app.services.auth
         
-        guard authService.user?._id == request.user._id else { return nil }
+        guard authService.user?._id == request.user._id else { fatalError() }
         
         return Endpoint(path: path, method: method, headerParameters: headerParams)
     }
@@ -185,16 +183,11 @@ extension UserRepository: UserAuthenticable {
             
             let request = UserHTTPDTO.Request(user: user, selectedProfile: nil)
             
-            guard let endpoint = UserRepository.signOut(with: request) else { return nil }
+            let endpoint = UserRepository.signOut(with: request)
             
-            task.networkTask = dataTransferService.request(with: endpoint) { [weak self] result in
-                guard let self = self else { return }
-                
+            task.networkTask = dataTransferService.request(with: endpoint) { result in
                 switch result {
                 case .success(let response):
-                    let context = self.persistentStore.coreDataStorage.context()
-                    self.persistentStore.deleteResponse(for: request, in: context)
-                    
                     completion(.success(response as! T))
                 case .failure(let error):
                     completion(.failure(error))
@@ -206,62 +199,11 @@ extension UserRepository: UserAuthenticable {
             return nil
         }
     }
-    
-    func sign<T>(endpoint: UserUseCase.Endpoints, request: Any?) async -> T? where T: Decodable {
-        switch endpoint {
-        case .signIn:
-            guard let request = request as? UserHTTPDTO.Request else { return nil }
-            
-            guard let cached = await persistentStore.getResponse(for: request) else {
-                let endpoint = UserRepository.signIn(with: request)
-                let result = await dataTransferService.request(with: endpoint)
-                
-                if case let .success(response) = result {
-                    persistentStore.save(response: response, for: request)
-                    
-                    return response as? T
-                }
-                
-                return nil
-            }
-            
-            return cached as? T
-        case .signUp:
-            guard let request = request as? UserHTTPDTO.Request else { return nil }
-            
-            let endpoint = UserRepository.signUp(with: request)
-            let result = await dataTransferService.request(with: endpoint)
-            
-            if case let .success(response) = result {
-                persistentStore.save(response: response, for: request)
-                return response as? T
-            }
-            
-            return nil
-        case .signOut:
-            guard let request = request as? UserHTTPDTO.Request else { return nil }
-            
-            guard let endpoint = UserRepository.signOut(with: request) else { return nil }
-            
-            let result = await dataTransferService.request(with: endpoint)
-            let context = persistentStore.coreDataStorage.context()
-
-            if case let .success(response) = result {
-                persistentStore.deleteResponse(for: request, in: context)
-                
-                return response as? T
-            }
-            
-            return nil
-        default:
-            return nil
-        }
-    }
 }
 
 // MARK: - RepositoryRequestable Implementation
 
-extension UserRepository {
+extension UserRepository: RepositoryRequestable {
     func find<T>(request: Any?,
                  cached: @escaping (T?) -> Void,
                  completion: @escaping (Result<T, DataTransferError>) -> Void) -> Cancellable? where T: Decodable {
@@ -318,70 +260,29 @@ extension UserRepository {
             guard !task.isCancelled else { return nil }
             
             let endpoint = UserRepository.updateUserData(with: request)
-            task.networkTask = dataTransferService.request(with: endpoint) { result in
+            
+            task.networkTask = dataTransferService.request(with: endpoint) { [weak self] result in
                 switch result {
                 case .success(let response):
                     completion(.success(response as! T))
+                    
+                    self?.persistentStore.getResponse(for: request) { (result) in
+                        switch result {
+                        case .success(let resp):
+                            guard let resp = resp else { return }
+                            resp.data?.selectedProfile = response.data?.selectedProfile
+
+                            self?.persistentStore.save(response: resp, for: request)
+                        case .failure(let error):
+                            printIfDebug(.error, "\(error)")
+                        }
+                    }
                 case .failure(let error):
                     completion(.failure(error))
                 }
             }
             
             return task
-        default:
-            return nil
-        }
-    }
-    
-    func find<T>(request: Any?) async -> T? where T: Decodable {
-        switch request {
-        case let request as ProfileHTTPDTO.GET.Request:
-            let endpoint = UserRepository.getUserProfiles(with: request)
-            let result = await dataTransferService.request(with: endpoint)
-            
-            if case let .success(response) = result {
-                return response as? T
-            }
-            
-            return nil
-        default:
-            return nil
-        }
-    }
-    
-    func create<T>(request: Any?) async -> T? where T: Decodable {
-        switch request {
-        case let request as ProfileHTTPDTO.POST.Request:
-            let endpoint = UserRepository.createUserProfile(with: request)
-            let result = await dataTransferService.request(with: endpoint)
-            
-            if case let .success(response) = result {
-                return response as? T
-            }
-            
-            return nil
-        default:
-            return nil
-        }
-    }
-    
-    func update<T>(request: Any?) async -> T? where T: Decodable {
-        switch request {
-        case let request as UserHTTPDTO.Request:
-            let authService = Application.app.services.auth
-            let endpoint = UserRepository.updateUserData(with: request)
-            let result = await dataTransferService.request(with: endpoint)
-            
-            if case let .success(response) = result {
-                var response = response
-                response.token = authService.userToken
-                
-                persistentStore.save(response: response, for: request)
-                
-                return response as? T
-            }
-            
-            return nil
         default:
             return nil
         }

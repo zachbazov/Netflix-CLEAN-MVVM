@@ -45,7 +45,7 @@ final class DescriptionTableViewCell: DetailTableViewCell {
 
 extension DescriptionTableViewCell {
     private func createDescription() {
-        let viewModel = DescriptionViewViewModel(with: viewModel.media)
+        let viewModel = DescriptionViewViewModel(with: self.viewModel.media)
         
         descriptionView = DescriptionView(on: contentView, with: viewModel)
     }

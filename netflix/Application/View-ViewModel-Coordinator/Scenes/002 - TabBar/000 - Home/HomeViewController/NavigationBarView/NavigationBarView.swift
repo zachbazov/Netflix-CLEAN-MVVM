@@ -22,8 +22,6 @@ final class NavigationBarView: UIView, View {
     
     var viewModel: NavigationBarViewModel!
     
-    private let parent: UIView
-    
     deinit {
         viewWillDeallocate()
     }
@@ -32,15 +30,12 @@ final class NavigationBarView: UIView, View {
     /// - Parameters:
     ///   - parent: Instantiating view.
     ///   - viewModel: Coordinating view model.
-    init(on parent: UIView, with viewModel: HomeViewModel) {
-        self.parent = parent
-        
-        super.init(frame: parent.bounds)
-        
-        self.nibDidLoad()
+    init(with viewModel: HomeViewModel) {
+        super.init(frame: .zero)
         
         self.viewModel = NavigationBarViewModel(with: viewModel)
         
+        self.nibDidLoad()
         self.viewDidLoad()
     }
     
@@ -48,16 +43,10 @@ final class NavigationBarView: UIView, View {
     
     func viewDidLoad() {
         viewWillDeploySubviews()
-        viewHierarchyWillConfigure()
     }
     
     func viewWillDeploySubviews() {
         configureProfileLabel()
-    }
-    
-    func viewHierarchyWillConfigure() {
-        self.addToHierarchy(on: parent)
-            .constraintToSuperview(parent)
     }
     
     func viewWillDeallocate() {
@@ -84,7 +73,7 @@ extension NavigationBarView: ViewProtocol {
         viewModel?.getUserProfiles() { [weak self] profile in
             guard let self = self, let profile = profile else { return }
             
-            self.profileLabel.text = profile.name
+            self.profileLabel?.text = profile.name
         }
     }
 }

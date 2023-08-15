@@ -49,13 +49,16 @@ struct MediaCollectionViewCellViewModel {
         self.logos = media.resources.logos
         self.posterImagePath = .init()
         self.logoImagePath = .init()
-        self.presentedLogoAlignment = .init(rawValue: media.resources.presentedLogoAlignment)!
+        self.presentedLogoAlignment = PresentedLogoAlignment(rawValue: media.resources.presentedLogoAlignment)!
         self.posterImageIdentifier = .init(string: "poster_\(media.slug)")
         self.logoImageIdentifier = .init(string: "logo_\(media.slug)")
-        self.posterImagePath = media.path(forResourceOfType: PresentedPoster.self)!
-        self.logoImagePath = media.path(forResourceOfType: PresentedLogo.self)!
-        self.posterImageURL = URL(string: self.posterImagePath)
-        self.logoImageURL = URL(string: self.logoImagePath)
+        self.posterImagePath = media.path(forResourceOfType: PresentedPoster.self)
+        self.logoImagePath = media.path(forResourceOfType: PresentedLogo.self)
+        
+        var configuration = Application.app.configuration
+        
+        self.posterImageURL = URL(string: "\(configuration.api.urlString)\(self.posterImagePath)")
+        self.logoImageURL = URL(string: "\(configuration.api.urlString)\(self.logoImagePath)")
     }
 }
 

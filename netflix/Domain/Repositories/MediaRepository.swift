@@ -92,8 +92,8 @@ extension MediaRepository {
         persistentStore.getResponse { [weak self] result in
             guard let self = self else { return }
             
-            if case let .success(responseDTO?) = result {
-                return cached(responseDTO as? T)
+            if case let .success(response?) = result {
+                return cached(response as? T)
             }
             
             guard !task.isCancelled else { return }
@@ -135,17 +135,6 @@ extension MediaRepository {
         return task
     }
     
-    func search(requestDTO: SearchHTTPDTO.Request) async -> SearchHTTPDTO.Response? {
-        let endpoint = MediaRepository.searchMedia(with: requestDTO)
-        let result = await dataTransferService.request(with: endpoint)
-        
-        if case let .success(response) = result {
-            return response
-        }
-        
-        return nil
-    }
-    
     func getUpcomings(completion: @escaping (Result<NewsHTTPDTO.Response, DataTransferError>) -> Void) -> Cancellable? {
         let params = ["isNewRelease": true]
         let requestDTO = NewsHTTPDTO.Request(queryParams: params)
@@ -165,36 +154,6 @@ extension MediaRepository {
         return task
     }
     
-    func find<T>(request: Any?) async -> T? where T: Decodable {
-        guard let cached = await persistentStore.getResponse() else {
-            let endpoint = MediaRepository.getAllMedia()
-            let result = await dataTransferService.request(with: endpoint)
-            
-            if case let .success(response) = result {
-                persistentStore.save(response: response)
-                
-                return response as? T
-            }
-            
-            return nil
-        }
-        
-        return cached as? T
-    }
-    
-    func getUpcomings() async -> NewsHTTPDTO.Response? {
-        let params = ["isNewRelease": true]
-        let request = NewsHTTPDTO.Request(queryParams: params)
-        let endpoint = MediaRepository.getUpcomingMedia(with: request)
-        let result = await dataTransferService.request(with: endpoint)
-        
-        if case let .success(response) = result {
-            return response
-        }
-        
-        return nil
-    }
-    
     func getTopSearches(completion: @escaping (Result<SearchHTTPDTO.Response, DataTransferError>) -> Void) -> Cancellable? {
         let task = RepositoryTask()
         
@@ -210,16 +169,5 @@ extension MediaRepository {
         })
         
         return task
-    }
-    
-    func getTopSearches() async -> SearchHTTPDTO.Response? {
-        let endpoint = MediaRepository.getTopSearchedMedia()
-        let result = await dataTransferService.request(with: endpoint)
-        
-        if case let .success(response) = result {
-            return response
-        }
-        
-        return nil
     }
 }

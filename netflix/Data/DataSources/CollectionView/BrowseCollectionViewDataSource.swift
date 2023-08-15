@@ -26,11 +26,15 @@ final class BrowseOverlayCollectionViewDataSource: CollectionViewDataSource {
     }
     
     override func cellForItem<T>(in collectionView: UICollectionView, at indexPath: IndexPath) -> T where T: UICollectionViewCell {
+        guard let homeViewController = Application.app.coordinator.tabCoordinator?.home?.viewControllers.first as? HomeViewController,
+              let homeViewModel = homeViewController.viewModel
+        else { fatalError() }
         return MediaCollectionViewCell.create(of: StandardCollectionViewCell.self,
                                                on: collectionView,
                                                reuseIdentifier: StandardCollectionViewCell.reuseIdentifier,
                                                section: viewModel.section.value,
-                                               for: indexPath) as! T
+                                               for: indexPath,
+                                               with: homeViewModel) as! T
     }
     
     override func didSelectItem(in collectionView: UICollectionView, at indexPath: IndexPath) {

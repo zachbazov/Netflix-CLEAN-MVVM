@@ -14,7 +14,7 @@ private protocol ViewProtocol {
     var centerItem: DetailNavigationViewItem? { get }
     var trailingItem: DetailNavigationViewItem? { get }
     
-    func didSelect(_ view: DetailNavigationViewItem)
+    func didSelect(_ view: DetailNavigationViewItem?)
     func stateDidChange(_ state: DetailNavigationView.State)
     func indicatorValueWillChange(for state: DetailNavigationView.State)
     func buttonAppearanceWillChange(for state: DetailNavigationView.State)
@@ -93,11 +93,11 @@ final class DetailNavigationView: UIView, View {
             
             switch state {
             case .episodes:
-                self.didSelect(self.leadingItem!)
+                self.didSelect(self.leadingItem)
             case .trailers:
-                self.didSelect(self.centerItem!)
+                self.didSelect(self.centerItem)
             case .similarContent:
-                self.didSelect(self.trailingItem!)
+                self.didSelect(self.trailingItem)
             }
         }
     }
@@ -132,8 +132,8 @@ extension DetailNavigationView: ViewInstantiable {}
 // MARK: - ViewProtocol Implementation
 
 extension DetailNavigationView: ViewProtocol {
-    func didSelect(_ view: DetailNavigationViewItem) {
-        guard let state = State(rawValue: view.tag) else { return }
+    func didSelect(_ view: DetailNavigationViewItem?) {
+        guard let state = State(rawValue: view?.tag ?? .zero) else { return }
         
         stateDidChange(state)
         

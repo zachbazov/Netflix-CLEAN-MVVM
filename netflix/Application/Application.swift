@@ -17,7 +17,6 @@ private protocol ApplicationLaunching {
 
 private protocol ApplicationAuthenticating {
     func resignUserSession()
-    func handleResignedSession(for user: UserDTO?)
 }
 
 // MARK: - ApplicationCoordinating Type
@@ -54,35 +53,33 @@ extension Application: ApplicationLaunching {
 
 extension Application: ApplicationAuthenticating {
     fileprivate func resignUserSession() {
-        if #available(iOS 13.0, *) {
-            Task {
-                let user = await services.auth.resign()
-                
-                handleResignedSession(for: user)
-            }
-            
-            return
-        }
-        
-        services.auth.resign { [weak self] user in
+        stores.userResponses.getResponse { [weak self] result in
             guard let self = self else { return }
             
-            self.handleResignedSession(for: user)
+            switch result {
+            case .success(let response):
+                guard let request = response?.request else {
+                    mainQueueDispatch {
+                        self.coordinate(to: .auth)
+                    }
+                    return
+                }
+                
+                self.services.auth.signIn(for: request) { (user) in
+                    mainQueueDispatch {
+                        if let _ = user?.selectedProfile {
+                            self.coordinate(to: .tabBar)
+                            
+                            return
+                        }
+                        
+                        self.coordinate(to: .profile)
+                    }
+                }
+            case .failure(let error):
+                printIfDebug(.error, "\(error)")
+            }
         }
-    }
-    
-    fileprivate func handleResignedSession(for user: UserDTO?) {
-        guard let user = user else {
-            return coordinate(to: .auth)
-        }
-        
-        guard let selectedProfile = user.selectedProfile,
-              let profiles = user.profiles,
-              profiles.contains(where: { $0 == selectedProfile }) else {
-            return coordinate(to: .profile)
-        }
-        
-        coordinate(to: .tabBar)
     }
 }
 
@@ -91,7 +88,6 @@ extension Application: ApplicationAuthenticating {
 extension Application: ApplicationCoordinating {
     fileprivate func setWindow(_ window: UIWindow?) {
         coordinator.window = window
-        
         coordinator.window?.makeKeyAndVisible()
     }
     

@@ -30,25 +30,13 @@ final class NewsCollectionViewCell: UICollectionViewCell, CollectionViewCell {
     var representedIdentifier: NSString!
     var indexPath: IndexPath!
     
-    var imageService: AsyncImageService = AsyncImageService.shared
-    
     // MARK: DataLoadable Implementation
     
-    func dataWillLoad() {
-        guard representedIdentifier == viewModel.media.slug as NSString? else { return }
-        
-        if #available(iOS 13.0, *) {
-            loadUsingAsyncAwait()
-            
-            return
-        }
-        
-        loadUsingDispatchGroup()
-    }
-    
     func dataDidLoad() {
-        guard let previewPosterImage = imageService.object(for: viewModel.previewPosterImageIdentifier),
-              let logoImage = imageService.object(for: viewModel.displayLogoImageIdentifier)
+        let imageService = Application.app.services.image
+        
+        guard let previewPosterImage = imageService.cache.object(for: viewModel.previewPosterImageIdentifier),
+              let logoImage = imageService.cache.object(for: viewModel.displayLogoImageIdentifier)
         else { return }
         
         setPoster(previewPosterImage)
@@ -59,7 +47,8 @@ final class NewsCollectionViewCell: UICollectionViewCell, CollectionViewCell {
     
     func viewDidLoad() {
         viewWillConfigure()
-        dataWillLoad()
+        
+        fetchData()
     }
     
     func viewWillConfigure() {
@@ -119,7 +108,7 @@ final class NewsCollectionViewCell: UICollectionViewCell, CollectionViewCell {
     
     // MARK: CollectionViewCellResourcing Implementation
     
-    func loadUsingDispatchGroup() {
+    func fetchData() {
         let group = DispatchGroup()
         
         group.enter()
@@ -138,49 +127,32 @@ final class NewsCollectionViewCell: UICollectionViewCell, CollectionViewCell {
             self.dataDidLoad()
         }
     }
-    
-    func loadUsingAsyncAwait() {
-        Task {
-            await posterWillLoad()
-            await logoWillLoad()
-            
-            dataDidLoad()
-        }
-    }
 }
 
 // MARK: - Private Implementation
 
 extension NewsCollectionViewCell {
     private func posterWillLoad(_ completion: @escaping () -> Void) {
+        let imageService = Application.app.services.image
+        
         imageService.load(
             url: viewModel.previewPosterImageURL,
-            identifier: viewModel.previewPosterImageIdentifier) { _ in
-                completion()
-            }
+            identifier: viewModel.previewPosterImageIdentifier) { [weak self] _ in
+            guard let self = self, self.representedIdentifier == self.viewModel.media.slug as NSString? else { return }
+            
+            completion()
+        }
     }
     
     private func logoWillLoad(_ completion: @escaping () -> Void) {
+        let imageService = Application.app.services.image
+        
         imageService.load(
             url: viewModel.displayLogoImageURL,
-            identifier: viewModel.displayLogoImageIdentifier) { _ in
-                completion()
-            }
-    }
-    
-    private func posterWillLoad() async {
-        guard let url = viewModel.previewPosterImageURL else { return }
-        
-        let identifier = viewModel.previewPosterImageIdentifier
-        
-        await imageService.load(url: url, identifier: identifier as String)
-    }
-    
-    private func logoWillLoad() async {
-        guard let url = viewModel.displayLogoImageURL else { return }
-        
-        let identifier = viewModel.displayLogoImageIdentifier
-        
-        await imageService.load(url: url, identifier: identifier as String)
+            identifier: viewModel.displayLogoImageIdentifier) { [weak self] _ in
+            guard let self = self, self.representedIdentifier == self.viewModel.media.slug as NSString? else { return }
+            
+            completion()
+        }
     }
 }

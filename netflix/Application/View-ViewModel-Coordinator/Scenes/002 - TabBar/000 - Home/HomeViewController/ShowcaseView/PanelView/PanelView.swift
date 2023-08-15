@@ -47,15 +47,12 @@ final class PanelView: UIView, View {
         viewWillDeallocate()
     }
     
-    func dataWillLoad() {
-        myList.loadData()
-    }
-    
     func viewDidLoad() {
         viewHierarchyWillConfigure()
         viewWillConfigure()
         viewWillTargetSubviews()
-        dataWillLoad()
+        
+        myList.fetchList()
     }
     
     func viewHierarchyWillConfigure() {

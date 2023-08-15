@@ -29,6 +29,8 @@ final class DetailCollectionViewDataSource: CollectionViewDataSource {
     
     override func cellForItem<T>(in collectionView: UICollectionView, at indexPath: IndexPath) -> T where T: UICollectionViewCell {
         guard let viewModel = viewModel.coordinator?.viewController?.viewModel,
+              let homeViewController = Application.app.coordinator.tabCoordinator?.home?.viewControllers.first as? HomeViewController,
+              let homeViewModel = homeViewController.viewModel,
               let dataSource = viewModel.coordinator?.viewController?.dataSource,
               let state = dataSource.navigationCell?.navigationView?.viewModel.state.value
         else { fatalError() }
@@ -48,7 +50,8 @@ final class DetailCollectionViewDataSource: CollectionViewDataSource {
             return MediaCollectionViewCell.create(of: StandardCollectionViewCell.self,
                                                    on: collectionView,
                                                    section: viewModel.section,
-                                                   for: indexPath) as! T
+                                                   for: indexPath,
+                                                   with: homeViewModel) as! T
         }
     }
     

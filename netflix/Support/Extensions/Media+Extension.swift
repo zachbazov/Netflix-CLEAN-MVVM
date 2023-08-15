@@ -75,7 +75,7 @@ enum PresentedSearchLogo: String {
 // MARK: - Media + Resource Path Provider
 
 extension Media {
-    func path<T>(forResourceOfType type: T.Type) -> String? {
+    func path<T>(forResourceOfType type: T.Type) -> String {
         switch type {
         case is PresentedPoster.Type:
             switch PresentedPoster(rawValue: resources.presentedPoster) {
@@ -85,7 +85,7 @@ extension Media {
             case .fourth: return resources.posters[3]
             case .fifth: return resources.posters[4]
             case .sixth: return resources.posters[5]
-            default: return nil
+            case nil: return .toBlank()
             }
         case is PresentedLogo.Type:
             switch PresentedLogo(rawValue: resources.presentedLogo) {
@@ -96,7 +96,7 @@ extension Media {
             case .fifth: return resources.logos[4]
             case .sixth: return resources.logos[5]
             case .seventh: return resources.logos[6]
-            default: return nil
+            case nil: return .toBlank()
             }
         case is PresentedDisplayLogo.Type:
             switch PresentedDisplayLogo(rawValue: resources.presentedDisplayLogo) {
@@ -107,7 +107,7 @@ extension Media {
             case .fifth: return resources.logos[4]
             case .sixth: return resources.logos[5]
             case .seventh: return resources.logos[6]
-            default: return nil
+            case nil: return .toBlank()
             }
         case is PresentedSearchLogo.Type:
             switch PresentedDisplayLogo(rawValue: resources.presentedSearchLogo) {
@@ -118,9 +118,9 @@ extension Media {
             case .fifth: return resources.logos[4]
             case .sixth: return resources.logos[5]
             case .seventh: return resources.logos[6]
-            default: return nil
+            case nil: return .toBlank()
             }
-        default: return nil
+        default: return .toBlank()
         }
     }
 }

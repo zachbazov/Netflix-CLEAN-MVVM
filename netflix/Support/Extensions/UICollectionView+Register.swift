@@ -11,7 +11,7 @@ import UIKit
 
 extension UICollectionView {
     func registerNib(_ views: UIView.Type...) {
-        views.forEach {
+        views.forEach { [unowned self] in
             let nib = UINib(nibName: String(describing: $0), bundle: nil)
             register(nib, forCellWithReuseIdentifier: String(describing: $0))
         }

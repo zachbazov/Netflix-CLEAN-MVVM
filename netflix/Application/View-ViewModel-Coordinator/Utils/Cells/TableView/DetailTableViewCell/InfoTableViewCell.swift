@@ -45,7 +45,7 @@ final class InfoTableViewCell: DetailTableViewCell {
 
 extension InfoTableViewCell {
     private func createInfo() {
-        let viewModel = InfoViewViewModel(with: viewModel)
+        let viewModel = InfoViewViewModel(with: self.viewModel)
         
         infoView = InfoView(on: contentView, with: viewModel)
     }

@@ -10,16 +10,8 @@ import UIKit
 // MARK: - ViewProtocol Type
 
 private protocol ViewProtocol {
-    var mediaPlayerView: MediaPlayerView? { get }
-    var imageView: UIImageView { get }
-    
-    func createImageView() -> UIImageView
-    func createMediaPlayer()
-    
     func viewWillPrepareForPlaying(_ played: Bool)
     func setImage(_ image: UIImage)
-    
-    func loadResources()
 }
 
 // MARK: - PreviewView Type
@@ -48,15 +40,12 @@ final class PreviewView: UIView, View {
         viewWillDeallocate()
     }
     
-    func dataWillLoad() {
-        loadResources()
-    }
-    
     func viewDidLoad() {
         viewHierarchyWillConfigure()
         viewWillDeploySubviews()
         viewWillConfigure()
-        dataWillLoad()
+        
+        fetchImages()
     }
     
     func viewHierarchyWillConfigure() {
@@ -106,18 +95,6 @@ extension PreviewView: ViewProtocol {
         }
     }
     
-    fileprivate func loadResources() {
-        AsyncImageService.shared.load(
-            url: viewModel.url,
-            identifier: viewModel.identifier) { [weak self] image in
-                guard let self = self, let image = image else { return }
-                
-                mainQueueDispatch {
-                    self.setImage(image)
-                }
-            }
-    }
-    
     fileprivate func setImage(_ image: UIImage) {
         imageView.image = image
     }
@@ -140,5 +117,19 @@ extension PreviewView {
         mediaPlayerView?
             .delegate?
             .playerDidPlay(mediaPlayer)
+    }
+    
+    private func fetchImages() {
+        let imageService = Application.app.services.image
+        
+        imageService.load(
+            url: viewModel.url,
+            identifier: viewModel.identifier) { [weak self] image in
+                guard let self = self, let image = image else { return }
+                
+                mainQueueDispatch {
+                    self.setImage(image)
+                }
+            }
     }
 }

@@ -109,8 +109,8 @@ extension UserProfileViewController: ViewControllerProtocol {
         let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
         
         let section = NSCollectionLayoutSection(group: group)
-        section.contentInsets = .uniform(size: 64.0)
-        section.interGroupSpacing = 32.0
+//        section.contentInsets = .uniform(size: 64.0)
+//        section.interGroupSpacing = 32.0
         
         let layout = UICollectionViewCompositionalLayout(section: section)
         return layout
@@ -123,11 +123,12 @@ extension UserProfileViewController: ViewControllerProtocol {
     }
 }
 
-// MARK: - Private UI Implementation
+// MARK: - Private Implementation
 
 extension UserProfileViewController {
     private func setupCollectionView() {
         collectionView.translatesAutoresizingMaskIntoConstraints = false
+        collectionView.setBackgroundColor(.blue)
         
         view.addSubview(collectionView)
         

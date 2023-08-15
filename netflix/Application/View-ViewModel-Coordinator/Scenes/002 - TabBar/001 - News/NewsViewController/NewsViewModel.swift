@@ -62,16 +62,16 @@ extension NewsViewModel {
         upcomingMediaWillLoad()
     }
     
-    private func loadUsingAsyncAwait() {
-        Task {
-            await upcomingMediaWillLoad()
-        }
-    }
+//    private func loadUsingAsyncAwait() {
+//        Task {
+//            await upcomingMediaWillLoad()
+//        }
+//    }
     
     private func loadUpcomings() {
-        if #available(iOS 13.0, *) {
-            return loadUsingAsyncAwait()
-        }
+//        if #available(iOS 13.0, *) {
+//            return loadUsingAsyncAwait()
+//        }
         
         loadUsingAsync()
     }
@@ -94,13 +94,13 @@ extension NewsViewModel {
             })
     }
     
-    private func upcomingMediaWillLoad() async {
-        let response = await useCase.request(endpoint: .getUpcomings, for: NewsHTTPDTO.Response.self, request: nil)
-        
-        guard let response = response else { return }
-        
-        items.value = response.toCellViewModels()
-    }
+//    private func upcomingMediaWillLoad() async {
+//        let response = await useCase.request(endpoint: .getUpcomings, for: NewsHTTPDTO.Response.self, request: nil)
+//
+//        guard let response = response else { return }
+//
+//        items.value = response.toCellViewModels()
+//    }
 }
 
 // MARK: - Private Implementation

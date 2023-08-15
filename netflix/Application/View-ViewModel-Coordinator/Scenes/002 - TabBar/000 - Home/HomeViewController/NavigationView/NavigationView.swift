@@ -25,6 +25,8 @@ private protocol ViewProtocol {
 final class NavigationView: UIView, View {
     @IBOutlet private weak var navigationContainer: UIView!
     @IBOutlet private weak var segmentContainer: UIView!
+    @IBOutlet weak var navigationHeight: NSLayoutConstraint!
+    @IBOutlet weak var segmentHeight: NSLayoutConstraint!
     
     private(set) var navigationBar: NavigationBarView?
     private(set) var segmentControl: SegmentControlView?
@@ -34,11 +36,7 @@ final class NavigationView: UIView, View {
     
     var viewModel: NavigationViewModel!
     
-    private let parent: UIView
-    
-    init(on parent: UIView, with viewModel: HomeViewModel) {
-        self.parent = parent
-        
+    init(with viewModel: HomeViewModel) {
         super.init(frame: .zero)
         
         self.nibDidLoad()
@@ -56,17 +54,11 @@ final class NavigationView: UIView, View {
     
     func viewDidLoad() {
         viewWillDeploySubviews()
-        viewHierarchyWillConfigure()
     }
     
     func viewWillDeploySubviews() {
         createNavigationBar()
         createSegmentControl()
-    }
-    
-    func viewHierarchyWillConfigure() {
-        self.addToHierarchy(on: parent)
-            .constraintToSuperview(parent)
     }
     
     func viewWillDeallocate() {
@@ -95,7 +87,10 @@ extension NavigationView: ViewProtocol {
     fileprivate func createNavigationBar() {
         guard let homeViewModel = viewModel?.coordinator.viewController?.viewModel else { return }
         
-        navigationBar = NavigationBarView(on: navigationContainer, with: homeViewModel)
+        navigationBar = NavigationBarView(with: homeViewModel)
+        navigationBar?
+            .addToHierarchy(on: navigationContainer)
+            .constraintToSuperview(navigationContainer)
     }
     
     fileprivate func createSegmentControl() {
@@ -141,11 +136,13 @@ extension NavigationView: ViewProtocol {
         
         switch style {
         case .blur:
-            addBlur()
+//            removeBlur()
             removeGradient()
+            addBlur()
         case .gradient:
-            addGradient(with: colors.toUIColorArray())
+//            removeGradient()
             removeBlur()
+            addGradient(with: colors.toUIColorArray())
         }
     }
 }

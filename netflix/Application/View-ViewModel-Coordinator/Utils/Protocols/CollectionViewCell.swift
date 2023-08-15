@@ -7,28 +7,6 @@
 
 import UIKit
 
-// MARK: - CollectionViewCellResourcing Type
-
-protocol CollectionViewCellResourcing {
-    func loadUsingAsyncAwait()
-    func loadUsingAsync()
-    func loadUsingDispatchGroup()
-    
-    func resourceWillLoad(for url: URL, withIdentifier identifier: NSString, _ completion: @escaping () -> Void)
-    func resourceWillLoad(for url: URL, withIdentifier identifier: String) async
-}
-
-// MARK: - CollectionViewCellResourcing Implementation
-
-extension CollectionViewCellResourcing {
-    func loadUsingAsyncAwait() {}
-    func loadUsingAsync() {}
-    func loadUsingDispatchGroup() {}
-    
-    func resourceWillLoad(for url: URL, withIdentifier identifier: NSString, _ completion: @escaping () -> Void) {}
-    func resourceWillLoad(for url: URL, withIdentifier identifier: String) async {}
-}
-
 // MARK: - CollectionViewCellConfiguring Type
 
 protocol CollectionViewCellConfiguring {
@@ -68,8 +46,6 @@ extension CollectionViewCellConfiguring {
 
 protocol CollectionViewCell: UICollectionViewCell,
                              ViewLifecycleBehavior,
-                             DataLoadable,
-                             CollectionViewCellResourcing,
                              CollectionViewCellConfiguring {
     associatedtype ViewModelType: ViewModel
     
@@ -86,7 +62,7 @@ extension CollectionViewCell {
                               reuseIdentifier: String? = nil,
                               section: Section? = nil,
                               for indexPath: IndexPath,
-                              with viewModel: CVM? = Void) -> U where U: UICollectionViewCell {
+                              with viewModel: CVM?) -> U where U: UICollectionViewCell {
         
         collectionView.register(U.nib, forCellWithReuseIdentifier: U.reuseIdentifier)
         

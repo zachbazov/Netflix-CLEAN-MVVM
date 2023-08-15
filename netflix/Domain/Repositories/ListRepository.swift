@@ -97,30 +97,4 @@ extension ListRepository {
         
         return task
     }
-    
-    func find<T>(request: Any?) async -> T? where T: Decodable {
-        guard let request = request as? ListHTTPDTO.GET.Request else { return nil }
-        
-        let endpoint = ListRepository.getMyList(with: request)
-        let result = await dataTransferService.request(with: endpoint)
-        
-        if case let .success(response) = result {
-            return response as? T
-        }
-        
-        return nil
-    }
-    
-    func update<T>(request: Any?) async -> T? where T: Decodable {
-        guard let request = request as? ListHTTPDTO.PATCH.Request else { return nil }
-        
-        let endpoint = ListRepository.updateMyList(with: request)
-        let result = await dataTransferService.request(with: endpoint)
-        
-        if case let .success(response) = result {
-            return response as? T
-        }
-        
-        return nil
-    }
 }

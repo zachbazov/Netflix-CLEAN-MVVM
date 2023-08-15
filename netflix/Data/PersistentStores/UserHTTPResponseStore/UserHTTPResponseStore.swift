@@ -13,8 +13,7 @@ final class UserHTTPResponseStore {
     let coreDataStorage: CoreDataStorage
     private let authService: AuthService
     
-    init(coreDataStorage: CoreDataStorage = .shared,
-         authService: AuthService) {
+    init(coreDataStorage: CoreDataStorage = .shared, authService: AuthService) {
         self.coreDataStorage = coreDataStorage
         self.authService = authService
     }
@@ -36,6 +35,7 @@ extension UserHTTPResponseStore {
         do {
             let fetchRequest: NSFetchRequest = UserHTTPResponseEntity.fetchRequest()
             let responseEntity = try context.fetch(fetchRequest).first
+            
             completion(.success(responseEntity?.toDTO()))
         } catch {
             completion(.failure(CoreDataStorageError.readError(error)))
@@ -102,21 +102,5 @@ extension UserHTTPResponseStore {
         } catch {
             printIfDebug(.error, "Unresolved error \(error) occured as trying to delete object.")
         }
-    }
-    
-    func getResponse() async -> UserHTTPDTO.Response? {
-        let context = coreDataStorage.context()
-        let fetchRequest = UserHTTPResponseEntity.fetchRequest()
-        guard let responseEntity = try? context.fetch(fetchRequest).first else { return nil }
-        let response = responseEntity.toDTO()
-        return response
-    }
-    
-    func getResponse(for request: UserHTTPDTO.Request) async -> UserHTTPDTO.Response? {
-        let context = coreDataStorage.context()
-        let fetchRequest = self.fetchRequest(for: request)
-        guard let requestEntity = try? context.fetch(fetchRequest).first else { return nil }
-        let response = requestEntity.response?.toDTO()
-        return response
     }
 }

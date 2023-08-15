@@ -36,10 +36,6 @@ protocol DataServiceTransferring {
     func request<E: ResponseRequestable>(
         with endpoint: E,
         completion: @escaping CompletionHandler<Void>) -> NetworkCancellable? where E.Response == Void
-    
-    func request<T, E>(with endpoint: E) async -> Result<T, DataTransferError>? where T: Decodable, E: ResponseRequestable, T == E.Response
-    
-    func request<E>(with endpoint: E) async -> Result<VoidHTTPDTO.Response, DataTransferError>? where E: ResponseRequestable
 }
 
 // MARK: - DataTransferErrorResolverProtocol Type
@@ -74,6 +70,7 @@ extension DataTransferService: DataServiceTransferring {
     func request<T, E>(
         with endpoint: E,
         completion: @escaping CompletionHandler<T>) -> NetworkCancellable? where T: Decodable, E: ResponseRequestable, T == E.Response {
+        
         return self.networkService.request(endpoint: endpoint) { result in
             switch result {
             case .success(let data):
@@ -107,26 +104,6 @@ extension DataTransferService: DataServiceTransferring {
                 }
             }
         }
-    }
-    
-    func request<T, E>(with endpoint: E) async -> Result<T, DataTransferError>? where T: Decodable, E: ResponseRequestable, T == E.Response {
-        guard let (data, _) = await networkService.request(endpoint: endpoint) else { return nil }
-        let result: Result<T, DataTransferError> = self.decode(data: data, decoder: endpoint.responseDecoder)
-        if case .failure(let error) = result {
-            self.errorLogger.log(error: error)
-            return nil
-        }
-        return result
-    }
-    
-    func request<E>(with endpoint: E) async -> Result<VoidHTTPDTO.Response, DataTransferError>? where E: ResponseRequestable {
-        guard let (data, _) = await self.networkService.request(endpoint: endpoint) else { return nil }
-        let result: Result<VoidHTTPDTO.Response, DataTransferError> = self.decode(data: data, decoder: endpoint.responseDecoder)
-        if case .failure(let error) = result {
-            self.errorLogger.log(error: error)
-            return nil
-        }
-        return result
     }
     
     private func decode<T: Decodable>(data: Data?, decoder: ResponseDecoder) -> Result<T, DataTransferError> {

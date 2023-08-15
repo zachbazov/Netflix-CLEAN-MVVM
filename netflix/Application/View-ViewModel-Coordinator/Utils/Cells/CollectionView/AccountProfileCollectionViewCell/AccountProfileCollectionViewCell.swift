@@ -22,8 +22,6 @@ final class AccountProfileCollectionViewCell: UICollectionViewCell, CollectionVi
     var representedIdentifier: NSString!
     var indexPath: IndexPath!
     
-    var imageService: AsyncImageService = AsyncImageService.shared
-    
     deinit {
         print("deinit \(Self.self)")
         

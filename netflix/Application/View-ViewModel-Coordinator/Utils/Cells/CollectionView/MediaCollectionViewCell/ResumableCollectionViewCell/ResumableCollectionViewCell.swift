@@ -46,7 +46,7 @@ extension ResumableCollectionViewCell {
     }
     
     private func configureGradients() {
-        gradientView.addGradientLayer(colors: [.clear, .black.withAlphaComponent(0.75)],
+        gradientView.addGradientLayer(colors: [.clear, UIColor.black.withAlphaComponent(0.75)],
                                       locations: [0.0, 1.0])
     }
 }

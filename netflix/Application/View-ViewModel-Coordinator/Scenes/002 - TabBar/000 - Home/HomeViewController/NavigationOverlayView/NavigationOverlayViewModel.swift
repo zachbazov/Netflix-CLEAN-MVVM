@@ -5,7 +5,7 @@
 //  Created by Zach Bazov on 20/09/2022.
 //
 
-import Foundation
+import UIKit
 
 // MARK: - ViewModelProtocol Type
 

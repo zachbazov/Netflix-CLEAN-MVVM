@@ -93,20 +93,20 @@ extension LandpageViewController {
         
         let locations: [NSNumber] = [0.0, 0.5, 1.0]
         statusBarGradientView.addGradientLayer(
-            colors: [.black.withAlphaComponent(0.75),
-                     .black.withAlphaComponent(0.5),
+            colors: [UIColor.black.withAlphaComponent(0.75),
+                     UIColor.black.withAlphaComponent(0.5),
                      .clear],
             locations: locations)
         
         topGradientView.addGradientLayer(
             colors: [.clear,
-                     .black.withAlphaComponent(0.5),
-                     .black.withAlphaComponent(0.75)],
+                     UIColor.black.withAlphaComponent(0.5),
+                     UIColor.black.withAlphaComponent(0.75)],
             locations: locations)
         
         bottomGradientView.addGradientLayer(
-            colors: [.black.withAlphaComponent(0.75),
-                     .black.withAlphaComponent(0.5),
+            colors: [UIColor.black.withAlphaComponent(0.75),
+                     UIColor.black.withAlphaComponent(0.5),
                      .clear],
             locations: locations)
     }

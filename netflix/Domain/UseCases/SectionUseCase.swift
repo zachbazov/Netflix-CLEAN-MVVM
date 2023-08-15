@@ -38,11 +38,4 @@ extension SectionUseCase: UseCase {
             return repository.find(request: request, cached: cached, completion: completion)
         }
     }
-    
-    func request<T>(endpoint: Endpoints, for response: T.Type, request: Any?) async -> T? where T: Decodable {
-        switch endpoint {
-        case .getSections:
-            return await repository.find(request: request)
-        }
-    }
 }

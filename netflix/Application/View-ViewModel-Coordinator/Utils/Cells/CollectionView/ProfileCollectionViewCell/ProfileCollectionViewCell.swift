@@ -116,14 +116,13 @@ extension ProfileCollectionViewCell {
         
         profileViewModel.selectedProfile = profile
         
-        if #available(iOS 13.0, *) {
-            Task {
-                await profileViewModel.userProfileDidUpdate(with: profile._id ?? .toBlank())
-            }
-            
-            return
-        }
+        guard let id = profile._id else { return }
         
-        profileViewModel.updateUserProfile(with: profile._id!)
+        profileViewModel.updateUserProfile(with: id) {
+            mainQueueDispatch {
+                let coordinator = Application.app.coordinator
+                coordinator.coordinate(to: .tabBar)
+            }
+        }
     }
 }

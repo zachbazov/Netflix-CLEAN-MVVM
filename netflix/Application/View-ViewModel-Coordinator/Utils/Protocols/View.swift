@@ -12,8 +12,7 @@ import UIKit
 protocol View: UIView,
                ViewLifecycleBehavior,
                ViewObservable,
-               ViewAnimatable,
-               DataLoadable {
+               ViewAnimatable {
     associatedtype ViewModelType: ViewModel
     var viewModel: ViewModelType! { get set }
 }

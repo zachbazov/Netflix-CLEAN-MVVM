@@ -11,7 +11,7 @@ import UIKit
 
 final class AccountMenuNotificationHybridCell: UITableViewCell {
     lazy var label: UILabel = createTitleLabel()
-    lazy var image: UIImageView = createImageView()
+    lazy var itemImage: UIImageView = createImageView()
     lazy var notificationIndicator: UIView = createNotificationIndicatorView()
     lazy var collectionView: UICollectionView = createCollectionView()
     
@@ -27,7 +27,7 @@ final class AccountMenuNotificationHybridCell: UITableViewCell {
     
     override func prepareForReuse() {
         label.text = nil
-        image.image = nil
+        itemImage.image = nil
         accessoryView = nil
         accessoryType = .none
         
@@ -50,12 +50,12 @@ extension AccountMenuNotificationHybridCell: HybridCell {
     }
     
     func viewHierarchyWillConfigure() {
-        image.addToHierarchy(on: contentView)
+        itemImage.addToHierarchy(on: contentView)
         label.addToHierarchy(on: contentView)
         
         contentView
             .chainConstraintToSuperview(
-                linking: image,
+                linking: itemImage,
                 to: label,
                 withLeadingAnchorValue: 24.0,
                 sizeInPoints: 28.0)
@@ -74,7 +74,7 @@ extension AccountMenuNotificationHybridCell: HybridCell {
     
     func viewWillDeallocate() {
         label.removeFromSuperview()
-        image.removeFromSuperview()
+        itemImage.removeFromSuperview()
         notificationIndicator.removeFromSuperview()
         collectionView.removeFromSuperview()
         
@@ -139,7 +139,7 @@ extension AccountMenuNotificationHybridCell {
             .withTintColor(.hexColor("#b3b3b3"))
         else { return }
         
-        self.image.image = systemImage
+        self.itemImage.image = systemImage
     }
     
     private func configureSections() {

@@ -55,7 +55,7 @@ protocol Requestable {
     var bodyParameters: [String: Any] { get }
     var bodyEncoding: BodyEncoding { get }
     
-    func urlRequest(with config: NetworkConfigurable) async throws -> URLRequest
+    func urlRequest(with config: NetworkConfigurable) throws -> URLRequest
 }
 
 // MARK: - Requestable Implementation
@@ -95,6 +95,10 @@ extension Requestable {
         if !bodyParameters.isEmpty {
             urlRequest.httpBody = encodeBody(bodyParameters: bodyParameters, bodyEncoding: bodyEncoding)
         }
+        
+//        if let user = Application.app.services.auth.user, let token = user.token {
+//            urlRequest.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+//        }
         
         urlRequest.httpMethod = method.rawValue
         urlRequest.allHTTPHeaderFields = allHeaders

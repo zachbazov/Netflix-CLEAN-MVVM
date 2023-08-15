@@ -38,14 +38,14 @@ extension Theme: ThemingBehavior {
             navigationBarAppearance.titleTextAttributes = [
                 .foregroundColor: UIColor.white,
                 .font: UIFont.systemFont(ofSize: 17, weight: .heavy)]
-            navigationBarAppearance.backgroundColor = .black.withAlphaComponent(0.75)
+            navigationBarAppearance.backgroundColor = UIColor.black.withAlphaComponent(0.75)
             navigationBarAppearance.buttonAppearance = barButtonItemAppearance
             
             UINavigationBar.appearance().barTintColor = .white
             UINavigationBar.appearance().standardAppearance = navigationBarAppearance
             UINavigationBar.appearance().scrollEdgeAppearance = navigationBarAppearance
         } else {
-            UINavigationBar.appearance().barTintColor = .black.withAlphaComponent(0.75)
+            UINavigationBar.appearance().barTintColor = UIColor.black.withAlphaComponent(0.75)
             UINavigationBar.appearance().tintColor = .white
             UINavigationBar.appearance().titleTextAttributes = [
                 .foregroundColor: UIColor.white,

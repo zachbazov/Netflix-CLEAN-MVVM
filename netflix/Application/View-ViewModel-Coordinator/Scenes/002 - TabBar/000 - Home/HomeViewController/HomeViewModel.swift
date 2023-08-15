@@ -64,17 +64,9 @@ final class HomeViewModel {
 
 extension HomeViewModel: ViewModel {
     func viewDidLoad() {
-        dataWillLoad()
-    }
-    
-    func dataWillLoad() {
         ActivityIndicatorView.present()
         
-        if #available(iOS 13.0, *) {
-            return loadUsingAsyncAwait()
-        }
-        
-        loadUsingDispatchGroup()
+        fetchData()
     }
     
     func dataDidLoad() {
@@ -236,18 +228,31 @@ private protocol DataProviderProtocol {
     func mediaDidLoad(_ completion: @escaping () -> Void)
     func topSearchesDidLoad(_ completion: @escaping () -> Void)
     
-    func sectionsDidLoad() async
-    func mediaDidLoad() async
-    func topSearchesDidLoad() async
-    
-    func loadUsingAsyncAwait()
     func loadUsingDispatchGroup()
 }
 
-// MARK: - DataProviderProtocol Implementation
+// MARK: - Private Implementation
 
-extension HomeViewModel: DataProviderProtocol {
-    fileprivate func loadUsingDispatchGroup() {
+extension HomeViewModel {
+    private func createSectionUseCase() -> SectionUseCase {
+        let services = Application.app.services
+        let stores = Application.app.stores
+        let dataTransferService = services.dataTransfer
+        let persistentStore = stores.sectionResponses
+        let repository = SectionRepository(dataTransferService: dataTransferService, persistentStore: persistentStore)
+        return SectionUseCase(repository: repository)
+    }
+    
+    private func createMediaUseCase() -> MediaUseCase {
+        let services = Application.app.services
+        let stores = Application.app.stores
+        let dataTransferService = services.dataTransfer
+        let persistentStore = stores.mediaResponses
+        let repository = MediaRepository(dataTransferService: dataTransferService, persistentStore: persistentStore)
+        return MediaUseCase(repository: repository)
+    }
+    
+    private func fetchData() {
         let group = DispatchGroup()
         
         group.enter()
@@ -257,20 +262,12 @@ extension HomeViewModel: DataProviderProtocol {
         group.enter()
         topSearchesDidLoad { group.leave() }
         
-        group.notify(queue: .main) { [weak self] in self?.dataDidLoad() }
-    }
-    
-    fileprivate func loadUsingAsyncAwait() {
-        Task {
-            await sectionsDidLoad()
-            await mediaDidLoad()
-            await topSearchesDidLoad()
-            
-            dataDidLoad()
+        group.notify(queue: .main) { [weak self] in
+            self?.dataDidLoad()
         }
     }
     
-    fileprivate func sectionsDidLoad(_ completion: @escaping () -> Void) {
+    private func sectionsDidLoad(_ completion: @escaping () -> Void) {
         sectionUseCase.repository.task = sectionUseCase.request(
             endpoint: .getSections,
             for: SectionHTTPDTO.Response.self,
@@ -298,11 +295,11 @@ extension HomeViewModel: DataProviderProtocol {
             })
     }
     
-    fileprivate func mediaDidLoad(_ completion: @escaping () -> Void) {
+    private func mediaDidLoad(_ completion: @escaping () -> Void) {
         mediaUseCase.repository.task = mediaUseCase.request(
             endpoint: .getAllMedia,
             for: MediaHTTPDTO.Response.self,
-            request: MediaHTTPDTO.Request.self,
+            request: nil,
             cached: { [weak self] responseDTO in
                 guard let self = self, let response = responseDTO else { return }
                 
@@ -311,6 +308,7 @@ extension HomeViewModel: DataProviderProtocol {
                 completion()
             }, completion: { [weak self] result in
                 guard let self = self else { return }
+                
                 switch result {
                 case .success(let response):
                     self.media = response.data.toDomain()
@@ -322,11 +320,11 @@ extension HomeViewModel: DataProviderProtocol {
             })
     }
     
-    fileprivate func topSearchesDidLoad(_ completion: @escaping () -> Void) {
-        mediaUseCase.repository.task = mediaUseCase.request(
+    private func topSearchesDidLoad(_ completion: @escaping () -> Void) {
+        let _ = mediaUseCase.request(
             endpoint: .getTopSearches,
             for: SearchHTTPDTO.Response.self,
-            request: SearchHTTPDTO.Request.self,
+            request: nil,
             cached: { _ in },
             completion: { [weak self] result in
                 guard let self = self else { return }
@@ -339,51 +337,5 @@ extension HomeViewModel: DataProviderProtocol {
                     printIfDebug(.error, "\(error)")
                 }
             })
-    }
-    
-    fileprivate func sectionsDidLoad() async {
-        let response = await sectionUseCase.request(endpoint: .getSections, for: SectionHTTPDTO.Response.self, request: nil)
-        
-        guard let sections = response?.data.toDomain() else { return }
-        
-        self.sections = sections
-    }
-    
-    fileprivate func mediaDidLoad() async {
-        let response = await mediaUseCase.request(endpoint: .getAllMedia, for: MediaHTTPDTO.Response.self, request: nil)
-        
-        guard let media = response?.data.toDomain() else { return }
-        
-        self.media = media
-    }
-    
-    fileprivate func topSearchesDidLoad() async {
-        let response = await mediaUseCase.request(endpoint: .getTopSearches, for: SearchHTTPDTO.Response.self, request: nil)
-        
-        guard let media = response?.data.toDomain() else { return }
-        
-        self.topSearches = media
-    }
-}
-
-// MARK: - Private Implementation
-
-extension HomeViewModel {
-    private func createSectionUseCase() -> SectionUseCase {
-        let services = Application.app.services
-        let stores = Application.app.stores
-        let dataTransferService = services.dataTransfer
-        let persistentStore = stores.sectionResponses
-        let repository = SectionRepository(dataTransferService: dataTransferService, persistentStore: persistentStore)
-        return SectionUseCase(repository: repository)
-    }
-    
-    private func createMediaUseCase() -> MediaUseCase {
-        let services = Application.app.services
-        let stores = Application.app.stores
-        let dataTransferService = services.dataTransfer
-        let persistentStore = stores.mediaResponses
-        let repository = MediaRepository(dataTransferService: dataTransferService, persistentStore: persistentStore)
-        return MediaUseCase(repository: repository)
     }
 }

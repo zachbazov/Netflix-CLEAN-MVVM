@@ -19,6 +19,7 @@ final class RepositoryTask {
 extension RepositoryTask: Cancellable {
     func cancel() {
         networkTask?.cancel()
+        
         isCancelled = true
     }
 }

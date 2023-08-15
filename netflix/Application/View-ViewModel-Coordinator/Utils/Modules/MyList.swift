@@ -37,16 +37,6 @@ final class MyList {
         return ListUseCase(repository: repository)
     }
     
-    func loadData() {
-        if #available(iOS 13.0, *) {
-            loadUsingAsyncAwait()
-            
-            return
-        }
-        
-        loadAsync()
-    }
-    
     private func dataDidLoad() {
         mainQueueDispatch { [weak self] in
             guard let controller = self?.viewModel?.coordinator?.viewController,
@@ -58,25 +48,7 @@ final class MyList {
         }
     }
     
-    fileprivate func loadUsingAsyncAwait() {
-        Task {
-            await listWillLoad()
-        }
-    }
-    
-    fileprivate func loadAsync() {
-        listWillLoad()
-    }
-    
     fileprivate func updateList() {
-        if #available(iOS 13.0, *) {
-            Task {
-                await listWillUpdate()
-            }
-            
-            return
-        }
-        
         listWillUpdate()
     }
     
@@ -131,7 +103,7 @@ final class MyList {
         }
     }
     
-    func listWillLoad() {
+    func fetchList() {
         guard self.list.isEmpty else {
             dataDidLoad()
             
@@ -187,37 +159,5 @@ final class MyList {
                     printIfDebug(.error, "\(error)")
                 }
             })
-    }
-    
-    func listWillLoad() async {
-        guard self.list.isEmpty else {
-            dataDidLoad()
-            
-            return
-        }
-        
-        guard let user = user else { return }
-        
-        let request = ListHTTPDTO.GET.Request(user: user)
-        let response = await useCase.request(endpoint: .getList, for: ListHTTPDTO.GET.Response.self, request: request)
-        
-        guard let list = response?.data.first?.media.toDomain() else { return }
-        
-        self.list = list.toSet()
-        self.section?.media = list
-        
-        dataDidLoad()
-    }
-    
-    fileprivate func listWillUpdate() async {
-        guard let user = user else { return }
-        guard let id = user._id else { return }
-        
-        let request = ListHTTPDTO.PATCH.Request(user: id, media: section?.media.toObjectIDs() ?? [])
-        let response = await useCase.request(endpoint: .updateList, for: ListHTTPDTO.PATCH.Response.self, request: request)
-        
-        guard let _ = response else { return }
-        
-        section?.media = list.toArray()
     }
 }

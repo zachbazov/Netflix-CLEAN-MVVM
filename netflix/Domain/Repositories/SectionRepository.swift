@@ -52,7 +52,7 @@ extension SectionRepository {
         persistentStore.getResponse { [weak self] result in
             guard let self = self else { return }
             
-            if case let .success(response) = result {
+            if case let .success(response?) = result {
                 return cached(response as? T)
             }
             
@@ -73,22 +73,5 @@ extension SectionRepository {
         }
         
         return task
-    }
-    
-    func find<T>(request: Any?) async -> T? where T: Decodable {
-        guard let cached = await persistentStore.getResponse() else {
-            let endpoint = SectionRepository.getAllSections()
-            let result = await self.dataTransferService.request(with: endpoint)
-            
-            if case let .success(response) = result {
-                persistentStore.save(response: response)
-                
-                return response as? T
-            }
-            
-            return nil
-        }
-        
-        return cached as? T
     }
 }

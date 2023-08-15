@@ -13,6 +13,6 @@ extension MediaHTTPResponseEntity {
     func toDTO() -> MediaHTTPDTO.Response {
         return .init(status: status!,
                      results: Int(results),
-                     data: data!)
+                     data: data ?? [])
     }
 }

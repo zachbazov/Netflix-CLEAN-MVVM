@@ -29,24 +29,14 @@ extension SectionHTTPResponseStore {
     
     func getResponse(completion: @escaping (Result<SectionHTTPDTO.Response?, CoreDataStorageError>) -> Void) {
         let context = coreDataStorage.context()
+        
         do {
             let fetchRequest: NSFetchRequest = self.fetchRequest()
             let responseEntity = try context.fetch(fetchRequest).first
+            
             completion(.success(responseEntity?.toDTO()))
         } catch {
             completion(.failure(CoreDataStorageError.readError(error)))
-        }
-    }
-    
-    func getResponse() async -> SectionHTTPDTO.Response? {
-        let context = coreDataStorage.context()
-        do {
-            let fetchRequest: NSFetchRequest = self.fetchRequest()
-            let responseEntity = try context.fetch(fetchRequest).first
-            guard let response = responseEntity?.toDTO() else { return nil }
-            return response
-        } catch {
-            return nil
         }
     }
     

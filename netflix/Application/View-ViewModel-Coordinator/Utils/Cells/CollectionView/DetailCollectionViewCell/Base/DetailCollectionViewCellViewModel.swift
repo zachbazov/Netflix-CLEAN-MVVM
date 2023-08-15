@@ -28,7 +28,10 @@ struct DetailCollectionViewCellViewModel {
         self.description = media.description
         self.posterImagePath = media.resources.previewPoster
         self.posterImageIdentifier = .init(string: "detail-poster_\(media.slug)")
-        self.posterImageURL = .init(string: self.posterImagePath)
+        
+        var configuration = Application.app.configuration
+        
+        self.posterImageURL = URL(string: "\(configuration.api.urlString)\(self.posterImagePath)")
         
         if let dataSource = viewModel.coordinator?.viewController?.dataSource,
            let collectionCell = dataSource.collectionCell {

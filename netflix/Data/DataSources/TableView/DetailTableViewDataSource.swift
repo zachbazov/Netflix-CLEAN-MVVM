@@ -10,11 +10,7 @@ import UIKit
 // MARK: - DataSourceProtocol Type
 
 private protocol DataSourceProtocol {
-    var collectionCell: DetailHybridCell? { get }
-    var navigationCell: NavigationTableViewCell? { get }
-    
     func contentSize(for state: DetailNavigationView.State) -> CGFloat
-    func reloadRow(at index: DetailTableViewDataSource.Index)
 }
 
 // MARK: - DetailTableViewDataSource Type
@@ -72,12 +68,14 @@ final class DetailTableViewDataSource: TableViewDataSource {
                                              for: indexPath,
                                              with: viewModel) as! T
         case .navigation:
+            guard navigationCell == nil else { return navigationCell! as! T }
             navigationCell = NavigationTableViewCell.create(of: NavigationTableViewCell.self,
                                                             on: tableView,
                                                             for: indexPath,
                                                             with: viewModel)
             return navigationCell as! T
         case .collection:
+            guard collectionCell == nil else { return collectionCell! as! T }
             collectionCell = DetailHybridCell.create(expecting: DetailHybridCell.self,
                                                      embedding: DetailCollectionViewCell.self,
                                                      on: tableView,
@@ -89,6 +87,7 @@ final class DetailTableViewDataSource: TableViewDataSource {
     
     @discardableResult
     override func heightForRow(in tableView: UITableView, at indexPath: IndexPath) -> CGFloat {
+        printIfDebug(.debug, "heightForRow")
         guard let view = coordinator.viewController?.view as UIView?,
               let index = DetailTableViewDataSource.Index(rawValue: indexPath.section)
         else { return .zero }
@@ -158,20 +157,6 @@ extension DetailTableViewDataSource: DataSourceProtocol {
             value = roundedItemsOutput * cellHeight + lineSpacing * roundedItemsOutput + topContentInset
             
             return value
-        }
-    }
-    
-    func reloadRow(at index: DetailTableViewDataSource.Index) {
-        guard let tableView = coordinator.viewController?.tableView else { return }
-        
-        switch index {
-        case .collection:
-            collectionCell?.dataSourceDidChange()
-            
-            let indexPath = IndexPath(row: index.rawValue, section: .zero)
-            heightForRow(in: tableView, at: indexPath)
-            tableView.reloadRows(at: [indexPath], with: .fade)
-        default: break
         }
     }
 }

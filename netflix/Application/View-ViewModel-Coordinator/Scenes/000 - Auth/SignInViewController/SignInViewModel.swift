@@ -69,19 +69,6 @@ extension SignInViewModel: ViewModelProtocol {
         let userDTO = UserDTO(email: email, password: password)
         let requestDTO = UserHTTPDTO.Request(user: userDTO, selectedProfile: nil)
         
-        if #available(iOS 13.0, *) {
-            Task {
-                let response = await authService.signIn(with: requestDTO)
-
-                guard let user = response?.data else { return }
-                
-                didFinish(with: user)
-                
-            }
-            
-            return
-        }
-        
         authService.signIn(for: requestDTO) { [weak self] user in
             self?.didFinish(with: user)
         }

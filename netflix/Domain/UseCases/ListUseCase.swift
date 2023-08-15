@@ -41,13 +41,4 @@ extension ListUseCase: UseCase {
             return repository.update(request: request, completion: completion)
         }
     }
-    
-    func request<T>(endpoint: Endpoints, for response: T.Type, request: Any?) async -> T? where T: Decodable {
-        switch endpoint {
-        case .getList:
-            return await repository.find(request: request)
-        case .updateList:
-            return await repository.update(request: request)
-        }
-    }
 }

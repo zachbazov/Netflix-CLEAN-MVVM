@@ -41,7 +41,7 @@ private struct TabBarConfiguration {
     
     private func newsTabItem(for controller: UINavigationController) {
         let title = "News & Hot"
-        let systemImage = "play.rectangle.on.rectangle.fill"
+        let systemImage = "play"
         let symbolConfiguration = UIImage.SymbolConfiguration(pointSize: 15.0)
         let image = UIImage(systemName: systemImage)?.whiteRendering(with: symbolConfiguration)
         let tag = TabBarCoordinator.Screen.news.rawValue

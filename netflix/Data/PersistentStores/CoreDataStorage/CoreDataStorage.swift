@@ -69,7 +69,7 @@ extension CoreDataStorage: CoreDataProtocol {
                 assertionFailure("CoreDataStorage unresolved error \(error), \(error.userInfo)")
             }
         }
-//        printContainerUrl(for: container)
+        printContainerUrl(for: container)
         return container
     }
     

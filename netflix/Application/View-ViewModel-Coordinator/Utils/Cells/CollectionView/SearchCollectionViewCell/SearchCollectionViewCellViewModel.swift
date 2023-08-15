@@ -52,12 +52,12 @@ struct SearchCollectionViewCellViewModel {
         self.logos = media.resources.logos
         self.posterImagePath = .init()
         self.logoImagePath = .init()
-        self.presentedLogoAlignment = .init(rawValue: media.resources.presentedLogoAlignment) ?? .init(rawValue: "bottom")!
-        self.presentedSearchLogoAlignment = .init(rawValue: media.resources.presentedSearchLogoAlignment) ?? .init(rawValue: "minXminY")!
+        self.presentedLogoAlignment = PresentedLogoAlignment(rawValue: media.resources.presentedSearchLogoAlignment) ?? .bottom
+        self.presentedSearchLogoAlignment = PresentedSearchLogoAlignment(rawValue: media.resources.presentedSearchLogoAlignment) ?? .maxXmaxY
         self.posterImageIdentifier = .init(string: "preview-poster_\(media.slug)")
         self.logoImageIdentifier = .init(string: "display-logo_\(media.slug)")
         self.posterImagePath = media.resources.previewPoster
-        self.logoImagePath = media.path(forResourceOfType: PresentedSearchLogo.self)!
+        self.logoImagePath = media.path(forResourceOfType: PresentedSearchLogo.self)
         self.posterImageURL = URL(string: self.posterImagePath)
         self.logoImageURL = URL(string: self.logoImagePath)
     }

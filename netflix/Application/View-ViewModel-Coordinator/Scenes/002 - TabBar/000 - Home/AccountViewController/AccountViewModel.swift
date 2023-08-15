@@ -52,14 +52,6 @@ extension AccountViewModel: ViewModelProtocol {
     }
     
     private func loadProfiles() {
-        if #available(iOS 13.0, *) {
-            Task {
-                await userProfilesDidLoad()
-            }
-            
-            return
-        }
-        
         userProfilesDidLoad()
     }
     
@@ -84,23 +76,6 @@ extension AccountViewModel: ViewModelProtocol {
                     printIfDebug(.error, "\(error)")
                 }
             })
-    }
-    
-    private func userProfilesDidLoad() async {
-        let authService = Application.app.services.auth
-        
-        guard let user = authService.user else { return }
-        
-        let request = ProfileHTTPDTO.GET.Request(user: user)
-        let response = await userUseCase.request(endpoint: .getUserProfiles, for: ProfileHTTPDTO.GET.Response.self, request: request)
-        
-        guard let profiles = response?.data.toDomain() else { return }
-        
-        self.profiles.value = profiles
-        
-        let addProfile = Profile(_id: "add", name: "Add Profile", image: "plus", active: false, user: user._id!)
-        
-        self.profiles.value.append(addProfile)
     }
 }
 

@@ -36,19 +36,6 @@ extension MediaHTTPResponseStore {
         }
     }
     
-    func getResponse() async -> MediaHTTPDTO.Response? {
-        let context = coreDataStorage.context()
-        do {
-            let fetchRequest = self.fetchRequest()
-            let responseEntity = try context.fetch(fetchRequest).first
-            let response = responseEntity?.toDTO()
-            return response
-        } catch {
-            printIfDebug(.error, "CoreDataMediaResponseStorage unresolved error \(CoreDataStorageError.readError(error)) occured trying to fetch a response.")
-        }
-        return nil
-    }
-    
     func save(response: MediaHTTPDTO.Response) {
         let context = coreDataStorage.context()
         
@@ -63,7 +50,7 @@ extension MediaHTTPResponseStore {
     }
     
     func deleteResponse(in context: NSManagedObjectContext) {
-        let fetchRequest = fetchRequest()
+        let fetchRequest = self.fetchRequest()
         do {
             if let result = try context.fetch(fetchRequest).first {
                 context.delete(result)

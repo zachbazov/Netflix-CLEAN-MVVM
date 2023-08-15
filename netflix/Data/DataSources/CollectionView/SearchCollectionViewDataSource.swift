@@ -48,11 +48,11 @@ final class SearchCollectionViewDataSource: CollectionViewDataSource {
         
         coordinator.coordinate(to: .detail)
         
-        guard let controller = coordinator.detail?.viewControllers.first as? DetailViewController else { return }
+        guard let detailController = coordinator.detail?.viewControllers.first as? DetailViewController else { return }
         
-        controller.viewModel.media = media
-        controller.viewModel.section = section
-        controller.viewModel.isRotated = rotated
+        detailController.viewModel.media = media
+        detailController.viewModel.section = section
+        detailController.viewModel.isRotated = rotated
     }
     
     override func willDisplayCellForItem<T>(_ cell: T, at indexPath: IndexPath) where T: UICollectionViewCell {

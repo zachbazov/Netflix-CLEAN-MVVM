@@ -52,19 +52,4 @@ extension MediaUseCase: UseCase {
             return repository.search(requestDTO: request, cached: cached, completion: completion)
         }
     }
-    
-    func request<T>(endpoint: Endpoints, for response: T.Type, request: Any?) async -> T? where T: Decodable {
-        switch endpoint {
-        case .getAllMedia:
-            return await repository.find(request: request)
-        case .getTopSearches:
-            return await repository.getTopSearches() as? T
-        case .getUpcomings:
-            return await repository.getUpcomings() as? T
-        case .searchMedia:
-            guard let request = request as? SearchHTTPDTO.Request else { return nil }
-            
-            return await repository.search(requestDTO: request) as? T
-        }
-    }
 }

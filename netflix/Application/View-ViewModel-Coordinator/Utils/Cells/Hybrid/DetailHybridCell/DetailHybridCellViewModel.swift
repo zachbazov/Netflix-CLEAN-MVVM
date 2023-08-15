@@ -46,11 +46,7 @@ final class DetailHybridCellViewModel {
 
 // MARK: - ViewModel Implementation
 
-extension DetailHybridCellViewModel: ViewModel {
-    func dataWillLoad() {
-        loadEpisodes()
-    }
-}
+extension DetailHybridCellViewModel: ViewModel {}
 
 // MARK: - ViewModelProtocol Implementation
 
@@ -78,7 +74,7 @@ extension DetailHybridCellViewModel: ViewModelProtocol {
 // MARK: - Private Implementation
 
 extension DetailHybridCellViewModel {
-    private func loadEpisodes() {
+    func fetchEpisodes() {
         guard let controller = coordinator.viewController,
               let dataSource = controller.dataSource,
               let state = dataSource.navigationCell?.navigationView?.viewModel.state.value
@@ -88,11 +84,13 @@ extension DetailHybridCellViewModel {
             let cellViewModel = DetailCollectionViewCellViewModel(with: controller.viewModel)
             let requestDTO = SeasonHTTPDTO.Request(id: nil, slug: cellViewModel.slug, season: 1)
             
-            self.seasonDidLoad(request: requestDTO) {}
+            self.seasonDidLoad(request: requestDTO) { [weak self] season in
+//                self?.season.value = season
+            }
         }
     }
     
-    private func seasonDidLoad(request: SeasonHTTPDTO.Request, _ completion: @escaping () -> Void) {
+    private func seasonDidLoad(request: SeasonHTTPDTO.Request, _ completion: @escaping (Season) -> Void) {
         guard let useCase = coordinator.viewController?.viewModel.useCase else { return }
         
         useCase.repository.task = useCase.request(
@@ -107,14 +105,10 @@ extension DetailHybridCellViewModel {
                     season.episodes = season.episodes.sorted { $0.episode < $1.episode }
                     
                     self?.season.value = season.toDomain()
-                    
-                    completion()
                 }
                 if case let .failure(error) = result {
                     printIfDebug(.error, "\(error)")
                 }
             })
     }
-    
-    private func seasonDidLoad() async {}
 }
