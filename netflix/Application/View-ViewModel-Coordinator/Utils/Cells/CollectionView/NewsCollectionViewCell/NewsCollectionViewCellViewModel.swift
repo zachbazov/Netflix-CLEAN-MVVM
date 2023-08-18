@@ -43,7 +43,7 @@ struct NewsCollectionViewCellViewModel {
         self.previewPosterImageURL = URL(string: self.previewPosterImagePath)
         self.displayLogoImagePath = media.path(forResourceOfType: PresentedDisplayLogo.self)
         self.displayLogoImageIdentifier = "display-logo_\(media.slug)" as NSString
-        self.displayLogoImageURL = URL(string: self.displayLogoImagePath)
+        self.displayLogoImageURL = URL(string: Application.app.configuration.api.urlString + self.displayLogoImagePath)
         self.eta = ["Coming Soon", "In \(Int.random(in: 1...60)) Days"].randomElement()!
         self.mediaType = media.type == "series" ? "S E R I E" : "F I L M"
     }

@@ -33,7 +33,7 @@ final class Application {
     
     private init() {}
     
-    private(set) lazy var configuration = Configuration()
+    lazy var configuration = Configuration()
     private(set) lazy var services = Services()
     private(set) lazy var stores = Stores()
     private(set) lazy var coordinator = RootCoordinator()

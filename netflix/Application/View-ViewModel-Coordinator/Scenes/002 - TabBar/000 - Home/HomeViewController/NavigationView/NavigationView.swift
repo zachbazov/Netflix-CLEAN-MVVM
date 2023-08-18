@@ -136,12 +136,12 @@ extension NavigationView: ViewProtocol {
         
         switch style {
         case .blur:
-//            removeBlur()
             removeGradient()
+            removeBlur()
             addBlur()
         case .gradient:
-//            removeGradient()
             removeBlur()
+            removeGradient()
             addGradient(with: colors.toUIColorArray())
         }
     }

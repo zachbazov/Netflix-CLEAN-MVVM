@@ -82,11 +82,9 @@ extension DetailHybridCellViewModel {
         
         if case .episodes = state {
             let cellViewModel = DetailCollectionViewCellViewModel(with: controller.viewModel)
-            let requestDTO = SeasonHTTPDTO.Request(id: nil, slug: cellViewModel.slug, season: 1)
+            let requestDTO = SeasonHTTPDTO.Request(slug: cellViewModel.slug, season: 1)
             
-            self.seasonDidLoad(request: requestDTO) { [weak self] season in
-//                self?.season.value = season
-            }
+            self.seasonDidLoad(request: requestDTO) { _ in }
         }
     }
     
@@ -105,6 +103,9 @@ extension DetailHybridCellViewModel {
                     season.episodes = season.episodes.sorted { $0.episode < $1.episode }
                     
                     self?.season.value = season.toDomain()
+                    
+                    completion(season.toDomain())
+                    printIfDebug(.debug, "success season fetching eps \(season.toDomain().episodes.count)")
                 }
                 if case let .failure(error) = result {
                     printIfDebug(.error, "\(error)")

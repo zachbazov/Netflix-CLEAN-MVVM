@@ -20,8 +20,6 @@ private struct TabBarConfiguration {
             homeTabItem(for: controller as! UINavigationController)
         case .news:
             newsTabItem(for: controller as! UINavigationController)
-        case .fastLaughs:
-            fastLaughsTabItem(for: controller as! UINavigationController)
         case .downloads:
             downloadsTabItem(for: controller as! UINavigationController)
         }
@@ -41,20 +39,10 @@ private struct TabBarConfiguration {
     
     private func newsTabItem(for controller: UINavigationController) {
         let title = "News & Hot"
-        let systemImage = "play"
+        let systemImage = "play.rectangle.on.rectangle"
         let symbolConfiguration = UIImage.SymbolConfiguration(pointSize: 15.0)
         let image = UIImage(systemName: systemImage)?.whiteRendering(with: symbolConfiguration)
         let tag = TabBarCoordinator.Screen.news.rawValue
-        let item = TabBarItem(title: title, image: image!, tag: tag, navigationBarHidden: true)
-        item.applyConfig(for: controller)
-    }
-    
-    private func fastLaughsTabItem(for controller: UINavigationController) {
-        let title = "Fast Laughs"
-        let systemImage = "face.smiling"
-        let symbolConfiguration = UIImage.SymbolConfiguration(pointSize: 15.0)
-        let image = UIImage(systemName: systemImage)?.whiteRendering(with: symbolConfiguration)
-        let tag = TabBarCoordinator.Screen.fastLaughs.rawValue
         let item = TabBarItem(title: title, image: image!, tag: tag, navigationBarHidden: true)
         item.applyConfig(for: controller)
     }
@@ -104,13 +92,11 @@ final class TabBarCoordinator {
     
     lazy var home: UINavigationController? = createHomeController()
     lazy var news: UINavigationController? = createNewsController()
-    lazy var fastLaughs: UINavigationController? = createFastLaughsController()
     lazy var downloads: UINavigationController? = createDownloadsController()
     
     deinit {
         home = nil
         news = nil
-        fastLaughs = nil
         downloads = nil
         
         viewController?.viewModel?.coordinator = nil
@@ -123,12 +109,10 @@ final class TabBarCoordinator {
     func removeViewControllers() {
         let homeController = home?.viewControllers.first as? HomeViewController
         let newsController = news?.viewControllers.first as? NewsViewController
-        let fastController = fastLaughs?.viewControllers.first as? FastLaughsViewController
         let downloadsController = downloads?.viewControllers.first as? DownloadsViewController
         
         homeController?.viewWillDeallocate()
         newsController?.viewWillDeallocate()
-        fastController?.viewWillDeallocate()
         downloadsController?.viewWillDeallocate()
     }
 }
@@ -169,21 +153,6 @@ extension TabBarCoordinator {
         return navigation
     }
     
-    func createFastLaughsController() -> UINavigationController {
-        let coordinator = FastLaughsViewCoordinator()
-        let viewModel = FastLaughsViewModel()
-        let controller = FastLaughsViewController()
-
-        controller.viewModel = viewModel
-        controller.viewModel.coordinator = coordinator
-        coordinator.viewController = controller
-        
-        let navigation = UINavigationController(rootViewController: controller)
-        navigation.navigationBar.tag = Screen.fastLaughs.rawValue
-        configuration.tabBarItem(for: .fastLaughs, with: navigation)
-        return navigation
-    }
-    
     func createDownloadsController() -> UINavigationController {
         let coordinator = DownloadsViewCoordinator()
         let viewModel = DownloadsViewModel()
@@ -207,7 +176,6 @@ extension TabBarCoordinator: Coordinator {
     enum Screen: Int {
         case home
         case news
-        case fastLaughs
         case downloads
     }
     
@@ -216,10 +184,9 @@ extension TabBarCoordinator: Coordinator {
     func coordinate(to screen: Screen) {
         guard let home = home,
               let news = news,
-              let fastLaughs = fastLaughs,
               let downloads = downloads
         else { return }
         
-        viewController?.viewControllers = [home, news, fastLaughs, downloads]
+        viewController?.viewControllers = [home, news, downloads]
     }
 }

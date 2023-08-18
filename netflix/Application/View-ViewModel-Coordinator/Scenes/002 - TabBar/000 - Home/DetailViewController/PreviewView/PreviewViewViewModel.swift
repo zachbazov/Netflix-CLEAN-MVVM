@@ -40,7 +40,7 @@ struct PreviewViewViewModel {
         self.slug = media.slug
         self.posterImagePath = media.resources.previewPoster
         self.identifier = "detail-poster_\(media.slug)" as NSString
-        self.url = URL(string: self.posterImagePath)!
+        self.url = URL(string: Application.app.configuration.api.urlString + self.posterImagePath)!
     }
 }
 

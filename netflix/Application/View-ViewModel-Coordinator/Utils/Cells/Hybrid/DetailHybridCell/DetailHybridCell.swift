@@ -27,9 +27,6 @@ final class DetailHybridCell: UITableViewCell {
 
 extension DetailHybridCell: HybridCell {
     func viewDidLoad() {
-        printIfDebug(.debug, "DetailHybridCell.viewDidLoad")
-        self.dataSource = self.createDataSource()
-        self.layout = self.createLayout()
         viewHierarchyWillConfigure()
         viewWillConfigure()
         viewWillBindObservers()
@@ -51,52 +48,13 @@ extension DetailHybridCell: HybridCell {
         viewModel?.season.observe(on: self) { [weak self] season in
             guard let self = self else { return }
             
-            printIfDebug(.debug, "\(season.title)")
-            
-            guard let controllerViewModel = self.controllerViewModel,
-                  let tableDataSource = controllerViewModel.coordinator?.viewController?.dataSource,
-                  let navigationView = tableDataSource.navigationCell?.navigationView
-            else { return }
-            
-            controllerViewModel.items = self.viewModel?.setItems(for: navigationView.viewModel.state.value) ?? []
-            
-            switch navigationView.viewModel.state.value {
-            case .episodes:
-                self.layout = CollectionViewLayout(layout: .descriptive, scrollDirection: .vertical)
-            case .trailers:
-                self.layout = CollectionViewLayout(layout: .trailer, scrollDirection: .vertical)
-            case .similarContent:
-                self.layout = CollectionViewLayout(layout: .detail, scrollDirection: .vertical)
-            }
-            
-            self.collectionView.setCollectionViewLayout(self.layout!, animated: false)
-            
-            self.dataSourceDidChange()
+            self.reloadRow()
         }
 
         viewModel?.state.observe(on: self) { [weak self] state in
             guard let self = self else { return }
             
-            guard let controllerViewModel = self.controllerViewModel,
-                  let tableDataSource = controllerViewModel.coordinator?.viewController?.dataSource,
-                  let navigationView = tableDataSource.navigationCell?.navigationView
-            else { return }
-            
-            controllerViewModel.items = self.viewModel?.setItems(for: navigationView.viewModel.state.value) ?? []
-            
-            switch navigationView.viewModel.state.value {
-            case .episodes:
-                self.layout = CollectionViewLayout(layout: .descriptive, scrollDirection: .vertical)
-            case .trailers:
-                self.layout = CollectionViewLayout(layout: .trailer, scrollDirection: .vertical)
-            case .similarContent:
-                self.layout = CollectionViewLayout(layout: .detail, scrollDirection: .vertical)
-            }
-            
-            self.collectionView.setCollectionViewLayout(self.layout!, animated: false)
-            
-            self.dataSourceDidChange()
-//            controller.dataSource?.heightForRow(in: controller.tableView, at: IndexPath(row: 1, section: 4))
+            self.reloadRow()
         }
     }
 
@@ -135,7 +93,12 @@ extension DetailHybridCell: HybridCell {
     }
     
     func createDataSource() -> DetailCollectionViewDataSource? {
-        guard let controllerViewModel = controllerViewModel else { return nil }
+        guard let controllerViewModel = controllerViewModel,
+              let dataSource = controllerViewModel.coordinator?.viewController?.dataSource,
+              let navigationView = dataSource.navigationCell?.navigationView
+        else { fatalError() }
+        
+        controllerViewModel.items = viewModel?.setItems(for: navigationView.viewModel.state.value) ?? []
         
         return DetailCollectionViewDataSource(with: controllerViewModel)
     }
@@ -171,10 +134,30 @@ extension DetailHybridCell {
 
 extension DetailHybridCell {
     func dataSourceDidChange() {
-        printIfDebug(.debug, "DetailHybridCell.dataSourceDidChange")
+        dataSource = createDataSource()
+        layout = createLayout()
         
+        guard let dataSource = dataSource,
+              let layout = layout
+        else { return }
+        
+        collectionView.setCollectionViewLayout(layout, animated: false)
         collectionView.delegate = dataSource
         collectionView.dataSource = dataSource
         collectionView.reloadData()
+    }
+}
+
+// MARK: - Private Implementation
+
+extension DetailHybridCell {
+    private func reloadRow() {
+        guard let controller = viewModel?.coordinator.viewController,
+              let dataSource = controller.dataSource
+        else { return }
+        
+        mainQueueDispatch {
+            dataSource.reloadRow(at: .collection)
+        }
     }
 }

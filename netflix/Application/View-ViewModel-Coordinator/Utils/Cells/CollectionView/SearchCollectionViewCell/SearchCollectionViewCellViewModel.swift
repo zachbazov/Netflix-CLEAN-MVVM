@@ -58,8 +58,8 @@ struct SearchCollectionViewCellViewModel {
         self.logoImageIdentifier = .init(string: "display-logo_\(media.slug)")
         self.posterImagePath = media.resources.previewPoster
         self.logoImagePath = media.path(forResourceOfType: PresentedSearchLogo.self)
-        self.posterImageURL = URL(string: self.posterImagePath)
-        self.logoImageURL = URL(string: self.logoImagePath)
+        self.posterImageURL = URL(string: Application.app.configuration.api.urlString + self.posterImagePath)
+        self.logoImageURL = URL(string: Application.app.configuration.api.urlString + self.logoImagePath)
     }
 }
 

@@ -87,7 +87,6 @@ final class DetailTableViewDataSource: TableViewDataSource {
     
     @discardableResult
     override func heightForRow(in tableView: UITableView, at indexPath: IndexPath) -> CGFloat {
-        printIfDebug(.debug, "heightForRow")
         guard let view = coordinator.viewController?.view as UIView?,
               let index = DetailTableViewDataSource.Index(rawValue: indexPath.section)
         else { return .zero }
@@ -159,6 +158,20 @@ extension DetailTableViewDataSource: DataSourceProtocol {
             return value
         }
     }
+    
+    func reloadRow(at index: DetailTableViewDataSource.Index) {
+        guard let tableView = coordinator.viewController?.tableView else { return }
+        
+        switch index {
+        case .collection:
+            collectionCell?.dataSourceDidChange()
+            
+            let indexPath = IndexPath(row: index.rawValue, section: .zero)
+            heightForRow(in: tableView, at: indexPath)
+            tableView.reloadRows(at: [indexPath], with: .fade)
+        default: break
+        }
+    }
 }
 
 // MARK: - Index Type
@@ -183,7 +196,7 @@ extension DetailTableViewDataSource {
         return view
     }
     
-    private func dataSourceDidChange() {
+    func dataSourceDidChange() {
         guard let tableView = coordinator.viewController?.tableView else { return }
         
         tableView.delegate = self

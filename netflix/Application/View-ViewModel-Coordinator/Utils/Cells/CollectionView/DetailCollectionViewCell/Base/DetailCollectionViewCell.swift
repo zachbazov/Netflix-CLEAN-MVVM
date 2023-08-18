@@ -48,14 +48,14 @@ extension DetailCollectionViewCell {
         imageService.load(
             url: viewModel.posterImageURL,
             identifier: viewModel.posterImageIdentifier) { [weak self] image in
-            guard let self = self,
-                  self.representedIdentifier == self.viewModel.slug as NSString?,
-                  let image = image
-            else { return }
-            
-            mainQueueDispatch {
-                self.setPoster(image)
+                guard let self = self,
+                      self.representedIdentifier == self.viewModel.slug as NSString?,
+                      let image = image
+                else { return }
+                
+                mainQueueDispatch {
+                    self.setPoster(image)
+                }
             }
-        }
     }
 }
