@@ -97,6 +97,15 @@ extension UIView {
         airPlay.prioritizesVideoDevices = true
         addSubview(airPlay)
     }
+    
+    func containsAVRoutePickerView() -> Bool {
+        for subview in subviews {
+            if subview is AVRoutePickerView {
+                return true
+            }
+        }
+        return false
+    }
 }
 
 // MARK: - Frame

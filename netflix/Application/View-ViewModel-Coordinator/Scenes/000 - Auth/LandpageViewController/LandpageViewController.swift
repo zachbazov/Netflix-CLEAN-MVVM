@@ -44,7 +44,7 @@ final class LandpageViewController: UIViewController, Controller {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        viewWillLoadBehaviors()
+        viewDidLoadBehaviors()
         viewDidDeploySubviews()
         viewDidTargetSubviews()
     }
@@ -58,6 +58,10 @@ final class LandpageViewController: UIViewController, Controller {
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         setupGradients()
+    }
+    
+    func viewDidLoadBehaviors() {
+        addBehaviors([BackButtonEmptyTitleNavigationBarBehavior(), BlackStyleNavigationBarBehavior()])
     }
     
     func viewDidDeploySubviews() {

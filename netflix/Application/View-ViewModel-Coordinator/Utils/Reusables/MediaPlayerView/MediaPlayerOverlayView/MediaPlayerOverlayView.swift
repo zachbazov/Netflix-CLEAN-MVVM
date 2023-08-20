@@ -67,12 +67,19 @@ final class MediaPlayerOverlayView: UIView, View {
     }
     
     func viewWillConfigure() {
+        printIfDebug(.debug, "viewWillConfigure")
         gradientView.setBackgroundColor(UIColor.black.withAlphaComponent(0.5))
         
         let title = mediaPlayerView?.viewModel?.media.title
         setTitle(title)
         
-        airPlayButton.asRoutePickerView()
+        if airPlayButton.containsAVRoutePickerView() {
+            printIfDebug(.debug, "contains")
+            return
+        } else {
+            printIfDebug(.debug, "doesnt contain")
+            airPlayButton.asRoutePickerView()
+        }
         
         configureButtonsForItemStatus()
     }

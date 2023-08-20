@@ -26,7 +26,7 @@ final class MediaTableViewDataSource: TableViewDataSource {
     
     var showcaseCell: ShowcaseTableViewCell?
     
-    fileprivate var initialOffsetY: CGFloat = .zero
+    fileprivate(set) var initialOffsetY: CGFloat = .zero
     fileprivate(set) var primaryOffsetY: CGFloat = .zero
     
     init(viewModel: HomeViewModel) {
@@ -174,14 +174,14 @@ extension MediaTableViewDataSource: DataSourceProtocol {
         tableView.reloadData()
     }
     
-    fileprivate func setContentInset() {
+    func setContentInset() {
         guard let controller = viewModel.coordinator?.viewController,
               let tableView = controller.tableView,
               let window = UIApplication.shared.windows.first
         else { return }
 
         let statusBarHeight = window.windowScene?.statusBarManager?.statusBarFrame.size.height ?? .zero
-        let offset = controller.navigationViewContainer.bounds.height - statusBarHeight - 5.0
+        let offset = controller.navigationViewContainer.bounds.height - statusBarHeight
         
         initialOffsetY = offset
         
@@ -254,7 +254,7 @@ extension MediaTableViewDataSource.Index: Valuable {
 // MARK: - Private Implementation
 
 extension MediaTableViewDataSource {
-    private func applyStyleChanges(_ condition: Bool, y: CGFloat) {
+    func applyStyleChanges(_ condition: Bool, y: CGFloat) {
         guard let controller = viewModel.coordinator?.viewController else { return }
         
         if condition {
@@ -270,7 +270,7 @@ extension MediaTableViewDataSource {
         }
     }
     
-    private func applyNavigationAdjustments(_ condition: Bool, y: CGFloat) {
+    func applyNavigationAdjustments(_ condition: Bool, y: CGFloat) {
         guard let controller = viewModel.coordinator?.viewController else { return }
         
         controller.navigationView?.segmentControl?.origin(y: y)

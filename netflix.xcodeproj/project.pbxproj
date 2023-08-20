@@ -210,10 +210,6 @@
 		A1AE02D1293BA29A00AF0BD6 /* DeviceOrientation.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1AE02D0293BA29A00AF0BD6 /* DeviceOrientation.swift */; };
 		A1AEB442299E0DD10016DE2B /* SceneObserverUnbindable.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1AEB441299E0DD10016DE2B /* SceneObserverUnbindable.swift */; };
 		A1AEB444299E15D20016DE2B /* TabController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1AEB443299E15D20016DE2B /* TabController.swift */; };
-		A1B0D42C29AE6FC6009977AB /* FastLaughsViewCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B0D42B29AE6FC6009977AB /* FastLaughsViewCoordinator.swift */; };
-		A1B0D42E29AE6FCC009977AB /* FastLaughsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B0D42D29AE6FCC009977AB /* FastLaughsViewModel.swift */; };
-		A1B0D43029AE6FD4009977AB /* FastLaughsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B0D42F29AE6FD4009977AB /* FastLaughsViewController.swift */; };
-		A1B0D43229AE6FD8009977AB /* FastLaughsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = A1B0D43129AE6FD8009977AB /* FastLaughsViewController.xib */; };
 		A1B0D43629B20E0F009977AB /* LabeledCollectionHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B0D43529B20E0F009977AB /* LabeledCollectionHeaderView.swift */; };
 		A1B0DE562954590E00307866 /* UITableView+ContentInset.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B0DE552954590E00307866 /* UITableView+ContentInset.swift */; };
 		A1B0DE5A29560F5900307866 /* UINavigationController+Identifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B0DE5929560F5900307866 /* UINavigationController+Identifier.swift */; };
@@ -548,10 +544,6 @@
 		A1AE02D0293BA29A00AF0BD6 /* DeviceOrientation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceOrientation.swift; sourceTree = "<group>"; };
 		A1AEB441299E0DD10016DE2B /* SceneObserverUnbindable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneObserverUnbindable.swift; sourceTree = "<group>"; };
 		A1AEB443299E15D20016DE2B /* TabController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabController.swift; sourceTree = "<group>"; };
-		A1B0D42B29AE6FC6009977AB /* FastLaughsViewCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FastLaughsViewCoordinator.swift; sourceTree = "<group>"; };
-		A1B0D42D29AE6FCC009977AB /* FastLaughsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FastLaughsViewModel.swift; sourceTree = "<group>"; };
-		A1B0D42F29AE6FD4009977AB /* FastLaughsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FastLaughsViewController.swift; sourceTree = "<group>"; };
-		A1B0D43129AE6FD8009977AB /* FastLaughsViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = FastLaughsViewController.xib; sourceTree = "<group>"; };
 		A1B0D43529B20E0F009977AB /* LabeledCollectionHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LabeledCollectionHeaderView.swift; sourceTree = "<group>"; };
 		A1B0DE552954590E00307866 /* UITableView+ContentInset.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITableView+ContentInset.swift"; sourceTree = "<group>"; };
 		A1B0DE5929560F5900307866 /* UINavigationController+Identifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UINavigationController+Identifier.swift"; sourceTree = "<group>"; };
@@ -734,14 +726,6 @@
 			path = "000 - Home";
 			sourceTree = "<group>";
 		};
-		A130BC92294CE09A0070EA5E /* 002 - Fast Laughs */ = {
-			isa = PBXGroup;
-			children = (
-				A1B0D42A29AE6F72009977AB /* FastLaughsViewController */,
-			);
-			path = "002 - Fast Laughs";
-			sourceTree = "<group>";
-		};
 		A130BC9C294E5F620070EA5E /* SearchViewController */ = {
 			isa = PBXGroup;
 			children = (
@@ -753,12 +737,12 @@
 			path = SearchViewController;
 			sourceTree = "<group>";
 		};
-		A130BCB629510C500070EA5E /* 003 - Downloads */ = {
+		A130BCB629510C500070EA5E /* 002 - Downloads */ = {
 			isa = PBXGroup;
 			children = (
 				A130BCB729510C7B0070EA5E /* DownloadsViewController */,
 			);
-			path = "003 - Downloads";
+			path = "002 - Downloads";
 			sourceTree = "<group>";
 		};
 		A130BCB729510C7B0070EA5E /* DownloadsViewController */ = {
@@ -1244,8 +1228,7 @@
 				A18691D728C8C1EE0087DE3B /* TabBarController.swift */,
 				A130BC91294CE08F0070EA5E /* 000 - Home */,
 				A130BCD429511E690070EA5E /* 001 - News */,
-				A130BC92294CE09A0070EA5E /* 002 - Fast Laughs */,
-				A130BCB629510C500070EA5E /* 003 - Downloads */,
+				A130BCB629510C500070EA5E /* 002 - Downloads */,
 			);
 			path = "002 - TabBar";
 			sourceTree = "<group>";
@@ -1632,17 +1615,6 @@
 				A18B997D28C03BB10077A5A6 /* Observable.swift */,
 			);
 			path = Reactive;
-			sourceTree = "<group>";
-		};
-		A1B0D42A29AE6F72009977AB /* FastLaughsViewController */ = {
-			isa = PBXGroup;
-			children = (
-				A1B0D42B29AE6FC6009977AB /* FastLaughsViewCoordinator.swift */,
-				A1B0D42D29AE6FCC009977AB /* FastLaughsViewModel.swift */,
-				A1B0D42F29AE6FD4009977AB /* FastLaughsViewController.swift */,
-				A1B0D43129AE6FD8009977AB /* FastLaughsViewController.xib */,
-			);
-			path = FastLaughsViewController;
 			sourceTree = "<group>";
 		};
 		A1B0D43329B0F976009977AB /* SearchCollectionViewCell */ = {
@@ -2112,7 +2084,6 @@
 				A1E81D3228CFF95300D044EA /* RatedCollectionViewCell.xib in Resources */,
 				A130BC82294CC8400070EA5E /* Localizable.strings in Resources */,
 				A1AD25A428D29A7800F793B3 /* ShowcaseView.xib in Resources */,
-				A1B0D43229AE6FD8009977AB /* FastLaughsViewController.xib in Resources */,
 				A1AD25C728D55DF300F793B3 /* NavigationBarView.xib in Resources */,
 				A1B70A8C293E72D000C718C6 /* SignInViewController.xib in Resources */,
 				A1741D2E28E694CF00F3C46B /* InfoView.xib in Resources */,
@@ -2167,7 +2138,6 @@
 				A1741D4828EC408B00F3C46B /* DetailPanelViewItem.swift in Sources */,
 				A1741D2C28E68FB600F3C46B /* PreviewViewViewModel.swift in Sources */,
 				A1F56A6928C68FB10089BD4F /* NSAttributedString+Extension.swift in Sources */,
-				A1B0D42C29AE6FC6009977AB /* FastLaughsViewCoordinator.swift in Sources */,
 				A1AD25A028D2987B00F793B3 /* ShowcaseTableViewCell.swift in Sources */,
 				A130BCBB29510C9A0070EA5E /* DownloadsViewModel.swift in Sources */,
 				A1B349FA2A165F77002AFE9E /* CollectionViewCell.swift in Sources */,
@@ -2178,7 +2148,6 @@
 				A1B1B0A8299AEDDE0070AD29 /* Services.swift in Sources */,
 				A18B998A28C040A70077A5A6 /* Cancellable.swift in Sources */,
 				A1741D1328E67A4F00F3C46B /* DetailTableViewDataSource.swift in Sources */,
-				A1B0D42E29AE6FCC009977AB /* FastLaughsViewModel.swift in Sources */,
 				A1B1B0C7299B8C1D0070AD29 /* UserUseCase.swift in Sources */,
 				A1741D4E28EC74D100F3C46B /* DetailPanelViewItemViewModel.swift in Sources */,
 				A18A799E2A22C48D00FE60AB /* DeviceOrientable.swift in Sources */,
@@ -2310,7 +2279,6 @@
 				A130BC96294CE0AF0070EA5E /* SearchViewModel.swift in Sources */,
 				A1AA28CC28F4C3710011EE9D /* MediaPlayer.swift in Sources */,
 				A1B70A71293D578600C718C6 /* ViewModel.swift in Sources */,
-				A1B0D43029AE6FD4009977AB /* FastLaughsViewController.swift in Sources */,
 				A1B70A7B293D7B7000C718C6 /* Application.swift in Sources */,
 				A1741D0F28E679B200F3C46B /* NavigationTableViewCell.swift in Sources */,
 				A18691D628C8423B0087DE3B /* DetailViewController.swift in Sources */,

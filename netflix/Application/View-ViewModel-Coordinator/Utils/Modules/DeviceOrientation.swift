@@ -42,10 +42,10 @@ final class DeviceOrientation {
 
 extension DeviceOrientation: OrientationProtocol {
     func set(orientation: UIInterfaceOrientationMask) {
-//        if #available(iOS 16.0, *) {
-//            windowScene?.requestGeometryUpdate(.iOS(interfaceOrientations: orientation))
-//            return
-//        }
+        if #available(iOS 16.0, *) {
+            windowScene?.requestGeometryUpdate(.iOS(interfaceOrientations: orientation))
+            return
+        }
         
         UIDevice.current.setValue(orientation.rawValue, forKey: orientationKey)
     }
