@@ -1,16 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="21507" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="21701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_12" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21505"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21679"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
-        <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="AddUserProfileViewController" customModule="netflix" customModuleProvider="target">
             <connections>
+                <outlet property="avatarImageView" destination="SDO-BR-2Ad" id="hpR-lU-k1H"/>
+                <outlet property="badgeViewContainer" destination="6ve-cL-GP5" id="5lx-Dw-pp6"/>
+                <outlet property="cancelBarButton" destination="oBb-TI-uoc" id="gHh-Ta-uOu"/>
+                <outlet property="kidsActivationSwitch" destination="byh-Ui-TEG" id="GPw-rN-tVS"/>
+                <outlet property="navigationBar" destination="aBp-Wb-eux" id="Hr0-wL-xB7"/>
+                <outlet property="navigationTitleLabel" destination="re9-Cm-KFR" id="PWz-I0-zO8"/>
+                <outlet property="profileNameTextField" destination="WbD-6P-BpB" id="eMk-qf-C7L"/>
+                <outlet property="saveBarButton" destination="vpF-tv-Y1M" id="8Xg-XQ-NYN"/>
                 <outlet property="view" destination="02b-eL-NHJ" id="HI4-QO-RC6"/>
             </connections>
         </placeholder>
@@ -18,14 +25,103 @@
         <view contentMode="scaleToFill" id="02b-eL-NHJ">
             <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <subviews>
+                <navigationBar contentMode="scaleToFill" translucent="NO" translatesAutoresizingMaskIntoConstraints="NO" id="aBp-Wb-eux">
+                    <rect key="frame" x="0.0" y="59" width="393" height="44"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="44" id="rgu-2o-ZWL"/>
+                    </constraints>
+                    <textAttributes key="titleTextAttributes">
+                        <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                    </textAttributes>
+                    <items>
+                        <navigationItem title="Add Profile" id="re9-Cm-KFR">
+                            <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="oBb-TI-uoc">
+                                <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                            </barButtonItem>
+                            <barButtonItem key="rightBarButtonItem" systemItem="save" id="vpF-tv-Y1M">
+                                <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                            </barButtonItem>
+                        </navigationItem>
+                    </items>
+                </navigationBar>
+                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="av-dark-blue" translatesAutoresizingMaskIntoConstraints="NO" id="SDO-BR-2Ad">
+                    <rect key="frame" x="144.66666666666666" y="119" width="104" height="104"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="104" id="L1z-hX-6Pd"/>
+                        <constraint firstAttribute="height" constant="104" id="u94-YL-DtL"/>
+                    </constraints>
+                </imageView>
+                <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="WbD-6P-BpB">
+                    <rect key="frame" x="48" y="255" width="297" height="48"/>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="48" id="gdI-hN-VgA"/>
+                    </constraints>
+                    <color key="textColor" red="0.792156862745098" green="0.792156862745098" blue="0.792156862745098" alpha="1" colorSpace="calibratedRGB"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                    <textInputTraits key="textInputTraits" autocapitalizationType="words" autocorrectionType="no" spellCheckingType="no" returnKeyType="done" enablesReturnKeyAutomatically="YES" smartDashesType="no" smartInsertDeleteType="no" smartQuotesType="no" textContentType="name"/>
+                </textField>
+                <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="byh-Ui-TEG">
+                    <rect key="frame" x="173" y="331" width="49" height="31"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="47" id="nce-zH-drU"/>
+                        <constraint firstAttribute="height" constant="31" id="vpG-KZ-BQj"/>
+                    </constraints>
+                </switch>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Kids Profile" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="UVZ-UA-EFF">
+                    <rect key="frame" x="32" y="394" width="329" height="21"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="21" id="cUm-Kv-C5f"/>
+                    </constraints>
+                    <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="18"/>
+                    <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Made for kids 12 and under, but parents have all the control." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bop-a3-oLP">
+                    <rect key="frame" x="56" y="423" width="281" height="42"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="42" id="Sq2-Le-ikI"/>
+                    </constraints>
+                    <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                    <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="6ve-cL-GP5" userLabel="Badge View Container">
+                    <rect key="frame" x="232.66666666666666" y="207" width="23.999999999999972" height="24"/>
+                    <color key="backgroundColor" white="0.82519755330119104" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="24" id="VGu-Tx-0vT"/>
+                        <constraint firstAttribute="width" constant="24" id="y04-oE-chU"/>
+                    </constraints>
+                </view>
+            </subviews>
             <viewLayoutGuide key="safeArea" id="oL5-Jb-xgm"/>
-            <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+            <color key="backgroundColor" red="0.086274509803921567" green="0.086274509803921567" blue="0.086274509803921567" alpha="1" colorSpace="calibratedRGB"/>
+            <constraints>
+                <constraint firstItem="bop-a3-oLP" firstAttribute="top" secondItem="UVZ-UA-EFF" secondAttribute="bottom" constant="8" id="4Jf-Gr-ofE"/>
+                <constraint firstItem="oL5-Jb-xgm" firstAttribute="trailing" secondItem="UVZ-UA-EFF" secondAttribute="trailing" constant="32" id="Cco-yK-5nx"/>
+                <constraint firstItem="6ve-cL-GP5" firstAttribute="trailing" secondItem="SDO-BR-2Ad" secondAttribute="trailing" constant="8" id="IdN-Ki-aOT"/>
+                <constraint firstItem="aBp-Wb-eux" firstAttribute="trailing" secondItem="oL5-Jb-xgm" secondAttribute="trailing" id="KdR-zY-YdM"/>
+                <constraint firstItem="WbD-6P-BpB" firstAttribute="leading" secondItem="oL5-Jb-xgm" secondAttribute="leading" constant="48" id="T83-zK-eYS"/>
+                <constraint firstItem="aBp-Wb-eux" firstAttribute="top" secondItem="oL5-Jb-xgm" secondAttribute="top" id="UNS-qz-Eju"/>
+                <constraint firstItem="6ve-cL-GP5" firstAttribute="bottom" secondItem="SDO-BR-2Ad" secondAttribute="bottom" constant="8" id="YZO-ke-3xN"/>
+                <constraint firstItem="WbD-6P-BpB" firstAttribute="top" secondItem="SDO-BR-2Ad" secondAttribute="bottom" constant="32" id="g9z-0e-LBZ"/>
+                <constraint firstItem="SDO-BR-2Ad" firstAttribute="top" secondItem="aBp-Wb-eux" secondAttribute="bottom" constant="16" id="gAH-fK-FR5"/>
+                <constraint firstItem="aBp-Wb-eux" firstAttribute="leading" secondItem="oL5-Jb-xgm" secondAttribute="leading" id="gs5-bh-pz3"/>
+                <constraint firstItem="UVZ-UA-EFF" firstAttribute="leading" secondItem="oL5-Jb-xgm" secondAttribute="leading" constant="32" id="i8i-Oz-6MZ"/>
+                <constraint firstItem="oL5-Jb-xgm" firstAttribute="trailing" secondItem="WbD-6P-BpB" secondAttribute="trailing" constant="48" id="kzK-gj-LL9"/>
+                <constraint firstItem="bop-a3-oLP" firstAttribute="leading" secondItem="oL5-Jb-xgm" secondAttribute="leading" constant="56" id="lB7-92-fUO"/>
+                <constraint firstItem="UVZ-UA-EFF" firstAttribute="top" secondItem="byh-Ui-TEG" secondAttribute="bottom" constant="32" id="niD-zF-eCh"/>
+                <constraint firstItem="oL5-Jb-xgm" firstAttribute="trailing" secondItem="bop-a3-oLP" secondAttribute="trailing" constant="56" id="qu8-YJ-vRl"/>
+                <constraint firstItem="byh-Ui-TEG" firstAttribute="top" secondItem="WbD-6P-BpB" secondAttribute="bottom" constant="28" id="usf-AG-SSY"/>
+                <constraint firstItem="byh-Ui-TEG" firstAttribute="centerX" secondItem="02b-eL-NHJ" secondAttribute="centerX" id="whf-nr-YlG"/>
+                <constraint firstItem="SDO-BR-2Ad" firstAttribute="centerX" secondItem="02b-eL-NHJ" secondAttribute="centerX" id="xiV-P3-xyL"/>
+            </constraints>
             <point key="canvasLocation" x="123" y="35"/>
         </view>
     </objects>
     <resources>
-        <systemColor name="systemBackgroundColor">
-            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-        </systemColor>
+        <image name="av-dark-blue" width="320" height="320"/>
     </resources>
 </document>

@@ -22,8 +22,6 @@ final class ProfileCollectionViewCell: UICollectionViewCell, CollectionViewCell 
     var indexPath: IndexPath!
     
     deinit {
-        printIfDebug(.debug, "deinit \(Self.self)")
-        
         viewWillDeallocate()
     }
     
@@ -66,6 +64,14 @@ extension ProfileCollectionViewCell: CollectionViewCellConfiguring {
     }
 }
 
+// MARK: - ThemeUpdatable Implementation
+
+extension ProfileCollectionViewCell: ThemeUpdatable {
+    func updateWithTheme() {
+        titleLabel.textColor = Theme.tintColor
+    }
+}
+
 // MARK: - Internal Implementation
 
 extension ProfileCollectionViewCell {
@@ -82,7 +88,7 @@ extension ProfileCollectionViewCell {
     }
 }
 
-// MARK - Private Implementation
+// MARK: - Private Implementation
 
 extension ProfileCollectionViewCell {
     private func configureProfileButtons() {

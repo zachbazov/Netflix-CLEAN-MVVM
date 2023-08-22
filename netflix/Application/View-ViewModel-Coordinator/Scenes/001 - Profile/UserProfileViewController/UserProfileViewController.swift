@@ -7,20 +7,6 @@
 
 import UIKit
 
-// MARK: - ViewControllerProtocol Type
-
-private protocol ViewControllerProtocol {
-    var collectionView: UICollectionView { get }
-    var dataSource: ProfileCollectionViewDataSource { get }
-    
-    func present()
-    
-    func createCollectionView() -> UICollectionView
-    func createLayout() -> UICollectionViewCompositionalLayout
-    
-    func editDidTap()
-}
-
 // MARK: - UserProfileViewController Type
 
 final class UserProfileViewController: UIViewController, Controller {
@@ -36,7 +22,9 @@ final class UserProfileViewController: UIViewController, Controller {
     override func viewDidLoad() {
         super.viewDidLoad()
         viewDidLoadBehaviors()
+        viewHierarchyDidConfigure()
         viewDidDeploySubviews()
+        viewDidConfigure()
         viewModel.viewDidLoad()
     }
     
@@ -45,15 +33,29 @@ final class UserProfileViewController: UIViewController, Controller {
         deviceWillLockOrientation(.portrait)
     }
     
+    func viewHierarchyDidConfigure() {
+        collectionView
+            .addToHierarchy(on: view)
+            .constraintCenterToSuperview(view, dividingHeightBy: 1.75)
+    }
+    
     func viewDidDeploySubviews() {
+        createLeftBarButtonItem()
+        createRightBarButtonItem()
+    }
+    
+    func viewDidConfigure() {
         title = "Who's Watching?"
-        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .edit,
-                                                            target: self,
-                                                            action: #selector(editDidTap))
-        setupCollectionView()
     }
     
     func viewWillDeallocate() {
+        navigationItem.leftBarButtonItem?.customView?.removeFromSuperview()
+        navigationItem.leftBarButtonItem?.customView = nil
+        navigationItem.leftBarButtonItem = nil
+        navigationItem.rightBarButtonItem?.customView?.removeFromSuperview()
+        navigationItem.rightBarButtonItem?.customView = nil
+        navigationItem.rightBarButtonItem = nil
+        
         collectionView.removeFromSuperview()
         dataSource.collectionView.removeFromSuperview()
         
@@ -63,15 +65,16 @@ final class UserProfileViewController: UIViewController, Controller {
     }
 }
 
-// MARK: - ViewControllerProtocol Implementation
+// MARK: - ViewAnimatable Implementation
 
-extension UserProfileViewController: ViewControllerProtocol {
-    func present() {
+extension UserProfileViewController: ViewAnimatable {
+    func viewDidAnimateAppearance() {
         guard let navigationController = navigationController else { return }
 
         navigationController.view.alpha = .zero
-        navigationController.view.transform = CGAffineTransform(translationX: navigationController.view.bounds.width, y: .zero)
-
+        navigationController.view.transform = CGAffineTransform(translationX: navigationController.view.bounds.width,
+                                                                y: .zero)
+        
         UIView.animate(
             withDuration: 0.25,
             delay: 0,
@@ -81,9 +84,33 @@ extension UserProfileViewController: ViewControllerProtocol {
                 navigationController.view.alpha = 1.0
             })
     }
-    
-    fileprivate func createCollectionView() -> UICollectionView {
-        let collectionView = UICollectionView(frame: view.bounds, collectionViewLayout: createLayout())
+}
+
+// MARK: - ThemeUpdatable Implementation
+
+extension UserProfileViewController: ThemeUpdatable {
+    func updateWithTheme() {
+        for case let cell as ThemeUpdatable in collectionView.visibleCells {
+            cell.updateWithTheme()
+        }
+        
+        view.backgroundColor = Theme.backgroundColor
+        collectionView.backgroundColor = Theme.backgroundColor
+        
+        navigationItem.leftBarButtonItem?.image = .themeControlImage
+        
+        setNeedsStatusBarAppearanceUpdate()
+        view.setNeedsDisplay()
+        collectionView.setNeedsDisplay()
+    }
+}
+
+// MARK: - Private Implementation
+
+extension UserProfileViewController {
+    private func createCollectionView() -> UICollectionView {
+        let collectionView = UICollectionView(frame: view.bounds,
+                                              collectionViewLayout: createLayout())
         collectionView.showsVerticalScrollIndicator = false
         collectionView.showsHorizontalScrollIndicator = false
         collectionView.isScrollEnabled = false
@@ -93,11 +120,11 @@ extension UserProfileViewController: ViewControllerProtocol {
         return collectionView
     }
     
-    fileprivate func createDataSource() -> ProfileCollectionViewDataSource {
+    private func createDataSource() -> ProfileCollectionViewDataSource {
         return ProfileCollectionViewDataSource(for: collectionView, with: viewModel)
     }
     
-    fileprivate func createLayout() -> UICollectionViewCompositionalLayout {
+    private func createLayout() -> UICollectionViewCompositionalLayout {
         let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(0.49),
                                               heightDimension: .fractionalHeight(1.0))
         
@@ -116,27 +143,34 @@ extension UserProfileViewController: ViewControllerProtocol {
         return layout
     }
     
+    private func createLeftBarButtonItem() {
+        navigationItem.leftBarButtonItem = UIBarButtonItem(image: .themeControlImage,
+                                                           style: .plain,
+                                                           target: self,
+                                                           action: #selector(themeControlDidTap))
+    }
+    
+    private func createRightBarButtonItem() {
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .edit,
+                                                            target: self,
+                                                            action: #selector(editDidTap))
+    }
+    
     @objc
-    fileprivate func editDidTap() {
+    private func editDidTap() {
         guard let coordinator = viewModel?.coordinator else { return }
         coordinator.coordinate(to: .editProfile)
     }
-}
-
-// MARK: - Private Implementation
-
-extension UserProfileViewController {
-    private func setupCollectionView() {
-        collectionView.translatesAutoresizingMaskIntoConstraints = false
-        collectionView.setBackgroundColor(.clear)
+    
+    @objc
+    private func themeControlDidTap() {
+        guard let navigationController = self.navigationController else { return }
         
-        view.addSubview(collectionView)
+        let themeType: Theme.ThemeType = Theme.currentTheme == .dark ? .light : .dark
         
-        NSLayoutConstraint.activate([
-            collectionView.heightAnchor.constraint(equalToConstant: view.bounds.height / 1.75),
-            collectionView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
-            collectionView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            collectionView.widthAnchor.constraint(equalToConstant: view.bounds.width)
-        ])
+        Theme.switchTo(theme: themeType)
+        Theme.applyAppearance(for: navigationController)
+        
+        updateWithTheme()
     }
 }

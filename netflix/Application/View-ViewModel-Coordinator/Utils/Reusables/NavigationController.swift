@@ -39,8 +39,8 @@ extension NavigationController: NavigatableController {
         modalPresentationStyle = .fullScreen
         isHidden = false
         
-        navigationBar.prefersLargeTitles = false
-        navigationBar.barStyle = .black
-        navigationBar.tintColor = .white
+//        navigationBar.prefersLargeTitles = false
+//        navigationBar.barStyle = .default
+//        navigationBar.tintColor = .white
     }
 }

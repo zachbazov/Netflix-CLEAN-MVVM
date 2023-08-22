@@ -10,5 +10,9 @@ import UIKit
 // MARK: - ProfileController Type
 
 final class ProfileController: UIViewController, Controller {
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return Theme.preferredStatusBarStyle
+    }
+    
     var viewModel: ProfileViewModel!
 }

@@ -29,4 +29,17 @@ extension UIImage {
             gradientLayer.render(in: ctx.cgContext)
         }
     }
+    
+    func setThemeTintColor(with symbolConfiguration: UIImage.SymbolConfiguration? = nil) -> UIImage? {
+        return self
+            .withRenderingMode(.alwaysOriginal)
+            .withTintColor(Theme.currentTheme == .dark ? .white : .black)
+            .withConfiguration(symbolConfiguration ?? .unspecified)
+    }
+    
+    static var themeControlImage: UIImage? {
+        return Theme.currentTheme == .dark
+            ? UIImage(systemName: "sun.max")?.setThemeTintColor()
+            : UIImage(systemName: "moon")?.setThemeTintColor()
+    }
 }

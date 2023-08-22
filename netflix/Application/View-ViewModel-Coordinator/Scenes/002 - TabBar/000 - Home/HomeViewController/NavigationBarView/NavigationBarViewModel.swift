@@ -67,7 +67,7 @@ extension NavigationBarViewModel: ViewModelProtocol {
             guard let controller = coordinator.viewController,
                   let navigation = controller.navigationView?.navigationBar
             else { return }
-            navigation.airPlayButton.asRoutePickerView()
+            navigation.airPlayButton.toRoutePickerView()
         case .search:
             coordinator.coordinate(to: .search)
         case .account:

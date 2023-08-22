@@ -54,12 +54,16 @@ extension ProfileCoordinator: Coordinator {
             
             viewController?.add(child: navigationController, container: view)
             
-            userProfileController?.present()
+            userProfileController?.viewDidAnimateAppearance()
         case .addProfile:
             guard let addUserProfileController = addUserProfileController else { fatalError() }
+            
+            Theme.applyUserProfileAppearance()
+            
             navigationController?.present(addUserProfileController, animated: true)
         case .editProfile:
             guard let editUserProfileController = editUserProfileController else { fatalError() }
+            
             navigationController?.pushViewController(editUserProfileController, animated: true)
         }
     }

@@ -41,28 +41,6 @@ final class HomeViewController: UIViewController, Controller {
         
         restoreHomeViewControllerNavigationStyle()
     }
-    fileprivate func restoreHomeViewControllerNavigationStyle() {
-        printIfDebug(.debug, "restoreHomeViewControllerNavigationStyle")
-        if navigationView?.gradient == nil || navigationView?.blur == nil {
-            
-            mainQueueDispatch { [weak self] in
-                guard let self = self else { return }
-                self.navigationView?.segmentControl?.origin(y: .zero)
-                self.navigationViewContainerHeight.constant = 160.0
-                self.navigationView?.segmentControl?.alpha = 1.0
-                
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                    if self.tableView.contentOffset.y < .zero {
-                        self.navigationView?.apply(.gradient)
-                    } else {
-                        self.navigationView?.apply(.blur)
-                    }
-                    
-                    self.navigationView?.layoutIfNeeded()
-                }
-            }
-        }
-    }
     
     func viewWillDeploySubviews() {
         createDataSource()
@@ -137,5 +115,27 @@ extension HomeViewController {
     
     private func createBrowseOverlay() {
         browseOverlayView = BrowseOverlayView(on: browseOverlayViewContainer, with: viewModel)
+    }
+    
+    private func restoreHomeViewControllerNavigationStyle() {
+        if navigationView?.gradient == nil || navigationView?.blur == nil {
+            
+            mainQueueDispatch { [weak self] in
+                guard let self = self else { return }
+                self.navigationView?.segmentControl?.origin(y: .zero)
+                self.navigationViewContainerHeight.constant = 160.0
+                self.navigationView?.segmentControl?.alpha = 1.0
+                
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                    if self.tableView.contentOffset.y < .zero {
+                        self.navigationView?.apply(.gradient)
+                    } else {
+                        self.navigationView?.apply(.blur)
+                    }
+                    
+                    self.navigationView?.layoutIfNeeded()
+                }
+            }
+        }
     }
 }

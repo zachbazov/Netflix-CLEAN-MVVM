@@ -11,7 +11,7 @@ import AVKit
 
 extension UIView {
     @discardableResult
-    func addToHierarchy(on view: UIView) -> UIView {
+    func addToHierarchy(on view: UIView) -> Self {
         view.addSubview(self)
         return self
     }
@@ -63,8 +63,11 @@ extension UIView {
 // MARK: - Layer
 
 extension UIView {
-    func cornerRadius(_ value: CGFloat) {
+    @discardableResult
+    func cornerRadius(_ value: CGFloat) -> Self {
         layer.cornerRadius = value
+        
+        return self
     }
     
     @discardableResult
@@ -91,14 +94,14 @@ extension UIView {
 // MARK: - AVRoutePickerView
 
 extension UIView {
-    func asRoutePickerView() {
+    func toRoutePickerView() {
         let airPlay = AVRoutePickerView(frame: bounds)
         airPlay.tintColor = .white
         airPlay.prioritizesVideoDevices = true
         addSubview(airPlay)
     }
     
-    func containsAVRoutePickerView() -> Bool {
+    var isRoutePickerView: Bool {
         for subview in subviews {
             if subview is AVRoutePickerView {
                 return true

@@ -26,9 +26,9 @@ extension SceneDelegate: UIWindowSceneDelegate {
                options connectionOptions: UIScene.ConnectionOptions) {
         guard let windowScene = (scene as? UIWindowScene) else { return }
         
-        Theme.applyDefaultAppearance()
-        
         window = UIWindow(windowScene: windowScene)
+        
+        Theme.applyAppearance()
         
         let application = Application.app
         application.appDidLaunch(in: window)
