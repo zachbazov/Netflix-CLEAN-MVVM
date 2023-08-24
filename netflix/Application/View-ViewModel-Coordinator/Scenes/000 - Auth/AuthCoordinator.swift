@@ -53,6 +53,8 @@ extension AuthCoordinator: Coordinator {
             
             switch screen {
             case .landpage:
+                Theme.applyAppearance()
+                
                 guard let navigationController = self.navigationController else { return }
                 self.viewController?.present(navigationController, animated: true)
             case .signIn:

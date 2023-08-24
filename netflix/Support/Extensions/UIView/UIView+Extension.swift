@@ -20,8 +20,10 @@ extension UIView {
 // MARK: - UIView + Styling
 
 extension UIView {
-    func setBackgroundColor(_ color: UIColor) {
+    @discardableResult
+    func setBackgroundColor(_ color: UIColor) -> Self {
         backgroundColor = color
+        return self
     }
 }
 
@@ -57,6 +59,19 @@ extension UIView {
         }
         isHidden = false
         alpha = 1.0
+    }
+    
+    @discardableResult
+    func hidden(_ hidden: Bool) -> Self {
+        guard !hidden else {
+            isHidden = true
+            alpha = 0.0
+            return self
+        }
+        
+        isHidden = false
+        alpha = 1.0
+        return self
     }
 }
 
@@ -116,5 +131,19 @@ extension UIView {
 extension UIView {
     func origin(y: CGFloat) {
         frame.origin.y = y
+    }
+}
+
+// MARK: - Target
+
+extension UIViewController {
+    func onTapResignFirstResponder() {
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleResignFirstResponder))
+        view.addGestureRecognizer(tapGesture)
+    }
+    
+    @objc
+    func handleResignFirstResponder() {
+        view.endEditing(true)
     }
 }

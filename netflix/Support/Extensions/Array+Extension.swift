@@ -18,3 +18,9 @@ extension Array where Element == Media {
 extension Array where Element == String {
     func toSet() -> Set<Element> { Set(self) }
 }
+
+extension Array {
+    var lastIndex: Int {
+        return self.count - 1
+    }
+}

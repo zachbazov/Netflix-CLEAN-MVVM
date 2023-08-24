@@ -7,6 +7,14 @@
 
 import UIKit
 
+// MARK: - CollectionViewCellEditable Type
+
+protocol CollectionViewCellEditable {
+    var editOverlayView: EditOverlayView? { get }
+    
+    func editMode(_ active: Bool)
+}
+
 // MARK: - CollectionViewCellConfiguring Type
 
 protocol CollectionViewCellConfiguring {
@@ -138,9 +146,8 @@ extension CollectionViewCell {
             cell.tag = indexPath.row
             cell.profileViewModel = viewModel
             cell.viewModel = ProfileCollectionViewCellViewModel(with: model)
-            cell.representedIdentifier = cell.viewModel.name as NSString
+            cell.representedIdentifier = cell.viewModel.id as NSString
             cell.indexPath = indexPath
-            cell.viewDidLoad()
         default: break
         }
         

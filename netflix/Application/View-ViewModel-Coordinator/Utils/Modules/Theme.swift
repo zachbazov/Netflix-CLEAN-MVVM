@@ -38,70 +38,43 @@ final class Theme {
     static var currentTheme: ThemeType = .dark
     
     static var barButtonTitleTextAttributes: [NSAttributedString.Key: Any] {
-        switch currentTheme {
-        case .dark:
-            return [.foregroundColor: UIColor.white,
-                    .font: UIFont.systemFont(ofSize: 16.0, weight: .heavy)]
-        case .light:
-            return [.foregroundColor: UIColor.black,
-                    .font: UIFont.systemFont(ofSize: 16.0, weight: .heavy)]
-        }
+        return currentTheme == .dark
+            ? [.foregroundColor: UIColor.white,
+               .font: UIFont.systemFont(ofSize: 16.0, weight: .heavy)]
+            : [.foregroundColor: UIColor.black,
+               .font: UIFont.systemFont(ofSize: 16.0, weight: .heavy)]
     }
     
     static var navigationBarTitleTextAttributes: [NSAttributedString.Key: Any] {
-        switch currentTheme {
-        case .dark:
-            return [.foregroundColor: UIColor.white,
-                    .font: UIFont.systemFont(ofSize: 17.0, weight: .heavy)]
-        case .light:
-            return [.foregroundColor: UIColor.black,
-                    .font: UIFont.systemFont(ofSize: 17.0, weight: .heavy)]
-        }
+        return currentTheme == .dark
+            ? [.foregroundColor: UIColor.white,
+               .font: UIFont.systemFont(ofSize: 17.0, weight: .heavy)]
+            : [.foregroundColor: UIColor.black,
+               .font: UIFont.systemFont(ofSize: 17.0, weight: .heavy)]
     }
     
     static var navigationBarBackgroundColor: UIColor {
-        switch currentTheme {
-        case .dark:
-            return UIColor.black
-        case .light:
-            return UIColor.white
-        }
+        return currentTheme == .dark ? .black : .white
     }
     
     static var navigationBarTintColor: UIColor {
-        switch currentTheme {
-        case .dark:
-            return UIColor.white
-        case .light:
-            return UIColor.black
-        }
+        return currentTheme == .dark ? .white : .black
     }
     
     static var tintColor: UIColor {
-        switch currentTheme {
-        case .dark:
-            return .white
-        case .light:
-            return .black
-        }
+        return currentTheme == .dark ? .white : .black
     }
     
     static var backgroundColor: UIColor {
-        switch currentTheme {
-        case .dark:
-            return UIColor.black
-        case .light:
-            return UIColor.white
-        }
+        return currentTheme == .dark ? .black : .white
     }
     
     static var preferredStatusBarStyle: UIStatusBarStyle {
-        switch currentTheme {
-        case .dark:
-            return .lightContent
-        case .light:
-            return .darkContent
-        }
+        return currentTheme == .dark ? .lightContent : .darkContent
+    }
+    
+    static var textFieldPlaceholderTintColor: UIColor {
+        return currentTheme == .dark ? UIColor.hexColor("#CACACA") : UIColor.hexColor("#000")
     }
 }
 
@@ -119,9 +92,9 @@ extension Theme: ThemeControl {
             barButtonItemAppearance.normal.titleTextAttributes = barButtonTitleTextAttributes
             
             let navigationBarAppearance = UINavigationBarAppearance()
-            navigationBarAppearance.configureWithDefaultBackground()
+            navigationBarAppearance.configureWithOpaqueBackground()
             navigationBarAppearance.titleTextAttributes = navigationBarTitleTextAttributes
-            navigationBarAppearance.backgroundColor = navigationBarBackgroundColor
+            navigationBarAppearance.backgroundColor = navigationBarBackgroundColor.withAlphaComponent(0.75)
             navigationBarAppearance.buttonAppearance = barButtonItemAppearance
             
             if let navigationController = navigationController {

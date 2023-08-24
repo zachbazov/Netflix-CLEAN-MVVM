@@ -10,8 +10,8 @@ import UIKit
 // MARK: - UserProfileViewController Type
 
 final class UserProfileViewController: UIViewController, Controller {
-    fileprivate(set) lazy var collectionView: UICollectionView = createCollectionView()
-    fileprivate(set) lazy var dataSource: ProfileCollectionViewDataSource = createDataSource()
+    fileprivate(set) var collectionView: UICollectionView?
+    fileprivate(set) var dataSource: ProfileCollectionViewDataSource?
     
     var viewModel: ProfileViewModel!
     
@@ -22,8 +22,8 @@ final class UserProfileViewController: UIViewController, Controller {
     override func viewDidLoad() {
         super.viewDidLoad()
         viewDidLoadBehaviors()
-        viewHierarchyDidConfigure()
         viewDidDeploySubviews()
+        viewHierarchyDidConfigure()
         viewDidConfigure()
         viewModel.viewDidLoad()
     }
@@ -33,13 +33,20 @@ final class UserProfileViewController: UIViewController, Controller {
         deviceWillLockOrientation(.portrait)
     }
     
+    func viewDidLoadBehaviors() {
+        addBehaviors([BackButtonEmptyTitleNavigationBarBehavior(),
+                      BlackStyleNavigationBarBehavior()])
+    }
+    
     func viewHierarchyDidConfigure() {
-        collectionView
+        collectionView?
             .addToHierarchy(on: view)
-            .constraintCenterToSuperview(view, dividingHeightBy: 1.75)
+            .constraintCenterToSuperview(view)
     }
     
     func viewDidDeploySubviews() {
+        createCollectionView()
+        createDataSource()
         createLeftBarButtonItem()
         createRightBarButtonItem()
     }
@@ -49,15 +56,11 @@ final class UserProfileViewController: UIViewController, Controller {
     }
     
     func viewWillDeallocate() {
-        navigationItem.leftBarButtonItem?.customView?.removeFromSuperview()
-        navigationItem.leftBarButtonItem?.customView = nil
         navigationItem.leftBarButtonItem = nil
-        navigationItem.rightBarButtonItem?.customView?.removeFromSuperview()
-        navigationItem.rightBarButtonItem?.customView = nil
         navigationItem.rightBarButtonItem = nil
         
-        collectionView.removeFromSuperview()
-        dataSource.collectionView.removeFromSuperview()
+        collectionView?.removeFromSuperview()
+        dataSource?.collectionView.removeFromSuperview()
         
         viewModel = nil
         
@@ -90,6 +93,8 @@ extension UserProfileViewController: ViewAnimatable {
 
 extension UserProfileViewController: ThemeUpdatable {
     func updateWithTheme() {
+        guard let collectionView = self.collectionView else { return }
+        
         for case let cell as ThemeUpdatable in collectionView.visibleCells {
             cell.updateWithTheme()
         }
@@ -97,7 +102,7 @@ extension UserProfileViewController: ThemeUpdatable {
         view.backgroundColor = Theme.backgroundColor
         collectionView.backgroundColor = Theme.backgroundColor
         
-        navigationItem.leftBarButtonItem?.image = .themeControlImage
+        navigationItem.leftBarButtonItem?.image = .themeControl
         
         setNeedsStatusBarAppearanceUpdate()
         view.setNeedsDisplay()
@@ -108,23 +113,22 @@ extension UserProfileViewController: ThemeUpdatable {
 // MARK: - Private Implementation
 
 extension UserProfileViewController {
-    private func createCollectionView() -> UICollectionView {
-        let collectionView = UICollectionView(frame: view.bounds,
-                                              collectionViewLayout: createLayout())
-        collectionView.showsVerticalScrollIndicator = false
-        collectionView.showsHorizontalScrollIndicator = false
-        collectionView.isScrollEnabled = false
-        collectionView.backgroundColor = .black
-        collectionView.register(ProfileCollectionViewCell.nib,
-                                forCellWithReuseIdentifier: ProfileCollectionViewCell.reuseIdentifier)
-        return collectionView
+    private func createCollectionView() {
+        collectionView = UICollectionView(frame: view.bounds, collectionViewLayout: .init())
+        collectionView?.showsVerticalScrollIndicator = false
+        collectionView?.showsHorizontalScrollIndicator = false
+        collectionView?.backgroundColor = .black
+        collectionView?.register(ProfileCollectionViewCell.nib,
+                                 forCellWithReuseIdentifier: ProfileCollectionViewCell.reuseIdentifier)
     }
     
-    private func createDataSource() -> ProfileCollectionViewDataSource {
-        return ProfileCollectionViewDataSource(for: collectionView, with: viewModel)
+    private func createDataSource() {
+        guard let collectionView = self.collectionView else { fatalError() }
+        
+        dataSource = ProfileCollectionViewDataSource(for: collectionView, with: viewModel)
     }
     
-    private func createLayout() -> UICollectionViewCompositionalLayout {
+    func createLayout() -> UICollectionViewCompositionalLayout {
         let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(0.49),
                                               heightDimension: .fractionalHeight(1.0))
         
@@ -136,7 +140,12 @@ extension UserProfileViewController {
         let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
         
         let section = NSCollectionLayoutSection(group: group)
-        section.contentInsets = .uniform(size: 64.0)
+        
+        let numOfItemsPerRow = floor(1.0 / itemSize.widthDimension.dimension)
+        let numOfProfiles = CGFloat(viewModel.profiles.count)
+        let numOfRows = CGFloat(viewModel.profiles.count) / numOfItemsPerRow
+        let topInset = (view.bounds.height / numOfProfiles / numOfRows)
+        section.contentInsets = NSDirectionalEdgeInsets(top: topInset, leading: 64.0, bottom: .zero, trailing: 64.0)
         section.interGroupSpacing = 32.0
         
         let layout = UICollectionViewCompositionalLayout(section: section)
@@ -144,22 +153,35 @@ extension UserProfileViewController {
     }
     
     private func createLeftBarButtonItem() {
-        navigationItem.leftBarButtonItem = UIBarButtonItem(image: .themeControlImage,
+        navigationItem.leftBarButtonItem = UIBarButtonItem(image: .themeControl,
                                                            style: .plain,
                                                            target: self,
                                                            action: #selector(themeControlDidTap))
     }
     
     private func createRightBarButtonItem() {
-        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .edit,
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: viewModel.isEditing ? "Done" : "Edit",
+                                                            style: .plain,
                                                             target: self,
                                                             action: #selector(editDidTap))
     }
     
     @objc
     private func editDidTap() {
-        guard let coordinator = viewModel?.coordinator else { return }
-        coordinator.coordinate(to: .editProfile)
+        viewModel.isEditing = !viewModel.isEditing
+        
+        navigationItem.rightBarButtonItem = nil
+        createRightBarButtonItem()
+        
+        guard let collectionView = self.collectionView else { return }
+        
+        for case let cell as ProfileCollectionViewCell in collectionView.visibleCells {
+            if cell.representedIdentifier == "addProfile" {
+                return
+            }
+            
+            cell.editMode(viewModel.isEditing)
+        }
     }
     
     @objc

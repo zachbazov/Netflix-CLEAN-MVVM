@@ -21,13 +21,13 @@ extension UICollectionView {
 // MARK: - UICollectionView + Constraints
 
 extension UICollectionView {
-    func constraintCenterToSuperview(_ view: UIView, dividingHeightBy value: CGFloat) {
+    func constraintCenterToSuperview(_ view: UIView) {
         translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            heightAnchor.constraint(equalToConstant: view.bounds.height / value),
             centerYAnchor.constraint(equalTo: view.centerYAnchor),
             centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            widthAnchor.constraint(equalToConstant: view.bounds.width)
+            widthAnchor.constraint(equalToConstant: view.bounds.width),
+            heightAnchor.constraint(equalToConstant: view.bounds.height)
         ])
     }
 }

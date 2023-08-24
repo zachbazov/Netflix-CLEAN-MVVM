@@ -10,7 +10,8 @@ import UIKit
 // MARK: - UIView + Constraints
 
 extension UIView {
-    func constraintToSuperview(_ view: UIView) {
+    @discardableResult
+    func constraintToSuperview(_ view: UIView) -> Self {
         translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             view.topAnchor.constraint(equalTo: topAnchor),
@@ -18,6 +19,7 @@ extension UIView {
             view.trailingAnchor.constraint(equalTo: trailingAnchor),
             view.bottomAnchor.constraint(equalTo: bottomAnchor)
         ])
+        return self
     }
     
     func constraintToCenterSuperview(_ view: UIView) {
@@ -34,6 +36,17 @@ extension UIView {
             view.centerXAnchor.constraint(equalTo: centerXAnchor),
             view.centerYAnchor.constraint(equalTo: centerYAnchor)
         ])
+    }
+    
+    func constraintCenterToSuperview(in view: UIView, withRadiusValue value: CGFloat) -> Self {
+        translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            widthAnchor.constraint(equalToConstant: value),
+            heightAnchor.constraint(equalToConstant: value),
+            centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            centerYAnchor.constraint(equalTo: view.centerYAnchor)
+        ])
+        return self
     }
     
     func constraintToCenter(_ view: UIView,

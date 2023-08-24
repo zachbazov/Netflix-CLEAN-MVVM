@@ -7,12 +7,6 @@
 
 import UIKit
 
-// MARK: - ViewControllerProtocol Type
-
-private protocol ViewControllerProtocol {
-    func textFieldValueDidChange(_ textField: UITextField)
-}
-
 // MARK: - SignUpViewController Type
 
 final class SignUpViewController: UIViewController, Controller {
@@ -46,10 +40,10 @@ final class SignUpViewController: UIViewController, Controller {
     
     func viewDidTargetSubviews() {
         signUpButton.addTarget(viewModel, action: #selector(viewModel?.signUpButtonDidTap), for: .touchUpInside)
-        nameTextField.addTarget(self, action: #selector(textFieldValueDidChange), for: .editingChanged)
-        emailTextField.addTarget(self, action: #selector(textFieldValueDidChange), for: .editingChanged)
-        passwordTextField.addTarget(self, action: #selector(textFieldValueDidChange), for: .editingChanged)
-        passwordConfirmTextField.addTarget(self, action: #selector(textFieldValueDidChange), for: .editingChanged)
+        nameTextField.addTarget(self, action: #selector(valueDidChange), for: .editingChanged)
+        emailTextField.addTarget(self, action: #selector(valueDidChange), for: .editingChanged)
+        passwordTextField.addTarget(self, action: #selector(valueDidChange), for: .editingChanged)
+        passwordConfirmTextField.addTarget(self, action: #selector(valueDidChange), for: .editingChanged)
     }
     
     func viewDidConfigure() {
@@ -67,11 +61,16 @@ final class SignUpViewController: UIViewController, Controller {
     }
 }
 
-// MARK: - ViewControllerProtocol Implementation
+// MARK: - TextFieldDelegate Implementation
 
-extension SignUpViewController: ViewControllerProtocol {
+extension SignUpViewController: TextFieldDelegate {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
+    }
+    
     @objc
-    fileprivate func textFieldValueDidChange(_ textField: UITextField) {
+    func valueDidChange(_ textField: UITextField) {
         switch textField {
         case nameTextField: viewModel?.name = textField.text
         case emailTextField: viewModel?.email = textField.text
@@ -79,14 +78,5 @@ extension SignUpViewController: ViewControllerProtocol {
         case passwordConfirmTextField: viewModel?.passwordConfirm = textField.text
         default: return
         }
-    }
-}
-
-// MARK: - UITextFieldDelegate Implementation
-
-extension SignUpViewController: UITextFieldDelegate {
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        textField.resignFirstResponder()
-        return true
     }
 }

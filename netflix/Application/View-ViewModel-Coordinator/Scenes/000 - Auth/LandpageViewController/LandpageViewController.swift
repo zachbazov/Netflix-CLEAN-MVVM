@@ -61,7 +61,8 @@ final class LandpageViewController: UIViewController, Controller {
     }
     
     func viewDidLoadBehaviors() {
-        addBehaviors([BackButtonEmptyTitleNavigationBarBehavior(), BlackStyleNavigationBarBehavior()])
+        addBehaviors([BackButtonEmptyTitleNavigationBarBehavior(),
+                      BlackStyleNavigationBarBehavior()])
     }
     
     func viewDidDeploySubviews() {

@@ -16,5 +16,6 @@ struct BackButtonEmptyTitleNavigationBarBehavior: ViewControllerLifecycleBehavio
             style: .plain,
             target: nil,
             action: nil)
+        viewController.navigationItem.backBarButtonItem?.tintColor = Theme.tintColor
     }
 }

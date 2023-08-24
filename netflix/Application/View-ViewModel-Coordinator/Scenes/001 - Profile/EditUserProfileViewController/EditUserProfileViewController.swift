@@ -13,15 +13,27 @@ final class EditUserProfileViewController: UIViewController, Controller {
     var viewModel: ProfileViewModel!
     
     deinit {
+        printIfDebug(.debug, "deinit")
         viewModel = nil
         
         removeFromParent()
     }
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        title = "Edit Profile"
-        navigationController?.navigationBar.tintColor = .white
-        view.backgroundColor = .black
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        viewDidConfigure()
+    }
+    
+    func viewDidConfigure() {
+        setTitle()
+    }
+}
+
+// MARK: - Private Implementation
+
+extension EditUserProfileViewController {
+    private func setTitle() {
+        guard let profileName = viewModel.editingProfile?.name else { return }
+        title = profileName
     }
 }

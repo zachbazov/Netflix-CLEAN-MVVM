@@ -15,8 +15,8 @@ private protocol ViewModelProtocol {
     var profiles: [Profile] { get }
     var selectedProfile: Profile? { get }
     
-    func getUserProfiles()
-    func createUserProfile()
+    func getUserProfiles(_ completion: @escaping () -> Void)
+    func createUserProfile(with request: ProfileHTTPDTO.POST.Request, _ completion: @escaping () -> Void)
     func updateUserProfile(with profileId: String, _ completion: @escaping () -> Void)
     func updateUserProfileForSigningOut(completion: @escaping () -> Void)
     
@@ -32,20 +32,34 @@ final class ProfileViewModel {
     
     var profiles = [Profile]()
     var selectedProfile: Profile?
+    var editingProfile: Profile?
+    
+    var profileName: String?
+    
+    var isEditing: Bool = false
+    
+    func add(_ profile: Profile) {
+        let priorToLast = profiles.count - 1
+        profiles.insert(profile, at: priorToLast)
+    }
 }
 
 // MARK: - ViewModel Implementation
 
 extension ProfileViewModel: ViewModel {
     func viewDidLoad() {
-        getUserProfiles()
+        getUserProfiles() { [weak self] in
+            guard let self = self else { return }
+            
+            self.didFinish()
+        }
     }
 }
 
 // MARK: - ViewModelProtocol Implementation
 
 extension ProfileViewModel: ViewModelProtocol {
-    fileprivate func getUserProfiles() {
+    fileprivate func getUserProfiles(_ completion: @escaping () -> Void) {
         let authService = Application.app.services.auth
         
         guard let user = authService.user else { return }
@@ -63,31 +77,26 @@ extension ProfileViewModel: ViewModelProtocol {
                 case .success(let response):
                     self.profiles = response.data.toDomain()
                     
-                    self.didFinish()
+                    completion()
                 case .failure(let error):
                     printIfDebug(.error, "\(error)")
                 }
             })
     }
     
-    fileprivate func createUserProfile() {
-        let authService = Application.app.services.auth
-        
-        guard let user = authService.user else { return }
-        
-        let profile = ProfileDTO(name: "test", image: "av-dark-green", active: false, user: user._id ?? "")
-        let request = ProfileHTTPDTO.POST.Request(user: user, profile: profile)
-        
+    func createUserProfile(with request: ProfileHTTPDTO.POST.Request, _ completion: @escaping () -> Void) {
         userUseCase.repository.task = userUseCase.request(
             endpoint: .createUserProfile,
             for: ProfileHTTPDTO.POST.Response.self,
             request: request,
             cached: { _ in },
             completion: { [weak self] result in
-                guard let self = self else {return }
+                guard let self = self else { return }
                 switch result {
                 case .success(let response):
                     self.selectedProfile = response.data.toDomain()
+                    
+                    completion()
                 case .failure(let error):
                     printIfDebug(.error, "\(error)")
                 }
@@ -142,16 +151,13 @@ extension ProfileViewModel: ViewModelProtocol {
         mainQueueDispatch { [weak self] in
             guard let self = self else { return }
             
-            guard let dataSource = self.coordinator?.userProfileController?.dataSource else { return }
+            guard let controller = self.coordinator?.userProfileController,
+                  let dataSource = controller.dataSource
+            else { return }
             
-            let authService = Application.app.services.auth
+            self.profiles.append(Profile.addProfile)
             
-            guard let user = authService.user else { return }
-            
-            let addProfile = Profile(_id: "", name: "Add Profile", image: "plus", active: false, user: user._id!)
-
-            self.profiles.append(addProfile)
-            
+            controller.collectionView?.setCollectionViewLayout(controller.createLayout(), animated: false)
             dataSource.dataSourceDidChange()
         }
     }
