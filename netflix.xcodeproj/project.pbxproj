@@ -13,8 +13,16 @@
 		8B1C65272A94F2F500CBF16D /* TextFieldDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B1C65262A94F2F500CBF16D /* TextFieldDelegate.swift */; };
 		8B1C65292A95939700CBF16D /* Profile+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B1C65282A95939700CBF16D /* Profile+Extension.swift */; };
 		8B1C652B2A96C88F00CBF16D /* EditOverlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B1C652A2A96C88F00CBF16D /* EditOverlayView.swift */; };
+		8B1C652F2A9795F100CBF16D /* ProfileSettingTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B1C652E2A9795F100CBF16D /* ProfileSettingTableViewCell.swift */; };
+		8B1C65312A9795F500CBF16D /* ProfileSettingTableViewCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B1C65302A9795F500CBF16D /* ProfileSettingTableViewCellViewModel.swift */; };
+		8B1C65332A9797DB00CBF16D /* ProfileSettingTableViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B1C65322A9797DB00CBF16D /* ProfileSettingTableViewDataSource.swift */; };
+		8B1C65352A979CB700CBF16D /* ProfileSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B1C65342A979CB700CBF16D /* ProfileSetting.swift */; };
+		8B1C65372A97A43300CBF16D /* ProfileSettingTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8B1C65362A97A43300CBF16D /* ProfileSettingTableViewCell.xib */; };
 		8B69FEEE2A37C249009D7264 /* NSCache+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B69FEED2A37C248009D7264 /* NSCache+Extension.swift */; };
 		8B69FEFD2A37C4D4009D7264 /* URLImageService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B69FEFC2A37C4D4009D7264 /* URLImageService.swift */; };
+		8B871BBA2A9FE1F100024F07 /* Int+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B871BB92A9FE1F100024F07 /* Int+Extension.swift */; };
+		8B871BBC2A9FEB3700024F07 /* UISwitchDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B871BBB2A9FEB3700024F07 /* UISwitchDelegate.swift */; };
+		8B871BBE2A9FEBC200024F07 /* UISwitch+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B871BBD2A9FEBC200024F07 /* UISwitch+Extension.swift */; };
 		A1183FC529D07B8C00D76759 /* SegmentControlView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1183FC429D07B8C00D76759 /* SegmentControlView.swift */; };
 		A1183FC729D07CBC00D76759 /* SegmentControlViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1183FC629D07CBB00D76759 /* SegmentControlViewModel.swift */; };
 		A127C1E228DD00F100CEE34F /* NavigationOverlayFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A127C1E128DD00F100CEE34F /* NavigationOverlayFooterView.swift */; };
@@ -349,8 +357,16 @@
 		8B1C65262A94F2F500CBF16D /* TextFieldDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextFieldDelegate.swift; sourceTree = "<group>"; };
 		8B1C65282A95939700CBF16D /* Profile+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Profile+Extension.swift"; sourceTree = "<group>"; };
 		8B1C652A2A96C88F00CBF16D /* EditOverlayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditOverlayView.swift; sourceTree = "<group>"; };
+		8B1C652E2A9795F100CBF16D /* ProfileSettingTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileSettingTableViewCell.swift; sourceTree = "<group>"; };
+		8B1C65302A9795F500CBF16D /* ProfileSettingTableViewCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileSettingTableViewCellViewModel.swift; sourceTree = "<group>"; };
+		8B1C65322A9797DB00CBF16D /* ProfileSettingTableViewDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileSettingTableViewDataSource.swift; sourceTree = "<group>"; };
+		8B1C65342A979CB700CBF16D /* ProfileSetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileSetting.swift; sourceTree = "<group>"; };
+		8B1C65362A97A43300CBF16D /* ProfileSettingTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ProfileSettingTableViewCell.xib; sourceTree = "<group>"; };
 		8B69FEED2A37C248009D7264 /* NSCache+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSCache+Extension.swift"; sourceTree = "<group>"; };
 		8B69FEFC2A37C4D4009D7264 /* URLImageService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLImageService.swift; sourceTree = "<group>"; };
+		8B871BB92A9FE1F100024F07 /* Int+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Int+Extension.swift"; sourceTree = "<group>"; };
+		8B871BBB2A9FEB3700024F07 /* UISwitchDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UISwitchDelegate.swift; sourceTree = "<group>"; };
+		8B871BBD2A9FEBC200024F07 /* UISwitch+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UISwitch+Extension.swift"; sourceTree = "<group>"; };
 		A1183FC429D07B8C00D76759 /* SegmentControlView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SegmentControlView.swift; sourceTree = "<group>"; };
 		A1183FC629D07CBB00D76759 /* SegmentControlViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SegmentControlViewModel.swift; sourceTree = "<group>"; };
 		A127C1E128DD00F100CEE34F /* NavigationOverlayFooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationOverlayFooterView.swift; sourceTree = "<group>"; };
@@ -689,6 +705,16 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		8B1C652D2A977F6900CBF16D /* ProfileSettingTableViewCell */ = {
+			isa = PBXGroup;
+			children = (
+				8B1C652E2A9795F100CBF16D /* ProfileSettingTableViewCell.swift */,
+				8B1C65302A9795F500CBF16D /* ProfileSettingTableViewCellViewModel.swift */,
+				8B1C65362A97A43300CBF16D /* ProfileSettingTableViewCell.xib */,
+			);
+			path = ProfileSettingTableViewCell;
+			sourceTree = "<group>";
+		};
 		8B69FEF12A37C2B4009D7264 /* ImageService */ = {
 			isa = PBXGroup;
 			children = (
@@ -1264,6 +1290,7 @@
 				A19956F3290F7F9900B7D655 /* ArraySlice+Extension.swift */,
 				A1BA1DA428D818C400730EA8 /* CALayer+Shadow.swift */,
 				A1B2BAD929FC0BB0004B612A /* CGRect+Extension.swift */,
+				8B871BB92A9FE1F100024F07 /* Int+Extension.swift */,
 				A130BCB42950F4F50070EA5E /* Media+Extension.swift */,
 				A1F56A6828C68FB10089BD4F /* NSAttributedString+Extension.swift */,
 				8B69FEED2A37C248009D7264 /* NSCache+Extension.swift */,
@@ -1278,6 +1305,7 @@
 				A1AD25BB28D3FBDC00F793B3 /* UICollectionViewCell+Extension.swift */,
 				A1BA1DA228D8149B00730EA8 /* UIImage+Extension.swift */,
 				A1B0DE5929560F5900307866 /* UINavigationController+Identifier.swift */,
+				8B871BBD2A9FEBC200024F07 /* UISwitch+Extension.swift */,
 				A1B0DE5829545A0600307866 /* UIView */,
 				A1E81D4628D1617E00D044EA /* UIViewController */,
 				A1B0DE57295459EB00307866 /* UITableView */,
@@ -1307,6 +1335,7 @@
 				A1B34A082A17C3EE002AFE9E /* TableViewCell.swift */,
 				A1AC9FAB29A4D1A300DAD66D /* TableViewHeader.swift */,
 				8B1C65262A94F2F500CBF16D /* TextFieldDelegate.swift */,
+				8B871BBB2A9FEB3700024F07 /* UISwitchDelegate.swift */,
 				A18691E528C936DE0087DE3B /* Valuable.swift */,
 				A1B70A6E293D578200C718C6 /* View.swift */,
 				A18A799B2A22C1EF00FE60AB /* ViewAnimatable.swift */,
@@ -1338,6 +1367,7 @@
 				A19956DC29019A3900B7D655 /* List.swift */,
 				A18B994328BFD9CC0077A5A6 /* Media.swift */,
 				A14E0CDE29C0DA1700F55500 /* Profile.swift */,
+				8B1C65342A979CB700CBF16D /* ProfileSetting.swift */,
 				A18B994528BFD9D50077A5A6 /* Season.swift */,
 				A18B994128BFD9C70077A5A6 /* Section.swift */,
 				A1AA28E728F6909B0011EE9D /* Trailer.swift */,
@@ -1729,6 +1759,7 @@
 				A18A79652A1FA93900FE60AB /* DetailTableViewCell */,
 				A1B70A86293E5BB900C718C6 /* LabeledTableHeaderView */,
 				A1FC093029DC5C4900CB4C9E /* NavigationOverlayTableViewCell */,
+				8B1C652D2A977F6900CBF16D /* ProfileSettingTableViewCell */,
 				A1AD25AB28D2A6C200F793B3 /* ShowcaseTableViewCell */,
 			);
 			path = TableView;
@@ -1892,6 +1923,7 @@
 				A1741D1228E67A4F00F3C46B /* DetailTableViewDataSource.swift */,
 				A1E81D2928CFE4A400D044EA /* MediaTableViewDataSource.swift */,
 				A1BA1DC128DCB7D700730EA8 /* NavigationOverlayTableViewDataSource.swift */,
+				8B1C65322A9797DB00CBF16D /* ProfileSettingTableViewDataSource.swift */,
 			);
 			path = TableView;
 			sourceTree = "<group>";
@@ -2128,6 +2160,7 @@
 				A1E81D3328CFF95300D044EA /* ResumableCollectionViewCell.xib in Resources */,
 				A130BCC9295115B40070EA5E /* DownloadsNavigationView.xib in Resources */,
 				A1B70A90293E762000C718C6 /* LandpageViewController.xib in Resources */,
+				8B1C65372A97A43300CBF16D /* ProfileSettingTableViewCell.xib in Resources */,
 				A1B70A85293E550400C718C6 /* DetailViewController.xib in Resources */,
 				A18B990528BEB62E0077A5A6 /* Assets.xcassets in Resources */,
 				A130BCDD29511E8F0070EA5E /* NewsViewController.xib in Resources */,
@@ -2230,7 +2263,9 @@
 				A1B70A77293D77BA00C718C6 /* TabBarCoordinator.swift in Sources */,
 				A18B991728BEBD040077A5A6 /* Configuration.swift in Sources */,
 				A18B997C28C029A30077A5A6 /* DataTransferService.swift in Sources */,
+				8B871BBC2A9FEB3700024F07 /* UISwitchDelegate.swift in Sources */,
 				A1B98BB1298A495F001B7B62 /* NewsHTTPDTO.swift in Sources */,
+				8B1C652F2A9795F100CBF16D /* ProfileSettingTableViewCell.swift in Sources */,
 				8B69FEEE2A37C249009D7264 /* NSCache+Extension.swift in Sources */,
 				8B1C65232A92E39B00CBF16D /* Badgable.swift in Sources */,
 				A18A796B2A1FB15800FE60AB /* DetailHybridCell.swift in Sources */,
@@ -2239,7 +2274,9 @@
 				A1BD20E229E5B9CC0093749E /* BlurView.swift in Sources */,
 				A18691D828C8C1EE0087DE3B /* TabBarController.swift in Sources */,
 				A1B68F2C2923CB5300FF5F18 /* LabeledTableHeaderViewModel.swift in Sources */,
+				8B1C65352A979CB700CBF16D /* ProfileSetting.swift in Sources */,
 				A1F56A6B28C6934B0089BD4F /* UIButton+Extension.swift in Sources */,
+				8B1C65312A9795F500CBF16D /* ProfileSettingTableViewCellViewModel.swift in Sources */,
 				A1B1B0DC299BA1FA0070AD29 /* ListUseCase.swift in Sources */,
 				A1DB570D2A1EA4EA0060FC3F /* DetailCollectionViewCellViewModel.swift in Sources */,
 				A1BDC0D32A0993D60027C251 /* NavigationViewModel.swift in Sources */,
@@ -2268,6 +2305,7 @@
 				A18B994428BFD9CC0077A5A6 /* Media.swift in Sources */,
 				A18B994828BFD9DA0077A5A6 /* Episode.swift in Sources */,
 				A1B98BAB298A44EF001B7B62 /* SeasonHTTPDTO.swift in Sources */,
+				8B1C65332A9797DB00CBF16D /* ProfileSettingTableViewDataSource.swift in Sources */,
 				A19956F4290F7F9900B7D655 /* ArraySlice+Extension.swift in Sources */,
 				A1AEB444299E15D20016DE2B /* TabController.swift in Sources */,
 				A1BA1DA728D8BA9F00730EA8 /* UIView+Animations.swift in Sources */,
@@ -2285,6 +2323,7 @@
 				A14E0CFB29C34F4A00F55500 /* AddUserProfileViewController.swift in Sources */,
 				A1AC9FA729A3617400DAD66D /* ViewLifecycleBehavior.swift in Sources */,
 				A18B993B28BFC9700077A5A6 /* BackButtonEmptyTitleNavigationBarBehavior.swift in Sources */,
+				8B871BBA2A9FE1F100024F07 /* Int+Extension.swift in Sources */,
 				A1741D4B28EC5B1B00F3C46B /* DetailNavigationViewItem.swift in Sources */,
 				A1741D3A28EBA16E00F3C46B /* DetailCollectionViewDataSource.swift in Sources */,
 				A14E0CB929BB979900F55500 /* AccountProfileCollectionViewCellViewModel.swift in Sources */,
@@ -2339,6 +2378,7 @@
 				A18B98FC28BEB62C0077A5A6 /* AppDelegate.swift in Sources */,
 				A18B998D28C0426E0077A5A6 /* RepositoryTask.swift in Sources */,
 				A14E0CCB29BCAB9D00F55500 /* AccountMenuTableViewDataSource.swift in Sources */,
+				8B871BBE2A9FEBC200024F07 /* UISwitch+Extension.swift in Sources */,
 				A1A71A9F298B2A58001C6AB1 /* UserHTTP.swift in Sources */,
 				A1741D5828EE5CB400F3C46B /* MediaPlayerViewViewModel.swift in Sources */,
 				A14E0CE129C0DA5A00F55500 /* ProfileDTO.swift in Sources */,

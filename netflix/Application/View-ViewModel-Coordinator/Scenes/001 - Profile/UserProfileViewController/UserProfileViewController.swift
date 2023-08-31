@@ -52,7 +52,7 @@ final class UserProfileViewController: UIViewController, Controller {
     }
     
     func viewDidConfigure() {
-        title = "Who's Watching?"
+        title = viewModel.isEditing ? "Manage Profiles" : "Who's Watching?"
     }
     
     func viewWillDeallocate() {
@@ -117,9 +117,7 @@ extension UserProfileViewController {
         collectionView = UICollectionView(frame: view.bounds, collectionViewLayout: .init())
         collectionView?.showsVerticalScrollIndicator = false
         collectionView?.showsHorizontalScrollIndicator = false
-        collectionView?.backgroundColor = .black
-        collectionView?.register(ProfileCollectionViewCell.nib,
-                                 forCellWithReuseIdentifier: ProfileCollectionViewCell.reuseIdentifier)
+        collectionView?.backgroundColor = Theme.backgroundColor
     }
     
     private func createDataSource() {
@@ -143,9 +141,13 @@ extension UserProfileViewController {
         
         let numOfItemsPerRow = floor(1.0 / itemSize.widthDimension.dimension)
         let numOfProfiles = CGFloat(viewModel.profiles.count)
-        let numOfRows = CGFloat(viewModel.profiles.count) / numOfItemsPerRow
-        let topInset = (view.bounds.height / numOfProfiles / numOfRows)
-        section.contentInsets = NSDirectionalEdgeInsets(top: topInset, leading: 64.0, bottom: .zero, trailing: 64.0)
+        
+        var numOfRows = numOfProfiles / numOfItemsPerRow
+        numOfRows = numOfRows == 0.5 ? 2.0 : numOfRows
+        
+        let verticalInset = (view.bounds.height * 0.50) / 2.0
+        
+        section.contentInsets = NSDirectionalEdgeInsets(top: verticalInset, leading: 64.0, bottom: verticalInset, trailing: 64.0)
         section.interGroupSpacing = 32.0
         
         let layout = UICollectionViewCompositionalLayout(section: section)
@@ -167,9 +169,10 @@ extension UserProfileViewController {
     }
     
     @objc
-    private func editDidTap() {
+    func editDidTap() {
         viewModel.isEditing = !viewModel.isEditing
         
+        viewDidConfigure()
         navigationItem.rightBarButtonItem = nil
         createRightBarButtonItem()
         

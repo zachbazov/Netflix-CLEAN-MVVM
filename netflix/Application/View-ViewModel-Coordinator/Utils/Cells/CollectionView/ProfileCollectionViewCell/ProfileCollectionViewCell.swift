@@ -101,6 +101,7 @@ extension ProfileCollectionViewCell {
     @objc
     private func didSelectItemForEditing() {
         profileViewModel?.editingProfile = profileViewModel.profiles[tag]
+        profileViewModel?.profileIndex = tag
         
         profileViewModel?.coordinator?.coordinate(to: .editProfile)
     }
@@ -122,9 +123,7 @@ extension ProfileCollectionViewCell {
         
         setTitle(viewModel.name)
         
-        guard let profiles = profileViewModel?.profiles else { return }
-        
-        if indexPath.row == profiles.lastIndex {
+        if viewModel.name == "Add Profile" {
             return configureAddProfileButton()
         }
         
@@ -154,7 +153,8 @@ extension ProfileCollectionViewCell {
         
         guard let id = profile._id else { return }
         
-        profileViewModel.updateUserProfile(with: id) {
+        profileViewModel.updateUserSelectedProfile(with: id) {
+            
             mainQueueDispatch {
                 let coordinator = Application.app.coordinator
                 coordinator.coordinate(to: .tabBar)

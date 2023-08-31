@@ -5,11 +5,19 @@
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21679"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="EditUserProfileViewController" customModule="netflix" customModuleProvider="target">
             <connections>
+                <outlet property="badgeViewContainer" destination="8VP-2R-ePB" id="qmc-Wb-uRk"/>
+                <outlet property="cancelBarButton" destination="RDa-dv-vVX" id="NJT-8t-nkd"/>
+                <outlet property="doneBarButton" destination="vXD-va-gC0" id="Qgl-PO-4pn"/>
+                <outlet property="profileImageView" destination="kMn-30-1XH" id="afj-61-YXa"/>
+                <outlet property="profileNameTextField" destination="lRb-zF-XI4" id="lh4-8C-Yip"/>
+                <outlet property="tableView" destination="oJi-R6-sLO" id="8N3-7m-HtY"/>
+                <outlet property="tableViewHeight" destination="bNZ-SF-HC4" id="1d1-hV-njd"/>
                 <outlet property="view" destination="yGI-Sn-gcM" id="AnS-sy-9nE"/>
             </connections>
         </placeholder>
@@ -17,9 +25,84 @@
         <view contentMode="scaleToFill" id="yGI-Sn-gcM">
             <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <subviews>
+                <navigationBar contentMode="scaleToFill" translucent="NO" translatesAutoresizingMaskIntoConstraints="NO" id="FCc-RH-WrM">
+                    <rect key="frame" x="0.0" y="59" width="393" height="44"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="44" id="dDP-rj-Ir3"/>
+                    </constraints>
+                    <items>
+                        <navigationItem title="Edit Profile" id="yP5-2I-H6I">
+                            <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="RDa-dv-vVX"/>
+                            <barButtonItem key="rightBarButtonItem" systemItem="done" id="vXD-va-gC0"/>
+                        </navigationItem>
+                    </items>
+                </navigationBar>
+                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="kMn-30-1XH" userLabel="Profile Image View">
+                    <rect key="frame" x="148.66666666666666" y="119" width="96" height="96"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="96" id="ix5-2h-AvX"/>
+                        <constraint firstAttribute="width" constant="96" id="k4u-I5-hCw"/>
+                    </constraints>
+                </imageView>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="8VP-2R-ePB" userLabel="Badge View Container">
+                    <rect key="frame" x="228.66666666666666" y="199" width="24" height="24"/>
+                    <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="24" id="s2G-OV-6LQ"/>
+                        <constraint firstAttribute="height" constant="24" id="z0M-Sp-SDg"/>
+                    </constraints>
+                </view>
+                <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="lRb-zF-XI4" userLabel="Profile Name Text Field">
+                    <rect key="frame" x="48" y="247" width="297" height="48"/>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="48" id="LXV-PV-DNN"/>
+                    </constraints>
+                    <color key="textColor" red="0.79215686269999996" green="0.79215686269999996" blue="0.79215686269999996" alpha="1" colorSpace="calibratedRGB"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                    <textInputTraits key="textInputTraits" autocapitalizationType="words" autocorrectionType="no" spellCheckingType="no" returnKeyType="done" enablesReturnKeyAutomatically="YES" smartDashesType="no" smartInsertDeleteType="no" smartQuotesType="no" textContentType="name"/>
+                </textField>
+                <tableView clipsSubviews="YES" contentMode="scaleToFill" bounces="NO" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" bouncesZoom="NO" style="grouped" separatorStyle="none" allowsSelection="NO" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="oJi-R6-sLO" userLabel="Profile Settings Table View">
+                    <rect key="frame" x="16" y="327" width="361" height="395"/>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="395" id="bNZ-SF-HC4"/>
+                    </constraints>
+                </tableView>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Changes made here apply to all devices." textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="VOg-Fv-MJc">
+                    <rect key="frame" x="16" y="738" width="361" height="15.666666666666629"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                    <color key="textColor" white="0.46714761373880026" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <nil key="highlightedColor"/>
+                </label>
+            </subviews>
             <viewLayoutGuide key="safeArea" id="mb5-jw-g0z"/>
-            <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+            <color key="backgroundColor" red="0.086274509799999996" green="0.086274509799999996" blue="0.086274509799999996" alpha="1" colorSpace="calibratedRGB"/>
+            <constraints>
+                <constraint firstItem="mb5-jw-g0z" firstAttribute="trailing" secondItem="oJi-R6-sLO" secondAttribute="trailing" constant="16" id="FHG-8y-CMn"/>
+                <constraint firstItem="FCc-RH-WrM" firstAttribute="leading" secondItem="mb5-jw-g0z" secondAttribute="leading" id="RXj-z2-g0I"/>
+                <constraint firstItem="FCc-RH-WrM" firstAttribute="top" secondItem="mb5-jw-g0z" secondAttribute="top" id="SEe-zR-Bv3"/>
+                <constraint firstItem="lRb-zF-XI4" firstAttribute="top" secondItem="kMn-30-1XH" secondAttribute="bottom" constant="32" id="SsC-TH-T7u"/>
+                <constraint firstItem="FCc-RH-WrM" firstAttribute="trailing" secondItem="mb5-jw-g0z" secondAttribute="trailing" id="YxR-sY-jtD"/>
+                <constraint firstItem="lRb-zF-XI4" firstAttribute="leading" secondItem="mb5-jw-g0z" secondAttribute="leading" constant="48" id="aah-bx-yk1"/>
+                <constraint firstItem="8VP-2R-ePB" firstAttribute="bottom" secondItem="kMn-30-1XH" secondAttribute="bottom" constant="8" id="cn6-0y-XKp"/>
+                <constraint firstItem="8VP-2R-ePB" firstAttribute="trailing" secondItem="kMn-30-1XH" secondAttribute="trailing" constant="8" id="h7D-U6-alg"/>
+                <constraint firstItem="kMn-30-1XH" firstAttribute="centerX" secondItem="yGI-Sn-gcM" secondAttribute="centerX" id="hW9-3k-uFL"/>
+                <constraint firstItem="kMn-30-1XH" firstAttribute="top" secondItem="FCc-RH-WrM" secondAttribute="bottom" constant="16" id="hco-wB-j6V"/>
+                <constraint firstItem="oJi-R6-sLO" firstAttribute="top" secondItem="lRb-zF-XI4" secondAttribute="bottom" constant="32" id="kp3-X8-dob"/>
+                <constraint firstItem="VOg-Fv-MJc" firstAttribute="top" secondItem="oJi-R6-sLO" secondAttribute="bottom" constant="16" id="mMq-O7-uja"/>
+                <constraint firstItem="mb5-jw-g0z" firstAttribute="trailing" secondItem="VOg-Fv-MJc" secondAttribute="trailing" constant="16" id="pxm-nw-Te7"/>
+                <constraint firstItem="oJi-R6-sLO" firstAttribute="leading" secondItem="mb5-jw-g0z" secondAttribute="leading" constant="16" id="q6v-Ya-6hL"/>
+                <constraint firstItem="VOg-Fv-MJc" firstAttribute="leading" secondItem="mb5-jw-g0z" secondAttribute="leading" constant="16" id="xf2-Mc-bxY"/>
+                <constraint firstItem="mb5-jw-g0z" firstAttribute="trailing" secondItem="lRb-zF-XI4" secondAttribute="trailing" constant="48" id="yal-bS-Pa8"/>
+            </constraints>
             <point key="canvasLocation" x="222" y="8"/>
         </view>
     </objects>
+    <resources>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+    </resources>
 </document>

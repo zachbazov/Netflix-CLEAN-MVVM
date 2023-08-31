@@ -29,16 +29,10 @@ final class AddUserProfileViewController: UIViewController, Controller {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-//        viewDidLoadBehaviors()
         viewDidDeploySubviews()
         viewDidTargetSubviews()
         viewDidConfigure()
     }
-    
-//    func viewDidLoadBehaviors() {
-//        addBehaviors([BackButtonEmptyTitleNavigationBarBehavior(),
-//                      BlackStyleNavigationBarBehavior()])
-//    }
     
     func viewDidDeploySubviews() {
         createBadgeView()
@@ -108,6 +102,7 @@ extension AddUserProfileViewController {
     
     private func configureAvatarImageView() {
         avatarImageView.cornerRadius(8.0)
+        avatarImageView.image = UIImage(named: "av-light-yellow")
     }
     
     private func configureProfileNameTextField() {
@@ -132,7 +127,7 @@ extension AddUserProfileViewController {
               let userId = user._id
         else { return }
         
-        let profileDTO = ProfileDTO(name: profileName, image: "av-dark-green", active: false, user: userId)
+        let profileDTO = ProfileDTO(name: profileName, image: "av-dark-green", active: false, user: userId, settings: nil)
         let request = ProfileHTTPDTO.POST.Request(user: user, profile: profileDTO)
         
         viewModel.createUserProfile(with: request) { [weak self] in

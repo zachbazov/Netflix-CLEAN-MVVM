@@ -100,6 +100,27 @@ extension UserRepository: UserRepositoryURLReferrable {
         return Endpoint(path: path, method: method, headerParameters: headerParams, queryParameters: queryParams, bodyParameters: bodyParams)
     }
     
+    static func updateUserProfile(with request: ProfileHTTPDTO.PATCH.Request) -> Endpoint<ProfileHTTPDTO.PATCH.Response> {
+        let path = "api/v1/users/profiles"
+        let method: HTTPMethodType = .patch
+        let headerParams = ["content-type": "application/json"]
+        let queryParams: [String: Any] = ["user": request.user._id ?? .toBlank(),
+                                          "id": request.id ?? .toBlank()]
+        let bodyParams: [String: Any] = ["name": request.profile.name]
+        
+        return Endpoint(path: path, method: method, headerParameters: headerParams, queryParameters: queryParams, bodyParameters: bodyParams)
+    }
+    
+    static func updateUserProfileSettings(with request: ProfileHTTPDTO.Settings.PATCH.Request) -> Endpoint<ProfileHTTPDTO.Settings.PATCH.Response> {
+        let path = "api/v1/users/profiles/settings"
+        let method: HTTPMethodType = .patch
+        let headerParams = ["content-type": "application/json"]
+        let queryParams: [String: Any] = ["user": request.user._id ?? .toBlank(),
+                                          "id": request.settings._id]
+        
+        return Endpoint(path: path, method: method, headerParameters: headerParams, queryParameters: queryParams, bodyParametersEncodable: request.settings)
+    }
+    
     static func updateUserData(with request: UserHTTPDTO.Request) -> Endpoint<UserHTTPDTO.Response> {
         let path = "api/v1/users/update-data"
         let method: HTTPMethodType = .patch
@@ -277,6 +298,40 @@ extension UserRepository: RepositoryRequestable {
                             printIfDebug(.error, "\(error)")
                         }
                     }
+                case .failure(let error):
+                    completion(.failure(error))
+                }
+            }
+            
+            return task
+        case let request as ProfileHTTPDTO.PATCH.Request:
+            let task = RepositoryTask()
+            
+            guard !task.isCancelled else { return nil }
+            
+            let endpoint = UserRepository.updateUserProfile(with: request)
+            
+            task.networkTask = dataTransferService.request(with: endpoint) { result in
+                switch result {
+                case .success(let response):
+                    completion(.success(response as! T))
+                case .failure(let error):
+                    completion(.failure(error))
+                }
+            }
+            
+            return task
+        case let request as ProfileHTTPDTO.Settings.PATCH.Request:
+            let task = RepositoryTask()
+            
+            guard !task.isCancelled else { return nil }
+            
+            let endpoint = UserRepository.updateUserProfileSettings(with: request)
+            
+            task.networkTask = dataTransferService.request(with: endpoint) { result in
+                switch result {
+                case .success(let response):
+                    completion(.success(response as! T))
                 case .failure(let error):
                     completion(.failure(error))
                 }

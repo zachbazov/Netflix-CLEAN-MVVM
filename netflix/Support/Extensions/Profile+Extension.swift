@@ -17,6 +17,11 @@ extension Profile {
               let userId = user._id
         else { fatalError("Unexpected user credentials.") }
         
-        return Profile(_id: "addProfile", name: "Add Profile", image: "plus", active: false, user: userId)
+        return Profile(_id: "addProfile",
+                       name: "Add Profile",
+                       image: "plus",
+                       active: false,
+                       user: userId,
+                       settings: .defaultValue)
     }
 }

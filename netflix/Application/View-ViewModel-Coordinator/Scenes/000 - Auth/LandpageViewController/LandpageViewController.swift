@@ -18,6 +18,10 @@ private protocol ViewControllerProtocol {
 // MARK: - LandpageViewController Type
 
 final class LandpageViewController: UIViewController, Controller {
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return Theme.preferredStatusBarStyle
+    }
+    
     @IBOutlet private weak var backgroundImageView: UIImageView!
     @IBOutlet private weak var statusBarGradientView: UIView!
     @IBOutlet private weak var topGradientView: UIView!

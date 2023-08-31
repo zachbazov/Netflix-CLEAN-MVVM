@@ -37,11 +37,30 @@ struct ProfileHTTPDTO {
     struct PATCH: HTTPRepresentable {
         struct Request: Decodable {
             let user: UserDTO
+            var id: String? = nil
+            let profile: ProfileDTO
         }
         
         struct Response: Decodable {
             let status: String
             let data: ProfileDTO
+        }
+    }
+    
+    // MARK: UserProfileSettings
+    
+    struct Settings: Decodable {
+        struct PATCH: HTTPRepresentable {
+            struct Request: Decodable {
+                let user: UserDTO
+                let id: String
+                let settings: ProfileDTO.Settings
+            }
+            
+            struct Response: Decodable {
+                let status: String
+                let data: ProfileDTO.Settings
+            }
         }
     }
 }

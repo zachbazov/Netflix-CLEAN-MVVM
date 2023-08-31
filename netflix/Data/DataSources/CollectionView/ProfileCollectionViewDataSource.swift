@@ -33,10 +33,13 @@ final class ProfileCollectionViewDataSource: CollectionViewDataSource {
     }
     
     override func cellForItem<T>(in collectionView: UICollectionView, at indexPath: IndexPath) -> T where T: UICollectionViewCell {
-        return ProfileCollectionViewCell.create(of: ProfileCollectionViewCell.self, on: collectionView, for: indexPath, with: viewModel) as! T
+        return ProfileCollectionViewCell.create(of: ProfileCollectionViewCell.self,
+                                                on: collectionView,
+                                                for: indexPath,
+                                                with: viewModel) as! T
     }
     
-    override func willDisplayCellForItem<T>(_ cell: T, at indexPath: IndexPath) where T : UICollectionViewCell {
+    override func willDisplayCellForItem<T>(_ cell: T, at indexPath: IndexPath) where T: UICollectionViewCell {
         cell.opacityAnimation()
     }
     

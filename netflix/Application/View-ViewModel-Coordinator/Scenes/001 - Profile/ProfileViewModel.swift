@@ -17,7 +17,9 @@ private protocol ViewModelProtocol {
     
     func getUserProfiles(_ completion: @escaping () -> Void)
     func createUserProfile(with request: ProfileHTTPDTO.POST.Request, _ completion: @escaping () -> Void)
-    func updateUserProfile(with profileId: String, _ completion: @escaping () -> Void)
+    func updateUserProfile(with request: ProfileHTTPDTO.PATCH.Request, _ completion: @escaping () -> Void)
+    func updateUserProfileSettings(with request: ProfileHTTPDTO.Settings.PATCH.Request, _ completion: @escaping () -> Void)
+    func updateUserSelectedProfile(with profileId: String, _ completion: @escaping () -> Void)
     func updateUserProfileForSigningOut(completion: @escaping () -> Void)
     
     func didFinish()
@@ -34,13 +36,57 @@ final class ProfileViewModel {
     var selectedProfile: Profile?
     var editingProfile: Profile?
     
+    var profileIndex: Int?
+    
     var profileName: String?
     
     var isEditing: Bool = false
     
+    lazy var profileSettings: [ProfileSetting] = createProfileSettings()
+    
     func add(_ profile: Profile) {
         let priorToLast = profiles.count - 1
         profiles.insert(profile, at: priorToLast)
+    }
+    
+    func setEditingProfile(_ profile: Profile) {
+        editingProfile = profile
+    }
+    
+    func updateProfile(_ profileDTO: ProfileDTO, at index: Int) {
+        profiles[index] = profileDTO.toDomain()
+    }
+    
+    func createProfileSettings() -> [ProfileSetting] {
+        let maturityRatingSetting = ProfileSetting(image: "exclamationmark.octagon",
+                                                   title: "Maturiy Rating",
+                                                   subtitle: "No restrictions",
+                                                   hasSubtitle: true,
+                                                   isSwitchable: false)
+        let displayLanguageSetting = ProfileSetting(image: "textformat",
+                                                    title: "Display Language",
+                                                    subtitle: "English",
+                                                    hasSubtitle: true,
+                                                    isSwitchable: false)
+        let audioAndSubtitlesSetting = ProfileSetting(image: "text.bubble.fill",
+                                                      title: "Audio & Subtitles",
+                                                      subtitle: "English",
+                                                      hasSubtitle: true,
+                                                      isSwitchable: false)
+        let autoplayNextEpisodeSetting = ProfileSetting(image: "arrow.right.square",
+                                                        title: "Autoplay Next Episode",
+                                                        hasSubtitle: false,
+                                                        isSwitchable: true)
+        let autoplayPreviewsSetting = ProfileSetting(image: "autostartstop",
+                                                     title: "Autoplay Previews",
+                                                     hasSubtitle: false,
+                                                     isSwitchable: true)
+        
+        return [maturityRatingSetting,
+                displayLanguageSetting,
+                audioAndSubtitlesSetting,
+                autoplayNextEpisodeSetting,
+                autoplayPreviewsSetting]
     }
 }
 
@@ -103,7 +149,51 @@ extension ProfileViewModel: ViewModelProtocol {
             })
     }
     
-    func updateUserProfile(with profileId: String, _ completion: @escaping () -> Void) {
+    func updateUserProfile(with request: ProfileHTTPDTO.PATCH.Request, _ completion: @escaping () -> Void) {
+        userUseCase.repository.task = userUseCase.request(
+            endpoint: .updateUserProfile,
+            for: ProfileHTTPDTO.PATCH.Response.self,
+            request: request,
+            cached: { _ in },
+            completion: { [weak self] result in
+                guard let self = self else { return }
+                
+                switch result {
+                case .success(let response):
+                    guard let profileIndex = self.profileIndex else { return }
+                    
+                    self.updateProfile(response.data, at: profileIndex)
+                    
+                    completion()
+                case .failure(let error):
+                    printIfDebug(.debug, "error \(error)")
+                }
+            })
+    }
+    
+    func updateUserProfileSettings(with request: ProfileHTTPDTO.Settings.PATCH.Request, _ completion: @escaping () -> Void) {
+        userUseCase.repository.task = userUseCase.request(
+            endpoint: .updateUserProfileSettings,
+            for: ProfileHTTPDTO.Settings.PATCH.Response.self,
+            request: request,
+            cached: { _ in },
+            completion: { [weak self] result in
+                guard let self = self else { return }
+                
+                switch result {
+                case .success(let response):
+                    guard let profileIndex = self.profileIndex else { return }
+                    
+                    self.profiles[profileIndex].settings = response.data.toDomain()
+                    
+                    completion()
+                case .failure(let error):
+                    printIfDebug(.debug, "error \(error)")
+                }
+            })
+    }
+    
+    func updateUserSelectedProfile(with profileId: String, _ completion: @escaping () -> Void) {
         let authService = Application.app.services.auth
         
         guard let user = authService.user else { return }

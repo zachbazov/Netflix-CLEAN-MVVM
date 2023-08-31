@@ -64,9 +64,7 @@ extension ProfileCoordinator: Coordinator {
         case .editProfile:
             guard let editUserProfileController = editUserProfileController else { fatalError() }
             
-            Theme.applyUserProfileAppearance()
-            
-            navigationController?.pushViewController(editUserProfileController, animated: true)
+            navigationController?.present(editUserProfileController, animated: true)
         }
     }
 }

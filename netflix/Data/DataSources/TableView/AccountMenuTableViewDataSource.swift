@@ -124,7 +124,7 @@ extension AccountMenuTableViewDataSource: DataSourceProtocol {
     }
 }
 
-// MARK: - Index Type
+// MARK: - Section Type
 
 extension AccountMenuTableViewDataSource {
     enum Section: Int {

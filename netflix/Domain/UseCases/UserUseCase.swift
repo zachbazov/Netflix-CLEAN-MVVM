@@ -26,6 +26,8 @@ extension UserUseCase {
         case signOut
         case getUserProfiles
         case createUserProfile
+        case updateUserProfile
+        case updateUserProfileSettings
         case updateUserData
     }
 }
@@ -49,6 +51,10 @@ extension UserUseCase: UseCase {
             return repository.find(request: request, cached: cached, completion: completion)
         case .createUserProfile:
             return repository.create(request: request, completion: completion)
+        case .updateUserProfile:
+            return repository.update(request: request, completion: completion)
+        case .updateUserProfileSettings:
+            return repository.update(request: request, completion: completion)
         case .updateUserData:
             return repository.update(request: request, completion: completion)
         }

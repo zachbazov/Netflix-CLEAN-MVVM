@@ -23,11 +23,15 @@ extension TableViewCell {
         for indexPath: IndexPath,
         with viewModel: V) -> U where U: UITableViewCell {
             
-            tableView.register(class: U.self)
+            switch U.reuseIdentifier {
+            case ProfileSettingTableViewCell.reuseIdentifier:
+                tableView.register(nib: U.self)
+            default:
+                tableView.register(class: U.self)
+            }
             
-            guard let cell = tableView.dequeueReusableCell(
-                withIdentifier: String(describing: U.self),
-                for: indexPath) as? U
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: U.reuseIdentifier,
+                                                           for: indexPath) as? U
             else { fatalError() }
             
             switch cell {
@@ -62,6 +66,15 @@ extension TableViewCell {
                 let model = viewModel.items[indexPath.row]
                 let cellViewModel = NavigationOverlayCollectionViewCellViewModel(title: model.stringValue)
                 
+                cell.viewModel = cellViewModel
+                cell.viewDidLoad()
+            case let cell as ProfileSettingTableViewCell:
+                guard let viewModel = viewModel as? ProfileViewModel else { fatalError() }
+                
+                let cellViewModel = ProfileSettingTableViewCellViewModel(at: indexPath, with: viewModel)
+                
+                cell.indexPath = indexPath
+                cell.profileViewModel = viewModel
                 cell.viewModel = cellViewModel
                 cell.viewDidLoad()
             default: break
