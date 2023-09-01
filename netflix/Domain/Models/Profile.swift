@@ -42,6 +42,41 @@ struct Profile {
     var settings: Settings?
 }
 
+// MARK: - Equatable Implementation
+
+extension Profile: Equatable {
+    static func ==(lhs: Profile, rhs: Profile) -> Bool {
+        return lhs._id == rhs._id &&
+            lhs.name == rhs.name &&
+            lhs.image == rhs.image &&
+            lhs.settings == rhs.settings
+    }
+}
+
+extension Profile.Settings: Equatable {
+    static func ==(lhs: Profile.Settings, rhs: Profile.Settings) -> Bool {
+        return lhs.maturityRating == rhs.maturityRating &&
+            lhs.displayLanguage == rhs.displayLanguage &&
+            lhs.audioAndSubtitles == rhs.audioAndSubtitles &&
+            lhs.autoplayNextEpisode == rhs.autoplayNextEpisode &&
+            lhs.autoplayPreviews == rhs.autoplayPreviews
+    }
+}
+
+// MARK: - Default Value
+
+extension Profile.Settings {
+    static var defaultValue: Profile.Settings {
+        return .init(_id: .toBlank(),
+                     maturityRating: .none,
+                     displayLanguage: .english,
+                     audioAndSubtitles: .english,
+                     autoplayNextEpisode: true,
+                     autoplayPreviews: true,
+                     profile: .toBlank())
+    }
+}
+
 // MARK: - Mapping
 
 extension Profile {
@@ -88,19 +123,5 @@ extension Profile.DisplayLanguage {
 extension Profile.AudioSubtitles {
     func toDTO() -> ProfileDTO.AudioSubtitles {
         return .init(rawValue: self.rawValue) ?? .english
-    }
-}
-
-// MARK: - Default Value
-
-extension Profile.Settings {
-    static var defaultValue: Profile.Settings {
-        return .init(_id: .toBlank(),
-                     maturityRating: .none,
-                     displayLanguage: .english,
-                     audioAndSubtitles: .english,
-                     autoplayNextEpisode: true,
-                     autoplayPreviews: true,
-                     profile: .toBlank())
     }
 }

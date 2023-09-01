@@ -62,6 +62,7 @@ final class EditUserProfileViewController: UIViewController, Controller {
         badgeView?.removeFromSuperview()
         badgeView = nil
         
+        viewModel.editingProfile = nil
         viewModel = nil
         
         removeFromParent()
@@ -140,33 +141,42 @@ extension EditUserProfileViewController {
         let authService = Application.app.services.auth
         
         guard let userDTO = authService.user,
-              let profile = viewModel.editingProfile
+              let editingProfile = viewModel.editingProfile,
+              let editingProfileSettings = editingProfile.settings
         else { return }
         
-        let request = ProfileHTTPDTO.PATCH.Request(user: userDTO,
-                                                   id: profile.toDTO()._id,
-                                                   profile: profile.toDTO())
+        if viewModel.hasChanges {
+            return dismissViewController()
+        }
         
-        viewModel.updateUserProfile(with: request) { [weak self] in
+        let profileRequest = ProfileHTTPDTO.PATCH.Request(user: userDTO,
+                                                          id: editingProfile.toDTO()._id,
+                                                          profile: editingProfile.toDTO())
+        
+        let settingsRequest = ProfileHTTPDTO.Settings.PATCH.Request(user: userDTO,
+                                                                    id: editingProfileSettings._id,
+                                                                    settings: editingProfileSettings.toDTO())
+        
+        viewModel.updateUserProfile(with: profileRequest) { [weak self] in
             guard let self = self else { return }
             
-            let request = ProfileHTTPDTO.Settings.PATCH.Request(
-                user: userDTO,
-                id: profile.settings?._id ?? .toBlank(),
-                settings: profile.settings?.toDTO() ?? .defaultValue)
-            
-            viewModel.updateUserProfileSettings(with: request) {
-                guard let userProfileController = self.viewModel.coordinator?.userProfileController else { return }
+            self.viewModel.updateUserProfileSettings(with: settingsRequest) {
                 
-                userProfileController.editDidTap()
-                userProfileController.dataSource?.dataSourceDidChange()
-                
-                self.dismissViewController()
+                self.userUpdateSessionDidFinish()
             }
         }
     }
     
     private func dismissViewController() {
         dismiss(animated: true)
+    }
+    
+    private func userUpdateSessionDidFinish() {
+        guard let userProfileController = self.viewModel.coordinator?.userProfileController else { return }
+        
+        userProfileController.editDidTap()
+        userProfileController.dataSource?.dataSourceDidChange()
+        
+        self.dismissViewController()
     }
 }

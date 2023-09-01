@@ -33,14 +33,37 @@ final class ProfileViewModel {
     fileprivate(set) lazy var userUseCase: UserUseCase = createUseCase()
     
     var profiles = [Profile]()
+    
     var selectedProfile: Profile?
+    
+    /**
+     The `editingProfile` property represents the user profile currently being edited.
+     
+     - Note:
+     Use this property to track and manage the user profile that is currently in the editing mode. It holds an optional `Profile` object, allowing you to reference the user's profile when in edit mode and set it to `nil` when there is no active editing session.
+     
+     - Important:
+     - When `editingProfile` is `nil`, there is no active editing session.
+     - To initiate an editing session, assign a `Profile` object to this property.
+     - Use this property in conjunction with your UI to display and manipulate the user's profile during editing.
+     
+     */
     var editingProfile: Profile?
+    
+    var currentProfile: Profile? {
+        guard let profileIndex = profileIndex else { return nil }
+        return profiles[profileIndex]
+    }
     
     var profileIndex: Int?
     
     var profileName: String?
     
     var isEditing: Bool = false
+    
+    var hasChanges: Bool {
+        return currentProfile == editingProfile
+    }
     
     lazy var profileSettings: [ProfileSetting] = createProfileSettings()
     
