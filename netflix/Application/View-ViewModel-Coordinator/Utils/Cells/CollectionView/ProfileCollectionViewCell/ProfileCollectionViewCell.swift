@@ -18,6 +18,7 @@ final class ProfileCollectionViewCell: UICollectionViewCell, CollectionViewCell 
     
     var profileViewModel: ProfileViewModel!
     var viewModel: ProfileCollectionViewCellViewModel!
+    var accountViewModel: AccountViewModel?
     
     var representedIdentifier: NSString!
     var indexPath: IndexPath!

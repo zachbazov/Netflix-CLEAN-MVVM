@@ -31,9 +31,9 @@ final class AccountProfileCollectionViewDataSource: CollectionViewDataSource {
     
     override func cellForItem<T>(in collectionView: UICollectionView, at indexPath: IndexPath) -> T where T : UICollectionViewCell {
         return AccountProfileCollectionViewCell.create(of: AccountProfileCollectionViewCell.self,
-                                                on: collectionView,
-                                                for: indexPath,
-                                                with: viewModel) as! T
+                                                       on: collectionView,
+                                                       for: indexPath,
+                                                       with: viewModel) as! T
     }
     
     override func willDisplayCellForItem<T>(_ cell: T, at indexPath: IndexPath) where T: UICollectionViewCell {

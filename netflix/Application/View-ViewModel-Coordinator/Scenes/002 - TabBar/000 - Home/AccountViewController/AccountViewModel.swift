@@ -72,6 +72,8 @@ extension AccountViewModel: ViewModelProtocol {
                 switch result {
                 case .success(let response):
                     self.profiles.value = response.data.toDomain()
+                    
+                    self.profiles.value.append(Profile.addProfile)
                 case .failure(let error):
                     printIfDebug(.error, "\(error)")
                 }

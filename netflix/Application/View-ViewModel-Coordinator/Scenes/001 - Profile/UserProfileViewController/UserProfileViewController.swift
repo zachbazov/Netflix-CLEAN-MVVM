@@ -53,8 +53,7 @@ final class UserProfileViewController: UIViewController, Controller {
     }
     
     func viewDidTargetSubviews() {
-        let tap = UITapGestureRecognizer(target: self, action: #selector(backgroundDidTap))
-        collectionView?.addGestureRecognizer(tap)
+        collectionView?.addTapGesture(self, action: #selector(backgroundDidTap))
     }
     
     func viewDidConfigure() {
@@ -151,9 +150,13 @@ extension UserProfileViewController {
         var numOfRows = numOfProfiles / numOfItemsPerRow
         numOfRows = numOfRows == 0.5 ? 2.0 : numOfRows
         
+        let horizontalInset: CGFloat = 64.0
         let verticalInset = ((view.bounds.height * 0.50) / numOfRows) / 2.0
         
-        section.contentInsets = NSDirectionalEdgeInsets(top: verticalInset, leading: 64.0, bottom: verticalInset, trailing: 64.0)
+        section.contentInsets = NSDirectionalEdgeInsets(top: verticalInset,
+                                                        leading: horizontalInset,
+                                                        bottom: verticalInset,
+                                                        trailing: horizontalInset)
         section.interGroupSpacing = 32.0
         
         let layout = UICollectionViewCompositionalLayout(section: section)

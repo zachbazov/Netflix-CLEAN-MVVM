@@ -37,11 +37,11 @@ final class AccountProfileCollectionViewCell: UICollectionViewCell, CollectionVi
     func viewWillConfigure() {
         guard let profiles = accountViewModel?.profiles.value else { return }
         
-        guard indexPath.row == profiles.count - 1 else {
-            return configureProfileButtons()
+        if viewModel.name == "Add Profile" {
+            return configureAddProfileButton()
         }
         
-        configureAddProfileButton()
+        configureProfileButtons()
     }
     
     // MARK: ViewProtocol Implementation

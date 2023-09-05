@@ -112,7 +112,6 @@ extension AccountViewController {
     private func createCollectionView() -> UICollectionView {
         let layout = CollectionViewLayout(layout: .profile, scrollDirection: .horizontal)
         let collectionView = UICollectionView(frame: collectionContainer.bounds, collectionViewLayout: layout)
-        collectionView.register(AccountProfileCollectionViewCell.nib, forCellWithReuseIdentifier: AccountProfileCollectionViewCell.reuseIdentifier)
         collectionView.contentInset = UIEdgeInsets(top: .zero, left: 16.0, bottom: .zero, right: 16.0)
         collectionView.backgroundColor = .black
         return collectionView
