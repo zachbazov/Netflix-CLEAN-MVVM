@@ -148,6 +148,7 @@ extension CollectionViewCell {
             cell.viewModel = ProfileCollectionViewCellViewModel(with: model)
             cell.representedIdentifier = cell.viewModel.id as NSString
             cell.indexPath = indexPath
+            cell.viewDidLoad()
         default: break
         }
         

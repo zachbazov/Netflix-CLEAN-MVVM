@@ -47,6 +47,17 @@ struct ProfileHTTPDTO {
         }
     }
     
+    struct DELETE: HTTPRepresentable {
+        struct Request: Decodable {
+            let user: UserDTO
+            let id: String
+        }
+        
+        struct Response: Decodable {
+            let status: String
+        }
+    }
+    
     // MARK: UserProfileSettings
     
     struct Settings: Decodable {

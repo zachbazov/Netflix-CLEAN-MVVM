@@ -57,7 +57,7 @@ extension EditOverlayView: ViewLifecycleBehavior {}
 
 extension EditOverlayView {
     private func createForegroundView() {
-        foreground = UIView(frame: .zero)
+        foreground = UIView(frame: bounds)
             .addToHierarchy(on: parent)
             .constraintToSuperview(parent)
             .hidden(true)

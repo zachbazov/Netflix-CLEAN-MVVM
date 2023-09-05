@@ -10,8 +10,8 @@ import UIKit
 // MARK: - UserProfileViewController Type
 
 final class UserProfileViewController: UIViewController, Controller {
-    fileprivate(set) var collectionView: UICollectionView?
-    fileprivate(set) var dataSource: ProfileCollectionViewDataSource?
+    private(set) var collectionView: UICollectionView?
+    private(set) var dataSource: ProfileCollectionViewDataSource?
     
     var viewModel: ProfileViewModel!
     
@@ -24,6 +24,7 @@ final class UserProfileViewController: UIViewController, Controller {
         viewDidLoadBehaviors()
         viewDidDeploySubviews()
         viewHierarchyDidConfigure()
+        viewDidTargetSubviews()
         viewDidConfigure()
         viewModel.viewDidLoad()
     }
@@ -49,6 +50,11 @@ final class UserProfileViewController: UIViewController, Controller {
         createDataSource()
         createLeftBarButtonItem()
         createRightBarButtonItem()
+    }
+    
+    func viewDidTargetSubviews() {
+        let tap = UITapGestureRecognizer(target: self, action: #selector(backgroundDidTap))
+        collectionView?.addGestureRecognizer(tap)
     }
     
     func viewDidConfigure() {
@@ -145,7 +151,7 @@ extension UserProfileViewController {
         var numOfRows = numOfProfiles / numOfItemsPerRow
         numOfRows = numOfRows == 0.5 ? 2.0 : numOfRows
         
-        let verticalInset = (view.bounds.height * 0.50) / 2.0
+        let verticalInset = ((view.bounds.height * 0.50) / numOfRows) / 2.0
         
         section.contentInsets = NSDirectionalEdgeInsets(top: verticalInset, leading: 64.0, bottom: verticalInset, trailing: 64.0)
         section.interGroupSpacing = 32.0
@@ -179,11 +185,9 @@ extension UserProfileViewController {
         guard let collectionView = self.collectionView else { return }
         
         for case let cell as ProfileCollectionViewCell in collectionView.visibleCells {
-            if cell.representedIdentifier == "addProfile" {
-                return
+            if cell.representedIdentifier != "addProfile" {
+                cell.editMode(viewModel.isEditing)
             }
-            
-            cell.editMode(viewModel.isEditing)
         }
     }
     
@@ -197,5 +201,16 @@ extension UserProfileViewController {
         Theme.applyAppearance(for: navigationController)
         
         updateWithTheme()
+    }
+    
+    @objc
+    func backgroundDidTap() {
+        if viewModel.isDeleting {
+            for case let cell as ProfileCollectionViewCell in collectionView?.visibleCells ?? [] where cell.viewModel.name != "Add Profile" {
+                cell.badgeViewContainer.hidden(viewModel.isDeleting)
+            }
+            
+            viewModel.isDeleting = false
+        }
     }
 }

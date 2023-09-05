@@ -44,7 +44,6 @@ final class ProfileViewModel {
      
      - Important:
      - When `editingProfile` is `nil`, there is no active editing session.
-     - To initiate an editing session, assign a `Profile` object to this property.
      - Use this property in conjunction with your UI to display and manipulate the user's profile during editing.
      
      */
@@ -64,6 +63,8 @@ final class ProfileViewModel {
     var hasChanges: Bool {
         return currentProfile == editingProfile
     }
+    
+    var isDeleting: Bool = false
     
     lazy var profileSettings: [ProfileSetting] = createProfileSettings()
     
@@ -163,7 +164,7 @@ extension ProfileViewModel: ViewModelProtocol {
                 guard let self = self else { return }
                 switch result {
                 case .success(let response):
-                    self.selectedProfile = response.data.toDomain()
+                    self.add(response.data.toDomain())
                     
                     completion()
                 case .failure(let error):
@@ -189,7 +190,7 @@ extension ProfileViewModel: ViewModelProtocol {
                     
                     completion()
                 case .failure(let error):
-                    printIfDebug(.debug, "error \(error)")
+                    printIfDebug(.debug, "\(error)")
                 }
             })
     }
@@ -211,7 +212,7 @@ extension ProfileViewModel: ViewModelProtocol {
                     
                     completion()
                 case .failure(let error):
-                    printIfDebug(.debug, "error \(error)")
+                    printIfDebug(.debug, "\(error)")
                 }
             })
     }
@@ -253,6 +254,30 @@ extension ProfileViewModel: ViewModelProtocol {
             completion: { result in
                 switch result {
                 case .success:
+                    completion()
+                case .failure(let error):
+                    printIfDebug(.error, "\(error)")
+                }
+            })
+    }
+    
+    func deleteUserProfile(_ profileId: String, _ completion: @escaping () -> Void) {
+        let authService = Application.app.services.auth
+        
+        guard let user = authService.user else { return }
+        
+        let request = ProfileHTTPDTO.DELETE.Request(user: user, id: profileId)
+        
+        userUseCase.repository.task = userUseCase.request(
+            endpoint: .deleteUserProfile,
+            request: request,
+            completion: { [weak self] result in
+                guard let self = self else { return }
+                
+                switch result {
+                case .success:
+                    self.profiles.removeAll(where: { $0._id == profileId })
+                    
                     completion()
                 case .failure(let error):
                     printIfDebug(.error, "\(error)")

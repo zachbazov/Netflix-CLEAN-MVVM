@@ -17,4 +17,5 @@ struct Badge: Badgable {
 
 enum BadgeType {
     case edit
+    case delete
 }

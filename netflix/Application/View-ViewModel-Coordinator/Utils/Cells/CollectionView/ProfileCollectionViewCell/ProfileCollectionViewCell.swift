@@ -14,6 +14,7 @@ final class ProfileCollectionViewCell: UICollectionViewCell, CollectionViewCell 
     @IBOutlet private weak var layerContainer: UIView!
     @IBOutlet private weak var button: UIButton!
     @IBOutlet private weak var titleLabel: UILabel!
+    @IBOutlet private(set) weak var badgeViewContainer: UIView!
     
     var profileViewModel: ProfileViewModel!
     var viewModel: ProfileCollectionViewCellViewModel!
@@ -22,13 +23,13 @@ final class ProfileCollectionViewCell: UICollectionViewCell, CollectionViewCell 
     var indexPath: IndexPath!
     
     var editOverlayView: EditOverlayView?
+    var badgeView: BadgeView?
     
     deinit {
         viewDidDeallocate()
     }
     
-    override func layoutSubviews() {
-        super.layoutSubviews()
+    func viewDidLoad() {
         viewDidDeploySubviews()
         viewDidConfigure()
         viewDidTargetSubviews()
@@ -36,6 +37,7 @@ final class ProfileCollectionViewCell: UICollectionViewCell, CollectionViewCell 
     
     func viewDidDeploySubviews() {
         createEditOverlayView()
+        createBadgeView()
     }
     
     func viewDidConfigure() {
@@ -44,9 +46,14 @@ final class ProfileCollectionViewCell: UICollectionViewCell, CollectionViewCell 
     
     func viewDidTargetSubviews() {
         button.addTarget(self, action: #selector(didSelect), for: .touchUpInside)
+        
+        layerContainer.addLongPressTarget(self, selector: #selector(longPressDidTap))
     }
     
     func viewDidDeallocate() {
+        badgeView?.removeFromSuperview()
+        badgeView = nil
+        
         editOverlayView?.removeFromSuperview()
         editOverlayView = nil
         
@@ -117,6 +124,34 @@ extension ProfileCollectionViewCell {
         editOverlayView?.foreground?.addGestureRecognizer(tap)
     }
     
+    private func createBadgeView() {
+        let badge = Badge(badgeType: .delete)
+        badgeView = BadgeView(on: badgeViewContainer, badge: badge)
+        
+        badgeViewContainer?.hidden(true)
+        
+        badgeView?.didTap = { [weak self] in
+            guard let self = self else { return }
+            
+            let alert = UIAlertController(title: .toBlank(), message: "Delete \(viewModel.name)'s profile?", preferredStyle: .alert)
+            let delete = UIAlertAction(title: "Delete", style: .destructive) { action in
+                self.profileViewModel.deleteUserProfile(self.viewModel.id) {
+                    
+                    guard let userProfileController = self.profileViewModel.coordinator?.userProfileController else { return }
+                    
+                    userProfileController.backgroundDidTap()
+                    userProfileController.dataSource?.dataSourceDidChange()
+                }
+            }
+            let cancel = UIAlertAction(title: "Cancel", style: .cancel)
+            
+            alert.addAction(delete)
+            alert.addAction(cancel)
+            
+            self.profileViewModel.coordinator?.viewController?.present(alert, animated: true)
+        }
+    }
+    
     private func configureButtons() {
         button.cornerRadius(8.0)
         layerContainer.cornerRadius(8.0)
@@ -143,7 +178,10 @@ extension ProfileCollectionViewCell {
         let image = UIImage.plus(withSymbolConfiguration: symbolConfiguration)
         
         button.setImage(image, for: .normal)
+        
         layerContainer.border(.hexColor("#aaaaaa"), width: 1.0)
+        
+        badgeViewContainer.hidden(true)
     }
     
     private func updateUserProfileSession() {
@@ -160,5 +198,17 @@ extension ProfileCollectionViewCell {
                 coordinator.coordinate(to: .tabBar)
             }
         }
+    }
+    
+    @objc
+    private func longPressDidTap() {
+        printIfDebug(.debug, "profileViewModel.isDeleting \(profileViewModel.isDeleting)")
+        if viewModel.name != "Add Profile" && !profileViewModel.isDeleting {
+            profileViewModel.isDeleting = true
+            
+            badgeViewContainer?.hidden(false)
+        }
+        
+        return
     }
 }

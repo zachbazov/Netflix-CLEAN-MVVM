@@ -19,9 +19,9 @@ final class AddUserProfileViewController: UIViewController, Controller {
     @IBOutlet private weak var kidsActivationSwitch: UISwitch!
     @IBOutlet private weak var badgeViewContainer: UIView!
     
-    private var badgeView: BadgeView?
-    
     var viewModel: ProfileViewModel!
+    
+    private var badgeView: BadgeView?
     
     deinit {
         viewDidDeallocate()
@@ -133,7 +133,6 @@ extension AddUserProfileViewController {
         viewModel.createUserProfile(with: request) { [weak self] in
             guard let self = self else { return }
             
-            self.viewModel.add(profileDTO.toDomain())
             self.clearChanges()
             self.dismissViewController()
             self.loadChanges()

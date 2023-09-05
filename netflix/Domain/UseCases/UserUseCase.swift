@@ -24,11 +24,15 @@ extension UserUseCase {
         case signIn
         case signUp
         case signOut
+        
         case getUserProfiles
         case createUserProfile
         case updateUserProfile
         case updateUserProfileSettings
+        
         case updateUserData
+        
+        case deleteUserProfile
     }
 }
 
@@ -57,6 +61,18 @@ extension UserUseCase: UseCase {
             return repository.update(request: request, completion: completion)
         case .updateUserData:
             return repository.update(request: request, completion: completion)
+        case .deleteUserProfile:
+            return repository.delete(request: request, completion: completion)
+        }
+    }
+    
+    func request(endpoint: Endpoints,
+                 request: Any?,
+                 completion: @escaping (Result<Void, DataTransferError>) -> Void) -> Cancellable? {
+        switch endpoint {
+        case .deleteUserProfile:
+            return repository.delete(request: request, completion: completion)
+        default: return nil
         }
     }
 }

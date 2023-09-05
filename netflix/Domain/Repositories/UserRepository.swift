@@ -131,6 +131,16 @@ extension UserRepository: UserRepositoryURLReferrable {
         
         return Endpoint(path: path, method: method, headerParameters: headerParams, queryParameters: queryParams, bodyParameters: bodyParams)
     }
+    
+    static func deleteUserProfile(with request: ProfileHTTPDTO.DELETE.Request) -> Endpoint<Void> {
+        let path = "api/v1/users/profiles"
+        let method: HTTPMethodType = .delete
+        let headerParams = ["content-type": "application/json"]
+        let queryParams: [String: Any] = ["user": request.user._id ?? .toBlank(),
+                                          "id": request.id]
+        
+        return Endpoint(path: path, method: method, headerParameters: headerParams, queryParameters: queryParams)
+    }
 }
 
 // MARK: - UserAuthenticable Implementation
@@ -332,6 +342,30 @@ extension UserRepository: RepositoryRequestable {
                 switch result {
                 case .success(let response):
                     completion(.success(response as! T))
+                case .failure(let error):
+                    completion(.failure(error))
+                }
+            }
+            
+            return task
+        default:
+            return nil
+        }
+    }
+    
+    func delete(request: Any?, completion: @escaping (Result<Void, DataTransferError>) -> Void) -> Cancellable? {
+        switch request {
+        case let request as ProfileHTTPDTO.DELETE.Request:
+            let task = RepositoryTask()
+            
+            guard !task.isCancelled else { return nil }
+            
+            let endpoint = UserRepository.deleteUserProfile(with: request)
+            
+            task.networkTask = dataTransferService.request(with: endpoint) { result in
+                switch result {
+                case .success(let response):
+                    completion(.success(response))
                 case .failure(let error):
                     completion(.failure(error))
                 }

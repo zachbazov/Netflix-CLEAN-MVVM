@@ -147,3 +147,10 @@ extension UIViewController {
         view.endEditing(true)
     }
 }
+
+extension UIView {
+    func addLongPressTarget(_ target: Any, selector: Selector) {
+        let longPress = UILongPressGestureRecognizer(target: target, action: selector)
+        addGestureRecognizer(longPress)
+    }
+}
