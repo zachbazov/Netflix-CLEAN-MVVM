@@ -34,47 +34,40 @@ extension TableViewCell {
                                                            for: indexPath) as? U
             else { fatalError() }
             
-            switch cell {
-            case let cell as ShowcaseTableViewCell:
-                guard let viewModel = viewModel as? HomeViewModel else { fatalError() }
+            switch (cell, viewModel) {
+            case (let cell as ShowcaseTableViewCell, let controllerViewModel as HomeViewModel):
+                let cellViewModel = ShowcaseTableViewCellViewModel(with: controllerViewModel)
                 
-                cell.viewModel = ShowcaseTableViewCellViewModel(with: viewModel)
+                cell.viewModel = cellViewModel
                 cell.viewDidLoad()
-            case let cell as InfoTableViewCell:
-                guard let viewModel = viewModel as? DetailViewModel else { fatalError() }
-                
-                cell.viewModel = viewModel
+            case (let cell as InfoTableViewCell, let controllerViewModel as DetailViewModel):
+                cell.viewModel = controllerViewModel
                 cell.viewDidLoad()
-            case let cell as DescriptionTableViewCell:
-                guard let viewModel = viewModel as? DetailViewModel else { fatalError() }
-                
-                cell.viewModel = viewModel
+            case (let cell as DescriptionTableViewCell, let controllerViewModel as DetailViewModel):
+                cell.viewModel = controllerViewModel
                 cell.viewDidLoad()
-            case let cell as PanelTableViewCell:
-                guard let viewModel = viewModel as? DetailViewModel else { fatalError() }
-                
-                cell.viewModel = viewModel
+            case (let cell as PanelTableViewCell, let controllerViewModel as DetailViewModel):
+                cell.viewModel = controllerViewModel
                 cell.viewDidLoad()
-            case let cell as NavigationTableViewCell:
-                guard let viewModel = viewModel as? DetailViewModel else { fatalError() }
-                
-                cell.viewModel = viewModel
+            case (let cell as NavigationTableViewCell, let controllerViewModel as DetailViewModel):
+                cell.viewModel = controllerViewModel
                 cell.viewDidLoad()
-            case let cell as NavigationOverlayTableViewCell:
-                guard let viewModel = viewModel as? NavigationOverlayViewModel else { fatalError() }
-                
-                let model = viewModel.items[indexPath.row]
+            case (let cell as NavigationOverlayTableViewCell, let controllerViewModel as NavigationOverlayViewModel):
+                let model = controllerViewModel.items[indexPath.row]
                 let cellViewModel = NavigationOverlayCollectionViewCellViewModel(title: model.stringValue)
                 
                 cell.viewModel = cellViewModel
                 cell.viewDidLoad()
-            case let cell as ProfileSettingTableViewCell:
-                guard let viewModel = viewModel as? ProfileViewModel else { fatalError() }
-                
-                let cellViewModel = ProfileSettingTableViewCellViewModel(at: indexPath, with: viewModel)
+            case (let cell as ProfileSettingTableViewCell, let controllerViewModel as ProfileViewModel):
+                let cellViewModel = ProfileSettingTableViewCellViewModel(at: indexPath, with: controllerViewModel)
                 
                 cell.indexPath = indexPath
-                cell.profileViewModel = viewModel
+                cell.profileViewModel = controllerViewModel
+                cell.viewModel = cellViewModel
+                cell.viewDidLoad()
+            case (let cell as MyNetflixProfileTableViewCell, let controllerViewModel as MyNetflixViewModel):
+                let cellViewModel = MyNetflixProfileTableViewCellViewModel(with: controllerViewModel)
+                
                 cell.viewModel = cellViewModel
                 cell.viewDidLoad()
             default: break

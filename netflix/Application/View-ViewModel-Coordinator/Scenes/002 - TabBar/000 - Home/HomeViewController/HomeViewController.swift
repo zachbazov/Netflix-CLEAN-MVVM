@@ -10,6 +10,10 @@ import UIKit
 // MARK: - HomeViewController Type
 
 final class HomeViewController: UIViewController, Controller {
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return Theme.preferredStatusBarStyle
+    }
+    
     @IBOutlet private(set) var tableView: UITableView!
     @IBOutlet private(set) var navigationViewContainer: UIView!
     @IBOutlet private(set) var navigationOverlayViewContainer: UIView!
@@ -99,7 +103,6 @@ final class HomeViewController: UIViewController, Controller {
 extension HomeViewController {
     private func createDataSource() {
         dataSource = MediaTableViewDataSource(viewModel: viewModel)
-        
     }
     
     private func createNavigationView() {
@@ -122,6 +125,7 @@ extension HomeViewController {
             
             mainQueueDispatch { [weak self] in
                 guard let self = self else { return }
+                
                 self.navigationView?.segmentControl?.origin(y: .zero)
                 self.navigationViewContainerHeight.constant = 160.0
                 self.navigationView?.segmentControl?.alpha = 1.0

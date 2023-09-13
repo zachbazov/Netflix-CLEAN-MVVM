@@ -12,7 +12,6 @@ import Foundation
 private protocol ViewModelProtocol {
     var mediaType: String { get }
     var title: String { get }
-    var downloadButtonTitle: String { get }
     var duration: String { get }
     var length: String { get }
     var isHD: Bool { get }
@@ -21,9 +20,10 @@ private protocol ViewModelProtocol {
 // MARK: - InfoViewViewModel Type
 
 struct InfoViewViewModel {
+    let coordinator: DetailViewCoordinator
+    
     let mediaType: String
     let title: String
-    let downloadButtonTitle: String
     let duration: String
     let length: String
     let isHD: Bool
@@ -31,6 +31,9 @@ struct InfoViewViewModel {
     /// Create a info view view model object.
     /// - Parameter viewModel: Coordinating view model.
     init(with viewModel: DetailViewModel) {
+        guard let coordinator = viewModel.coordinator else { fatalError() }
+        self.coordinator = coordinator
+        
         guard let media = viewModel.media else { fatalError() }
         
         guard let type = Media.MediaType(rawValue: media.type) else { fatalError() }
@@ -38,7 +41,6 @@ struct InfoViewViewModel {
         self.mediaType = type == .series ? "S E R I E" : "F I L M"
         
         self.title = media.title
-        self.downloadButtonTitle = "Download \(self.title)"
         
         switch type {
         case .series:

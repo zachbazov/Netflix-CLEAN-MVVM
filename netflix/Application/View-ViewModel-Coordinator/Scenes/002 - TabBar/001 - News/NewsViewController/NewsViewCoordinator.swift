@@ -47,7 +47,6 @@ extension NewsViewCoordinator: CoordinatorProtocol {
         
         let navigation = UINavigationController(rootViewController: controller)
         navigation.setNavigationBarHidden(true, animated: false)
-        navigation.view.setBackgroundColor(.black)
         
         viewController?.present(navigation, animated: true)
     }

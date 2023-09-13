@@ -52,10 +52,14 @@ extension AccountViewModel: ViewModelProtocol {
     }
     
     private func loadProfiles() {
-        userProfilesDidLoad()
+        userProfilesDidLoad() { [weak self] in
+            guard let self = self else { return }
+            
+            self.profiles.value.append(Profile.addProfile)
+        }
     }
     
-    private func userProfilesDidLoad() {
+    private func userProfilesDidLoad(_ completion: @escaping () -> Void) {
         let authService = Application.app.services.auth
         
         guard let user = authService.user else { return }
@@ -73,7 +77,7 @@ extension AccountViewModel: ViewModelProtocol {
                 case .success(let response):
                     self.profiles.value = response.data.toDomain()
                     
-                    self.profiles.value.append(Profile.addProfile)
+                    completion()
                 case .failure(let error):
                     printIfDebug(.error, "\(error)")
                 }

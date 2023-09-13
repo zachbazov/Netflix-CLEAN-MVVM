@@ -18,6 +18,7 @@ private protocol DataSourceProtocol {
 final class DetailTableViewDataSource: TableViewDataSource {
     fileprivate let coordinator: DetailViewCoordinator
     
+    fileprivate(set) var infoCell: InfoTableViewCell?
     fileprivate(set) var navigationCell: NavigationTableViewCell?
     fileprivate(set) var collectionCell: DetailHybridCell?
     
@@ -31,6 +32,9 @@ final class DetailTableViewDataSource: TableViewDataSource {
     }
     
     deinit {
+        infoCell?.removeFromSuperview()
+        infoCell = nil
+        
         collectionCell?.removeFromSuperview()
         collectionCell = nil
         
@@ -53,10 +57,12 @@ final class DetailTableViewDataSource: TableViewDataSource {
         
         switch index {
         case .info:
-            return InfoTableViewCell.create(of: InfoTableViewCell.self,
-                                            on: tableView,
-                                            for: indexPath,
-                                            with: viewModel) as! T
+            guard infoCell == nil else { return infoCell! as! T }
+            infoCell = InfoTableViewCell.create(of: InfoTableViewCell.self,
+                                                on: tableView,
+                                                for: indexPath,
+                                                with: viewModel)
+            return infoCell as! T
         case .description:
             return DescriptionTableViewCell.create(of: DescriptionTableViewCell.self,
                                                    on: tableView,

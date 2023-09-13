@@ -157,7 +157,20 @@ extension DetailPanelViewItem: ViewProtocol {
         case .rate:
             printIfDebug(.debug, "rate")
         case .share:
-            printIfDebug(.debug, "share")
+            let text = "Netflix"
+            var appConfiguration = Application.app.configuration
+            let appURL = URL(string: appConfiguration.api.urlString)!
+            let items: [Any] = [text, appURL]
+            
+            let activityViewController = UIActivityViewController(activityItems: items, applicationActivities: nil)
+            activityViewController.excludedActivityTypes = [UIActivity.ActivityType.airDrop]
+            
+            if let popoverController = activityViewController.popoverPresentationController {
+                
+            }
+            
+            guard let controller = viewModel.coordinator.viewController else { return }
+            controller.present(activityViewController, animated: true, completion: nil)
         }
         
         setAlphaAnimation(using: gestureRecognizers!.first) {

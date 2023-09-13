@@ -13,6 +13,7 @@ struct ProfileHTTPDTO {
     struct GET: HTTPRepresentable {
         struct Request: Decodable {
             let user: UserDTO
+            var _id: String?
         }
         
         struct Response: Decodable {

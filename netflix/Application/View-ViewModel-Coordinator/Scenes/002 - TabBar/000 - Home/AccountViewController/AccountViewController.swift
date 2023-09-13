@@ -29,7 +29,7 @@ final class AccountViewController: UIViewController, Controller {
     
     private(set) lazy var collectionView: UICollectionView = createCollectionView()
     private(set) lazy var profileDataSource: AccountProfileCollectionViewDataSource = createProfileDataSource()
-    private var accountMenuDataSource: AccountMenuTableViewDataSource?
+//    private var accountMenuDataSource: AccountMenuTableViewDataSource?
     
     deinit {
         viewWillDeallocate()
@@ -79,7 +79,7 @@ final class AccountViewController: UIViewController, Controller {
     func viewWillDeallocate() {
         viewWillUnbindObservers()
         
-        accountMenuDataSource = nil
+//        accountMenuDataSource = nil
         
         collectionView.removeFromSuperview()
         
@@ -122,7 +122,7 @@ extension AccountViewController {
     }
     
     private func createAccountMenuDataSource() {
-        accountMenuDataSource = AccountMenuTableViewDataSource(with: viewModel)
+//        accountMenuDataSource = AccountMenuTableViewDataSource(with: viewModel)
     }
     
     private func signOut() {

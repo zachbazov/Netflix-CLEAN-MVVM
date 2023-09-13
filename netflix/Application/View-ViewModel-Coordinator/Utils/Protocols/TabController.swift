@@ -9,6 +9,7 @@ import UIKit
 
 // MARK: - TabController Type
 
-protocol TabController: UITabBarController, UITabBarControllerDelegate {
-    func viewDidConfigure()
-}
+protocol TabController: UITabBarController,
+                        UITabBarControllerDelegate,
+                        ViewLifecycleBehavior,
+                        ViewObservable {}

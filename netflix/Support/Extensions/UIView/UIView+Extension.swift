@@ -149,6 +149,11 @@ extension UIViewController {
 }
 
 extension UIView {
+    func addTapGesture(_ target: Any, action: Selector) {
+        let tap = UITapGestureRecognizer(target: target, action: action)
+        addGestureRecognizer(tap)
+    }
+    
     func addLongPressTarget(_ target: Any, selector: Selector) {
         let longPress = UILongPressGestureRecognizer(target: target, action: selector)
         addGestureRecognizer(longPress)

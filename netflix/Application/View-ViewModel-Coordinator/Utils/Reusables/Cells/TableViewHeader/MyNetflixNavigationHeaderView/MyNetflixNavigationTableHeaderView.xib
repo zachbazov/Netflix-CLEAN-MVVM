@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="21701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21679"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="MyNetflixNavigationTableHeaderView" customModule="netflix" customModuleProvider="target">
+            <connections>
+                <outlet property="airPlayButton" destination="J9I-Ft-pT5" id="UMF-qg-Sjp"/>
+                <outlet property="menuButton" destination="fuN-EC-FZ5" id="lkb-iG-YqT"/>
+                <outlet property="searchButton" destination="kZR-Rb-seg" id="TTN-o6-s9A"/>
+                <outlet property="titleLabel" destination="PxK-Vd-rDI" id="Ajg-Ki-nUY"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="YdS-cd-qLI">
+            <rect key="frame" x="0.0" y="0.0" width="393" height="56"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <subviews>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="PxK-Vd-rDI">
+                    <rect key="frame" x="16" y="14.999999999999998" width="45" height="26.333333333333329"/>
+                    <fontDescription key="fontDescription" type="boldSystem" pointSize="22"/>
+                    <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="83U-8A-t4i">
+                    <rect key="frame" x="267" y="8" width="118" height="40"/>
+                    <subviews>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="J9I-Ft-pT5">
+                            <rect key="frame" x="0.0" y="0.0" width="39.333333333333336" height="40"/>
+                            <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                            <state key="normal" image="airplayvideo" catalog="system">
+                                <preferredSymbolConfiguration key="preferredSymbolConfiguration" weight="semibold"/>
+                            </state>
+                        </button>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kZR-Rb-seg">
+                            <rect key="frame" x="39.333333333333314" y="0.0" width="39.333333333333343" height="40"/>
+                            <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                            <state key="normal" image="magnifyingglass" catalog="system">
+                                <preferredSymbolConfiguration key="preferredSymbolConfiguration" weight="semibold"/>
+                            </state>
+                        </button>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fuN-EC-FZ5">
+                            <rect key="frame" x="78.666666666666686" y="0.0" width="39.333333333333343" height="40"/>
+                            <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                            <state key="normal" image="ellipsis" catalog="system">
+                                <preferredSymbolConfiguration key="preferredSymbolConfiguration" scale="medium" weight="semibold"/>
+                            </state>
+                        </button>
+                    </subviews>
+                </stackView>
+            </subviews>
+            <viewLayoutGuide key="safeArea" id="ZIL-ig-ken"/>
+            <constraints>
+                <constraint firstItem="PxK-Vd-rDI" firstAttribute="centerY" secondItem="YdS-cd-qLI" secondAttribute="centerY" id="QkR-Hf-OeZ"/>
+                <constraint firstAttribute="bottom" secondItem="83U-8A-t4i" secondAttribute="bottom" constant="8" id="Qu8-rZ-Grd"/>
+                <constraint firstItem="83U-8A-t4i" firstAttribute="top" secondItem="YdS-cd-qLI" secondAttribute="top" constant="8" id="StY-O2-m72"/>
+                <constraint firstItem="ZIL-ig-ken" firstAttribute="trailing" secondItem="83U-8A-t4i" secondAttribute="trailing" constant="8" id="j3h-hN-ycB"/>
+                <constraint firstItem="83U-8A-t4i" firstAttribute="width" secondItem="YdS-cd-qLI" secondAttribute="width" multiplier="0.3" id="lai-s8-0m5"/>
+                <constraint firstItem="PxK-Vd-rDI" firstAttribute="leading" secondItem="ZIL-ig-ken" secondAttribute="leading" constant="16" id="xHW-df-F33"/>
+            </constraints>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <point key="canvasLocation" x="-113" y="162"/>
+        </view>
+    </objects>
+    <resources>
+        <image name="airplayvideo" catalog="system" width="128" height="97"/>
+        <image name="ellipsis" catalog="system" width="128" height="37"/>
+        <image name="magnifyingglass" catalog="system" width="128" height="117"/>
+    </resources>
+</document>

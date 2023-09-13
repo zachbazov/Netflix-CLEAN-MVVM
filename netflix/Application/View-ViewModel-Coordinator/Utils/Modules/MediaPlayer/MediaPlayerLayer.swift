@@ -25,7 +25,7 @@ private protocol LayerProtocol {
 final class MediaPlayerLayer: UIView {
     override class var layerClass: AnyClass { AVPlayerLayer.self }
     
-    fileprivate var playerLayer: AVPlayerLayer { layer as! AVPlayerLayer }
+    var playerLayer: AVPlayerLayer { layer as! AVPlayerLayer }
     fileprivate var player: AVPlayer {
         get {
             guard let player = playerLayer.player else { fatalError() }

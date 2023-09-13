@@ -12,12 +12,16 @@ import UIKit
 private protocol NavigatableController: UINavigationController {
     var isHidden: Bool { get set }
     
-    func viewWillConfigure()
+//    func viewWillConfigure()
 }
 
 // MARK: - NavigationController Type
 
 final class NavigationController: UINavigationController {
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return Theme.preferredStatusBarStyle
+    }
+    
     var isHidden: Bool {
         get { return isNavigationBarHidden }
         set { setNavigationBarHidden(newValue, animated: false) }

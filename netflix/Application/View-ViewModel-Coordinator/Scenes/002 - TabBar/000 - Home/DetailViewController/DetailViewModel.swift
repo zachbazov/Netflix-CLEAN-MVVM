@@ -34,7 +34,12 @@ final class DetailViewModel {
     
     var section: Section?
     var media: Media?
-    var isRotated: Bool = false
+    var isRotated: Bool = false {
+        didSet {
+            let orientation = DeviceOrientation.shared
+            orientation.rotate()
+        }
+    }
     
     var items: [MediaRepresentable] = []
     

@@ -126,11 +126,11 @@ extension Theme: ThemeControl {
                 .font: UIFont.systemFont(ofSize: 16, weight: .heavy)]
             
             let navigationBarAppearance = UINavigationBarAppearance()
-            navigationBarAppearance.configureWithDefaultBackground()
+            navigationBarAppearance.configureWithTransparentBackground()
             navigationBarAppearance.titleTextAttributes = [
                 .foregroundColor: UIColor.white,
                 .font: UIFont.systemFont(ofSize: 18.0, weight: .bold)]
-            navigationBarAppearance.backgroundColor = .hexColor("#161616")
+            navigationBarAppearance.backgroundColor = .clear
             navigationBarAppearance.buttonAppearance = barButtonItemAppearance
             
             UINavigationBar.appearance().barTintColor = .white

@@ -12,10 +12,14 @@ import UIKit
 final class ProfileCoordinator {
     var viewController: ProfileController?
     
-    lazy var navigationController: UINavigationController? = createNavigationController()
+    lazy var navigationController: NavigationController? = createNavigationController()
     lazy var userProfileController: UserProfileViewController? = createUserProfileViewController()
     lazy var addUserProfileController: AddUserProfileViewController? = createAddUserProfileViewController()
     lazy var editUserProfileController: EditUserProfileViewController? = createEditUserProfileViewController()
+    
+    init() {
+        Theme.applyUserProfileAppearance()
+    }
     
     func removeViewControllers() {
         navigationController?.viewControllers.forEach { $0.removeFromParent() }
@@ -54,8 +58,6 @@ extension ProfileCoordinator: Coordinator {
             
             viewController?.add(child: navigationController, container: view)
             
-            Theme.applyUserProfileAppearance()
-            
             userProfileController?.viewDidAnimateAppearance()
         case .addProfile:
             guard let addUserProfileController = addUserProfileController else { fatalError() }
@@ -72,9 +74,9 @@ extension ProfileCoordinator: Coordinator {
 // MARK: - Private Implementation
 
 extension ProfileCoordinator {
-    private func createNavigationController() -> UINavigationController {
+    private func createNavigationController() -> NavigationController {
         guard let userProfileController = userProfileController else { fatalError() }
-        let navigation = UINavigationController(rootViewController: userProfileController)
+        let navigation = NavigationController(rootViewController: userProfileController)
         navigation.setNavigationBarHidden(false, animated: false)
         return navigation
     }

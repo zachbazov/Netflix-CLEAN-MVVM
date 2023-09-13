@@ -31,12 +31,3 @@ extension UICollectionView {
         ])
     }
 }
-
-// MARK: - UICollectionView + Add Gestures
-
-extension UICollectionView {
-    func addTapGesture(_ target: Any, action: Selector) {
-        let tap = UITapGestureRecognizer(target: target, action: action)
-        addGestureRecognizer(tap)
-    }
-}

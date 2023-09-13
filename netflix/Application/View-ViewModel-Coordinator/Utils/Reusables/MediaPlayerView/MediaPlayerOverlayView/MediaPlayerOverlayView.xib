@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="21507" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="21701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21505"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21679"/>
         <capability name="Image references" minToolsVersion="12.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
@@ -23,7 +23,7 @@
                 <outlet property="rotateButton" destination="VLl-F2-aC4" id="UHF-Y8-ZEQ"/>
                 <outlet property="startTimeLabel" destination="Nf7-Dl-noz" id="v24-4Q-vGJ"/>
                 <outlet property="timeSeparatorLabel" destination="Fd3-hC-1FD" id="RrK-g9-Hbq"/>
-                <outlet property="titleLabel" destination="3Jk-MW-2fR" id="zyK-VL-WDP"/>
+                <outlet property="titleLabel" destination="knL-rP-9cf" id="iyQ-v3-QPZ"/>
                 <outlet property="trackingSlider" destination="AKC-Qj-g1E" id="WtL-sm-f8g"/>
             </connections>
         </placeholder>
@@ -67,9 +67,9 @@
                                 </mask>
                             </variation>
                         </button>
-                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Title" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3Jk-MW-2fR" userLabel="Title">
-                            <rect key="frame" x="191.5" y="0.0" width="31" height="64"/>
-                            <fontDescription key="fontDescription" type="system" weight="medium" pointSize="15"/>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Title" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="knL-rP-9cf">
+                            <rect key="frame" x="72" y="8" width="270" height="48"/>
+                            <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="15"/>
                             <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <nil key="highlightedColor"/>
                         </label>
@@ -100,23 +100,24 @@
                         </button>
                     </subviews>
                     <constraints>
+                        <constraint firstItem="knL-rP-9cf" firstAttribute="leading" secondItem="POJ-Nt-BgD" secondAttribute="trailing" constant="8" id="4wT-7h-G4b"/>
                         <constraint firstItem="POJ-Nt-BgD" firstAttribute="leading" secondItem="zGN-LO-lvD" secondAttribute="leading" constant="16" id="6ly-a0-5FX"/>
-                        <constraint firstItem="3Jk-MW-2fR" firstAttribute="top" secondItem="zGN-LO-lvD" secondAttribute="top" id="Bca-a4-CSm"/>
+                        <constraint firstAttribute="bottom" secondItem="knL-rP-9cf" secondAttribute="bottom" constant="8" id="A4Z-uT-pS8"/>
                         <constraint firstAttribute="trailing" secondItem="VLl-F2-aC4" secondAttribute="trailing" constant="16" id="Eqf-jK-nXM"/>
+                        <constraint firstItem="knL-rP-9cf" firstAttribute="top" secondItem="zGN-LO-lvD" secondAttribute="top" constant="8" id="IQ5-6V-qGf"/>
                         <constraint firstAttribute="bottom" secondItem="VLl-F2-aC4" secondAttribute="bottom" constant="8" id="NGD-mj-n7Z"/>
-                        <constraint firstItem="VLl-F2-aC4" firstAttribute="leading" secondItem="3Jk-MW-2fR" secondAttribute="trailing" constant="16" id="Nhm-vs-bHu"/>
                         <constraint firstItem="VLl-F2-aC4" firstAttribute="top" secondItem="zGN-LO-lvD" secondAttribute="top" constant="8" id="ODG-wO-3M3"/>
-                        <constraint firstItem="3Jk-MW-2fR" firstAttribute="leading" secondItem="POJ-Nt-BgD" secondAttribute="trailing" constant="16" id="Wn0-FV-898"/>
                         <constraint firstItem="VLl-F2-aC4" firstAttribute="top" secondItem="zGN-LO-lvD" secondAttribute="top" constant="8" id="ZBx-aG-mQz"/>
                         <constraint firstItem="POJ-Nt-BgD" firstAttribute="centerY" secondItem="VLl-F2-aC4" secondAttribute="centerY" id="avb-ck-hjW"/>
-                        <constraint firstItem="3Jk-MW-2fR" firstAttribute="centerY" secondItem="zGN-LO-lvD" secondAttribute="centerY" id="haX-Fv-JOH"/>
                         <constraint firstAttribute="height" constant="64" id="jEg-fX-cUn"/>
                         <constraint firstItem="POJ-Nt-BgD" firstAttribute="top" secondItem="zGN-LO-lvD" secondAttribute="top" constant="8" id="lcn-19-dNm"/>
                         <constraint firstItem="POJ-Nt-BgD" firstAttribute="leading" secondItem="zGN-LO-lvD" secondAttribute="leading" constant="16" id="oNP-V0-Hyz"/>
                         <constraint firstAttribute="height" constant="64" id="rIl-rC-arm"/>
                         <constraint firstAttribute="bottom" secondItem="VLl-F2-aC4" secondAttribute="bottom" constant="8" id="saK-EI-ISI"/>
+                        <constraint firstItem="knL-rP-9cf" firstAttribute="centerX" secondItem="zGN-LO-lvD" secondAttribute="centerX" id="sqw-GM-KbE"/>
                         <constraint firstAttribute="bottom" secondItem="POJ-Nt-BgD" secondAttribute="bottom" constant="8" id="v5g-RJ-srM"/>
-                        <constraint firstAttribute="bottom" secondItem="3Jk-MW-2fR" secondAttribute="bottom" id="vge-R7-Sjy"/>
+                        <constraint firstItem="VLl-F2-aC4" firstAttribute="leading" secondItem="knL-rP-9cf" secondAttribute="trailing" constant="8" id="wQC-ij-1HX"/>
+                        <constraint firstItem="knL-rP-9cf" firstAttribute="centerY" secondItem="VLl-F2-aC4" secondAttribute="centerY" id="yEL-AV-8Ta"/>
                         <constraint firstAttribute="trailing" secondItem="VLl-F2-aC4" secondAttribute="trailing" constant="16" id="yn9-mo-6BT"/>
                     </constraints>
                     <variation key="default">
@@ -128,13 +129,8 @@
                             <exclude reference="lcn-19-dNm"/>
                             <exclude reference="oNP-V0-Hyz"/>
                             <exclude reference="v5g-RJ-srM"/>
-                            <exclude reference="Bca-a4-CSm"/>
-                            <exclude reference="Wn0-FV-898"/>
-                            <exclude reference="haX-Fv-JOH"/>
-                            <exclude reference="vge-R7-Sjy"/>
                             <exclude reference="Eqf-jK-nXM"/>
                             <exclude reference="NGD-mj-n7Z"/>
-                            <exclude reference="Nhm-vs-bHu"/>
                             <exclude reference="ODG-wO-3M3"/>
                             <exclude reference="ZBx-aG-mQz"/>
                             <exclude reference="saK-EI-ISI"/>
@@ -147,9 +143,6 @@
                             <include reference="6ly-a0-5FX"/>
                             <include reference="lcn-19-dNm"/>
                             <include reference="v5g-RJ-srM"/>
-                            <include reference="Wn0-FV-898"/>
-                            <include reference="haX-Fv-JOH"/>
-                            <include reference="Nhm-vs-bHu"/>
                             <include reference="ODG-wO-3M3"/>
                             <include reference="saK-EI-ISI"/>
                             <include reference="yn9-mo-6BT"/>
@@ -160,8 +153,6 @@
                             <include reference="rIl-rC-arm"/>
                             <include reference="avb-ck-hjW"/>
                             <include reference="oNP-V0-Hyz"/>
-                            <include reference="Bca-a4-CSm"/>
-                            <include reference="vge-R7-Sjy"/>
                             <include reference="Eqf-jK-nXM"/>
                             <include reference="NGD-mj-n7Z"/>
                             <include reference="ZBx-aG-mQz"/>
@@ -250,11 +241,11 @@
                     <rect key="frame" x="0.0" y="825" width="414" height="32"/>
                     <subviews>
                         <button opaque="NO" tag="5" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="feE-Zg-8qd" userLabel="Volume">
-                            <rect key="frame" x="363.5" y="4.5" width="21.5" height="23"/>
+                            <rect key="frame" x="356.5" y="4" width="35.5" height="24"/>
                             <color key="tintColor" white="1" alpha="0.90000000000000002" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                             <state key="normal">
-                                <imageReference key="image" image="speaker.slash.fill" catalog="system" symbolScale="medium"/>
+                                <imageReference key="image" image="speaker.wave.3.fill" catalog="system" symbolScale="medium"/>
                                 <preferredSymbolConfiguration key="preferredSymbolConfiguration" configurationType="pointSize" pointSize="20" weight="bold"/>
                             </state>
                         </button>
@@ -376,7 +367,6 @@
                 <constraint firstItem="CbU-IE-W1c" firstAttribute="top" secondItem="rrC-3H-w7v" secondAttribute="bottom" constant="8" id="c0H-vo-fnm"/>
                 <constraint firstAttribute="bottom" secondItem="e5h-QP-MRl" secondAttribute="bottom" id="efi-60-npH"/>
                 <constraint firstItem="zGN-LO-lvD" firstAttribute="leading" secondItem="PKA-hK-4cO" secondAttribute="leading" id="ghg-GW-pkP"/>
-                <constraint firstItem="3Jk-MW-2fR" firstAttribute="centerX" secondItem="ESu-F9-0Sv" secondAttribute="centerX" id="hSJ-bL-8n7"/>
                 <constraint firstAttribute="trailing" secondItem="CbU-IE-W1c" secondAttribute="trailing" id="hkS-Mq-NHX"/>
                 <constraint firstItem="rhw-Gv-aBD" firstAttribute="leading" secondItem="PKA-hK-4cO" secondAttribute="leading" id="okY-eV-6MV"/>
                 <constraint firstItem="zGN-LO-lvD" firstAttribute="trailing" secondItem="PKA-hK-4cO" secondAttribute="trailing" id="p96-DC-6ZI"/>
@@ -399,7 +389,6 @@
                     <exclude reference="ghg-GW-pkP"/>
                     <exclude reference="p96-DC-6ZI"/>
                     <exclude reference="qQe-Z8-mTQ"/>
-                    <exclude reference="hSJ-bL-8n7"/>
                     <exclude reference="5tU-Tj-UeP"/>
                     <exclude reference="JK7-y4-BSw"/>
                     <exclude reference="Qna-4U-8ub"/>
@@ -446,7 +435,6 @@
                     <include reference="FtE-ua-Wkz"/>
                     <include reference="p96-DC-6ZI"/>
                     <include reference="qQe-Z8-mTQ"/>
-                    <include reference="hSJ-bL-8n7"/>
                     <include reference="5tU-Tj-UeP"/>
                     <include reference="Qna-4U-8ub"/>
                     <include reference="bDc-YZ-rak"/>
@@ -459,7 +447,7 @@
                     <include reference="PYf-HC-0Mt"/>
                 </mask>
             </variation>
-            <point key="canvasLocation" x="62.276785714285708" y="120.28985507246378"/>
+            <point key="canvasLocation" x="60.869565217391312" y="119.86607142857142"/>
         </view>
     </objects>
     <resources>
@@ -467,7 +455,7 @@
         <image name="goforward.15" catalog="system" width="119" height="128"/>
         <image name="play.fill" catalog="system" width="117" height="128"/>
         <image name="rotate.right" catalog="system" width="115" height="128"/>
-        <image name="speaker.slash.fill" catalog="system" width="118" height="128"/>
+        <image name="speaker.wave.3.fill" catalog="system" width="128" height="84"/>
         <systemColor name="systemRedColor">
             <color red="1" green="0.23137254901960785" blue="0.18823529411764706" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>

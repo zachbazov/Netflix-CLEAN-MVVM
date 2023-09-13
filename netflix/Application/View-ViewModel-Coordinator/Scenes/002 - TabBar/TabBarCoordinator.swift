@@ -20,8 +20,8 @@ private struct TabBarConfiguration {
             homeTabItem(for: controller as! UINavigationController)
         case .news:
             newsTabItem(for: controller as! UINavigationController)
-        case .downloads:
-            downloadsTabItem(for: controller as! UINavigationController)
+        case .myNetflix:
+            myNetflixTabItem(for: controller as! UINavigationController)
         }
     }
     
@@ -47,13 +47,13 @@ private struct TabBarConfiguration {
         item.applyConfig(for: controller)
     }
     
-    private func downloadsTabItem(for controller: UINavigationController) {
-        let title = "Downloads"
-        let systemImage = "arrow.down.circle.fill"
+    private func myNetflixTabItem(for controller: UINavigationController) {
+        let title = "My Netflix"
         let symbolConfiguration = UIImage.SymbolConfiguration(pointSize: 15.0)
-        let image = UIImage(systemName: systemImage)?.whiteRendering(with: symbolConfiguration)
-        let tag = TabBarCoordinator.Screen.downloads.rawValue
-        let item = TabBarItem(title: title, image: image!, tag: tag)
+        let tag = TabBarCoordinator.Screen.myNetflix.rawValue
+        let item = TabBarItem(title: title, image: nil, tag: tag)
+        controller.tabBarController?.tabBar.barStyle = .default
+        controller.tabBarController?.tabBar.isTranslucent = true
         item.applyConfig(for: controller)
     }
 }
@@ -64,7 +64,7 @@ extension TabBarConfiguration {
     /// Item representation type.
     private struct TabBarItem {
         let title: String
-        let image: UIImage
+        var image: UIImage?
         let tag: Int
         var navigationBarHidden: Bool?
         
@@ -92,12 +92,12 @@ final class TabBarCoordinator {
     
     lazy var home: UINavigationController? = createHomeController()
     lazy var news: UINavigationController? = createNewsController()
-    lazy var downloads: UINavigationController? = createDownloadsController()
+    lazy var myNetflix: UINavigationController? = createMyNetflixController()
     
     deinit {
         home = nil
         news = nil
-        downloads = nil
+        myNetflix = nil
         
         viewController?.viewModel?.coordinator = nil
         viewController?.viewModel = nil
@@ -106,14 +106,18 @@ final class TabBarCoordinator {
         viewController = nil
     }
     
+    init() {
+        Theme.applyAppearance()
+    }
+    
     func removeViewControllers() {
         let homeController = home?.viewControllers.first as? HomeViewController
         let newsController = news?.viewControllers.first as? NewsViewController
-        let downloadsController = downloads?.viewControllers.first as? DownloadsViewController
+        let myNetflixController = myNetflix?.viewControllers.first as? MyNetflixViewController
         
         homeController?.viewWillDeallocate()
         newsController?.viewWillDeallocate()
-        downloadsController?.viewWillDeallocate()
+        myNetflixController?.viewDidDeallocate()
     }
 }
 
@@ -153,18 +157,18 @@ extension TabBarCoordinator {
         return navigation
     }
     
-    func createDownloadsController() -> UINavigationController {
-        let coordinator = DownloadsViewCoordinator()
-        let viewModel = DownloadsViewModel()
-        let controller = DownloadsViewController()
+    func createMyNetflixController() -> UINavigationController {
+        let coordinator = MyNetflixCoordinator()
+        let viewModel = MyNetflixViewModel()
+        let controller = MyNetflixViewController()
         
         controller.viewModel = viewModel
         controller.viewModel.coordinator = coordinator
         coordinator.viewController = controller
         
         let navigation = UINavigationController(rootViewController: controller)
-        navigation.navigationBar.tag = Screen.downloads.rawValue
-        configuration.tabBarItem(for: .downloads, with: navigation)
+        navigation.navigationBar.tag = Screen.myNetflix.rawValue
+        configuration.tabBarItem(for: .myNetflix, with: navigation)
         return navigation
     }
 }
@@ -176,7 +180,7 @@ extension TabBarCoordinator: Coordinator {
     enum Screen: Int {
         case home
         case news
-        case downloads
+        case myNetflix
     }
     
     /// Screen presentation control.
@@ -184,9 +188,10 @@ extension TabBarCoordinator: Coordinator {
     func coordinate(to screen: Screen) {
         guard let home = home,
               let news = news,
-              let downloads = downloads
+              let myNetflix = myNetflix
         else { return }
         
-        viewController?.viewControllers = [home, news, downloads]
+        viewController?.viewControllers = [home, news, myNetflix]
+        viewController?.selectedIndex = screen.rawValue
     }
 }

@@ -15,7 +15,6 @@ private protocol ViewProtocol {
     
     func didSelect(view: Any)
     func valueDidChange(for slider: UISlider)
-    func setTitle(_ title: String?)
 }
 
 // MARK: - MediaPlayerOverlayView Type
@@ -69,16 +68,13 @@ final class MediaPlayerOverlayView: UIView, View {
     func viewWillConfigure() {
         gradientView.setBackgroundColor(UIColor.black.withAlphaComponent(0.5))
         
-        let title = mediaPlayerView?.viewModel?.media.title
-        setTitle(title)
-        
-        if airPlayButton.isRoutePickerView {
-            return
-        } else {
+        if airPlayButton.isRoutePickerView != true {
             airPlayButton.toRoutePickerView()
         }
         
         configureButtonsForItemStatus()
+        
+        setTitle(mediaPlayerView?.viewModel.media.title ?? .toBlank())
     }
     
     func viewWillTargetSubviews() {
@@ -100,8 +96,8 @@ final class MediaPlayerOverlayView: UIView, View {
         trackingSlider.isHidden(false)
         startTimeLabel.isHidden(false)
         durationLabel.isHidden(false)
-        titleLabel.isHidden(false)
         timeSeparatorLabel.isHidden(false)
+        titleLabel.isHidden(false)
     }
     
     @objc
@@ -119,8 +115,8 @@ final class MediaPlayerOverlayView: UIView, View {
         trackingSlider.isHidden(true)
         startTimeLabel.isHidden(true)
         durationLabel.isHidden(true)
-        titleLabel.isHidden(true)
         timeSeparatorLabel.isHidden(true)
+        titleLabel.isHidden(true)
     }
     
     func viewWillBindObservers() {
@@ -224,7 +220,15 @@ extension MediaPlayerOverlayView: ViewProtocol {
             
             progressView?.progress = progress
         case .mute:
-            printIfDebug(.debug, "\(item.rawValue)")
+            viewModel.isMuted.toggle()
+            
+            let volumeLevel: Float = viewModel.isMuted ? .zero : 1.0
+            mediaPlayerView?.mediaPlayer?.player.volume = volumeLevel
+            
+            let muted = UIImage(systemName: "speaker.slash.fill")!
+            let unmuted = UIImage(systemName: "speaker.wave.3.fill")!
+            let image = viewModel.isMuted ? muted : unmuted
+            muteButton.setImage(image, for: .normal)
         }
     }
     
@@ -233,14 +237,11 @@ extension MediaPlayerOverlayView: ViewProtocol {
         guard let player = mediaPlayerView?.mediaPlayer?.player as AVPlayer? else { return }
         
         let newTime = CMTime(seconds: Double(slider.value), preferredTimescale: 600)
+        let newProgress = progressView.progress + Float(newTime.seconds)
         
         player.seek(to: newTime, toleranceBefore: .zero, toleranceAfter: .zero)
         
-        progressView.setProgress(progressView.progress + Float(newTime.seconds), animated: true)
-    }
-    
-    fileprivate func setTitle(_ title: String?) {
-        titleLabel.text = title ?? .toBlank()
+        progressView.setProgress(newProgress, animated: true)
     }
 }
 
@@ -255,8 +256,7 @@ extension MediaPlayerOverlayView {
         switch player.timeControlStatus {
         case .playing:
             systemImage = UIImage(systemName: "pause")!
-        case .paused,
-                .waitingToPlayAtSpecifiedRate:
+        case .paused, .waitingToPlayAtSpecifiedRate:
             systemImage = UIImage(systemName: "arrowtriangle.right.fill")!
         default:
             systemImage = UIImage(systemName: "pause")!
@@ -312,7 +312,6 @@ extension MediaPlayerOverlayView {
             durationLabel.isEnabled = true
             
             progressView.setProgress(currentTime, animated: true)
-            
             trackingSlider.maximumValue = newDurationInSeconds
             trackingSlider.value = currentTime
             startTimeLabel.text = viewModel.timeString(currentTime)
@@ -323,6 +322,10 @@ extension MediaPlayerOverlayView {
             startTimeLabel.isEnabled = false
             durationLabel.isEnabled = false
         }
+    }
+    
+    private func setTitle(_ title: String) {
+        titleLabel.text = title
     }
 }
 

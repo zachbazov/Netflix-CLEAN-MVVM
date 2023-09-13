@@ -18,11 +18,46 @@
 		8B1C65332A9797DB00CBF16D /* ProfileSettingTableViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B1C65322A9797DB00CBF16D /* ProfileSettingTableViewDataSource.swift */; };
 		8B1C65352A979CB700CBF16D /* ProfileSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B1C65342A979CB700CBF16D /* ProfileSetting.swift */; };
 		8B1C65372A97A43300CBF16D /* ProfileSettingTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8B1C65362A97A43300CBF16D /* ProfileSettingTableViewCell.xib */; };
+		8B225C6D2AAD3D0C009AC792 /* MyNetflixMenuItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B225C6C2AAD3D0C009AC792 /* MyNetflixMenuItem.swift */; };
+		8B225C722AAE050D009AC792 /* MyNetflixProfileTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B225C712AAE050D009AC792 /* MyNetflixProfileTableViewCell.swift */; };
+		8B225C742AAE0511009AC792 /* MyNetflixProfileTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8B225C732AAE0511009AC792 /* MyNetflixProfileTableViewCell.xib */; };
+		8B225C762AAE051D009AC792 /* MyNetflixProfileTableViewCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B225C752AAE051D009AC792 /* MyNetflixProfileTableViewCellViewModel.swift */; };
+		8B225C7A2AAF606C009AC792 /* NotificationsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B225C792AAF606C009AC792 /* NotificationsViewController.swift */; };
+		8B225C7C2AAF6072009AC792 /* NotificationsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B225C7B2AAF6072009AC792 /* NotificationsViewModel.swift */; };
+		8B225C7E2AAF6085009AC792 /* NotificationsCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B225C7D2AAF6085009AC792 /* NotificationsCoordinator.swift */; };
+		8B225C802AAF6091009AC792 /* NotificationsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8B225C7F2AAF6091009AC792 /* NotificationsViewController.xib */; };
+		8B225C822AAF60AE009AC792 /* MyListCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B225C812AAF60AE009AC792 /* MyListCoordinator.swift */; };
+		8B225C842AAF60B1009AC792 /* MyListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B225C832AAF60B1009AC792 /* MyListViewModel.swift */; };
+		8B225C862AAF60B5009AC792 /* MyListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B225C852AAF60B5009AC792 /* MyListViewController.swift */; };
+		8B225C882AAF60BB009AC792 /* MyListViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8B225C872AAF60BB009AC792 /* MyListViewController.xib */; };
+		8B225C8E2AAFAFA6009AC792 /* NotificationHybridCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B225C8D2AAFAFA6009AC792 /* NotificationHybridCell.swift */; };
+		8B225C902AAFAFAA009AC792 /* NotificationHybridCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B225C8F2AAFAFAA009AC792 /* NotificationHybridCellViewModel.swift */; };
+		8B225C972AB0E3D2009AC792 /* MyListHybridCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B225C962AB0E3D2009AC792 /* MyListHybridCell.swift */; };
+		8B225C992AB0E3D9009AC792 /* MyListHybridCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B225C982AB0E3D9009AC792 /* MyListHybridCellViewModel.swift */; };
+		8B225C9D2AB0E68F009AC792 /* MyListCollectionViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B225C9C2AB0E68F009AC792 /* MyListCollectionViewDataSource.swift */; };
+		8B225C9F2AB10733009AC792 /* TrailerCollectionViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B225C9E2AB10733009AC792 /* TrailerCollectionViewDataSource.swift */; };
+		8B225CA22AB10793009AC792 /* TrailerHybridCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B225CA12AB10793009AC792 /* TrailerHybridCell.swift */; };
+		8B225CA42AB107AB009AC792 /* TrailerHybridCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B225CA32AB107AB009AC792 /* TrailerHybridCellViewModel.swift */; };
 		8B69FEEE2A37C249009D7264 /* NSCache+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B69FEED2A37C248009D7264 /* NSCache+Extension.swift */; };
 		8B69FEFD2A37C4D4009D7264 /* URLImageService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B69FEFC2A37C4D4009D7264 /* URLImageService.swift */; };
 		8B871BBA2A9FE1F100024F07 /* Int+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B871BB92A9FE1F100024F07 /* Int+Extension.swift */; };
 		8B871BBC2A9FEB3700024F07 /* UISwitchDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B871BBB2A9FEB3700024F07 /* UISwitchDelegate.swift */; };
 		8B871BBE2A9FEBC200024F07 /* UISwitch+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B871BBD2A9FEBC200024F07 /* UISwitch+Extension.swift */; };
+		8B8C29502AA8BB3900E148C4 /* ButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B8C294F2AA8BB3900E148C4 /* ButtonView.swift */; };
+		8B8C29532AA90FFD00E148C4 /* EntitledButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B8C29522AA90FFD00E148C4 /* EntitledButton.swift */; };
+		8B8C29572AA9418700E148C4 /* PlayButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B8C29562AA9418700E148C4 /* PlayButton.swift */; };
+		8B99FA382AACDC9E00F02C5D /* AccountTableViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B99FA372AACDC9E00F02C5D /* AccountTableViewDataSource.swift */; };
+		8B99FA3A2AACDDCB00F02C5D /* UITableView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B99FA392AACDDCB00F02C5D /* UITableView+Extension.swift */; };
+		8B99FA3C2AAD016900F02C5D /* MyNetflixNavigationTableHeaderView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8B99FA3B2AAD016900F02C5D /* MyNetflixNavigationTableHeaderView.xib */; };
+		8B99FA3E2AAD01BE00F02C5D /* MyNetflixNavigationTableHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B99FA3D2AAD01BE00F02C5D /* MyNetflixNavigationTableHeaderView.swift */; };
+		8B99FA412AAD072700F02C5D /* MyNetflixNavigationTableHeaderViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B99FA402AAD072700F02C5D /* MyNetflixNavigationTableHeaderViewModel.swift */; };
+		8B99FA442AAD095700F02C5D /* ReferrableTableHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B99FA432AAD095700F02C5D /* ReferrableTableHeaderView.swift */; };
+		8B99FA462AAD095A00F02C5D /* ReferrableTableHeaderView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8B99FA452AAD095A00F02C5D /* ReferrableTableHeaderView.xib */; };
+		8B99FA482AAD095E00F02C5D /* ReferrableTableHeaderViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B99FA472AAD095E00F02C5D /* ReferrableTableHeaderViewModel.swift */; };
+		8BB3AEE32AACB47D001810F3 /* MyNetflixViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BB3AEE22AACB47D001810F3 /* MyNetflixViewController.swift */; };
+		8BB3AEE52AACB48B001810F3 /* MyNetflixCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BB3AEE42AACB48B001810F3 /* MyNetflixCoordinator.swift */; };
+		8BB3AEE72AACB493001810F3 /* MyNetflixViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BB3AEE62AACB493001810F3 /* MyNetflixViewModel.swift */; };
+		8BB3AEE92AACB603001810F3 /* MyNetflixViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8BB3AEE82AACB603001810F3 /* MyNetflixViewController.xib */; };
 		A1183FC529D07B8C00D76759 /* SegmentControlView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1183FC429D07B8C00D76759 /* SegmentControlView.swift */; };
 		A1183FC729D07CBC00D76759 /* SegmentControlViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1183FC629D07CBB00D76759 /* SegmentControlViewModel.swift */; };
 		A127C1E228DD00F100CEE34F /* NavigationOverlayFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A127C1E128DD00F100CEE34F /* NavigationOverlayFooterView.swift */; };
@@ -58,15 +93,12 @@
 		A14E0CB729BB979000F55500 /* AccountProfileCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A14E0CB629BB979000F55500 /* AccountProfileCollectionViewCell.swift */; };
 		A14E0CB929BB979900F55500 /* AccountProfileCollectionViewCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A14E0CB829BB979900F55500 /* AccountProfileCollectionViewCellViewModel.swift */; };
 		A14E0CBB29BB979F00F55500 /* AccountProfileCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = A14E0CBA29BB979F00F55500 /* AccountProfileCollectionViewCell.xib */; };
-		A14E0CBE29BB97E500F55500 /* AccountMenuNotificationHybridCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A14E0CBD29BB97E500F55500 /* AccountMenuNotificationHybridCell.swift */; };
-		A14E0CC329BB983300F55500 /* AccountMenuNotificationCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A14E0CC229BB983300F55500 /* AccountMenuNotificationCollectionViewCell.swift */; };
-		A14E0CC529BB983700F55500 /* AccountMenuNotificationCollectionViewCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A14E0CC429BB983700F55500 /* AccountMenuNotificationCollectionViewCellViewModel.swift */; };
-		A14E0CC729BB983C00F55500 /* AccountMenuNotificationCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = A14E0CC629BB983C00F55500 /* AccountMenuNotificationCollectionViewCell.xib */; };
+		A14E0CC329BB983300F55500 /* NotificationCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A14E0CC229BB983300F55500 /* NotificationCollectionViewCell.swift */; };
+		A14E0CC529BB983700F55500 /* NotificationCollectionViewCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A14E0CC429BB983700F55500 /* NotificationCollectionViewCellViewModel.swift */; };
+		A14E0CC729BB983C00F55500 /* NotificationCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = A14E0CC629BB983C00F55500 /* NotificationCollectionViewCell.xib */; };
 		A14E0CC929BCAB3600F55500 /* AccountMenuItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = A14E0CC829BCAB3600F55500 /* AccountMenuItem.swift */; };
-		A14E0CCB29BCAB9D00F55500 /* AccountMenuTableViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = A14E0CCA29BCAB9D00F55500 /* AccountMenuTableViewDataSource.swift */; };
-		A14E0CCD29BCAC4B00F55500 /* AccountMenuNotificationHybridCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A14E0CCC29BCAC4B00F55500 /* AccountMenuNotificationHybridCellViewModel.swift */; };
 		A14E0CCF29BCBE6D00F55500 /* AccountProfileCollectionViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = A14E0CCE29BCBE6D00F55500 /* AccountProfileCollectionViewDataSource.swift */; };
-		A14E0CD429BE81F200F55500 /* AccountMenuNotificationCollectionViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = A14E0CD329BE81F200F55500 /* AccountMenuNotificationCollectionViewDataSource.swift */; };
+		A14E0CD429BE81F200F55500 /* NotificationCollectionViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = A14E0CD329BE81F200F55500 /* NotificationCollectionViewDataSource.swift */; };
 		A14E0CD729C08DC600F55500 /* ProfileCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A14E0CD629C08DC600F55500 /* ProfileCoordinator.swift */; };
 		A14E0CD929C08DCD00F55500 /* ProfileViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A14E0CD829C08DCD00F55500 /* ProfileViewModel.swift */; };
 		A14E0CDB29C08DD000F55500 /* ProfileController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A14E0CDA29C08DD000F55500 /* ProfileController.swift */; };
@@ -362,11 +394,46 @@
 		8B1C65322A9797DB00CBF16D /* ProfileSettingTableViewDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileSettingTableViewDataSource.swift; sourceTree = "<group>"; };
 		8B1C65342A979CB700CBF16D /* ProfileSetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileSetting.swift; sourceTree = "<group>"; };
 		8B1C65362A97A43300CBF16D /* ProfileSettingTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ProfileSettingTableViewCell.xib; sourceTree = "<group>"; };
+		8B225C6C2AAD3D0C009AC792 /* MyNetflixMenuItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyNetflixMenuItem.swift; sourceTree = "<group>"; };
+		8B225C712AAE050D009AC792 /* MyNetflixProfileTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyNetflixProfileTableViewCell.swift; sourceTree = "<group>"; };
+		8B225C732AAE0511009AC792 /* MyNetflixProfileTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MyNetflixProfileTableViewCell.xib; sourceTree = "<group>"; };
+		8B225C752AAE051D009AC792 /* MyNetflixProfileTableViewCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyNetflixProfileTableViewCellViewModel.swift; sourceTree = "<group>"; };
+		8B225C792AAF606C009AC792 /* NotificationsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationsViewController.swift; sourceTree = "<group>"; };
+		8B225C7B2AAF6072009AC792 /* NotificationsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationsViewModel.swift; sourceTree = "<group>"; };
+		8B225C7D2AAF6085009AC792 /* NotificationsCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationsCoordinator.swift; sourceTree = "<group>"; };
+		8B225C7F2AAF6091009AC792 /* NotificationsViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = NotificationsViewController.xib; sourceTree = "<group>"; };
+		8B225C812AAF60AE009AC792 /* MyListCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyListCoordinator.swift; sourceTree = "<group>"; };
+		8B225C832AAF60B1009AC792 /* MyListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyListViewModel.swift; sourceTree = "<group>"; };
+		8B225C852AAF60B5009AC792 /* MyListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyListViewController.swift; sourceTree = "<group>"; };
+		8B225C872AAF60BB009AC792 /* MyListViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MyListViewController.xib; sourceTree = "<group>"; };
+		8B225C8D2AAFAFA6009AC792 /* NotificationHybridCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationHybridCell.swift; sourceTree = "<group>"; };
+		8B225C8F2AAFAFAA009AC792 /* NotificationHybridCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationHybridCellViewModel.swift; sourceTree = "<group>"; };
+		8B225C962AB0E3D2009AC792 /* MyListHybridCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyListHybridCell.swift; sourceTree = "<group>"; };
+		8B225C982AB0E3D9009AC792 /* MyListHybridCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyListHybridCellViewModel.swift; sourceTree = "<group>"; };
+		8B225C9C2AB0E68F009AC792 /* MyListCollectionViewDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyListCollectionViewDataSource.swift; sourceTree = "<group>"; };
+		8B225C9E2AB10733009AC792 /* TrailerCollectionViewDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrailerCollectionViewDataSource.swift; sourceTree = "<group>"; };
+		8B225CA12AB10793009AC792 /* TrailerHybridCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrailerHybridCell.swift; sourceTree = "<group>"; };
+		8B225CA32AB107AB009AC792 /* TrailerHybridCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrailerHybridCellViewModel.swift; sourceTree = "<group>"; };
 		8B69FEED2A37C248009D7264 /* NSCache+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSCache+Extension.swift"; sourceTree = "<group>"; };
 		8B69FEFC2A37C4D4009D7264 /* URLImageService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLImageService.swift; sourceTree = "<group>"; };
 		8B871BB92A9FE1F100024F07 /* Int+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Int+Extension.swift"; sourceTree = "<group>"; };
 		8B871BBB2A9FEB3700024F07 /* UISwitchDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UISwitchDelegate.swift; sourceTree = "<group>"; };
 		8B871BBD2A9FEBC200024F07 /* UISwitch+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UISwitch+Extension.swift"; sourceTree = "<group>"; };
+		8B8C294F2AA8BB3900E148C4 /* ButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonView.swift; sourceTree = "<group>"; };
+		8B8C29522AA90FFD00E148C4 /* EntitledButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EntitledButton.swift; sourceTree = "<group>"; };
+		8B8C29562AA9418700E148C4 /* PlayButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayButton.swift; sourceTree = "<group>"; };
+		8B99FA372AACDC9E00F02C5D /* AccountTableViewDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountTableViewDataSource.swift; sourceTree = "<group>"; };
+		8B99FA392AACDDCB00F02C5D /* UITableView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITableView+Extension.swift"; sourceTree = "<group>"; };
+		8B99FA3B2AAD016900F02C5D /* MyNetflixNavigationTableHeaderView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MyNetflixNavigationTableHeaderView.xib; sourceTree = "<group>"; };
+		8B99FA3D2AAD01BE00F02C5D /* MyNetflixNavigationTableHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyNetflixNavigationTableHeaderView.swift; sourceTree = "<group>"; };
+		8B99FA402AAD072700F02C5D /* MyNetflixNavigationTableHeaderViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyNetflixNavigationTableHeaderViewModel.swift; sourceTree = "<group>"; };
+		8B99FA432AAD095700F02C5D /* ReferrableTableHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReferrableTableHeaderView.swift; sourceTree = "<group>"; };
+		8B99FA452AAD095A00F02C5D /* ReferrableTableHeaderView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ReferrableTableHeaderView.xib; sourceTree = "<group>"; };
+		8B99FA472AAD095E00F02C5D /* ReferrableTableHeaderViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReferrableTableHeaderViewModel.swift; sourceTree = "<group>"; };
+		8BB3AEE22AACB47D001810F3 /* MyNetflixViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyNetflixViewController.swift; sourceTree = "<group>"; };
+		8BB3AEE42AACB48B001810F3 /* MyNetflixCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyNetflixCoordinator.swift; sourceTree = "<group>"; };
+		8BB3AEE62AACB493001810F3 /* MyNetflixViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyNetflixViewModel.swift; sourceTree = "<group>"; };
+		8BB3AEE82AACB603001810F3 /* MyNetflixViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MyNetflixViewController.xib; sourceTree = "<group>"; };
 		A1183FC429D07B8C00D76759 /* SegmentControlView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SegmentControlView.swift; sourceTree = "<group>"; };
 		A1183FC629D07CBB00D76759 /* SegmentControlViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SegmentControlViewModel.swift; sourceTree = "<group>"; };
 		A127C1E128DD00F100CEE34F /* NavigationOverlayFooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationOverlayFooterView.swift; sourceTree = "<group>"; };
@@ -402,15 +469,12 @@
 		A14E0CB629BB979000F55500 /* AccountProfileCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountProfileCollectionViewCell.swift; sourceTree = "<group>"; };
 		A14E0CB829BB979900F55500 /* AccountProfileCollectionViewCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountProfileCollectionViewCellViewModel.swift; sourceTree = "<group>"; };
 		A14E0CBA29BB979F00F55500 /* AccountProfileCollectionViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = AccountProfileCollectionViewCell.xib; sourceTree = "<group>"; };
-		A14E0CBD29BB97E500F55500 /* AccountMenuNotificationHybridCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountMenuNotificationHybridCell.swift; sourceTree = "<group>"; };
-		A14E0CC229BB983300F55500 /* AccountMenuNotificationCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountMenuNotificationCollectionViewCell.swift; sourceTree = "<group>"; };
-		A14E0CC429BB983700F55500 /* AccountMenuNotificationCollectionViewCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountMenuNotificationCollectionViewCellViewModel.swift; sourceTree = "<group>"; };
-		A14E0CC629BB983C00F55500 /* AccountMenuNotificationCollectionViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = AccountMenuNotificationCollectionViewCell.xib; sourceTree = "<group>"; };
+		A14E0CC229BB983300F55500 /* NotificationCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationCollectionViewCell.swift; sourceTree = "<group>"; };
+		A14E0CC429BB983700F55500 /* NotificationCollectionViewCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationCollectionViewCellViewModel.swift; sourceTree = "<group>"; };
+		A14E0CC629BB983C00F55500 /* NotificationCollectionViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = NotificationCollectionViewCell.xib; sourceTree = "<group>"; };
 		A14E0CC829BCAB3600F55500 /* AccountMenuItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountMenuItem.swift; sourceTree = "<group>"; };
-		A14E0CCA29BCAB9D00F55500 /* AccountMenuTableViewDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountMenuTableViewDataSource.swift; sourceTree = "<group>"; };
-		A14E0CCC29BCAC4B00F55500 /* AccountMenuNotificationHybridCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountMenuNotificationHybridCellViewModel.swift; sourceTree = "<group>"; };
 		A14E0CCE29BCBE6D00F55500 /* AccountProfileCollectionViewDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountProfileCollectionViewDataSource.swift; sourceTree = "<group>"; };
-		A14E0CD329BE81F200F55500 /* AccountMenuNotificationCollectionViewDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountMenuNotificationCollectionViewDataSource.swift; sourceTree = "<group>"; };
+		A14E0CD329BE81F200F55500 /* NotificationCollectionViewDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationCollectionViewDataSource.swift; sourceTree = "<group>"; };
 		A14E0CD629C08DC600F55500 /* ProfileCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileCoordinator.swift; sourceTree = "<group>"; };
 		A14E0CD829C08DCD00F55500 /* ProfileViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewModel.swift; sourceTree = "<group>"; };
 		A14E0CDA29C08DD000F55500 /* ProfileController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileController.swift; sourceTree = "<group>"; };
@@ -715,6 +779,91 @@
 			path = ProfileSettingTableViewCell;
 			sourceTree = "<group>";
 		};
+		8B225C702AAE04B6009AC792 /* MyNetflixProfileTableViewCell */ = {
+			isa = PBXGroup;
+			children = (
+				8B225C712AAE050D009AC792 /* MyNetflixProfileTableViewCell.swift */,
+				8B225C752AAE051D009AC792 /* MyNetflixProfileTableViewCellViewModel.swift */,
+				8B225C732AAE0511009AC792 /* MyNetflixProfileTableViewCell.xib */,
+			);
+			path = MyNetflixProfileTableViewCell;
+			sourceTree = "<group>";
+		};
+		8B225C772AAF5F41009AC792 /* NotificationsViewController */ = {
+			isa = PBXGroup;
+			children = (
+				8B225C7D2AAF6085009AC792 /* NotificationsCoordinator.swift */,
+				8B225C7B2AAF6072009AC792 /* NotificationsViewModel.swift */,
+				8B225C792AAF606C009AC792 /* NotificationsViewController.swift */,
+				8B225C7F2AAF6091009AC792 /* NotificationsViewController.xib */,
+			);
+			path = NotificationsViewController;
+			sourceTree = "<group>";
+		};
+		8B225C782AAF5F85009AC792 /* MyListViewController */ = {
+			isa = PBXGroup;
+			children = (
+				8B225C812AAF60AE009AC792 /* MyListCoordinator.swift */,
+				8B225C832AAF60B1009AC792 /* MyListViewModel.swift */,
+				8B225C852AAF60B5009AC792 /* MyListViewController.swift */,
+				8B225C872AAF60BB009AC792 /* MyListViewController.xib */,
+			);
+			path = MyListViewController;
+			sourceTree = "<group>";
+		};
+		8B225C892AAF98BC009AC792 /* TableViewHeader */ = {
+			isa = PBXGroup;
+			children = (
+				A1B70A86293E5BB900C718C6 /* LabeledTableHeaderView */,
+				8B99FA3F2AAD070500F02C5D /* MyNetflixNavigationHeaderView */,
+				8B99FA422AAD093600F02C5D /* ReferrableTableHeaderView */,
+			);
+			path = TableViewHeader;
+			sourceTree = "<group>";
+		};
+		8B225C8A2AAF98DF009AC792 /* CollectionReusableView */ = {
+			isa = PBXGroup;
+			children = (
+				A1B0D43529B20E0F009977AB /* LabeledCollectionHeaderView.swift */,
+			);
+			path = CollectionReusableView;
+			sourceTree = "<group>";
+		};
+		8B225C8B2AAF997B009AC792 /* Base */ = {
+			isa = PBXGroup;
+			children = (
+				8B8C294F2AA8BB3900E148C4 /* ButtonView.swift */,
+			);
+			path = Base;
+			sourceTree = "<group>";
+		};
+		8B225C8C2AAFAF8D009AC792 /* NotificationHybridCell */ = {
+			isa = PBXGroup;
+			children = (
+				8B225C8D2AAFAFA6009AC792 /* NotificationHybridCell.swift */,
+				8B225C8F2AAFAFAA009AC792 /* NotificationHybridCellViewModel.swift */,
+			);
+			path = NotificationHybridCell;
+			sourceTree = "<group>";
+		};
+		8B225C952AB0E3C4009AC792 /* MyListHybridCell */ = {
+			isa = PBXGroup;
+			children = (
+				8B225C962AB0E3D2009AC792 /* MyListHybridCell.swift */,
+				8B225C982AB0E3D9009AC792 /* MyListHybridCellViewModel.swift */,
+			);
+			path = MyListHybridCell;
+			sourceTree = "<group>";
+		};
+		8B225CA02AB10772009AC792 /* TrailerHybridCell */ = {
+			isa = PBXGroup;
+			children = (
+				8B225CA12AB10793009AC792 /* TrailerHybridCell.swift */,
+				8B225CA32AB107AB009AC792 /* TrailerHybridCellViewModel.swift */,
+			);
+			path = TrailerHybridCell;
+			sourceTree = "<group>";
+		};
 		8B69FEF12A37C2B4009D7264 /* ImageService */ = {
 			isa = PBXGroup;
 			children = (
@@ -739,6 +888,47 @@
 				A18B997B28C029A30077A5A6 /* DataTransferService.swift */,
 			);
 			path = DataTransferService;
+			sourceTree = "<group>";
+		};
+		8B8C29512AA90FBE00E148C4 /* Buttons */ = {
+			isa = PBXGroup;
+			children = (
+				8B225C8B2AAF997B009AC792 /* Base */,
+				8B8C29522AA90FFD00E148C4 /* EntitledButton.swift */,
+				8B8C29562AA9418700E148C4 /* PlayButton.swift */,
+			);
+			path = Buttons;
+			sourceTree = "<group>";
+		};
+		8B99FA3F2AAD070500F02C5D /* MyNetflixNavigationHeaderView */ = {
+			isa = PBXGroup;
+			children = (
+				8B99FA3D2AAD01BE00F02C5D /* MyNetflixNavigationTableHeaderView.swift */,
+				8B99FA402AAD072700F02C5D /* MyNetflixNavigationTableHeaderViewModel.swift */,
+				8B99FA3B2AAD016900F02C5D /* MyNetflixNavigationTableHeaderView.xib */,
+			);
+			path = MyNetflixNavigationHeaderView;
+			sourceTree = "<group>";
+		};
+		8B99FA422AAD093600F02C5D /* ReferrableTableHeaderView */ = {
+			isa = PBXGroup;
+			children = (
+				8B99FA432AAD095700F02C5D /* ReferrableTableHeaderView.swift */,
+				8B99FA472AAD095E00F02C5D /* ReferrableTableHeaderViewModel.swift */,
+				8B99FA452AAD095A00F02C5D /* ReferrableTableHeaderView.xib */,
+			);
+			path = ReferrableTableHeaderView;
+			sourceTree = "<group>";
+		};
+		8BB3AEE12AACB44D001810F3 /* MyNetflixViewController */ = {
+			isa = PBXGroup;
+			children = (
+				8BB3AEE42AACB48B001810F3 /* MyNetflixCoordinator.swift */,
+				8BB3AEE62AACB493001810F3 /* MyNetflixViewModel.swift */,
+				8BB3AEE22AACB47D001810F3 /* MyNetflixViewController.swift */,
+				8BB3AEE82AACB603001810F3 /* MyNetflixViewController.xib */,
+			);
+			path = MyNetflixViewController;
 			sourceTree = "<group>";
 		};
 		A1183FCA29D11C0600D76759 /* SegmentControlView */ = {
@@ -773,12 +963,15 @@
 			path = SearchViewController;
 			sourceTree = "<group>";
 		};
-		A130BCB629510C500070EA5E /* 002 - Downloads */ = {
+		A130BCB629510C500070EA5E /* 002 - My Netflix */ = {
 			isa = PBXGroup;
 			children = (
+				8BB3AEE12AACB44D001810F3 /* MyNetflixViewController */,
 				A130BCB729510C7B0070EA5E /* DownloadsViewController */,
+				8B225C772AAF5F41009AC792 /* NotificationsViewController */,
+				8B225C782AAF5F85009AC792 /* MyListViewController */,
 			);
-			path = "002 - Downloads";
+			path = "002 - My Netflix";
 			sourceTree = "<group>";
 		};
 		A130BCB729510C7B0070EA5E /* DownloadsViewController */ = {
@@ -861,23 +1054,14 @@
 			path = AccountProfileCollectionViewCell;
 			sourceTree = "<group>";
 		};
-		A14E0CBC29BB97AD00F55500 /* AccountMenuNotificationHybridCell */ = {
+		A14E0CC129BB980A00F55500 /* NotificationCollectionViewCell */ = {
 			isa = PBXGroup;
 			children = (
-				A14E0CBD29BB97E500F55500 /* AccountMenuNotificationHybridCell.swift */,
-				A14E0CCC29BCAC4B00F55500 /* AccountMenuNotificationHybridCellViewModel.swift */,
+				A14E0CC229BB983300F55500 /* NotificationCollectionViewCell.swift */,
+				A14E0CC429BB983700F55500 /* NotificationCollectionViewCellViewModel.swift */,
+				A14E0CC629BB983C00F55500 /* NotificationCollectionViewCell.xib */,
 			);
-			path = AccountMenuNotificationHybridCell;
-			sourceTree = "<group>";
-		};
-		A14E0CC129BB980A00F55500 /* AccountMenuNotificationCollectionViewCell */ = {
-			isa = PBXGroup;
-			children = (
-				A14E0CC229BB983300F55500 /* AccountMenuNotificationCollectionViewCell.swift */,
-				A14E0CC429BB983700F55500 /* AccountMenuNotificationCollectionViewCellViewModel.swift */,
-				A14E0CC629BB983C00F55500 /* AccountMenuNotificationCollectionViewCell.xib */,
-			);
-			path = AccountMenuNotificationCollectionViewCell;
+			path = NotificationCollectionViewCell;
 			sourceTree = "<group>";
 		};
 		A14E0CD529C08D6600F55500 /* 001 - Profile */ = {
@@ -1145,15 +1329,17 @@
 		A18A796E2A1FC73D00FE60AB /* Reusables */ = {
 			isa = PBXGroup;
 			children = (
-				A1AA28CD28F4C38E0011EE9D /* MediaPlayerView */,
 				A130BCA1294FA48E0070EA5E /* ActivityIndicatorView.swift */,
 				A1741D3E28EBD33200F3C46B /* AgeRestrictionView.swift */,
 				8B1C65242A92E41E00CBF16D /* BadgeView.swift */,
 				A1BD20E129E5B9CC0093749E /* BlurView.swift */,
+				8B8C29512AA90FBE00E148C4 /* Buttons */,
+				A1B349FB2A165F98002AFE9E /* Cells */,
 				A1E81D0E28CFE21300D044EA /* CollectionViewLayout.swift */,
 				8B1C652A2A96C88F00CBF16D /* EditOverlayView.swift */,
 				A1BD20E329E5B9E70093749E /* GradientView.swift */,
 				A1741D4028EBD33D00F3C46B /* HDView.swift */,
+				A1AA28CD28F4C38E0011EE9D /* MediaPlayerView */,
 				A1B70A93293E9FA400C718C6 /* NavigationController.swift */,
 				A127C1E128DD00F100CEE34F /* NavigationOverlayFooterView.swift */,
 				A1BD20E829EED69F0093749E /* OpaqueView.swift */,
@@ -1265,7 +1451,7 @@
 				A18691D728C8C1EE0087DE3B /* TabBarController.swift */,
 				A130BC91294CE08F0070EA5E /* 000 - Home */,
 				A130BCD429511E690070EA5E /* 001 - News */,
-				A130BCB629510C500070EA5E /* 002 - Downloads */,
+				A130BCB629510C500070EA5E /* 002 - My Netflix */,
 			);
 			path = "002 - TabBar";
 			sourceTree = "<group>";
@@ -1274,10 +1460,8 @@
 			isa = PBXGroup;
 			children = (
 				A18B993928BFC95A0077A5A6 /* Behaviors */,
-				A1B349FB2A165F98002AFE9E /* Cells */,
 				A1B1B0C8299B95270070AD29 /* Modules */,
 				A18B993428BFC7130077A5A6 /* Protocols */,
-				A1AEB44A299E56BD0016DE2B /* Reactive */,
 				A18A796E2A1FC73D00FE60AB /* Reusables */,
 			);
 			path = Utils;
@@ -1366,6 +1550,7 @@
 				A18B997F28C03CA20077A5A6 /* JWT.swift */,
 				A19956DC29019A3900B7D655 /* List.swift */,
 				A18B994328BFD9CC0077A5A6 /* Media.swift */,
+				8B225C6C2AAD3D0C009AC792 /* MyNetflixMenuItem.swift */,
 				A14E0CDE29C0DA1700F55500 /* Profile.swift */,
 				8B1C65342A979CB700CBF16D /* ProfileSetting.swift */,
 				A18B994528BFD9D50077A5A6 /* Season.swift */,
@@ -1578,9 +1763,11 @@
 		A1AD235A2A1AE16700188DDC /* Hybrid */ = {
 			isa = PBXGroup;
 			children = (
-				A14E0CBC29BB97AD00F55500 /* AccountMenuNotificationHybridCell */,
 				A18A79692A1FB14300FE60AB /* DetailHybridCell */,
 				A1AD235C2A1AF4BE00188DDC /* MediaHybridCell */,
+				8B225C952AB0E3C4009AC792 /* MyListHybridCell */,
+				8B225C8C2AAFAF8D009AC792 /* NotificationHybridCell */,
+				8B225CA02AB10772009AC792 /* TrailerHybridCell */,
 			);
 			path = Hybrid;
 			sourceTree = "<group>";
@@ -1674,8 +1861,9 @@
 		A1B0DE57295459EB00307866 /* UITableView */ = {
 			isa = PBXGroup;
 			children = (
-				A1AD25BF28D3FC9600F793B3 /* UITableView+Register.swift */,
 				A1B0DE552954590E00307866 /* UITableView+ContentInset.swift */,
+				8B99FA392AACDDCB00F02C5D /* UITableView+Extension.swift */,
+				A1AD25BF28D3FC9600F793B3 /* UITableView+Register.swift */,
 				A1B349EF2A139584002AFE9E /* UITableView+ReloadSection.swift */,
 			);
 			path = UITableView;
@@ -1703,11 +1891,12 @@
 		A1B1B0C8299B95270070AD29 /* Modules */ = {
 			isa = PBXGroup;
 			children = (
-				A1741D5628EE5C9A00F3C46B /* MediaPlayer */,
 				A1B779112A0E6207009014FD /* Color.swift */,
 				A1AE02D0293BA29A00AF0BD6 /* DeviceOrientation.swift */,
+				A1741D5628EE5C9A00F3C46B /* MediaPlayer */,
 				A1B68F292921BAE600FF5F18 /* MyList.swift */,
 				A1741D6128EF716000F3C46B /* ScheduledTimer.swift */,
+				A1AEB44A299E56BD0016DE2B /* Reactive */,
 				A1F56A5B28C668100089BD4F /* Theme.swift */,
 			);
 			path = Modules;
@@ -1746,9 +1935,11 @@
 		A1B349FB2A165F98002AFE9E /* Cells */ = {
 			isa = PBXGroup;
 			children = (
+				8B225C8A2AAF98DF009AC792 /* CollectionReusableView */,
 				A1B349FD2A165FAC002AFE9E /* CollectionView */,
 				A1AD235A2A1AE16700188DDC /* Hybrid */,
 				A1B349FC2A165FA6002AFE9E /* TableView */,
+				8B225C892AAF98BC009AC792 /* TableViewHeader */,
 			);
 			path = Cells;
 			sourceTree = "<group>";
@@ -1757,7 +1948,7 @@
 			isa = PBXGroup;
 			children = (
 				A18A79652A1FA93900FE60AB /* DetailTableViewCell */,
-				A1B70A86293E5BB900C718C6 /* LabeledTableHeaderView */,
+				8B225C702AAE04B6009AC792 /* MyNetflixProfileTableViewCell */,
 				A1FC093029DC5C4900CB4C9E /* NavigationOverlayTableViewCell */,
 				8B1C652D2A977F6900CBF16D /* ProfileSettingTableViewCell */,
 				A1AD25AB28D2A6C200F793B3 /* ShowcaseTableViewCell */,
@@ -1768,14 +1959,13 @@
 		A1B349FD2A165FAC002AFE9E /* CollectionView */ = {
 			isa = PBXGroup;
 			children = (
-				A14E0CC129BB980A00F55500 /* AccountMenuNotificationCollectionViewCell */,
 				A14E0CB529BB977E00F55500 /* AccountProfileCollectionViewCell */,
 				A1DB57092A1EA4C60060FC3F /* DetailCollectionViewCell */,
 				A1B349FE2A167AF0002AFE9E /* MediaCollectionViewCell */,
 				A130BCE5295135F70070EA5E /* NewsCollectionViewCell */,
-				A1B0D43329B0F976009977AB /* SearchCollectionViewCell */,
+				A14E0CC129BB980A00F55500 /* NotificationCollectionViewCell */,
 				A14E0CE829C1297F00F55500 /* ProfileCollectionViewCell */,
-				A1B0D43529B20E0F009977AB /* LabeledCollectionHeaderView.swift */,
+				A1B0D43329B0F976009977AB /* SearchCollectionViewCell */,
 			);
 			path = CollectionView;
 			sourceTree = "<group>";
@@ -1919,7 +2109,7 @@
 		A1D23AB729CA1A1100748029 /* TableView */ = {
 			isa = PBXGroup;
 			children = (
-				A14E0CCA29BCAB9D00F55500 /* AccountMenuTableViewDataSource.swift */,
+				8B99FA372AACDC9E00F02C5D /* AccountTableViewDataSource.swift */,
 				A1741D1228E67A4F00F3C46B /* DetailTableViewDataSource.swift */,
 				A1E81D2928CFE4A400D044EA /* MediaTableViewDataSource.swift */,
 				A1BA1DC128DCB7D700730EA8 /* NavigationOverlayTableViewDataSource.swift */,
@@ -1931,14 +2121,16 @@
 		A1D23AB829CA1A1B00748029 /* CollectionView */ = {
 			isa = PBXGroup;
 			children = (
-				A14E0CD329BE81F200F55500 /* AccountMenuNotificationCollectionViewDataSource.swift */,
 				A14E0CCE29BCBE6D00F55500 /* AccountProfileCollectionViewDataSource.swift */,
 				A1C31DB22A1D2E970035F1A8 /* BrowseCollectionViewDataSource.swift */,
 				A1741D3928EBA16E00F3C46B /* DetailCollectionViewDataSource.swift */,
 				A1E81D2B28CFE4A900D044EA /* MediaCollectionViewDataSource.swift */,
 				A130BCE3295135820070EA5E /* NewsCollectionViewDataSource.swift */,
+				A14E0CD329BE81F200F55500 /* NotificationCollectionViewDataSource.swift */,
 				A14E0CF529C337A800F55500 /* ProfileCollectionViewDataSource.swift */,
 				A130BCA3294FAA210070EA5E /* SearchCollectionViewDataSource.swift */,
+				8B225C9C2AB0E68F009AC792 /* MyListCollectionViewDataSource.swift */,
+				8B225C9E2AB10733009AC792 /* TrailerCollectionViewDataSource.swift */,
 			);
 			path = CollectionView;
 			sourceTree = "<group>";
@@ -2127,10 +2319,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				A14E0CB329BB285F00F55500 /* AccountViewController.xib in Resources */,
+				8BB3AEE92AACB603001810F3 /* MyNetflixViewController.xib in Resources */,
 				A1741D6028EE61F600F3C46B /* MediaPlayerOverlayView.xib in Resources */,
 				A1E81D3228CFF95300D044EA /* RatedCollectionViewCell.xib in Resources */,
+				8B225C882AAF60BB009AC792 /* MyListViewController.xib in Resources */,
 				A130BC82294CC8400070EA5E /* Localizable.strings in Resources */,
 				A1AD25A428D29A7800F793B3 /* ShowcaseView.xib in Resources */,
+				8B225C802AAF6091009AC792 /* NotificationsViewController.xib in Resources */,
 				A1AD25C728D55DF300F793B3 /* NavigationBarView.xib in Resources */,
 				A1B70A8C293E72D000C718C6 /* SignInViewController.xib in Resources */,
 				A1741D2E28E694CF00F3C46B /* InfoView.xib in Resources */,
@@ -2143,7 +2338,8 @@
 				A1741D3428E6981B00F3C46B /* DetailNavigationView.xib in Resources */,
 				A130BCB129509CC70070EA5E /* SearchCollectionViewCell.xib in Resources */,
 				A1AA28EF28F71F410011EE9D /* TrailerCollectionViewCell.xib in Resources */,
-				A14E0CC729BB983C00F55500 /* AccountMenuNotificationCollectionViewCell.xib in Resources */,
+				8B99FA462AAD095A00F02C5D /* ReferrableTableHeaderView.xib in Resources */,
+				A14E0CC729BB983C00F55500 /* NotificationCollectionViewCell.xib in Resources */,
 				A130BC9A294CE0B80070EA5E /* SearchViewController.xib in Resources */,
 				A1B2BAEA2A0689AB004B612A /* NavigationView.xib in Resources */,
 				A130BCBF29510CA80070EA5E /* DownloadsViewController.xib in Resources */,
@@ -2159,12 +2355,14 @@
 				A14E0CFD29C34F5900F55500 /* AddUserProfileViewController.xib in Resources */,
 				A1E81D3328CFF95300D044EA /* ResumableCollectionViewCell.xib in Resources */,
 				A130BCC9295115B40070EA5E /* DownloadsNavigationView.xib in Resources */,
+				8B99FA3C2AAD016900F02C5D /* MyNetflixNavigationTableHeaderView.xib in Resources */,
 				A1B70A90293E762000C718C6 /* LandpageViewController.xib in Resources */,
 				8B1C65372A97A43300CBF16D /* ProfileSettingTableViewCell.xib in Resources */,
 				A1B70A85293E550400C718C6 /* DetailViewController.xib in Resources */,
 				A18B990528BEB62E0077A5A6 /* Assets.xcassets in Resources */,
 				A130BCDD29511E8F0070EA5E /* NewsViewController.xib in Resources */,
 				A1AA28D628F590B90011EE9D /* EpisodeCollectionViewCell.xib in Resources */,
+				8B225C742AAE0511009AC792 /* MyNetflixProfileTableViewCell.xib in Resources */,
 				A1AD767529AC85AE00669667 /* NewsCollectionViewCell.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -2196,9 +2394,11 @@
 				A1741D5A28EE5CB800F3C46B /* MediaPlayerViewItem.swift in Sources */,
 				A1B1B0A8299AEDDE0070AD29 /* Services.swift in Sources */,
 				A18B998A28C040A70077A5A6 /* Cancellable.swift in Sources */,
+				8B99FA482AAD095E00F02C5D /* ReferrableTableHeaderViewModel.swift in Sources */,
 				A1741D1328E67A4F00F3C46B /* DetailTableViewDataSource.swift in Sources */,
 				A1B1B0C7299B8C1D0070AD29 /* UserUseCase.swift in Sources */,
 				A1741D4E28EC74D100F3C46B /* DetailPanelViewItemViewModel.swift in Sources */,
+				8B225C972AB0E3D2009AC792 /* MyListHybridCell.swift in Sources */,
 				A18A799E2A22C48D00FE60AB /* DeviceOrientable.swift in Sources */,
 				A18691BE28C764600087DE3B /* UIBarButtonItem+Extension.swift in Sources */,
 				A1B779122A0E6207009014FD /* Color.swift in Sources */,
@@ -2209,19 +2409,25 @@
 				A1B70A8A293E5E0400C718C6 /* Coordinator.swift in Sources */,
 				A1AD25BE28D3FC1200F793B3 /* UITableViewHeaderFooterView+Reusable.swift in Sources */,
 				A18A79952A22B73C00FE60AB /* ViewObservable.swift in Sources */,
+				8B225C722AAE050D009AC792 /* MyNetflixProfileTableViewCell.swift in Sources */,
 				A1AE02D1293BA29A00AF0BD6 /* DeviceOrientation.swift in Sources */,
+				8B225C902AAFAFAA009AC792 /* NotificationHybridCellViewModel.swift in Sources */,
 				A16C8BF82A2BB475008CD489 /* SectionRepresentable.swift in Sources */,
 				A16C8BF62A2BB41F008CD489 /* MediaRepresentable.swift in Sources */,
+				8B8C29572AA9418700E148C4 /* PlayButton.swift in Sources */,
 				A1B70A73293D6DC500C718C6 /* RootCoordinator.swift in Sources */,
+				8B225C7A2AAF606C009AC792 /* NotificationsViewController.swift in Sources */,
 				A1AA28D428F590B30011EE9D /* EpisodeCollectionViewCell.swift in Sources */,
 				A18B997828C020FC0077A5A6 /* NetworkService.swift in Sources */,
-				A14E0CBE29BB97E500F55500 /* AccountMenuNotificationHybridCell.swift in Sources */,
+				8B225C862AAF60B5009AC792 /* MyListViewController.swift in Sources */,
 				A127C1E228DD00F100CEE34F /* NavigationOverlayFooterView.swift in Sources */,
+				8B225CA42AB107AB009AC792 /* TrailerHybridCellViewModel.swift in Sources */,
 				A18A79A32A22CECC00FE60AB /* APIConfig.swift in Sources */,
 				A1AD25D028D6D31000F793B3 /* NavigationBarViewModel.swift in Sources */,
 				A1AD767729AC85B200669667 /* NewsCollectionViewCell.swift in Sources */,
 				A18B995D28BFFBF30077A5A6 /* EpisodeDTO.swift in Sources */,
 				A1B70A94293E9FA400C718C6 /* NavigationController.swift in Sources */,
+				8B99FA442AAD095700F02C5D /* ReferrableTableHeaderView.swift in Sources */,
 				A18B994228BFD9C70077A5A6 /* Section.swift in Sources */,
 				A14E0CEA29C1298E00F55500 /* ProfileCollectionViewCell.swift in Sources */,
 				A1C7E7A9292A784A004690B9 /* AuthService.swift in Sources */,
@@ -2229,9 +2435,9 @@
 				A1B0DE562954590E00307866 /* UITableView+ContentInset.swift in Sources */,
 				A1B70AA729400B0E00C718C6 /* SignUpViewModel.swift in Sources */,
 				A1BA1DAC28D9D42A00730EA8 /* NavigationOverlayView.swift in Sources */,
+				8B225C7E2AAF6085009AC792 /* NotificationsCoordinator.swift in Sources */,
 				A1B3F99D28C631F90042DE9F /* SignInViewController.swift in Sources */,
 				A1B1B0D2299B9F820070AD29 /* MediaUseCase.swift in Sources */,
-				A14E0CCD29BCAC4B00F55500 /* AccountMenuNotificationHybridCellViewModel.swift in Sources */,
 				A1741D5028EC774700F3C46B /* DetailNavigationViewItemViewModel.swift in Sources */,
 				A1B68F2A2921BAE600FF5F18 /* MyList.swift in Sources */,
 				A1AA28C828F487E70011EE9D /* MediaPlayerObservers.swift in Sources */,
@@ -2242,10 +2448,12 @@
 				A1DB570B2A1EA4D20060FC3F /* DetailCollectionViewCell.swift in Sources */,
 				A130BCA4294FAA210070EA5E /* SearchCollectionViewDataSource.swift in Sources */,
 				A1B70A7F293D80C000C718C6 /* DetailViewCoordinator.swift in Sources */,
+				8B225C9D2AB0E68F009AC792 /* MyListCollectionViewDataSource.swift in Sources */,
 				A18A799A2A22C08A00FE60AB /* NavigationStylable.swift in Sources */,
 				A1AD25C528D4D35700F793B3 /* NavigationBarView.swift in Sources */,
 				A1AA28E828F6909B0011EE9D /* Trailer.swift in Sources */,
 				A18B993828BFC7820077A5A6 /* UIViewController+AddBehaviors.swift in Sources */,
+				8B225C992AB0E3D9009AC792 /* MyListHybridCellViewModel.swift in Sources */,
 				A1B70A79293D780100C718C6 /* TabBarViewModel.swift in Sources */,
 				A1B1B0AC299B12010070AD29 /* Repository.swift in Sources */,
 				A130BC7F294CAB2B0070EA5E /* Localization.swift in Sources */,
@@ -2263,6 +2471,7 @@
 				A1B70A77293D77BA00C718C6 /* TabBarCoordinator.swift in Sources */,
 				A18B991728BEBD040077A5A6 /* Configuration.swift in Sources */,
 				A18B997C28C029A30077A5A6 /* DataTransferService.swift in Sources */,
+				8BB3AEE52AACB48B001810F3 /* MyNetflixCoordinator.swift in Sources */,
 				8B871BBC2A9FEB3700024F07 /* UISwitchDelegate.swift in Sources */,
 				A1B98BB1298A495F001B7B62 /* NewsHTTPDTO.swift in Sources */,
 				8B1C652F2A9795F100CBF16D /* ProfileSettingTableViewCell.swift in Sources */,
@@ -2280,6 +2489,7 @@
 				A1B1B0DC299BA1FA0070AD29 /* ListUseCase.swift in Sources */,
 				A1DB570D2A1EA4EA0060FC3F /* DetailCollectionViewCellViewModel.swift in Sources */,
 				A1BDC0D32A0993D60027C251 /* NavigationViewModel.swift in Sources */,
+				8B225C7C2AAF6072009AC792 /* NotificationsViewModel.swift in Sources */,
 				A18B997A28C0244D0077A5A6 /* Endpoint.swift in Sources */,
 				A1B93C812900CF2900AF2C7F /* UserHTTPRequestEntity+Mapping.swift in Sources */,
 				A1B2BAE82A0688D1004B612A /* NavigationView.swift in Sources */,
@@ -2307,6 +2517,8 @@
 				A1B98BAB298A44EF001B7B62 /* SeasonHTTPDTO.swift in Sources */,
 				8B1C65332A9797DB00CBF16D /* ProfileSettingTableViewDataSource.swift in Sources */,
 				A19956F4290F7F9900B7D655 /* ArraySlice+Extension.swift in Sources */,
+				8B99FA3A2AACDDCB00F02C5D /* UITableView+Extension.swift in Sources */,
+				8B225C842AAF60B1009AC792 /* MyListViewModel.swift in Sources */,
 				A1AEB444299E15D20016DE2B /* TabController.swift in Sources */,
 				A1BA1DA728D8BA9F00730EA8 /* UIView+Animations.swift in Sources */,
 				8B1C65252A92E41E00CBF16D /* BadgeView.swift in Sources */,
@@ -2338,10 +2550,13 @@
 				A1B70A71293D578600C718C6 /* ViewModel.swift in Sources */,
 				A1B70A7B293D7B7000C718C6 /* Application.swift in Sources */,
 				A1741D0F28E679B200F3C46B /* NavigationTableViewCell.swift in Sources */,
+				8B99FA412AAD072700F02C5D /* MyNetflixNavigationTableHeaderViewModel.swift in Sources */,
 				A18691D628C8423B0087DE3B /* DetailViewController.swift in Sources */,
 				A1B93C7F2900B69B00AF2C7F /* MediaResponseEntity+Mapping.swift in Sources */,
 				A1AD23582A19234B00188DDC /* HybridCell.swift in Sources */,
+				8B225C822AAF60AE009AC792 /* MyListCoordinator.swift in Sources */,
 				A18B993D28BFC9A40077A5A6 /* BlackStyleNavigationBarBehavior.swift in Sources */,
+				8B225C8E2AAFAFA6009AC792 /* NotificationHybridCell.swift in Sources */,
 				A18A79A02A22CD9700FE60AB /* NetworkConfigurable.swift in Sources */,
 				A1AA28C628F487290011EE9D /* MediaPlayerOverlayViewViewModel.swift in Sources */,
 				A1E81D4328D1600100D044EA /* UIColor+Extension.swift in Sources */,
@@ -2358,8 +2573,10 @@
 				A1AA290228FCAB980011EE9D /* MediaRepository.swift in Sources */,
 				A1741D4128EBD33D00F3C46B /* HDView.swift in Sources */,
 				A130BCE4295135820070EA5E /* NewsCollectionViewDataSource.swift in Sources */,
+				8B225CA22AB10793009AC792 /* TrailerHybridCell.swift in Sources */,
 				A1B2BAE52A066B21004B612A /* PanelViewModel.swift in Sources */,
 				A1741D2828E67CF800F3C46B /* DetailNavigationView.swift in Sources */,
+				8BB3AEE72AACB493001810F3 /* MyNetflixViewModel.swift in Sources */,
 				A130BCD729511E820070EA5E /* NewsViewCoordinator.swift in Sources */,
 				A186923D28CAD45A0087DE3B /* ImageService.swift in Sources */,
 				A1C7E7AB292BC5C1004690B9 /* ShowcaseTableViewCellViewModel.swift in Sources */,
@@ -2377,7 +2594,7 @@
 				A14E0CD929C08DCD00F55500 /* ProfileViewModel.swift in Sources */,
 				A18B98FC28BEB62C0077A5A6 /* AppDelegate.swift in Sources */,
 				A18B998D28C0426E0077A5A6 /* RepositoryTask.swift in Sources */,
-				A14E0CCB29BCAB9D00F55500 /* AccountMenuTableViewDataSource.swift in Sources */,
+				8B225C762AAE051D009AC792 /* MyNetflixProfileTableViewCellViewModel.swift in Sources */,
 				8B871BBE2A9FEBC200024F07 /* UISwitch+Extension.swift in Sources */,
 				A1A71A9F298B2A58001C6AB1 /* UserHTTP.swift in Sources */,
 				A1741D5828EE5CB400F3C46B /* MediaPlayerViewViewModel.swift in Sources */,
@@ -2387,6 +2604,8 @@
 				A1F56A6F28C695FC0089BD4F /* UITextField+Extension.swift in Sources */,
 				8B1C65292A95939700CBF16D /* Profile+Extension.swift in Sources */,
 				A1B93C7228FF329800AF2C7F /* Array+Extension.swift in Sources */,
+				8BB3AEE32AACB47D001810F3 /* MyNetflixViewController.swift in Sources */,
+				8B8C29502AA8BB3900E148C4 /* ButtonView.swift in Sources */,
 				A18B998028C03CA20077A5A6 /* JWT.swift in Sources */,
 				A1E81D2E28CFE79400D044EA /* LabeledTableHeaderView.swift in Sources */,
 				A1BA1DC228DCB7D700730EA8 /* NavigationOverlayTableViewDataSource.swift in Sources */,
@@ -2408,10 +2627,12 @@
 				A1741D0B28E679A900F3C46B /* DescriptionTableViewCell.swift in Sources */,
 				A1B349F22A13C59B002AFE9E /* DetailNavigationViewModel.swift in Sources */,
 				A1BD20E429E5B9E70093749E /* GradientView.swift in Sources */,
-				A14E0CD429BE81F200F55500 /* AccountMenuNotificationCollectionViewDataSource.swift in Sources */,
+				A14E0CD429BE81F200F55500 /* NotificationCollectionViewDataSource.swift in Sources */,
 				A1B70A7D293D800300C718C6 /* AuthCoordinator.swift in Sources */,
 				A18B98FE28BEB62C0077A5A6 /* SceneDelegate.swift in Sources */,
+				8B99FA3E2AAD01BE00F02C5D /* MyNetflixNavigationTableHeaderView.swift in Sources */,
 				A18A79932A22B4F200FE60AB /* CoordinatorAssignable.swift in Sources */,
+				8B225C9F2AB10733009AC792 /* TrailerCollectionViewDataSource.swift in Sources */,
 				A1B1B0AA299AEDE20070AD29 /* Stores.swift in Sources */,
 				A1AD25BC28D3FBDC00F793B3 /* UICollectionViewCell+Extension.swift in Sources */,
 				A1F56A5E28C679980089BD4F /* UIView+Extension.swift in Sources */,
@@ -2420,12 +2641,12 @@
 				A18B994628BFD9D50077A5A6 /* Season.swift in Sources */,
 				A1A71AA7298B2A6C001C6AB1 /* ListHTTP.swift in Sources */,
 				A1E3706C29BB1E8A00CFEE9C /* AccountViewController.swift in Sources */,
-				A14E0CC529BB983700F55500 /* AccountMenuNotificationCollectionViewCellViewModel.swift in Sources */,
+				A14E0CC529BB983700F55500 /* NotificationCollectionViewCellViewModel.swift in Sources */,
 				A1D23ABD29CA715200748029 /* SectionHTTPResponseStore.swift in Sources */,
 				A1B98BB9298B1F3E001B7B62 /* ListHTTPDTO.swift in Sources */,
 				A1BA1DBB28DBE02C00730EA8 /* UIView+Constraints.swift in Sources */,
 				A18B994A28BFD9DD0077A5A6 /* User.swift in Sources */,
-				A14E0CC329BB983300F55500 /* AccountMenuNotificationCollectionViewCell.swift in Sources */,
+				A14E0CC329BB983300F55500 /* NotificationCollectionViewCell.swift in Sources */,
 				A14E0CCF29BCBE6D00F55500 /* AccountProfileCollectionViewDataSource.swift in Sources */,
 				A1183FC729D07CBC00D76759 /* SegmentControlViewModel.swift in Sources */,
 				A14E0CB729BB979000F55500 /* AccountProfileCollectionViewCell.swift in Sources */,
@@ -2435,6 +2656,7 @@
 				A1B70AA529400ACE00C718C6 /* SignInViewModel.swift in Sources */,
 				A1B1B0DA299BA0910070AD29 /* SectionUseCase.swift in Sources */,
 				A1B68F2E2923DF2300FF5F18 /* Set+Extension.swift in Sources */,
+				8B225C6D2AAD3D0C009AC792 /* MyNetflixMenuItem.swift in Sources */,
 				A19956DD29019A3900B7D655 /* List.swift in Sources */,
 				A130BCEB295136EA0070EA5E /* NewsCollectionViewCellViewModel.swift in Sources */,
 				A14E0CF629C337A800F55500 /* ProfileCollectionViewDataSource.swift in Sources */,
@@ -2450,6 +2672,7 @@
 				A18A796D2A1FB15C00FE60AB /* DetailHybridCellViewModel.swift in Sources */,
 				A1E81D1628CFE2D800D044EA /* MediaHybridCell.swift in Sources */,
 				A186921C28CA2ED20087DE3B /* MediaCollectionViewCellViewModel.swift in Sources */,
+				8B99FA382AACDC9E00F02C5D /* AccountTableViewDataSource.swift in Sources */,
 				A19956DF29019A7700B7D655 /* ListDTO.swift in Sources */,
 				A130BCE02951344C0070EA5E /* NewsNavigationView.swift in Sources */,
 				A1183FC529D07B8C00D76759 /* SegmentControlView.swift in Sources */,
@@ -2465,6 +2688,7 @@
 				A14E0CC929BCAB3600F55500 /* AccountMenuItem.swift in Sources */,
 				A1AD23622A1BDAD800188DDC /* CollectionViewDataSource.swift in Sources */,
 				A1B98BA4298A414E001B7B62 /* HTTPRepresentable.swift in Sources */,
+				8B8C29532AA90FFD00E148C4 /* EntitledButton.swift in Sources */,
 				A1F3389629CCD634005629DB /* BlockbusterCollectionViewCell.swift in Sources */,
 				A1E81D3B28D15D2E00D044EA /* UITableViewCell+Extension.swift in Sources */,
 				A1B480BC293686330041418D /* StandardCollectionViewCell.swift in Sources */,

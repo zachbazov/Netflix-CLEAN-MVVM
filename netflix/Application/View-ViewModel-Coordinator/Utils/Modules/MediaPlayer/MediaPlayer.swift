@@ -29,7 +29,7 @@ private protocol PlayerProtocol {
 // MARK: - MediaPlayer Type
 
 struct MediaPlayer {
-    fileprivate let layer: MediaPlayerLayer
+    let layer: MediaPlayerLayer
     
     let player = AVPlayer()
     

@@ -60,8 +60,6 @@ final class DetailViewController: UIViewController, Controller {
         dataSource = nil
         viewModel = nil
         tableView = nil
-        
-//        restoreHomeViewControllerNavigationStyle()
     }
 }
 
@@ -76,27 +74,3 @@ extension DetailViewController: ControllerProtocol {
         dataSource = DetailTableViewDataSource(with: viewModel)
     }
 }
-
-//
-
-//extension DetailViewController {
-//    fileprivate func restoreHomeViewControllerNavigationStyle() {
-//        guard let controller = Application.app.coordinator.tabCoordinator?.home?.viewControllers.first as? HomeViewController else { return }
-//
-//        if controller.navigationView?.gradient == nil || controller.navigationView?.blur == nil {
-//            controller.navigationView?.segmentControl?.origin(y: .zero)
-//            controller.navigationViewContainerHeight.constant = 160.0
-//            controller.navigationView?.segmentControl?.alpha = 1.0
-//
-//            mainQueueDispatch {
-//                if controller.tableView.contentOffset.y < .zero {
-//                    controller.navigationView?.apply(.gradient)
-//                } else {
-//                    controller.navigationView?.apply(.blur)
-//                }
-//
-//                controller.navigationView?.layoutIfNeeded()
-//            }
-//        }
-//    }
-//}

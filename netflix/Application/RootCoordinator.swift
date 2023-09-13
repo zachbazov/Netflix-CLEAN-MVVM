@@ -37,6 +37,10 @@ extension RootCoordinator: Coordinator {
     func coordinate(to screen: Screen) {
         switch screen {
         case .auth:
+            if tabCoordinator != nil {
+                deallocateTabBar()
+            }
+            
             authCoordinator = createAuthCoordinator()
             
             window?.rootViewController = authCoordinator?.viewController
@@ -53,6 +57,9 @@ extension RootCoordinator: Coordinator {
             
             profileCoordinator?.coordinate(to: .userProfile)
         case .tabBar:
+            if authCoordinator != nil {
+                deallocateAuth()
+            }
             if profileCoordinator != nil {
                 deallocateProfile()
             }

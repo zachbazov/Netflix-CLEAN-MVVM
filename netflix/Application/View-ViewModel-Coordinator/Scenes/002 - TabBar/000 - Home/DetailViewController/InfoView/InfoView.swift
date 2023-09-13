@@ -33,8 +33,8 @@ final class InfoView: UIView, View {
     @IBOutlet private weak var ageRestrictionViewContainer: UIView!
     @IBOutlet private weak var lengthLabel: UILabel!
     @IBOutlet private weak var hdViewContainer: UIView!
-    @IBOutlet private weak var playButton: UIButton!
-    @IBOutlet private weak var downloadButton: UIButton!
+    @IBOutlet private(set) weak var playButton: PlayButton!
+    @IBOutlet private(set) weak var downloadButton: EntitledButton!
     
     fileprivate var ageRestrictionView: AgeRestrictionView?
     fileprivate var hdView: HDView?
@@ -79,7 +79,7 @@ final class InfoView: UIView, View {
         setTitle(viewModel.title)
         setLength(viewModel.length)
         setYear(viewModel.duration)
-        setButtonTitle(viewModel.downloadButtonTitle)
+        setButtonTitle(viewModel.title)
         
         hdViewContainer.isHidden(!viewModel.isHD)
     }
@@ -127,7 +127,8 @@ extension InfoView: ViewProtocol {
     }
     
     fileprivate func setButtonTitle(_ string: String) {
-        downloadButton.setTitle(viewModel.downloadButtonTitle, for: .normal)
+        downloadButton.header.text = "D O W N L O A D"
+        downloadButton.content.text = viewModel.title
     }
 }
 

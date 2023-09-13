@@ -113,6 +113,7 @@ extension PreviewView {
         mediaPlayerView?
             .delegate?
             .player(mediaPlayer, willReplaceItem: mediaPlayerView?.viewModel.item)
+        printIfDebug(.debug, "PreviewView.MediaPlayerViewItem: \(mediaPlayerView?.viewModel.item)")
         
         mediaPlayerView?
             .delegate?

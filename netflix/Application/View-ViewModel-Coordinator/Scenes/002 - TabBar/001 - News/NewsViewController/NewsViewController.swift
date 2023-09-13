@@ -13,6 +13,10 @@ final class NewsViewController: UIViewController, Controller {
     @IBOutlet private var navigationViewContainer: UIView!
     @IBOutlet private(set) var collectionViewContainer: UIView!
     
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return Theme.preferredStatusBarStyle
+    }
+    
     var viewModel: NewsViewModel!
     
     fileprivate lazy var navigationView: NewsNavigationView? = createNavigationView()

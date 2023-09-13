@@ -19,11 +19,11 @@ protocol TableViewHeader: UITableViewHeaderFooterView, ViewLifecycleBehavior {
 // MARK: - TableViewHeader Implementation
 
 extension TableViewHeader {
-    static func create<U>(
+    static func create<U, CVM>(
         of type: U.Type,
         on tableView: UITableView,
         for index: Int,
-        with viewModel: HomeViewModel) -> U where U: UITableViewHeaderFooterView {
+        with viewModel: CVM) -> U where U: UITableViewHeaderFooterView, CVM: ViewModel {
             
             tableView.register(headerFooter: U.self)
             
@@ -33,7 +33,25 @@ extension TableViewHeader {
             
             switch cell {
             case let cell as LabeledTableHeaderView:
+                guard let viewModel = viewModel as? HomeViewModel else { fatalError() }
+                
                 cell.viewModel = LabeledTableHeaderViewModel(index: index, with: viewModel)
+                cell.viewDidLoad()
+            case let cell as MyNetflixNavigationTableHeaderView:
+                guard let viewModel = viewModel as? MyNetflixViewModel else { fatalError() }
+                
+                let item = viewModel.menuItems[index]
+                
+                cell.index = index
+                cell.viewModel = MyNetflixNavigationTableHeaderViewModel(item: item, with: viewModel)
+                cell.viewDidLoad()
+            case let cell as ReferrableTableHeaderView:
+                guard let viewModel = viewModel as? MyNetflixViewModel else { fatalError() }
+                
+                let item = viewModel.menuItems[index]
+                
+                cell.index = index
+                cell.viewModel = ReferrableTableHeaderViewModel(with: item, with: viewModel)
                 cell.viewDidLoad()
             default: break
             }

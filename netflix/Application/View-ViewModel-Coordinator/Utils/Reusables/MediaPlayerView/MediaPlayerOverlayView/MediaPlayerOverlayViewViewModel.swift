@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import CoreGraphics
 
 // MARK: - ViewModelProtocol Type
 
@@ -39,6 +38,8 @@ struct MediaPlayerOverlayViewViewModel {
         components.second = Int(max(.zero, time))
         return timeRemainingFormatter.string(for: components as DateComponents)!
     }
+    
+    var isMuted = false
 }
 
 // MARK: - ViewModel Implementation
